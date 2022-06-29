@@ -17,6 +17,7 @@
 
     # Other Flakes
     emacs-overlay.url  = "github:nix-community/emacs-overlay";
+    nur.url = "github:nix-community/NUR";
   };
 
   # Outputs is a function that takes the inputs as arguments.
@@ -32,6 +33,12 @@
   # The rec expression turns a basic set into a set where self-referencing is possible.
   # It is a shorthand for recursive and allows to use the values defined in this set from its own scope.
   rec {
+    # Add overlays from other flakes so we can use them from pkgs.
+    overlays = {
+      nur = nur.overlay;
+      emacs = emacs-overlay.overlay;
+    };
+
     # System configurations
     # Accessible via 'nixos-rebuild'
     nixosConfigurations = {

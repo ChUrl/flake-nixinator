@@ -25,6 +25,12 @@
     '';
   };
 
+  # Auto garbage-collect and optimize store
+  nix.gc.automatic = true;
+  nix.gc.options = "--delete-older-than 5d";
+  nix.autoOptimiseStore = true;
+  nix.optimise.automatic = true;
+
   # TODO: Understand this
   # This will add your inputs as registries, making operations with them (such
   # as nix shell nixpkgs#name) consistent with your flake inputs.
@@ -131,49 +137,31 @@
     isNormalUser = true;
     description = "Christoph";
     extraGroups = [ "networkmanager" "wheel" "audio" "realtime" "docker" "adbusers" "scanner" "lp" ];
-    shell = pkgs.fish;
-    # Do this with HomeManager
-    packages = with pkgs; [
-    #  firefox
-    #  kate
-    #  thunderbird
-    ];
+    shell = pkgs.fish; # TODO: Is this needed if programs.fish.enable = true?
+    # We do this with HomeManager
+    packages = with pkgs; [ ];
   };
-
-  environment.shells = with pkgs; [ fish ];
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-  environment.systemPackages = with pkgs; [
-    vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-    wget
-    git
-    dosfstools
-    ntfs3g
-    e2fsprogs
-  ];
-
-  # Auto garbage-collect and optimize store
-  nix.gc.automatic = true;
-  nix.gc.options = "--delete-older-than 5d";
-  nix.autoOptimiseStore = true;
-  nix.optimise.automatic = true;
-
   # Use all redistributable firmware (i.e. nonfree)
   hardware.enableRedistributableFirmware = true;
 
-  # Enable automatic upgrades.
-  system.autoUpgrade.enable = false;
-  system.autoUpgrade.allowReboot = false;
+  # We want these packages to be available even when no user profile is active
+  # List packages installed in system profile. To search, run:
+  # $ nix search wget
+  environment.systemPackages = with pkgs; [
+    wget
+  ];
 
-  # Docker
-  virtualisation.docker = {
-    enable = true;
-    autoPrune.enable = true;
-  };
+  # It is preferred to use the module (if it exists) over environment.systemPackages, as some extra configs are applied.
+  programs.adb.enable = true;
+  programs.fish.enable = true;
+  programs.git.enable = true;
+  programs.neovim.enable = true;
+  programs.starship.enable = true;
+  programs.thefuck.enable = true; # Not available in HomeManager
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -192,12 +180,21 @@
     SystemMaxUse=50M
   '';
 
-  # TODO: What to transfer to HomeManager?
-  services.lorri.enable = true; # Cache direnv
-  services.locate.enable = true; # Periodically update index
-  services.emacs.enable = false; # timeout?
   services.fstrim.enable = true;
+  services.fwupd.enable = true;
+  services.locate.enable = true; # Periodically update index
+  services.ntp.enable = true;
   services.xserver.wacom.enable = true;
+
+  # Docker
+  virtualisation.docker = {
+    enable = true;
+    autoPrune.enable = true;
+  };
+
+  virtualisation.libvirtd = {
+    enable = true;
+  };
 
   # TODO: Other ports (tcp/udp/ssh...)?
   # Open ports in the firewall.
