@@ -9,14 +9,13 @@
     # Feel free to split up your configuration and import pieces of it here.
   ];
 
-  # Comment out if you wish to disable Unfree packages for your system
-  nixpkgs.config.allowUnfree = true;
   # https://github.com/nix-community/home-manager/issues/2942
   nixpkgs.config.allowUnfreePredicate = (pkg: true);
+  nixpkgs.config.allowUnfree = true;
 
   # Chinese Input
   i18n.inputMethod.enabled = "fcitx5";
-  i18n.inputMethod.fcitx5.addons = with pkgs; [ fcitx5-gtk libsForQt5.fcitx5-qt fcitx5-chinese-addons fctix5-configtool ]
+  i18n.inputMethod.fcitx5.addons = with pkgs; [ fcitx5-gtk libsForQt5.fcitx5-qt fcitx5-chinese-addons fcitx5-configtool ];
 
   # Packages with extra options managed by HomeManager natively
   programs = {
@@ -30,8 +29,15 @@
 
     direnv = {
       enable = true;
-      # enableFishIntegration = true; # Deprecated
       nix-direnv.enable = true;
+    };
+
+    # TODO: Move to emacs module
+    emacs = {
+      # TODO: This is wrong, I need to figure out the overlays
+      # package = pkgs.emacsPgtkNativeComp;
+      package = pkgs.emacs28NativeComp;
+      enable = true;
     };
 
     exa.enable = true;
@@ -123,7 +129,8 @@
 
     # Doom Emacs
     # TODO: Make module out of this
-    emacs.emacsPgtkNativeComp
+    binutils
+    zstd
     ripgrep
     fd
     gcc
@@ -175,7 +182,7 @@
     papirus-icon-theme
 
     # Fonts
-    # TODO: Make a module
+    # TODO: Make a module and move to fonts.fonts or something more specific
     victor-mono
     source-code-pro
     source-sans-pro
@@ -205,7 +212,8 @@
 
     # Gaming
     gamemode
-    nur.gamescope
+    # TODO: This is wrong, I need to figure out nur when I try out gamescope
+    # pkgs.repos.dukzcry.gamescope
     steam
     polymc
     lutris
