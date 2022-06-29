@@ -8,6 +8,9 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+
+      # NixCommunity binary cache
+      ./cachix.nix
     ];
 
   # Enable flakes

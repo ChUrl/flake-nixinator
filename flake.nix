@@ -42,7 +42,7 @@
         system = "x86_64-linux";
 
         # >> Main NixOS configuration file <<
-        modules = [ ./configuration.nix ];
+        modules = [ ./nixos/configuration.nix ];
 
         # Make our inputs available to the config (for importing modules)
         specialArgs = { inherit inputs; };
@@ -60,7 +60,7 @@
 
         modules = [
 	  # >> Main HomeManager configuration file <<
-          ./home.nix
+          ./home/home.nix
           {
             home = rec {
               username = "christoph";
