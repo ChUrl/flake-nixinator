@@ -11,9 +11,15 @@
     ];
 
   # Enable flakes
+  # Keep nix-shell from grabage collection for direnv (keep-outputs + keep-derivations)
   nix = {
     package = pkgs.nixFlakes;
-    extraOptions = "experimental-features = nix-command flakes";
+    extraOptions = ''
+      experimental-features = nix-command flakes
+
+      keep-outputs = true
+      keep-derivations = true
+    '';
   };
 
   # TODO: Understand this
@@ -28,10 +34,23 @@
     [ -d "$HOME/.nix-profile" ] || /nix/var/nix/profiles/per-user/$USER/home-manager/activate &> /dev/null
   '';
 
+  # Kernel
+  boot.kernelPackages = pkgs.linuxPackages_zen;
+  boot.kernelParams = [ "mitigations=off" ];
+  security.protectKernelImage = true;
+
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
+  boot.loader.systemd-boot.configurationLimit = 5;
+  boot.loader.systemd-boot.editor = false;
+  boot.loader.systemd-boot.consoleMode = "max";
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.efi.efiSysMountPoint = "/boot/efi";
+
+  hardware.cpu.intel.updateMicrocode = true;
+
+  # Make /tmp volatile
+  boot.tmpOnTmpfs = true;
 
   networking.hostName = "nixinator"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -66,6 +85,7 @@
 
   # Enable the KDE Plasma Desktop Environment.
   services.xserver.videoDrivers = ["nvidia"];
+  hardware.nvidia.modesetting.enable = true; # Not officially supported by NVidia
   services.xserver.displayManager.sddm.enable = true;
   services.xserver.desktopManager.plasma5.enable = true;
   services.xserver.desktopManager.plasma5.runUsingSystemd = true;
@@ -78,6 +98,10 @@
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
+  # TODO: Printer driver
+  services.avahi.enable = true; # Network printers
+  services.avahi.nssmdns = true;
+  hardware.sane.enable = true; # Scanning
 
   # Enable sound with pipewire.
   sound.enable = true;
@@ -89,7 +113,7 @@
     alsa.support32Bit = true;
     pulse.enable = true;
     # If you want to use JACK applications, uncomment this
-    #jack.enable = true;
+    jack.enable = true; # We need this for low latency audio
 
     # use the example session manager (no others are packaged yet so this is enabled by default,
     # no need to redefine it in your config for now)
@@ -103,7 +127,9 @@
   users.users.christoph = {
     isNormalUser = true;
     description = "Christoph";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "audio" "realtime" "docker" "adbusers" "scanner" "lp" ];
+    shell = pkgs.fish;
+    # Do this with HomeManager
     packages = with pkgs; [
     #  firefox
     #  kate
@@ -111,15 +137,40 @@
     ];
   };
 
+  environment.shells = with pkgs; [ fish ];
+
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-  #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-  #  wget
+    vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+    wget
+    git
+    dosfstools
+    ntfs3g
+    e2fsprogs
   ];
+
+  # Auto garbage-collect and optimize store
+  nix.gc.automatic = true;
+  nix.gc.options = "--delete-older-than 5d";
+  nix.autoOptimiseStore = true;
+  nix.optimise.automatic = true;
+
+  # Use all redistributable firmware (i.e. nonfree)
+  hardware.enableRedistributableFirmware = true;
+
+  # Enable automatic upgrades.
+  system.autoUpgrade.enable = false;
+  system.autoUpgrade.allowReboot = false;
+
+  # Docker
+  virtualisation.docker = {
+    enable = true;
+    autoPrune.enable = true;
+  };
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -132,11 +183,37 @@
   # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
+  services.openssh.enable = true;
 
+  services.journald.extraConfig = ''
+    SystemMaxUse=50M
+  '';
+
+  # TODO: What to transfer to HomeManager?
+  services.lorri.enable = true; # Cache direnv
+  services.locate.enable = true; # Periodically update index
+  services.emacs.enable = false; # timeout?
+  services.fstrim.enable = true;
+  services.xserver.wacom.enable = true;
+
+  # TODO: Other ports (tcp/udp/ssh...)?
   # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
+  networking.firewall.allowedTCPPorts = [ ];
+  networking.firewall.allowedTCPPortRanges = [
+    { # KDEConnect
+      from = 1714;
+      to = 1764;
+    }
+  ];
+
+  networking.firewall.allowedUDPPorts = [ ];
+  networking.firewall.allowedUDPPortRanges = [
+    { # KDEConnect
+      from = 1714;
+      to = 1764;
+    }
+  ];
+
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
 
