@@ -23,10 +23,11 @@
   # Outputs is a function that takes the inputs as arguments.
   # To handle extra arguments we use the inputs@ pattern.
   # It gives a name to the ... ellipses.
-  outputs = inputs @ { nixpkgs, home-manager, ... }:
+  outputs = inputs @ { nixpkgs, home-manager, emacs-overlay, nur, ... }:
   # With let you can define local variables
   let
     # We bring these functions into the scope for the outputs.
+    inherit (builtins) attrValues;
     inherit (nixpkgs.lib) nixosSystem;
     inherit (home-manager.lib) homeManagerConfiguration;
   in
@@ -49,7 +50,13 @@
         system = "x86_64-linux";
 
         # >> Main NixOS configuration file <<
-        modules = [ ./nixos/configuration.nix ];
+        modules = [
+	  # TODO: Modularize
+	  ./nixos/configuration.nix
+
+	  # Add the overlays
+	  { nixpkgs.overlays = attrValues overlays; }
+	];
 
         # Make our inputs available to the config (for importing modules)
         specialArgs = { inherit inputs; };
@@ -68,12 +75,17 @@
         modules = [
 	  # >> Main HomeManager configuration file <<
           ./home/home.nix
+
           {
             home = rec {
               username = "christoph";
               homeDirectory = "/home/${username}";
               stateVersion = "22.05";
             };
+
+	    # Add the overlays
+	    # TODO: This is wrong, I need to figure out nur when I try out gamescope
+	    # nixpkgs.overlays = attrValues overlays;
           }
         ];
 

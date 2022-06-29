@@ -92,12 +92,21 @@
   # Enable the X11 windowing system.
   services.xserver.enable = true;
 
-  # Enable the KDE Plasma Desktop Environment.
+  # Proprietary graphics drivers
   services.xserver.videoDrivers = ["nvidia"];
   hardware.nvidia.modesetting.enable = true; # Not officially supported by NVidia
-  services.xserver.displayManager.sddm.enable = true;
-  services.xserver.desktopManager.plasma5.enable = true;
-  services.xserver.desktopManager.plasma5.runUsingSystemd = true;
+
+  # Startx replaces the displaymanager so default (lightdm) isn't used, start to shell
+  # services.xserver.displayManager.startx.enable = true;
+
+  # Plasma (X11)
+  # services.xserver.displayManager.sddm.enable = true;
+  # services.xserver.desktopManager.plasma5.enable = true;
+  # services.xserver.desktopManager.plasma5.runUsingSystemd = true;
+
+  # Gnome (Wayland)
+  services.xserver.displayManager.gdm.enable = true;
+  services.xserver.desktopManager.gnome.enable = true;
 
   # Configure keymap in X11
   services.xserver = {
@@ -106,8 +115,8 @@
   };
 
   # Enable CUPS to print documents.
-  services.printing.enable = true;
   # TODO: Printer driver
+  services.printing.enable = true;
   services.avahi.enable = true; # Network printers
   services.avahi.nssmdns = true;
   hardware.sane.enable = true; # Scanning
@@ -146,6 +155,7 @@
   nixpkgs.config.allowUnfree = true;
 
   # Use all redistributable firmware (i.e. nonfree)
+  hardware.enableAllFirmware = true;
   hardware.enableRedistributableFirmware = true;
 
   # We want these packages to be available even when no user profile is active
@@ -199,20 +209,10 @@
   # TODO: Other ports (tcp/udp/ssh...)?
   # Open ports in the firewall.
   networking.firewall.allowedTCPPorts = [ ];
-  networking.firewall.allowedTCPPortRanges = [
-    { # KDEConnect
-      from = 1714;
-      to = 1764;
-    }
-  ];
+  networking.firewall.allowedTCPPortRanges = [];
 
   networking.firewall.allowedUDPPorts = [ ];
-  networking.firewall.allowedUDPPortRanges = [
-    { # KDEConnect
-      from = 1714;
-      to = 1764;
-    }
-  ];
+  networking.firewall.allowedUDPPortRanges = [];
 
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
