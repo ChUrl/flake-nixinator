@@ -30,6 +30,8 @@
       nix-direnv.enable = true;
     };
 
+    exa.enable = true;
+
     # TODO: Copy config from Arch dots
     fish = {
       enable = true;
@@ -83,7 +85,6 @@
   # Add stuff for your user as you see fit:
   home.packages = with pkgs; [
     # CLI Tools
-    # HM exa
     procs
     tokei
     rsync
@@ -126,6 +127,7 @@
     xdotool
 
     # Web
+    noisetorch
     discord
     yt-dlp
     spotify
