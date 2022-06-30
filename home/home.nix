@@ -57,7 +57,7 @@
         # See nixpkgs' firefox/wrapper.nix to check which options you can use
         cfg = {
           # Gnome shell native connector
-          enableGnomeExtensions = true;
+          enableGnomeExtensions = false; # I don't need this since I declare installed extensions inside HomeManager
         };
       };
 
@@ -128,6 +128,13 @@
     # TODO: Moooore
     # Gnome extensions
     gnomeExtensions.appindicator
+    gnomeExtensions.blur-my-shell
+    gnomeExtensions.sound-output-device-chooser
+    gnomeExtensions.vitals
+    gnomeExtensions.no-overview
+    gnomeExtensions.switch-workspace
+    gnomeExtensions.maximize-to-empty-workspace
+    gnomeExtensions.pip-on-top
 
     # Ranger
     # TODO: Make module out of this
