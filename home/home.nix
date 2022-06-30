@@ -215,9 +215,9 @@
     # TODO: This is wrong, I need to figure out nur when I try out gamescope
     # pkgs.repos.dukzcry.gamescope
     # Flatpak bottles
-    steam
-    polymc
-    lutris
+    # Flatpak steam
+    polymc # TODO: Should I use Flatpak for all gaming stuff?
+    # lutris # I don't want that crap, pleaaaase
   ];
 
   services = {
