@@ -161,7 +161,8 @@
 
     # Tools
     # calibre
-    virt-manager
+    # virt-manager # Let's try gnome-boxes while we're at it
+    gnome-boxes
     gource
     keepassxc
     ark
