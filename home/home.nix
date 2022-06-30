@@ -214,6 +214,7 @@
     gamemode
     # TODO: This is wrong, I need to figure out nur when I try out gamescope
     # pkgs.repos.dukzcry.gamescope
+    # Flatpak bottles
     steam
     polymc
     lutris
