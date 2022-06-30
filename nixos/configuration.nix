@@ -191,6 +191,7 @@
     SystemMaxUse=50M
   '';
 
+  services.flatpak.enable = true; # Not quite the nix style but useful for bottles/proprietary stuff
   services.fstrim.enable = true;
   services.fwupd.enable = true;
   services.locate.enable = true; # Periodically update index
