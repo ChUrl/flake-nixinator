@@ -152,9 +152,9 @@
     # Web
     signal-desktop
     noisetorch
-    discord
+    # Flatpak discord
     yt-dlp
-    spotify
+    # Flatpak spotify
     thunderbird
     protonmail-bridge
     protonvpn-cli
