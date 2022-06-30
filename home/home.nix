@@ -51,6 +51,7 @@
 
     firefox = {
       enable = true;
+      enableGnomeExtensions = true;
     };
 
     fzf = {
@@ -113,6 +114,10 @@
     httpie
     rclone
 
+    # TODO: Moooore
+    # Gnome extensions
+    gnomeExtensions.appindicator
+
     # Ranger
     # TODO: Make module out of this
     ranger
@@ -165,11 +170,11 @@
     gnome.gnome-boxes
     gource
     keepassxc
-    ark
+    # ark # This is KDE tool
     anki
     libreoffice-fresh
-    libsForQt5.dolphin-plugins
-    libsForQt5.kdegraphics-thumbnailers
+    # libsForQt5.dolphin-plugins
+    # libsForQt5.kdegraphics-thumbnailers
 
     # Graphics
     wacomtablet
@@ -191,7 +196,6 @@
     jetbrains-mono
     etBook
     overpass
-    # Chinese Fonts
     source-han-mono
     source-han-sans
     source-han-serif
