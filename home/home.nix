@@ -59,7 +59,7 @@
           # Gnome shell native connector
           enableGnomeExtensions = true;
         };
-      }
+      };
 
       # TODO: Add extensions
       extensions = [];
