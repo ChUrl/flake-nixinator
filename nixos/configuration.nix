@@ -107,7 +107,15 @@
   # Gnome (Wayland)
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.gnome.enable = true;
-  services.gnome.gnome-keyring.enable = true;
+  services.gnome.chrome-gnome-shell.enable = true; # Also need this for firefox, firefox ext is enabled in HomeManager
+  # HomeManager services.gnome.gnome-keyring.enable = true;
+
+  # TODO: Identify all the crap
+  # Remove these packages that come by default with GNOME
+  environment.gnome.excludePackages = with pkgs.gnome; [
+    epiphany
+    gnome-maps
+  ];
 
   # Configure keymap in X11
   services.xserver = {
