@@ -23,18 +23,18 @@
       keep-outputs = true
       keep-derivations = true
     '';
+
+    # Auto garbage-collect and optimize store
+    gc.automatic = true;
+    gc.options = "--delete-older-than 5d";
+    autoOptimiseStore = true;
+    optimise.automatic = true;
+
+    # TODO: Understand this
+    # This will add your inputs as registries, making operations with them (such
+    # as nix shell nixpkgs#name) consistent with your flake inputs.
+    registry = lib.mapAttrs' (n: v: lib.nameValuePair n { flake = v; }) inputs;
   };
-
-  # Auto garbage-collect and optimize store
-  nix.gc.automatic = true;
-  nix.gc.options = "--delete-older-than 5d";
-  nix.autoOptimiseStore = true;
-  nix.optimise.automatic = true;
-
-  # TODO: Understand this
-  # This will add your inputs as registries, making operations with them (such
-  # as nix shell nixpkgs#name) consistent with your flake inputs.
-  nix.registry = lib.mapAttrs' (n: v: lib.nameValuePair n { flake = v; }) inputs;
 
   # TODO: Understand that
   # Will activate home-manager profiles for each user upon login
@@ -43,33 +43,31 @@
     [ -d "$HOME/.nix-profile" ] || /nix/var/nix/profiles/per-user/$USER/home-manager/activate &> /dev/null
   '';
 
-  # Kernel
-  boot.kernelPackages = pkgs.linuxPackages_zen;
-  boot.kernelParams = [ "mitigations=off" ];
-  security.protectKernelImage = true;
+  # Bootloader/Kernel stuff
+  boot = {
+    kernelPackages = pkgs.linuxPackages_zen;
+    kernelParams = [ "mitigations=off" ];
 
-  # Bootloader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.systemd-boot.configurationLimit = 5;
-  boot.loader.systemd-boot.editor = false;
-  boot.loader.systemd-boot.consoleMode = "max";
-  boot.loader.efi.canTouchEfiVariables = true;
-  boot.loader.efi.efiSysMountPoint = "/boot/efi";
+    loader.systemd-boot.enable = true;
+    loader.systemd-boot.configurationLimit = 5;
+    loader.systemd-boot.editor = false;
+    loader.systemd-boot.consoleMode = "max";
+    loader.efi.canTouchEfiVariables = true;
+    loader.efi.efiSysMountPoint = "/boot/efi";
+
+    # Make /tmp volatile
+    tmpOnTmpfs = true;
+  };
 
   hardware.cpu.intel.updateMicrocode = true;
+  security.protectKernelImage = true;
 
-  # Make /tmp volatile
-  boot.tmpOnTmpfs = true;
+  # Allow unfree packages
+  nixpkgs.config.allowUnfree = true;
 
-  networking.hostName = "nixinator"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
-  # Enable networking
-  networking.networkmanager.enable = true;
+  # Use all redistributable firmware (i.e. nonfree)
+  hardware.enableAllFirmware = true;
+  hardware.enableRedistributableFirmware = true;
 
   # Set your time zone.
   time.timeZone = "Europe/Berlin";
@@ -89,37 +87,56 @@
     LC_TIME = "de_DE.UTF-8";
   };
 
+  # TODO: Other ports (tcp/udp/ssh...)?
+  # Open ports in the firewall.
+  networking = {
+    hostName = "nixinator"; # Define your hostname.
+    # wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+
+    # Configure network proxy if necessary
+    # proxy.default = "http://user:password@proxy:port/";
+    # proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+
+    # Enable networking
+    networkmanager.enable = true;
+
+    firewall.allowedTCPPorts = [ ];
+    firewall.allowedTCPPortRanges = [];
+
+    firewall.allowedUDPPorts = [ ];
+    firewall.allowedUDPPortRanges = [];
+
+    # Or disable the firewall altogether.
+    # firewall.enable = false;
+  };
+
   # Enable the X11 windowing system.
-  services.xserver.enable = true;
-
-  # Proprietary graphics drivers
-  services.xserver.videoDrivers = ["nvidia"];
-  hardware.nvidia.modesetting.enable = true; # Not officially supported by NVidia
-
-  # Startx replaces the displaymanager so default (lightdm) isn't used, start to shell
-  # services.xserver.displayManager.startx.enable = true;
-
-  # Plasma (X11)
-  # services.xserver.displayManager.sddm.enable = true;
-  # services.xserver.desktopManager.plasma5.enable = true;
-  # services.xserver.desktopManager.plasma5.runUsingSystemd = true;
-
-  # Gnome (Wayland)
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
-  # HomeManager services.gnome.gnome-keyring.enable = true;
-
-  # TODO: Identify all the crap
-  # Remove these packages that come by default with GNOME
-  environment.gnome.excludePackages = with pkgs.gnome; [
-    epiphany
-    gnome-maps
-  ];
-
-  # Configure keymap in X11
   services.xserver = {
+    enable = true;
+
+    # Configure keymap in X11
     layout = "us";
     xkbVariant = "altgr-intl";
+
+    # Proprietary graphics drivers
+    # TODO: Opengl and stuff
+    videoDrivers = ["nvidia"];
+    # hardware.nvidia.modesetting.enable = true; # Not officially supported by NVidia # TODO: I don't think I need this for gnome
+
+    # Startx replaces the displaymanager so default (lightdm) isn't used, start to shell
+    # displayManager.startx.enable = true;
+
+    # Plasma (X11)
+    # displayManager.sddm.enable = true;
+    # desktopManager.plasma5.enable = true;
+    # desktopManager.plasma5.runUsingSystemd = true;
+
+    # Gnome (Wayland)
+    displayManager.gdm.enable = true;
+    desktopManager.gnome.enable = true;
+    # HomeManager gnome.gnome-keyring.enable = true;
+
+    wacom.enable = true;
   };
 
   # Enable CUPS to print documents.
@@ -138,7 +155,6 @@
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
-    # If you want to use JACK applications, uncomment this
     jack.enable = true; # We need this for low latency audio
 
     # use the example session manager (no others are packaged yet so this is enabled by default,
@@ -159,51 +175,45 @@
     packages = with pkgs; [ ];
   };
 
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
-
-  # Use all redistributable firmware (i.e. nonfree)
-  hardware.enableAllFirmware = true;
-  hardware.enableRedistributableFirmware = true;
+  # TODO: Trusted users
 
   # We want these packages to be available even when no user profile is active
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-  environment.systemPackages = with pkgs; [
-    wget
+  # Empty since we basically only need git + editor which is enabled below
+  environment.systemPackages = with pkgs; [ ];
+
+  # TODO: Identify all the crap
+  # Remove these packages that come by default with GNOME
+  environment.gnome.excludePackages = with pkgs.gnome; [
+    epiphany
+    gnome-maps
   ];
 
   # It is preferred to use the module (if it exists) over environment.systemPackages, as some extra configs are applied.
-  programs.adb.enable = true;
-  programs.fish.enable = true;
-  programs.git.enable = true;
-  programs.neovim.enable = true;
-  programs.starship.enable = true;
-  programs.thefuck.enable = true; # Not available in HomeManager
-
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
+  # I would prefer to use HomeManager for some of these but the modules don't exist (yet)
+  programs = {
+    adb.enable = true;
+    fish.enable = true;
+    git.enable = true;
+    neovim.enable = true;
+    starship.enable = true;
+    thefuck.enable = true; # Not available in HomeManager
+  };
 
   # List services that you want to enable:
+  services = {
+    # Enable the OpenSSH daemon.
+    openssh.enable = true;
 
-  # Enable the OpenSSH daemon.
-  services.openssh.enable = true;
+    journald.extraConfig = ''
+      SystemMaxUse=50M
+    '';
 
-  services.journald.extraConfig = ''
-    SystemMaxUse=50M
-  '';
-
-  services.flatpak.enable = true; # Not quite the nix style but useful for bottles/proprietary stuff
-  services.fstrim.enable = true;
-  services.fwupd.enable = true;
-  services.locate.enable = true; # Periodically update index
-  services.ntp.enable = true;
-  services.xserver.wacom.enable = true;
+    flatpak.enable = true; # Not quite the nix style but useful for bottles/proprietary stuff
+    fstrim.enable = true;
+    fwupd.enable = true;
+    locate.enable = true; # Periodically update index
+    ntp.enable = true;
+  };
 
   # Docker
   virtualisation.docker = {
@@ -214,17 +224,6 @@
   virtualisation.libvirtd = {
     enable = true;
   };
-
-  # TODO: Other ports (tcp/udp/ssh...)?
-  # Open ports in the firewall.
-  networking.firewall.allowedTCPPorts = [ ];
-  networking.firewall.allowedTCPPortRanges = [];
-
-  networking.firewall.allowedUDPPorts = [ ];
-  networking.firewall.allowedUDPPortRanges = [];
-
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
