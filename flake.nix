@@ -27,7 +27,7 @@
   # With let you can define local variables
   let
     # We bring these functions into the scope for the outputs.
-    inherit (builtins) attrValues;
+    inherit (builtins) attrValues; # TODO: What does this do
     inherit (nixpkgs.lib) nixosSystem;
     inherit (home-manager.lib) homeManagerConfiguration;
   in
