@@ -107,7 +107,6 @@
   # Gnome (Wayland)
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.gnome.enable = true;
-  # services.gnome.chrome-gnome-shell.enable = true; # Also need this for firefox, firefox ext is enabled in HomeManager # TODO: Is this still true?
   # HomeManager services.gnome.gnome-keyring.enable = true;
 
   # TODO: Identify all the crap
