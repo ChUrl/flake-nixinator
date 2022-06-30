@@ -51,7 +51,18 @@
 
     firefox = {
       enable = true;
-      enableGnomeExtensions = true;
+
+      # TODO: Add extra config
+      package = pkgs.firefox.override {
+        # See nixpkgs' firefox/wrapper.nix to check which options you can use
+        cfg = {
+          # Gnome shell native connector
+          enableGnomeExtensions = true;
+        };
+      }
+
+      # TODO: Add extensions
+      extensions = [];
     };
 
     fzf = {
