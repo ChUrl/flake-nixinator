@@ -53,7 +53,7 @@
       enable = true;
 
       # TODO: Add extra config
-      package = pkgs.firefox.override {
+      package = pkgs.firefox-wayland.override {
         # See nixpkgs' firefox/wrapper.nix to check which options you can use
         cfg = {
           # Gnome shell native connector
@@ -244,7 +244,7 @@
   ];
 
   services = {
-    lorri.enable = true;
+    # lorri.enable = true; # Use nix-direnv instead
 
     nextcloud-client = {
       enable = true;
