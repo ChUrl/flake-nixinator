@@ -176,7 +176,7 @@ rec {
 
     # Gaming
     gamemode
-    nur.repos.dukzcry.gamescope
+    # Flatpak nur.repos.dukzcry.gamescope # We need to install this with flatpak to be able to use with bottles
     # Flatpak bottles
     # Flatpak steam
     polymc # TODO: Should I use Flatpak for all gaming stuff?
