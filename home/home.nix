@@ -342,15 +342,37 @@ rec {
         };
       };
 
-      # TODO:
-      extensions = with pkgs.nur.repos.rycee.firefox-addons; [ ublock-origin ];
+      extensions = with pkgs.nur.repos.rycee.firefox-addons; [
+        augmented-steam
+        betterttv
+        bypass-paywalls-clean
+        clearurls
+        cookie-autodelete
+        don-t-fuck-with-paste
+        keepassxc-browser
+        localcdn
+        privacy-badger
+        search-by-image
+        single-file
+        skip-redirect
+        sponsorblock
+        tab-session-manager
+        to-deepl
+        transparent-standalone-image
+        tree-style-tab
+        ublacklist
+        ublock-origin
+        umatrix
+        unpaywall
+        view-image
+        vimium
+      ];
 
       # TODO:
       profiles = {
         default = {
-          id = 0;
+          id = 0; # 0 is default profile
 
-          # TODO:
           settings = {
             "app.update.auto" = false;
             # "browser.startup.homepage" = "https://lobste.rs";
