@@ -151,7 +151,7 @@
       enable = true;
       extraPortals = with pkgs; [
         xdg-desktop-portal-wlr
-        xdg-desktop-portal-gtk
+        # xdg-desktop-portal-gtk # TODO: Does this come with gnome?
       ];
       gtkUsePortal = true;
     };
@@ -224,6 +224,8 @@
       SystemMaxUse=50M
     '';
 
+    acpid.enable = true;
+    dbus.enable = true;
     flatpak.enable = true; # Not quite the nix style but useful for bottles/proprietary stuff
     fstrim.enable = true;
     fwupd.enable = true;
