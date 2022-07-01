@@ -4,24 +4,39 @@
 { config, lib, pkgs, modulesPath, ... }:
 
 {
-  imports =
-    [ (modulesPath + "/installer/scan/not-detected.nix")
-    ];
+  imports = [
+    (modulesPath + "/installer/scan/not-detected.nix")
+  ];
 
   boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usbhid" "usb_storage" "sd_mod" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
 
-  fileSystems."/" =
-    { device = "/dev/disk/by-uuid/b87bbc3d-edd3-434a-b4a3-859bf62b8a17";
-      fsType = "ext4";
-    };
+  fileSystems."/" = {
+    device = "/dev/disk/by-uuid/b87bbc3d-edd3-434a-b4a3-859bf62b8a17";
+    fsType = "ext4";
+  };
 
-  fileSystems."/boot/efi" =
-    { device = "/dev/disk/by-uuid/36A9-3D74";
-      fsType = "vfat";
-    };
+  fileSystems."/boot/efi" = {
+    device = "/dev/disk/by-uuid/36A9-3D74";
+    fsType = "vfat";
+  };
+
+  fileSystems."/home/christoph/GameSSD" = {
+    device = "/dev/disk/by-uuid/fcea57ce-cd8a-44b0-a4bc-5ac11849dfb6";
+    fsType = "ext4";
+  };
+
+  fileSystems."/home/christoph/GameHDD" = {
+    device = "/dev/disk/by-uuid/77ae7407-5faa-4d93-8b11-a64ff9a33954";
+    fsType = "ext4";
+  };
+
+  fileSystems."/home/christoph/Videos" = {
+    device = "/dev/disk/by-uuid/4ac26c8e-f9fc-449e-9a80-491558539dbb";
+    fsType = "ext4";
+  };
 
   swapDevices = [ ];
 
