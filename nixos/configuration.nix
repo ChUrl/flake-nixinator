@@ -43,6 +43,9 @@
     [ -d "$HOME/.nix-profile" ] || /nix/var/nix/profiles/per-user/$USER/home-manager/activate &> /dev/null
   '';
 
+  # Allow unfree packages
+  nixpkgs.config.allowUnfree = true;
+
   # Bootloader/Kernel stuff
   boot = {
     kernelPackages = pkgs.linuxPackages_zen;
@@ -59,18 +62,20 @@
     tmpOnTmpfs = true;
   };
 
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
-
   security.protectKernelImage = true;
-  hardware.cpu.intel.updateMicrocode = true;
 
-  # Use all redistributable firmware (i.e. nonfree)
-  hardware.enableAllFirmware = true;
-  hardware.enableRedistributableFirmware = true;
+  hardware = {
+    cpu.intel.updateMicrocode = true;
 
-  hardware.opengl.enable = true;
-  hardware.opengl.driSupport32Bit = true;
+    # Use all redistributable firmware (i.e. nonfree)
+    enableAllFirmware = true;
+    enableRedistributableFirmware = true;
+
+    opengl.enable = true;
+    opengl.driSupport32Bit = true;
+
+    sane.enable = true; # Scanning
+  };
 
   # Set your time zone.
   time.timeZone = "Europe/Berlin";
@@ -146,23 +151,17 @@
   };
 
   # XDG
-  xdg = {
-    portal = {
-      enable = true;
-      extraPortals = with pkgs; [
-        xdg-desktop-portal-wlr
-        # xdg-desktop-portal-gtk # TODO: Does this come with gnome?
-      ];
-      gtkUsePortal = true;
-    };
-  };
-
-  # Enable CUPS to print documents.
-  # TODO: Printer driver
-  services.printing.enable = true;
-  services.avahi.enable = true; # Network printers
-  services.avahi.nssmdns = true;
-  hardware.sane.enable = true; # Scanning
+  # TODO: For some reason Gnome takes a minute to login with this enabled...
+  # xdg = {
+  #   portal = {
+  #     enable = true;
+  #     extraPortals = with pkgs; [
+  #       xdg-desktop-portal-wlr
+  #       # xdg-desktop-portal-gtk # TODO: Does this come with gnome? At least it gives a collision when rebuilding
+  #     ];
+  #     gtkUsePortal = true;
+  #   };
+  # };
 
   # Enable sound with pipewire.
   sound.enable = true;
@@ -217,6 +216,12 @@
 
   # List services that you want to enable:
   services = {
+    # Enable CUPS to print documents.
+    # TODO: Printer driver
+    printing.enable = true;
+    avahi.enable = true; # Network printers
+    avahi.nssmdns = true;
+
     # Enable the OpenSSH daemon.
     openssh.enable = true;
 
