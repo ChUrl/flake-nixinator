@@ -57,7 +57,7 @@ in {
     };
 
     home.sessionPath = [
-      "/home/${config.home.username}/.emacs.d/bin"
+      "/home/${config.home.username}/.emacs/bin"
     ];
 
     # TODO:
@@ -69,8 +69,8 @@ in {
 
       # Because we write to the filesystem, this script has to be run after HomeManager's writeBoundary
       installDoomEmacs = hm.dag.entryAfter ["writeBoundary"] ''
-        if [ ! -d "${config.home.homeDirectory}/.emacs.d" ]; then
-           git clone --depth=1 --single-branch "https://github.com/doomemacs/doomemacs" "${config.home.homeDirectory}/.emacs.d"
+        if [ ! -d "${config.home.homeDirectory}/.emacs" ]; then
+           git clone --depth=1 --single-branch "https://github.com/doomemacs/doomemacs" "${config.home.homeDirectory}/.emacs"
         fi
       '';
     };
