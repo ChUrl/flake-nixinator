@@ -1,13 +1,27 @@
 # This is your home-manager configuration file
 # Use this to configure your home environment (it replaces ~/.config/nixpkgs/home.nix)
 
-{ inputs, lib, config, pkgs, ... }: {
+{ inputs, lib, config, nixosConfig, pkgs, ... }:
+
+rec {
   imports = [
     # If you want to use home-manager modules from other flakes (such as nix-colors), use something like:
     # inputs.nix-colors.homeManagerModule
 
     # Feel free to split up your configuration and import pieces of it here.
+
+    ./modules/emacs.nix
   ];
+
+  # Config my modules
+  modules = {
+    emacs.enable = false;
+    emacs.useDoom = false;
+  };
+
+  # TODO: Fonts
+  # TODO: Gtk
+  # TODO: Email
 
   # Disabled since HomeManager should use global pkgs
   # https://github.com/nix-community/home-manager/issues/2942
@@ -20,7 +34,7 @@
 
   home = {
     username = "christoph";
-    homeDirectory = "/home/christoph";
+    homeDirectory = "/home/${home.username}";
     enableNixpkgsReleaseCheck = true;
 
     # TODO: There are many more home.* options
@@ -42,6 +56,8 @@
     rsync
     rclone
     xclip
+    xorg.xwininfo
+    xdotool
     poppler_utils # pdfunite
     ffmpeg
     imagemagick
@@ -75,27 +91,24 @@
     exiftool
     mediainfo
 
-    # Doom Emacs
-    # TODO: Make module out of this
-    binutils
-    zstd
-    ripgrep
-    fd
-    gcc
-    libgccjit
-    gnumake
-    cmake
-    sqlite
-    python310Packages.pygments
-    inkscape
-    graphviz
-    gnuplot
-    pandoc
-    nixfmt
-    shellcheck
-    maim
-    xorg.xwininfo
-    xdotool
+    # Doom Emacs (contained in Module)
+    # binutils
+    # zstd
+    # ripgrep
+    # fd
+    # gcc
+    # libgccjit
+    # gnumake
+    # cmake
+    # sqlite
+    # python310Packages.pygments
+    # inkscape
+    # graphviz
+    # gnuplot
+    # pandoc
+    # nixfmt
+    # shellcheck
+    # maim
 
     # Web
     signal-desktop
@@ -164,7 +177,7 @@
     # Flatpak bottles
     # Flatpak steam
     polymc # TODO: Should I use Flatpak for all gaming stuff?
-    # lutris # I don't want that crap, pleaaaase
+    # lutris # I don't want to, pleeeease
   ];
 
   # Packages with extra options managed by HomeManager natively
@@ -182,12 +195,12 @@
       nix-direnv.enable = true;
     };
 
-    # TODO: Move to emacs module
-    emacs = {
-      package = pkgs.emacsPgtkNativeComp; # NOTE: I have no idea why not pkgs.emacs.emacsPgtkNativeComp...
-      # package = pkgs.emacs28NativeComp;
-      enable = true;
-    };
+    # Contained in Module
+    # emacs = {
+    #   package = pkgs.emacsPgtkNativeComp; # NOTE: I have no idea why not pkgs.emacs.emacsPgtkNativeComp...
+    #   # package = pkgs.emacs28NativeComp;
+    #   enable = true;
+    # };
 
     exa.enable = true;
 
@@ -242,7 +255,7 @@
           settings = {
 	    "app.update.auto" = false;
             # "browser.startup.homepage" = "https://lobste.rs";
-            "identity.fxaccounts.account.device.name" = "nixinator"; # TODO: I want to pass the toplevel config to use config.networking.hostName, there seems to be an attribute nixosConfig for that but it didn't work
+            "identity.fxaccounts.account.device.name" = nixosConfig.networking.hostName; # NOTE: nixosConfig attribute is somehow not documented, so Idk if I should use it
             "signon.rememberSignons" = false;
             # "browser.urlbar.placeholderName" = "DuckDuckGo";
             # "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
