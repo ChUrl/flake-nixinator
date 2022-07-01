@@ -1,0 +1,14 @@
+# -*- mode: snippet -*-
+# name: graphviz deterministic finite automaton
+# key: dfa
+# --
+#+BEGIN_SRC dot :file $1.png :cmdline -Kdot -Tpng
+digraph {
+    rankdir = LR;
+    splines = true;
+    node [shape = doublecircle]; Z1;
+    node [shape = circle];
+    Z0 -> Z1 [label = ""];
+    $0
+}
+#+END_SRC
