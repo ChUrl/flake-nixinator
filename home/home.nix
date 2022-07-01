@@ -15,8 +15,8 @@ rec {
 
   # Config my modules
   modules = {
-    emacs.enable = false;
-    emacs.useDoom = false;
+    emacs.enable = true;
+    emacs.useDoom = true;
   };
 
   # TODO: Fonts
