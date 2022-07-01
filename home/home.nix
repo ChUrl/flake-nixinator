@@ -88,10 +88,10 @@
 	  id = 0;
 
           # TODO:
-          settings = defaultSettings // {
+          settings = {
 	    "app.update.auto" = false;
             # "browser.startup.homepage" = "https://lobste.rs";
-            "identity.fxaccounts.account.device.name" = config.networking.hostName;
+            "identity.fxaccounts.account.device.name" = "nixinator"; # TODO: I want to pass the toplevel config to use config.networking.hostName
             "signon.rememberSignons" = false;
             # "browser.urlbar.placeholderName" = "DuckDuckGo";
             # "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
