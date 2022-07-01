@@ -9,9 +9,10 @@
     # Feel free to split up your configuration and import pieces of it here.
   ];
 
+  # Disabled since HomeManager should use global pkgs
   # https://github.com/nix-community/home-manager/issues/2942
-  nixpkgs.config.allowUnfreePredicate = (pkg: true);
-  nixpkgs.config.allowUnfree = true;
+  # nixpkgs.config.allowUnfreePredicate = (pkg: true);
+  # nixpkgs.config.allowUnfree = true;
 
   # Chinese Input
   i18n.inputMethod.enabled = "fcitx5";
@@ -92,7 +93,7 @@
           settings = {
 	    "app.update.auto" = false;
             # "browser.startup.homepage" = "https://lobste.rs";
-            "identity.fxaccounts.account.device.name" = "nixinator"; # TODO: I want to pass the toplevel config to use config.networking.hostName
+            "identity.fxaccounts.account.device.name" = "nixinator"; # TODO: I want to pass the toplevel config to use config.networking.hostName, there seems to be an attribute nixosConfig for that but it didn't work
             "signon.rememberSignons" = false;
             # "browser.urlbar.placeholderName" = "DuckDuckGo";
             # "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
@@ -301,4 +302,6 @@
 
   # Nicely reload system units when changing configs
   systemd.user.startServices = "sd-switch";
+
+  home.stateVersion = "22.05";
 }
