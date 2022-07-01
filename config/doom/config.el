@@ -238,8 +238,8 @@
       "M-h" #'rotate-text-backward
       "M-l" #'rotate-text
 
-      "C-<tab>" #'centaur-tabs-forward
-      "C-<iso-lefttab>" #'centaur-tabs-backward
+;;      "C-<tab>" #'centaur-tabs-forward
+;;      "C-<iso-lefttab>" #'centaur-tabs-backward
 
       "<tab>" #'doom/dumb-indent
       "<backtab>" #'doom/dumb-dedent
@@ -321,7 +321,7 @@
   (setq! projectile-track-known-projects-automatically t
          projectile-indexing-method 'alien ;; alien is faster than hybrid but doesn't recognize .projectile markers
          projectile-sort-order 'recentf
-         projectile-ignored-projects '("~/.emacs.d" "/tmp" "~/" "~/.emacs.d/.local/straight/repos/")
+         projectile-ignored-projects '("/home/christoph/.emacs.d" "/tmp" "/home/christoph/" "/home/christoph/.emacs.d/.local/straight/repos/")
          ;; projectile-project-root-files #'(".projectile") ;; only recognize .projectile projects
          ;; projectile-project-root-functions #'(projectile-root-top-down
          ;;                                      projectile-root-top-down-recurring
@@ -362,20 +362,20 @@
       (propertize (file-size-human-readable size) 'face (list :foreground color)))))
 
 ;; tabs
-(after! centaur-tabs
-  (centaur-tabs-group-by-projectile-project)
-  (setq centaur-tabs-height 36
-        centaur-tabs-set-icons t
-        centaur-tabs-style "rounded"
-        centaur-tabs-modified-marker "o"
-        centaur-tabs-close-button "×"
-        centaur-tabs-set-bar 'above
-        centaur-tabs-gray-out-icons 'buffer
-        )
-  (push "Doom" centaur-tabs-excluded-prefixes)
-  )
-(add-hook! 'org-mode-hook 'centaur-tabs-local-mode) ;; disable tabs in selected buffers
-(add-hook! 'latex-mode-hook 'centaur-tabs-local-mode)
+;; (after! centaur-tabs
+;;   (centaur-tabs-group-by-projectile-project)
+;;   (setq centaur-tabs-height 36
+;;         centaur-tabs-set-icons t
+;;         centaur-tabs-style "rounded"
+;;         centaur-tabs-modified-marker "o"
+;;         centaur-tabs-close-button "×"
+;;         centaur-tabs-set-bar 'above
+;;         centaur-tabs-gray-out-icons 'buffer
+;;         )
+;;   (push "Doom" centaur-tabs-excluded-prefixes)
+;;   )
+;; (add-hook! 'org-mode-hook 'centaur-tabs-local-mode) ;; disable tabs in selected buffers
+;; (add-hook! 'latex-mode-hook 'centaur-tabs-local-mode)
 
 ;; workspaces
 (after! persp-mode
@@ -814,6 +814,7 @@
 (setq! magit-repository-directories '(("~/Notes/HHU" . 3)
                                       ("~/Notes/Org" . 0)
                                       ("~/Arch" . 0)
+                                      ("~/NixFlake" . 0)
                                       ("~/Documents" . 1)
                                       ("~/Projects" . 2)
                                       ("~/NoSync" . 1))
