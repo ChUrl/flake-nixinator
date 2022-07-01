@@ -59,15 +59,18 @@
     tmpOnTmpfs = true;
   };
 
-  hardware.cpu.intel.updateMicrocode = true;
-  security.protectKernelImage = true;
-
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
+
+  security.protectKernelImage = true;
+  hardware.cpu.intel.updateMicrocode = true;
 
   # Use all redistributable firmware (i.e. nonfree)
   hardware.enableAllFirmware = true;
   hardware.enableRedistributableFirmware = true;
+
+  hardware.opengl.enable = true;
+  hardware.opengl.driSupport32Bit = true;
 
   # Set your time zone.
   time.timeZone = "Europe/Berlin";
@@ -137,6 +140,21 @@
     # HomeManager gnome.gnome-keyring.enable = true;
 
     wacom.enable = true;
+
+    # Enable touchpad support (enabled default in most desktopManager).
+    # libinput.enable = true;
+  };
+
+  # XDG
+  xdg = {
+    portal = {
+      enable = true;
+      extraPortals = with pkgs; [
+        xdg-desktop-portal-wlr
+        xdg-desktop-portal-gtk
+      ];
+      gtkUsePortal = true;
+    };
   };
 
   # Enable CUPS to print documents.
@@ -159,11 +177,8 @@
 
     # use the example session manager (no others are packaged yet so this is enabled by default,
     # no need to redefine it in your config for now)
-    #media-session.enable = true;
+    # media-session.enable = true;
   };
-
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.christoph = {
@@ -184,8 +199,9 @@
   # TODO: Identify all the crap
   # Remove these packages that come by default with GNOME
   environment.gnome.excludePackages = with pkgs.gnome; [
-    epiphany
+    # epiphany # gnome webbrowser
     gnome-maps
+    gnome-contacts
   ];
 
   # It is preferred to use the module (if it exists) over environment.systemPackages, as some extra configs are applied.
