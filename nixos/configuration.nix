@@ -72,8 +72,9 @@
     enableAllFirmware = true;
     enableRedistributableFirmware = true;
 
-    opengl.enable = true;
-    opengl.driSupport32Bit = true;
+    nvidia.modesetting.enable = true; # Not officially supported by NVidia but needed for wayland
+    # opengl.enable = true;
+    # opengl.driSupport32Bit = true;
 
     sane.enable = true; # Scanning
   };
@@ -129,8 +130,7 @@
 
     # Proprietary graphics drivers
     # TODO: Opengl and stuff
-    videoDrivers = ["nvidia"];
-    # hardware.nvidia.modesetting.enable = true; # Not officially supported by NVidia # TODO: I don't think I need this for gnome
+    videoDrivers = [ "nvidia" ];
 
     # Startx replaces the displaymanager so default (lightdm) isn't used, start to shell
     # displayManager.startx.enable = true;
@@ -142,6 +142,7 @@
 
     # Gnome (Wayland)
     displayManager.gdm.enable = true;
+    displayManager.gdm.wayland = true; # This is actually the default
     desktopManager.gnome.enable = true;
     # HomeManager gnome.gnome-keyring.enable = true;
 
@@ -213,6 +214,7 @@
     neovim.enable = true;
     starship.enable = true;
     thefuck.enable = true; # Not available in HomeManager
+    xwayland.enable = true;
   };
 
   # List services that you want to enable:
@@ -229,6 +231,9 @@
     journald.extraConfig = ''
       SystemMaxUse=50M
     '';
+
+    # Wiki says needed for appindicators
+    udev.packages = with pkgs; [ gnome.gnome-settings-daemon ];
 
     acpid.enable = true;
     dbus.enable = true;
