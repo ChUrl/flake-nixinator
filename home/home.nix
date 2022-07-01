@@ -19,9 +19,9 @@ rec {
     emacs.useDoom = true;
   };
 
-  # TODO: Fonts
   # TODO: Gtk
   # TODO: Email
+  # TODO: run noisetorch as login script
 
   # Disabled since HomeManager should use global pkgs
   # https://github.com/nix-community/home-manager/issues/2942
@@ -293,6 +293,39 @@ rec {
     # TODO: Copy config from Arch dots
     kitty = {
       enable = true;
+      font = { name = "Victor Mono SemiBold"; };
+      settings = {
+        font_size = 12;
+        scrollback_lines = 10000;
+        window_padding_width = 10;
+
+        # Light Theme
+        # background = "#f7f7f7";
+        # foreground = "#494542";
+        # selection_background = "#a4a1a1";
+        # selection_foreground = "#f7f7f7";
+        # cursor = "#494542";
+        # color0 = "#090200";
+        # color1 = "#da2c20";
+        # color2 = "#00a152";
+        # color3 = "#ffcc00";
+        # color4 = "#00a0e4";
+        # color5 = "#a06994";
+        # color6 = "#0077d9";
+        # color7 = "#a4a1a1";
+        # color8 = "#5b5754";
+        # color9 = "#e8bacf";
+        # color10 = "#3a3332";
+        # color11 = "#494542";
+        # color12 = "#7f7c7b";
+        # color13 = "#d6d4d3";
+        # color14 = "#ccab53";
+        # color15 = "#d2b3ff";
+      };
+      keybindings = {
+        "kitty_mod+j" = "next_window";
+        "kitty_mod+k" = "previous_window";
+      };
     };
 
     # mpv.enable = true; # Use gnome apps for now
