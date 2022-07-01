@@ -34,7 +34,7 @@ in {
   # Since this module is for HomeManager, config is not the system config
   config = mkIf cfg.enable {
     # What home packages should be enabled
-    home.packages = [
+    home.packages = with pkgs; [
       binutils
       zstd
       (ripgrep.override { withPCRE2 = true; })
@@ -64,8 +64,11 @@ in {
     # fonts.fonts = [ pkgs.emacs-all-the-icons-fonts ];
 
     # If doom is enabled we want to clone the framework
-    system.userActivationScripts = mkIf cfg.useDoom {
-      installDoomEmacs = ''
+    # The activation script is being run when home-manager rebuilds
+    home.activation = mkIf cfg.useDoom {
+
+      # Because we write to the filesystem, this script has to be run after HomeManager's writeBoundary
+      installDoomEmacs = hm.dag.entryAfter ["writeBoundary"] ''
         if [ ! -d "${config.home.homeDirectory}/.emacs.d" ]; then
            git clone --depth=1 --single-branch "https://github.com/doomemacs/doomemacs" "${config.home.homeDirectory}/.emacs.d"
         fi
