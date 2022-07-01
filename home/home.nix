@@ -30,7 +30,12 @@ rec {
 
   # Chinese Input
   i18n.inputMethod.enabled = "fcitx5";
-  i18n.inputMethod.fcitx5.addons = with pkgs; [ fcitx5-gtk libsForQt5.fcitx5-qt fcitx5-chinese-addons fcitx5-configtool ];
+  i18n.inputMethod.fcitx5.addons = with pkgs; [
+    fcitx5-gtk
+    libsForQt5.fcitx5-qt
+    fcitx5-chinese-addons
+    fcitx5-configtool
+  ];
 
   # Make fonts installed through packages available to applications
   fonts.fontconfig.enable = true;
@@ -47,7 +52,8 @@ rec {
       EDITOR = "nvim";
       VISUAL = "nvim";
       MOZ_ENABLE_WAYLAND = 1;
-      XDG_DATA_DIRS = "/var/lib/flatpak/exports/share:/home/christoph/.local/share/flatpak/exports/share:$XDG_DATA_DIRS";
+      XDG_DATA_DIRS =
+        "/var/lib/flatpak/exports/share:/home/christoph/.local/share/flatpak/exports/share:$XDG_DATA_DIRS";
       DOCKER_BUILDKIT = 1;
       LANG = "en_US.UTF-8";
       WINEESYNC = 1;
@@ -58,7 +64,6 @@ rec {
 
       # TODO: Investigate if this also slows down Gnome login
       # GTK_USE_PORTAL = 1;
-
 
     };
 
@@ -202,9 +207,7 @@ rec {
   programs = {
     home-manager.enable = true;
 
-    bat = {
-      enable = true;
-    };
+    bat = { enable = true; };
 
     command-not-found.enable = true;
 
@@ -239,28 +242,37 @@ rec {
 
         cd = "z";
         cp = "cp -i";
-        ls = "exa --color always --group-directories-first -F --git --icons"; # color-ls
-        lsl = "exa --color always --group-directories-first -F -l --git --icons";
-        lsa = "exa --color always --group-directories-first -F -l -a --git --icons";
-        tre = "exa --color always --group-directories-first -F -T -L 2 ---icons";
+        ls =
+          "exa --color always --group-directories-first -F --git --icons"; # color-ls
+        lsl =
+          "exa --color always --group-directories-first -F -l --git --icons";
+        lsa =
+          "exa --color always --group-directories-first -F -l -a --git --icons";
+        tre =
+          "exa --color always --group-directories-first -F -T -L 2 ---icons";
         mkd = "mkdir -p";
-        blk = "lsblk -o NAME,LABEL,UUID,FSTYPE,SIZE,FSUSE%,MOUNTPOINT,MODEL | bat";
+        blk =
+          "lsblk -o NAME,LABEL,UUID,FSTYPE,SIZE,FSUSE%,MOUNTPOINT,MODEL | bat";
         fsm = "df -h | bat";
         grp = "grep --color=auto -E";
-        fzp = "fzf --preview 'bat --color=always --style=numbers --line-range=:500 {}'";
+        fzp =
+          "fzf --preview 'bat --color=always --style=numbers --line-range=:500 {}'";
         fre = "free -m";
 
-        r = "ranger --choosedir=$HOME/.rangerdir; set LASTDIR (cat $HOME/.rangerdir); cd $LASTDIR";
+        r =
+          "ranger --choosedir=$HOME/.rangerdir; set LASTDIR (cat $HOME/.rangerdir); cd $LASTDIR";
         rsync = "rsync -chavzP --info=progress2";
-        performance = "sudo cpupower frequency-set -g performance && nvidia-settings -a [gpu:0]/GPUPowerMizerMode=1";
-        powersave = "sudo cpupower frequency-set -g powersave && nvidia-settings -a [gpu:0]/GPUPowerMizerMode=0";
+        performance =
+          "sudo cpupower frequency-set -g performance && nvidia-settings -a [gpu:0]/GPUPowerMizerMode=1";
+        powersave =
+          "sudo cpupower frequency-set -g powersave && nvidia-settings -a [gpu:0]/GPUPowerMizerMode=0";
 
         wat = "watch -d -c -n -0.5";
         dus = "sudo dust -r";
         dsi = "sudo du -sch . | bat";
         prc = "procs -t";
 
-        emacs = "emacs -nw";
+        emcs = "emacs -nw";
 
         gs = "git status";
         gcm = "git commit -m";
@@ -283,7 +295,8 @@ rec {
 
         league = "sudo sysctl -w abi.vsyscall32=0";
 
-        mp4 = "yt-dlp -f 'bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4] / bv*+ba/b' --recode-video mp4"; # the -f options are yt-dlp defaults
+        mp4 =
+          "yt-dlp -f 'bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4] / bv*+ba/b' --recode-video mp4"; # the -f options are yt-dlp defaults
         mp3 = "yt-dlp -f 'ba' --extract-audio --audio-format mp3";
       };
       shellAliases = {
@@ -310,10 +323,10 @@ rec {
         # About policies:
         # https://github.com/mozilla/policy-templates#enterprisepoliciesenabled
         extraPolicies = {
-	  # TODO: Investigate this
-          ExtensionSettings = {};
+          # TODO: Investigate this
+          ExtensionSettings = { };
 
-	  CaptivePortal = false;
+          CaptivePortal = false;
           DisableFirefoxStudies = true;
           DisablePocket = true;
           DisableTelemetry = true;
@@ -330,27 +343,26 @@ rec {
       };
 
       # TODO:
-      extensions = with pkgs.nur.repos.rycee.firefox-addons; [
-	ublock-origin
-      ];
+      extensions = with pkgs.nur.repos.rycee.firefox-addons; [ ublock-origin ];
 
       # TODO:
       profiles = {
         default = {
-	  id = 0;
+          id = 0;
 
           # TODO:
           settings = {
-	    "app.update.auto" = false;
+            "app.update.auto" = false;
             # "browser.startup.homepage" = "https://lobste.rs";
-            "identity.fxaccounts.account.device.name" = nixosConfig.networking.hostName; # NOTE: nixosConfig attribute is somehow not documented, so Idk if I should use it
+            "identity.fxaccounts.account.device.name" =
+              nixosConfig.networking.hostName; # NOTE: nixosConfig attribute is somehow not documented, so Idk if I should use it
             "signon.rememberSignons" = false;
             # "browser.urlbar.placeholderName" = "DuckDuckGo";
             # "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
           };
 
           # userChrome = builtins.readFile ../conf.d/userChrome.css;
-	};
+        };
       };
     };
 
