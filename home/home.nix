@@ -42,7 +42,7 @@
 
     exa.enable = true;
 
-    feh.enable = true;
+    # feh.enable = true; # Use gnome apps for now
 
     # TODO: Copy config from Arch dots
     fish = {
@@ -52,17 +52,54 @@
     firefox = {
       enable = true;
 
-      # TODO: Add extra config
-      package = pkgs.firefox-wayland.override {
-        # See nixpkgs' firefox/wrapper.nix to check which options you can use
-        cfg = {
-          # Gnome shell native connector
-          enableGnomeExtensions = false; # I don't need this since I declare installed extensions inside HomeManager
+      # firefox-unwrapped is the pure firefox browser, wrapFirefox adds configuration ontop
+      package = pkgs.wrapFirefox pkgs.firefox-unwrapped {
+
+        forceWayland = true;
+
+        # About policies:
+        # https://github.com/mozilla/policy-templates#enterprisepoliciesenabled
+        extraPolicies = {
+	  # TODO: Investigate this
+          ExtensionSettings = {};
+
+	  CaptivePortal = false;
+          DisableFirefoxStudies = true;
+          DisablePocket = true;
+          DisableTelemetry = true;
+          DisableFirefoxAccounts = true;
+          FirefoxHome = {
+            Pocket = false;
+            Snippets = false;
+          };
+          UserMessaging = {
+            ExtensionRecommendations = false;
+            SkipOnboarding = true;
+          };
         };
       };
 
-      # TODO: Add extensions
+      # TODO:
       extensions = [];
+
+      # TODO:
+      profiles = {
+        default = {
+	  id = 0;
+
+          # TODO:
+          settings = defaultSettings // {
+	    "app.update.auto" = false;
+            # "browser.startup.homepage" = "https://lobste.rs";
+            "identity.fxaccounts.account.device.name" = config.networking.hostName;
+            "signon.rememberSignons" = false;
+            # "browser.urlbar.placeholderName" = "DuckDuckGo";
+            # "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
+          };
+
+          # userChrome = builtins.readFile ../conf.d/userChrome.css;
+	};
+      };
     };
 
     fzf = {
@@ -70,6 +107,7 @@
       enableFishIntegration = true;
     };
 
+    # TODO: This is also enabled as system module, what exactly happens now?
     git = {
       enable = true;
       delta.enable = true;
@@ -90,12 +128,13 @@
       enable = true;
     };
 
-    mpv.enable = true;
+    # mpv.enable = true; # Use gnome apps for now
 
     neovim = {
       enable = true;
     };
 
+    # TODO: openssh is also enabled as system module
     ssh.enable = true;
 
     starship = {
@@ -117,16 +156,16 @@
     procs
     tokei
     rsync
+    rclone
     xclip
-    poppler_utils
+    poppler_utils # pdfunite
     ffmpeg
     imagemagick
-    htop
+    # htop
     httpie
-    rclone
 
-    # TODO: Moooore
     # Gnome extensions
+    # TODO: Make a gnome module
     gnomeExtensions.appindicator
     gnomeExtensions.blur-my-shell
     gnomeExtensions.sound-output-device-chooser
@@ -135,6 +174,8 @@
     gnomeExtensions.switch-workspace
     gnomeExtensions.maximize-to-empty-workspace
     gnomeExtensions.pip-on-top
+    gnomeExtensions.custom-hot-corners-extended
+    gnomeExtensions.dock-from-dash
 
     # Ranger
     # TODO: Make module out of this
@@ -250,6 +291,12 @@
       enable = true;
       startInBackground = true;
     };
+  };
+
+  # Environment variables
+  home.sessionVariables = {
+    MOZ_ENABLE_WAYLAND = 1;
+    EDITOR = "nvim";
   };
 
   # Nicely reload system units when changing configs
