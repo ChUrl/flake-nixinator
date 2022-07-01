@@ -57,7 +57,7 @@ in {
     };
 
     home.sessionPath = [
-      "/home/${home.username}/.emacs.d/bin"
+      "/home/${config.home.username}/.emacs.d/bin"
     ];
 
     # TODO:
@@ -66,8 +66,8 @@ in {
     # If doom is enabled we want to clone the framework
     system.userActivationScripts = mkIf cfg.useDoom {
       installDoomEmacs = ''
-        if [ ! -d "${home.homeDirectory}/.emacs.d" ]; then
-           git clone --depth=1 --single-branch "https://github.com/doomemacs/doomemacs" "${home.homeDirectory}/.emacs.d"
+        if [ ! -d "${config.home.homeDirectory}/.emacs.d" ]; then
+           git clone --depth=1 --single-branch "https://github.com/doomemacs/doomemacs" "${config.home.homeDirectory}/.emacs.d"
         fi
       '';
     };
