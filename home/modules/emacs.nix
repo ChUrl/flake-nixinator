@@ -63,6 +63,16 @@ in {
     # TODO:
     # fonts.fonts = [ pkgs.emacs-all-the-icons-fonts ];
 
+    # We tell HomeManager where the config files belong
+    home.file = {
+      # With onChange you even could rebuild doom emacs when rebuilding HomeManager but I don't want this to become too slow
+
+      # We let HomeManager link the config
+      doom-config.recursive = true; # doom-config is a directory
+      doom-config.source = ../../config/doom;
+      doom-config.target = ".config/doom"; # Relative to homeDirectory
+    };
+
     # If doom is enabled we want to clone the framework
     # The activation script is being run when home-manager rebuilds
     home.activation = mkIf cfg.useDoom {
