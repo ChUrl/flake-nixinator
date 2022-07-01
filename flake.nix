@@ -55,7 +55,7 @@
 	  ./nixos/configuration.nix
 
 	  # Add the overlays
-	  { nixpkgs.overlays = attrValues overlays; }
+	  # { nixpkgs.overlays = attrValues overlays; } # I only really need them for HomeManager
 	];
 
         # Make our inputs available to the config (for importing modules)
