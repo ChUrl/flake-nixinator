@@ -362,7 +362,7 @@ rec {
         tree-style-tab
         ublacklist
         ublock-origin
-        umatrix
+        # umatrix # Many pages need manual intervention
         unpaywall
         view-image
         vimium
@@ -378,12 +378,9 @@ rec {
             # "browser.startup.homepage" = "https://lobste.rs";
             "identity.fxaccounts.account.device.name" = nixosConfig.networking.hostName; # NOTE: nixosConfig attribute is somehow not documented, so Idk if I should use it
 
-            # Taken from hlissner
-            # Default to dark theme in DevTools panel
-            # "devtools.theme" = "dark";
             # Enable ETP for decent security (makes firefox containers and many
             # common security/privacy add-ons redundant).
-            # "browser.contentblocking.category" = "strict";
+            "browser.contentblocking.category" = "standard";
             "privacy.donottrackheader.enabled" = true;
             "privacy.donottrackheader.value" = 1;
             "privacy.purge_trackers.enabled" = true;
@@ -394,8 +391,6 @@ rec {
             # "services.sync.prefs.sync.browser.uiCustomization.state" = true;
             # Enable userContent.css and userChrome.css for our theme modules
             "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
-            # Stop creating ~/Downloads!
-            # "browser.download.dir" = "${config.user.home}/downloads";
             # Don't use the built-in password manager. A nixos user is more likely
             # using an external one (you are using one, right?).
             "signon.rememberSignons" = false;
@@ -424,6 +419,7 @@ rec {
             # Reduce search engine noise in the urlbar's completion window. The
             # shortcuts and suggestions will still work, but Firefox won't clutter
             # its UI with reminders that they exist.
+            # TODO: Somehow not applied? At least it's not represented in settings
             "browser.urlbar.suggest.searches" = true;
             "browser.urlbar.shortcuts.bookmarks" = false;
             "browser.urlbar.shortcuts.history" = true;
@@ -516,6 +512,7 @@ rec {
             "datareporting.healthreport.uploadEnabled" = false;
             "datareporting.healthreport.service.enabled" = false;
             "datareporting.policy.dataSubmissionEnabled" = false;
+            "dom.security.https_only_mode" = true;
 
             # Disable crash reports
             "breakpad.reportURL" = "";
@@ -532,7 +529,7 @@ rec {
             "extensions.formautofill.heuristics.enabled" = false;
           };
 
-          # userChrome = builtins.readFile ../conf.d/userChrome.css;
+          userChrome = builtins.readFile ../config/firefox/userChrome.css;
         };
       };
     };
