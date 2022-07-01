@@ -81,38 +81,5 @@
         specialArgs = { inherit inputs; };
       };
     };
-
-    # Home configurations standalone
-    # Accessible via 'home-manager'
-    # homeConfigurations = {
-    #   # We give our configuration a name (the user + hostname).
-    #   # This makes it easy to add configurations for different users/PCs.
-    #   # Usage: home-manager switch --flake .#christoph@nixinator
-    #   "christoph@nixinator" = home-manager.lib.homeManagerConfiguration rec {
-    #     pkgs = nixpkgs.legacyPackages."x86_64-linux"; # HomeManager needs this since 22.11 release
-
-    #     modules = [
-    #       # >> Main HomeManager configuration file <<
-    #       ./home/home.nix
-
-    #       {
-    #         home = rec {
-    #           username = "christoph";
-    #           homeDirectory = "/home/${username}";
-    #           stateVersion = "22.05";
-    #         };
-
-    #         # Add the overlays
-    #         # TODO: I guess attrValues unpacks the overlays set or smth?
-    #         nixpkgs.overlays = attrValues overlays;
-    #       }
-    #     ];
-
-    #     # Make our inputs available to the config (for importing modules)
-    #     extraSpecialArgs = {
-    #       inherit inputs;
-    #     };
-    #   };
-    # };
   };
 }
