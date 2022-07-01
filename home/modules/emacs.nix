@@ -35,7 +35,8 @@ in {
   config = mkIf cfg.enable {
     # What home packages should be enabled
     home.packages = with pkgs; [
-      ((emacsPackagesFor emacsPgtkNativeComp).emacsWithPackages (epkgs: [
+      # NOTE: I have problems with emacsPgtkNativeComp/emacsPgtk
+      ((emacsPackagesFor emacs28NativeComp).emacsWithPackages (epkgs: [
         epkgs.vterm
       ]))
 
