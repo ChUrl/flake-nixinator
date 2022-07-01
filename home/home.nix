@@ -34,9 +34,8 @@
 
     # TODO: Move to emacs module
     emacs = {
-      # TODO: This is wrong, I need to figure out the overlays
-      # package = pkgs.emacsPgtkNativeComp;
-      package = pkgs.emacs28NativeComp;
+      package = pkgs.emacsPgtkNativeComp; # NOTE: I have no idea why not pkgs.emacs.emacsPgtkNativeComp...
+      # package = pkgs.emacs28NativeComp;
       enable = true;
     };
 
@@ -80,7 +79,9 @@
       };
 
       # TODO:
-      extensions = [];
+      extensions = with pkgs.nur.repos.rycee.firefox-addons; [
+	ublock-origin
+      ];
 
       # TODO:
       profiles = {
@@ -276,8 +277,7 @@
 
     # Gaming
     gamemode
-    # TODO: This is wrong, I need to figure out nur when I try out gamescope
-    # pkgs.repos.dukzcry.gamescope
+    nur.repos.dukzcry.gamescope
     # Flatpak bottles
     # Flatpak steam
     polymc # TODO: Should I use Flatpak for all gaming stuff?
