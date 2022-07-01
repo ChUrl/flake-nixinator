@@ -30,15 +30,16 @@
     inherit (builtins) attrValues; # TODO: What does this do
     inherit (nixpkgs.lib) nixosSystem;
     inherit (home-manager.lib) homeManagerConfiguration;
-  in
-  # The rec expression turns a basic set into a set where self-referencing is possible.
-  # It is a shorthand for recursive and allows to use the values defined in this set from its own scope.
-  rec {
+
     # Add overlays from other flakes so we can use them from pkgs.
     overlays = {
       nur = nur.overlay;
       emacs = emacs-overlay.overlay;
     };
+  in
+  # The rec expression turns a basic set into a set where self-referencing is possible.
+  # It is a shorthand for recursive and allows to use the values defined in this set from its own scope.
+  rec {
 
     # System configurations
     # Accessible via 'nixos-rebuild'
@@ -84,8 +85,8 @@
             };
 
 	    # Add the overlays
-	    # TODO: This is wrong, I need to figure out nur when I try out gamescope
-	    # nixpkgs.overlays = attrValues overlays;
+	    # TODO: I guess attrValues unpacks the overlays set or smth?
+	    nixpkgs.overlays = attrValues overlays;
           }
         ];
 
