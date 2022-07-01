@@ -18,138 +18,20 @@
   i18n.inputMethod.enabled = "fcitx5";
   i18n.inputMethod.fcitx5.addons = with pkgs; [ fcitx5-gtk libsForQt5.fcitx5-qt fcitx5-chinese-addons fcitx5-configtool ];
 
-  # Packages with extra options managed by HomeManager natively
-  programs = {
-    home-manager.enable = true;
+  home = {
+    username = "christoph";
+    homeDirectory = "/home/christoph";
+    enableNixpkgsReleaseCheck = true;
 
-    bat = {
-      enable = true;
+    # TODO: There are many more home.* options
+
+    # Environment variables
+    sessionVariables = {
+      MOZ_ENABLE_WAYLAND = 1;
+      EDITOR = "nvim";
     };
 
-    command-not-found.enable = true;
-
-    direnv = {
-      enable = true;
-      nix-direnv.enable = true;
-    };
-
-    # TODO: Move to emacs module
-    emacs = {
-      package = pkgs.emacsPgtkNativeComp; # NOTE: I have no idea why not pkgs.emacs.emacsPgtkNativeComp...
-      # package = pkgs.emacs28NativeComp;
-      enable = true;
-    };
-
-    exa.enable = true;
-
-    # feh.enable = true; # Use gnome apps for now
-
-    # TODO: Copy config from Arch dots
-    fish = {
-      enable = true;
-    };
-
-    firefox = {
-      enable = true;
-
-      # firefox-unwrapped is the pure firefox browser, wrapFirefox adds configuration ontop
-      package = pkgs.wrapFirefox pkgs.firefox-unwrapped {
-
-        forceWayland = true;
-
-        # About policies:
-        # https://github.com/mozilla/policy-templates#enterprisepoliciesenabled
-        extraPolicies = {
-	  # TODO: Investigate this
-          ExtensionSettings = {};
-
-	  CaptivePortal = false;
-          DisableFirefoxStudies = true;
-          DisablePocket = true;
-          DisableTelemetry = true;
-          DisableFirefoxAccounts = true;
-          FirefoxHome = {
-            Pocket = false;
-            Snippets = false;
-          };
-          UserMessaging = {
-            ExtensionRecommendations = false;
-            SkipOnboarding = true;
-          };
-        };
-      };
-
-      # TODO:
-      extensions = with pkgs.nur.repos.rycee.firefox-addons; [
-	ublock-origin
-      ];
-
-      # TODO:
-      profiles = {
-        default = {
-	  id = 0;
-
-          # TODO:
-          settings = {
-	    "app.update.auto" = false;
-            # "browser.startup.homepage" = "https://lobste.rs";
-            "identity.fxaccounts.account.device.name" = "nixinator"; # TODO: I want to pass the toplevel config to use config.networking.hostName, there seems to be an attribute nixosConfig for that but it didn't work
-            "signon.rememberSignons" = false;
-            # "browser.urlbar.placeholderName" = "DuckDuckGo";
-            # "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
-          };
-
-          # userChrome = builtins.readFile ../conf.d/userChrome.css;
-	};
-      };
-    };
-
-    fzf = {
-      enable = true;
-      enableFishIntegration = true;
-    };
-
-    # TODO: This is also enabled as system module, what exactly happens now?
-    git = {
-      enable = true;
-      delta.enable = true;
-      userEmail = "christoph.urlacher@protonmail.com";
-      userName = "ChUrl";
-    };
-
-    keychain = {
-      enable = true;
-      enableFishIntegration = true;
-      enableXsessionIntegration = true;
-      agents = [ "ssh" ];
-      keys = [ "id_ed25519" ];
-    };
-
-    # TODO: Copy config from Arch dots
-    kitty = {
-      enable = true;
-    };
-
-    # mpv.enable = true; # Use gnome apps for now
-
-    neovim = {
-      enable = true;
-    };
-
-    # TODO: openssh is also enabled as system module
-    ssh.enable = true;
-
-    starship = {
-      enable = true;
-      enableFishIntegration = true;
-    };
-
-    # TODO: TexLive
-
-    zoxide = {
-      enable = true;
-      enableFishIntegration = true;
-    };
+    stateVersion = "22.05";
   };
 
   # Add stuff for your user as you see fit:
@@ -285,6 +167,140 @@
     # lutris # I don't want that crap, pleaaaase
   ];
 
+  # Packages with extra options managed by HomeManager natively
+  programs = {
+    home-manager.enable = true;
+
+    bat = {
+      enable = true;
+    };
+
+    command-not-found.enable = true;
+
+    direnv = {
+      enable = true;
+      nix-direnv.enable = true;
+    };
+
+    # TODO: Move to emacs module
+    emacs = {
+      package = pkgs.emacsPgtkNativeComp; # NOTE: I have no idea why not pkgs.emacs.emacsPgtkNativeComp...
+      # package = pkgs.emacs28NativeComp;
+      enable = true;
+    };
+
+    exa.enable = true;
+
+    # feh.enable = true; # Use gnome apps for now
+
+    # TODO: Copy config from Arch dots
+    fish = {
+      enable = true;
+    };
+
+    firefox = {
+      enable = true;
+
+      # firefox-unwrapped is the pure firefox browser, wrapFirefox adds configuration ontop
+      package = pkgs.wrapFirefox pkgs.firefox-unwrapped {
+
+        forceWayland = true;
+
+        # About policies:
+        # https://github.com/mozilla/policy-templates#enterprisepoliciesenabled
+        extraPolicies = {
+	  # TODO: Investigate this
+          ExtensionSettings = {};
+
+	  CaptivePortal = false;
+          DisableFirefoxStudies = true;
+          DisablePocket = true;
+          DisableTelemetry = true;
+          DisableFirefoxAccounts = true;
+          FirefoxHome = {
+            Pocket = false;
+            Snippets = false;
+          };
+          UserMessaging = {
+            ExtensionRecommendations = false;
+            SkipOnboarding = true;
+          };
+        };
+      };
+
+      # TODO:
+      extensions = with pkgs.nur.repos.rycee.firefox-addons; [
+	ublock-origin
+      ];
+
+      # TODO:
+      profiles = {
+        default = {
+	  id = 0;
+
+          # TODO:
+          settings = {
+	    "app.update.auto" = false;
+            # "browser.startup.homepage" = "https://lobste.rs";
+            "identity.fxaccounts.account.device.name" = "nixinator"; # TODO: I want to pass the toplevel config to use config.networking.hostName, there seems to be an attribute nixosConfig for that but it didn't work
+            "signon.rememberSignons" = false;
+            # "browser.urlbar.placeholderName" = "DuckDuckGo";
+            # "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
+          };
+
+          # userChrome = builtins.readFile ../conf.d/userChrome.css;
+	};
+      };
+    };
+
+    fzf = {
+      enable = true;
+      enableFishIntegration = true;
+    };
+
+    # TODO: This is also enabled as system module, what exactly happens now?
+    git = {
+      enable = true;
+      delta.enable = true;
+      userEmail = "christoph.urlacher@protonmail.com";
+      userName = "ChUrl";
+    };
+
+    keychain = {
+      enable = true;
+      enableFishIntegration = true;
+      enableXsessionIntegration = true;
+      agents = [ "ssh" ];
+      keys = [ "id_ed25519" ];
+    };
+
+    # TODO: Copy config from Arch dots
+    kitty = {
+      enable = true;
+    };
+
+    # mpv.enable = true; # Use gnome apps for now
+
+    neovim = {
+      enable = true;
+    };
+
+    # TODO: openssh is also enabled as system module
+    ssh.enable = true;
+
+    starship = {
+      enable = true;
+      enableFishIntegration = true;
+    };
+
+    # TODO: TexLive
+
+    zoxide = {
+      enable = true;
+      enableFishIntegration = true;
+    };
+  };
+
   services = {
     # lorri.enable = true; # Use nix-direnv instead
 
@@ -294,14 +310,6 @@
     };
   };
 
-  # Environment variables
-  home.sessionVariables = {
-    MOZ_ENABLE_WAYLAND = 1;
-    EDITOR = "nvim";
-  };
-
   # Nicely reload system units when changing configs
   systemd.user.startServices = "sd-switch";
-
-  home.stateVersion = "22.05";
 }
