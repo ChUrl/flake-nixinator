@@ -73,8 +73,9 @@
     enableRedistributableFirmware = true;
 
     nvidia.modesetting.enable = true; # Not officially supported by NVidia but needed for wayland
-    # opengl.enable = true;
-    # opengl.driSupport32Bit = true;
+    opengl.enable = true;
+    opengl.driSupport = true;
+    opengl.driSupport32Bit = true;
 
     sane.enable = true; # Scanning
   };
