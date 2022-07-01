@@ -44,6 +44,7 @@
   '';
 
   # Allow unfree packages
+  # Since we use HomeManager as a module with global pkgs this should also cover user packages
   nixpkgs.config.allowUnfree = true;
 
   # Bootloader/Kernel stuff
