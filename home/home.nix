@@ -21,7 +21,7 @@ rec {
 
   # TODO: Gtk
   # TODO: Email
-  # TODO: run noisetorch as login script
+  # TODO: Run noisetorch as login script
 
   # Disabled since HomeManager should use global pkgs
   # https://github.com/nix-community/home-manager/issues/2942
@@ -44,8 +44,22 @@ rec {
 
     # Environment variables
     sessionVariables = {
-      MOZ_ENABLE_WAYLAND = 1;
       EDITOR = "nvim";
+      VISUAL = "nvim";
+      MOZ_ENABLE_WAYLAND = 1;
+      XDG_DATA_DIRS = "/var/lib/flatpak/exports/share:/home/christoph/.local/share/flatpak/exports/share:$XDG_DATA_DIRS";
+      DOCKER_BUILDKIT = 1;
+      LANG = "en_US.UTF-8";
+      WINEESYNC = 1;
+      WINEFSYNC = 1;
+      WINEPREFIX = "/home/christoph/.wine";
+
+      # NOTE: GTK_IM_MODULE, QT_IM_MODULE, XMODIFIERS are set by HomeManager fcitx5 module
+
+      # TODO: Investigate if this also slows down Gnome login
+      # GTK_USE_PORTAL = 1;
+
+
     };
 
     stateVersion = "22.05";
@@ -160,6 +174,7 @@ rec {
     source-han-serif
     wqy_zenhei
     wqy_microhei
+    (pkgs.nerdfonts.override { fonts = [ "VictorMono" ]; })
 
     # Audio
     # TODO: Make a module
@@ -212,6 +227,76 @@ rec {
     # TODO: Copy config from Arch dots
     fish = {
       enable = true;
+      # functions = {};
+      # plugins = [];
+      shellAbbrs = {
+        c = "clear";
+        q = "exit";
+        h = "history | bat";
+
+        failed = "systemctl --failed";
+        errors = "journalctl -p 3 -xb";
+
+        cd = "z";
+        cp = "cp -i";
+        ls = "exa --color always --group-directories-first -F --git --icons"; # color-ls
+        lsl = "exa --color always --group-directories-first -F -l --git --icons";
+        lsa = "exa --color always --group-directories-first -F -l -a --git --icons";
+        tre = "exa --color always --group-directories-first -F -T -L 2 ---icons";
+        mkd = "mkdir -p";
+        blk = "lsblk -o NAME,LABEL,UUID,FSTYPE,SIZE,FSUSE%,MOUNTPOINT,MODEL | bat";
+        fsm = "df -h | bat";
+        grp = "grep --color=auto -E";
+        fzp = "fzf --preview 'bat --color=always --style=numbers --line-range=:500 {}'";
+        fre = "free -m";
+
+        r = "ranger --choosedir=$HOME/.rangerdir; set LASTDIR (cat $HOME/.rangerdir); cd $LASTDIR";
+        rsync = "rsync -chavzP --info=progress2";
+        performance = "sudo cpupower frequency-set -g performance && nvidia-settings -a [gpu:0]/GPUPowerMizerMode=1";
+        powersave = "sudo cpupower frequency-set -g powersave && nvidia-settings -a [gpu:0]/GPUPowerMizerMode=0";
+
+        wat = "watch -d -c -n -0.5";
+        dus = "sudo dust -r";
+        dsi = "sudo du -sch . | bat";
+        prc = "procs -t";
+
+        emacs = "emacs -nw";
+
+        gs = "git status";
+        gcm = "git commit -m";
+        ga = "git add";
+        glg = "git log --graph --decorate --oneline";
+        gcl = "git clone";
+
+        xxhamster = "TERM=ansi ssh christoph@217.160.142.51";
+
+        fonts = "fc-list";
+        fchar = "fc-match -s";
+
+        vpnat = "protonvpn-cli c --cc at";
+        vpnch = "protonvpn-cli c --cc ch";
+        vpnlu = "protonvpn-cli c --cc lu";
+        vpnus = "protonvpn-cli c --cc us";
+        vpnhk = "protonvpn-cli c --cc hk";
+        vpnkr = "protonvpn-cli c --cc kr";
+        vpnoff = "protonvpn-cli d";
+
+        league = "sudo sysctl -w abi.vsyscall32=0";
+
+        mp4 = "yt-dlp -f 'bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4] / bv*+ba/b' --recode-video mp4"; # the -f options are yt-dlp defaults
+        mp3 = "yt-dlp -f 'ba' --extract-audio --audio-format mp3";
+      };
+      shellAliases = {
+        # ".." = "cd ..";
+        "please" = "sudo !!";
+        "yeet" = "rm -rf";
+      };
+      shellInit = ''
+        set -e fish_greeting
+      '';
+      # promptInit = ''
+      #   any-nix-shell fish --info-right | source
+      # '';
     };
 
     firefox = {
@@ -332,6 +417,32 @@ rec {
 
     neovim = {
       enable = true;
+      extraConfig = ''
+        set incsearch
+        set hlsearch
+        set ignorecase
+        set autoindent
+        set expandtab
+        set smartindent
+        set smarttab
+        set shiftwidth=4
+        set softtabstop=4
+        set backspace=indent,eol,start
+        set ruler
+        set number
+        set laststatus=2
+        set noshowmode
+        set undofile
+        set undodir=~/.vim/undo
+        set hidden
+        set printfont=Victor\ Mono\ SemiBold:h10
+        set guifont=Victor\ Mono\ SemiBold:h12
+        let printencoding='utf-8'
+        set encoding=utf-8
+      '';
+      plugins = with pkgs.vimPlugins; [ vim-nix lightline-vim ];
+      viAlias = true;
+      vimAlias = true;
     };
 
     # TODO: openssh is also enabled as system module
