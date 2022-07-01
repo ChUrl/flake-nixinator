@@ -35,12 +35,17 @@ in {
   config = mkIf cfg.enable {
     # What home packages should be enabled
     home.packages = with pkgs; [
+      ((emacsPackagesFor emacsPgtkNativeComp).emacsWithPackages (epkgs: [
+        epkgs.vterm
+      ]))
+
       binutils
       zstd
       (ripgrep.override { withPCRE2 = true; })
       fd
       # libgccjit
       sqlite
+      # TODO: I probably need python too
       python310Packages.pygments
       inkscape
       graphviz
@@ -49,19 +54,20 @@ in {
       nixfmt
       shellcheck
       maim
+      # TODO: Use LaTeX module instead
+      texlive.combined.scheme-medium
+      emacs-all-the-icons-fonts
     ];
 
-    programs.emacs = {
-      package = pkgs.emacsPgtkNativeComp;
-      enable = true;
-    };
+    # Do this in packages
+    # programs.emacs = {
+    #   package = pkgs.emacsPgtkNativeComp;
+    #   enable = true;
+    # };
 
     home.sessionPath = [
-      "/home/${config.home.username}/.emacs/bin"
+      "/home/${config.home.username}/.emacs.d/bin"
     ];
-
-    # TODO:
-    # fonts.fonts = [ pkgs.emacs-all-the-icons-fonts ];
 
     # We tell HomeManager where the config files belong
     home.file = {
@@ -79,8 +85,8 @@ in {
 
       # Because we write to the filesystem, this script has to be run after HomeManager's writeBoundary
       installDoomEmacs = hm.dag.entryAfter ["writeBoundary"] ''
-        if [ ! -d "${config.home.homeDirectory}/.emacs" ]; then
-           git clone --depth=1 --single-branch "https://github.com/doomemacs/doomemacs" "${config.home.homeDirectory}/.emacs"
+        if [ ! -d "${config.home.homeDirectory}/.emacs.d" ]; then
+           git clone --depth=1 --single-branch "https://github.com/doomemacs/doomemacs" "${config.home.homeDirectory}/.emacs.d"
         fi
       '';
     };

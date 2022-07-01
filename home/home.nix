@@ -32,6 +32,9 @@ rec {
   i18n.inputMethod.enabled = "fcitx5";
   i18n.inputMethod.fcitx5.addons = with pkgs; [ fcitx5-gtk libsForQt5.fcitx5-qt fcitx5-chinese-addons fcitx5-configtool ];
 
+  # Make fonts installed through packages available to applications
+  fonts.fontconfig.enable = true;
+
   home = {
     username = "christoph";
     homeDirectory = "/home/${home.username}";
