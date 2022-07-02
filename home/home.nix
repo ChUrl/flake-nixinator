@@ -149,7 +149,7 @@ rec {
     gource
     keepassxc
     # ark # This is KDE tool
-    anki
+    # Flatpak anki # The version is quite a bit behind on nixos
     libreoffice-fresh
     # libsForQt5.dolphin-plugins
     # libsForQt5.kdegraphics-thumbnailers
