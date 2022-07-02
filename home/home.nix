@@ -88,6 +88,7 @@ rec {
 
     # Gnome extensions
     # TODO: Make a gnome module
+    gnome.gnome-tweaks
     gnomeExtensions.appindicator
     gnomeExtensions.blur-my-shell
     gnomeExtensions.sound-output-device-chooser
