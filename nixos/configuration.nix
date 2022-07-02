@@ -188,6 +188,20 @@
     # media-session.enable = true;
   };
 
+  fonts = {
+    enableDefaultFonts = true; # Some default fonts for unicode coverage
+    fontDir.enable = true;
+    # fonts = []; # Font packages go here, mostly done in HomeManager though
+    fontconfig = {
+      enable = true;
+      defaultFonts = {
+        serif = [ "Source Han Serif Regular" ];
+        sansSerif = [ "Source Han Sans Regular" ];
+        monospace = [ "Source Han Mono Regular" ];
+      };
+    };
+  };
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.christoph = {
     isNormalUser = true;
