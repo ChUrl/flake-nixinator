@@ -230,6 +230,7 @@
   # I would prefer to use HomeManager for some of these but the modules don't exist (yet)
   programs = {
     adb.enable = true;
+    dconf.enable = true;
     fish.enable = true;
     git.enable = true;
     neovim.enable = true;
