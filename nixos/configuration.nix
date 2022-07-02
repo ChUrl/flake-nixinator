@@ -98,6 +98,12 @@
     LC_TIME = "de_DE.UTF-8";
   };
 
+  # https://github.com/NixOS/nixpkgs/issues/179486
+  i18n.supportedLocales = [
+    "en_US.UTF-8/UTF-8"
+    "de_DE.UTF-8/UTF-8"
+  ];
+
   # TODO: Other ports (tcp/udp/ssh...)?
   # Open ports in the firewall.
   networking = {
