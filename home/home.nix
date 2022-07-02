@@ -40,6 +40,21 @@ rec {
   # Make fonts installed through packages available to applications
   fonts.fontconfig.enable = true;
 
+  # TODO: Module
+  gtk = {
+    enable = true;
+
+    cursorTheme.package = pkgs.numix-cursor-theme;
+    cursorTheme.name = "Numix";
+    # cursorTheme.size = 16;
+
+    iconTheme.package = pkgs.papirus-icon-theme;
+    iconTheme.name = "Papirus";
+
+    # theme.package = ;
+    # theme.name = ;
+  };
+
   home = {
     username = "christoph";
     homeDirectory = "/home/${home.username}";
@@ -164,7 +179,7 @@ rec {
     # godot
 
     # Icons
-    papirus-icon-theme
+    # papirus-icon-theme # Moved to iconTheme
 
     # Fonts
     # TODO: Make a module and move to fonts.fonts or something more specific
