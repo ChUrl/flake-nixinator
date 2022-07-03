@@ -34,11 +34,11 @@ rec {
     fcitx5-gtk
     libsForQt5.fcitx5-qt
     fcitx5-chinese-addons
-    fcitx5-configtool
+    fcitx5-configtool # TODO: Remove this and set config through HomeManager
   ];
 
   # Make fonts installed through user packages available to applications
-  # TODO: I don't think I need this anymore as all fonts are installed through the system config
+  # NOTE: I don't think I need this anymore as all fonts are installed through the system config but let's keep this just in case
   fonts.fontconfig.enable = true; # Also updates the font-cache
 
   # Make fonts available to flatpak apps, we link the fontdir to $XDG_DATA_DIR/fonts and allow access
@@ -128,7 +128,7 @@ rec {
 
     # Gnome extensions
     # TODO: Make a gnome module
-    # gnome.gnome-tweaks # I want to do this declaratively
+    # gnome.gnome-tweaks # Disabled since settings should be set declaratively
     gnomeExtensions.appindicator
     gnomeExtensions.blur-my-shell
     gnomeExtensions.sound-output-device-chooser
@@ -154,32 +154,13 @@ rec {
     exiftool
     mediainfo
 
-    # Doom Emacs (contained in Module)
-    # binutils
-    # zstd
-    # ripgrep
-    # fd
-    # gcc
-    # libgccjit
-    # gnumake
-    # cmake
-    # sqlite
-    # python310Packages.pygments
-    # inkscape
-    # graphviz
-    # gnuplot
-    # pandoc
-    # nixfmt
-    # shellcheck
-    # maim
-
     # Web
     signal-desktop
     noisetorch
     # Flatpak discord
     yt-dlp
     # Flatpak spotify
-    thunderbird
+    # thunderbird
     protonmail-bridge
     protonvpn-cli
 
@@ -202,25 +183,6 @@ rec {
     # krita
     # blender
     # godot
-
-    # Icons
-    # TODO: Check if this is needed
-    # papirus-icon-theme # Moved to iconTheme
-
-    # Fonts (Disabled because we use the system config)
-    # victor-mono
-    # source-code-pro
-    # source-sans-pro
-    # source-serif-pro
-    # (pkgs.nerdfonts.override { fonts = [ "VictorMono" ]; })
-    # source-han-mono
-    # source-han-sans
-    # source-han-serif
-    # wqy_zenhei
-    # wqy_microhei
-    # jetbrains-mono
-    # etBook
-    # overpass
 
     # Audio
     # TODO: Make a module
@@ -257,18 +219,10 @@ rec {
       nix-direnv.enable = true;
     };
 
-    # Contained in Module
-    # emacs = {
-    #   package = pkgs.emacsPgtkNativeComp; # NOTE: I have no idea why not pkgs.emacs.emacsPgtkNativeComp...
-    #   # package = pkgs.emacs28NativeComp;
-    #   enable = true;
-    # };
-
     exa.enable = true;
 
     # feh.enable = true; # Use gnome apps for now
 
-    # TODO: Copy config from Arch dots
     fish = {
       enable = true;
       # functions = {};
@@ -589,7 +543,6 @@ rec {
       enableFishIntegration = true;
     };
 
-    # TODO: This is also enabled as system module, what exactly happens now?
     git = {
       enable = true;
       delta.enable = true;
@@ -675,7 +628,6 @@ rec {
       vimAlias = true;
     };
 
-    # TODO: openssh is also enabled as system module
     ssh.enable = true;
 
     starship = {
