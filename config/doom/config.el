@@ -23,8 +23,8 @@
 ;;       doom-variable-pitch-font (font-spec :family "sans" :size 13))
 (setq! doom-font (font-spec :family "Victor Mono" :weight 'semi-bold :size 17) ;; Victor Mono
        doom-big-font (font-spec :family "Victor Mono" :weight 'semi-bold :size 21) ;; Victor Mono
-       doom-variable-pitch-font (font-spec :family "Noto Sans CJK SC" :size 17) ;; Overpass, Source Han Sans CN
-       doom-unicode-font (font-spec :family "Noto Sans CJK SC" :size 17) ;; Use this for chinese characters 汉字
+       doom-variable-pitch-font (font-spec :family "Source Han Sans" :size 17) ;; Overpass, Source Han Sans CN
+       doom-unicode-font (font-spec :family "Source Han Sans" :size 17) ;; Use this for chinese characters 汉字
        ;; doom-serif-font (font-spec :family "IBM Plex Mono" :weight 'light)
        )
 
