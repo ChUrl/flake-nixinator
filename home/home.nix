@@ -44,10 +44,12 @@ rec {
   gtk = {
     enable = true;
 
+    # TODO: doesn't work
     cursorTheme.package = pkgs.numix-cursor-theme;
     cursorTheme.name = "Numix";
     # cursorTheme.size = 16;
 
+    # TODO: check if works
     iconTheme.package = pkgs.papirus-icon-theme;
     iconTheme.name = "Papirus";
 
@@ -288,7 +290,7 @@ rec {
         dsi = "sudo du -sch . | bat";
         prc = "procs -t";
 
-        emacs = "emacs -nw";
+        emcs = "emacs -nw";
 
         gs = "git status";
         gcm = "git commit -m";
