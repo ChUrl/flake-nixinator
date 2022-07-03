@@ -41,11 +41,17 @@ rec {
   # TODO: I don't think I need this anymore as all fonts are installed through the system config
   fonts.fontconfig.enable = true; # Also updates the font-cache
 
-  # Make fonts available to flatpak apps, we either link the fontdir to $XDG_DATA_DIR/fonts or allow access to fontdir directly
+  # Make fonts available to flatpak apps, we link the fontdir to $XDG_DATA_DIR/fonts and allow access
   # home.file.".local/share/fonts" = {
   #   recursive = true;
-  #   source = /run/current-system/sw/share/X11/fonts;
+  #   source = /run/current-system/sw/share/X11/fonts; # We cannot use the absolute path
   # };
+  # We link like this to be able to address the absolute location, also the fonts won't get copied to store
+  home.activation.linkFontDir = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    if [ ! -L "${home.homeDirectory}/.local/share/fonts" ]; then
+      ln -sf /run/current-system/sw/share/X11/fonts ${home.homeDirectory}/.local/share/fonts
+    fi
+  '';
   home.file.".local/share/flatpak/overrides/global".text = ''
     [Context]
     filesystems=/run/current-system/sw/share/X11/fonts:ro;/nix/store:ro
