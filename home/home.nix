@@ -99,7 +99,7 @@ rec {
 
     };
 
-    # sessionPath
+    # sessionPath = [];
 
     pointerCursor.package = pkgs.numix-cursor-theme;
     pointerCursor.gtk.enable = true;

@@ -11,7 +11,7 @@ let
   # We use it to determine if the config should be changed below
   cfg = config.modules.emacs;
 in {
-  imports = [];
+  imports = [ ];
 
   # Options is a vector of options this module defines
   # This module defines only the "emacs" option and suboptions "enable" and "doom"
@@ -36,9 +36,8 @@ in {
     # What home packages should be enabled
     home.packages = with pkgs; [
       # NOTE: I have problems with emacsPgtkNativeComp/emacsPgtk and also emacs28NativeComp GUI
-      ((emacsPackagesFor emacsPgtkNativeComp).emacsWithPackages (epkgs: [
-        epkgs.vterm
-      ]))
+      ((emacsPackagesFor emacsPgtkNativeComp).emacsWithPackages
+        (epkgs: [ epkgs.vterm ]))
 
       binutils
       zstd
@@ -66,9 +65,7 @@ in {
     #   enable = true;
     # };
 
-    home.sessionPath = [
-      "/home/${config.home.username}/.emacs.d/bin"
-    ];
+    home.sessionPath = [ "/home/${config.home.username}/.emacs.d/bin" ];
 
     # We tell HomeManager where the config files belong
     # home.file.".config/doom" = {
