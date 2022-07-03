@@ -37,8 +37,9 @@ rec {
     fcitx5-configtool
   ];
 
-  # Make fonts installed through packages available to applications
-  fonts.fontconfig.enable = true;
+  # Make fonts installed through user packages available to applications
+  # TODO: I don't think I need this anymore as all fonts are installed through the system config
+  fonts.fontconfig.enable = true; # Also updates the font-cache
 
   # TODO: Module
   gtk = {
@@ -93,7 +94,7 @@ rec {
     procs
     tokei
     rsync
-    rclone
+    # rclone
     xclip
     xorg.xwininfo
     xdotool
@@ -101,7 +102,8 @@ rec {
     ffmpeg
     imagemagick
     # htop
-    httpie
+    # httpie
+    nix-locate
 
     # Gnome extensions
     # TODO: Make a gnome module
@@ -181,23 +183,23 @@ rec {
     # godot
 
     # Icons
+    # TODO: Check if this is needed
     # papirus-icon-theme # Moved to iconTheme
 
-    # Fonts
-    # TODO: Make a module and move to fonts.fonts or something more specific
-    victor-mono
-    source-code-pro
-    source-sans-pro
-    source-serif-pro
-    jetbrains-mono
-    etBook
-    overpass
-    source-han-mono
-    source-han-sans
-    source-han-serif
-    wqy_zenhei
-    wqy_microhei
-    (pkgs.nerdfonts.override { fonts = [ "VictorMono" ]; })
+    # Fonts (Disabled because we use the system config)
+    # victor-mono
+    # source-code-pro
+    # source-sans-pro
+    # source-serif-pro
+    # (pkgs.nerdfonts.override { fonts = [ "VictorMono" ]; })
+    # source-han-mono
+    # source-han-sans
+    # source-han-serif
+    # wqy_zenhei
+    # wqy_microhei
+    # jetbrains-mono
+    # etBook
+    # overpass
 
     # Audio
     # TODO: Make a module
