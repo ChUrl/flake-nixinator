@@ -5,13 +5,12 @@
 { inputs, lib, config, pkgs, ... }:
 
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
+  imports = [ # Include the results of the hardware scan.
+    ./hardware-configuration.nix
 
-      # NixCommunity binary cache
-      ./cachix.nix
-    ];
+    # NixCommunity binary cache
+    ./cachix.nix
+  ];
 
   # Enable flakes
   # Keep nix-shell from grabage collection for direnv (keep-outputs + keep-derivations)
@@ -72,7 +71,8 @@
     enableAllFirmware = true;
     enableRedistributableFirmware = true; # Also enables microcode update
 
-    nvidia.modesetting.enable = true; # Not officially supported by NVidia but needed for wayland
+    nvidia.modesetting.enable =
+      true; # Not officially supported by NVidia but needed for wayland
     opengl.enable = true;
     opengl.driSupport = true;
     opengl.driSupport32Bit = true;
@@ -99,10 +99,7 @@
   };
 
   # https://github.com/NixOS/nixpkgs/issues/179486
-  i18n.supportedLocales = [
-    "en_US.UTF-8/UTF-8"
-    "de_DE.UTF-8/UTF-8"
-  ];
+  i18n.supportedLocales = [ "en_US.UTF-8/UTF-8" "de_DE.UTF-8/UTF-8" ];
 
   # TODO: Other ports (tcp/udp/ssh...)?
   # Open ports in the firewall.
@@ -118,10 +115,10 @@
     networkmanager.enable = true;
 
     firewall.allowedTCPPorts = [ ];
-    firewall.allowedTCPPortRanges = [];
+    firewall.allowedTCPPortRanges = [ ];
 
     firewall.allowedUDPPorts = [ ];
-    firewall.allowedUDPPortRanges = [];
+    firewall.allowedUDPPortRanges = [ ];
 
     # Or disable the firewall altogether.
     # firewall.enable = false;
@@ -190,24 +187,25 @@
 
   fonts = {
     enableDefaultFonts = true; # Some default fonts for unicode coverage
-    fontDir.enable = true; # Puts fonts to /run/current-system/sw/share/X11/fonts
+    fontDir.enable =
+      true; # Puts fonts to /run/current-system/sw/share/X11/fonts
 
     # Font packages go here, don't do this with HomeManager as I need the fonts in the fontdir for flatpak apps
     fonts = with pkgs; [
-      victor-mono    
+      victor-mono
       source-code-pro
-      source-sans-pro 
+      source-sans-pro
       source-serif-pro
       (pkgs.nerdfonts.override { fonts = [ "VictorMono" ]; })
       source-han-mono
-      source-han-sans 
+      source-han-sans
       source-han-serif
-      wqy_zenhei  
-      wqy_microhei    
+      wqy_zenhei
+      wqy_microhei
       # jetbrains-mono
       # etBook  
       # overpass
-    ]; 
+    ];
 
     # TODO: Check if this works
     fontconfig = {
@@ -224,7 +222,16 @@
   users.users.christoph = {
     isNormalUser = true;
     description = "Christoph";
-    extraGroups = [ "networkmanager" "wheel" "audio" "realtime" "docker" "adbusers" "scanner" "lp" ];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+      "audio"
+      "realtime"
+      "docker"
+      "adbusers"
+      "scanner"
+      "lp"
+    ];
     shell = pkgs.fish; # TODO: Is this needed if programs.fish.enable = true?
     # We do this with HomeManager
     packages = with pkgs; [ ];
@@ -277,7 +284,8 @@
 
     acpid.enable = true;
     dbus.enable = true;
-    flatpak.enable = true; # Not quite the nix style but useful for bottles/proprietary stuff
+    flatpak.enable =
+      true; # Not quite the nix style but useful for bottles/proprietary stuff
     fstrim.enable = true;
     fwupd.enable = true;
     locate.enable = true; # Periodically update index
@@ -290,9 +298,7 @@
     autoPrune.enable = true;
   };
 
-  virtualisation.libvirtd = {
-    enable = true;
-  };
+  virtualisation.libvirtd = { enable = true; };
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
