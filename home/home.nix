@@ -103,7 +103,7 @@ rec {
     imagemagick
     # htop
     # httpie
-    nix-locate
+    nix-index
 
     # Gnome extensions
     # TODO: Make a gnome module
