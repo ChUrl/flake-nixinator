@@ -41,6 +41,16 @@ rec {
   # TODO: I don't think I need this anymore as all fonts are installed through the system config
   fonts.fontconfig.enable = true; # Also updates the font-cache
 
+  # Make fonts available to flatpak apps, we either link the fontdir to $XDG_DATA_DIR/fonts or allow access to fontdir directly
+  # home.file.".local/share/fonts" = {
+  #   recursive = true;
+  #   source = /run/current-system/sw/share/X11/fonts;
+  # };
+  home.file.".local/share/flatpak/overrides/global".text = ''
+    [Context]
+    filesystems=/run/current-system/sw/share/X11/fonts:ro;/nix/store:ro
+  '';
+
   # TODO: Module
   gtk = {
     enable = true;
@@ -70,8 +80,7 @@ rec {
       EDITOR = "nvim";
       VISUAL = "nvim";
       MOZ_ENABLE_WAYLAND = 1;
-      XDG_DATA_DIRS =
-        "/var/lib/flatpak/exports/share:/home/christoph/.local/share/flatpak/exports/share:$XDG_DATA_DIRS";
+      XDG_DATA_DIRS = "/var/lib/flatpak/exports/share:/home/christoph/.local/share/flatpak/exports/share:$XDG_DATA_DIRS";
       DOCKER_BUILDKIT = 1;
       LANG = "en_US.UTF-8";
       WINEESYNC = 1;
