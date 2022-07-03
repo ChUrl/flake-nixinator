@@ -190,8 +190,24 @@
 
   fonts = {
     enableDefaultFonts = true; # Some default fonts for unicode coverage
-    fontDir.enable = true;
-    # fonts = []; # Font packages go here, mostly done in HomeManager though
+    fontDir.enable = true; # Puts fonts to /run/current-system/sw/share/X11/fonts
+
+    # Font packages go here, don't do this with HomeManager as I need the fonts in the fontdir for flatpak apps
+    fonts = with pkgs; [
+      victor-mono    
+      source-code-pro
+      source-sans-pro 
+      source-serif-pro
+      (pkgs.nerdfonts.override { fonts = [ "VictorMono" ]; })
+      source-han-mono
+      source-han-sans 
+      source-han-serif
+      wqy_zenhei  
+      wqy_microhei    
+      # jetbrains-mono
+      # etBook  
+      # overpass
+    ]; 
 
     # TODO: Check if this works
     fontconfig = {
