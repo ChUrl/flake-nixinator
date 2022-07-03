@@ -61,12 +61,10 @@ rec {
   gtk = {
     enable = true;
 
-    # TODO: doesn't work
-    cursorTheme.package = pkgs.numix-cursor-theme;
-    cursorTheme.name = "Numix";
-    # cursorTheme.size = 16;
+    # I guess this gets set by home.pointerCursor
+    # cursorTheme.package = pkgs.numix-cursor-theme;
+    # cursorTheme.name = "Numix-Cursor";
 
-    # TODO: check if works
     iconTheme.package = pkgs.papirus-icon-theme;
     iconTheme.name = "Papirus";
 
@@ -86,7 +84,8 @@ rec {
       EDITOR = "nvim";
       VISUAL = "nvim";
       MOZ_ENABLE_WAYLAND = 1;
-      XDG_DATA_DIRS = "/var/lib/flatpak/exports/share:/home/christoph/.local/share/flatpak/exports/share:$XDG_DATA_DIRS";
+      XDG_DATA_DIRS =
+        "/var/lib/flatpak/exports/share:/home/christoph/.local/share/flatpak/exports/share:$XDG_DATA_DIRS";
       DOCKER_BUILDKIT = 1;
       LANG = "en_US.UTF-8";
       WINEESYNC = 1;
@@ -99,6 +98,13 @@ rec {
       # GTK_USE_PORTAL = 1;
 
     };
+
+    # sessionPath
+
+    pointerCursor.package = pkgs.numix-cursor-theme;
+    pointerCursor.gtk.enable = true;
+    pointerCursor.name = "Numix-Cursor";
+    pointerCursor.x11.enable = true;
 
     stateVersion = "22.05";
   };
@@ -411,7 +417,8 @@ rec {
           settings = {
             "app.update.auto" = false;
             # "browser.startup.homepage" = "https://lobste.rs";
-            "identity.fxaccounts.account.device.name" = nixosConfig.networking.hostName; # NOTE: nixosConfig attribute is somehow not documented, so Idk if I should use it
+            "identity.fxaccounts.account.device.name" =
+              nixosConfig.networking.hostName; # NOTE: nixosConfig attribute is somehow not documented, so Idk if I should use it
 
             # Enable ETP for decent security (makes firefox containers and many
             # common security/privacy add-ons redundant).
@@ -469,13 +476,17 @@ rec {
             # Show whole URL in address bar
             "browser.urlbar.trimURLs" = false;
             # Disable some not so useful functionality.
-            "browser.disableResetPrompt" = true;       # "Looks like you haven't started Firefox in a while."
-            "browser.onboarding.enabled" = false;      # "New to Firefox? Let's get started!" tour
-            "browser.aboutConfig.showWarning" = false; # Warning when opening about:config
-            "media.videocontrols.picture-in-picture.video-toggle.enabled" = true;
+            "browser.disableResetPrompt" =
+              true; # "Looks like you haven't started Firefox in a while."
+            "browser.onboarding.enabled" =
+              false; # "New to Firefox? Let's get started!" tour
+            "browser.aboutConfig.showWarning" =
+              false; # Warning when opening about:config
+            "media.videocontrols.picture-in-picture.video-toggle.enabled" =
+              true;
             "extensions.pocket.enabled" = false;
             "extensions.shield-recipe-client.enabled" = false;
-            "reader.parse-on-load.enabled" = false;  # "reader view"
+            "reader.parse-on-load.enabled" = false; # "reader view"
 
             # Security-oriented defaults
             "security.family_safety.mode" = 0;
@@ -484,15 +495,18 @@ rec {
             # https://github.com/tlswg/tls13-spec/issues/1001
             "security.tls.enable_0rtt_data" = false;
             # Use Mozilla geolocation service instead of Google if given permission
-            "geo.provider.network.url" = "https://location.services.mozilla.com/v1/geolocate?key=%MOZILLA_API_KEY%";
+            "geo.provider.network.url" =
+              "https://location.services.mozilla.com/v1/geolocate?key=%MOZILLA_API_KEY%";
             "geo.provider.use_gpsd" = false;
             # https://support.mozilla.org/en-US/kb/extension-recommendations
             "browser.newtabpage.activity-stream.asrouter.userprefs.cfr" = false;
-            "browser.newtabpage.activity-stream.asrouter.userprefs.cfr.addons" = false;
-            "browser.newtabpage.activity-stream.asrouter.userprefs.cfr.features" = false;
+            "browser.newtabpage.activity-stream.asrouter.userprefs.cfr.addons" =
+              false;
+            "browser.newtabpage.activity-stream.asrouter.userprefs.cfr.features" =
+              false;
             "extensions.htmlaboutaddons.recommendations.enabled" = false;
             "extensions.htmlaboutaddons.discover.enabled" = false;
-            "extensions.getAddons.showPane" = false;  # uses Google Analytics
+            "extensions.getAddons.showPane" = false; # uses Google Analytics
             "browser.discovery.enabled" = false;
             # Reduce File IO / SSD abuse
             # Otherwise, Firefox bombards the HD with writes. Not so nice for SSDs.
@@ -552,7 +566,8 @@ rec {
             # Disable crash reports
             "breakpad.reportURL" = "";
             "browser.tabs.crashReporting.sendReport" = false;
-            "browser.crashReports.unsubmittedCheck.autoSubmit2" = false;  # don't submit backlogged reports
+            "browser.crashReports.unsubmittedCheck.autoSubmit2" =
+              false; # don't submit backlogged reports
 
             # Disable Form autofill
             # https://wiki.mozilla.org/Firefox/Features/Form_Autofill
