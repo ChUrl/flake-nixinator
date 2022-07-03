@@ -71,13 +71,10 @@ in {
     ];
 
     # We tell HomeManager where the config files belong
-    home.file = {
+    home.file.".config/doom" = {
       # With onChange you even could rebuild doom emacs when rebuilding HomeManager but I don't want this to become too slow
-
-      # We let HomeManager link the config
-      doom-config.recursive = true; # doom-config is a directory
-      doom-config.source = ../../config/doom;
-      doom-config.target = ".config/doom"; # Relative to homeDirectory
+      recursive = true; # is a directory
+      source = ../../config/doom;
     };
 
     # If doom is enabled we want to clone the framework
