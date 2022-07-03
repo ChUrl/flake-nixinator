@@ -192,6 +192,8 @@
     enableDefaultFonts = true; # Some default fonts for unicode coverage
     fontDir.enable = true;
     # fonts = []; # Font packages go here, mostly done in HomeManager though
+
+    # TODO: Check if this works
     fontconfig = {
       enable = true;
       defaultFonts = {
