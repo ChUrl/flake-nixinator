@@ -57,6 +57,8 @@ in {
       # TODO: Use LaTeX module instead
       texlive.combined.scheme-medium
       emacs-all-the-icons-fonts
+
+      # TODO: Should I list lsps etc here or inside shell.nix for specific projects?
     ];
 
     # Do this in packages
@@ -65,7 +67,8 @@ in {
     #   enable = true;
     # };
 
-    home.sessionPath = [ "/home/${config.home.username}/.emacs.d/bin" ];
+    home.sessionPath =
+      mkIf cfg.useDoom [ "/home/${config.home.username}/.emacs.d/bin" ];
 
     # We tell HomeManager where the config files belong
     # home.file.".config/doom" = {
@@ -77,6 +80,7 @@ in {
     # If doom is enabled we want to clone the framework
     # The activation script is being run when home-manager rebuilds
     home.activation = mkIf cfg.useDoom {
+
       # Because we write to the filesystem, this script has to be run after HomeManager's writeBoundary
       installDoomEmacs = hm.dag.entryAfter [ "writeBoundary" ] ''
         if [ ! -d "${config.home.homeDirectory}/.emacs.d" ]; then

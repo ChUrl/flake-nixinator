@@ -19,9 +19,9 @@ rec {
     emacs.useDoom = true;
   };
 
-  # TODO: Gtk
   # TODO: Email
   # TODO: Run noisetorch as login script
+  # TODO: Gnome terminal
 
   # Disabled since HomeManager should use global pkgs
   # https://github.com/nix-community/home-manager/issues/2942
