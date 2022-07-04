@@ -127,6 +127,7 @@ rec {
     # htop
     # httpie
     nix-index
+    nvd # nix rebuild diff
 
     # Gnome extensions
     # TODO: Make a gnome module
@@ -233,6 +234,8 @@ rec {
         c = "clear";
         q = "exit";
         h = "history | bat";
+
+        rebuild = "sudo nixos-rebuild build --flake .#nixinator && nvd diff /run/current-system result";
 
         failed = "systemctl --failed";
         errors = "journalctl -p 3 -xb";
