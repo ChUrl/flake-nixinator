@@ -88,9 +88,11 @@ rec {
         "/var/lib/flatpak/exports/share:/home/christoph/.local/share/flatpak/exports/share:$XDG_DATA_DIRS";
       DOCKER_BUILDKIT = 1;
       LANG = "en_US.UTF-8";
-      WINEESYNC = 1;
-      WINEFSYNC = 1;
-      WINEPREFIX = "/home/christoph/.wine";
+
+      # Don't use system wine, use bottles
+      # WINEESYNC = 1;
+      # WINEFSYNC = 1;
+      # WINEPREFIX = "/home/christoph/.wine";
 
       # NOTE: GTK_IM_MODULE, QT_IM_MODULE, XMODIFIERS are set by HomeManager fcitx5 module
 
