@@ -57,6 +57,7 @@ in {
       # TODO: Use LaTeX module instead
       texlive.combined.scheme-medium
       emacs-all-the-icons-fonts
+      bashInteractive # For keychain
 
       # TODO: Should I list lsps etc here or inside shell.nix for specific projects?
     ];
