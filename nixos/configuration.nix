@@ -13,15 +13,16 @@
   ];
 
   # Enable flakes
-  # Keep nix-shell from grabage collection for direnv (keep-outputs + keep-derivations)
   nix = {
     package = pkgs.nixFlakes;
     extraOptions = ''
       experimental-features = nix-command flakes
-
-      keep-outputs = true
-      keep-derivations = true
     '';
+
+    # Keep nix-shell from grabage collection for direnv (keep-outputs + keep-derivations)
+    # NOTE: nix-direnv use nix or use flake should do this automatically
+    # keep-outputs = true
+    # keep-derivations = true
 
     # Auto garbage-collect and optimize store
     gc.automatic = true;
