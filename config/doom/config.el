@@ -150,7 +150,7 @@
          doom-modeline-minor-modes nil
          doom-modeline-window-width-limit 80
          doom-modeline-lsp t
-         doom-modeline-enable-word-count t
+         doom-modeline-enable-word-count t ; only in selection
          doom-modeline-buffer-file-name-style 'truncate-with-project
          ))
 
