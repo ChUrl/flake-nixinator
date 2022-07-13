@@ -57,6 +57,12 @@ rec {
     filesystems=/run/current-system/sw/share/X11/fonts:ro;/nix/store:ro
   '';
 
+  # TODO: Move to gaming modules
+  home.file.".local/share/flatpak/overrides/com.valvesoftware.Steam".text = ''
+    [Context]
+    filesystems=${home.homeDirectory}/GameSSD;${home.homeDirectory}/GameHDD
+  '';
+
   # TODO: Module
   gtk = {
     enable = true;
@@ -68,8 +74,8 @@ rec {
     iconTheme.package = pkgs.papirus-icon-theme;
     iconTheme.name = "Papirus";
 
-    # theme.package = ;
-    # theme.name = ;
+    # theme.package = pkgs.whitesur-gtk-theme;
+    # theme.name = "WhiteSur-light-solid";
   };
 
   home = {
@@ -83,11 +89,15 @@ rec {
     sessionVariables = {
       EDITOR = "nvim";
       VISUAL = "nvim";
-      MOZ_ENABLE_WAYLAND = 1;
+      LANG = "en_US.UTF-8";
+
       XDG_DATA_DIRS =
         "/var/lib/flatpak/exports/share:/home/christoph/.local/share/flatpak/exports/share:$XDG_DATA_DIRS";
       DOCKER_BUILDKIT = 1;
-      LANG = "en_US.UTF-8";
+
+      # Enable wayland for other shitty apps
+      MOZ_ENABLE_WAYLAND = 1;
+      QT_QPA_PLATFORM = "wayland";
 
       # Don't use system wine, use bottles
       # WINEESYNC = 1;
@@ -128,6 +138,7 @@ rec {
     # httpie
     nix-index
     nvd # nix rebuild diff
+    neofetch # Easily see interesting package versions/kernel
 
     # Gnome extensions
     # TODO: Make a gnome module
@@ -137,11 +148,11 @@ rec {
     gnomeExtensions.sound-output-device-chooser
     gnomeExtensions.vitals
     gnomeExtensions.no-overview
-    gnomeExtensions.switch-workspace
+    # gnomeExtensions.switch-workspace
     gnomeExtensions.maximize-to-empty-workspace
     gnomeExtensions.pip-on-top
     gnomeExtensions.custom-hot-corners-extended
-    gnomeExtensions.dock-from-dash
+    # gnomeExtensions.dock-from-dash
 
     # Ranger
     # TODO: Make module out of this
@@ -163,7 +174,7 @@ rec {
     # Flatpak discord
     yt-dlp
     # Flatpak spotify
-    # thunderbird
+    # thunderbird # Try gnome mail
     protonmail-bridge
     protonvpn-cli
 
@@ -173,11 +184,8 @@ rec {
     gnome.gnome-boxes
     gource
     keepassxc
-    # ark # This is KDE tool
-    # Flatpak anki # The version is quite a bit behind on nixos
+    anki-bin # Use anki-bin as anki is some versions behind
     libreoffice-fresh
-    # libsForQt5.dolphin-plugins
-    # libsForQt5.kdegraphics-thumbnailers
 
     # Graphics
     wacomtablet
@@ -189,13 +197,13 @@ rec {
 
     # Audio
     # TODO: Make a module
+    # NOTE: Don't use any system wine, use bottles runner for yabridge
     # vcv-rack
     # bitwig-studio
     # audacity
     # carla
-    # TODO: Make wine-tgk derivation
-    # yabridge
-    # yabridgectl # TODO: Do I need both?
+    # yabridge # NOTE: Wait for version bump
+    # yabridgectl
 
     # Use NixCommunity binary cache
     cachix
@@ -205,8 +213,8 @@ rec {
     # Flatpak nur.repos.dukzcry.gamescope # We need to install this with flatpak to be able to use with bottles
     # Flatpak bottles
     # Flatpak steam
-    polymc # TODO: Should I use Flatpak for all gaming stuff?
-    # lutris # I don't want to, pleeeease
+    # Flatpak polymc # Use flatpak as it bundles java and I don't have/want system wide java installation
+    # lutris # I don't want to
   ];
 
   # Packages with extra options managed by HomeManager natively
@@ -235,7 +243,10 @@ rec {
         q = "exit";
         h = "history | bat";
 
-        rebuild = "sudo nixos-rebuild build --flake .#nixinator && nvd diff /run/current-system result";
+        upgrade =
+          "nix flake update && sudo nixos-rebuild build --flake .#nixinator && nvd diff /run/current-system result";
+        rebuild = "sudo nixos-rebuild switch --flake .#nixinator";
+        rebuildfast = "sudo nixos-rebuild switch --fast --flake .#nixinator";
 
         failed = "systemctl --failed";
         errors = "journalctl -p 3 -xb";
