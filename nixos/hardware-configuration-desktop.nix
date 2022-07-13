@@ -60,4 +60,20 @@
     lib.mkDefault config.hardware.enableRedistributableFirmware;
   # high-resolution display
   hardware.video.hidpi.enable = lib.mkDefault true;
+
+  hardware = {
+    # cpu.intel.updateMicrocode = true; # Already defined in hardware.nix
+
+    # Use all redistributable firmware (i.e. nonfree)
+    enableAllFirmware = true;
+    enableRedistributableFirmware = true; # Also enables microcode update
+
+    nvidia.modesetting.enable =
+      true; # Not officially supported by NVidia but needed for wayland
+    opengl.enable = true;
+    opengl.driSupport = true;
+    opengl.driSupport32Bit = true;
+
+    sane.enable = true; # Scanning
+  };
 }

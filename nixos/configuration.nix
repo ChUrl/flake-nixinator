@@ -5,9 +5,7 @@
 { inputs, lib, config, pkgs, ... }:
 
 {
-  imports = [ # Include the results of the hardware scan.
-    ./hardware-configuration.nix
-
+  imports = [
     # NixCommunity binary cache
     ./cachix.nix
   ];
@@ -65,22 +63,6 @@
 
   security.protectKernelImage = true;
 
-  hardware = {
-    # cpu.intel.updateMicrocode = true; # Already defined in hardware.nix
-
-    # Use all redistributable firmware (i.e. nonfree)
-    enableAllFirmware = true;
-    enableRedistributableFirmware = true; # Also enables microcode update
-
-    nvidia.modesetting.enable =
-      true; # Not officially supported by NVidia but needed for wayland
-    opengl.enable = true;
-    opengl.driSupport = true;
-    opengl.driSupport32Bit = true;
-
-    sane.enable = true; # Scanning
-  };
-
   # Set your time zone.
   time.timeZone = "Europe/Berlin";
 
@@ -105,7 +87,7 @@
   # TODO: Other ports (tcp/udp/ssh...)?
   # Open ports in the firewall.
   networking = {
-    hostName = "nixinator"; # Define your hostname.
+    # hostName = "nixinator"; # Define your hostname. # NOTE: Done in host specific config
     # wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
     # Configure network proxy if necessary
@@ -130,12 +112,12 @@
     enable = true;
 
     # Configure keymap in X11
-    layout = "us";
-    xkbVariant = "altgr-intl";
+    # layout = "us"; # NOTE: Done in host specific config
+    # xkbVariant = "altgr-intl"; # NOTE: Done in host specific config
 
     # Proprietary graphics drivers
     # TODO: Opengl and stuff
-    videoDrivers = [ "nvidia" ];
+    # videoDrivers = [ "nvidia" ]; # NOTE: Done in host specific config
 
     # Startx replaces the displaymanager so default (lightdm) isn't used, start to shell
     # displayManager.startx.enable = true;
