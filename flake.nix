@@ -39,6 +39,17 @@
         emacs = inputs.emacs-overlay.overlay;
       };
 
+      homemanager = home-manager.nixosModules.home-manager {
+        home-manager.useGlobalPkgs =
+          true; # Use systems pkgs, disables nixpkgs.* options in home.nix
+        home-manager.useUserPackages =
+          true; # Enable installing packages through users.christoph.packages
+        home-manager.users.christoph = import ./home/home.nix;
+
+        # Make our overlays available in home.nix
+        home-manager.extraSpecialArgs = { inherit inputs; };
+      };
+
       # The rec expression turns a basic set into a set where self-referencing is possible.
       # It is a shorthand for recursive and allows to use the values defined in this set from its own scope.
     in rec {
@@ -56,6 +67,7 @@
           modules = [
             # TODO: Modularize
             ./nixos/configuration.nix
+            ./nixos/configuration-desktop.nix
 
             # TODO: Investigate this { ... } module syntax
             # Overlays
@@ -65,17 +77,31 @@
             }
 
             # HomeManager
-            home-manager.nixosModules.home-manager
-            {
-              home-manager.useGlobalPkgs =
-                true; # Use systems pkgs, disables nixpkgs.* options in home.nix
-              home-manager.useUserPackages =
-                true; # Enable installing packages through users.christoph.packages
-              home-manager.users.christoph = import ./home/home.nix;
+            homemanager
+          ];
 
-              # Make our overlays available in home.nix
-              home-manager.extraSpecialArgs = { inherit inputs; };
+          # Make our inputs available to the configuration.nix (for importing modules)
+          specialArgs = { inherit inputs; };
+        };
+
+        nixtop = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+
+          # >> Main NixOS configuration file <<
+          modules = [
+            # TODO: Modularize
+            ./nixos/configuration.nix
+            ./nixos/configuration-laptop.nix
+
+            # TODO: Investigate this { ... } module syntax
+            # Overlays
+            {
+              # Since HomeManager uses global pkgs we can set the overlays here
+              nixpkgs.overlays = attrValues overlays;
             }
+
+            # HomeManager
+            homemanager
           ];
 
           # Make our inputs available to the configuration.nix (for importing modules)
