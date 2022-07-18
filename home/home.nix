@@ -62,6 +62,10 @@ rec {
     [Context]
     filesystems=${home.homeDirectory}/GameSSD;${home.homeDirectory}/GameHDD
   '';
+  home.file.".local/share/flatpak/overrides/com.usebottles.bottles".text = ''
+    [Context]
+    filesystems=${home.homeDirectory}/.var/app/com.valvesoftware.Steam/data/Steam;<F16>{home.homeDirectory}/Downloads
+  '';
 
   # TODO: Module
   gtk = {
