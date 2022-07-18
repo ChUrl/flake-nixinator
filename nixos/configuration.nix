@@ -25,7 +25,7 @@
     # Auto garbage-collect and optimize store
     gc.automatic = true;
     gc.options = "--delete-older-than 5d";
-    autoOptimiseStore = true;
+    settings.auto-optimise-store = true;
     optimise.automatic = true;
 
     # TODO: Understand this
