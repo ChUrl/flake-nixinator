@@ -205,9 +205,9 @@ rec {
     # vcv-rack
     # bitwig-studio
     # audacity
-    # carla
-    # yabridge # NOTE: Wait for version bump
-    # yabridgectl
+    carla
+    yabridge
+    yabridgectl
 
     # Use NixCommunity binary cache
     cachix
