@@ -22,7 +22,15 @@ rec {
 
   # TODO: Email
   # TODO: Run noisetorch as login script
-  # TODO: Gnome terminal
+  # TODO: Gnome terminal config
+
+  # TODO: Update flatpak on rebuild? Make a setting/module for this, emacs update and yabridgectl update... Use home.activation...
+  home.activation.syncDoomEmacs = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    doom sync
+  '';
+  home.activation.syncYabridge = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    yabridgectl sync
+  '';
 
   # Disabled since HomeManager should use global pkgs
   # https://github.com/nix-community/home-manager/issues/2942
@@ -323,6 +331,11 @@ rec {
         "please" = "sudo !!";
         "yeet" = "rm -rf";
       };
+      # This init only occurs for login shell
+      # TODO: Make option for noisetorch activation
+      loginShellInit = ''
+        noisetorch -i
+      '';
       shellInit = ''
         set -e fish_greeting
       '';
