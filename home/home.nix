@@ -26,7 +26,7 @@ rec {
 
   # TODO: Update flatpak on rebuild? Make a setting/module for this, emacs update and yabridgectl update... Use home.activation...
   home.activation.syncDoomEmacs = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    doom sync
+    ${home.homeDirectory}/.emacs.d/bin/doom sync
   '';
   home.activation.syncYabridge = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     yabridgectl sync
