@@ -14,6 +14,7 @@ rec {
   ];
 
   # Config my modules
+  # TODO: Emacs autosync on rebuild?
   modules = {
     emacs.enable = true;
     emacs.useDoom = true;
@@ -46,15 +47,18 @@ rec {
   #   recursive = true;
   #   source = /run/current-system/sw/share/X11/fonts; # We cannot use the absolute path
   # };
-  # We link like this to be able to address the absolute location, also the fonts won't get copied to store
+  # We link like this to be able to address the absolute location, also the fonts won't get copied to store, also icons
   home.activation.linkFontDir = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     if [ ! -L "${home.homeDirectory}/.local/share/fonts" ]; then
       ln -sf /run/current-system/sw/share/X11/fonts ${home.homeDirectory}/.local/share/fonts
     fi
+    if [ ! -L "${home.homeDirectory}/.local/share/icons" ]; then
+      ln -sf /run/current-system/sw/share/icons ${home.homeDirectory}/.local/share/icons
+    fi
   '';
   home.file.".local/share/flatpak/overrides/global".text = ''
     [Context]
-    filesystems=/run/current-system/sw/share/X11/fonts:ro;/nix/store:ro
+    filesystems=/run/current-system/sw/share/X11/fonts:ro;/run/current-system/sw/share/icons:ro;/nix/store:ro
   '';
 
   # TODO: Move to gaming modules
@@ -64,7 +68,7 @@ rec {
   '';
   home.file.".local/share/flatpak/overrides/com.usebottles.bottles".text = ''
     [Context]
-    filesystems=${home.homeDirectory}/.var/app/com.valvesoftware.Steam/data/Steam;<F16>{home.homeDirectory}/Downloads
+    filesystems=${home.homeDirectory}/.var/app/com.valvesoftware.Steam/data/Steam;${home.homeDirectory}/Downloads
   '';
 
   # TODO: Module
@@ -200,8 +204,8 @@ rec {
     # godot
 
     # Audio
-    # TODO: Make a module
-    # NOTE: Don't use any system wine, use bottles runner for yabridge
+    # TODO: Make a module, autosync yabridge on rebuild?
+    # NOTE: yabridge pulls in wine
     # vcv-rack
     # bitwig-studio
     # audacity
