@@ -681,8 +681,41 @@ rec {
       '';
       plugins = with pkgs.vimPlugins; [
         vim-nix
-        lightline-vim
-        (nvim-treesitter.withPlugins (plugins: pkgs.tree-sitter.allGrammars))
+        surround-nvim
+        # lightline-vim
+        {
+          plugin = lualine-nvim;
+          config = ''
+            lua << EOF
+            require('lualine').setup {}
+            EOF
+          '';
+        }
+        vim-gitgutter
+        # YouCompleteMe
+        {
+
+          plugin = nvim-autopairs;
+          config = ''
+            lua << EOF
+            require('nvim-autopairs').setup {}
+            EOF
+          '';
+        }
+        {
+          plugin = (nvim-treesitter.withPlugins
+            (plugins: pkgs.tree-sitter.allGrammars));
+          config = ''
+            lua << EOF
+            require('nvim-treesitter.configs').setup {
+                highlight = {
+                    enable = true,
+                    additional_vim_regex_highlighting = false,
+                },
+            }
+            EOF
+          '';
+        }
       ];
       viAlias = true;
       vimAlias = true;
