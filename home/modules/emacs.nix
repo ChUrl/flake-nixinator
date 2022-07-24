@@ -35,18 +35,15 @@ in {
   config = mkIf cfg.enable {
     # What home packages should be enabled
     home.packages = with pkgs; [
-      # NOTE: I have problems with emacsPgtkNativeComp/emacsPgtk and also emacs28NativeComp GUI
       ((emacsPackagesFor emacsPgtkNativeComp).emacsWithPackages
         (epkgs: [ epkgs.vterm ]))
 
-      binutils
+      # binutils # conflicts with gcc
       zstd
       (ripgrep.override { withPCRE2 = true; })
       fd
       # libgccjit
       sqlite
-      # TODO: I probably need python too
-      python310Packages.pygments
       inkscape
       graphviz
       gnuplot
@@ -59,7 +56,11 @@ in {
       emacs-all-the-icons-fonts
       bashInteractive # For keychain
 
-      # TODO: Should I list lsps etc here or inside shell.nix for specific projects?
+      # Treemacs needs python + syntax coloring in org/latex needs pygments
+      (python310.withPackages (ppkgs:
+        [
+          ppkgs.pygments
+        ])) # withPackages expects a function that gets all the packages as argument and returns a list with the packages we want
     ];
 
     # Do this in packages
