@@ -18,6 +18,7 @@
     # Other Flakes
     emacs-overlay.url = "github:nix-community/emacs-overlay";
     nur.url = "github:nix-community/NUR";
+    # nixvim.url = "github:pta2002/nixvim";
   };
 
   # Outputs is a function that takes the inputs as arguments.
