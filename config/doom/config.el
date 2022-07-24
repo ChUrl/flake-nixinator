@@ -107,7 +107,7 @@
               display-line-numbers-width 4
               line-spacing 0.1 ;; slightly more space
               tab-always-indent t
-              major-mode 'org-mode
+              ;; major-mode 'org-mode ;; When opening a nonexistent file by mistake this is bad
               delete-by-moving-to-trash t
               window-combination-resize t ;; take space from all windows, not current
               x-stretch-cursor t
