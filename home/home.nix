@@ -11,6 +11,8 @@ rec {
     # Feel free to split up your configuration and import pieces of it here.
 
     ./modules/emacs.nix
+
+    # inputs.nixvim.homeManagerModules.nixvim
   ];
 
   # Config my modules
@@ -152,9 +154,14 @@ rec {
     imagemagick
     # htop
     # httpie
-    nix-index
+    ripgrep
     nvd # nix rebuild diff
     neofetch # Easily see interesting package versions/kernel
+
+    # Some basics should be available everywhere
+    # This makes problems with conflicts in nix-store, for example gcc/ld and binutils/ld or different python versions
+    # python311
+    # gcc # nvim needs this
 
     # Gnome extensions
     # TODO: Make a gnome module
@@ -239,7 +246,8 @@ rec {
 
     bat = { enable = true; };
 
-    command-not-found.enable = true;
+    # Exclusive with nix-index
+    # command-not-found.enable = true;
 
     direnv = {
       enable = true;
@@ -332,10 +340,10 @@ rec {
         "yeet" = "rm -rf";
       };
       # This init only occurs for login shell
-      # TODO: Make option for noisetorch activation
-      loginShellInit = ''
-        noisetorch -i
-      '';
+      # TODO: Make option for noisetorch activation, doesn't work like this
+      # loginShellInit = ''
+      #   noisetorch -i
+      # '';
       shellInit = ''
         set -e fish_greeting
       '';
@@ -598,11 +606,16 @@ rec {
     # TODO: Copy config from Arch dots
     kitty = {
       enable = true;
-      font = { name = "Victor Mono SemiBold"; };
+      font = {
+        package = pkgs.victor-mono;
+        name = "Victor Mono SemiBold";
+        size = 12;
+      };
       settings = {
-        font_size = 12;
+        editor = "nvim";
         scrollback_lines = 10000;
         window_padding_width = 10;
+        # hide_window_decorations = "yes";
 
         # Light Theme
         # background = "#f7f7f7";
@@ -633,7 +646,13 @@ rec {
       };
     };
 
-    # mpv.enable = true; # Use gnome apps for now
+    # Gnome apps for now
+    # mpv = {
+    #   enable = true;
+    #   scripts = with pkgs; [
+    #     mpvScripts.mpris  # Make controllable with media keys
+    #   ];
+    # };
 
     neovim = {
       enable = true;
@@ -660,9 +679,18 @@ rec {
         let printencoding='utf-8'
         set encoding=utf-8
       '';
-      plugins = with pkgs.vimPlugins; [ vim-nix lightline-vim ];
+      plugins = with pkgs.vimPlugins; [
+        vim-nix
+        lightline-vim
+        (nvim-treesitter.withPlugins (plugins: pkgs.tree-sitter.allGrammars))
+      ];
       viAlias = true;
       vimAlias = true;
+    };
+
+    nix-index = {
+      enable = true;
+      enableFishIntegration = true;
     };
 
     ssh.enable = true;
