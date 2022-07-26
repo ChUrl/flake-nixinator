@@ -171,6 +171,7 @@ rec {
     ripgrep
     nvd # nix rebuild diff
     neofetch # Easily see interesting package versions/kernel
+    lazygit
 
     # Some basics should be available everywhere
     # This makes problems with conflicts in nix-store, for example gcc/ld and binutils/ld or different python versions
@@ -235,7 +236,7 @@ rec {
     # Audio
     # TODO: Make a module, autosync yabridge on rebuild?
     # vcv-rack
-    bitwig-studio # No flatpak for yabridge compatibility
+    bitwig-studio
     # audacity
     carla
     yabridge
@@ -323,6 +324,7 @@ rec {
 
         emcs = "emacs -nw";
 
+        lg = "lazygit";
         gs = "git status";
         gcm = "git commit -m";
         ga = "git add";
