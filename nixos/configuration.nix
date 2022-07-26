@@ -210,6 +210,7 @@
       "wheel"
       "audio"
       "realtime"
+      "gamemode"
       "docker"
       "adbusers"
       "scanner"

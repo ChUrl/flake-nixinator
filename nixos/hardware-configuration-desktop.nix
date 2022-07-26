@@ -75,5 +75,7 @@
     opengl.driSupport32Bit = true;
 
     sane.enable = true; # Scanning
+
+    xpadneo.enable = true;  # Xbox Controller
   };
 }
