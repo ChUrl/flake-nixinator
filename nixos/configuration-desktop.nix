@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, musnix, ... }:
 
 {
   imports = [
@@ -7,6 +7,11 @@
   ];
 
   networking.hostName = "nixinator"; # Define your hostname.
+
+  musnix = {
+    enable = true;
+    # musnix.soundcardPciId = ;
+  };
 
   services.xserver = {
     # Configure keymap in X11
