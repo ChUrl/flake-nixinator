@@ -81,6 +81,20 @@ rec {
     filesystems=${home.homeDirectory}/.var/app/com.valvesoftware.Steam/data/Steam;${home.homeDirectory}/Downloads
   '';
 
+  # TODO: Make to a derivation with makeDesktopIcon and add to music module
+  # Doesn't work
+  # home.file.".local/share/applications/carla-guitar-amp.desktop".text = ''
+  #   [Desktop Entry]
+  #   Type=Application
+  #   Exec=PIPEWIRE_LATENCY=256/48000 gamemoderun carla ${home.homeDirectory}/Documents/Carla/GuitarDefault.carxp
+  #   Terminal=false
+  #   Name=Carla Guitar Amp
+  #   Icon=carla
+  #   Comment=Play through NeuralDSP Gojira and Petrucci
+  #   GenericName=Guitar Amp Simulation
+  #   Categories=Music;Audio;
+  # '';
+
   # TODO: Module
   gtk = {
     enable = true;
@@ -220,13 +234,13 @@ rec {
 
     # Audio
     # TODO: Make a module, autosync yabridge on rebuild?
-    # NOTE: yabridge pulls in wine
     # vcv-rack
-    # bitwig-studio
+    bitwig-studio # No flatpak for yabridge compatibility
     # audacity
     carla
     yabridge
     yabridgectl
+    # (callPackage ../derivations/carla-guitar-amp.nix { inherit home; })
 
     # Use NixCommunity binary cache
     cachix
@@ -333,6 +347,9 @@ rec {
         mp4 =
           "yt-dlp -f 'bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4] / bv*+ba/b' --recode-video mp4"; # the -f options are yt-dlp defaults
         mp3 = "yt-dlp -f 'ba' --extract-audio --audio-format mp3";
+
+        guitar =
+          "PIPEWIRE_LATENCY=256/48000 gamemoderun carla ${home.homeDirectory}/Documents/Carla/GuitarDefault.carxp";
       };
       shellAliases = {
         # ".." = "cd ..";
@@ -680,7 +697,7 @@ rec {
         set encoding=utf-8
       '';
       plugins = with pkgs.vimPlugins; [
-        vim-nix
+        # vim-nix
         surround-nvim
         # lightline-vim
         {
