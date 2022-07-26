@@ -19,6 +19,7 @@
     emacs-overlay.url = "github:nix-community/emacs-overlay";
     nur.url = "github:nix-community/NUR";
     # nixvim.url = "github:pta2002/nixvim";
+    musnix.url = "github:musnix/musnix";
   };
 
   # Outputs is a function that takes the inputs as arguments.
@@ -55,6 +56,8 @@
 
           # >> Main NixOS configuration file <<
           modules = [
+            inputs.musnix.nixosModules.musnix
+
             # TODO: Modularize
             ./nixos/configuration.nix
             ./nixos/configuration-desktop.nix
