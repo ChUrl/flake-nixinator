@@ -78,7 +78,7 @@ rec {
   '';
   home.file.".local/share/flatpak/overrides/com.usebottles.bottles".text = ''
     [Context]
-    filesystems=${home.homeDirectory}/.var/app/com.valvesoftware.Steam/data/Steam;${home.homeDirectory}/Downloads
+    filesystems=${home.homeDirectory}/.var/app/com.valvesoftware.Steam/data/Steam;${home.homeDirectory}/Downloads;${home.homeDirectory}/GameSSD;${home.homeDirectory}/GameHDD
   '';
 
   # TODO: Make to a derivation with makeDesktopIcon and add to music module
@@ -251,6 +251,7 @@ rec {
     # Flatpak nur.repos.dukzcry.gamescope # We need to install this with flatpak to be able to use with bottles
     # Flatpak bottles
     # Flatpak steam
+    # Flatpak proton-ge
     # Flatpak polymc # Use flatpak as it bundles java and I don't have/want system wide java installation
     # lutris # I don't want to
   ];
@@ -282,10 +283,9 @@ rec {
         q = "exit";
         h = "history | bat";
 
-        upgrade =
-          "nix flake update && sudo nixos-rebuild build --flake .#nixinator && nvd diff /run/current-system result";
-        rebuild = "sudo nixos-rebuild switch --flake .#nixinator";
-        rebuildfast = "sudo nixos-rebuild switch --fast --flake .#nixinator";
+        # upgrade = "nix flake update && sudo nixos-rebuild build --flake .#nixinator && nvd diff /run/current-system result";
+        # rebuild = "sudo nixos-rebuild switch --flake .#nixinator";
+        # rebuildfast = "sudo nixos-rebuild switch --fast --flake .#nixinator";
 
         failed = "systemctl --failed";
         errors = "journalctl -p 3 -xb";
