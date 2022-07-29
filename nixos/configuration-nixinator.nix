@@ -3,7 +3,7 @@
 {
   imports = [
     # Include the results of the hardware scan.
-    ./hardware-configuration-desktop.nix
+    ./hardware-configuration-nixinator.nix
   ];
 
   networking.hostName = "nixinator"; # Define your hostname.
