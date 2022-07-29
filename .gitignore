@@ -1,3 +1,5 @@
 .owncloudsync.log
 .sync_*
 result
+.direnv
+.idea
