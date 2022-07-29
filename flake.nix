@@ -20,12 +20,13 @@
     nur.url = "github:nix-community/NUR";
     # nixvim.url = "github:pta2002/nixvim";
     musnix.url = "github:musnix/musnix";
+    devshell.url = "github:numtide/devshell";
   };
 
   # Outputs is a function that takes the inputs as arguments.
   # To handle extra arguments we use the inputs@ pattern.
   # It gives a name to the ... ellipses.
-  outputs = inputs@{ nixpkgs, home-manager, ... }:
+  outputs = inputs@{ nixpkgs, home-manager, devshell, ... }:
 
     # With let you can define local variables
     let
@@ -41,9 +42,31 @@
         emacs = inputs.emacs-overlay.overlay;
       };
 
+      pkgs = import nixpkgs {
+        system = "x86_64-linux";
+        config.allowUnfree = true;
+        overlays = [ devshell.overlay ];
+      };
+
       # The rec expression turns a basic set into a set where self-referencing is possible.
       # It is a shorthand for recursive and allows to use the values defined in this set from its own scope.
     in rec {
+
+      devShells."x86_64-linux".default = pkgs.devshell.mkShell {
+        name = "NixFlake Shell";
+
+        packages = with pkgs; [
+          jetbrains.clion
+        ];
+
+        commands = [
+          {
+            name = "ide";
+            help = "Launch clion in this folder";
+            command = "clion ./ &>/dev/null &";
+          }
+        ];
+      };
 
       # System configurations + HomeManager module
       # Accessible via 'nixos-rebuild'
@@ -60,7 +83,7 @@
 
             # TODO: Modularize
             ./nixos/configuration.nix
-            ./nixos/configuration-desktop.nix
+            ./nixos/configuration-nixinator.nix
 
             # TODO: Investigate this { ... } module syntax
             # Overlays
@@ -94,7 +117,7 @@
           modules = [
             # TODO: Modularize
             ./nixos/configuration.nix
-            ./nixos/configuration-laptop.nix
+            ./nixos/configuration-nixtop.nix
 
             # TODO: Investigate this { ... } module syntax
             # Overlays
