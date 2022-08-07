@@ -27,6 +27,12 @@ in {
       default = false;
       description = "Use the Doom Emacs framework";
     };
+
+    autosync = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Sync Doom Emacs on nixos-rebuild";
+    };
   };
 
   # Config is the merged set of all module configurations
@@ -63,15 +69,9 @@ in {
         ])) # withPackages expects a function that gets all the packages as argument and returns a list with the packages we want
     ];
 
-    # Do this in packages
-    # programs.emacs = {
-    #   package = pkgs.emacsPgtkNativeComp;
-    #   enable = true;
-    # };
+    home.sessionPath = mkIf cfg.useDoom [ "/home/${config.home.username}/.emacs.d/bin" ];
 
-    home.sessionPath =
-      mkIf cfg.useDoom [ "/home/${config.home.username}/.emacs.d/bin" ];
-
+    # Note: Don't do it this way as the config becomes immutable
     # We tell HomeManager where the config files belong
     # home.file.".config/doom" = {
     #   # With onChange you even could rebuild doom emacs when rebuilding HomeManager but I don't want this to become too slow
@@ -90,11 +90,21 @@ in {
         fi
       '';
 
+      # TODO: Put node after installDoomEmacs node
       # With this approach we keep the config mutable as it is not copied and linked from store
       linkDoomConfig = hm.dag.entryAfter [ "writeBoundary" ] ''
         if [ ! -L "${config.home.homeDirectory}/.config/doom" ]; then
           ln -sf ${config.home.homeDirectory}/NixFlake/config/doom ${config.home.homeDirectory}/.config/doom
         fi
+      '';
+    };
+
+    home.activation = mkIf cfg.autosync {
+
+      # TODO: assert that doom is enabled and put node after linkDoomConfig node
+      # No idea what happens on the first install, don't know if install or sync happens first
+      syncDoomEmacs = hm.dag.entryAfter [ "writeBoundary" ] ''
+        ${home.homeDirectory}/.emacs.d/bin/doom sync
       '';
     };
   };
