@@ -81,6 +81,15 @@ rec {
     filesystems=${home.homeDirectory}/.var/app/com.valvesoftware.Steam/data/Steam;${home.homeDirectory}/Downloads;${home.homeDirectory}/GameSSD;${home.homeDirectory}/GameHDD
   '';
 
+  # Generate a list of installed user packages in /etc/current-user-packages
+  home.file.".local/share/current-user-packages".text =
+    let
+      packages = builtins.map (p: "${p.name}") home.packages;
+      sortedUnique = builtins.sort builtins.lessThan (lib.unique packages);
+      formatted = builtins.concatStringsSep "\n" sortedUnique;
+    in
+      formatted;
+
   # TODO: Make to a derivation with makeDesktopIcon and add to music module
   # Doesn't work
   # home.file.".local/share/applications/carla-guitar-amp.desktop".text = ''
