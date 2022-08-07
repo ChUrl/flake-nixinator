@@ -50,6 +50,7 @@
     kernelPackages = pkgs.linuxPackages_zen;
     kernelParams = [ "mitigations=off" ];
 
+    plymouth.enable = true;
     loader.systemd-boot.enable = true;
     loader.systemd-boot.configurationLimit = 5;
     loader.systemd-boot.editor = false;
@@ -140,17 +141,17 @@
   };
 
   # XDG
-  # TODO: For some reason Gnome takes a minute to login with this enabled...
-  # xdg = {
-  #   portal = {
-  #     enable = true;
-  #     extraPortals = with pkgs; [
-  #       xdg-desktop-portal-wlr
-  #       # xdg-desktop-portal-gtk # TODO: Does this come with gnome? At least it gives a collision when rebuilding
-  #     ];
-  #     gtkUsePortal = true;
-  #   };
-  # };
+  xdg = {
+    portal = {
+      enable = true;
+      extraPortals = with pkgs; [
+        # xdg-desktop-portal-wlr # For wlroots based desktops
+        # xdg-desktop-portal-gtk # Comes with gnome
+        xdg-desktop-portal-gnome
+      ];
+      # gtkUsePortal = true; # Deprecated
+    };
+  };
 
   # Enable sound with pipewire.
   sound.enable = true;
@@ -215,11 +216,21 @@
       "adbusers"
       "scanner"
       "lp"
+      "libvirtd"
     ];
     shell = pkgs.fish; # TODO: Is this needed if programs.fish.enable = true?
     # We do this with HomeManager
     packages = with pkgs; [ ];
   };
+
+  # Generate a list of installed packages in /etc/current-system-packages
+  environment.etc."current-system-packages".text =
+    let
+      packages = builtins.map (p: "${p.name}") config.environment.systemPackages;
+      sortedUnique = builtins.sort builtins.lessThan (lib.unique packages);
+      formatted = builtins.concatStringsSep "\n" sortedUnique;
+  in
+    formatted;
 
   # TODO: Trusted users
 
@@ -230,8 +241,8 @@
   # TODO: Identify all the crap
   # Remove these packages that come by default with GNOME
   environment.gnome.excludePackages = with pkgs.gnome; [
-    # epiphany # gnome webbrowser
-    gnome-maps
+    # epiphany # gnome webbrowser, could be good with new version
+    # gnome-maps
     gnome-contacts
   ];
 
@@ -282,6 +293,7 @@
     autoPrune.enable = true;
   };
 
+  security.polkit.enable = true;
   virtualisation.libvirtd = { enable = true; };
 
   # This value determines the NixOS release from which the default
