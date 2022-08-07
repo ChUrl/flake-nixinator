@@ -81,7 +81,7 @@ rec {
     filesystems=${home.homeDirectory}/.var/app/com.valvesoftware.Steam/data/Steam;${home.homeDirectory}/Downloads;${home.homeDirectory}/GameSSD;${home.homeDirectory}/GameHDD
   '';
 
-  # Generate a list of installed user packages in /etc/current-user-packages
+  # Generate a list of installed user packages in ~/.local/share/current-user-packages
   home.file.".local/share/current-user-packages".text =
     let
       packages = builtins.map (p: "${p.name}") home.packages;
