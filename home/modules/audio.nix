@@ -51,10 +51,14 @@ in {
 
   config = mkIf cfg.enable {
 
-    home.packages = with pkgs; (mkMerge [
-      (mkIf cfg.carla.enable [ carla ])
-      (mkIf cfg.yabridge.enable [ yabridge yabridgectl ])
-      (mkIf cfg.bitwig.enable [ bitwig-studio ])
+    # I changed to regular if to stay consistent with flatpak module, mkIf doesn't always work for some reason
+    home.packages = with pkgs; (builtins.concatLists [
+      # (mkIf cfg.carla.enable [ carla ])
+      # (mkIf cfg.yabridge.enable [ yabridge yabridgectl ])
+      # (mkIf cfg.bitwig.enable [ bitwig-studio ])
+      (if cfg.carla.enable then [ carla ] else [ ])
+      (if cfg.yabridge.enable then [ yabridge yabridgectl ] else [ ])
+      (if cfg.bitwig.enable then [ bitwig-studio ] else [ ])
       cfg.extraPackages
     ]);
 
