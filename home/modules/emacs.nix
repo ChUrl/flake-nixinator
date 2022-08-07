@@ -44,6 +44,8 @@ in {
   # Config is the merged set of all module configurations
   # Here we define what happens to the config if the module is active (but only if the module is active)
   # Since this module is for HomeManager, config is not the system config
+  # Attribute sets like config can be defined multiple times (every module defines a different config), on
+  # building the config they are merged
   config = mkIf cfg.enable {
     # What home packages should be enabled
     home.packages = with pkgs; [
