@@ -91,20 +91,17 @@ in {
           fi
         '';
 
-        # TODO: Put node after installDoomEmacs node
         # With this approach we keep the config mutable as it is not copied and linked from store
-        linkDoomConfig = hm.dag.entryAfter [ "writeBoundary" ] ''
+        linkDoomConfig = hm.dag.entryAfter [ "writeBoundary" "installDoomEmacs" ] ''
           if [ ! -L "${config.home.homeDirectory}/.config/doom" ]; then
             ln -sf ${config.home.homeDirectory}/NixFlake/config/doom ${config.home.homeDirectory}/.config/doom
           fi
         '';
       })
 
-      (mkIf cfg.autosync {
+      (mkIf (cfg.useDoom && cfg.autosync) {
 
-        # TODO: assert that doom is enabled and put node after linkDoomConfig node
-        # No idea what happens on the first install, don't know if install or sync happens first
-        syncDoomEmacs = hm.dag.entryAfter [ "writeBoundary" ] ''
+        syncDoomEmacs = hm.dag.entryAfter [ "writeBoundary" "linkDoomConfig" ] ''
           ${config.home.homeDirectory}/.emacs.d/bin/doom sync
         '';
       })
