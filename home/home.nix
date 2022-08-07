@@ -19,6 +19,7 @@ rec {
   modules = {
     emacs.enable = true;
     emacs.useDoom = true;
+    emacs.autosync = true;
   };
 
   # TODO: Email
