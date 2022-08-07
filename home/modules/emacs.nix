@@ -28,10 +28,16 @@ in {
       description = "Use the Doom Emacs framework";
     };
 
-    autosync = mkOption {
+    autoSync = mkOption {
       type = types.bool;
       default = false;
       description = "Sync Doom Emacs on nixos-rebuild";
+    };
+
+    autoUpgrade = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Automatically upgrade Doom Emacs on nixos-rebuild";
     };
   };
 
@@ -99,10 +105,17 @@ in {
         '';
       })
 
-      (mkIf (cfg.useDoom && cfg.autosync) {
+      (mkIf (cfg.useDoom && cfg.autoSync) {
 
         syncDoomEmacs = hm.dag.entryAfter [ "writeBoundary" "linkDoomConfig" ] ''
           ${config.home.homeDirectory}/.emacs.d/bin/doom sync
+        '';
+      })
+
+      (mkIf (cfg.useDoom && cfg.autoUpgrade) {
+
+        upgradeDoomEmacs = hm.dag.entryAfter [ "writeBoundary" "linkDoomConfig" ] ''
+          ${config.home.homeDirectory}/.emacs.d/bin/doom upgrade -!
         '';
       })
     ]);
