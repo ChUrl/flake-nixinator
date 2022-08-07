@@ -141,8 +141,7 @@
   };
 
   # XDG
-  xdg = {
-    portal = {
+  xdg.portal = {
       enable = true;
       extraPortals = with pkgs; [
         # xdg-desktop-portal-wlr # For wlroots based desktops
@@ -150,7 +149,6 @@
         xdg-desktop-portal-gnome
       ];
       # gtkUsePortal = true; # Deprecated
-    };
   };
 
   # Enable sound with pipewire.
