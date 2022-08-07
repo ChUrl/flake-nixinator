@@ -79,33 +79,35 @@ in {
     #   source = ../../config/doom;
     # };
 
-    # If doom is enabled we want to clone the framework
-    # The activation script is being run when home-manager rebuilds
-    home.activation = mkIf cfg.useDoom {
+    home.activation = (mkMerge [
+      (mkIf cfg.useDoom {
 
-      # Because we write to the filesystem, this script has to be run after HomeManager's writeBoundary
-      installDoomEmacs = hm.dag.entryAfter [ "writeBoundary" ] ''
-        if [ ! -d "${config.home.homeDirectory}/.emacs.d" ]; then
-          git clone --depth=1 --single-branch "https://github.com/doomemacs/doomemacs" "${config.home.homeDirectory}/.emacs.d"
-        fi
-      '';
+        # If doom is enabled we want to clone the framework
+        # The activation script is being run when home-manager rebuilds
+        # Because we write to the filesystem, this script has to be run after HomeManager's writeBoundary
+        installDoomEmacs = hm.dag.entryAfter [ "writeBoundary" ] ''
+          if [ ! -d "${config.home.homeDirectory}/.emacs.d" ]; then
+            git clone --depth=1 --single-branch "https://github.com/doomemacs/doomemacs" "${config.home.homeDirectory}/.emacs.d"
+          fi
+        '';
 
-      # TODO: Put node after installDoomEmacs node
-      # With this approach we keep the config mutable as it is not copied and linked from store
-      linkDoomConfig = hm.dag.entryAfter [ "writeBoundary" ] ''
-        if [ ! -L "${config.home.homeDirectory}/.config/doom" ]; then
-          ln -sf ${config.home.homeDirectory}/NixFlake/config/doom ${config.home.homeDirectory}/.config/doom
-        fi
-      '';
-    };
+        # TODO: Put node after installDoomEmacs node
+        # With this approach we keep the config mutable as it is not copied and linked from store
+        linkDoomConfig = hm.dag.entryAfter [ "writeBoundary" ] ''
+          if [ ! -L "${config.home.homeDirectory}/.config/doom" ]; then
+            ln -sf ${config.home.homeDirectory}/NixFlake/config/doom ${config.home.homeDirectory}/.config/doom
+          fi
+        '';
+      })
 
-    home.activation = mkIf cfg.autosync {
+      (mkIf cfg.autosync {
 
-      # TODO: assert that doom is enabled and put node after linkDoomConfig node
-      # No idea what happens on the first install, don't know if install or sync happens first
-      syncDoomEmacs = hm.dag.entryAfter [ "writeBoundary" ] ''
-        ${home.homeDirectory}/.emacs.d/bin/doom sync
-      '';
-    };
+        # TODO: assert that doom is enabled and put node after linkDoomConfig node
+        # No idea what happens on the first install, don't know if install or sync happens first
+        syncDoomEmacs = hm.dag.entryAfter [ "writeBoundary" ] ''
+          ${config.home.homeDirectory}/.emacs.d/bin/doom sync
+        '';
+      })
+    ]);
   };
 }
