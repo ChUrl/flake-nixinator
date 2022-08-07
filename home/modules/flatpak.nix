@@ -27,7 +27,7 @@ in {
     };
 
     packages = mkOption {
-      type = types.listOf types.string;
+      type = types.listOf types.str;
       default = [ ];
       description = "List of enabled flatpaks";
     };
@@ -47,8 +47,6 @@ in {
 
   config = mkIf cfg.enable {
 
-    services.flatpak.enable = true;
-
     # NOTE: Is already set by flatpak.enable in configuration.nix
     # xdg.systemDirs.data = [
     #   "/var/lib/flatpak/exports/share"
@@ -60,8 +58,8 @@ in {
         # We link like this to be able to address the absolute location, also the fonts won't get copied to store
         # NOTE: This path contains all the fonts because fonts.fontDir.enable is true
         linkFontDir = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-          if [ ! -L "${home.homeDirectory}/.local/share/fonts" ]; then
-            ln -sf /run/current-system/sw/share/X11/fonts ${home.homeDirectory}/.local/share/fonts
+          if [ ! -L "${config.home.homeDirectory}/.local/share/fonts" ]; then
+            ln -sf /run/current-system/sw/share/X11/fonts ${config.home.homeDirectory}/.local/share/fonts
           fi
         '';
       })
@@ -69,8 +67,8 @@ in {
       (mkIf cfg.iconFix {
         # NOTE: This path works because we have homeManager.useUserPackages = true (everything is stored in /etc/profiles/)
         linkIconDir = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-          if [ ! -L "${home.homeDirectory}/.local/share/icons" ]; then
-            ln -sf /etc/profiles/per-user/christoph/share/icons ${home.homeDirectory}/.local/share/icons
+          if [ ! -L "${config.home.homeDirectory}/.local/share/icons" ]; then
+            ln -sf /etc/profiles/per-user/christoph/share/icons ${config.home.homeDirectory}/.local/share/icons
           fi
         '';
       })

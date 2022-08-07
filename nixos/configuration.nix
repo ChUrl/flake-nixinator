@@ -259,7 +259,7 @@
   # List services that you want to enable:
   services = {
     # Enable CUPS to print documents.
-    # TODO: Printer driver
+    # TODO: Printer driver, Gnome printing
     printing.enable = true;
     avahi.enable = true; # Network printers
     avahi.nssmdns = true;
@@ -276,7 +276,7 @@
 
     acpid.enable = true;
     dbus.enable = true;
-    # flatpak.enable = true; # Not quite the nix style but useful for bottles/proprietary stuff
+    flatpak.enable = true; # Not quite the nix style but useful for bottles/proprietary stuff
     fstrim.enable = true;
     fwupd.enable = true;
     locate.enable = true; # Periodically update index
@@ -299,5 +299,4 @@
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "22.05"; # Did you read the comment?
-
 }
