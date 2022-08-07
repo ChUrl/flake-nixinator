@@ -129,7 +129,11 @@ rec {
 
       # Enable wayland for other shitty apps
       MOZ_ENABLE_WAYLAND = 1;
+      MOZ_USE_XINPUT2 = 1;
       QT_QPA_PLATFORM = "wayland";
+      LIBVA_DRIVER_NAME = "nvidia";
+      MOZ_DISABLE_RDD_SANDBOX = 1;
+      EGL_PLATFORM = "wayland";
 
       # Don't use system wine, use bottles
       # WINEESYNC = 1;
@@ -150,11 +154,18 @@ rec {
     pointerCursor.name = "Numix-Cursor";
     pointerCursor.x11.enable = true;
 
+    # Do not change
     stateVersion = "22.05";
   };
 
   # Add stuff for your user as you see fit:
   home.packages = with pkgs; [
+    # Firefox hardware video acceleration
+    libva
+    libva-utils
+    nvidia-vaapi-driver
+    vulkan-tools
+
     # CLI Tools
     procs
     tokei
@@ -191,6 +202,28 @@ rec {
     gnomeExtensions.pip-on-top
     gnomeExtensions.custom-hot-corners-extended
     # gnomeExtensions.dock-from-dash
+    gnomeExtensions.gamemode
+    # gnomeExtensions.gsconnect # kde connect alternative
+    # gnomeExtensions.quake-mode # dropdown for any application
+    gnomeExtensions.systemd-manager # to quickly start nextcloud
+    gnomeExtensions.extensions-sync
+    gnomeExtensions.tweaks-in-system-menu
+    # gnomeExtensions.compiz-windows-effect # WobBlY wiNdoWS
+    gnomeExtensions.panel-scroll
+    gnomeExtensions.rounded-window-corners
+
+    # Gnome applications
+    gnome.gnome-boxes
+    gnome.sushi # Gnome files previews
+    gnome.gnome-logs # systemd log viewer
+    gnome.gnome-tweaks # conflicts with nixos/hm gnome settings file
+    gnome.gnome-nettool
+    gnome.simple-scan
+    gnome.file-roller # archive manager
+    # gnome-usage # Alternative system performance monitor (gnome.gnome-system-monitor is the preinstalled one)
+    # gnome-secrets # Alternative keepass database viewer
+    gnome-firmware
+    wike # Wikipedia viewer
 
     # Ranger
     # TODO: Make module out of this
@@ -219,11 +252,11 @@ rec {
     # Tools
     # calibre
     # virt-manager # Let's try gnome-boxes while we're at it
-    gnome.gnome-boxes
     gource
     keepassxc
     anki-bin # Use anki-bin as anki is some versions behind
     libreoffice-fresh
+    jabref # manage bibilography
 
     # Graphics
     wacomtablet
@@ -241,7 +274,7 @@ rec {
     carla
     yabridge
     yabridgectl
-    # (callPackage ../derivations/carla-guitar-amp.nix { inherit home; })
+    # (callPackage ../derivations/carla-guitar-amp.nix { inherit home; }) # TODO
 
     # Use NixCommunity binary cache
     cachix
@@ -253,7 +286,6 @@ rec {
     # Flatpak steam
     # Flatpak proton-ge
     # Flatpak polymc # Use flatpak as it bundles java and I don't have/want system wide java installation
-    # lutris # I don't want to
   ];
 
   # Packages with extra options managed by HomeManager natively
@@ -264,6 +296,8 @@ rec {
 
     # Exclusive with nix-index
     # command-not-found.enable = true;
+
+    chromium.enable = true;
 
     direnv = {
       enable = true;
@@ -408,6 +442,7 @@ rec {
         clearurls
         cookie-autodelete
         don-t-fuck-with-paste
+        h264ify
         keepassxc-browser
         localcdn
         privacy-badger
@@ -437,6 +472,16 @@ rec {
             # "browser.startup.homepage" = "https://lobste.rs";
             "identity.fxaccounts.account.device.name" =
               nixosConfig.networking.hostName; # NOTE: nixosConfig attribute is somehow not documented, so Idk if I should use it
+
+            # Firefox wayland hardware video acceleration
+            # https://github.com/elFarto/nvidia-vaapi-driver/#firefox=
+            "media.ffmpeg.vaapi.enabled" = true;
+            "widget.wayland-dmabuf-vaapi.enabled" = true;
+            "widget.dmabuf.force-enabled" = true;
+            "gfx.webrender.enabled" = true; # Should be set on gnome anyway
+            "media.rdd-ffmpeg.enabled" = true;
+            "media.av1.enabled" = false;
+            "gfx.x11-egl.force-enabled" = true;
 
             # Enable ETP for decent security (makes firefox containers and many
             # common security/privacy add-ons redundant).
