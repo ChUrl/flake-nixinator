@@ -76,9 +76,14 @@
             command = "nix flake check";
           }
           {
-            name = "pkgs";
+            name = "pkgs-sys";
             help = "List currently installed system packages";
             command = "bat /etc/current-system-packages";
+          }
+          {
+            name = "pkgs-usr";
+            help = "List currently installed user packages";
+            command = "bat ~/.local/share/current-user-packages";
           }
           {
             name = "switch-nixinator";
@@ -137,7 +142,9 @@
               home-manager.users.christoph = import ./home/home.nix;
 
               # Make our overlays available in home.nix
-              home-manager.extraSpecialArgs = { inherit inputs; };
+              home-manager.extraSpecialArgs = {
+                inherit inputs;
+              };
             }
           ];
 
