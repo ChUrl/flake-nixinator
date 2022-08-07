@@ -11,25 +11,28 @@ rec {
     # Feel free to split up your configuration and import pieces of it here.
 
     ./modules/emacs.nix
+    ./modules/audio.nix
 
     # inputs.nixvim.homeManagerModules.nixvim
   ];
 
   # Config my modules
-  modules = {
-    emacs.enable = true;
-    emacs.useDoom = true;
-    emacs.autosync = true;
+  modules.emacs = {
+    enable = true;
+    useDoom = true;
+    autosync = true;
+  };
+
+  modules.audio = {
+    enable = true;
+    carla = true;
+    yabridge.enable = true;
+    yabridge.autosync = true;
   };
 
   # TODO: Email
   # TODO: Run noisetorch as login script
   # TODO: Gnome terminal config
-
-  # TODO: Update flatpak on rebuild? Make a setting/module for this, emacs update and yabridgectl update... Use home.activation...
-  home.activation.syncYabridge = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    yabridgectl sync
-  '';
 
   # Disabled since HomeManager should use global pkgs
   # https://github.com/nix-community/home-manager/issues/2942
@@ -49,6 +52,8 @@ rec {
   # NOTE: I don't think I need this anymore as all fonts are installed through the system config but let's keep this just in case
   fonts.fontconfig.enable = true; # Also updates the font-cache
 
+  # TODO: Add to flatpak module
+  # TODO: Update flatpak on rebuild?
   # We link like this to be able to address the absolute location, also the fonts won't get copied to store
   # NOTE: This path contains all the fonts because fonts.fontDir.enable is true
   home.activation.linkFontDir = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
@@ -63,7 +68,6 @@ rec {
       ln -sf /etc/profiles/per-user/christoph/share/icons ${home.homeDirectory}/.local/share/icons
     fi
   '';
-
   # Allow access to linked fonts/icons
   home.file.".local/share/flatpak/overrides/global".text = ''
     [Context]
@@ -89,19 +93,7 @@ rec {
     in
       formatted;
 
-  # TODO: Music module
-  # NOTE: This desktop entry is created in /etc/profiles/per-user/christoph/share/applications
-  #       This location is part of XDG_DATA_DIRS
-  xdg.desktopEntries.guitar = {
-    name = "Guitar Amp (Carla)";
-    genericName = "Guitar Amp Simulation";
-    icon = "carla";
-    exec = "env PIPEWIRE_LATENCY=256/48000 gamemoderun carla ${home.homeDirectory}/Documents/Carla/GuitarDefault.carxp";
-    terminal = false;
-    categories = [ "Music" "Audio" ];
-  };
-
-  # TODO: Does this has to be set manually or is it set by flatpak.enable?
+  # NOTE: Is set by flatpak.enable
   # xdg.systemDirs.data = [
   #   "/var/lib/flatpak/exports/share"
   #   "${home.homeDirectory}/.local/share/flatpak/exports/share"
@@ -273,13 +265,12 @@ rec {
     # godot
 
     # Audio
-    # TODO: Make a module, autosync yabridge on rebuild?
     # vcv-rack
     bitwig-studio
     # audacity
-    carla
-    yabridge
-    yabridgectl
+    # Module carla
+    # Module yabridge
+    # Module yabridgectl
 
     # Use NixCommunity binary cache
     cachix
