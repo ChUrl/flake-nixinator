@@ -276,8 +276,7 @@
 
     acpid.enable = true;
     dbus.enable = true;
-    flatpak.enable =
-      true; # Not quite the nix style but useful for bottles/proprietary stuff
+    # flatpak.enable = true; # Not quite the nix style but useful for bottles/proprietary stuff
     fstrim.enable = true;
     fwupd.enable = true;
     locate.enable = true; # Periodically update index

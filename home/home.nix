@@ -12,6 +12,8 @@ rec {
 
     ./modules/emacs.nix
     ./modules/audio.nix
+    ./modules/flatpak.nix
+    ./modules/gaming.nix
 
     # inputs.nixvim.homeManagerModules.nixvim
   ];
@@ -19,17 +21,34 @@ rec {
   # Config my modules
   modules.emacs = {
     enable = true;
+
     useDoom = true;
-    autosync = true;
+    autoSync = true;
+    autoUpgrade = false; # Very volatile as the upgrade fails sometimes with bleeding edge emacs
   };
 
   modules.audio = {
     enable = true;
-    carla = true;
+
+    carla.enable = true;
+    bitwig.enable = false;
+
     yabridge.enable = true;
-    yabridge.autosync = true;
-    bitwig.enable = true;
+    yabridge.autoSync = true;
+
     extraPackages = with pkgs; [ audacity vcv-rack ];
+  };
+
+  modules.flatpak = {
+    enable = true;
+
+    fontFix = true;
+    iconFix = true;
+
+    autoInstall = true;
+    autoUpdate = true;
+
+    packages = [ "discord" ];
   };
 
   # TODO: Email
@@ -54,28 +73,6 @@ rec {
   # NOTE: I don't think I need this anymore as all fonts are installed through the system config but let's keep this just in case
   fonts.fontconfig.enable = true; # Also updates the font-cache
 
-  # TODO: Add to flatpak module
-  # TODO: Update flatpak on rebuild?
-  # We link like this to be able to address the absolute location, also the fonts won't get copied to store
-  # NOTE: This path contains all the fonts because fonts.fontDir.enable is true
-  home.activation.linkFontDir = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    if [ ! -L "${home.homeDirectory}/.local/share/fonts" ]; then
-      ln -sf /run/current-system/sw/share/X11/fonts ${home.homeDirectory}/.local/share/fonts
-    fi
-  '';
-  # Also link icons
-  # NOTE: This path works because we have homeManager.useUserPackages = true (everything is stored in /etc/profiles/)
-  home.activation.linkIconDir = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    if [ ! -L "${home.homeDirectory}/.local/share/icons" ]; then
-      ln -sf /etc/profiles/per-user/christoph/share/icons ${home.homeDirectory}/.local/share/icons
-    fi
-  '';
-  # Allow access to linked fonts/icons
-  home.file.".local/share/flatpak/overrides/global".text = ''
-    [Context]
-    filesystems=/run/current-system/sw/share/X11/fonts:ro;/run/current-system/sw/share/icons:ro;/nix/store:ro
-  '';
-
   # TODO: Move to gaming modules
   home.file.".local/share/flatpak/overrides/com.valvesoftware.Steam".text = ''
     [Context]
@@ -94,12 +91,6 @@ rec {
       formatted = builtins.concatStringsSep "\n" sortedUnique;
     in
       formatted;
-
-  # NOTE: Is set by flatpak.enable
-  # xdg.systemDirs.data = [
-  #   "/var/lib/flatpak/exports/share"
-  #   "${home.homeDirectory}/.local/share/flatpak/exports/share"
-  # ];
 
   # TODO: Module
   gtk = {
