@@ -47,10 +47,12 @@ rec {
     fontFix = true;
     iconFix = true;
 
-    autoInstall = true;
     autoUpdate = true;
+    autoPrune = true;
 
-    packages = [ "discord" ];
+    discord = false;
+    spotify = true;
+    flatseal = true;
   };
 
   # TODO: Email
