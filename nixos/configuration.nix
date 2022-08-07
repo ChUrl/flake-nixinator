@@ -171,8 +171,7 @@
 
   fonts = {
     enableDefaultFonts = true; # Some default fonts for unicode coverage
-    fontDir.enable =
-      true; # Puts fonts to /run/current-system/sw/share/X11/fonts
+    fontDir.enable = true; # Puts fonts to /run/current-system/sw/share/X11/fonts
 
     # Font packages go here, don't do this with HomeManager as I need the fonts in the fontdir for flatpak apps
     fonts = with pkgs; [
