@@ -16,7 +16,6 @@ rec {
   ];
 
   # Config my modules
-  # TODO: Emacs autosync on rebuild?
   modules = {
     emacs.enable = true;
     emacs.useDoom = true;
@@ -27,9 +26,6 @@ rec {
   # TODO: Gnome terminal config
 
   # TODO: Update flatpak on rebuild? Make a setting/module for this, emacs update and yabridgectl update... Use home.activation...
-  home.activation.syncDoomEmacs = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    ${home.homeDirectory}/.emacs.d/bin/doom sync
-  '';
   home.activation.syncYabridge = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     yabridgectl sync
   '';
@@ -95,12 +91,11 @@ rec {
   # TODO: Music module
   # NOTE: This desktop entry is created in /etc/profiles/per-user/christoph/share/applications
   #       This location is part of XDG_DATA_DIRS
-  # TODO: Although everything seems correct, gnome doesn't show it
   xdg.desktopEntries.guitar = {
     name = "Guitar Amp (Carla)";
     genericName = "Guitar Amp Simulation";
     icon = "carla";
-    exec = "PIPEWIRE_LATENCY=256/48000 gamemoderun carla ${home.homeDirectory}/Documents/Carla/GuitarDefault.carxp";
+    exec = "env PIPEWIRE_LATENCY=256/48000 gamemoderun carla ${home.homeDirectory}/Documents/Carla/GuitarDefault.carxp";
     terminal = false;
     categories = [ "Music" "Audio" ];
   };
@@ -284,7 +279,6 @@ rec {
     carla
     yabridge
     yabridgectl
-    # (callPackage ../derivations/carla-guitar-amp.nix { inherit home; }) # TODO
 
     # Use NixCommunity binary cache
     cachix
@@ -393,9 +387,6 @@ rec {
         mp4 =
           "yt-dlp -f 'bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4] / bv*+ba/b' --recode-video mp4"; # the -f options are yt-dlp defaults
         mp3 = "yt-dlp -f 'ba' --extract-audio --audio-format mp3";
-
-        guitar =
-          "PIPEWIRE_LATENCY=256/48000 gamemoderun carla ${home.homeDirectory}/Documents/Carla/GuitarDefault.carxp";
       };
       shellAliases = {
         # ".." = "cd ..";
