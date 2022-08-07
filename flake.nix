@@ -135,10 +135,8 @@
             # HomeManager
             home-manager.nixosModules.home-manager
             {
-              home-manager.useGlobalPkgs =
-                true; # Use systems pkgs, disables nixpkgs.* options in home.nix
-              home-manager.useUserPackages =
-                true; # Enable installing packages through users.christoph.packages
+              home-manager.useGlobalPkgs = true; # Use systems pkgs, disables nixpkgs.* options in home.nix
+              home-manager.useUserPackages = true; # Enable installing packages through users.christoph.packages to /etc/profiles instead of ~/.nix-profile
               home-manager.users.christoph = import ./home/home.nix;
 
               # Make our overlays available in home.nix
