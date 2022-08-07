@@ -28,6 +28,8 @@ rec {
     carla = true;
     yabridge.enable = true;
     yabridge.autosync = true;
+    bitwig.enable = true;
+    extraPackages = with pkgs; [ audacity vcv-rack ];
   };
 
   # TODO: Email
@@ -263,14 +265,6 @@ rec {
     # krita
     # blender
     # godot
-
-    # Audio
-    # vcv-rack
-    bitwig-studio
-    # audacity
-    # Module carla
-    # Module yabridge
-    # Module yabridgectl
 
     # Use NixCommunity binary cache
     cachix

@@ -33,16 +33,30 @@ in {
         description = "Sync yabridge plugins on nixos-rebuild";
       };
     };
+
+    bitwig = {
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Enable Bitwig Studio digital audio workstation";
+      };
+    };
+
+    extraPackages = mkOption {
+      type = types.listOf types.package;
+      default = [ ];
+      description = "Extra packages to install";
+    };
   };
 
   config = mkIf cfg.enable {
 
     home.packages = with pkgs; (mkMerge [
       (mkIf cfg.carla [ carla ])
-
       (mkIf cfg.yabridge.enable [ yabridge yabridgectl ])
+      (mkIf cfg.bitwig.enable [ bitwig-studio ])
+      cfg.extraPackages
     ]);
-
 
     # NOTE: This desktop entry is created in /etc/profiles/per-user/christoph/share/applications
     #       This location is part of XDG_DATA_DIRS
