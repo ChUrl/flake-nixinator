@@ -32,10 +32,7 @@
     let
       # We bring these functions into the scope for the outputs.
       inherit (builtins) attrValues; # TODO: What does this do
-      # inherit (nixpkgs.lib) nixosSystem;
-      # inherit (home-manager.lib) homeManagerConfiguration;
 
-      # Disabled since HomeManager module inherits these in extraSpecialArgs
       # Add overlays from other flakes so we can use them from pkgs.
       overlays = {
         nur = inputs.nur.overlay;
@@ -111,6 +108,7 @@
       # System configurations + HomeManager module
       # Accessible via 'nixos-rebuild'
       nixosConfigurations = {
+
         # We give our configuration a name (the hostname) to choose a configuration when rebuilding.
         # This makes it easy to add different configurations later (e.g. for a laptop).
         # Usage: sudo nixos-rebuild switch --flake .#nixinator
@@ -140,9 +138,7 @@
               home-manager.users.christoph = import ./home/home.nix;
 
               # Make our overlays available in home.nix
-              home-manager.extraSpecialArgs = {
-                inherit inputs;
-              };
+              home-manager.extraSpecialArgs = { inherit inputs; };
             }
           ];
 
@@ -169,10 +165,8 @@
             # HomeManager
             home-manager.nixosModules.home-manager
             {
-              home-manager.useGlobalPkgs =
-                true; # Use systems pkgs, disables nixpkgs.* options in home.nix
-              home-manager.useUserPackages =
-                true; # Enable installing packages through users.christoph.packages
+              home-manager.useGlobalPkgs = true; # Use systems pkgs, disables nixpkgs.* options in home.nix
+              home-manager.useUserPackages = true; # Enable installing packages through users.christoph.packages
               home-manager.users.christoph = import ./home/home.nix;
 
               # Make our overlays available in home.nix
