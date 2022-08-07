@@ -21,13 +21,13 @@ in {
     };
 
     yabridge = {
-      enable = {
+      enable = mkOption {
         type = types.bool;
         default = false;
         description = "Enable yabridge + yabridgectl";
       };
 
-      autosync = {
+      autosync = mkOption {
         type = types.bool;
         default = false;
         description = "Sync yabridge plugins on nixos-rebuild";
@@ -50,7 +50,7 @@ in {
       name = "Guitar Amp (Carla)";
       genericName = "Guitar Amp Simulation";
       icon = "carla";
-      exec = "env PIPEWIRE_LATENCY=256/48000 gamemoderun carla ${home.homeDirectory}/.config/carla/GuitarDefault.carxp";
+      exec = "env PIPEWIRE_LATENCY=256/48000 gamemoderun carla ${config.home.homeDirectory}/.config/carla/GuitarDefault.carxp";
       terminal = false;
       categories = [ "Music" "Audio" ];
     };
