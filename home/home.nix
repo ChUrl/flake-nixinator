@@ -52,20 +52,22 @@ rec {
   # NOTE: I don't think I need this anymore as all fonts are installed through the system config but let's keep this just in case
   fonts.fontconfig.enable = true; # Also updates the font-cache
 
-  # Make fonts available to flatpak apps, we link the fontdir to $XDG_DATA_DIR/fonts and allow access
-  # home.file.".local/share/fonts" = {
-  #   recursive = true;
-  #   source = /run/current-system/sw/share/X11/fonts; # We cannot use the absolute path
-  # };
-  # We link like this to be able to address the absolute location, also the fonts won't get copied to store, also icons
+  # We link like this to be able to address the absolute location, also the fonts won't get copied to store
+  # NOTE: This path contains all the fonts because fonts.fontDir.enable is true
   home.activation.linkFontDir = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     if [ ! -L "${home.homeDirectory}/.local/share/fonts" ]; then
       ln -sf /run/current-system/sw/share/X11/fonts ${home.homeDirectory}/.local/share/fonts
     fi
+  '';
+  # Also link icons
+  # NOTE: This path works because we have homeManager.useUserPackages = true (everything is stored in /etc/profiles/)
+  home.activation.linkIconDir = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     if [ ! -L "${home.homeDirectory}/.local/share/icons" ]; then
-      ln -sf /run/current-system/sw/share/icons ${home.homeDirectory}/.local/share/icons
+      ln -sf /etc/profiles/per-user/christoph/share/icons ${home.homeDirectory}/.local/share/icons
     fi
   '';
+
+  # Allow access to linked fonts/icons
   home.file.".local/share/flatpak/overrides/global".text = ''
     [Context]
     filesystems=/run/current-system/sw/share/X11/fonts:ro;/run/current-system/sw/share/icons:ro;/nix/store:ro
@@ -90,19 +92,24 @@ rec {
     in
       formatted;
 
-  # TODO: Make to a derivation with makeDesktopIcon and add to music module
-  # Doesn't work
-  # home.file.".local/share/applications/carla-guitar-amp.desktop".text = ''
-  #   [Desktop Entry]
-  #   Type=Application
-  #   Exec=PIPEWIRE_LATENCY=256/48000 gamemoderun carla ${home.homeDirectory}/Documents/Carla/GuitarDefault.carxp
-  #   Terminal=false
-  #   Name=Carla Guitar Amp
-  #   Icon=carla
-  #   Comment=Play through NeuralDSP Gojira and Petrucci
-  #   GenericName=Guitar Amp Simulation
-  #   Categories=Music;Audio;
-  # '';
+  # TODO: Music module
+  # NOTE: This desktop entry is created in /etc/profiles/per-user/christoph/share/applications
+  #       This location is part of XDG_DATA_DIRS
+  # TODO: Although everything seems correct, gnome doesn't show it
+  xdg.desktopEntries.guitar = {
+    name = "Guitar Amp (Carla)";
+    genericName = "Guitar Amp Simulation";
+    icon = "carla";
+    exec = "PIPEWIRE_LATENCY=256/48000 gamemoderun carla ${home.homeDirectory}/Documents/Carla/GuitarDefault.carxp";
+    terminal = false;
+    categories = [ "Music" "Audio" ];
+  };
+
+  # TODO: Does this has to be set manually or is it set by flatpak.enable?
+  # xdg.systemDirs.data = [
+  #   "/var/lib/flatpak/exports/share"
+  #   "${home.homeDirectory}/.local/share/flatpak/exports/share"
+  # ];
 
   # TODO: Module
   gtk = {
@@ -132,11 +139,9 @@ rec {
       VISUAL = "nvim";
       LANG = "en_US.UTF-8";
 
-      XDG_DATA_DIRS =
-        "/var/lib/flatpak/exports/share:/home/christoph/.local/share/flatpak/exports/share:$XDG_DATA_DIRS";
       DOCKER_BUILDKIT = 1;
 
-      # Enable wayland for other shitty apps
+      # Firefox vaapi test
       MOZ_ENABLE_WAYLAND = 1;
       MOZ_USE_XINPUT2 = 1;
       QT_QPA_PLATFORM = "wayland";
@@ -150,10 +155,6 @@ rec {
       # WINEPREFIX = "/home/christoph/.wine";
 
       # NOTE: GTK_IM_MODULE, QT_IM_MODULE, XMODIFIERS are set by HomeManager fcitx5 module
-
-      # TODO: Investigate if this also slows down Gnome login
-      # GTK_USE_PORTAL = 1;
-
     };
 
     # sessionPath = [];
