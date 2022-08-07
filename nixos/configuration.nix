@@ -223,14 +223,14 @@
     packages = with pkgs; [ ];
   };
 
-  # Generate a list of installed packages in /etc/current-system-packages
+  # Generate a list of installed system packages in /etc/current-system-packages
   environment.etc."current-system-packages".text =
     let
       packages = builtins.map (p: "${p.name}") config.environment.systemPackages;
       sortedUnique = builtins.sort builtins.lessThan (lib.unique packages);
       formatted = builtins.concatStringsSep "\n" sortedUnique;
-  in
-    formatted;
+    in
+      formatted;
 
   # TODO: Trusted users
 
