@@ -62,7 +62,29 @@
     tmpOnTmpfs = true;
   };
 
-  security.protectKernelImage = true;
+  security = {
+    protectKernelImage = true;
+    rtkit.enable = true;
+    polkit.enable = true;
+
+    sudo.enable = true;
+    sudo.extraRules = [
+      {
+        users = [ "christoph" ];
+        commands = [
+          {
+            command = "/etc/profiles/per-user/christoph/bin/gamemoderun";
+            options = [ "SETENV" "NOPASSWD" ];
+          }
+          # We allow running flatpak without password so flatpaks can be installed from the hm config (needs sudo)
+          {
+            command = "/run/current-system/sw/bin/flatpak";
+            options = [ "SETENV" "NOPASSWD" ];
+          }
+        ];
+      }
+    ];
+  };
 
   # Set your time zone.
   time.timeZone = "Europe/Berlin";
@@ -154,7 +176,6 @@
   # Enable sound with pipewire.
   sound.enable = true;
   hardware.pulseaudio.enable = false;
-  security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
     alsa.enable = true;
@@ -289,7 +310,6 @@
     autoPrune.enable = true;
   };
 
-  security.polkit.enable = true;
   virtualisation.libvirtd = { enable = true; };
 
   # This value determines the NixOS release from which the default
