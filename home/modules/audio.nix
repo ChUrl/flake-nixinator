@@ -14,7 +14,7 @@ in {
       description = "Configure for realtime audio and enable a bunch of music production tools";
     };
 
-    carla = mkOption {
+    carla.enable = mkOption {
       type = types.bool;
       default = false;
       description = "Enable Carla + guitar-specific stuff";
@@ -27,7 +27,7 @@ in {
         description = "Enable yabridge + yabridgectl";
       };
 
-      autosync = mkOption {
+      autoSync = mkOption {
         type = types.bool;
         default = false;
         description = "Sync yabridge plugins on nixos-rebuild";
@@ -52,7 +52,7 @@ in {
   config = mkIf cfg.enable {
 
     home.packages = with pkgs; (mkMerge [
-      (mkIf cfg.carla [ carla ])
+      (mkIf cfg.carla.enable [ carla ])
       (mkIf cfg.yabridge.enable [ yabridge yabridgectl ])
       (mkIf cfg.bitwig.enable [ bitwig-studio ])
       cfg.extraPackages
@@ -60,7 +60,7 @@ in {
 
     # NOTE: This desktop entry is created in /etc/profiles/per-user/christoph/share/applications
     #       This location is part of XDG_DATA_DIRS
-    xdg.desktopEntries.guitar = mkIf cfg.carla {
+    xdg.desktopEntries.guitar = mkIf cfg.carla.enable {
       name = "Guitar Amp (Carla)";
       genericName = "Guitar Amp Simulation";
       icon = "carla";
@@ -70,7 +70,7 @@ in {
     };
 
     home.activation = (mkMerge [
-      (mkIf cfg.carla {
+      (mkIf cfg.carla.enable {
 
         # The module includes the default carla project with ArchetypePetrucci + ArchetypeGojira
         # TODO: I don't know if I should keep this
@@ -81,7 +81,7 @@ in {
         '';
       })
 
-      (mkIf cfg.yabridge.autosync {
+      (mkIf cfg.yabridge.autoSync {
         syncYabridge = hm.dag.entryAfter [ "writeBoundary" ] ''
           yabridgectl sync
         '';
