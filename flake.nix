@@ -76,6 +76,11 @@
             command = "nix flake check";
           }
           {
+            name = "pkgs";
+            help = "List currently installed system packages";
+            command = "bat /etc/current-system-packages";
+          }
+          {
             name = "switch-nixinator";
             help = "Rebuild and activate the nixinator config";
             command = "sudo nixos-rebuild switch --flake .#nixinator";
