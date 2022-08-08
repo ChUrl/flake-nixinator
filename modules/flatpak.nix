@@ -1,6 +1,7 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, mylib, pkgs, ... }:
 
 with lib;
+with mylib.modules;
 
 let
   cfg = config.modules.flatpak;
@@ -8,53 +9,17 @@ in {
   imports = [ ];
 
   options.modules.flatpak = {
-    enable = mkOption {
-      type = types.bool;
-      default = false;
-      description = "Enable flatpak support";
-    };
+    enable = mkBoolOpt false "Enable flatpak support";
+    fontFix = mkBoolOpt false "Link fonts to ~/.local/share/fonts so flatpak apps can find them";
+    iconFix = mkBoolOpt false "Link icons to ~/.local/share/icons so flatpak apps can find them";
+    autoUpdate = mkBoolOpt false "Update flatpak apps on nixos-rebuild";
+    autoPrune = mkBoolOpt false "Remove unused packages on nixos-rebuild";
 
-    fontFix = mkOption {
-      type = types.bool;
-      default = false;
-      description = "Link fonts to ~/.local/share/fonts so flatpak apps can find them";
-    };
-
-    iconFix = mkOption {
-      type = types.bool;
-      default = false;
-      description = "Link icons to ~/.local/share/icons so flatpak apps can find them";
-    };
-
-    autoUpdate = mkOption {
-      type = types.bool;
-      default = false;
-      description = "Update flatpak apps on nixos-rebuild";
-    };
-
-    autoPrune = mkOption {
-      type = types.bool;
-      default = false;
-      description = "Remove unused packages on nixos-rebuild";
-    };
-
-    discord.enable = mkOption {
-      type = types.bool;
-      default = false;
-      description = "Enable Discord";
-    };
-
-    spotify.enable = mkOption {
-      type = types.bool;
-      default = false;
-      description = "Enable Spotify";
-    };
-
-    flatseal.enable = mkOption {
-      type = types.bool;
-      default = false;
-      description = "Enable Flatseal";
-    };
+    # TODO: Add library function to make this easier
+    #       The flatpak name should be included and a list of all enabled apps should be available
+    discord.enable = mkBoolOpt false "Enable Discord";
+    spotify.enable = mkBoolOpt false "Enable Spotify";
+    flatseal.enable = mkBoolOpt false "Enable Flatseal";
   };
 
   config = mkIf cfg.enable {
@@ -66,24 +31,26 @@ in {
     # ];
 
     home.activation = mkMerge [
+      # We link like this to be able to address the absolute location, also the fonts won't get copied to store
+      # NOTE: This path contains all the fonts because fonts.fontDir.enable is true
       (mkIf cfg.fontFix {
-        # We link like this to be able to address the absolute location, also the fonts won't get copied to store
-        # NOTE: This path contains all the fonts because fonts.fontDir.enable is true
-        linkFontDir = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-          if [ ! -L "${config.home.homeDirectory}/.local/share/fonts" ]; then
-            ln -sf /run/current-system/sw/share/X11/fonts ${config.home.homeDirectory}/.local/share/fonts
-          fi
-        '';
+        linkFontDir = lib.hm.dag.entryAfter [ "writeBoundary" ]
+        (mkLink "/run/current-system/sw/share/X11/fonts" "${config.home.homeDirectory}/.local/share/fonts");
+      })
+      (mkElse cfg.fontFix {
+        unlinkFontDir = lib.hm.dag.entryAfter [ "writeBoundary" ]
+        (mkUnlink "${config.home.homeDirectory}/.local/share/fonts");
       })
 
+      # Fixes missing icons + cursor
+      # NOTE: This path works because we have homeManager.useUserPackages = true (everything is stored in /etc/profiles/)
       (mkIf cfg.iconFix {
-        # Fixes missing icons + cursor
-        # NOTE: This path works because we have homeManager.useUserPackages = true (everything is stored in /etc/profiles/)
-        linkIconDir = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-          if [ ! -L "${config.home.homeDirectory}/.local/share/icons" ]; then
-            ln -sf /etc/profiles/per-user/christoph/share/icons ${config.home.homeDirectory}/.local/share/icons
-          fi
-        '';
+        linkIconDir = lib.hm.dag.entryAfter [ "writeBoundary" ]
+        (mkLink "/etc/profiles/per-user/christoph/share/icons" "${config.home.homeDirectory}/.local/share/icons");
+      })
+      (mkElse cfg.iconFix {
+        unlinkIconDir = lib.hm.dag.entryAfter [ "writeBoundary" ]
+        (mkUnlink "${config.home.homeDirectory}/.local/share/icons");
       })
 
       # TODO: I should find a smarter way than this to make it easy to add flatpak options

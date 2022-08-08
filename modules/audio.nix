@@ -1,6 +1,7 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, mylib, pkgs, ... }:
 
 with lib;
+with mylib.modules;
 
 let
   cfg = config.modules.audio;
@@ -8,38 +9,13 @@ in {
   imports = [ ];
 
   options.modules.audio = {
-    enable = mkOption {
-      type = types.bool;
-      default = false;
-      description = "Configure for realtime audio and enable a bunch of music production tools";
-    };
-
-    carla.enable = mkOption {
-      type = types.bool;
-      default = false;
-      description = "Enable Carla + guitar-specific stuff";
-    };
+    enable = mkBoolOpt false "Configure for realtime audio and enable a bunch of music production tools";
+    carla.enable = mkBoolOpt false "Enable Carla + guitar-specific stuff";
+    bitwig.enable = mkBoolOpt false "Enable Bitwig Studio digital audio workstation";
 
     yabridge = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Enable yabridge + yabridgectl";
-      };
-
-      autoSync = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Sync yabridge plugins on nixos-rebuild";
-      };
-    };
-
-    bitwig = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Enable Bitwig Studio digital audio workstation";
-      };
+      enable = mkBoolOpt false "Enable yabridge + yabridgectl";
+      autoSync = mkBoolOpt false "Sync yabridge plugins on nixos-rebuild";
     };
 
     extraPackages = mkOption {
@@ -78,15 +54,14 @@ in {
     };
 
     home.activation = mkMerge [
+      # The module includes the default carla project with ArchetypePetrucci + ArchetypeGojira
       (mkIf cfg.carla.enable {
-
-        # The module includes the default carla project with ArchetypePetrucci + ArchetypeGojira
-        # TODO: I don't know if I should keep this
-        linkCarlaConfig = hm.dag.entryAfter [ "writeBoundary" ] ''
-          if [ ! -L "${config.home.homeDirectory}/.config/carla" ]; then
-            ln -sf ${config.home.homeDirectory}/NixFlake/config/carla ${config.home.homeDirectory}/.config/carla
-          fi
-        '';
+        linkCarlaConfig = hm.dag.entryAfter [ "writeBoundary" ]
+        (mkLink "${config.home.homeDirectory}/NixFlake/config/carla" "${config.home.homeDirectory}/.config/carla");
+      })
+      (mkElse cfg.carla.enable {
+        unlinkCarlaConfig = hm.dag.entryAfter [ "writeBoundary" ]
+        (mkUnlink "${config.home.homeDirectory}/.config/carla");
       })
 
       (mkIf cfg.yabridge.autoSync {

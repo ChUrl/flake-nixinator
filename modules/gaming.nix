@@ -1,6 +1,7 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, mylib, pkgs, ... }:
 
 with lib;
+with mylib.modules;
 
 let
   cfg = config.modules.gaming;

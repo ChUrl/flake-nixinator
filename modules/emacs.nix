@@ -1,10 +1,11 @@
 # https://nixos.org/manual/nixos/stable/index.html#sec-writing-modules
 
 # This is a function with arguments
-{ config, lib, pkgs, ... }:
+{ config, lib, mylib, pkgs, ... }:
 
 # We add stuff from lib to our namespace (mkOption...)
 with lib;
+with mylib.modules;
 
 let
   # This is the current state of the option that this module defines
@@ -16,30 +17,12 @@ in {
   # Options is a vector of options this module defines
   # This module defines only the "emacs" option and suboptions "enable" and "doom"
   options.modules.emacs = {
-    enable = mkOption {
-      type = types.bool;
-      default = false;
-      description = "Enable the GNU Emacs editor";
-    };
+    enable = mkBoolOpt false "Enable the GNU Emacs editor";
 
     doom = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Use the Doom Emacs framework";
-      };
-
-      autoSync = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Sync Doom Emacs on nixos-rebuild";
-      };
-
-      autoUpgrade = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Automatically upgrade Doom Emacs on nixos-rebuild";
-      };
+      enable = mkBoolOpt false "Use the Doom Emacs framework";
+      autoSync = mkBoolOpt false "Sync Doom Emacs on nixos-rebuild";
+      autoUpgrade = mkBoolOpt false "Upgrade Doom Emacs on nixos-rebuild";
     };
   };
 
@@ -108,22 +91,21 @@ in {
         '';
 
         # With this approach we keep the config mutable as it is not copied and linked from store
-        linkDoomConfig = hm.dag.entryAfter [ "writeBoundary" "installDoomEmacs" ] ''
-          if [ ! -L "${config.home.homeDirectory}/.config/doom" ]; then
-            ln -sf ${config.home.homeDirectory}/NixFlake/config/doom ${config.home.homeDirectory}/.config/doom
-          fi
-        '';
+        linkDoomConfig = hm.dag.entryAfter [ "writeBoundary" "installDoomEmacs" ]
+        (mkLink "${config.home.homeDirectory}/NixFlake/config/doom" "${config.home.homeDirectory}/.config/doom");
+      })
+      (mkElse cfg.doom.enable {
+        unlinkDoomConfig = hm.dag.entryAfter [ "writeBoundary" "installDoomEmacs" ]
+        (mkUnlink "${config.home.homeDirectory}/.config/doom");
       })
 
       (mkIf (cfg.doom.enable && cfg.doom.autoSync) {
-
         syncDoomEmacs = hm.dag.entryAfter [ "writeBoundary" "linkDoomConfig" ] ''
           ${config.home.homeDirectory}/.emacs.d/bin/doom sync
         '';
       })
 
       (mkIf (cfg.doom.enable && cfg.doom.autoUpgrade) {
-
         upgradeDoomEmacs = hm.dag.entryAfter [ "writeBoundary" "linkDoomConfig" ] ''
           ${config.home.homeDirectory}/.emacs.d/bin/doom upgrade -!
         '';
