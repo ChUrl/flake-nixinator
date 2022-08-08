@@ -3,14 +3,14 @@
 let
   inherit (inputs) home-manager;
 
-in rec {
+in {
   mkNixosConfig = { system ? "x86_64-linux", mylib, hostname, username ? "christoph", extraModules ? [ ] }:
   lib.nixosSystem {
     inherit system;
 
     # Make our inputs available to the configuration.nix (for importing modules)
     # specialArgs are propagated to all modules
-    specialArgs = { inherit inputs hostname mylib; };
+    specialArgs = { inherit inputs hostname username mylib; };
 
     modules = builtins.concatLists [
       [
@@ -33,7 +33,7 @@ in rec {
       [
         home-manager.nixosModules.home-manager {
           # extraSpecialArgs are propagated to all hm config modules
-          home-manager.extraSpecialArgs = { inherit inputs hostname mylib; };
+          home-manager.extraSpecialArgs = { inherit inputs hostname username mylib; };
 
           # Use systems pkgs, disables nixpkgs.* options in home.nix
           home-manager.useGlobalPkgs = true;
