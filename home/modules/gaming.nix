@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.modules.gaming;
-  flatpak = config.module.flatpak;
+  flatpak = config.modules.flatpak;
 in {
   imports = [ ];
 
