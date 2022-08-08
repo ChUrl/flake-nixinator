@@ -15,7 +15,8 @@ in {
     enable = mkBoolOpt false "Configure for realtime audio and enable a bunch of music production tools";
     carla.enable = mkBoolOpt false "Enable Carla + guitar-specific stuff";
     bitwig.enable = mkBoolOpt false "Enable Bitwig Studio digital audio workstation";
-    bottles.enable = mkBoolOpt false "Enable Bottles to emulate windows VSTs (requires flatpak)";
+    # TODO: Add bottles audio bottle config link
+    bottles.enable = mkBoolOpt false "Enable Bottles to emulate windows VSTs (flatpak)";
 
     yabridge = {
       enable = mkBoolOpt false "Enable yabridge + yabridgectl";
@@ -33,7 +34,7 @@ in {
     assertions = [
       (mkIf cfg.bottles.enable {
         assertion = cfgfp.enable;
-        message = "Cannot enable bottles without the flatpak module!";
+        message = "Cannot enable Bottles without the flatpak module!";
       })
     ];
 
