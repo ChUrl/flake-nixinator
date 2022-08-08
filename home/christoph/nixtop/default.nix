@@ -7,4 +7,15 @@ rec {
     ../../../modules
   ];
 
+  # TODO: Validate that this doesn't install too much
+  modules.gaming = {
+    enable = true;
+
+    discordChromium.enable = true;
+
+    noisetorch = {
+      enable = true;
+      autostart = true;
+    };
+  };
 }
