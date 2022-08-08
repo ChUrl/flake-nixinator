@@ -7,8 +7,7 @@
   imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
 
   boot = {
-    initrd.availableKernelModules =
-      [ "xhci_pci" "ahci" "nvme" "usbhid" "usb_storage" "sd_mod" ];
+    initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usbhid" "usb_storage" "sd_mod" ];
     initrd.kernelModules = [ ];
     kernelModules = [ "kvm-intel" ];
     extraModulePackages = [ ];
@@ -55,21 +54,14 @@
   # networking.interfaces.enp4s0u2.useDHCP = lib.mkDefault true;
   # networking.interfaces.wlp3s0.useDHCP = lib.mkDefault true;
 
-  powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
-  hardware.cpu.intel.updateMicrocode =
-    lib.mkDefault config.hardware.enableRedistributableFirmware;
-  # high-resolution display
-  hardware.video.hidpi.enable = lib.mkDefault true;
-
   hardware = {
-    # cpu.intel.updateMicrocode = true; # Already defined in hardware.nix
-
     # Use all redistributable firmware (i.e. nonfree)
-    enableAllFirmware = true;
-    enableRedistributableFirmware = true; # Also enables microcode update
+    # enableAllFirmware = true;
+    enableRedistributableFirmware = true;
+    cpu.intel.updateMicrocode = true;
 
-    nvidia.modesetting.enable =
-      true; # Not officially supported by NVidia but needed for wayland
+    nvidia.modesetting.enable = true; # Not officially supported by NVidia but needed for wayland
+    video.hidpi.enable = lib.mkDefault true;
     opengl.enable = true;
     opengl.driSupport = true;
     opengl.driSupport32Bit = true;
@@ -78,4 +70,6 @@
 
     xpadneo.enable = true;  # Xbox Controller
   };
+
+  powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
 }
