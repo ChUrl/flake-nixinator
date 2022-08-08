@@ -3,6 +3,12 @@
 with lib;
 with mylib.modules;
 
+# NOTE: The module is also used by other modules (gaming, audio).
+#       It is important that every flatpak interaction is handled through this module
+#       to prevent that anything is removed by a module although it is required by another one
+
+# TODO: Also need a library function to enable and concatenate different flatpak overrides (also global overrides)
+
 let
   cfg = config.modules.flatpak;
 in {
@@ -16,10 +22,26 @@ in {
     autoPrune = mkBoolOpt false "Remove unused packages on nixos-rebuild";
 
     # TODO: Add library function to make this easier
-    #       The flatpak name should be included and a list of all enabled apps should be available
+    # TODO: The flatpak name should be included and a list of all enabled apps should be available
+    # TODO: Do this for strings + packages
     discord.enable = mkBoolOpt false "Enable Discord";
     spotify.enable = mkBoolOpt false "Enable Spotify";
     flatseal.enable = mkBoolOpt false "Enable Flatseal";
+    bottles.enable = mkBoolOpt false "Enable Bottles";
+
+    # This is mainly used by other modules to allow them to use flatpak packages
+    extraInstall = mkOption {
+      type = types.listOf types.str;
+      default = [ ];
+      description = "Flatpaks that will be installed additionally";
+    };
+
+    # This doesn't uninstall if any flatpak is still present in the extraInstall list
+    extraRemove = mkOption {
+      type = types.listOf types.str;
+      default = [ ];
+      description = "Flatpaks that will be removed additionally (use with extraInstall)";
+    };
   };
 
   config = mkIf cfg.enable {
@@ -56,16 +78,18 @@ in {
       # TODO: I should find a smarter way than this to make it easy to add flatpak options
       {
         # TODO: Enable this block only if any flatpak is enabled
-        # TODO: Only install new flatpaks, check with flatpak list | grep <name> | wc -l
         installFlatpaks = let
           to_install = builtins.concatLists [
             (optionals cfg.discord.enable [ "com.discordapp.Discord" ])
             (optionals cfg.spotify.enable [ "com.spotify.Client" ])
             (optionals cfg.flatseal.enable [ "com.github.tchx84.Flatseal" ])
+            (optionals cfg.bottles.enable [ "com.usebottles.bottles" ])
+            cfg.extraInstall
           ];
 
           to_install_str = builtins.concatStringsSep " " to_install;
         in
+          # By using || we make sure this command never throws any errors
           lib.hm.dag.entryAfter [ "writeBoundary" ] ''
             sudo flatpak install -y ${to_install_str} || echo "Nothing to be installed"
           '';
@@ -73,16 +97,19 @@ in {
 
       {
         # TODO: Enable this block only if any flatpak is disabled
-        # TODO: Only remove flatpaks that are installed, check with flatpak list | grep <name> | wc -l
         removeFlatpaks = let
           to_remove = builtins.concatLists [
             (optionals (!cfg.discord.enable) [ "com.discordapp.Discord" ])
             (optionals (!cfg.spotify.enable) [ "com.spotify.Client" ])
             (optionals (!cfg.flatseal.enable) [ "com.github.tchx84.Flatseal" ])
+            (optionals (!cfg.bottles.enable) [ "com.usebottles.bottles" ])
+            # Remove only the flatpaks that are not present in extraInstall
+            (without cfg.extraRemove cfg.extraInstall)
           ];
 
           to_remove_str = builtins.concatStringsSep " " to_remove;
         in
+          # By using || we make sure this command never throws any errors
           lib.hm.dag.entryAfter [ "writeBoundary" ] ''
             sudo flatpak uninstall -y ${to_remove_str} || echo "Nothing to be removed"
           '';
@@ -94,6 +121,7 @@ in {
         '';
       })
 
+      # Execute this after flatpak removal as there can be leftovers
       (mkIf cfg.autoPrune {
         pruneFlatpak = lib.hm.dag.entryAfter [ "writeBoundary" "removeFlatpak" ] ''
           sudo flatpak uninstall --unused -y
