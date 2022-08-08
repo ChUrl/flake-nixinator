@@ -55,14 +55,6 @@ in {
       default = false;
       description = "Enable Flatseal";
     };
-
-    # NOTE: Disabled as these won't be removed automatically when disabled
-    #       Will see if it works well enough without this flexibility
-    # extraPackages = mkOption {
-    #   type = types.listOf types.str;
-    #   default = [ ];
-    #   description = "List of additionally enabled flatpaks";
-    # };
   };
 
   config = mkIf cfg.enable {
@@ -85,6 +77,7 @@ in {
       })
 
       (mkIf cfg.iconFix {
+        # Fixes missing icons + cursor
         # NOTE: This path works because we have homeManager.useUserPackages = true (everything is stored in /etc/profiles/)
         linkIconDir = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
           if [ ! -L "${config.home.homeDirectory}/.local/share/icons" ]; then
@@ -93,8 +86,11 @@ in {
         '';
       })
 
+      # TODO: I should find a smarter way than this to make it easy to add flatpak options
       {
-        installFlatpak = let
+        # TODO: Enable this block only if any flatpak is enabled
+        # TODO: Only install new flatpaks, check with flatpak list | grep <name> | wc -l
+        installFlatpaks = let
           to_install = builtins.concatLists [
             (optionals cfg.discord.enable [ "com.discordapp.Discord" ])
             (optionals cfg.spotify.enable [ "com.spotify.Client" ])
@@ -104,10 +100,14 @@ in {
           to_install_str = builtins.concatStringsSep " " to_install;
         in
           lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-            sudo flatpak install -y ${to_install_str}
+            sudo flatpak install -y ${to_install_str} || echo "Nothing to be installed"
           '';
+      }
 
-        removeFlatpak = let
+      {
+        # TODO: Enable this block only if any flatpak is disabled
+        # TODO: Only remove flatpaks that are installed, check with flatpak list | grep <name> | wc -l
+        removeFlatpaks = let
           to_remove = builtins.concatLists [
             (optionals (!cfg.discord.enable) [ "com.discordapp.Discord" ])
             (optionals (!cfg.spotify.enable) [ "com.spotify.Client" ])
@@ -117,7 +117,7 @@ in {
           to_remove_str = builtins.concatStringsSep " " to_remove;
         in
           lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-            sudo flatpak uninstall -y ${to_remove_str}
+            sudo flatpak uninstall -y ${to_remove_str} || echo "Nothing to be removed"
           '';
       }
 
