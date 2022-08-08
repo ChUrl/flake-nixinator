@@ -5,13 +5,18 @@
 # https://github.com/nix-community/home-manager/blob/586ac1fd58d2de10b926ce3d544b3179891e58cb/nixos/default.nix#L19
 { inputs, lib, config, nixosConfig, pkgs, ... }:
 
+# This is a module
+# Because no imports/options/config is defined explicitly, everything is treated as config
+# { inputs, lib, ... }: { ... } gets turned into { inputs, lib, ... }: { config = { ... }; } implicitly
 rec {
+
+  # Every module is a nix expression, specifically a function { inputs, lib, ... }: { ... }
+  # Every module (/function) is called with the same arguments as this module (home.nix)
+  # Arguments with matching names are "plugged in" into the right slots,
+  # the case of different arity is handled by always providing ellipses (...) in module definitions
   imports = [
-    # If you want to use home-manager modules from other flakes (such as nix-colors), use something like:
-    # inputs.nix-colors.homeManagerModule
 
-    # Feel free to split up your configuration and import pieces of it here.
-
+    # My modules
     ./modules/emacs.nix
     ./modules/audio.nix
     ./modules/flatpak.nix
@@ -24,17 +29,18 @@ rec {
   modules.emacs = {
     enable = true;
 
-    useDoom = true;
-    autoSync = true;
-    autoUpgrade = false; # Very volatile as the upgrade fails sometimes with bleeding edge emacs
+    # TODO: Remove the stuff when disabled
+    doom.enable = true;
+    doom.autoSync = true;
+    doom.autoUpgrade = false; # Very volatile as the upgrade fails sometimes with bleeding edge emacs
   };
 
   modules.audio = {
     enable = true;
 
+    # TODO: Remove the config link when disabled
     carla.enable = true;
     bitwig.enable = false;
-
     yabridge.enable = true;
     yabridge.autoSync = true;
 
@@ -44,16 +50,18 @@ rec {
   modules.flatpak = {
     enable = true;
 
+    # TODO: Make these active by default and remove the links if disabled
     fontFix = true;
     iconFix = true;
-
     autoUpdate = true;
     autoPrune = true;
 
-    discord = false;
-    spotify = true;
-    flatseal = true;
+    discord.enable = false;
+    spotify.enable = true;
+    flatseal.enable = true;
   };
+
+  modules.gaming = {};
 
   # TODO: Email
   # TODO: Run noisetorch as login script
