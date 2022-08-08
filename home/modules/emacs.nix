@@ -22,22 +22,24 @@ in {
       description = "Enable the GNU Emacs editor";
     };
 
-    useDoom = mkOption {
-      type = types.bool;
-      default = false;
-      description = "Use the Doom Emacs framework";
-    };
+    doom = {
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Use the Doom Emacs framework";
+      };
 
-    autoSync = mkOption {
-      type = types.bool;
-      default = false;
-      description = "Sync Doom Emacs on nixos-rebuild";
-    };
+      autoSync = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Sync Doom Emacs on nixos-rebuild";
+      };
 
-    autoUpgrade = mkOption {
-      type = types.bool;
-      default = false;
-      description = "Automatically upgrade Doom Emacs on nixos-rebuild";
+      autoUpgrade = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Automatically upgrade Doom Emacs on nixos-rebuild";
+      };
     };
   };
 
@@ -46,7 +48,11 @@ in {
   # Since this module is for HomeManager, config is not the system config
   # Attribute sets like config can be defined multiple times (every module defines a different config), on
   # building the config they are merged
+  # Because config depends on itself recursively (through cfg) we use mkIf instead of the normal if...then...else,
+  # as it delays the evaluation (the if is moved inside the assignments inside the set)
+  # mkIf can only be used in the config section (like mkMerge, mkForce and co)
   config = mkIf cfg.enable {
+
     # What home packages should be enabled
     home.packages = with pkgs; [
       ((emacsPackagesFor emacsPgtkNativeComp).emacsWithPackages
@@ -77,7 +83,7 @@ in {
         ])) # withPackages expects a function that gets all the packages as argument and returns a list with the packages we want
     ];
 
-    home.sessionPath = mkIf cfg.useDoom [ "/home/${config.home.username}/.emacs.d/bin" ];
+    home.sessionPath = mkIf cfg.doom.enable [ "${config.home.homeDirectory}/.emacs.d/bin" ];
 
     # Note: Don't do it this way as the config becomes immutable
     # We tell HomeManager where the config files belong
@@ -88,7 +94,7 @@ in {
     # };
 
     home.activation = (mkMerge [
-      (mkIf cfg.useDoom {
+      (mkIf cfg.doom.enable {
 
         # If doom is enabled we want to clone the framework
         # The activation script is being run when home-manager rebuilds
@@ -107,14 +113,14 @@ in {
         '';
       })
 
-      (mkIf (cfg.useDoom && cfg.autoSync) {
+      (mkIf (cfg.doom.enable && cfg.doom.autoSync) {
 
         syncDoomEmacs = hm.dag.entryAfter [ "writeBoundary" "linkDoomConfig" ] ''
           ${config.home.homeDirectory}/.emacs.d/bin/doom sync
         '';
       })
 
-      (mkIf (cfg.useDoom && cfg.autoUpgrade) {
+      (mkIf (cfg.doom.enable && cfg.doom.autoUpgrade) {
 
         upgradeDoomEmacs = hm.dag.entryAfter [ "writeBoundary" "linkDoomConfig" ] ''
           ${config.home.homeDirectory}/.emacs.d/bin/doom upgrade -!
