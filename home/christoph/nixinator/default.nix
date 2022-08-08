@@ -10,11 +10,29 @@ rec {
 
     carla.enable = true;
     bitwig.enable = false;
+    bottles.enable = true;
     yabridge.enable = true;
     yabridge.autoSync = true;
 
     extraPackages = with pkgs; [ audacity vcv-rack ];
   };
 
-  modules.gaming = {};
+  modules.gaming = {
+    enable = true;
+
+    discordChromium.enable = true;
+    polymc.enable = true;
+    bottles.enable = true;
+
+    noisetorch = {
+      enable = true;
+      autostart = true;
+    };
+
+    steam = {
+      enable = true;
+      protonGE = true;
+      gamescope = true;
+    };
+  };
 }
