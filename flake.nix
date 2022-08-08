@@ -60,11 +60,14 @@
         nixinator = nixpkgs.lib.nixosSystem {
           inherit system;
 
+          # Make our inputs available to the configuration.nix (for importing modules)
+          specialArgs = { inherit inputs; };
+
           # >> Main NixOS configuration file <<
           modules = [
-            # TODO: Can this be set globally?
-            { nixpkgs = { inherit pkgs; }; }
+            { nixpkgs.pkgs = pkgs; }
 
+            # TODO: Access this over inputs in configuration-nixtop.nix
             inputs.musnix.nixosModules.musnix
 
             ./nixos/configuration.nix
@@ -76,23 +79,19 @@
               home-manager.useGlobalPkgs = true; # Use systems pkgs, disables nixpkgs.* options in home.nix
               home-manager.useUserPackages = true; # Enable installing packages through users.christoph.packages to /etc/profiles instead of ~/.nix-profile
               home-manager.users.christoph = import ./home/home.nix;
-
-              # Make our inputs available in home.nix
-              home-manager.extraSpecialArgs = { inherit inputs; };
             }
           ];
-
-          # Make our inputs available to the configuration.nix (for importing modules)
-          specialArgs = { inherit inputs; };
         };
 
         nixtop = nixpkgs.lib.nixosSystem {
           inherit system;
 
+          # Make our inputs available to the configuration.nix (for importing modules)
+          specialArgs = { inherit inputs; };
+
           # >> Main NixOS configuration file <<
           modules = [
-            # TODO: Can this be set globally?
-            { nixpkgs = { inherit pkgs; }; }
+            { nixpkgs.pkgs = pkgs; }
 
             ./nixos/configuration.nix
             ./nixos/configuration-nixtop.nix
@@ -103,14 +102,8 @@
               home-manager.useGlobalPkgs = true; # Use systems pkgs, disables nixpkgs.* options in home.nix
               home-manager.useUserPackages = true; # Enable installing packages through users.christoph.packages
               home-manager.users.christoph = import ./home/home.nix;
-
-              # Make our inputs available in home.nix
-              home-manager.extraSpecialArgs = { inherit inputs; };
             }
           ];
-
-          # Make our inputs available to the configuration.nix (for importing modules)
-          specialArgs = { inherit inputs; };
         };
       };
     };
