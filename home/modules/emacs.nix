@@ -93,7 +93,9 @@ in {
     #   source = ../../config/doom;
     # };
 
-    home.activation = (mkMerge [
+    home.activation = mkMerge [
+
+      # The parantheses around mkIf are needed for precedence in this case
       (mkIf cfg.doom.enable {
 
         # If doom is enabled we want to clone the framework
@@ -126,6 +128,6 @@ in {
           ${config.home.homeDirectory}/.emacs.d/bin/doom upgrade -!
         '';
       })
-    ]);
+    ];
   };
 }
