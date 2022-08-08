@@ -32,6 +32,7 @@
     let
       system = "x86_64-linux";
 
+      # Set overlays + unfree globally
       pkgs = import nixpkgs {
         inherit system;
         config.allowUnfree = true;
@@ -49,76 +50,31 @@
     # The rec expression turns a basic set into a set where self-referencing is possible.
     # It is a shorthand for recursive and allows to use the values defined in this set from its own scope.
     in rec {
-#      inherit lib;
 
       # Local shell for NixFlake directory
       devShells."${system}".default = import ./shell.nix { inherit pkgs; };
 
       # System configurations + HomeManager module
       # Accessible via 'nixos-rebuild'
-      # TODO: Add some sort of lib function to deduplicate the configs (they are mostly the same except for the modules)
       nixosConfigurations = {
-
-        # WIP using lib.my
-        nixinator = mylib.nixos.mkNixosConfig {
-          inherit system;
-
-          hostname = "nixinator";
-          extraModules = [ inputs.musnix.nixosModules.musnix ];
-          homeConfigs = [ mylib.nixos.mkHomeConfig { username = "christoph"; } ];
-        };
 
         # We give our configuration a name (the hostname) to choose a configuration when rebuilding.
         # This makes it easy to add different configurations later (e.g. for a laptop).
         # Usage: sudo nixos-rebuild switch --flake .#nixinator
-#        nixinator = nixpkgs.lib.nixosSystem {
-#          inherit system;
-#
-#          # Make our inputs available to the configuration.nix (for importing modules)
-#          specialArgs = { inherit inputs; };
-#
-#          # >> Main NixOS configuration file <<
-#          modules = [
-#            { nixpkgs.pkgs = pkgs; }
-#
-#            # TODO: Access this over inputs in configuration-nixtop.nix
-#            inputs.musnix.nixosModules.musnix
-#
-#            ./nixos/configuration.nix
-#            ./nixos/configuration-nixinator.nix
-#
-#            # HomeManager
-#            home-manager.nixosModules.home-manager
-#            {
-#              home-manager.useGlobalPkgs = true; # Use systems pkgs, disables nixpkgs.* options in home.nix
-#              home-manager.useUserPackages = true; # Enable installing packages through users.christoph.packages to /etc/profiles instead of ~/.nix-profile
-#              home-manager.users.christoph = import ./home/home-christoph.nix;
-#            }
-#          ];
-#        };
+        nixinator = mylib.nixos.mkNixosConfig {
+          inherit system;
 
-#        nixtop = nixpkgs.lib.nixosSystem {
-#          inherit system;
-#
-#          # Make our inputs available to the configuration.nix (for importing modules)
-#          specialArgs = { inherit inputs; };
-#
-#          # >> Main NixOS configuration file <<
-#          modules = [
-#            { nixpkgs.pkgs = pkgs; }
-#
-#            ./nixos/configuration.nix
-#            ./nixos/configuration-nixtop.nix
-#
-#            # HomeManager
-#            home-manager.nixosModules.home-manager
-#            {
-#              home-manager.useGlobalPkgs = true; # Use systems pkgs, disables nixpkgs.* options in home.nix
-#              home-manager.useUserPackages = true; # Enable installing packages through users.christoph.packages
-#              home-manager.users.christoph = import ./home/home-christoph.nix;
-#            }
-#          ];
-#        };
+          hostname = "nixinator";
+          username = "christoph";
+          extraModules = [ inputs.musnix.nixosModules.musnix ];
+        };
+
+        nixtop = mylib.nixos.mkNixosConfig {
+          inherit system;
+
+          hostname = "nixtop";
+          username = "christoph";
+        };
       };
     };
 }
