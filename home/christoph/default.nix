@@ -3,7 +3,7 @@
 
 # The nixosConfig allows to access the toplevel system configuration from within home manager
 # https://github.com/nix-community/home-manager/blob/586ac1fd58d2de10b926ce3d544b3179891e58cb/nixos/default.nix#L19
-{ inputs, lib, config, nixosConfig, pkgs, ... }:
+{ inputs, lib, mylib, config, nixosConfig, pkgs, ... }:
 
 # This is a module
 # Because no imports/options/config is defined explicitly, everything is treated as config

@@ -1,4 +1,4 @@
-{ musnix, config, lib, pkgs, ... }:
+{ musnix, config, lib, mylib, pkgs, ... }:
 
 {
   imports = [

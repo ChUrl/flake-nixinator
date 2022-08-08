@@ -18,9 +18,9 @@
     # Other Flakes
     emacs-overlay.url = "github:nix-community/emacs-overlay";
     nur.url = "github:nix-community/NUR";
-    # nixvim.url = "github:pta2002/nixvim";
     musnix.url = "github:musnix/musnix";
     devshell.url = "github:numtide/devshell";
+    # nixvim.url = "github:pta2002/nixvim";
   };
 
   # Outputs is a function that takes the inputs as arguments.
@@ -35,6 +35,7 @@
       # Set overlays + unfree globally
       pkgs = import nixpkgs {
         inherit system;
+
         config.allowUnfree = true;
         overlays = [
           inputs.devshell.overlay
@@ -44,7 +45,7 @@
       };
 
       # Add my additions to the nixpkgs lib
-#      mylib = nixpkgs.lib.extend (self: super: { my = import ./lib { inherit pkgs inputs; lib = self; }; });
+#      lib = nixpkgs.lib.extend (self: super: { my = import ./lib { inherit pkgs inputs; lib = self; }; });
       mylib = import ./lib { inherit inputs pkgs; lib = nixpkgs.lib; };
 
     # The rec expression turns a basic set into a set where self-referencing is possible.
@@ -62,7 +63,7 @@
         # This makes it easy to add different configurations later (e.g. for a laptop).
         # Usage: sudo nixos-rebuild switch --flake .#nixinator
         nixinator = mylib.nixos.mkNixosConfig {
-          inherit system;
+          inherit system mylib;
 
           hostname = "nixinator";
           username = "christoph";
@@ -70,7 +71,7 @@
         };
 
         nixtop = mylib.nixos.mkNixosConfig {
-          inherit system;
+          inherit system mylib;
 
           hostname = "nixtop";
           username = "christoph";
