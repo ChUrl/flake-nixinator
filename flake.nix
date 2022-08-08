@@ -65,7 +65,6 @@
 
           hostname = "nixinator";
           username = "christoph";
-          extraModules = [ inputs.musnix.nixosModules.musnix ];
         };
 
         nixtop = mylib.nixos.mkNixosConfig {
