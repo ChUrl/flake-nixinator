@@ -1,11 +1,11 @@
 { inputs, pkgs, lib, ... }:
 
 let
-  inherit (inputs) nixpkgs home-manager;
+  inherit (inputs) home-manager;
 
 in rec {
-  mkNixosConfig = { system, hostname, extraModules, homeConfigs }:
-  nixpkgs.lib.nixosSystem {
+  mkNixosConfig = { system ? "x86_64-linux", hostname, username ? "christoph", extraModules ? [ ] }:
+  lib.nixosSystem {
     inherit system;
 
     # Make our inputs available to the configuration.nix (for importing modules)
@@ -25,26 +25,24 @@ in rec {
 
       extraModules
 
-      # Make a user home for every config supplied
-      (builtins.map home-manager.nixosModules.home-manager homeConfigs)
+      # I included the home config statically like this as I am the only user
+      # I would have liked to make it more flexible (for multiple users on the same host)
+      # but I failed because nix stopped autoinjecting the required arguments and I didn't
+      # know how to handle that...
+      [
+        home-manager.nixosModules.home-manager {
+
+          # Use systems pkgs, disables nixpkgs.* options in home.nix
+          home-manager.useGlobalPkgs = true;
+
+          # Enable installing packages through users.christoph.packages to /etc/profiles instead of ~/.nix-profile
+          home-manager.useUserPackages = true;
+
+          # User specific config file
+          # Is marked as error but correct
+          home-manager.users.${username}.imports = [ ../home/${username} ];
+        }
+      ]
     ];
-  };
-
-  # Only returns the set that has to be passed to home-manager.nixosModules.home-manager
-  # because then nix is able to automatically inject the dependencies
-  mkHomeConfig = { username }:
-  {
-    # Include the inputs just in case they might be needed somewhere
-    home-manager.extraSpecialArgs = { inherit inputs; };
-
-    # Use systems pkgs, disables nixpkgs.* options in home.nix
-    home-manager.useGlobalPkgs = true;
-
-    # Enable installing packages through users.christoph.packages to /etc/profiles instead of ~/.nix-profile
-    home-manager.useUserPackages = true;
-
-    # User specific config file
-    # TODO: Do this for a list of users
-    home-manager.users.${username}.imports = [ ../home/${username} ]; # Is marked as error but correct (I think)
   };
 }
