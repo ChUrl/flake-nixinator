@@ -44,8 +44,6 @@
         ];
       };
 
-      # Add my additions to the nixpkgs lib
-#      lib = nixpkgs.lib.extend (self: super: { my = import ./lib { inherit pkgs inputs; lib = self; }; });
       mylib = import ./lib { inherit inputs pkgs; lib = nixpkgs.lib; };
 
     # The rec expression turns a basic set into a set where self-referencing is possible.
