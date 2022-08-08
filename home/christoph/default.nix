@@ -44,8 +44,6 @@ rec {
     # bottles.enable = true; # Configured by audio/gaming, not necessary otherwise
   };
 
-  # TODO: Email
-  # TODO: Run noisetorch as login script
   # TODO: Gnome terminal config
 
   # Chinese Input
@@ -220,7 +218,6 @@ rec {
 
     # Web
     signal-desktop
-    noisetorch
     # Flatpak discord
     yt-dlp
     # Flatpak spotify
@@ -350,11 +347,6 @@ rec {
         "please" = "sudo !!";
         "yeet" = "rm -rf";
       };
-      # This init only occurs for login shell
-      # TODO: Make option for noisetorch activation, doesn't work like this
-      # loginShellInit = ''
-      #   noisetorch -i
-      # '';
       shellInit = ''
         set -e fish_greeting
       '';
