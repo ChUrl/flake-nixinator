@@ -3,7 +3,7 @@
 
 # The nixosConfig allows to access the toplevel system configuration from within home manager
 # https://github.com/nix-community/home-manager/blob/586ac1fd58d2de10b926ce3d544b3179891e58cb/nixos/default.nix#L19
-{ inputs, lib, mylib, config, nixosConfig, pkgs, ... }:
+{ inputs, hostname, username, lib, mylib, config, nixosConfig, pkgs, ... }:
 
 # This is a module
 # Because no imports/options/config is defined explicitly, everything is treated as config
@@ -15,12 +15,8 @@ rec {
   # Arguments with matching names are "plugged in" into the right slots,
   # the case of different arity is handled by always providing ellipses (...) in module definitions
   imports = [
-
-    # My modules
-    ../../modules/emacs.nix
-    ../../modules/audio.nix
-    ../../modules/flatpak.nix
-    ../../modules/gaming.nix
+    ./${hostname}
+    ../../modules
 
     # inputs.nixvim.homeManagerModules.nixvim
   ];
@@ -33,18 +29,6 @@ rec {
     doom.enable = true;
     doom.autoSync = true;
     doom.autoUpgrade = false; # Very volatile as the upgrade fails sometimes with bleeding edge emacs
-  };
-
-  modules.audio = {
-    enable = true;
-
-    # TODO: Remove the config link when disabled
-    carla.enable = true;
-    bitwig.enable = false;
-    yabridge.enable = true;
-    yabridge.autoSync = true;
-
-    extraPackages = with pkgs; [ audacity vcv-rack ];
   };
 
   modules.flatpak = {
@@ -60,8 +44,6 @@ rec {
     spotify.enable = true;
     flatseal.enable = true;
   };
-
-  modules.gaming = {};
 
   # TODO: Email
   # TODO: Run noisetorch as login script
@@ -120,7 +102,7 @@ rec {
   };
 
   home = {
-    username = "christoph";
+    username = username; # Inherited from flake.nix
     homeDirectory = "/home/${home.username}";
     enableNixpkgsReleaseCheck = true;
 
