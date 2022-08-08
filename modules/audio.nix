@@ -15,7 +15,7 @@ in {
     enable = mkBoolOpt false "Configure for realtime audio and enable a bunch of music production tools";
     carla.enable = mkBoolOpt false "Enable Carla + guitar-specific stuff";
     bitwig.enable = mkBoolOpt false "Enable Bitwig Studio digital audio workstation";
-    bottles.enable = mkBoolOpt false "Enable Bottles to emulate windows VSTs";
+    bottles.enable = mkBoolOpt false "Enable Bottles to emulate windows VSTs (requires flatpak)";
 
     yabridge = {
       enable = mkBoolOpt false "Enable yabridge + yabridgectl";
