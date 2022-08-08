@@ -41,16 +41,12 @@ rec {
     discord.enable = false;
     spotify.enable = true;
     flatseal.enable = true;
+    # bottles.enable = true; # Configured by audio/gaming
   };
 
   # TODO: Email
   # TODO: Run noisetorch as login script
   # TODO: Gnome terminal config
-
-  # Disabled since HomeManager should use global pkgs
-  # https://github.com/nix-community/home-manager/issues/2942
-  # nixpkgs.config.allowUnfreePredicate = (pkg: true);
-  # nixpkgs.config.allowUnfree = true;
 
   # Chinese Input
   i18n.inputMethod.enabled = "fcitx5";
@@ -251,14 +247,6 @@ rec {
 
     # Use NixCommunity binary cache
     cachix
-
-    # Gaming
-    gamemode
-    # Flatpak nur.repos.dukzcry.gamescope # We need to install this with flatpak to be able to use with bottles
-    # Flatpak bottles
-    # Flatpak steam
-    # Flatpak proton-ge
-    # Flatpak polymc # Use flatpak as it bundles java and I don't have/want system wide java installation
   ];
 
   # Packages with extra options managed by HomeManager natively
@@ -270,7 +258,7 @@ rec {
     # Exclusive with nix-index
     # command-not-found.enable = true;
 
-    chromium.enable = true;
+    # chromium.enable = true;
 
     direnv = {
       enable = true;
