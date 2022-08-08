@@ -17,7 +17,7 @@
       experimental-features = nix-command flakes
     '';
 
-    # Keep nix-shell from grabage collection for direnv (keep-outputs + keep-derivations)
+    # Keep nix-shell from garbage collection for direnv (keep-outputs + keep-derivations)
     # NOTE: nix-direnv use nix or use flake should do this automatically
     # keep-outputs = true
     # keep-derivations = true
