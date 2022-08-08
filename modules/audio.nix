@@ -5,13 +5,17 @@ with mylib.modules;
 
 let
   cfg = config.modules.audio;
+  cfgfp = config.modules.flatpak;
 in {
-  imports = [ ];
+  imports = [
+    ./flatpak.nix
+  ];
 
   options.modules.audio = {
     enable = mkBoolOpt false "Configure for realtime audio and enable a bunch of music production tools";
     carla.enable = mkBoolOpt false "Enable Carla + guitar-specific stuff";
     bitwig.enable = mkBoolOpt false "Enable Bitwig Studio digital audio workstation";
+    bottles.enable = mkBoolOpt false "Enable Bottles to emulate windows VSTs";
 
     yabridge = {
       enable = mkBoolOpt false "Enable yabridge + yabridgectl";
@@ -36,7 +40,7 @@ in {
       # This means that lib.optional can be used for single packages/arguments
       # and lib.optionals has to be used when the argument is itself a list
       # I use lib.optionals everywhere as I think this is more clear
-      (optionals cfg.carla.enable [ carla ])
+      (optionals cfg.carla.enable [ carla gamemode ])
       (optionals cfg.yabridge.enable [ yabridge yabridgectl ])
       (optionals cfg.bitwig.enable [ bitwig-studio ])
       cfg.extraPackages
@@ -52,6 +56,9 @@ in {
       terminal = false;
       categories = [ "Music" "Audio" ];
     };
+
+    # NOTE: Important to not disable this option if another module enables it
+    modules.flatpak.bottles.enable = mkIf cfg.bottles.enable true;
 
     home.activation = mkMerge [
       # The module includes the default carla project with ArchetypePetrucci + ArchetypeGojira
