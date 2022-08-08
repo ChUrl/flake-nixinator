@@ -41,11 +41,6 @@
     [ -d "$HOME/.nix-profile" ] || /nix/var/nix/profiles/per-user/$USER/home-manager/activate &> /dev/null
   '';
 
-  # Allow unfree packages
-  # TODO: Can I do that in the flake.nix globally? I already set pkgs there with this config but it's not enough...
-  # Since we use HomeManager as a module with global pkgs this should also cover user packages
-#  nixpkgs.config.allowUnfree = true;
-
   # Bootloader/Kernel stuff
   boot = {
     kernelPackages = pkgs.linuxPackages_zen;
@@ -136,14 +131,6 @@
   # Enable the X11 windowing system.
   services.xserver = {
     enable = true;
-
-    # Configure keymap in X11
-    # layout = "us"; # NOTE: Done in host specific config
-    # xkbVariant = "altgr-intl"; # NOTE: Done in host specific config
-
-    # Proprietary graphics drivers
-    # TODO: Opengl and stuff
-    # videoDrivers = [ "nvidia" ]; # NOTE: Done in host specific config
 
     # Startx replaces the displaymanager so default (lightdm) isn't used, start to shell
     # displayManager.startx.enable = true;
