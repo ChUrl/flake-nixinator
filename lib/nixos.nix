@@ -1,9 +1,7 @@
 { inputs, pkgs, lib, ... }:
 
 let
-
-  # Allows to just use nixpkgs without qualifiers
-  inherit (inputs) nixpkgs;
+  inherit (inputs) nixpkgs home-manager;
 
 in rec {
   mkNixosConfig = { system, hostname, extraModules, homeManagerConfig }:
@@ -13,7 +11,7 @@ in rec {
     # Make our inputs available to the configuration.nix (for importing modules)
     specialArgs = { inherit inputs; };
 
-    modules = builtins.conatLists [
+    modules = builtins.concatLists [
       [
         # Replace the pkgs to include overlays/unfree
         { nixpkgs.pkgs = pkgs; }
@@ -25,7 +23,7 @@ in rec {
         (import "./nixos/configuration-" + hostname + ".nix")
       ]
       extraModules
-      homeManagerConfig
+      [ homeManagerConfig ]
     ];
   };
 
