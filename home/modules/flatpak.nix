@@ -38,19 +38,19 @@ in {
       description = "Remove unused packages on nixos-rebuild";
     };
 
-    discord = mkOption {
+    discord.enable = mkOption {
       type = types.bool;
       default = false;
       description = "Enable Discord";
     };
 
-    spotify = mkOption {
+    spotify.enable = mkOption {
       type = types.bool;
       default = false;
       description = "Enable Spotify";
     };
 
-    flatseal = mkOption {
+    flatseal.enable = mkOption {
       type = types.bool;
       default = false;
       description = "Enable Flatseal";
@@ -73,7 +73,7 @@ in {
     #   "${home.homeDirectory}/.local/share/flatpak/exports/share"
     # ];
 
-    home.activation = (mkMerge [
+    home.activation = mkMerge [
       (mkIf cfg.fontFix {
         # We link like this to be able to address the absolute location, also the fonts won't get copied to store
         # NOTE: This path contains all the fonts because fonts.fontDir.enable is true
@@ -94,36 +94,27 @@ in {
       })
 
       {
-        installFlatpak =
-        let
-          # For some reason (mkIf ...) evaluates to a set { _type = "if"; condition = ... } so nothing can
-          # be merged. I don't understand why the set isn't evaluated, it worked previously
-          to_install = (builtins.concatLists [
-            # (mkIf cfg.discord [ "com.discordapp.Discord" ])
-            # (mkIf cfg.spotify [ "com.spotify.Client" ])
-            # (mkIf cfg.flatseal [ "com.github.tchx84.Flatseal" ])
-            (if cfg.discord then [ "com.discordapp.Discord" ] else [ ])
-            (if cfg.spotify then [ "com.spotify.Client" ] else [ ])
-            (if cfg.flatseal then [ "com.github.tchx84.Flatseal" ] else [ ])
-            # cfg.extraPackages
-          ]);
+        installFlatpak = let
+          to_install = builtins.concatLists [
+            (optionals cfg.discord.enable [ "com.discordapp.Discord" ])
+            (optionals cfg.spotify.enable [ "com.spotify.Client" ])
+            (optionals cfg.flatseal.enable [ "com.github.tchx84.Flatseal" ])
+          ];
 
-          to_install_str = (builtins.concatStringsSep " " to_install);
+          to_install_str = builtins.concatStringsSep " " to_install;
         in
           lib.hm.dag.entryAfter [ "writeBoundary" ] ''
             sudo flatpak install -y ${to_install_str}
           '';
 
-        # NOTE: This only removes named flatpaks, nothing from extraPackages
-        removeFlatpak =
-        let
-          to_remove = (builtins.concatLists [
-            (if ! cfg.discord then [ "com.discordapp.Discord" ] else [ ])
-            (if ! cfg.spotify then [ "com.spotify.Client" ] else [ ])
-            (if ! cfg.flatseal then [ "com.github.tchx84.Flatseal" ] else [ ])
-          ]);
+        removeFlatpak = let
+          to_remove = builtins.concatLists [
+            (optionals (!cfg.discord.enable) [ "com.discordapp.Discord" ])
+            (optionals (!cfg.spotify.enable) [ "com.spotify.Client" ])
+            (optionals (!cfg.flatseal.enable) [ "com.github.tchx84.Flatseal" ])
+          ];
 
-          to_remove_str = (builtins.concatStringsSep " " to_remove);
+          to_remove_str = builtins.concatStringsSep " " to_remove;
         in
           lib.hm.dag.entryAfter [ "writeBoundary" ] ''
             sudo flatpak uninstall -y ${to_remove_str}
@@ -141,7 +132,7 @@ in {
           sudo flatpak uninstall --unused -y
         '';
       })
-    ]);
+    ];
 
     # TODO: Add option for extra overrides and concatenate this string together
     # Allow access to linked fonts/icons
