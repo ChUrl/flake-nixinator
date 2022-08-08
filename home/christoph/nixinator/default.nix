@@ -1,5 +1,7 @@
 { inputs, hostname, username, lib, mylib, config, nixosConfig, pkgs, ... }:
 
+# Here goes the stuff that will only be enabled on the desktop
+
 rec {
   imports = [
     ../../../modules
