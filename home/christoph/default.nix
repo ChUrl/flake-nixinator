@@ -17,10 +17,10 @@ rec {
   imports = [
 
     # My modules
-    ./modules/emacs.nix
-    ./modules/audio.nix
-    ./modules/flatpak.nix
-    ./modules/gaming.nix
+    ../modules/emacs.nix
+    ../modules/audio.nix
+    ../modules/flatpak.nix
+    ../modules/gaming.nix
 
     # inputs.nixvim.homeManagerModules.nixvim
   ];

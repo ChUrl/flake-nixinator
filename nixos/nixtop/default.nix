@@ -3,7 +3,7 @@
 {
   imports = [
     # Include the results of the hardware scan.
-    ./hardware-configuration-nixtop.nix
+    ./hardware-configuration.nix
   ];
 
   networking.hostName = "nixtop"; # Define your hostname.
