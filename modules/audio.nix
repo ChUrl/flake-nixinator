@@ -30,6 +30,12 @@ in {
   };
 
   config = mkIf cfg.enable {
+    assertions = [
+      (mkIf cfg.bottles.enable {
+        assertion = cfgfp.enable;
+        message = "Cannot enable bottles without the flatpak module!";
+      })
+    ];
 
     # Use builtins.concatLists instead of mkMerge as this is more safe as the type is specified,
     # also mkMerge doesn't work in every case as it yields a set
