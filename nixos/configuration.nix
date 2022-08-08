@@ -42,6 +42,7 @@
   '';
 
   # Allow unfree packages
+  # TODO: Can I do that in the flake.nix globally? I already set pkgs there with this config but it's not enough...
   # Since we use HomeManager as a module with global pkgs this should also cover user packages
   nixpkgs.config.allowUnfree = true;
 
