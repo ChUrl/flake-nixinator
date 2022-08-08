@@ -26,109 +26,49 @@
   # Outputs is a function that takes the inputs as arguments.
   # To handle extra arguments we use the inputs@ pattern.
   # It gives a name to the ... ellipses.
-  outputs = inputs@{ nixpkgs, home-manager, devshell, ... }:
+  outputs = inputs @ { nixpkgs, home-manager, ... }:
 
     # With let you can define local variables
     let
-      # We bring these functions into the scope for the outputs.
-      inherit (builtins) attrValues; # TODO: What does this do
-
-      # Add overlays from other flakes so we can use them from pkgs.
-      overlays = {
-        nur = inputs.nur.overlay;
-        emacs = inputs.emacs-overlay.overlay;
-      };
+      system = "x86_64-linux";
 
       pkgs = import nixpkgs {
-        system = "x86_64-linux";
+        inherit system;
         config.allowUnfree = true;
-        overlays = [ devshell.overlay ];
+        overlays = [
+          inputs.devshell.overlay
+          inputs.nur.overlay
+          inputs.emacs-overlay.overlay
+        ];
       };
 
-      # The rec expression turns a basic set into a set where self-referencing is possible.
-      # It is a shorthand for recursive and allows to use the values defined in this set from its own scope.
+    # The rec expression turns a basic set into a set where self-referencing is possible.
+    # It is a shorthand for recursive and allows to use the values defined in this set from its own scope.
     in rec {
 
-      devShells."x86_64-linux".default = pkgs.devshell.mkShell {
-        name = "NixFlake Shell";
-
-        packages = with pkgs; [
-          jetbrains.clion
-        ];
-
-        commands = [
-          {
-            name = "ide";
-            help = "Launch clion in this folder";
-            command = "clion ./ &>/dev/null &";
-          }
-          {
-            name = "update";
-            help = "Update the flake";
-            command = "nix flake update";
-          }
-          {
-            name = "check";
-            help = "Validate the flake";
-            command = "nix flake check";
-          }
-          {
-            name = "pkgs-sys";
-            help = "List currently installed system packages";
-            command = "bat /etc/current-system-packages";
-          }
-          {
-            name = "pkgs-usr";
-            help = "List currently installed user packages";
-            command = "bat ~/.local/share/current-user-packages";
-          }
-          {
-            name = "switch-nixinator";
-            help = "Rebuild and activate the nixinator config";
-            command = "sudo nixos-rebuild switch --flake .#nixinator";
-          }
-          {
-            name = "build-nixinator";
-            help = "Rebuild and diff the nixinator config";
-            command = "sudo nixos-rebuild build --flake .#nixinator | nvd diff /run/current-system result";
-          }
-          {
-            name = "switch-nixtop";
-            help = "Rebuild and activate the nixtop config";
-            command = "sudo nixos-rebuild switch --flake .#nixtop";
-          }
-          {
-            name = "build-nixtop";
-            help = "Rebuild and diff the nixtop config";
-            command = "sudo nixos-rebuild build --flake .#nixtop | nvd diff /run/current-system result";
-          }
-        ];
-      };
+      # Local shell for NixFlake directory
+      devShells."${system}".default = import ./shell.nix { inherit pkgs; };
 
       # System configurations + HomeManager module
       # Accessible via 'nixos-rebuild'
+      # TODO: Add some sort of lib function to deduplicate the configs (they are mostly the same except for the modules)
       nixosConfigurations = {
 
         # We give our configuration a name (the hostname) to choose a configuration when rebuilding.
         # This makes it easy to add different configurations later (e.g. for a laptop).
         # Usage: sudo nixos-rebuild switch --flake .#nixinator
         nixinator = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
+          inherit system;
 
           # >> Main NixOS configuration file <<
           modules = [
+            # TODO: Can this be set globally?
+            { nixpkgs = { inherit pkgs; }; }
+
             inputs.musnix.nixosModules.musnix
 
-            # TODO: Modularize
             ./nixos/configuration.nix
             ./nixos/configuration-nixinator.nix
-
-            # TODO: Investigate this { ... } module syntax
-            # Overlays
-            {
-              # Since HomeManager uses global pkgs we can set the overlays here
-              nixpkgs.overlays = attrValues overlays;
-            }
 
             # HomeManager
             home-manager.nixosModules.home-manager
@@ -137,7 +77,7 @@
               home-manager.useUserPackages = true; # Enable installing packages through users.christoph.packages to /etc/profiles instead of ~/.nix-profile
               home-manager.users.christoph = import ./home/home.nix;
 
-              # Make our overlays available in home.nix
+              # Make our inputs available in home.nix
               home-manager.extraSpecialArgs = { inherit inputs; };
             }
           ];
@@ -147,20 +87,15 @@
         };
 
         nixtop = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
+          inherit system;
 
           # >> Main NixOS configuration file <<
           modules = [
-            # TODO: Modularize
+            # TODO: Can this be set globally?
+            { nixpkgs = { inherit pkgs; }; }
+
             ./nixos/configuration.nix
             ./nixos/configuration-nixtop.nix
-
-            # TODO: Investigate this { ... } module syntax
-            # Overlays
-            {
-              # Since HomeManager uses global pkgs we can set the overlays here
-              nixpkgs.overlays = attrValues overlays;
-            }
 
             # HomeManager
             home-manager.nixosModules.home-manager
@@ -169,7 +104,7 @@
               home-manager.useUserPackages = true; # Enable installing packages through users.christoph.packages
               home-manager.users.christoph = import ./home/home.nix;
 
-              # Make our overlays available in home.nix
+              # Make our inputs available in home.nix
               home-manager.extraSpecialArgs = { inherit inputs; };
             }
           ];
