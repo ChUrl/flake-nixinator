@@ -4,7 +4,7 @@ let
   inherit (inputs) nixpkgs home-manager;
 
 in rec {
-  mkNixosConfig = { system, hostname, extraModules, homeManagerConfig }:
+  mkNixosConfig = { system, hostname, extraModules, homeConfigs }:
   nixpkgs.lib.nixosSystem {
     inherit system;
 
@@ -17,19 +17,26 @@ in rec {
         { nixpkgs.pkgs = pkgs; }
 
         # Main config file for all configs/hosts
-        ./nixos/configuration.nix
+        ../nixos/configuration.nix
 
         # Host specifig config file
-        (import "./nixos/configuration-" + hostname + ".nix")
+        ../nixos/${hostname}
       ]
+
       extraModules
-      [ homeManagerConfig ]
+
+      # Make a user home for every config supplied
+      (builtins.map home-manager.nixosModules.home-manager homeConfigs)
     ];
   };
 
-  mkHomeManagerConfig = { username }:
-  home-manager.nixosModules.home-manager
+  # Only returns the set that has to be passed to home-manager.nixosModules.home-manager
+  # because then nix is able to automatically inject the dependencies
+  mkHomeConfig = { username }:
   {
+    # Include the inputs just in case they might be needed somewhere
+    home-manager.extraSpecialArgs = { inherit inputs; };
+
     # Use systems pkgs, disables nixpkgs.* options in home.nix
     home-manager.useGlobalPkgs = true;
 
@@ -37,9 +44,7 @@ in rec {
     home-manager.useUserPackages = true;
 
     # User specific config file
-    home-manager.users.username = import "./home/home-" + username + ".nix";
-
-    # Include the inputs just in case they might be needed somewhere
-    home-manager.extraSpecialArgs = { inherit inputs; };
+    # TODO: Do this for a list of users
+    home-manager.users.${username}.imports = [ ../home/${username} ]; # Is marked as error but correct (I think)
   };
 }
