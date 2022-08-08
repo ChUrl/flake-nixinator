@@ -78,7 +78,6 @@ rec {
     in
       formatted;
 
-  # TODO: Module
   gtk = {
     enable = true;
 
@@ -167,7 +166,6 @@ rec {
     # gcc # nvim needs this
 
     # Gnome extensions
-    # TODO: Make a gnome module
     # gnome.gnome-tweaks # Disabled since settings should be set declaratively
     gnomeExtensions.appindicator
     gnomeExtensions.blur-my-shell
@@ -203,7 +201,6 @@ rec {
     wike # Wikipedia viewer
 
     # Ranger
-    # TODO: Make module out of this
     ranger
     ueberzug
     ffmpegthumbnailer
@@ -284,30 +281,21 @@ rec {
 
         cd = "z";
         cp = "cp -i";
-        ls =
-          "exa --color always --group-directories-first -F --git --icons"; # color-ls
-        lsl =
-          "exa --color always --group-directories-first -F -l --git --icons";
-        lsa =
-          "exa --color always --group-directories-first -F -l -a --git --icons";
-        tre =
-          "exa --color always --group-directories-first -F -T -L 2 ---icons";
+        ls = "exa --color always --group-directories-first -F --git --icons"; # color-ls
+        lsl = "exa --color always --group-directories-first -F -l --git --icons";
+        lsa = "exa --color always --group-directories-first -F -l -a --git --icons";
+        tre = "exa --color always --group-directories-first -F -T -L 2 ---icons";
         mkd = "mkdir -p";
-        blk =
-          "lsblk -o NAME,LABEL,UUID,FSTYPE,SIZE,FSUSE%,MOUNTPOINT,MODEL | bat";
+        blk = "lsblk -o NAME,LABEL,UUID,FSTYPE,SIZE,FSUSE%,MOUNTPOINT,MODEL | bat";
         fsm = "df -h | bat";
         grp = "grep --color=auto -E";
-        fzp =
-          "fzf --preview 'bat --color=always --style=numbers --line-range=:500 {}'";
+        fzp = "fzf --preview 'bat --color=always --style=numbers --line-range=:500 {}'";
         fre = "free -m";
 
-        r =
-          "ranger --choosedir=$HOME/.rangerdir; set LASTDIR (cat $HOME/.rangerdir); cd $LASTDIR";
+        r = "ranger --choosedir=$HOME/.rangerdir; set LASTDIR (cat $HOME/.rangerdir); cd $LASTDIR";
         rsync = "rsync -chavzP --info=progress2";
-        performance =
-          "sudo cpupower frequency-set -g performance && nvidia-settings -a [gpu:0]/GPUPowerMizerMode=1";
-        powersave =
-          "sudo cpupower frequency-set -g powersave && nvidia-settings -a [gpu:0]/GPUPowerMizerMode=0";
+        performance = "sudo cpupower frequency-set -g performance && nvidia-settings -a [gpu:0]/GPUPowerMizerMode=1";
+        powersave = "sudo cpupower frequency-set -g powersave && nvidia-settings -a [gpu:0]/GPUPowerMizerMode=0";
 
         wat = "watch -d -c -n -0.5";
         dus = "sudo dust -r";
@@ -338,8 +326,7 @@ rec {
 
         league = "sudo sysctl -w abi.vsyscall32=0";
 
-        mp4 =
-          "yt-dlp -f 'bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4] / bv*+ba/b' --recode-video mp4"; # the -f options are yt-dlp defaults
+        mp4 = "yt-dlp -f 'bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4] / bv*+ba/b' --recode-video mp4"; # the -f options are yt-dlp defaults
         mp3 = "yt-dlp -f 'ba' --extract-audio --audio-format mp3";
       };
       shellAliases = {
@@ -412,7 +399,6 @@ rec {
         vimium
       ];
 
-      # TODO:
       profiles = {
         default = {
           id = 0; # 0 is default profile
@@ -473,7 +459,6 @@ rec {
             # Reduce search engine noise in the urlbar's completion window. The
             # shortcuts and suggestions will still work, but Firefox won't clutter
             # its UI with reminders that they exist.
-            # TODO: Somehow not applied? At least it's not represented in settings
             "browser.urlbar.suggest.searches" = true;
             "browser.urlbar.shortcuts.bookmarks" = false;
             "browser.urlbar.shortcuts.history" = true;
@@ -608,7 +593,7 @@ rec {
       keys = [ "id_ed25519" ];
     };
 
-    # TODO: Copy config from Arch dots
+    # TODO: Copy config from Arch dots, also move the entire config folder (to allow ephemereal configs)
     kitty = {
       enable = true;
       font = {
