@@ -52,6 +52,7 @@ in {
 
       # TODO: Extra config (extensions etc), maybe standalone chromium module
       (optionals cfg.discordChromium.enable [ chromium ])
+      (optionals cfg.noisetorch.enable [ noisetorch ])
     ];
 
     xdg.desktopEntries.discordChromium = mkIf cfg.discordChromium.enable {
@@ -61,6 +62,23 @@ in {
       exec = "chromium --new-window discord.com/app";
       terminal = false;
       categories = [ "Network" "Chat" ];
+    };
+
+    # TODO: Check if this works after fresh login
+    systemd.user.services = mkIf cfg.noisetorch.autostart {
+      noisetorch-autostart = {
+        Unit = {
+          Description = "Noisetorch noise suppression";
+          PartOf = [ "graphical-session.target" ];
+          After = [ "graphical-session.target" ];
+        };
+        Install.WantedBy = [ "graphical-session.target" ];
+        Service = {
+          Type = "oneshot";
+          Environment = "PATH=/etc/profiles/per-user/${config.home.username}/bin";
+          ExecStart = "${pkgs.noisetorch}/bin/noisetorch -i";
+        };
+       };
     };
 
     # NOTE: Important to not disable this option if another module enables it
