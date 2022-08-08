@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ inputs, lib, config, pkgs, ... }:
+{ inputs, hostname, lib, config, pkgs, ... }:
 
 {
   imports = [
@@ -111,7 +111,9 @@
   # TODO: Other ports (tcp/udp/ssh...)?
   # Open ports in the firewall.
   networking = {
-    # hostName = "nixinator"; # Define your hostname. # NOTE: Done in host specific config
+    # Gets inherited from flake in nixos mylib
+    hostName = hostname; # Define your hostname.
+
     # wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
     # Configure network proxy if necessary

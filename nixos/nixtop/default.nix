@@ -6,8 +6,6 @@
     ./hardware-configuration.nix
   ];
 
-  networking.hostName = "nixtop"; # Define your hostname.
-
   services.xserver = {
     # Configure keymap in X11
     layout = "de";
