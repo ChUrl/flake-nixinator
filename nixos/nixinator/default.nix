@@ -1,12 +1,10 @@
-{ config, lib, pkgs, musnix, ... }:
+{ musnix, config, lib, pkgs, ... }:
 
 {
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
   ];
-
-  networking.hostName = "nixinator"; # Define your hostname.
 
   musnix = {
     enable = true;

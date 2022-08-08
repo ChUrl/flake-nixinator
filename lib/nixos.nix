@@ -9,7 +9,8 @@ in rec {
     inherit system;
 
     # Make our inputs available to the configuration.nix (for importing modules)
-    specialArgs = { inherit inputs; };
+    # specialArgs are propagated to all modules
+    specialArgs = { inherit inputs hostname; };
 
     modules = builtins.concatLists [
       [
@@ -39,7 +40,6 @@ in rec {
           home-manager.useUserPackages = true;
 
           # User specific config file
-          # Is marked as error but correct
           home-manager.users.${username}.imports = [ ../home/${username} ];
         }
       ]
