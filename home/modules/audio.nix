@@ -51,16 +51,20 @@ in {
 
   config = mkIf cfg.enable {
 
-    # I changed to regular if to stay consistent with flatpak module, mkIf doesn't always work for some reason
-    home.packages = with pkgs; (builtins.concatLists [
-      # (mkIf cfg.carla.enable [ carla ])
-      # (mkIf cfg.yabridge.enable [ yabridge yabridgectl ])
-      # (mkIf cfg.bitwig.enable [ bitwig-studio ])
-      (if cfg.carla.enable then [ carla ] else [ ])
-      (if cfg.yabridge.enable then [ yabridge yabridgectl ] else [ ])
-      (if cfg.bitwig.enable then [ bitwig-studio ] else [ ])
+    # Use builtins.concatLists instead of mkMerge as this is more safe as the type is specified,
+    # also mkMerge doesn't work in every case as it yields a set
+    home.packages = with pkgs; builtins.concatLists [
+
+      # lib.optional is preferred over mkIf or if...then...else by nix coding standards
+      # lib.optional wraps its argument in a list, lib.optionals doesn't
+      # This means that lib.optional can be used for single packages/arguments
+      # and lib.optionals has to be used when the argument is itself a list
+      # I use lib.optionals everywhere as I think this is more clear
+      (optionals cfg.carla.enable [ carla ])
+      (optionals cfg.yabridge.enable [ yabridge yabridgectl ])
+      (optionals cfg.bitwig.enable [ bitwig-studio ])
       cfg.extraPackages
-    ]);
+    ];
 
     # NOTE: This desktop entry is created in /etc/profiles/per-user/christoph/share/applications
     #       This location is part of XDG_DATA_DIRS
@@ -73,7 +77,7 @@ in {
       categories = [ "Music" "Audio" ];
     };
 
-    home.activation = (mkMerge [
+    home.activation = mkMerge [
       (mkIf cfg.carla.enable {
 
         # The module includes the default carla project with ArchetypePetrucci + ArchetypeGojira
@@ -90,7 +94,6 @@ in {
           yabridgectl sync
         '';
       })
-    ]);
-
+    ];
   };
 }
