@@ -41,7 +41,7 @@ rec {
     discord.enable = false;
     spotify.enable = true;
     flatseal.enable = true;
-    # bottles.enable = true; # Configured by audio/gaming
+    # bottles.enable = true; # Configured by audio/gaming, not necessary otherwise
   };
 
   # TODO: Email
