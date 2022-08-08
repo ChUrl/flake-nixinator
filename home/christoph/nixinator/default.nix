@@ -8,7 +8,6 @@ rec {
   modules.audio = {
     enable = true;
 
-    # TODO: Remove the config link when disabled
     carla.enable = true;
     bitwig.enable = false;
     yabridge.enable = true;

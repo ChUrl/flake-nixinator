@@ -25,7 +25,6 @@ rec {
   modules.emacs = {
     enable = true;
 
-    # TODO: Remove the stuff when disabled
     doom.enable = true;
     doom.autoSync = true;
     doom.autoUpgrade = false; # Very volatile as the upgrade fails sometimes with bleeding edge emacs
