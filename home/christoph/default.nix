@@ -34,7 +34,6 @@ rec {
   modules.flatpak = {
     enable = true;
 
-    # TODO: Make these active by default and remove the links if disabled
     fontFix = true;
     iconFix = true;
     autoUpdate = true;

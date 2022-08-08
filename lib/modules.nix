@@ -1,19 +1,27 @@
 { inputs, pkgs, lib, ... }:
 
-let
-
-in {
-  mkBoolOpt = { def, desc ? "" }:
-  {
+rec {
+  mkBoolOpt = def: desc:
+  lib.mkOption {
     type = lib.types.bool;
     default = def;
     description = desc;
   };
 
-  linkMutable = { src, dest, after }:
-  lib.hm.dag.entryAfter [ "writeBoundary" ] ++ after ''
+  mkElse = pred: do:
+  (lib.mkIf (!pred) do);
+
+  mkLink = src: dest:
+  ''
     if [ ! -L "${dest}" ]; then
       ln -sf ${src} ${dest}
+    fi
+  '';
+
+  mkUnlink = dest:
+  ''
+    if [ -L "${dest}" ]; then
+      rm ${dest}
     fi
   '';
 }
