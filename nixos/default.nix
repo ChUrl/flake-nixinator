@@ -6,7 +6,9 @@
 
 {
   imports = [
-    # NixCommunity binary cache
+    # Import the host-specific system config
+    ./${hostname}
+
     ./cachix.nix
   ];
 
