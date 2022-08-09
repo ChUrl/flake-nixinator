@@ -11,12 +11,14 @@ rec {
     enable = true;
 
     carla.enable = true;
-    bitwig.enable = false;
+    bitwig.enable = true;
+    faust.enable = true;
     bottles.enable = true;
+    tenacity.enable = true;
+    vcvrack.enable = true;
+
     yabridge.enable = true;
     yabridge.autoSync = true;
-
-    extraPackages = with pkgs; [ audacity vcv-rack ];
   };
 
   modules.gaming = {
