@@ -18,10 +18,7 @@ in {
         { nixpkgs.pkgs = pkgs; }
 
         # Main config file for all configs/hosts
-        ../nixos/configuration.nix
-
-        # Host specifig config file
-        ../nixos/${hostname}
+        ../nixos
       ]
 
       extraModules
