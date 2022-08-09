@@ -10,80 +10,92 @@ pkgs.devshell.mkShell {
   commands = [
     # Utility
     {
-      name = "ide";
+      name = "util-ide";
       help = "Launch clion in this folder";
       command = "clion ./ &>/dev/null &";
     }
     {
-      name = "watch-flatpak";
+      name = "util-watch-flatpak";
       help = "Show running flatpak operations";
       command = "watch -n 0.5 -d procs flatpak";
     }
     {
-      name = "pkgs-sys";
+      name = "util-pkgs-sys";
       help = "List currently installed system packages";
       command = "bat /etc/current-system-packages";
     }
     {
-      name = "pkgs-usr";
+      name = "util-pkgs-usr";
       help = "List currently installed user packages";
       command = "bat ~/.local/share/current-user-packages";
     }
     {
-      name = "diff-system";
+      name = "util-diff-system";
       help = "Compare current system to ./result";
       command = "nvd diff /run/current-system result";
     }
 
     # Flake
     {
-      name = "update";
+      name = "flake-update";
       help = "Update the flake";
       command = "nix flake update";
     }
     {
-      name = "check";
+      name = "flake-check";
       help = "Validate the flake";
       command = "nix flake check";
     }
 
     # Nix Store
     {
-      name = "gc";
+      name = "store-gc";
       help = "Run NixOS garbage collector";
       command = "nix-store --gc";
     }
     {
-      name = "optimise";
+      name = "store-optimise";
       help = "Run NixOS store optimization (slow)";
       command = "nix-store --optimise -vv";
     }
     {
-      name = "verify";
+      name = "store-verify";
       help = "Run NixOS store verification with repair (slow)";
       command = "nix-store --verify --check-contents";
     }
 
     # Rebuild
     {
-      name = "switch-nixinator";
+      name = "rebuild-switch-nixinator";
       help = "Rebuild and activate the nixinator config";
       command = "sudo nixos-rebuild switch --flake .#nixinator";
     }
     {
-      name = "build-nixinator";
-      help = "Rebuild and diff the nixinator config";
+      name = "rebuild-build-nixinator";
+      help = "Rebuild and diff the nixinator config (to diff systems)";
       command = "sudo nixos-rebuild build --flake .#nixinator";
     }
     {
-      name = "switch-nixtop";
+      name = "rebuild-switch-nixtop";
       help = "Rebuild and activate the nixtop config";
       command = "sudo nixos-rebuild switch --flake .#nixtop";
     }
     {
-      name = "build-nixtop";
-      help = "Rebuild and diff the nixtop config";
+      name = "rebuild-build-nixtop";
+      help = "Rebuild and diff the nixtop config (to diff systems)";
       command = "sudo nixos-rebuild build --flake .#nixtop";
+    }
+
+    # Help text (this is pretty stupid)
+    {
+      name = "help-store-path";
+      help = "Display the location of a binary in the nix store";
+      command = "echo 'readlink -f (which <arg>)'";
+    }
+    {
+      name = "help-libraries";
+      help = "Display the wanted dynamic libraries by a binary";
+      command = "echo 'ldd (readlink -f (which <arg>))'";
     }
   ];
 }
