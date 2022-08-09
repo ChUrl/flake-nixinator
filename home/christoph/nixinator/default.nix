@@ -12,13 +12,15 @@ rec {
 
     carla.enable = true;
     bitwig.enable = true;
+    tenacity.enable = true;
+
     faust.enable = true;
     bottles.enable = true;
-    tenacity.enable = true;
-    vcvrack.enable = true;
-
     yabridge.enable = true;
     yabridge.autoSync = true;
+
+    vcvrack.enable = true;
+    vital.enable = true;
   };
 
   modules.gaming = {
