@@ -95,9 +95,9 @@ in {
 
           to_install_str = builtins.concatStringsSep " " to_install;
         in
-          # By using || we make sure this command never throws any errors
+          # Flatpak install can take a long time so we disconnect the process to not trigger the HM timeout (90s)
           lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-            sudo flatpak install -y ${to_install_str} || echo "Nothing to be installed"
+            sudo flatpak install -y ${to_install_str} &
           '';
       }
 
@@ -116,14 +116,16 @@ in {
           to_remove_str = builtins.concatStringsSep " " to_remove;
         in
           # By using || we make sure this command never throws any errors
+          # Uninstallation is fast so HM timeout shouldn't be triggered
           lib.hm.dag.entryAfter [ "writeBoundary" ] ''
             sudo flatpak uninstall -y ${to_remove_str} || echo "Nothing to be removed"
           '';
       }
 
       (mkIf cfg.autoUpdate {
+        # Flatpak install can take a long time so we disconnect the process to not trigger the HM timeout (90s)
         updateFlatpak = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-          sudo flatpak update -y
+          sudo flatpak update -y &
         '';
       })
 
