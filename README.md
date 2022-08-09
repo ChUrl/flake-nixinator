@@ -5,8 +5,8 @@ Because I am dumb many obvious things are explained here and in comments inside 
 This is very WIP and some parts are pretty dumb as I am still learning the NixOS ecosystem.
 
 I heavily borrowed from:
-- (hlissner)[https://github.com/hlissner/dotfiles]
-- (misterio77)[https://github.com/Misterio77/nix-config]
+- [hlissner](https://github.com/hlissner/dotfiles)
+- [misterio77](https://github.com/Misterio77/nix-config)
 
 # ./nixos
 
