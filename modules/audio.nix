@@ -114,6 +114,15 @@ in {
         (mkUnlink "${config.home.homeDirectory}/.config/carla");
       })
 
+      (mkIf cfg.vital.enable {
+        linkVitalVST3 = hm.dag.entryAfter [ "writeBoundary" ]
+        (mkLink "${pkgs.vital-synth}/lib/vst3/Vital.vst3/Contents/x86_64-linux/Vital.so" "${config.home.homeDirectory}/.vst3/Vital.so");
+      })
+      (mkElse cfg.vital.enable {
+        unlinkVitalVST3 = hm.dag.entryAfter [ "writeBoundary" ]
+        (mkUnlink "${config.home.homeDirectory}/.vst3/Vital.so");
+      })
+
       (mkIf cfg.yabridge.autoSync {
         syncYabridge = hm.dag.entryAfter [ "writeBoundary" ] ''
           yabridgectl sync
