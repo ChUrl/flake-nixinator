@@ -15,7 +15,9 @@ rec {
   # Arguments with matching names are "plugged in" into the right slots,
   # the case of different arity is handled by always providing ellipses (...) in module definitions
   imports = [
+    # Import the host-specific user-config
     ./${hostname}
+
     ../../modules
 
     # inputs.nixvim.homeManagerModules.nixvim
@@ -134,6 +136,7 @@ rec {
   # Add stuff for your user as you see fit:
   home.packages = with pkgs; [
     # Firefox hardware video acceleration
+    # TODO
     libva
     libva-utils
     nvidia-vaapi-driver
