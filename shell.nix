@@ -8,20 +8,16 @@ pkgs.devshell.mkShell {
   ];
 
   commands = [
+    # Utility
     {
       name = "ide";
       help = "Launch clion in this folder";
       command = "clion ./ &>/dev/null &";
     }
     {
-      name = "update";
-      help = "Update the flake";
-      command = "nix flake update";
-    }
-    {
-      name = "check";
-      help = "Validate the flake";
-      command = "nix flake check";
+      name = "watch-flatpak";
+      help = "Show running flatpak operations";
+      command = "watch -n 0.5 -d procs flatpak";
     }
     {
       name = "pkgs-sys";
@@ -34,6 +30,42 @@ pkgs.devshell.mkShell {
       command = "bat ~/.local/share/current-user-packages";
     }
     {
+      name = "diff-system";
+      help = "Compare current system to ./result";
+      command = "nvd diff /run/current-system result";
+    }
+
+    # Flake
+    {
+      name = "update";
+      help = "Update the flake";
+      command = "nix flake update";
+    }
+    {
+      name = "check";
+      help = "Validate the flake";
+      command = "nix flake check";
+    }
+
+    # Nix Store
+    {
+      name = "gc";
+      help = "Run NixOS garbage collector";
+      command = "nix-store --gc";
+    }
+    {
+      name = "optimise";
+      help = "Run NixOS store optimization (slow)";
+      command = "nix-store --optimise -vv";
+    }
+    {
+      name = "verify";
+      help = "Run NixOS store verification with repair (slow)";
+      command = "nix-store --verify --check-contents";
+    }
+
+    # Rebuild
+    {
       name = "switch-nixinator";
       help = "Rebuild and activate the nixinator config";
       command = "sudo nixos-rebuild switch --flake .#nixinator";
@@ -41,7 +73,7 @@ pkgs.devshell.mkShell {
     {
       name = "build-nixinator";
       help = "Rebuild and diff the nixinator config";
-      command = "sudo nixos-rebuild build --flake .#nixinator | nvd diff /run/current-system result";
+      command = "sudo nixos-rebuild build --flake .#nixinator";
     }
     {
       name = "switch-nixtop";
@@ -51,7 +83,7 @@ pkgs.devshell.mkShell {
     {
       name = "build-nixtop";
       help = "Rebuild and diff the nixtop config";
-      command = "sudo nixos-rebuild build --flake .#nixtop | nvd diff /run/current-system result";
+      command = "sudo nixos-rebuild build --flake .#nixtop";
     }
   ];
 }
