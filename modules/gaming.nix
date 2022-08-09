@@ -16,7 +16,6 @@ in {
     enable = mkBoolOpt false "Enable the Gaming module";
     discordChromium.enable = mkBoolOpt false "Enable Discord as Chromium webapp";
     polymc.enable = mkBoolOpt false "Enable PolyMC for Minecraft (flatpak)";
-    # TODO: Add specific gaming bottles configs?
     bottles.enable = mkBoolOpt false "Enable Bottles to emulate Windows games (flatpak)";
 
     noisetorch = {
@@ -64,7 +63,6 @@ in {
       categories = [ "Network" "Chat" ];
     };
 
-    # TODO: Check if this works after fresh login
     systemd.user.services = mkIf cfg.noisetorch.autostart {
       noisetorch-autostart = {
         Unit = {
