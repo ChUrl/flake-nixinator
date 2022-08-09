@@ -32,19 +32,16 @@ rec {
 
   modules.flatpak = {
     enable = true;
-
-    fontFix = true;
-    iconFix = true;
     autoUpdate = true;
     autoPrune = true;
 
     discord.enable = false;
     spotify.enable = true;
-    flatseal.enable = true;
     # bottles.enable = true; # Configured by audio/gaming, not necessary otherwise
   };
 
   # TODO: Gnome terminal config
+  # TODO: Autostart keepass
 
   # Chinese Input
   i18n.inputMethod.enabled = "fcitx5";
