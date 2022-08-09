@@ -41,6 +41,9 @@
           inputs.devshell.overlay
           inputs.nur.overlay
           inputs.emacs-overlay.overlay
+
+          # All my own overlays
+          (import ./overlays { inherit nixpkgs; })
         ];
       };
 
