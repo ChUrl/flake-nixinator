@@ -44,6 +44,9 @@ rec {
 
   # TODO: Gnome terminal config
   # TODO: Autostart keepass
+  # TODO: Store the external binaries for my derivations in GitHub LFS (Vital, NeuralDSP, other plugins etc.)
+  # TODO: Derivations for bottles like UPlay, NeuralDSP, LoL (don't know what is possible with bottles-cli though)
+  # TODO: When bottles derivations are there remove the bottles option from audio/gaming module and assert that bottles is enabled in flatpak module
 
   # Chinese Input
   i18n.inputMethod.enabled = "fcitx5";
