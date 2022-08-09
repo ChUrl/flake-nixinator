@@ -37,6 +37,10 @@ in stdenv.mkDerivation rec {
   # This is necessary because NixOS doesn't have the linux typical static location where these libraries are placed,
   # so the binary needs the correct paths to the nix store for each one.
   # autoPatchelfHook propagates all the buildInputs so they are available at runtime.
+  # View also:
+  # https://nixos.org/manual/nixpkgs/unstable/#setup-hook-autopatchelfhook
+  # https://nixos.wiki/wiki/Packaging/Binaries
+  # https://unix.stackexchange.com/questions/522822/different-methods-to-run-a-non-nixos-executable-on-nixos/522823#522823
   nativeBuildInputs = [
     dpkg
     autoPatchelfHook
