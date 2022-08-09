@@ -13,16 +13,22 @@ in {
 
   options.modules.audio = {
     enable = mkBoolOpt false "Configure for realtime audio and enable a bunch of music production tools";
-    carla.enable = mkBoolOpt false "Enable Carla + guitar-specific stuff";
+
+    # TODO: Group these in categories (like instruments/VSTs or sth)
     # TODO: Make it easier to add many yes/no options, similar to the flatpak stuff
+
+    # Hosts/Editing
+    carla.enable = mkBoolOpt false "Enable Carla + guitar-specific stuff";
     bitwig.enable = mkBoolOpt false "Enable Bitwig Studio digital audio workstation";
-    faust.enable = mkBoolOpt false "Enable the Faust functional DSP language";
     tenacity.enable = mkBoolOpt false "Enable Tenacity";
-    bottles.enable = mkBoolOpt false "Enable Bottles to emulate windows VSTs (flatpak)";
+
+    # Instruments/Plugins
     vcvrack.enable = mkBoolOpt false "Enable the VCV-Rack Eurorack simulator";
+    vital.enable = mkBoolOpt false "Enable the Vital wavetable Synthesizer";
 
-    # TODO: Vital derivation (adapt from aur)
-
+    # Misc
+    faust.enable = mkBoolOpt false "Enable the Faust functional DSP language";
+    bottles.enable = mkBoolOpt false "Enable Bottles to emulate windows VSTs (flatpak)";
     yabridge = {
       enable = mkBoolOpt false "Enable yabridge + yabridgectl";
       autoSync = mkBoolOpt false "Sync yabridge plugins on nixos-rebuild";
@@ -46,13 +52,32 @@ in {
       # This means that lib.optional can be used for single packages/arguments
       # and lib.optionals has to be used when the argument is itself a list
       # I use lib.optionals everywhere as I think this is more clear
-      (optionals cfg.carla.enable [ carla gamemode ])
-      (optionals cfg.yabridge.enable [ yabridge yabridgectl ])
-      (optionals cfg.bitwig.enable [ bitwig-studio ])
-      (optionals cfg.faust.enable [ faust ])
-      (optionals cfg.tenacity.enable [ tenacity ])
-      (optionals cfg.vcvrack.enable [ vcv-rack ])
+
+      # Some of these include gamemode as I use that to enable performance governors for CPU/GPU and other stuff
+
+      # Enable some default pipewire stuff if pipewire is enabled
       (optionals nixosConfig.services.pipewire.enable [ helvum easyeffects ])
+
+      (optionals cfg.carla.enable [ carla gamemode ])
+      (optionals cfg.bitwig.enable [
+        # TODO: The override doesn't help, Bitwig pipewire still fails...
+        # We need to force pipewire into the dependencies so bitwig can access libpipewire
+        # This will probably get patched directly into nixpkgs in the future
+        # NOTE: override overrides the function arguments (this part: { stdenv, fetchurl, ... })
+        #       while overrideAttrs overrides the stuff inside mkDerivation { ... }
+        (bitwig-studio.overrideAttrs (oldAttrs: {
+          buildInputs = oldAttrs.buildInputs ++ [ pipewire ];
+        }))
+        gamemode
+        # bitwig-studio
+      ])
+      (optionals cfg.tenacity.enable [ tenacity ])
+
+      (optionals cfg.faust.enable [ faust ])
+      (optionals cfg.yabridge.enable [ yabridge yabridgectl ])
+
+      (optionals cfg.vcvrack.enable [ vcv-rack ])
+      (optionals cfg.vital.enable [ vital-synth ])
     ];
 
     # NOTE: This desktop entry is created in /etc/profiles/per-user/christoph/share/applications
@@ -62,6 +87,15 @@ in {
       genericName = "Guitar Amp Simulation";
       icon = "carla";
       exec = "env PIPEWIRE_LATENCY=256/48000 gamemoderun carla ${config.home.homeDirectory}/.config/carla/GuitarDefault.carxp";
+      terminal = false;
+      categories = [ "Music" "Audio" ];
+    };
+
+    xdg.desktopEntries.bitwig-low-latency = mkIf cfg.bitwig.enable {
+      name = "Bitwig Studio (Low Latency)";
+      genericName = "Digital Audio Workstation";
+      icon = "bitwig-studio";
+      exec = "env PIPEWIRE_LATENCY=256/48000 gamemoderun bitwig-studio";
       terminal = false;
       categories = [ "Music" "Audio" ];
     };
