@@ -1,4 +1,4 @@
-{ config, lib, mylib, pkgs, ... }:
+{ config, nixosConfig, lib, mylib, pkgs, ... }:
 
 with lib;
 with mylib.modules;
@@ -16,8 +16,8 @@ in {
 
   options.modules.flatpak = {
     enable = mkBoolOpt false "Enable flatpak support";
-    fontFix = mkBoolOpt false "Link fonts to ~/.local/share/fonts so flatpak apps can find them";
-    iconFix = mkBoolOpt false "Link icons to ~/.local/share/icons so flatpak apps can find them";
+    fontFix = mkBoolOpt true "Link fonts to ~/.local/share/fonts so flatpak apps can find them";
+    iconFix = mkBoolOpt true "Link icons to ~/.local/share/icons so flatpak apps can find them";
     autoUpdate = mkBoolOpt false "Update flatpak apps on nixos-rebuild";
     autoPrune = mkBoolOpt false "Remove unused packages on nixos-rebuild";
 
@@ -26,7 +26,7 @@ in {
     # TODO: Do this for strings + packages
     discord.enable = mkBoolOpt false "Enable Discord";
     spotify.enable = mkBoolOpt false "Enable Spotify";
-    flatseal.enable = mkBoolOpt false "Enable Flatseal";
+    flatseal.enable = mkBoolOpt true "Enable Flatseal";
     bottles.enable = mkBoolOpt false "Enable Bottles";
 
     # This is mainly used by other modules to allow them to use flatpak packages
@@ -45,6 +45,12 @@ in {
   };
 
   config = mkIf cfg.enable {
+    assertions = [
+      (mkIf cfg.enable {
+        assertion = nixosConfig.services.flatpak.enable;
+        message = "Cannot use the flatpak module with flatpak disabled in nixos!";
+      })
+    ];
 
     # NOTE: Is already set by flatpak.enable in configuration.nix
     # xdg.systemDirs.data = [
