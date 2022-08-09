@@ -1,4 +1,14 @@
-# NixFlake/nixos
+# NixOS Configuration
+
+To install remove everything from ``/etc/nixos`` and symlink the ``flake.nix`` to ``/etc/nixos/flake.nix``.
+Because I am dumb many obvious things are explained here and in comments inside the configuration.
+This is very WIP and some parts are pretty dumb as I am still learning the NixOS ecosystem.
+
+I heavily borrowed from:
+- (hlissner)[https://github.com/hlissner/dotfiles]
+- (misterio77)[https://github.com/Misterio77/nix-config]
+
+# ./nixos
 
 This folder contains all the system configurations.
 
@@ -8,7 +18,7 @@ This folder contains all the system configurations.
 When creating a NixOS configuration inside the ``NixFlake/flake.nix`` the common configuration is imported.
 Because the hostname is propagated to the common configuration, it can import the host-specific config by itself.
 
-# NixFlake/home
+# ./home
 
 This folder contains all the home-manager configurations.
 
