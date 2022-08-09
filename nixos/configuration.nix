@@ -173,9 +173,8 @@
     pulse.enable = true;
     jack.enable = true; # We need this for low latency audio
 
-    # use the example session manager (no others are packaged yet so this is enabled by default,
-    # no need to redefine it in your config for now)
-    # media-session.enable = true;
+    wireplumber.enable = true;
+    media-session.enable = false;
   };
 
   fonts = {
@@ -218,6 +217,7 @@
       "networkmanager"
       "wheel"
       "audio"
+      "pipewire"
       "realtime"
       "gamemode"
       "docker"
