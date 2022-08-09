@@ -1,4 +1,4 @@
-{ config, lib, mylib, pkgs, ... }:
+{ config, nixosConfig, lib, mylib, pkgs, ... }:
 
 with lib;
 with mylib.modules;
@@ -14,19 +14,18 @@ in {
   options.modules.audio = {
     enable = mkBoolOpt false "Configure for realtime audio and enable a bunch of music production tools";
     carla.enable = mkBoolOpt false "Enable Carla + guitar-specific stuff";
+    # TODO: Make it easier to add many yes/no options, similar to the flatpak stuff
     bitwig.enable = mkBoolOpt false "Enable Bitwig Studio digital audio workstation";
-    # TODO: Add bottles audio bottle config link
+    faust.enable = mkBoolOpt false "Enable the Faust functional DSP language";
+    tenacity.enable = mkBoolOpt false "Enable Tenacity";
     bottles.enable = mkBoolOpt false "Enable Bottles to emulate windows VSTs (flatpak)";
+    vcvrack.enable = mkBoolOpt false "Enable the VCV-Rack Eurorack simulator";
+
+    # TODO: Vital derivation (adapt from aur)
 
     yabridge = {
       enable = mkBoolOpt false "Enable yabridge + yabridgectl";
       autoSync = mkBoolOpt false "Sync yabridge plugins on nixos-rebuild";
-    };
-
-    extraPackages = mkOption {
-      type = types.listOf types.package;
-      default = [ ];
-      description = "Extra packages to install";
     };
   };
 
@@ -50,7 +49,10 @@ in {
       (optionals cfg.carla.enable [ carla gamemode ])
       (optionals cfg.yabridge.enable [ yabridge yabridgectl ])
       (optionals cfg.bitwig.enable [ bitwig-studio ])
-      cfg.extraPackages
+      (optionals cfg.faust.enable [ faust ])
+      (optionals cfg.tenacity.enable [ tenacity ])
+      (optionals cfg.vcvrack.enable [ vcv-rack ])
+      (optionals nixosConfig.services.pipewire.enable [ helvum easyeffects ])
     ];
 
     # NOTE: This desktop entry is created in /etc/profiles/per-user/christoph/share/applications
