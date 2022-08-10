@@ -7,6 +7,7 @@
     ./firefox.nix
     ./flatpak.nix
     ./gaming.nix
+    ./kitty.nix
     ./misc.nix
     ./nextcloud.nix
   ];
