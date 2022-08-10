@@ -9,6 +9,7 @@
     ./gaming.nix
     ./kitty.nix
     ./misc.nix
+    ./neovim.nix
     ./nextcloud.nix
   ];
 }
