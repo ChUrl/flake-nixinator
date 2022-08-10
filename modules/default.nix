@@ -8,6 +8,7 @@
     ./fish.nix
     ./flatpak.nix
     ./gaming.nix
+    ./gnome.nix
     ./kitty.nix
     ./misc.nix
     ./neovim.nix

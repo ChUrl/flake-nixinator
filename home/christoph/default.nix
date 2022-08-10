@@ -52,6 +52,16 @@ rec {
       spotify.enable = true;
     };
 
+    gnome = {
+      enable = true;
+      extensions = true;
+
+      theme = {
+        papirusIcons = true;
+        numixCursor = true;
+      };
+    };
+
     kitty.enable = true;
 
     misc = {
@@ -74,7 +84,6 @@ rec {
   # TODO: Store the external binaries for my derivations in GitHub LFS (Vital, NeuralDSP, other plugins etc.)
   # TODO: Derivations for bottles like UPlay, NeuralDSP, LoL (don't know what is possible with bottles-cli though)
   # TODO: When bottles derivations are there remove the bottles option from audio/gaming module and assert that bottles is enabled in flatpak module
-  # TODO: Fix chinese input
 
   # Chinese Input
   i18n.inputMethod.enabled = "fcitx5";
@@ -100,27 +109,26 @@ rec {
   '';
 
   # Generate a list of installed user packages in ~/.local/share/current-user-packages
-  home.file.".local/share/current-user-packages".text =
-    let
-      packages = builtins.map (p: "${p.name}") home.packages;
-      sortedUnique = builtins.sort builtins.lessThan (lib.unique packages);
-      formatted = builtins.concatStringsSep "\n" sortedUnique;
-    in
-      formatted;
+  home.file.".local/share/current-user-packages".text = let
+    packages = builtins.map (p: "${p.name}") home.packages;
+    sortedUnique = builtins.sort builtins.lessThan (lib.unique packages);
+    formatted = builtins.concatStringsSep "\n" sortedUnique;
+  in
+    formatted;
 
-  gtk = {
-    enable = true;
-
-    # I guess this gets set by home.pointerCursor
-    # cursorTheme.package = pkgs.numix-cursor-theme;
-    # cursorTheme.name = "Numix-Cursor";
-
-    iconTheme.package = pkgs.papirus-icon-theme;
-    iconTheme.name = "Papirus";
-
-    # theme.package = pkgs.whitesur-gtk-theme;
-    # theme.name = "WhiteSur-light-solid";
-  };
+#  gtk = {
+#    enable = true;
+#
+#    # I guess this gets set by home.pointerCursor
+#    # cursorTheme.package = pkgs.numix-cursor-theme;
+#    # cursorTheme.name = "Numix-Cursor";
+#
+#    iconTheme.package = pkgs.papirus-icon-theme;
+#    iconTheme.name = "Papirus";
+#
+#    # theme.package = pkgs.whitesur-gtk-theme;
+#    # theme.name = "WhiteSur-light-solid";
+#  };
 
   home = {
     username = username; # Inherited from flake.nix
@@ -151,10 +159,10 @@ rec {
 
     # sessionPath = [];
 
-    pointerCursor.package = pkgs.numix-cursor-theme;
-    pointerCursor.gtk.enable = true;
-    pointerCursor.name = "Numix-Cursor";
-    pointerCursor.x11.enable = true;
+#    pointerCursor.package = pkgs.numix-cursor-theme;
+#    pointerCursor.gtk.enable = true;
+#    pointerCursor.name = "Numix-Cursor";
+#    pointerCursor.x11.enable = true;
 
     # Do not change
     stateVersion = "22.05";
@@ -179,49 +187,6 @@ rec {
     nvd # nix rebuild diff
     neofetch # Easily see interesting package versions/kernel
     lazygit
-
-    # Some basics should be available everywhere
-    # This makes problems with conflicts in nix-store, for example gcc/ld and binutils/ld or different python versions
-    # python311
-    # gcc # nvim needs this
-
-    # Gnome extensions
-    gnomeExtensions.appindicator
-    gnomeExtensions.blur-my-shell
-    gnomeExtensions.sound-output-device-chooser
-    gnomeExtensions.vitals
-    gnomeExtensions.no-overview
-    # gnomeExtensions.switch-workspace
-    gnomeExtensions.maximize-to-empty-workspace
-    gnomeExtensions.pip-on-top
-    gnomeExtensions.custom-hot-corners-extended
-    # gnomeExtensions.dock-from-dash
-    gnomeExtensions.gamemode
-    # gnomeExtensions.gsconnect # kde connect alternative
-    # gnomeExtensions.quake-mode # dropdown for any application
-    # gnomeExtensions.systemd-manager # to quickly start nextcloud
-    gnomeExtensions.extensions-sync
-    gnomeExtensions.tweaks-in-system-menu
-    # gnomeExtensions.compiz-windows-effect # WobBlY wiNdoWS
-    gnomeExtensions.panel-scroll
-    gnomeExtensions.rounded-window-corners
-    # gnomeExtensions.easyeffects-preset-selector # Throws error com.sth could not be found, dbus problem?
-    gnomeExtensions.launch-new-instance
-    gnomeExtensions.auto-activities
-
-    # Gnome applications
-    # gnome.gnome-session # Allow to start gnome from tty (sadly this is not usable, many things don't work)
-    gnome.gnome-boxes # VM
-    gnome.sushi # Gnome files previews
-    gnome.gnome-logs # systemd log viewer
-    gnome.gnome-tweaks # conflicts with nixos/hm gnome settings file sometimes, watch out what settings to change
-    gnome.gnome-nettool
-    gnome.simple-scan
-    gnome.gnome-sound-recorder
-    gnome.file-roller # archive manager
-    # gnome-usage # Alternative system performance monitor (gnome.gnome-system-monitor is the preinstalled one)
-    # gnome-secrets # Alternative keepass database viewer
-    gnome-firmware
 
     # Ranger
     ranger
