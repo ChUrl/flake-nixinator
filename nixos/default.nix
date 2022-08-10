@@ -48,7 +48,7 @@
     kernelPackages = pkgs.linuxPackages_zen;
     kernelParams = [ "mitigations=off" ];
 
-    plymouth.enable = true;
+    # plymouth.enable = true;
     loader.systemd-boot.enable = true;
     loader.systemd-boot.configurationLimit = 5;
     loader.systemd-boot.editor = false;
@@ -70,10 +70,16 @@
       {
         users = [ "christoph" ];
         commands = [
-          {
-            command = "/etc/profiles/per-user/christoph/bin/gamemoderun";
-            options = [ "SETENV" "NOPASSWD" ];
-          }
+          # Launch gamemode without password because it is annoying
+          # {
+          #   command = "/etc/profiles/per-user/christoph/bin/gamemoderun";
+          #   options = [ "SETENV" "NOPASSWD" ];
+          # }
+          # {
+          #   command = "${pkgs.gamemode}/libexec/cpugovctl";
+          #   options = [ "SETENV" "NOPASSWD" ];
+          # }
+
           # We allow running flatpak without password so flatpaks can be installed from the hm config (needs sudo)
           {
             command = "/run/current-system/sw/bin/flatpak";
@@ -135,6 +141,7 @@
     enable = true;
 
     # Startx replaces the displaymanager so default (lightdm) isn't used, start to shell
+    # Sadly using this with gnome-session doesn't really work
     # displayManager.startx.enable = true;
 
     # Plasma (X11)
@@ -144,14 +151,16 @@
 
     # Gnome (Wayland)
     displayManager.gdm.enable = true;
+    # I had problems with gdm defaulting to X11, after I added this it stopped although I don't know if this
+    # was the sole reason
+    displayManager.defaultSession = "gnome";
     displayManager.gdm.wayland = true; # This is actually the default
     desktopManager.gnome.enable = true;
-    # HomeManager gnome.gnome-keyring.enable = true;
 
     wacom.enable = true;
 
     # Enable touchpad support (enabled default in most desktopManager).
-    # libinput.enable = true;
+    libinput.enable = true;
   };
 
   # XDG
