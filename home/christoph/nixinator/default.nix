@@ -19,21 +19,22 @@ rec {
     yabridge.enable = true;
     yabridge.autoSync = true;
 
+    noisesupression = {
+#      easyeffects.enable = true;
+
+       noisetorch.enable = true;
+       noisetorch.autostart = true;
+    };
+
     vcvrack.enable = true;
-    vital.enable = true;
+    # vital.enable = true;
   };
 
   modules.gaming = {
     enable = true;
 
-    discordChromium.enable = true;
     polymc.enable = true;
     bottles.enable = true;
-
-    noisetorch = {
-      enable = true;
-      autostart = true;
-    };
 
     steam = {
       enable = true;
