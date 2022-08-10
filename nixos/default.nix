@@ -243,13 +243,12 @@
   };
 
   # Generate a list of installed system packages in /etc/current-system-packages
-  environment.etc."current-system-packages".text =
-    let
-      packages = builtins.map (p: "${p.name}") config.environment.systemPackages;
-      sortedUnique = builtins.sort builtins.lessThan (lib.unique packages);
-      formatted = builtins.concatStringsSep "\n" sortedUnique;
-    in
-      formatted;
+  environment.etc."current-system-packages".text = let
+    packages = builtins.map (p: "${p.name}") config.environment.systemPackages;
+    sortedUnique = builtins.sort builtins.lessThan (lib.unique packages);
+    formatted = builtins.concatStringsSep "\n" sortedUnique;
+  in
+    formatted;
 
   # TODO: Trusted users
 
