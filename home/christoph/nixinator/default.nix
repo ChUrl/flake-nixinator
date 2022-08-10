@@ -7,39 +7,41 @@ rec {
     ../../../modules
   ];
 
-  modules.audio = {
-    enable = true;
+  modules = {
+    audio = {
+      enable = true;
 
-    carla.enable = true;
-    bitwig.enable = true;
-    tenacity.enable = true;
+      carla.enable = true;
+      bitwig.enable = true;
+      tenacity.enable = true;
 
-    faust.enable = true;
-    bottles.enable = true;
-    yabridge.enable = true;
-    yabridge.autoSync = true;
+      faust.enable = true;
+      bottles.enable = true;
+      yabridge.enable = true;
+      yabridge.autoSync = true;
 
-    noisesuppression = {
-       noisetorch.enable = true;
-       noisetorch.autostart = true;
+      noisesuppression = {
+         noisetorch.enable = true;
+         noisetorch.autostart = true;
+      };
+
+      vcvrack.enable = true;
+      # vital.enable = true;
+      distrho.enable = true;
     };
 
-    vcvrack.enable = true;
-    # vital.enable = true;
-    distrho.enable = true;
-  };
-
-  modules.gaming = {
-    enable = true;
-
-    polymc.enable = true;
-    bottles.enable = true;
-    discordChromium.enable = true;
-
-    steam = {
+    gaming = {
       enable = true;
-      protonGE = true;
-      gamescope = true;
+
+      polymc.enable = true;
+      bottles.enable = true;
+      discordChromium.enable = true;
+
+      steam = {
+        enable = true;
+        protonGE = true;
+        gamescope = true;
+      };
     };
   };
 }
