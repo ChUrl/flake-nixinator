@@ -17,10 +17,11 @@ in {
   config = mkIf cfg.enable {
     assertions = [
       {
-        assertion = !config.home.services.nextcloud-client.enable;
+        assertion = !config.services.nextcloud-client.enable;
         message = "Can't enable both HM nextcloud and my nextcloud module!";
       }
     ];
+    
     # I want to have nextcloud-client in the path when the module is enabled
     home.packages = with pkgs; [ nextcloud-client ];
 
@@ -29,12 +30,14 @@ in {
         Unit = {
           Description = "Nextcloud Client";
           PartOf = [ "graphical-session.target" ];
-          After = [ "graphical-session.target" ]; # was graphical-session-pre.target originally in HM
+
+          # was graphical-session-pre.target originally in HM
+          After = [ "graphical-session.target" "network-online.target" ];
         };
 
         Service = {
           Environment = "PATH=${config.home.profileDirectory}/bin";
-          ExecStart = "${pkgs.nextcloud-client}/bin/nextcloud";
+          ExecStart = "${pkgs.nextcloud-client}/bin/nextcloud --background";
         };
 
         Install.WantedBy = [ "graphical-session.target" ];
