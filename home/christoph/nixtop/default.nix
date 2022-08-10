@@ -15,9 +15,9 @@ rec {
 
   modules.audio = {
     enable = true;
-    noisetorch = {
-      enable = true;
-      autostart = true;
+    noisesuppression = {
+      noisetorch.enable = true;
+      noisetorch.autostart = true;
     };
   };
 }
