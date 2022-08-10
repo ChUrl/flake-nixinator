@@ -15,7 +15,7 @@ in {
   imports = [ ];
 
   options.modules.flatpak = {
-    enable = mkBoolOpt false "Enable flatpak support";
+    enable = mkEnableOpt "Flatpak module";
     fontFix = mkBoolOpt true "Link fonts to ~/.local/share/fonts so flatpak apps can find them";
     iconFix = mkBoolOpt true "Link icons to ~/.local/share/icons so flatpak apps can find them";
     autoUpdate = mkBoolOpt false "Update flatpak apps on nixos-rebuild";
@@ -24,10 +24,10 @@ in {
     # TODO: Add library function to make this easier
     # TODO: The flatpak name should be included and a list of all enabled apps should be available
     # TODO: Do this for strings + packages
-    discord.enable = mkBoolOpt false "Enable Discord";
-    spotify.enable = mkBoolOpt false "Enable Spotify";
-    flatseal.enable = mkBoolOpt true "Enable Flatseal";
-    bottles.enable = mkBoolOpt false "Enable Bottles";
+    discord.enable = mkEnableOpt "Discord";
+    spotify.enable = mkEnableOpt "Spotify";
+    flatseal.enable = mkEnableOpt "Flatseal";
+    bottles.enable = mkEnableOpt "Bottles";
 
     # This is mainly used by other modules to allow them to use flatpak packages
     extraInstall = mkOption {
