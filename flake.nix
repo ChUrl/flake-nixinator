@@ -47,6 +47,7 @@
         ];
       };
 
+      # I don't know how to extend the nixpkgs.lib directly so just propagate mylib to the config modules as argument
       mylib = import ./lib { inherit inputs pkgs; lib = nixpkgs.lib; };
 
     # The rec expression turns a basic set into a set where self-referencing is possible.
@@ -61,7 +62,7 @@
       nixosConfigurations = {
 
         # We give our configuration a name (the hostname) to choose a configuration when rebuilding.
-        # This makes it easy to add different configurations later (e.g. for a laptop).
+        # This makes it easy to add different configurations (e.g. for a laptop).
         # Usage: sudo nixos-rebuild switch --flake .#nixinator
         nixinator = mylib.nixos.mkNixosConfig {
           inherit system mylib;
@@ -70,6 +71,7 @@
           username = "christoph";
         };
 
+        # Usage: sudo nixos-rebuild switch --flake .#nixtop
         nixtop = mylib.nixos.mkNixosConfig {
           inherit system mylib;
 
