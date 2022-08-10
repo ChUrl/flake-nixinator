@@ -17,10 +17,12 @@ in {
   # Options is a vector of options this module defines
   # This module defines only the "emacs" option and suboptions "enable" and "doom"
   options.modules.emacs = {
-    enable = mkBoolOpt false "Enable the GNU Emacs editor";
+    enable = mkEnableOpt "Emacs module";
+    nativeComp = mkBoolOpt false "Use Emacs 28.x branch with native comp support";
+    pgtkNativeComp = mkBoolOpt false "Use Emacs 29.x branch with native comp and pure gtk support";
 
     doom = {
-      enable = mkBoolOpt false "Use the Doom Emacs framework";
+      enable = mkEnableOpt "Doom Emacs framework";
       autoSync = mkBoolOpt false "Sync Doom Emacs on nixos-rebuild";
       autoUpgrade = mkBoolOpt false "Upgrade Doom Emacs on nixos-rebuild";
     };
@@ -35,35 +37,45 @@ in {
   # as it delays the evaluation (the if is moved inside the assignments inside the set)
   # mkIf can only be used in the config section (like mkMerge, mkForce and co)
   config = mkIf cfg.enable {
+    assertions = [
+      (mkIf cfg.nativeComp {
+        assertion = !cfg.pgtkNativeComp;
+        message = "Can't enable both nativeComp and pgtkNativeComp!";
+      })
+      (mkIf cfg.pgtkNativeComp {
+        assertion = !cfg.nativeComp;
+        message = "Can't enable both nativeComp and pgtkNativeComp!";
+      })
+    ];
 
     # What home packages should be enabled
-    home.packages = with pkgs; [
-      ((emacsPackagesFor emacsPgtkNativeComp).emacsWithPackages
-        (epkgs: [ epkgs.vterm ]))
+    home.packages = with pkgs; builtins.concatLists [
+      (optionals cfg.nativeComp [ ((emacsPackagesFor emacsNativeComp).emacsWithPackages (epkgs: [ epkgs.vterm ])) ])
+      (optionals cfg.pgtkNativeComp [ ((emacsPackagesFor emacsPgtkNativeComp).emacsWithPackages (epkgs: [ epkgs.vterm ])) ])
 
-      # binutils # conflicts with gcc
-      zstd
-      (ripgrep.override { withPCRE2 = true; })
-      fd
-      # libgccjit
-      sqlite
-      inkscape
-      graphviz
-      gnuplot
-      pandoc
-      nixfmt
-      shellcheck
-      maim
-      # TODO: Use LaTeX module instead
-      texlive.combined.scheme-medium
-      emacs-all-the-icons-fonts
-      bashInteractive # For keychain
+      # TODO: Check what hlissner has enabled
+      (optionals cfg.doom.enable [
+        emacs-all-the-icons-fonts
+        (ripgrep.override { withPCRE2 = true; })
+        fd
+        zstd
+        sqlite # Org roam
+        inkscape # Org latex preview
+        graphviz # Org graphviz support
+        gnuplot # Org gnuplot support
+        pandoc # Org export formats
+        maim
+        bashInteractive # For keychain
 
-      # Treemacs needs python + syntax coloring in org/latex needs pygments
-      (python310.withPackages (ppkgs:
-        [
-          ppkgs.pygments
-        ])) # withPackages expects a function that gets all the packages as argument and returns a list with the packages we want
+        # withPackages expects a function that gets all the packages as argument and returns a list with the packages we want
+        (python310.withPackages (ppkgs: [ ppkgs.pygments ])) # Latex minted
+
+        # nixfmt # This belongs in specific flake.nix
+        # shellcheck # This belongs in specific flake.nix
+
+        # TODO: Use LaTeX module instead
+        texlive.combined.scheme-medium
+      ])
     ];
 
     home.sessionPath = mkIf cfg.doom.enable [ "${config.home.homeDirectory}/.emacs.d/bin" ];
