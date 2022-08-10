@@ -6,5 +6,7 @@
     ./emacs.nix
     ./flatpak.nix
     ./gaming.nix
+    ./misc.nix
+    ./nextcloud.nix
   ];
 }
