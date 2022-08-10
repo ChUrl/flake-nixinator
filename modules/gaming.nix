@@ -19,11 +19,6 @@ in {
     polymc.enable = mkEnableOpt "PolyMC (flatpak)";
     bottles.enable = mkEnableOpt "Bottles (flatpak)";
 
-    noisetorch = {
-      enable = mkEnableOpt "Noisetorch";
-      autostart = mkBoolOpt false "Autostart Noistorch";
-    };
-
     steam = {
       enable = mkEnableOpt "Steam (flatpak)";
       protonGE = mkBoolOpt false "Enable Steam Proton GloriousEggroll runner (flatpak)";
@@ -33,6 +28,7 @@ in {
 
   config = mkIf cfg.enable {
     assertions = [
+      # TODO: Make lib function for multiple assertions that have the same condition
       (mkIf cfg.steam.enable {
         assertion = cfgfp.enable;
         message = "Cannot enable Steam without the flatpak module!";
@@ -52,7 +48,6 @@ in {
 
       # TODO: Extra config (extensions etc), maybe standalone chromium module
       (optionals cfg.discordChromium.enable [ chromium ])
-      (optionals cfg.noisetorch.enable [ noisetorch ])
     ];
 
     xdg.desktopEntries.discordChromium = mkIf cfg.discordChromium.enable {
@@ -62,22 +57,6 @@ in {
       exec = "chromium --new-window discord.com/app";
       terminal = false;
       categories = [ "Network" "Chat" ];
-    };
-
-    systemd.user.services = mkIf (cfg.noisetorch.enable && cfg.noisetorch.autostart) {
-      noisetorch-autostart = {
-        Unit = {
-          Description = "Noisetorch noise suppression";
-          PartOf = [ "graphical-session.target" ];
-          After = [ "graphical-session.target" ];
-        };
-        Install.WantedBy = [ "graphical-session.target" ];
-        Service = {
-          Type = "oneshot";
-          Environment = "PATH=/etc/profiles/per-user/${config.home.username}/bin";
-          ExecStart = "${pkgs.noisetorch}/bin/noisetorch -i";
-        };
-       };
     };
 
     # NOTE: Important to not disable this option if another module enables it
