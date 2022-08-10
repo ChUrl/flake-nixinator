@@ -49,6 +49,10 @@ rec {
     spotify.enable = true;
   };
 
+  modules.kitty = {
+    enable = true;
+  };
+
   modules.misc = {
     enable = true;
 
@@ -370,49 +374,6 @@ rec {
       keys = [ "id_ed25519" ];
     };
 
-    # TODO: Copy config from Arch dots, also move the entire config folder (to allow ephemereal configs)
-    kitty = {
-      enable = true;
-      font = {
-        package = pkgs.victor-mono;
-        name = "Victor Mono SemiBold";
-        size = 12;
-      };
-      settings = {
-        editor = "nvim";
-        scrollback_lines = 10000;
-        window_padding_width = 10;
-        # hide_window_decorations = "yes";
-
-        # Light Theme
-        # background = "#f7f7f7";
-        # foreground = "#494542";
-        # selection_background = "#a4a1a1";
-        # selection_foreground = "#f7f7f7";
-        # cursor = "#494542";
-        # color0 = "#090200";
-        # color1 = "#da2c20";
-        # color2 = "#00a152";
-        # color3 = "#ffcc00";
-        # color4 = "#00a0e4";
-        # color5 = "#a06994";
-        # color6 = "#0077d9";
-        # color7 = "#a4a1a1";
-        # color8 = "#5b5754";
-        # color9 = "#e8bacf";
-        # color10 = "#3a3332";
-        # color11 = "#494542";
-        # color12 = "#7f7c7b";
-        # color13 = "#d6d4d3";
-        # color14 = "#ccab53";
-        # color15 = "#d2b3ff";
-      };
-      keybindings = {
-        "kitty_mod+j" = "next_window";
-        "kitty_mod+k" = "previous_window";
-      };
-    };
-
     # Gnome apps for now
     # mpv = {
     #   enable = true;
@@ -420,73 +381,6 @@ rec {
     #     mpvScripts.mpris  # Make controllable with media keys
     #   ];
     # };
-
-    neovim = {
-      enable = true;
-      extraConfig = ''
-        set incsearch
-        set hlsearch
-        set ignorecase
-        set autoindent
-        set expandtab
-        set smartindent
-        set smarttab
-        set shiftwidth=4
-        set softtabstop=4
-        set backspace=indent,eol,start
-        set ruler
-        set number
-        set laststatus=2
-        set noshowmode
-        set undofile
-        set undodir=~/.vim/undo
-        set hidden
-        set printfont=Victor\ Mono\ SemiBold:h10
-        set guifont=Victor\ Mono\ SemiBold:h12
-        let printencoding='utf-8'
-        set encoding=utf-8
-      '';
-      plugins = with pkgs.vimPlugins; [
-        # vim-nix
-        surround-nvim
-        # lightline-vim
-        {
-          plugin = lualine-nvim;
-          config = ''
-            lua << EOF
-            require('lualine').setup {}
-            EOF
-          '';
-        }
-        # vim-gitgutter
-        # YouCompleteMe
-        {
-
-          plugin = nvim-autopairs;
-          config = ''
-            lua << EOF
-            require('nvim-autopairs').setup {}
-            EOF
-          '';
-        }
-        {
-          plugin = (nvim-treesitter.withPlugins
-            (plugins: pkgs.tree-sitter.allGrammars));
-          config = ''
-            lua << EOF
-            require('nvim-treesitter.configs').setup {
-                highlight = {
-                    enable = true,
-                    additional_vim_regex_highlighting = false,
-                },
-            }
-            EOF
-          '';
-        }
-      ];
-      viAlias = true;
-      vimAlias = true;
-    };
 
     nix-index = {
       enable = true;
