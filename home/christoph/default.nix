@@ -77,6 +77,8 @@ rec {
       enable = true;
       autostart = true;
     };
+
+    ranger.enable = true;
   };
 
   # TODO: Gnome terminal config
@@ -116,20 +118,6 @@ rec {
   in
     formatted;
 
-#  gtk = {
-#    enable = true;
-#
-#    # I guess this gets set by home.pointerCursor
-#    # cursorTheme.package = pkgs.numix-cursor-theme;
-#    # cursorTheme.name = "Numix-Cursor";
-#
-#    iconTheme.package = pkgs.papirus-icon-theme;
-#    iconTheme.name = "Papirus";
-#
-#    # theme.package = pkgs.whitesur-gtk-theme;
-#    # theme.name = "WhiteSur-light-solid";
-#  };
-
   home = {
     username = username; # Inherited from flake.nix
     homeDirectory = "/home/${home.username}";
@@ -157,13 +145,6 @@ rec {
       # NOTE: GTK_IM_MODULE, QT_IM_MODULE, XMODIFIERS are set by HomeManager fcitx5 module
     };
 
-    # sessionPath = [];
-
-#    pointerCursor.package = pkgs.numix-cursor-theme;
-#    pointerCursor.gtk.enable = true;
-#    pointerCursor.name = "Numix-Cursor";
-#    pointerCursor.x11.enable = true;
-
     # Do not change
     stateVersion = "22.05";
   };
@@ -174,32 +155,18 @@ rec {
     procs
     tokei
     rsync
-    # rclone
+    rclone
     xclip
     xorg.xwininfo
     xdotool
     poppler_utils # pdfunite
     ffmpeg
     imagemagick
-    # htop
-    # httpie
+    httpie
     ripgrep
     nvd # nix rebuild diff
     neofetch # Easily see interesting package versions/kernel
     lazygit
-
-    # Ranger
-    ranger
-    ueberzug
-    ffmpegthumbnailer
-    atool
-    p7zip
-    zip
-    unzip
-    unrar
-    libarchive
-    exiftool
-    mediainfo
 
     # Web
     signal-desktop
