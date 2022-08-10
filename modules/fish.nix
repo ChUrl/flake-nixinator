@@ -82,5 +82,35 @@ in {
       '';
     };
 
+    # I put these programs here as they all have fish integration and are connected to the shell,
+    # don't know if I will keep it that way
+
+    programs.fzf = {
+      enable = true;
+      enableFishIntegration = true;
+    };
+
+    programs.keychain = {
+      enable = true;
+      enableFishIntegration = true;
+      enableXsessionIntegration = true;
+      agents = [ "ssh" ];
+      keys = [ "id_ed25519" ];
+    };
+
+    programs.nix-index = {
+      enable = true;
+      enableFishIntegration = true;
+    };
+
+    programs.starship = {
+      enable = true;
+      enableFishIntegration = true;
+    };
+
+    programs.zoxide = {
+      enable = true;
+      enableFishIntegration = true;
+    };
   };
 }

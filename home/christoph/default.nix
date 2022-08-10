@@ -8,7 +8,9 @@
 # This is a module
 # Because no imports/options/config is defined explicitly, everything is treated as config
 # { inputs, lib, ... }: { ... } gets turned into { inputs, lib, ... }: { config = { ... }; } implicitly
-rec {
+let
+  cfgnv = config.modules.neovim;
+in rec {
 
   # Every module is a nix expression, specifically a function { inputs, lib, ... }: { ... }
   # Every module (/function) is called with the same arguments as this module (home.nix)
@@ -127,8 +129,8 @@ rec {
 
     # Environment variables
     sessionVariables = {
-      EDITOR = "nvim";
-      VISUAL = "nvim";
+      EDITOR = (if cfgnv.enable then "nvim" else "nano");
+      VISUAL = (if cfgnv.enable then "nvim" else "nano");
       LANG = "en_US.UTF-8";
 
       DOCKER_BUILDKIT = 1;
@@ -167,11 +169,10 @@ rec {
     nvd # nix rebuild diff
     neofetch # Easily see interesting package versions/kernel
     lazygit
+    yt-dlp
 
     # Web
     signal-desktop
-    yt-dlp
-    # thunderbird # Try gnome mail
     protonmail-bridge
     protonvpn-cli
 
@@ -200,26 +201,13 @@ rec {
   # Packages with extra options managed by HomeManager natively
   programs = {
     home-manager.enable = true;
-
-    bat = { enable = true; };
-
-    # Exclusive with nix-index
-    # command-not-found.enable = true;
-
-    # chromium.enable = true;
+    bat.enable = true;
+    exa.enable = true;
+    ssh.enable = true;
 
     direnv = {
       enable = true;
       nix-direnv.enable = true;
-    };
-
-    exa.enable = true;
-
-    # feh.enable = true; # Use gnome apps for now
-
-    fzf = {
-      enable = true;
-      enableFishIntegration = true;
     };
 
     git = {
@@ -228,51 +216,7 @@ rec {
       userEmail = "christoph.urlacher@protonmail.com";
       userName = "ChUrl";
     };
-
-    keychain = {
-      enable = true;
-      enableFishIntegration = true;
-      enableXsessionIntegration = true;
-      agents = [ "ssh" ];
-      keys = [ "id_ed25519" ];
-    };
-
-    # Gnome apps for now
-    # mpv = {
-    #   enable = true;
-    #   scripts = with pkgs; [
-    #     mpvScripts.mpris  # Make controllable with media keys
-    #   ];
-    # };
-
-    nix-index = {
-      enable = true;
-      enableFishIntegration = true;
-    };
-
-    ssh.enable = true;
-
-    starship = {
-      enable = true;
-      enableFishIntegration = true;
-    };
-
-    # TODO: TexLive
-
-    zoxide = {
-      enable = true;
-      enableFishIntegration = true;
-    };
   };
-
-  # services = {
-  #   # lorri.enable = true; # Use nix-direnv instead
-
-  #   nextcloud-client = {
-  #     enable = true;
-  #     startInBackground = true;
-  #   };
-  # };
 
   # Nicely reload system units when changing configs
   systemd.user.startServices = "sd-switch";
