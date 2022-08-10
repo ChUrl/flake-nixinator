@@ -11,7 +11,7 @@ in {
 
     keepass = {
       enable = mkEnableOpt "KeePassXC";
-      autostart = mkBoolOpt "Autostart KeePassXC";
+      autostart = mkBoolOpt false "Autostart KeePassXC";
     };
   };
 
@@ -20,7 +20,6 @@ in {
     home.packages = with pkgs; builtins.concatLists [
       (optionals cfg.keepass.enable [ keepassxc ])
     ];
-
 
     systemd.user.services = {
       autostart-keepass =
