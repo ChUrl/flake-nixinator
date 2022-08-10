@@ -46,10 +46,10 @@ in {
 
   config = mkIf cfg.enable {
     assertions = [
-      (mkIf cfg.enable {
+      {
         assertion = nixosConfig.services.flatpak.enable;
         message = "Cannot use the flatpak module with flatpak disabled in nixos!";
-      })
+      }
     ];
 
     # NOTE: Is already set by flatpak.enable in configuration.nix
