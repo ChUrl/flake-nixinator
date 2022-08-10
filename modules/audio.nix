@@ -12,25 +12,25 @@ in {
   ];
 
   options.modules.audio = {
-    enable = mkBoolOpt false "Configure for realtime audio and enable a bunch of music production tools";
+    enable = mkEnableOpt "Audio module";
 
     # TODO: Group these in categories (like instruments/VSTs or sth)
     # TODO: Make it easier to add many yes/no options, similar to the flatpak stuff
 
     # Hosts/Editing
-    carla.enable = mkBoolOpt false "Enable Carla + guitar-specific stuff";
-    bitwig.enable = mkBoolOpt false "Enable Bitwig Studio digital audio workstation";
-    tenacity.enable = mkBoolOpt false "Enable Tenacity";
+    carla.enable = mkEnableOpt "Carla (VST host)";
+    bitwig.enable = mkEnableOpt "Bitwig (Digital audio workstation)";
+    tenacity.enable = mkEnableOpt "Tenacity (Audacity fork)";
 
     # Instruments/Plugins
-    vcvrack.enable = mkBoolOpt false "Enable the VCV-Rack Eurorack simulator";
-    vital.enable = mkBoolOpt false "Enable the Vital wavetable Synthesizer";
+    vcvrack.enable = mkEnableOpt "VCV-Rack (Eurorack simulator)";
+    vital.enable = mkEnableOpt "Vital (Wavetable synthesizer)";
 
     # Misc
-    faust.enable = mkBoolOpt false "Enable the Faust functional DSP language";
-    bottles.enable = mkBoolOpt false "Enable Bottles to emulate windows VSTs (flatpak)";
+    faust.enable = mkEnableOpt "Faust (functional DSP language)";
+    bottles.enable = mkEnableOpt "Bottles (flatpak)";
     yabridge = {
-      enable = mkBoolOpt false "Enable yabridge + yabridgectl";
+      enable = mkEnableOpt "Yabridge (Windows VST plugin manager)";
       autoSync = mkBoolOpt false "Sync yabridge plugins on nixos-rebuild";
     };
   };
@@ -123,7 +123,7 @@ in {
         (mkUnlink "${config.home.homeDirectory}/.vst3/Vital.vst3");
       })
 
-      (mkIf cfg.yabridge.autoSync {
+      (mkIf (cfg.yabridge.enable && cfg.yabridge.autoSync) {
         syncYabridge = hm.dag.entryAfter [ "writeBoundary" ] ''
           yabridgectl sync
         '';

@@ -13,18 +13,19 @@ in {
   ];
 
   options.modules.gaming = {
-    enable = mkBoolOpt false "Enable the Gaming module";
-    discordChromium.enable = mkBoolOpt false "Enable Discord as Chromium webapp";
-    polymc.enable = mkBoolOpt false "Enable PolyMC for Minecraft (flatpak)";
-    bottles.enable = mkBoolOpt false "Enable Bottles to emulate Windows games (flatpak)";
+    enable = mkEnableOpt "Gaming module";
+
+    discordChromium.enable = mkEnableOpt "Discord (Chromium)";
+    polymc.enable = mkEnableOpt "PolyMC (flatpak)";
+    bottles.enable = mkEnableOpt "Bottles (flatpak)";
 
     noisetorch = {
-      enable = mkBoolOpt false "Enable Noisetorch";
+      enable = mkEnableOpt "Noisetorch";
       autostart = mkBoolOpt false "Autostart Noistorch";
     };
 
     steam = {
-      enable = mkBoolOpt false "Enable steam (flatpak)";
+      enable = mkEnableOpt "Steam (flatpak)";
       protonGE = mkBoolOpt false "Enable Steam Proton GloriousEggroll runner (flatpak)";
       gamescope = mkBoolOpt false "Enable the gamescope micro compositor (flatpak)";
     };
@@ -63,7 +64,7 @@ in {
       categories = [ "Network" "Chat" ];
     };
 
-    systemd.user.services = mkIf cfg.noisetorch.autostart {
+    systemd.user.services = mkIf (cfg.noisetorch.enable && cfg.noisetorch.autostart) {
       noisetorch-autostart = {
         Unit = {
           Description = "Noisetorch noise suppression";

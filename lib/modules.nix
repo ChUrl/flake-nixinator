@@ -9,6 +9,9 @@ rec {
     description = desc;
   };
 
+  # Alias for consistency
+  mkEnableOpt = lib.mkEnableOption;
+
   # Like mkIf but the predicate is inverted
   mkElse = pred: do:
   (lib.mkIf (!pred) do);
