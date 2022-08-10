@@ -25,6 +25,7 @@ in {
     # Instruments/Plugins
     vcvrack.enable = mkEnableOpt "VCV-Rack (Eurorack simulator)";
     vital.enable = mkEnableOpt "Vital (Wavetable synthesizer)";
+    # distrho.enable = mkEnableOpt "Distrho (Linux VST ports"; # Cannot use with wayland
 
     # Misc
     faust.enable = mkEnableOpt "Faust (functional DSP language)";
@@ -32,6 +33,15 @@ in {
     yabridge = {
       enable = mkEnableOpt "Yabridge (Windows VST plugin manager)";
       autoSync = mkBoolOpt false "Sync yabridge plugins on nixos-rebuild";
+    };
+
+    noisesupression = {
+      noisetorch = {
+        enable = mkEnableOpt "Noisetorch";
+        autostart = mkBoolOpt false "Autoload Noisetorch suppression";
+      };
+
+      easyeffects.enable = mkEnableOpt "EasyEffects";
     };
   };
 
@@ -56,7 +66,7 @@ in {
       # Some of these include gamemode as I use that to enable performance governors for CPU/GPU and other stuff
 
       # Enable some default pipewire stuff if pipewire is enabled
-      (optionals nixosConfig.services.pipewire.enable [ helvum easyeffects ])
+      (optionals nixosConfig.services.pipewire.enable [ helvum ])
 
       (optionals cfg.carla.enable [ carla gamemode ])
       (optionals cfg.bitwig.enable [
@@ -75,10 +85,18 @@ in {
 
       (optionals cfg.faust.enable [ faust ])
       (optionals cfg.yabridge.enable [ yabridge yabridgectl ])
+      (optionals cfg.noisesupression.noisetorch.enable [ noisetorch ])
+#      (optionals cfg.noisesupression.easyeffects.enable [ easyeffects ])
 
       (optionals cfg.vcvrack.enable [ vcv-rack ])
       (optionals cfg.vital.enable [ vital-synth ])
+      # (optionals cfg.distrho.enable [ distrho ]) # Cannot use with wayland
     ];
+
+    services.easyeffects = mkIf cfg.noisesupression.easyeffects.enable {
+      enable = true;
+      preset = "noise_supression";
+    };
 
     # NOTE: This desktop entry is created in /etc/profiles/per-user/christoph/share/applications
     #       This location is part of XDG_DATA_DIRS
@@ -98,6 +116,45 @@ in {
       exec = "env PIPEWIRE_LATENCY=256/48000 gamemoderun bitwig-studio";
       terminal = false;
       categories = [ "Music" "Audio" ];
+    };
+
+    # TODO: After pipewire.target or partof pipewire.service?
+    systemd.user.services = {
+      autostart-noisetorch =
+      (mkIf (cfg.noisesupression.noisetorch.enable && cfg.noisesupression.noisetorch.autostart) {
+        Unit = {
+          Type = "oneshot";
+          Description = "Noisetorch noise suppression";
+          PartOf = [ "graphical-session.target" ];
+          After = [ "graphical-session.target" ];
+        };
+
+        Service = {
+          Environment = "PATH=${config.home.profileDirectory}/bin"; # Leads to /etc/profiles/per-user/christoph/bin
+          ExecStart = "${pkgs.noisetorch}/bin/noisetorch -i";
+#          ExecStop = "${pkgs.noisetorch}/bin/noisetorch -u";
+          Restart = "on-failure";
+        };
+
+        Install.WantedBy = [ "graphical-session.target" ];
+      });
+
+#      autostart-easyeffects =
+#      (mkIf cfg.noisesupression.easyeffects.enable {
+#        Unit = {
+#          Description = "EasyEffects noise suppression";
+#          PartOf = [ "graphical-session.target" ];
+#          After = [ "graphical-session.target"];
+#        };
+#
+#        Service = {
+#          Type = "oneshot";
+#          Environment = "PATH=${config.home.profileDirectory}/bin"; # Leads to /etc/profiles/per-user/christoph/bin
+#          ExecStart = "${pkgs.easyeffects}/bin/easyeffects -l noise_suppression";
+#        };
+#
+#        Install.WantedBy = [ "graphical-session.target" ];
+#      });
     };
 
     # NOTE: Important to not disable this option if another module enables it
