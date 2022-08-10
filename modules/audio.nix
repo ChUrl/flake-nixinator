@@ -24,24 +24,31 @@ in {
 
     # Instruments/Plugins
     vcvrack.enable = mkEnableOpt "VCV-Rack (Eurorack simulator)";
-    vital.enable = mkEnableOpt "Vital (Wavetable synthesizer)";
-    # distrho.enable = mkEnableOpt "Distrho (Linux VST ports"; # Cannot use with wayland
+#    vital.enable = mkEnableOpt "Vital (Wavetable synthesizer)";
+    distrho.enable = mkEnableOpt "Distrho (Linux VST ports)";
 
     # Misc
     faust.enable = mkEnableOpt "Faust (functional DSP language)";
     bottles.enable = mkEnableOpt "Bottles (flatpak)";
+
+    # TODO: Automatically add the needed paths, depends on the bottle though
+    # /home/christoph/.var/app/com.usebottles.bottles/data/bottles/bottles/Audio/drive_c/Program Files/Common Files/VST3
+    # /home/christoph/.var/app/com.usebottles.bottles/data/bottles/bottles/Audio/drive_c/Program Files/VstPlugins
     yabridge = {
       enable = mkEnableOpt "Yabridge (Windows VST plugin manager)";
       autoSync = mkBoolOpt false "Sync yabridge plugins on nixos-rebuild";
     };
 
-    noisesupression = {
+    noisesuppression = {
       noisetorch = {
         enable = mkEnableOpt "Noisetorch";
         autostart = mkBoolOpt false "Autoload Noisetorch suppression";
       };
 
-      easyeffects.enable = mkEnableOpt "EasyEffects";
+      easyeffects = {
+        enable = mkEnableOpt "EasyEffects";
+        autostart = mkBoolOpt false "Autoload EasyEffects suppression profile";
+      };
     };
   };
 
@@ -85,17 +92,16 @@ in {
 
       (optionals cfg.faust.enable [ faust ])
       (optionals cfg.yabridge.enable [ yabridge yabridgectl ])
-      (optionals cfg.noisesupression.noisetorch.enable [ noisetorch ])
-#      (optionals cfg.noisesupression.easyeffects.enable [ easyeffects ])
+      (optionals cfg.noisesuppression.noisetorch.enable [ noisetorch ])
 
       (optionals cfg.vcvrack.enable [ vcv-rack ])
-      (optionals cfg.vital.enable [ vital-synth ])
-      # (optionals cfg.distrho.enable [ distrho ]) # Cannot use with wayland
+#      (optionals cfg.vital.enable [ vital-synth ])
+      (optionals cfg.distrho.enable [ distrho ])
     ];
 
-    services.easyeffects = mkIf cfg.noisesupression.easyeffects.enable {
+    services.easyeffects = mkIf cfg.noisesuppression.easyeffects.enable {
       enable = true;
-      preset = "noise_supression";
+      preset = optionalString cfg.noisesuppression.easyeffects.autostart "noise_supression";
     };
 
     # NOTE: This desktop entry is created in /etc/profiles/per-user/christoph/share/applications
@@ -121,7 +127,7 @@ in {
     # TODO: After pipewire.target or partof pipewire.service?
     systemd.user.services = {
       autostart-noisetorch =
-      (mkIf (cfg.noisesupression.noisetorch.enable && cfg.noisesupression.noisetorch.autostart) {
+      (mkIf (cfg.noisesuppression.noisetorch.enable && cfg.noisesuppression.noisetorch.autostart) {
         Unit = {
           Type = "oneshot";
           Description = "Noisetorch noise suppression";
@@ -132,29 +138,11 @@ in {
         Service = {
           Environment = "PATH=${config.home.profileDirectory}/bin"; # Leads to /etc/profiles/per-user/christoph/bin
           ExecStart = "${pkgs.noisetorch}/bin/noisetorch -i";
-#          ExecStop = "${pkgs.noisetorch}/bin/noisetorch -u";
           Restart = "on-failure";
         };
 
         Install.WantedBy = [ "graphical-session.target" ];
       });
-
-#      autostart-easyeffects =
-#      (mkIf cfg.noisesupression.easyeffects.enable {
-#        Unit = {
-#          Description = "EasyEffects noise suppression";
-#          PartOf = [ "graphical-session.target" ];
-#          After = [ "graphical-session.target"];
-#        };
-#
-#        Service = {
-#          Type = "oneshot";
-#          Environment = "PATH=${config.home.profileDirectory}/bin"; # Leads to /etc/profiles/per-user/christoph/bin
-#          ExecStart = "${pkgs.easyeffects}/bin/easyeffects -l noise_suppression";
-#        };
-#
-#        Install.WantedBy = [ "graphical-session.target" ];
-#      });
     };
 
     # NOTE: Important to not disable this option if another module enables it
@@ -171,13 +159,30 @@ in {
         (mkUnlink "${config.home.homeDirectory}/.config/carla");
       })
 
-      (mkIf cfg.vital.enable {
-        linkVitalVST3 = hm.dag.entryAfter [ "writeBoundary" ]
-        (mkLink "${pkgs.vital-synth}/lib/vst3/Vital.vst3" "${config.home.homeDirectory}/.vst3/Vital.vst3");
+#      (mkIf cfg.vital.enable {
+#        linkVitalVST3 = hm.dag.entryAfter [ "writeBoundary" ]
+#        (mkLink "${pkgs.vital-synth}/lib/vst3/Vital.vst3" "${config.home.homeDirectory}/.vst3/Vital.vst3");
+#      })
+#      (mkElse cfg.vital.enable {
+#        unlinkVitalVST3 = hm.dag.entryAfter [ "writeBoundary" ]
+#        (mkUnlink "${config.home.homeDirectory}/.vst3/Vital.vst3");
+#      })
+
+      (mkIf cfg.distrho.enable {
+        linkDistrhoLV2 = hm.dag.entryAfter [ "writeBoundary" ]
+        (mkLink "${pkgs.distrho}/lib/lv2" "${config.home.homeDirectory}/.lv2/distrho");
+        linkDistrhoVST = hm.dag.entryAfter [ "writeBoundary" ]
+        (mkLink "${pkgs.distrho}/lib/vst" "${config.home.homeDirectory}/.vst/distrho");
+        linkDistrhoVST3 = hm.dag.entryAfter [ "writeBoundary" ]
+        (mkLink "${pkgs.distrho}/lib/vst3" "${config.home.homeDirectory}/.vst3/distrho");
       })
-      (mkElse cfg.vital.enable {
-        unlinkVitalVST3 = hm.dag.entryAfter [ "writeBoundary" ]
-        (mkUnlink "${config.home.homeDirectory}/.vst3/Vital.vst3");
+      (mkElse cfg.distrho.enable {
+        unlinkDistrhoLV2 = hm.dag.entryAfter [ "writeBoundary" ]
+        (mkUnlink "${config.home.homeDirectory}/.lv2/distrho");
+        unlinkDistrhoVST = hm.dag.entryAfter [ "writeBoundary" ]
+        (mkUnlink "${config.home.homeDirectory}/.vst/distrho");
+        unlinkDistrhoVST3 = hm.dag.entryAfter [ "writeBoundary" ]
+        (mkUnlink "${config.home.homeDirectory}/.vst3/distrho");
       })
 
       (mkIf (cfg.yabridge.enable && cfg.yabridge.autoSync) {
