@@ -13,9 +13,9 @@ in {
   };
 
   config = mkIf cfg.enable {
-
     programs.neovim = {
       enable = true;
+
       extraConfig = ''
         set incsearch
         set hlsearch
@@ -39,6 +39,7 @@ in {
         let printencoding='utf-8'
         set encoding=utf-8
       '';
+
       plugins = with pkgs.vimPlugins; [
         # vim-nix
         surround-nvim
@@ -77,6 +78,7 @@ in {
           '';
         }
       ];
+
       viAlias = cfg.alias;
       vimAlias = cfg.alias;
     };

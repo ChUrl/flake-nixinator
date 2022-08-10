@@ -22,6 +22,7 @@ in {
         name = "Victor Mono SemiBold";
         size = 12;
       };
+
       settings = {
         editor = (if cfgnv.enable then "nvim" else "nano");
         scrollback_lines = 10000;
@@ -51,6 +52,7 @@ in {
         # color14 = "#ccab53";
         # color15 = "#d2b3ff";
       };
+
       keybindings = {
         "kitty_mod+j" = "next_window";
         "kitty_mod+k" = "previous_window";

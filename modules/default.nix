@@ -5,6 +5,7 @@
     ./audio.nix
     ./emacs.nix
     ./firefox.nix
+    ./fish.nix
     ./flatpak.nix
     ./gaming.nix
     ./kitty.nix
