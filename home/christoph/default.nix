@@ -40,7 +40,18 @@ rec {
 
     discord.enable = false;
     spotify.enable = true;
-    # bottles.enable = true; # Configured by audio/gaming, not necessary otherwise
+  };
+
+  modules.misc = {
+    keepass = {
+      enable = true;
+      autostart = true;
+    };
+  };
+
+  modules.nextcloud = {
+    enable = true;
+    autostart = true;
   };
 
   # TODO: Gnome terminal config
@@ -111,13 +122,17 @@ rec {
 
       DOCKER_BUILDKIT = 1;
 
-      # Firefox vaapi test
-      MOZ_ENABLE_WAYLAND = 1;
-      MOZ_USE_XINPUT2 = 1;
+      # Enable wayland
+      XDG_SESSION_TYPE = "wayland";
       QT_QPA_PLATFORM = "wayland";
+      MOZ_ENABLE_WAYLAND = 1;
+
+      # Firefox vaapi test
+      EGL_PLATFORM = "wayland";
       LIBVA_DRIVER_NAME = "nvidia";
       MOZ_DISABLE_RDD_SANDBOX = 1;
-      EGL_PLATFORM = "wayland";
+
+      MOZ_USE_XINPUT2 = 1;
 
       # Don't use system wine, use bottles
       # WINEESYNC = 1;
@@ -184,15 +199,19 @@ rec {
     gnomeExtensions.gamemode
     # gnomeExtensions.gsconnect # kde connect alternative
     # gnomeExtensions.quake-mode # dropdown for any application
-    gnomeExtensions.systemd-manager # to quickly start nextcloud
+    # gnomeExtensions.systemd-manager # to quickly start nextcloud
     gnomeExtensions.extensions-sync
     gnomeExtensions.tweaks-in-system-menu
     # gnomeExtensions.compiz-windows-effect # WobBlY wiNdoWS
     gnomeExtensions.panel-scroll
     gnomeExtensions.rounded-window-corners
+    # gnomeExtensions.easyeffects-preset-selector # Throws error com.sth could not be found, dbus problem?
+    gnomeExtensions.launch-new-instance
+    gnomeExtensions.auto-activities
 
     # Gnome applications
-    gnome.gnome-boxes
+    # gnome.gnome-session # Allow to start gnome from tty (sadly this is not usable, many things don't work)
+    gnome.gnome-boxes # VM
     gnome.sushi # Gnome files previews
     gnome.gnome-logs # systemd log viewer
     gnome.gnome-tweaks # conflicts with nixos/hm gnome settings file sometimes, watch out what settings to change
@@ -228,7 +247,6 @@ rec {
     # calibre
     # virt-manager # Let's try gnome-boxes while we're at it
     gource # Visualize git commit log
-    keepassxc
     anki-bin # Use anki-bin as anki is some versions behind
     # libreoffice-fresh
     jabref # manage bibilography
@@ -275,13 +293,7 @@ rec {
         c = "clear";
         q = "exit";
         h = "history | bat";
-
-        # upgrade = "nix flake update && sudo nixos-rebuild build --flake .#nixinator && nvd diff /run/current-system result";
-        # rebuild = "sudo nixos-rebuild switch --flake .#nixinator";
-        # rebuildfast = "sudo nixos-rebuild switch --fast --flake .#nixinator";
-
-        failed = "systemctl --failed";
-        errors = "journalctl -p 3 -xb";
+        r = "ranger --choosedir=$HOME/.rangerdir; set LASTDIR (cat $HOME/.rangerdir); cd $LASTDIR";
 
         cd = "z";
         cp = "cp -i";
@@ -290,23 +302,16 @@ rec {
         lsa = "exa --color always --group-directories-first -F -l -a --git --icons";
         tre = "exa --color always --group-directories-first -F -T -L 2 ---icons";
         mkd = "mkdir -p";
+
         blk = "lsblk -o NAME,LABEL,UUID,FSTYPE,SIZE,FSUSE%,MOUNTPOINT,MODEL | bat";
         fsm = "df -h | bat";
         grp = "grep --color=auto -E";
         fzp = "fzf --preview 'bat --color=always --style=numbers --line-range=:500 {}'";
         fre = "free -m";
-
-        r = "ranger --choosedir=$HOME/.rangerdir; set LASTDIR (cat $HOME/.rangerdir); cd $LASTDIR";
-        rsync = "rsync -chavzP --info=progress2";
-        performance = "sudo cpupower frequency-set -g performance && nvidia-settings -a [gpu:0]/GPUPowerMizerMode=1";
-        powersave = "sudo cpupower frequency-set -g powersave && nvidia-settings -a [gpu:0]/GPUPowerMizerMode=0";
-
         wat = "watch -d -c -n -0.5";
         dus = "sudo dust -r";
         dsi = "sudo du -sch . | bat";
         prc = "procs -t";
-
-        emcs = "emacs -nw";
 
         lg = "lazygit";
         gs = "git status";
@@ -314,11 +319,6 @@ rec {
         ga = "git add";
         glg = "git log --graph --decorate --oneline";
         gcl = "git clone";
-
-        xxhamster = "TERM=ansi ssh christoph@217.160.142.51";
-
-        fonts = "fc-list";
-        fchar = "fc-match -s";
 
         vpnat = "protonvpn-cli c --cc at";
         vpnch = "protonvpn-cli c --cc ch";
@@ -328,7 +328,17 @@ rec {
         vpnkr = "protonvpn-cli c --cc kr";
         vpnoff = "protonvpn-cli d";
 
-        league = "sudo sysctl -w abi.vsyscall32=0";
+        # This doesn't work at all, many things crash, no internet etc.
+        # gnome = "dbus-run-session gnome-session"; # Requires XDG_SESSION_TYPE to be set for wayland
+
+        failed = "systemctl --failed";
+        errors = "journalctl -p 3 -xb";
+
+        rsync = "rsync -chavzP --info=progress2";
+        performance = "sudo cpupower frequency-set -g performance && nvidia-settings -a [gpu:0]/GPUPowerMizerMode=1";
+        powersave = "sudo cpupower frequency-set -g powersave && nvidia-settings -a [gpu:0]/GPUPowerMizerMode=0";
+
+        xxhamster = "TERM=ansi ssh christoph@217.160.142.51";
 
         mp4 = "yt-dlp -f 'bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4] / bv*+ba/b' --recode-video mp4"; # the -f options are yt-dlp defaults
         mp3 = "yt-dlp -f 'ba' --extract-audio --audio-format mp3";
@@ -735,14 +745,14 @@ rec {
     };
   };
 
-  services = {
-    # lorri.enable = true; # Use nix-direnv instead
+  # services = {
+  #   # lorri.enable = true; # Use nix-direnv instead
 
-    nextcloud-client = {
-      enable = true;
-      startInBackground = false; # TODO: Nextcloud doesn't start after login
-    };
-  };
+  #   nextcloud-client = {
+  #     enable = true;
+  #     startInBackground = true;
+  #   };
+  # };
 
   # Nicely reload system units when changing configs
   systemd.user.startServices = "sd-switch";
