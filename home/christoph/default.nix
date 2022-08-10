@@ -26,6 +26,7 @@ rec {
   # Config my modules
   modules.emacs = {
     enable = true;
+    pgtkNativeComp = true;
 
     doom.enable = true;
     doom.autoSync = true;
@@ -47,6 +48,7 @@ rec {
   # TODO: Store the external binaries for my derivations in GitHub LFS (Vital, NeuralDSP, other plugins etc.)
   # TODO: Derivations for bottles like UPlay, NeuralDSP, LoL (don't know what is possible with bottles-cli though)
   # TODO: When bottles derivations are there remove the bottles option from audio/gaming module and assert that bottles is enabled in flatpak module
+  # TODO: Fix chinese input
 
   # Chinese Input
   i18n.inputMethod.enabled = "fcitx5";
@@ -169,7 +171,6 @@ rec {
     # gcc # nvim needs this
 
     # Gnome extensions
-    # gnome.gnome-tweaks # Disabled since settings should be set declaratively
     gnomeExtensions.appindicator
     gnomeExtensions.blur-my-shell
     gnomeExtensions.sound-output-device-chooser
@@ -194,14 +195,14 @@ rec {
     gnome.gnome-boxes
     gnome.sushi # Gnome files previews
     gnome.gnome-logs # systemd log viewer
-    gnome.gnome-tweaks # conflicts with nixos/hm gnome settings file
+    gnome.gnome-tweaks # conflicts with nixos/hm gnome settings file sometimes, watch out what settings to change
     gnome.gnome-nettool
     gnome.simple-scan
+    gnome.gnome-sound-recorder
     gnome.file-roller # archive manager
     # gnome-usage # Alternative system performance monitor (gnome.gnome-system-monitor is the preinstalled one)
     # gnome-secrets # Alternative keepass database viewer
     gnome-firmware
-    wike # Wikipedia viewer
 
     # Ranger
     ranger
@@ -218,9 +219,7 @@ rec {
 
     # Web
     signal-desktop
-    # Flatpak discord
     yt-dlp
-    # Flatpak spotify
     # thunderbird # Try gnome mail
     protonmail-bridge
     protonvpn-cli
@@ -228,19 +227,21 @@ rec {
     # Tools
     # calibre
     # virt-manager # Let's try gnome-boxes while we're at it
-    gource
+    gource # Visualize git commit log
     keepassxc
     anki-bin # Use anki-bin as anki is some versions behind
-    libreoffice-fresh
+    # libreoffice-fresh
     jabref # manage bibilography
+    # wike # Wikipedia viewer
 
-    # Graphics
+    # Media
     wacomtablet
     xournalpp
     # kdenlive
     # krita
     # blender
     # godot
+    # obs-studio
 
     # Use NixCommunity binary cache
     cachix
@@ -684,7 +685,7 @@ rec {
             EOF
           '';
         }
-        vim-gitgutter
+        # vim-gitgutter
         # YouCompleteMe
         {
 
@@ -739,7 +740,7 @@ rec {
 
     nextcloud-client = {
       enable = true;
-      startInBackground = true;
+      startInBackground = false; # TODO: Nextcloud doesn't start after login
     };
   };
 
