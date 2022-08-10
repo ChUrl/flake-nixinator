@@ -29,7 +29,7 @@ in {
     gtk = mkMerge [
       { enable = true; }
 
-      (optionalAttrs cfg.papirusIcons {
+      (optionalAttrs cfg.theme.papirusIcons {
         iconTheme.package = pkgs.papirus-icon-theme;
         iconTheme.name = "Papirus";
       })
@@ -37,13 +37,13 @@ in {
 
     home.pointerCursor = mkMerge [
       {
-        pointerCursor.gtk.enable = true;
-        pointerCursor.x11.enable = true;
+        gtk.enable = true;
+        x11.enable = true;
       }
 
-      (optionalAttrs cfg.numixCursor {
-        pointerCursor.package = pkgs.numix-cursor-theme;
-        pointerCursor.name = "Numix-Cursor";
+      (optionalAttrs cfg.theme.numixCursor {
+        package = pkgs.numix-cursor-theme;
+        name = "Numix-Cursor";
       })
     ];
 
