@@ -20,7 +20,7 @@ in rec {
     # Import the host-specific user-config
     ./${hostname}
 
-    ../../modules
+    ../modules
 
     # inputs.nixvim.homeManagerModules.nixvim
   ];
