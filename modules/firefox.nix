@@ -12,6 +12,7 @@ in {
     wayland = mkBoolOpt false "Enable firefox wayland support";
     vaapi = mkBoolOpt false "Enable firefox vaapi support";
     disableTabBar = mkBoolOpt false "Disable the firefox tab bar (for TST)";
+    defaultBookmarks = mkBoolOpt false "Preset standard bookmarks and folders";
   };
 
   config = mkIf cfg.enable {
@@ -52,7 +53,7 @@ in {
         # https://github.com/mozilla/policy-templates#enterprisepoliciesenabled
         extraPolicies = {
           # TODO: Make library function to allow easy bookmark creation and add my default bookmarks/folders
-          Bookmarks = { };
+          Bookmarks = (optionalAttrs cfg.defaultBookmarks { });
           CaptivePortal = false;
           DisableFirefoxAccounts = true;
           DisableFirefoxStudies = true;
