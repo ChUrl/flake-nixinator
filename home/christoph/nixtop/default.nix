@@ -4,7 +4,7 @@
 
 rec {
   imports = [
-    ../../../modules
+    ../../modules
   ];
 
   modules = {

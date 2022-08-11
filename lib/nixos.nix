@@ -18,7 +18,7 @@ in {
         { nixpkgs.pkgs = pkgs; }
 
         # Main config file for all configs/hosts
-        ../nixos
+        ../system
       ]
 
       extraModules
