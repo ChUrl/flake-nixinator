@@ -19,6 +19,8 @@
       experimental-features = nix-command flakes
     '';
 
+    settings.trusted-users = [ "root" "christoph" ];
+
     # Keep nix-shell from garbage collection for direnv (keep-outputs + keep-derivations)
     # NOTE: nix-direnv use nix or use flake should do this automatically
     # keep-outputs = true
@@ -250,7 +252,6 @@
   in
     formatted;
 
-  # TODO: Trusted users
 
   # We want these packages to be available even when no user profile is active
   # Empty since we basically only need git + editor which is enabled below
