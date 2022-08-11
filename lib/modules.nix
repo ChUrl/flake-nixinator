@@ -51,4 +51,14 @@ rec {
   # Returns base without occurences of elements that are also in remove
   without = base: remove:
   lib.filter (x: !(contains remove x)) base;
+
+  # For use with single element sets
+  attrName = set: let
+    names = lib.attrNames set;
+  in (if (names != [ ]) then (lib.head names) else null);
+
+  # For use with single element sets
+  attrValue = set: let
+    values = lib.attrValues set;
+  in (if (values != [ ]) then (lib.head values) else null);
 }
