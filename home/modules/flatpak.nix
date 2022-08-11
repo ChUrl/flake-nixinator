@@ -7,8 +7,6 @@ with mylib.modules;
 #       It is important that every flatpak interaction is handled through this module
 #       to prevent that anything is removed by a module although it is required by another one
 
-# TODO: Also need a library function to enable and concatenate different flatpak overrides (also global overrides)
-
 let
   cfg = config.modules.flatpak;
 in {
@@ -78,11 +76,12 @@ in {
       {
         ".local/share/flatpak/overrides/global".text = let
           default_overrides =  [
+            "/nix/store:ro"
+
             # These are not necessary
             # Make sure flatpaks are allowed to use the icons/fonts that are symlinked by icon/font fix
             # "/run/current-system/sw/share/X11/fonts:ro"
             # "/run/current-system/sw/share/icons:ro"
-            "/nix/store:ro"
           ];
 
           all_overrides = builtins.concatLists [ default_overrides cfg.extraGlobalOverride ];

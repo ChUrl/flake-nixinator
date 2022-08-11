@@ -18,6 +18,8 @@ in {
   # This module defines only the "emacs" option and suboptions "enable" and "doom"
   options.modules.emacs = {
     enable = mkEnableOpt "Emacs module";
+
+    # TODO: Use an enum for this not individual options
     nativeComp = mkBoolOpt false "Use Emacs 28.x branch with native comp support";
     pgtkNativeComp = mkBoolOpt false "Use Emacs 29.x branch with native comp and pure gtk support";
 

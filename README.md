@@ -8,7 +8,7 @@ I heavily borrowed from:
 - [hlissner](https://github.com/hlissner/dotfiles)
 - [misterio77](https://github.com/Misterio77/nix-config)
 
-# ./nixos
+# ./system
 
 This folder contains all the system configurations.
 
@@ -27,3 +27,10 @@ This folder contains all the home-manager configurations.
 
 When creating a NixOS configuration inside the ``NixFlake/flake.nix`` the common configuration is imported.
 Because the hostname is propagated to the common configuration, it can import the host-specific config by itself.
+
+# Notes
+
+- I didn't organize the modules in folders with a ``default.nix`` for every module as this reduces readability
+- Modules are split into system modules and home modules
+- The ``NixFlake/overlays/default.nix`` imports all the derivations
+- ``NixFlake/config`` contains all the dotfiles that are symlinked by HomeManager
