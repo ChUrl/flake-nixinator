@@ -102,16 +102,6 @@ in rec {
   # NOTE: I don't think I need this anymore as all fonts are installed through the system config but let's keep this just in case
   fonts.fontconfig.enable = true; # Also updates the font-cache
 
-  # TODO: Move to gaming modules
-  home.file.".local/share/flatpak/overrides/com.valvesoftware.Steam".text = ''
-    [Context]
-    filesystems=${home.homeDirectory}/GameSSD;${home.homeDirectory}/GameHDD
-  '';
-  home.file.".local/share/flatpak/overrides/com.usebottles.bottles".text = ''
-    [Context]
-    filesystems=${home.homeDirectory}/.var/app/com.valvesoftware.Steam/data/Steam;${home.homeDirectory}/Downloads;${home.homeDirectory}/GameSSD;${home.homeDirectory}/GameHDD
-  '';
-
   # Generate a list of installed user packages in ~/.local/share/current-user-packages
   home.file.".local/share/current-user-packages".text = let
     packages = builtins.map (p: "${p.name}") home.packages;

@@ -12,8 +12,6 @@ with mylib.modules;
 let
   cfg = config.modules.flatpak;
 in {
-  imports = [ ];
-
   options.modules.flatpak = {
     enable = mkEnableOpt "Flatpak module";
     fontFix = mkBoolOpt true "Link fonts to ~/.local/share/fonts so flatpak apps can find them";
@@ -42,6 +40,22 @@ in {
       default = [ ];
       description = "Flatpaks that will be removed additionally (use with extraInstall)";
     };
+
+    extraOverride = mkOption {
+      type = types.listOf types.attrs;
+      default = [ ];
+      # TODO: Change the format to { "com.usebottles.bottles" = [ "~/Documents" "~/Downloads" ]; }
+      # TODO: This requires that the lists of the same key are being merged recursively, mkMerge would override the key
+      example = [ { "com.usebottles.bottles" = "\${config.home.homeDirectory}/Documents"; } ];
+      description = "Additional overrides";
+    };
+
+    extraGlobalOverride = mkOption {
+      type = types.listOf types.str;
+      default = [ ];
+      example = [ "\${config.home.homeDirectory}/Documents:ro" ];
+      description = "Additional global overrides";
+    };
   };
 
   config = mkIf cfg.enable {
@@ -57,6 +71,30 @@ in {
     #   "/var/lib/flatpak/exports/share"
     #   "${home.homeDirectory}/.local/share/flatpak/exports/share"
     # ];
+
+    # TODO: Currently it is not possible to define overrides for the same flatpak from different places
+    # TODO: Also only filesystems overrides are applied
+    home.file = mkMerge ([
+      {
+        ".local/share/flatpak/overrides/global".text = let
+          default_overrides =  [
+            # These are not necessary
+            # Make sure flatpaks are allowed to use the icons/fonts that are symlinked by icon/font fix
+            # "/run/current-system/sw/share/X11/fonts:ro"
+            # "/run/current-system/sw/share/icons:ro"
+            "/nix/store:ro"
+          ];
+
+          all_overrides = builtins.concatLists [ default_overrides cfg.extraGlobalOverride ];
+
+          str_overrides = builtins.concatStringsSep ";" all_overrides;
+        in "[Context]\nfilesystems=${str_overrides}";
+      }
+    ] ++ (map (set: let
+      name = attrName set;
+      value = attrValue set;
+    in (optionalAttrs (name != null) { ".local/share/flatpak/overrides/${name}".text = "[Context]\nfilesystems=${value}"; }))
+    cfg.extraOverride));
 
     home.activation = mkMerge [
       # We link like this to be able to address the absolute location, also the fonts won't get copied to store
@@ -136,12 +174,5 @@ in {
         '';
       })
     ];
-
-    # TODO: Add option for extra overrides and concatenate this string together
-    # Allow access to linked fonts/icons
-    home.file.".local/share/flatpak/overrides/global".text = ''
-      [Context]
-      filesystems=/run/current-system/sw/share/X11/fonts:ro;/run/current-system/sw/share/icons:ro;/nix/store:ro
-    '';
   };
 }
