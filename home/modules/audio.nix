@@ -24,7 +24,7 @@ in {
 
     # Instruments/Plugins
     vcvrack.enable = mkEnableOpt "VCV-Rack (Eurorack simulator)";
-#    vital.enable = mkEnableOpt "Vital (Wavetable synthesizer)";
+    # vital.enable = mkEnableOpt "Vital (Wavetable synthesizer)"; # Replaced by distrho
     distrho.enable = mkEnableOpt "Distrho (Linux VST ports)";
 
     # Misc
@@ -95,7 +95,7 @@ in {
       (optionals cfg.noisesuppression.noisetorch.enable [ noisetorch ])
 
       (optionals cfg.vcvrack.enable [ vcv-rack ])
-#      (optionals cfg.vital.enable [ vital-synth ])
+      # (optionals cfg.vital.enable [ vital-synth ]) # Replaced by distrho
       (optionals cfg.distrho.enable [ distrho ])
     ];
 
@@ -159,14 +159,15 @@ in {
         (mkUnlink "${config.home.homeDirectory}/.config/carla");
       })
 
-#      (mkIf cfg.vital.enable {
-#        linkVitalVST3 = hm.dag.entryAfter [ "writeBoundary" ]
-#        (mkLink "${pkgs.vital-synth}/lib/vst3/Vital.vst3" "${config.home.homeDirectory}/.vst3/Vital.vst3");
-#      })
-#      (mkElse cfg.vital.enable {
-#        unlinkVitalVST3 = hm.dag.entryAfter [ "writeBoundary" ]
-#        (mkUnlink "${config.home.homeDirectory}/.vst3/Vital.vst3");
-#      })
+      # Replaced by distrho
+      # (mkIf cfg.vital.enable {
+      #   linkVitalVST3 = hm.dag.entryAfter [ "writeBoundary" ]
+      #   (mkLink "${pkgs.vital-synth}/lib/vst3/Vital.vst3" "${config.home.homeDirectory}/.vst3/Vital.vst3");
+      # })
+      # (mkElse cfg.vital.enable {
+      #   unlinkVitalVST3 = hm.dag.entryAfter [ "writeBoundary" ]
+      #   (mkUnlink "${config.home.homeDirectory}/.vst3/Vital.vst3");
+      # })
 
       (mkIf cfg.distrho.enable {
         linkDistrhoLV2 = hm.dag.entryAfter [ "writeBoundary" ]

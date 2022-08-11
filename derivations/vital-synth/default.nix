@@ -1,3 +1,5 @@
+# Has a problem with vertically offset UI, replaced by distrho for now but kept as an example
+
 # Damn I hate this style
 { lib
 , stdenv
@@ -61,8 +63,6 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     alsa-lib freetype gcc.cc.lib gcc.cc glib glibc curlWithGnuTls libGL libglvnd libsecret
   ];
-
-  # TODO: Somehow/somehwere (in HomeManager?) we need to make a link to ~/.vst3
 
   # Copy the contents of the .deb package to the $out directory that nix creates for built derivations
   # Very simple as the vital .deb has a very basic format (only [ usr/bin usr/lib usr/share ])
