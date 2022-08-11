@@ -62,6 +62,15 @@ in {
     # NOTE: Important to not disable this option if another module enables it
     modules.flatpak.bottles.enable = mkIf cfg.bottles.enable true;
 
+    modules.flatpak.extraOverride = [
+      (optionalAttrs cfg.bottles.enable {
+        "com.usebottles.bottles" = "${config.home.homeDirectory}/.var/app/com.valvesoftware.Steam/data/Steam;${config.home.homeDirectory}/GameSSD;${config.home.homeDirectory}/GameHDD";
+      })
+      (optionalAttrs cfg.steam.enable {
+        "com.valvesoftware.Steam" = "${config.home.homeDirectory}/GameSSD;${config.home.homeDirectory}/GameHDD";
+      })
+    ];
+
     modules.flatpak.extraInstall = builtins.concatLists [
       (optionals cfg.steam.enable [ "com.valvesoftware.Steam" ])
       (optionals (cfg.steam.enable && cfg.steam.protonGE) [ "com.valvesoftware.Steam.CompatibilityTool.Proton-GE" ])
