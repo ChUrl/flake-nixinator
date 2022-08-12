@@ -24,6 +24,11 @@
 
     firefox-gnome-theme.url = "github:rafaelmardojai/firefox-gnome-theme";
     firefox-gnome-theme.flake = false;
+
+    adwaita-for-steam.url = "github:tkashkin/Adwaita-for-Steam";
+    adwaita-for-steam.flake = false;
+
+    nixos-conf-editor.url = "github:vlinkz/nixos-conf-editor";
   };
 
   # Outputs is a function that takes the inputs as arguments.

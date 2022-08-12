@@ -202,6 +202,7 @@
       # jetbrains-mono
       # etBook  
       # overpass
+      cantarell-fonts
     ];
 
     # TODO: Check if this works

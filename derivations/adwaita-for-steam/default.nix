@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   installPhase = ''
     mkdir -p $out/share/adwaita-for-steam
-    cp -r Adwaita/* $out/share/adwaita-for-steam
+    cp -r Adwaita $out/share/adwaita-for-steam/
   '';
 
   meta = with lib; {

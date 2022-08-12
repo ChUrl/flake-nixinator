@@ -1,5 +1,21 @@
 {
   "nodes": {
+    "adwaita-for-steam": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1660168151,
+        "narHash": "sha256-EOnnejn/O0wCF3wzk2yc/MH14m4U9BIfQQKxyu0UEH8=",
+        "owner": "tkashkin",
+        "repo": "Adwaita-for-Steam",
+        "rev": "9b9c5a036fe262ee2816abcbdeb49c4c1dcc0e8c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "tkashkin",
+        "repo": "Adwaita-for-Steam",
+        "type": "github"
+      }
+    },
     "devshell": {
       "inputs": {
         "flake-utils": "flake-utils",
@@ -138,6 +154,25 @@
         "type": "github"
       }
     },
+    "nixos-conf-editor": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_4",
+        "utils": "utils_2"
+      },
+      "locked": {
+        "lastModified": 1659222042,
+        "narHash": "sha256-esyfFl72t5k2XNq6DCRgfIC6TYgIMyGKla9GaEEN0Oo=",
+        "owner": "vlinkz",
+        "repo": "nixos-conf-editor",
+        "rev": "b649b637beb4bc17159a4b7ca949d6703b6bf7cb",
+        "type": "github"
+      },
+      "original": {
+        "owner": "vlinkz",
+        "repo": "nixos-conf-editor",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1643381941,
@@ -184,6 +219,22 @@
     },
     "nixpkgs_4": {
       "locked": {
+        "lastModified": 1659077768,
+        "narHash": "sha256-P0XIHBVty6WIuIrk2DZNvLcYev9956y1prT4zL212H8=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "2a93ea177c3d7700b934bf95adfe00c435f696b8",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_5": {
+      "locked": {
         "lastModified": 1659981942,
         "narHash": "sha256-uCFiP/B/NXOWzhN6TKfMbSxtVMk1bVnCrnJRjCF6RmU=",
         "owner": "nixos",
@@ -215,13 +266,15 @@
     },
     "root": {
       "inputs": {
+        "adwaita-for-steam": "adwaita-for-steam",
         "devshell": "devshell",
         "emacs-overlay": "emacs-overlay",
         "firefox-gnome-theme": "firefox-gnome-theme",
         "hardware": "hardware",
         "home-manager": "home-manager",
         "musnix": "musnix",
-        "nixpkgs": "nixpkgs_4",
+        "nixos-conf-editor": "nixos-conf-editor",
+        "nixpkgs": "nixpkgs_5",
         "nur": "nur"
       }
     },
@@ -232,6 +285,21 @@
         "owner": "numtide",
         "repo": "flake-utils",
         "rev": "1ed9fb1935d260de5fe1c2f7ee0ebaae17ed2fa1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "utils_2": {
+      "locked": {
+        "lastModified": 1656928814,
+        "narHash": "sha256-RIFfgBuKz6Hp89yRr7+NR5tzIAbn52h8vT6vXkYjZoM=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "7e2a3b3dfd9af950a856d66b0a7d01e3c18aa249",
         "type": "github"
       },
       "original": {

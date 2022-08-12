@@ -41,6 +41,7 @@ rec {
         enable = true;
         protonGE = true;
         gamescope = true;
+        adwaita = true;
       };
     };
   };
