@@ -1,9 +1,9 @@
-{ nixpkgs, ... }:
+{ inputs, nixpkgs, ... }:
 
 let
   # Taken from https://github.com/Misterio77/nix-config/blob/main/overlay/default.nix
   # By specifying this we can just add our derivation to derivations/default.nix and it will land here
-  additions = final: prev: import ../derivations { pkgs = final; };
+  additions = final: prev: import ../derivations { inherit inputs; pkgs = final; };
 
 in
   # TODO: I have absolutely no clue what happens here lol

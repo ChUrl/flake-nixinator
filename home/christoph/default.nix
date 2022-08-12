@@ -42,6 +42,7 @@ in rec {
       vaapi = true;
       disableTabBar = true;
       defaultBookmarks = true;
+      gnomeTheme = true;
     };
 
     fish.enable = true;
@@ -136,6 +137,7 @@ in rec {
       # Enable wayland
       XDG_SESSION_TYPE = "wayland";
       QT_QPA_PLATFORM = "wayland";
+      NIXOS_OZONE_WL = "1";
 
       # Don't use system wine, use bottles
       # WINEESYNC = 1;
