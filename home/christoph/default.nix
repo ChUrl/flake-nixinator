@@ -175,7 +175,6 @@ in rec {
     signal-desktop
     protonmail-bridge
     protonvpn-cli
-
     cyberdrop-dl
 
     # Tools
@@ -186,6 +185,7 @@ in rec {
     # libreoffice-fresh
     jabref # manage bibilography
     # wike # Wikipedia viewer
+    inputs.nixos-conf-editor.packages."x86_64-linux".nixos-conf-editor
 
     # Media
     wacomtablet
