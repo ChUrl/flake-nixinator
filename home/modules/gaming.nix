@@ -23,6 +23,7 @@ in {
       enable = mkEnableOpt "Steam (flatpak)";
       protonGE = mkBoolOpt false "Enable Steam Proton GloriousEggroll runner (flatpak)";
       gamescope = mkBoolOpt false "Enable the gamescope micro compositor (flatpak)";
+      adwaita = mkBoolOpt false "Enable the adwaita-for-steam skin";
     };
   };
 
@@ -46,8 +47,39 @@ in {
     home.packages = with pkgs; builtins.concatLists [
       [ gamemode ] # gamemode should be always enabled (could also be enabled by audio module)
 
-      # TODO: Extra config (extensions etc), maybe standalone chromium module
+      # TODO: Extra config (extensions etc) in chromium module
       (optionals cfg.discordChromium.enable [ chromium ])
+
+      (optionals cfg.steam.adwaita [ adwaita-for-steam ])
+    ];
+
+    # This doesn't work because steam doesn't detect symlinked skins, files have to be copied
+    # home.file = mkMerge [
+    #   (optionalAttrs cfg.steam.adwaita {
+    #     "adwaita-for-steam" = {
+    #       source = "${pkgs.adwaita-for-steam}/share/adwaita-for-steam/Adwaita";
+    #       target = ".var/app/com.valvesoftware.Steam/.local/share/Steam/skins/Adwaita";
+    #       recursive = false;
+    #     };
+    #   })
+    # ];
+    home.activation = mkMerge [
+      (optionalAttrs cfg.steam.adwaita {
+        copySteamAdwaitaSkin = hm.dag.entryAfter [ "writeBoundary" ] ''
+          if [ ! -d ${config.home.homeDirectory}/.var/app/com.valvesoftware.Steam/.local/share/Steam/skins ]; then
+            mkdir ${config.home.homeDirectory}/.var/app/com.valvesoftware.Steam/.local/share/Steam/skins
+          fi
+
+          cp -r ${pkgs.adwaita-for-steam}/share/adwaita-for-steam/Adwaita ${config.home.homeDirectory}/.var/app/com.valvesoftware.Steam/.local/share/Steam/skins/Adwaita
+          chmod -R +w ${config.home.homeDirectory}/.var/app/com.valvesoftware.Steam/.local/share/Steam/skins/Adwaita
+        '';
+      })
+
+      (optionalAttrs (! cfg.steam.adwaita) {
+        deleteSteamAdwaitaSkin = hm.dag.entryAfter [ "writeBoundary" ] ''
+          rm -rf ${config.home.homeDirectory}/.var/app/com.valvesoftware.Steam/.local/share/Steam/skins/Adwaita
+        '';
+      })
     ];
 
     xdg.desktopEntries.discordChromium = mkIf cfg.discordChromium.enable {
