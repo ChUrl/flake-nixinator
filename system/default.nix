@@ -32,18 +32,11 @@
     settings.auto-optimise-store = true;
     optimise.automatic = true;
 
-    # TODO: Understand this
     # This will add your inputs as registries, making operations with them (such
     # as nix shell nixpkgs#name) consistent with your flake inputs.
+    # (Registry contains flakes)
     registry = lib.mapAttrs' (n: v: lib.nameValuePair n { flake = v; }) inputs;
   };
-
-  # TODO: Understand that
-  # Will activate home-manager profiles for each user upon login
-  # This is useful when using ephemeral installations
-  environment.loginShellInit = ''
-    [ -d "$HOME/.nix-profile" ] || /nix/var/nix/profiles/per-user/$USER/home-manager/activate &> /dev/null
-  '';
 
   # Bootloader/Kernel stuff
   boot = {
