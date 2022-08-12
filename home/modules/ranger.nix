@@ -12,8 +12,6 @@ in {
     preview = mkBoolOpt false "Enable Ranger image preview";
   };
 
-  # TODO: Ranger configuration
-
   config = mkIf cfg.enable {
     home.packages = with pkgs; lib.concatLists [
       [
@@ -27,6 +25,7 @@ in {
         exiftool
         mediainfo
       ]
+
       (optionals cfg.preview [
         # ueberzug # Only X11
         python310Packages.pillow
@@ -55,11 +54,9 @@ in {
 
           # The settings { column_ratios = "1,1"; } get turned into { column_ratios = "set column_ratios = 1,1"; }
           settings_in_values = mapAttrs (name: value: concatStringsSep " " ["set" name value]) settings;
-
-          # Results in [ "set column_rations = 1,1" ]
-          settings_list = attrValues settings_in_values;
-
+          settings_list = attrValues settings_in_values; # Results in [ "set column_rations = 1,1" ]
           settings_str = concatStringsSep "\n" settings_list;
+
         in settings_str;
       }
 

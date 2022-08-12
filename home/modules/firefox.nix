@@ -129,7 +129,6 @@ in {
           ];
 
           settings = mkMerge [
-            # TODO: Fix vaapi
             (optionalAttrs cfg.vaapi {
               # Firefox wayland hardware video acceleration
               # https://github.com/elFarto/nvidia-vaapi-driver/#firefox=
