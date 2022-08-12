@@ -1,5 +1,7 @@
 # Has a problem with vertically offset UI, replaced by distrho for now but kept as an example
 
+# TODO: Flake derivation
+
 # Damn I hate this style
 { lib
 , stdenv
