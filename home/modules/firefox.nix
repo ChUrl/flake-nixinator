@@ -42,6 +42,15 @@ in {
       })
     ];
 
+    xdg.desktopEntries.firefox-private = {
+      name = "Firefox (Incognito)";
+      genericName = "Private web browser";
+      icon = "firefox";
+      exec = "firefox --private-window %U";
+      terminal = false;
+      categories = [ "Network" "WebBrowser" ];
+    };
+
     programs.firefox = {
       enable = true;
 
