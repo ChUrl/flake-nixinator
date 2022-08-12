@@ -9,7 +9,7 @@
 # Because no imports/options/config is defined explicitly, everything is treated as config
 # { inputs, lib, ... }: { ... } gets turned into { inputs, lib, ... }: { config = { ... }; } implicitly
 let
-  cfgnv = config.modules.neovim;
+
 in rec {
 
   # Every module is a nix expression, specifically a function { inputs, lib, ... }: { ... }
@@ -78,12 +78,20 @@ in rec {
       };
     };
 
+    neovim = {
+      enable = true;
+      alias = true;
+    };
+
     nextcloud = {
       enable = true;
       autostart = true;
     };
 
-    ranger.enable = true;
+    ranger = {
+      enable = true;
+      preview = true;
+    };
   };
 
   # TODO: Gnome terminal config
@@ -121,8 +129,6 @@ in rec {
 
     # Environment variables
     sessionVariables = {
-      EDITOR = (if cfgnv.enable then "nvim" else "nano");
-      VISUAL = (if cfgnv.enable then "nvim" else "nano");
       LANG = "en_US.UTF-8";
 
       DOCKER_BUILDKIT = 1;
