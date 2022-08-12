@@ -165,6 +165,7 @@ in rec {
     httpie
     ripgrep
     nvd # nix rebuild diff
+    du-dust
     neofetch # Easily see interesting package versions/kernel
     lazygit
     yt-dlp
