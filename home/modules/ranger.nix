@@ -45,7 +45,7 @@ in {
             vcs_aware = "true";
             preview_images_method = "kitty"; # TODO: Only if kitty enabled
             unicode_ellipsis = "true";
-            draw_borders = "outline"; # separators/outline/both/none
+            draw_borders = (if cfg.preview then "none" else "both"); # doesn't work well with preview
             line_numbers = "relative";
             preview_images = (if cfg.preview then "true" else "false");
             use_preview_script = (if cfg.preview then "true" else "false");
