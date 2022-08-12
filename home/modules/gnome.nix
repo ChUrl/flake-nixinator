@@ -47,6 +47,8 @@ in {
       })
     ];
 
+    # TODO: GSettings overrides (home-manager dconf.settings)
+
     home.packages = with pkgs; builtins.concatLists [
       [
         # gnome.gnome-session # Allow to start gnome from tty (sadly this is not usable, many things don't work)
@@ -58,6 +60,7 @@ in {
         gnome.simple-scan
         gnome.gnome-sound-recorder
         gnome.file-roller # archive manager
+        gnome.dconf-editor
         # gnome-usage # Alternative system performance monitor (gnome.gnome-system-monitor is the preinstalled one)
         # gnome-secrets # Alternative keepass database viewer
         gnome-firmware
