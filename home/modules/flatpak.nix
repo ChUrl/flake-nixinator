@@ -72,28 +72,35 @@ in {
 
     # TODO: Currently it is not possible to define overrides for the same flatpak from different places
     # TODO: Also only filesystems overrides are applied
-    home.file = mkMerge ([
+    home.file = let
+      # Specific overrides
+
+      # This generates the set { "<filename>" = "<overrides>"; }
+      concat_override = name: value:
+      (optionalAttrs (name != null) { ".local/share/flatpak/overrides/${name}".text = "[Context]\nfilesystems=${value}"; });
+
+      # This is a list of sets: [ { "<filename>" = "<overrides>"; } { "<filename>" = "<overrides>"; } ]
+      extra_overrides = (map (set: concat_override (attrName set) (attrValue set)) cfg.extraOverride);
+
+      # Global overrides
+
+      global_default_overrides =  [
+        "/nix/store:ro"
+
+        # These are not necessary
+        # Make sure flatpaks are allowed to use the icons/fonts that are symlinked by icon/font fix
+        # "/run/current-system/sw/share/X11/fonts:ro"
+        # "/run/current-system/sw/share/icons:ro"
+      ];
+
+      global_overrides = builtins.concatLists [ global_default_overrides cfg.extraGlobalOverride ];
+
+      str_global_overrides = builtins.concatStringsSep ";" global_overrides;
+    in mkMerge ([
       {
-        ".local/share/flatpak/overrides/global".text = let
-          default_overrides =  [
-            "/nix/store:ro"
-
-            # These are not necessary
-            # Make sure flatpaks are allowed to use the icons/fonts that are symlinked by icon/font fix
-            # "/run/current-system/sw/share/X11/fonts:ro"
-            # "/run/current-system/sw/share/icons:ro"
-          ];
-
-          all_overrides = builtins.concatLists [ default_overrides cfg.extraGlobalOverride ];
-
-          str_overrides = builtins.concatStringsSep ";" all_overrides;
-        in "[Context]\nfilesystems=${str_overrides}";
+        ".local/share/flatpak/overrides/global".text = "[Context]\nfilesystems=${str_global_overrides}";
       }
-    ] ++ (map (set: let
-      name = attrName set;
-      value = attrValue set;
-    in (optionalAttrs (name != null) { ".local/share/flatpak/overrides/${name}".text = "[Context]\nfilesystems=${value}"; }))
-    cfg.extraOverride));
+    ] ++ extra_overrides);
 
     home.activation = mkMerge [
       # We link like this to be able to address the absolute location, also the fonts won't get copied to store
