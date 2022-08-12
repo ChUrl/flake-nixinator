@@ -167,6 +167,8 @@ in rec {
     protonmail-bridge
     protonvpn-cli
 
+    cyberdrop-dl
+
     # Tools
     # calibre
     # virt-manager # Let's try gnome-boxes while we're at it
