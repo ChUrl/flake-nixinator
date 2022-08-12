@@ -21,6 +21,9 @@
     musnix.url = "github:musnix/musnix";
     devshell.url = "github:numtide/devshell";
     # nixvim.url = "github:pta2002/nixvim";
+
+    firefox-gnome-theme.url = "github:rafaelmardojai/firefox-gnome-theme";
+    firefox-gnome-theme.flake = false;
   };
 
   # Outputs is a function that takes the inputs as arguments.
@@ -43,7 +46,7 @@
           inputs.emacs-overlay.overlay
 
           # All my own overlays
-          (import ./overlays { inherit nixpkgs; })
+          (import ./overlays { inherit nixpkgs inputs; })
         ];
       };
 

@@ -1,4 +1,4 @@
-{ config, nixosConfig, lib, mylib, pkgs, ... }:
+{ inputs, config, nixosConfig, lib, mylib, pkgs, ... }:
 
 with lib;
 with mylib.modules;
@@ -13,6 +13,7 @@ in {
     vaapi = mkBoolOpt false "Enable firefox vaapi support";
     disableTabBar = mkBoolOpt false "Disable the firefox tab bar (for TST)";
     defaultBookmarks = mkBoolOpt false "Preset standard bookmarks and folders";
+    gnomeTheme = mkBoolOpt false "Use Firefox gnome theme (rafaelmardojai)";
   };
 
   config = mkIf cfg.enable {
@@ -24,6 +25,8 @@ in {
         nvidia-vaapi-driver
         vulkan-tools
       ])
+
+      (optionals cfg.gnomeTheme [ firefox-gnome-theme ])
     ];
 
     home.sessionVariables = mkMerge [
@@ -116,14 +119,17 @@ in {
           id = 0; # 0 is default profile
 
           userChrome = concatStringsSep "\n" [
+            (optionalString cfg.gnomeTheme ''
+              @import "${pkgs.firefox-gnome-theme}/share/firefox-gnome-theme/gnome-theme.css";
+            '')
+
             (optionalString cfg.disableTabBar ''
-              #TabsToolbar {
-                display: none;
-              }
-              '')
+              #TabsToolbar { display: none; }
+            '')
           ];
 
           settings = mkMerge [
+            # TODO: Fix vaapi
             (optionalAttrs cfg.vaapi {
               # Firefox wayland hardware video acceleration
               # https://github.com/elFarto/nvidia-vaapi-driver/#firefox=
@@ -134,12 +140,17 @@ in {
               "media.rdd-ffmpeg.enabled" = true;
               "media.av1.enabled" = false;
               "gfx.x11-egl.force-enabled" = true;
+              "media.hardware-video-decoding.force-enabled" = true;
+              "layers.acceleration.force-enabled" = true;
             })
 
+            # TODO: Check about:config and add missing stuff
             {
               "app.update.auto" = false;
               # "browser.startup.homepage" = "https://lobste.rs";
               "identity.fxaccounts.account.device.name" = nixosConfig.networking.hostName;
+              # Do not interfere with spotify
+              "media.hardwaremediakeys.enabled" = false;
 
               # Enable ETP for decent security (makes firefox containers and many
               # common security/privacy add-ons redundant).

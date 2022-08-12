@@ -38,6 +38,22 @@
         "type": "github"
       }
     },
+    "firefox-gnome-theme": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1659056973,
+        "narHash": "sha256-Vxxxwi2XV3oys2xbjkt2RSHu0mPeEKX0x4ksI1ANVec=",
+        "owner": "rafaelmardojai",
+        "repo": "firefox-gnome-theme",
+        "rev": "73c929f3b1583ef0053bda6a0353b17ade3b0c39",
+        "type": "github"
+      },
+      "original": {
+        "owner": "rafaelmardojai",
+        "repo": "firefox-gnome-theme",
+        "type": "github"
+      }
+    },
     "flake-utils": {
       "locked": {
         "lastModified": 1642700792,
@@ -201,6 +217,7 @@
       "inputs": {
         "devshell": "devshell",
         "emacs-overlay": "emacs-overlay",
+        "firefox-gnome-theme": "firefox-gnome-theme",
         "hardware": "hardware",
         "home-manager": "home-manager",
         "musnix": "musnix",
