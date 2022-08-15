@@ -66,6 +66,9 @@ in rec {
         papirusIcons = true;
         numixCursor = true;
       };
+
+      settings = {
+      };
     };
 
     kitty.enable = true;
@@ -74,6 +77,11 @@ in rec {
       enable = true;
 
       keepass = {
+        enable = true;
+        autostart = true;
+      };
+
+      protonmail = {
         enable = true;
         autostart = true;
       };
@@ -151,6 +159,8 @@ in rec {
     stateVersion = "22.05";
   };
 
+  # TODO: Check what packages are installed here and in modules and check if there is already a service/hm-module for it
+  # TODO: If so use this or adapt the config from there (example gnome.sushi is also added to dbus packages in services.sushi)
   # Add stuff for your user as you see fit:
   home.packages = with pkgs; [
     # CLI Tools
@@ -173,7 +183,6 @@ in rec {
     yt-dlp
 
     signal-desktop
-    protonmail-bridge
     protonvpn-cli
     cyberdrop-dl
 
