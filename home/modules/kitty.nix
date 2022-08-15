@@ -5,7 +5,7 @@ with mylib.modules;
 
 let
   cfg = config.modules.kitty;
-  cfgnv = config.modules.neovim;
+  # cfgnv = config.modules.neovim;
 in {
 
   options.modules.kitty = {
@@ -13,8 +13,6 @@ in {
   };
 
   config = mkIf cfg.enable {
-    # TODO: Copy config from Arch dots, also move the entire config folder (to allow ephemereal configs)
-    # TODO: Light/Dark theme option
     programs.kitty = {
       enable = true;
       font = {
@@ -23,8 +21,9 @@ in {
         size = 12;
       };
 
+      # TODO: Configure
       settings = {
-        editor = (if cfgnv.enable then "nvim" else "nano");
+        editor = "nvim";
         scrollback_lines = 10000;
         window_padding_width = 10;
         # hide_window_decorations = "yes";

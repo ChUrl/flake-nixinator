@@ -9,10 +9,16 @@ in {
 
   options.modules.neovim = {
     enable = mkEnableOpt "NeoVim";
-    alias = mkBoolOpt "Link nvim to vim/vi";
+    alias = mkBoolOpt false "Link nvim to vim/vi";
   };
 
   config = mkIf cfg.enable {
+    # TODO: Configure by enabled editor
+    home.sessionVariables = {
+      EDITOR = "nvim";
+      VISUAL = "nvim";
+    };
+
     programs.neovim = {
       enable = true;
 
@@ -42,8 +48,9 @@ in {
 
       plugins = with pkgs.vimPlugins; [
         # vim-nix
+        # YouCompleteMe
         surround-nvim
-        # lightline-vim
+
         {
           plugin = lualine-nvim;
           config = ''
@@ -52,10 +59,8 @@ in {
             EOF
           '';
         }
-        # vim-gitgutter
-        # YouCompleteMe
-        {
 
+        {
           plugin = nvim-autopairs;
           config = ''
             lua << EOF
@@ -63,9 +68,9 @@ in {
             EOF
           '';
         }
+
         {
-          plugin = (nvim-treesitter.withPlugins
-            (plugins: pkgs.tree-sitter.allGrammars));
+          plugin = (nvim-treesitter.withPlugins (plugins: pkgs.tree-sitter.allGrammars));
           config = ''
             lua << EOF
             require('nvim-treesitter.configs').setup {
