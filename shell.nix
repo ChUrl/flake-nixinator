@@ -34,6 +34,11 @@ pkgs.devshell.mkShell {
       help = "Compare current system to ./result";
       command = "nvd diff /run/current-system result";
     }
+    {
+      name = "util-data-dirs";
+      help = "List XDG_DATA_DIRS in a readable format";
+      command = ''echo $XDG_DATA_DIRS | sed "s/:/\n/g" | sort -u'';
+    }
 
     # Flake
     {
@@ -45,6 +50,11 @@ pkgs.devshell.mkShell {
       name = "flake-check";
       help = "Validate the flake";
       command = "nix flake check";
+    }
+    {
+      name = "flake-trace";
+      help = "Validate the flake with stack trace";
+      command = "nix flake check --show-trace";
     }
 
     # Nix Store
