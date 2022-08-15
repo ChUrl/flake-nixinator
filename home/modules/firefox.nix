@@ -61,8 +61,9 @@ in {
       package = pkgs.wrapFirefox pkgs.firefox-unwrapped {
         forceWayland = cfg.wayland;
 
-        # About policies:
-        # https://github.com/mozilla/policy-templates#enterprisepoliciesenabled
+        # About policies: https://github.com/mozilla/policy-templates#enterprisepoliciesenabled
+        # NOTE: Some of these settings are duplicated in the about:config settings so they are
+        #       not strictly necessary
         extraPolicies = {
           # TODO: Make library function to allow easy bookmark creation and add my default bookmarks/folders
           Bookmarks = (optionalAttrs cfg.defaultBookmarks { });
@@ -132,174 +133,128 @@ in {
             (optionalAttrs cfg.vaapi {
               # Firefox wayland hardware video acceleration
               # https://github.com/elFarto/nvidia-vaapi-driver/#firefox=
-              "media.ffmpeg.vaapi.enabled" = true;
-              "widget.wayland-dmabuf-vaapi.enabled" = true;
-              "widget.dmabuf.force-enabled" = true;
+              "gfx.canvas.accelerated" = true;
               "gfx.webrender.enabled" = true; # Should be set on gnome anyway
-              "media.rdd-ffmpeg.enabled" = true;
-              "media.av1.enabled" = false;
               "gfx.x11-egl.force-enabled" = true;
-              "media.hardware-video-decoding.force-enabled" = true;
               "layers.acceleration.force-enabled" = true;
+              "media.av1.enabled" = false;
+              "media.ffmpeg.vaapi.enabled" = true;
+              "media.hardware-video-decoding.force-enabled" = true;
+              "media.rdd-ffmpeg.enabled" = true;
+              "widget.dmabuf.force-enabled" = true;
+              "widget.wayland-dmabuf-vaapi.enabled" = true;
             })
 
-            # TODO: Check about:config and add missing stuff
-            {
+            (let
+              # Note: This has to be updated when something is changed inside firefox...
+              customizationState = ''{"placements":{"widget-overflow-fixed-list":["jid1-mnnxcxisbpnsxq_jetpack-browser-action","_74145f27-f039-47ce-a470-a662b129930a_-browser-action","_b86e4813-687a-43e6-ab65-0bde4ab75758_-browser-action","cookieautodelete_kennydo_com-browser-action","skipredirect_sblask-browser-action","_ublacklist-browser-action","umatrix_raymondhill_net-browser-action","_2e5ff8c8-32fe-46d0-9fc8-6b8986621f3c_-browser-action","_287dcf75-bec6-4eec-b4f6-71948a2eea29_-browser-action","_d133e097-46d9-4ecc-9903-fa6a722a6e0e_-browser-action","_f209234a-76f0-4735-9920-eb62507a54cd_-browser-action","dontfuckwithpaste_raim_ist-browser-action","sponsorblocker_ajay_app-browser-action","mogultv_mogultv_org-browser-action","jid1-tsgsxbhncspbwq_jetpack-browser-action"],"nav-bar":["back-button","forward-button","downloads-button","urlbar-container","save-to-pocket-button","fxa-toolbar-menu-button","treestyletab_piro_sakura_ne_jp-browser-action","ublock0_raymondhill_net-browser-action","_531906d3-e22f-4a6c-a102-8057b88a1a63_-browser-action","tab-session-manager_sienori-browser-action","_d7742d87-e61d-4b78-b8a1-b469842139fa_-browser-action","keepassxc-browser_keepassxc_org-browser-action"],"toolbar-menubar":["menubar-items"],"TabsToolbar":["tabbrowser-tabs","new-tab-button","alltabs-button"],"PersonalToolbar":["personal-bookmarks"]},"seen":["developer-button","ublock0_raymondhill_net-browser-action","_287dcf75-bec6-4eec-b4f6-71948a2eea29_-browser-action","_2e5ff8c8-32fe-46d0-9fc8-6b8986621f3c_-browser-action","_531906d3-e22f-4a6c-a102-8057b88a1a63_-browser-action","_74145f27-f039-47ce-a470-a662b129930a_-browser-action","_b86e4813-687a-43e6-ab65-0bde4ab75758_-browser-action","_d133e097-46d9-4ecc-9903-fa6a722a6e0e_-browser-action","_d7742d87-e61d-4b78-b8a1-b469842139fa_-browser-action","_f209234a-76f0-4735-9920-eb62507a54cd_-browser-action","_ublacklist-browser-action","cookieautodelete_kennydo_com-browser-action","dontfuckwithpaste_raim_ist-browser-action","jid1-mnnxcxisbpnsxq_jetpack-browser-action","keepassxc-browser_keepassxc_org-browser-action","skipredirect_sblask-browser-action","sponsorblocker_ajay_app-browser-action","tab-session-manager_sienori-browser-action","treestyletab_piro_sakura_ne_jp-browser-action","umatrix_raymondhill_net-browser-action","mogultv_mogultv_org-browser-action","jid1-tsgsxbhncspbwq_jetpack-browser-action"],"dirtyAreaCache":["nav-bar","PersonalToolbar","toolbar-menubar","TabsToolbar","widget-overflow-fixed-list"],"currentVersion":17,"newElementCount":5}'';
+            in {
+              "accessibility.force_disabled" = 1;
+              "app.normandy.enabled" = false; # https://mozilla.github.io/normandy/
+              "app.normandy.api_url" = "";
               "app.update.auto" = false;
-              # "browser.startup.homepage" = "https://lobste.rs";
-              "identity.fxaccounts.account.device.name" = nixosConfig.networking.hostName;
-              # Do not interfere with spotify
-              "media.hardwaremediakeys.enabled" = false;
+              "app.shield.optoutstudies.enabled" = false;
 
-              # Enable ETP for decent security (makes firefox containers and many
-              # common security/privacy add-ons redundant).
+              "beacon.enabled" = false; # https://developer.mozilla.org/en-US/docs/Web/API/navigator.sendBeacon
+              "breakpad.reportURL" = "";
+              "browser.aboutConfig.showWarning" = false; # Warning when opening about:config
               "browser.contentblocking.category" = "standard";
-              "privacy.donottrackheader.enabled" = true;
-              "privacy.donottrackheader.value" = 1;
-              "privacy.purge_trackers.enabled" = true;
-              # Your customized toolbar settings are stored in
-              # 'browser.uiCustomization.state'. This tells firefox to sync it between
-              # machines. WARNING: This may not work across OSes. Since I use NixOS on
-              # all the machines I use Firefox on, this is no concern to me.
-              # "services.sync.prefs.sync.browser.uiCustomization.state" = true;
-              # Enable userContent.css and userChrome.css for our theme modules
-              "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
-              # Don't use the built-in password manager. A nixos user is more likely
-              # using an external one (you are using one, right?).
-              "signon.rememberSignons" = false;
-              # Do not check if Firefox is the default browser
-              "browser.shell.checkDefaultBrowser" = false;
-              # Disable the "new tab page" feature and show a blank tab instead
-              # https://wiki.mozilla.org/Privacy/Reviews/New_Tab
-              # https://support.mozilla.org/en-US/kb/new-tab-page-show-hide-and-customize-top-sites#w_how-do-i-turn-the-new-tab-page-off
+              "browser.crashReports.unsubmittedCheck.autoSubmit2" = false; # don't submit backlogged reports
+              "browser.disableResetPrompt" = true; # "Looks like you haven't started Firefox in a while."
+              "browser.discovery.enabled" = false;
+              "browser.fixup.alternate.enabled" = false; # http://www-archive.mozilla.org/docs/end-user/domain-guessing.html
+              "browser.formfill.enable" = false;
               "browser.newtabpage.enabled" = false;
               "browser.newtab.url" = "about:blank";
-              # Disable Activity Stream
-              # https://wiki.mozilla.org/Firefox/Activity_Stream
-              "browser.newtabpage.activity-stream.enabled" = false;
-              "browser.newtabpage.activity-stream.telemetry" = false;
-              # Disable new tab tile ads & preload
-              # http://www.thewindowsclub.com/disable-remove-ad-tiles-from-firefox
-              # http://forums.mozillazine.org/viewtopic.php?p=13876331#p13876331
-              # https://wiki.mozilla.org/Tiles/Technical_Documentation#Ping
-              # https://gecko.readthedocs.org/en/latest/browser/browser/DirectoryLinksProvider.html#browser-newtabpage-directory-source
-              # https://gecko.readthedocs.org/en/latest/browser/browser/DirectoryLinksProvider.html#browser-newtabpage-directory-ping
-              "browser.newtabpage.enhanced" = false;
-              "browser.newtabpage.introShown" = true;
               "browser.newtab.preload" = false;
-              "browser.newtabpage.directory.ping" = "";
-              "browser.newtabpage.directory.source" = "data:text/plain,{}";
-              # Reduce search engine noise in the urlbar's completion window. The
-              # shortcuts and suggestions will still work, but Firefox won't clutter
-              # its UI with reminders that they exist.
-              "browser.urlbar.suggest.searches" = true;
-              "browser.urlbar.shortcuts.bookmarks" = false;
-              "browser.urlbar.shortcuts.history" = true;
-              "browser.urlbar.shortcuts.tabs" = false;
-              "browser.urlbar.showSearchSuggestionsFirst" = false;
-              "browser.urlbar.speculativeConnect.enabled" = false;
-              # https://bugzilla.mozilla.org/1642623
-              "browser.urlbar.dnsResolveSingleWordsAfterSearch" = 0;
-              # https://blog.mozilla.org/data/2021/09/15/data-and-firefox-suggest/
-              "browser.urlbar.suggest.quicksuggest.nonsponsored" = false;
-              "browser.urlbar.suggest.quicksuggest.sponsored" = false;
-              # Show whole URL in address bar
-              "browser.urlbar.trimURLs" = false;
-              # Disable some not so useful functionality.
-              "browser.disableResetPrompt" = true; # "Looks like you haven't started Firefox in a while."
-              "browser.onboarding.enabled" = false; # "New to Firefox? Let's get started!" tour
-              "browser.aboutConfig.showWarning" = false; # Warning when opening about:config
-              "media.videocontrols.picture-in-picture.video-toggle.enabled" = true;
-              "extensions.pocket.enabled" = false;
-              "extensions.shield-recipe-client.enabled" = false;
-              "reader.parse-on-load.enabled" = false; # "reader view"
-
-              # Security-oriented defaults
-              "security.family_safety.mode" = 0;
-              # https://blog.mozilla.org/security/2016/10/18/phasing-out-sha-1-on-the-public-web/
-              "security.pki.sha1_enforcement_level" = 1;
-              # https://github.com/tlswg/tls13-spec/issues/1001
-              "security.tls.enable_0rtt_data" = false;
-              # Use Mozilla geolocation service instead of Google if given permission
-              "geo.provider.network.url" = "https://location.services.mozilla.com/v1/geolocate?key=%MOZILLA_API_KEY%";
-              "geo.provider.use_gpsd" = false;
-              # https://support.mozilla.org/en-US/kb/extension-recommendations
               "browser.newtabpage.activity-stream.asrouter.userprefs.cfr" = false;
               "browser.newtabpage.activity-stream.asrouter.userprefs.cfr.addons" = false;
               "browser.newtabpage.activity-stream.asrouter.userprefs.cfr.features" = false;
-              "extensions.htmlaboutaddons.recommendations.enabled" = false;
-              "extensions.htmlaboutaddons.discover.enabled" = false;
-              "extensions.getAddons.showPane" = false; # uses Google Analytics
-              "browser.discovery.enabled" = false;
-              # Reduce File IO / SSD abuse
-              # Otherwise, Firefox bombards the HD with writes. Not so nice for SSDs.
-              # This forces it to write every 30 minutes, rather than 15 seconds.
-              "browser.sessionstore.interval" = "1800000";
-              # Disable battery API
-              # https://developer.mozilla.org/en-US/docs/Web/API/BatteryManager
-              # https://bugzilla.mozilla.org/show_bug.cgi?id=1313580
-              "dom.battery.enabled" = false;
-              # Disable "beacon" asynchronous HTTP transfers (used for analytics)
-              # https://developer.mozilla.org/en-US/docs/Web/API/navigator.sendBeacon
-              "beacon.enabled" = false;
-              # Disable pinging URIs specified in HTML <a> ping= attributes
-              # http://kb.mozillazine.org/Browser.send_pings
-              "browser.send_pings" = false;
-              # Disable gamepad API to prevent USB device enumeration
-              # https://www.w3.org/TR/gamepad/
-              # https://trac.torproject.org/projects/tor/ticket/13023
-              "dom.gamepad.enabled" = false;
-              # Don't try to guess domain names when entering an invalid domain name in URL bar
-              # http://www-archive.mozilla.org/docs/end-user/domain-guessing.html
-              "browser.fixup.alternate.enabled" = false;
-              # Disable telemetry
-              # https://wiki.mozilla.org/Platform/Features/Telemetry
-              # https://wiki.mozilla.org/Privacy/Reviews/Telemetry
-              # https://wiki.mozilla.org/Telemetry
-              # https://www.mozilla.org/en-US/legal/privacy/firefox.html#telemetry
-              # https://support.mozilla.org/t5/Firefox-crashes/Mozilla-Crash-Reporter/ta-p/1715
-              # https://wiki.mozilla.org/Security/Reviews/Firefox6/ReviewNotes/telemetry
-              # https://gecko.readthedocs.io/en/latest/browser/experiments/experiments/manifest.html
-              # https://wiki.mozilla.org/Telemetry/Experiments
-              # https://support.mozilla.org/en-US/questions/1197144
-              # https://firefox-source-docs.mozilla.org/toolkit/components/telemetry/telemetry/internals/preferences.html#id1
-              "toolkit.telemetry.unified" = false;
-              "toolkit.telemetry.enabled" = false;
-              "toolkit.telemetry.server" = "data:,";
-              "toolkit.telemetry.archive.enabled" = false;
-              "toolkit.telemetry.coverage.opt-out" = true;
-              "toolkit.coverage.opt-out" = true;
-              "toolkit.coverage.endpoint.base" = "";
-              "experiments.supported" = false;
-              "experiments.enabled" = false;
-              "experiments.manifest.uri" = "";
+              "browser.newtabpage.activity-stream.enabled" = false; # https://wiki.mozilla.org/Firefox/Activity_Stream
+              "browser.newtabpage.activity-stream.telemetry" = false;
+              "browser.newtabpage.directory.ping" = "";
+              "browser.newtabpage.directory.source" = "data:text/plain,{}";
+              "browser.newtabpage.enhanced" = false;
+              "browser.newtabpage.introShown" = true;
+              "browser.onboarding.enabled" = false; # "New to Firefox? Let's get started!" tour
               "browser.ping-centre.telemetry" = false;
-              # https://mozilla.github.io/normandy/
-              "app.normandy.enabled" = false;
-              "app.normandy.api_url" = "";
-              "app.shield.optoutstudies.enabled" = false;
-              # Disable health reports (basically more telemetry)
-              # https://support.mozilla.org/en-US/kb/firefox-health-report-understand-your-browser-perf
-              # https://gecko.readthedocs.org/en/latest/toolkit/components/telemetry/telemetry/preferences.html
+              "browser.send_pings" = false; # http://kb.mozillazine.org/Browser.send_pings
+              "browser.sessionstore.interval" = "1800000"; # Reduce File IO / SSD abuse by increasing write interval
+              "browser.shell.checkDefaultBrowser" = false;
+              "browser.tabs.crashReporting.sendReport" = false;
+              "browser.toolbars.bookmarks.visibility" = "always";
+              "browser.uiCustomization.state" = customizationState;
+              "browser.urlbar.dnsResolveSingleWordsAfterSearch" = 0; # https://bugzilla.mozilla.org/1642623
+              "browser.urlbar.shortcuts.bookmarks" = false; # This is only the button to search in bookmarks, bookmark search works anyway if enabled
+              "browser.urlbar.shortcuts.history" = false;
+              "browser.urlbar.shortcuts.tabs" = false;
+              "browser.urlbar.showSearchSuggestionsFirst" = false;
+              "browser.urlbar.speculativeConnect.enabled" = false;
+              "browser.urlbar.suggest.calculator" = true;
+              "browser.urlbar.suggest.engines" = false;
+              "browser.urlbar.suggest.openpage" = false;
+              "browser.urlbar.suggest.searches" = true;
+              "browser.urlbar.suggest.quicksuggest.nonsponsored" = false;
+              "browser.urlbar.suggest.quicksuggest.sponsored" = false;
+              "browser.urlbar.unitConversion.enabled" = true;
+              "browser.urlbar.trimURLs" = false;
+
               "datareporting.healthreport.uploadEnabled" = false;
               "datareporting.healthreport.service.enabled" = false;
               "datareporting.policy.dataSubmissionEnabled" = false;
+              "dom.battery.enabled" = false;
+              "dom.forms.autocomplete.formautofill" = false;
+              "dom.gamepad.enabled" = false; # Disable gamepad API to prevent USB device enumeration
               "dom.security.https_only_mode" = true;
 
-              # Disable crash reports
-              "breakpad.reportURL" = "";
-              "browser.tabs.crashReporting.sendReport" = false;
-              "browser.crashReports.unsubmittedCheck.autoSubmit2" = false; # don't submit backlogged reports
-
-              # Disable Form autofill
-              # https://wiki.mozilla.org/Firefox/Features/Form_Autofill
-              "browser.formfill.enable" = false;
+              "experiments.enabled" = false;
+              "experiments.manifest.uri" = "";
+              "experiments.supported" = false;
               "extensions.formautofill.addresses.enabled" = false;
               "extensions.formautofill.available" = "off";
               "extensions.formautofill.creditCards.available" = false;
               "extensions.formautofill.creditCards.enabled" = false;
               "extensions.formautofill.heuristics.enabled" = false;
-            }
+              "extensions.getAddons.showPane" = false; # uses Google Analytics
+              "extensions.htmlaboutaddons.discover.enabled" = false;
+              "extensions.htmlaboutaddons.recommendations.enabled" = false;
+              "extensions.pocket.enabled" = false;
+              "extensions.shield-recipe-client.enabled" = false;
+
+              "general.autoScroll" = false;
+              "general.smoothScroll" = true;
+              "geo.provider.network.url" = "https://location.services.mozilla.com/v1/geolocate?key=%MOZILLA_API_KEY%";
+              "geo.provider.use_gpsd" = false;
+
+              "identity.fxaccounts.account.device.name" = nixosConfig.networking.hostName;
+
+              "media.hardwaremediakeys.enabled" = false; # Do not interfere with spotify
+              "media.videocontrols.picture-in-picture.video-toggle.enabled" = true;
+
+              "narrate.enabled" = false;
+
+              "privacy.donottrackheader.enabled" = true;
+              "privacy.donottrackheader.value" = 1;
+              "privacy.purge_trackers.enabled" = true;
+
+              "reader.parse-on-load.enabled" = false; # "reader view"
+
+              "security.family_safety.mode" = 0;
+              "security.pki.sha1_enforcement_level" = 1; # https://blog.mozilla.org/security/2016/10/18/phasing-out-sha-1-on-the-public-web/
+              "security.tls.enable_0rtt_data" = false; # https://github.com/tlswg/tls13-spec/issues/1001
+              "signon.autofillForms" = false;
+              "signon.generateion.enabled" = false;
+              "signon.rememberSignons" = false;
+
+              "toolkit.coverage.opt-out" = true;
+              "toolkit.coverage.endpoint.base" = "";
+              "toolkit.legacyUserProfileCustomizations.stylesheets" = cfg.gnomeTheme || cfg.disableTabBar;
+              "toolkit.telemetry.unified" = false;
+              "toolkit.telemetry.enabled" = false;
+              "toolkit.telemetry.server" = "data:,";
+              "toolkit.telemetry.archive.enabled" = false;
+              "toolkit.telemetry.coverage.opt-out" = true;
+            })
           ];
         };
       };
