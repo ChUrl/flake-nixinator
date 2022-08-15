@@ -287,9 +287,6 @@
       SystemMaxUse=50M
     '';
 
-    # Wiki says needed for appindicators
-    udev.packages = with pkgs; [ gnome.gnome-settings-daemon ];
-
     acpid.enable = true;
     dbus.enable = true;
     flatpak.enable = true; # Not quite the nix style but useful for bottles/proprietary stuff
@@ -297,6 +294,12 @@
     fwupd.enable = true;
     locate.enable = true; # Periodically update index
     ntp.enable = true;
+
+    # TODO: Find a way to organize this better as it's split from the Gnome module
+    gnome.gnome-keyring.enable = true;
+    gnome.sushi.enable = true;
+    gnome.gnome-settings-daemon.enable = true;
+    gnome.gnome-online-accounts.enable = true; # Probably Gnome enables this
   };
 
   # Docker
