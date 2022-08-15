@@ -5,4 +5,5 @@
   cyberdrop-dl = pkgs.callPackage ./cyberdrop-dl {};
   firefox-gnome-theme = pkgs.callPackage ./firefox-gnome-theme { src = inputs.firefox-gnome-theme; };
   adwaita-for-steam = pkgs.callPackage ./adwaita-for-steam { src = inputs.adwaita-for-steam; };
+  dconf-editor-wrapped = pkgs.callPackage ./dconf-editor-wrapped {};
 }
