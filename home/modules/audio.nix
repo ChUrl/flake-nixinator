@@ -45,6 +45,7 @@ in {
         autostart = mkBoolOpt false "Autoload Noisetorch suppression";
       };
 
+      # TODO: Store easyeffects presets/config (dconf com/github/wwmm/easyeffects ?)
       easyeffects = {
         enable = mkEnableOpt "EasyEffects";
         autostart = mkBoolOpt false "Autoload EasyEffects suppression profile";
