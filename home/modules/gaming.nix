@@ -54,6 +54,7 @@ in {
     ];
 
     # This doesn't work because steam doesn't detect symlinked skins, files have to be copied
+    # https://github.com/ValveSoftware/steam-for-linux/issues/3572
     # home.file = mkMerge [
     #   (optionalAttrs cfg.steam.adwaita {
     #     "adwaita-for-steam" = {
@@ -68,6 +69,11 @@ in {
         copySteamAdwaitaSkin = hm.dag.entryAfter [ "writeBoundary" ] ''
           if [ ! -d ${config.home.homeDirectory}/.var/app/com.valvesoftware.Steam/.local/share/Steam/skins ]; then
             mkdir ${config.home.homeDirectory}/.var/app/com.valvesoftware.Steam/.local/share/Steam/skins
+          fi
+
+          # Delete the directory to copy again, if src was updated
+          if [ -d ${config.home.homeDirectory}/.var/app/com.valvesoftware.Steam/.local/share/Steam/skins/Adwaita ]; then
+            rm -rf ${config.home.homeDirectory}/.var/app/com.valvesoftware.Steam/.local/share/Steam/skins/Adwaita
           fi
 
           cp -r ${pkgs.adwaita-for-steam}/share/adwaita-for-steam/Adwaita ${config.home.homeDirectory}/.var/app/com.valvesoftware.Steam/.local/share/Steam/skins/Adwaita
