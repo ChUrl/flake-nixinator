@@ -185,6 +185,7 @@ in rec {
     signal-desktop
     protonvpn-cli
     cyberdrop-dl
+    filezilla
 
     # Tools
     # calibre
@@ -196,14 +197,18 @@ in rec {
     # wike # Wikipedia viewer
     inputs.nixos-conf-editor.packages."x86_64-linux".nixos-conf-editor
 
+    # TODO: LaTeX module
+    texlab
+
     # Media
     wacomtablet
     xournalpp
-    # kdenlive
-    # krita
-    # blender
-    # godot
-    # obs-studio
+    kdenlive
+    # davinci-resolve
+    krita
+    blender
+    godot
+    obs-studio
 
     # Use NixCommunity binary cache
     cachix
