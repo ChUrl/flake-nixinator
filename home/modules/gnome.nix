@@ -152,11 +152,11 @@ in {
         # cursor-size, cursor-theme set by home-manager
         document-font-name = "Source Han Sans 11";
         enable-hot-corners = false; # TODO: Make dependent on if extended hot corners extension is installed
-        font-antialiasing = "rgba";
+        font-antialiasing = "grayscale";
         font-hinting = "slight";
         font-name = "Source Han Sans 11";
         # gtk-theme, icon-theme set by home-manager
-        monospace-font-name = "VictorMono Nerd Font Mono Semi-Bold 10";
+        monospace-font-name = "Source Han Mono 10";
       };
 
       "org/gnome/desktop/peripherals/touchpad" = {
