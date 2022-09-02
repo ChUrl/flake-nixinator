@@ -15,6 +15,7 @@ in {
   options.modules.gaming = {
     enable = mkEnableOpt "Gaming module";
 
+    discordElectron.enable = mkEnableOpt "Discord (Electron)";
     discordChromium.enable = mkEnableOpt "Discord (Chromium)";
     polymc.enable = mkEnableOpt "PolyMC (flatpak)";
     bottles.enable = mkEnableOpt "Bottles (flatpak)";
@@ -45,11 +46,14 @@ in {
     ];
 
     home.packages = with pkgs; builtins.concatLists [
-      [ gamemode ] # gamemode should be always enabled (could also be enabled by audio module)
+      [
+        gamemode # gamemode should be always enabled (could also be enabled by audio module)
+      ] 
 
       # TODO: Extra config (extensions etc) in chromium module
       (optionals cfg.discordChromium.enable [ chromium ])
 
+      (optionals cfg.discordElectron.enable [ discord ])
       (optionals cfg.steam.adwaita [ adwaita-for-steam ])
     ];
 
