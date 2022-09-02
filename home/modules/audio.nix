@@ -83,9 +83,11 @@ in {
         # This will probably get patched directly into nixpkgs in the future
         # NOTE: override overrides the function arguments (this part: { stdenv, fetchurl, ... })
         #       while overrideAttrs overrides the stuff inside mkDerivation { ... }
-        (bitwig-studio.overrideAttrs (oldAttrs: {
-          buildInputs = oldAttrs.buildInputs ++ [ pipewire ];
-        }))
+        # NOTE: This attempt didn't work
+        # (bitwig-studio.overrideAttrs (oldAttrs: {
+        #   buildInputs = oldAttrs.buildInputs ++ [ pipewire ];
+        # }))
+        bitwig-studio-pipewire
         gamemode
         # bitwig-studio
       ])
