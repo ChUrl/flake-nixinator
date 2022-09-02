@@ -6,7 +6,7 @@ let
   additions = final: prev: import ../derivations { inherit inputs; pkgs = final; };
 
   modifications = final: prev: {
-    # dconf-editor-wrapped = import ./dconf-editor.nix { inherit final prev; }; # Only kept as an example
+    # dconf-editor-wrapped = import ./dconf-editor.nix { inherit final prev; }; # Only kept as an example, has nothing to do with current dconf-editor-wrapped derivation
     # Use dconf-editor.nix: { final, prev }: final.<package>.overrideAttrs (oldAttrs: { ... }) or sth similar
   };
 
