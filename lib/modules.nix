@@ -17,11 +17,13 @@ rec {
   (lib.mkIf (!pred) do);
 
   # Creates a symlink if it doesn't exist
+  # If it exists renew the link
   mkLink = src: dest:
   ''
-    if [ ! -L "${dest}" ]; then
-      ln -sf ${src} ${dest}
+    if [ -L "${dest}" ]; then
+      rm ${dest}
     fi
+    ln -sf ${src} ${dest}
   '';
 
   # Removes a symlink if it exists
