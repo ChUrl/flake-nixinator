@@ -25,7 +25,7 @@ rec {
          noisetorch.autostart = true;
       };
 
-      vcvrack.enable = true;
+      vcvrack.enable = false;
       # vital.enable = true;
       distrho.enable = true;
     };
@@ -36,6 +36,7 @@ rec {
       polymc.enable = true;
       bottles.enable = true;
       discordChromium.enable = true;
+      discordElectron.enable = false;
 
       steam = {
         enable = true;
