@@ -114,14 +114,14 @@ in {
     ];
 
     modules.flatpak.extraInstall = builtins.concatLists [
-      (optionals cfg.steam.enable [ "com.valvesoftware.Steam" ])
+      (optionals cfg.steam.enable [ "com.valvesoftware.Steam" "com.github.Matoking.protontricks" ])
       (optionals (cfg.steam.enable && cfg.steam.protonGE) [ "com.valvesoftware.Steam.CompatibilityTool.Proton-GE" ])
       (optionals (cfg.steam.enable && cfg.steam.gamescope) [ "com.valvesoftware.Steam.Utility.gamescope" ])
       (optionals cfg.polymc.enable [ "org.polymc.PolyMC" ])
     ];
 
     modules.flatpak.extraRemove = builtins.concatLists [
-      (optionals (!cfg.steam.enable) [ "com.valvesoftware.Steam" ])
+      (optionals (!cfg.steam.enable) [ "com.valvesoftware.Steam" "com.github.Matoking.protontricks" ])
       (optionals (!cfg.steam.enable || !cfg.steam.protonGE) [ "com.valvesoftware.Steam.CompatibilityTool.Proton-GE" ])
       (optionals (!cfg.steam.enable || !cfg.steam.gamescope) [ "com.valvesoftware.Steam.Utility.gamescope" ])
       (optionals (!cfg.polymc.enable) [ "org.polymc.PolyMC" ])
