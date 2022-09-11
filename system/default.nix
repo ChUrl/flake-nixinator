@@ -310,6 +310,7 @@
 
     libvirtd.enable = true;
 
+    # Follow steps from https://nixos.wiki/wiki/WayDroid
     waydroid. enable = true;
     lxd.enable = true;
   };
