@@ -55,6 +55,9 @@ in {
 
       (optionals cfg.discordElectron.enable [ discord ])
       (optionals cfg.steam.adwaita [ adwaita-for-steam ])
+
+      # Prefer flatpak version as this one doesn't find the STEAM_DIR automatically
+      # (optionals cfg.steam.enable [ protontricks ])
     ];
 
     # This doesn't work because steam doesn't detect symlinked skins, files have to be copied
@@ -106,10 +109,15 @@ in {
 
     modules.flatpak.extraOverride = [
       (optionalAttrs cfg.bottles.enable {
-        "com.usebottles.bottles" = "${config.home.homeDirectory}/.var/app/com.valvesoftware.Steam/data/Steam;${config.home.homeDirectory}/GameSSD;${config.home.homeDirectory}/GameHDD";
+        # Changed com.valvesoftware.Steam/data/Steam to com.valvesoftware.Steam
+        "com.usebottles.bottles" = "${config.home.homeDirectory}/.var/app/com.valvesoftware.Steam;${config.home.homeDirectory}/GameSSD;${config.home.homeDirectory}/GameHDD";
       })
+      # TODO: Why can't I specify both overrides inside optionalAttrs cfg.steam.enable?
       (optionalAttrs cfg.steam.enable {
         "com.valvesoftware.Steam" = "${config.home.homeDirectory}/GameSSD;${config.home.homeDirectory}/GameHDD";
+      })
+      (optionalAttrs cfg.steam.enable {
+        "com.github.Matoking.protontricks" = "${config.home.homeDirectory}/GameSSD;${config.home.homeDirectory}/GameHDD";
       })
     ];
 
