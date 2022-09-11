@@ -36,7 +36,7 @@ rec {
       polymc.enable = true;
       bottles.enable = true;
       discordChromium.enable = true;
-      discordElectron.enable = false;
+      discordElectron.enable = true;
 
       steam = {
         enable = true;
