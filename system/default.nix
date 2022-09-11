@@ -302,13 +302,17 @@
     gnome.gnome-online-accounts.enable = true; # Probably Gnome enables this
   };
 
-  # Docker
-  virtualisation.docker = {
-    enable = true;
-    autoPrune.enable = true;
-  };
+  virtualisation = {
+    docker = {
+      enable = true;
+      autoPrune.enable = true;
+    };
 
-  virtualisation.libvirtd = { enable = true; };
+    libvirtd.enable = true;
+
+    waydroid. enable = true;
+    lxd.enable = true;
+  };
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
