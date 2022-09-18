@@ -7,4 +7,5 @@
   adwaita-for-steam = pkgs.callPackage ./adwaita-for-steam { src = inputs.adwaita-for-steam; };
   dconf-editor-wrapped = pkgs.callPackage ./dconf-editor-wrapped {};
   bitwig-studio-pipewire = pkgs.callPackage ./bitwig-studio-pipewire {};
+  oversteer = pkgs.callPackage ./oversteer {};
 }
