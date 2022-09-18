@@ -311,8 +311,8 @@
     libvirtd.enable = true;
 
     # Follow steps from https://nixos.wiki/wiki/WayDroid
-    waydroid. enable = true;
-    lxd.enable = true;
+    # waydroid. enable = true;
+    # lxd.enable = true;
   };
 
   # This value determines the NixOS release from which the default
