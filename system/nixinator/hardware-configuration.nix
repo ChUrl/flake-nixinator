@@ -13,7 +13,9 @@
     # https://wiki.archlinux.org/title/Kernel_mode_setting#Early_KMS_start
     initrd.kernelModules = [ "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm" ];
     kernelModules = [ "kvm-intel" ];
-    extraModulePackages = [ ];
+    extraModulePackages = with pkgs.linux_zen; [
+      new-lg4ff # Logitech force feedback
+    ];
   };
 
   fileSystems."/" = {
