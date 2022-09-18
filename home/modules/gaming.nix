@@ -48,6 +48,7 @@ in {
     home.packages = with pkgs; builtins.concatLists [
       [
         gamemode # gamemode should be always enabled (could also be enabled by audio module)
+        oversteer # TODO: Make option
       ] 
 
       # TODO: Extra config (extensions etc) in chromium module
