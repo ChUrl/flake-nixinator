@@ -219,6 +219,7 @@ in rec {
     home-manager.enable = true;
     bat.enable = true;
     exa.enable = true;
+    mpv.enable = true;
     ssh.enable = true;
 
     direnv = {
