@@ -4,7 +4,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(org-agenda-files
-   '("~/Notes/Org/20220425205309-bseos_todo.org" "/home/christoph/Notes/Org/coding_projects.org" "/home/christoph/Notes/Org/20220324131647-ss2022.org" "/home/christoph/Notes/Org/20220406001207-renesas.org" "/home/christoph/Notes/Org/todo_private.org" "/home/christoph/Notes/Org/todo_ss_2022.org"))
+   '("~/Notes/Org/20220924183716-bachelorarbeit.org" "/home/christoph/Notes/Org/coding_projects.org" "/home/christoph/Notes/Org/20220324131647-ss2022.org" "/home/christoph/Notes/Org/20220406001207-renesas.org" "/home/christoph/Notes/Org/todo_private.org" "/home/christoph/Notes/Org/todo_ss_2022.org"))
  '(safe-local-variable-values
    '((projectile-project-root . "~/Dotfiles/doom/.config/doom"))))
 (custom-set-faces

@@ -413,7 +413,7 @@
    ;; Edit settings
    org-auto-align-tags nil
    org-tags-column 0
-   org-catch-invisible-edits 'show-and-error
+   org-fold-catch-invisible-edits 'show-and-error
    org-special-ctrl-a/e t
    org-insert-heading-respect-content t
 
@@ -421,6 +421,8 @@
    org-hide-emphasis-markers t
    org-pretty-entities t
    org-ellipsis "…"
+
+   org-modern-table nil ;; has graphical glitches when collapsing headlines
 
    ;; Agenda styling
    org-agenda-block-separator ?─
