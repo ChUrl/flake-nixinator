@@ -1,7 +1,7 @@
 # Taken from https://github.com/NixOS/nixpkgs/pull/176779/files
 
-{ lib, stdenv, meson, ninja, pkgconfig, gettext, cmake, udev, fetchFromGitHub, python3
-, wrapGAppsHook, gtk3, glib, gnome3, appstream-glib, gobject-introspection, desktop-file-utils }:
+{ lib, stdenv, meson, ninja, pkg-config, gettext, cmake, udev, fetchFromGitHub, python3
+, wrapGAppsHook, gtk3, glib, gnome, appstream-glib, gobject-introspection, desktop-file-utils }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "oversteer";
@@ -35,7 +35,7 @@ python3.pkgs.buildPythonApplication rec {
     meson
     ninja
     gettext
-    pkgconfig
+    pkg-config
     wrapGAppsHook
     desktop-file-utils
     appstream-glib
@@ -44,7 +44,7 @@ python3.pkgs.buildPythonApplication rec {
     udev
   ];
 
-  buildInputs = [ udev gtk3 glib gnome3.adwaita-icon-theme python3 ];
+  buildInputs = [ udev gtk3 glib gnome.adwaita-icon-theme python3 ];
 
   propagatedBuildInputs = with python3.pkgs; [ pyudev pyxdg evdev pygobject3 matplotlib scipy ];
 
