@@ -20,6 +20,7 @@ in {
     enable = mkEnableOpt "Emacs module";
 
     # TODO: Use an enum for this not individual options
+    nixpkgs = mkBoolOpt false "Use Emacs from the official repositories";
     nativeComp = mkBoolOpt false "Use Emacs 28.x branch with native comp support";
     pgtkNativeComp = mkBoolOpt false "Use Emacs 29.x branch with native comp and pure gtk support";
 
@@ -41,12 +42,16 @@ in {
   config = mkIf cfg.enable {
     assertions = [
       (mkIf cfg.nativeComp {
-        assertion = !cfg.pgtkNativeComp;
-        message = "Can't enable both nativeComp and pgtkNativeComp!";
+        assertion = !cfg.pgtkNativeComp && !cfg.nixpkgs;
+        message = "Can't enable more than one Emacs package!";
       })
       (mkIf cfg.pgtkNativeComp {
-        assertion = !cfg.nativeComp;
-        message = "Can't enable both nativeComp and pgtkNativeComp!";
+        assertion = !cfg.nativeComp && !cfg.nixpkgs;
+        message = "Can't enable more than one Emacs package!";
+      })
+      (mkIf cfg.nixpkgs {
+        assertion = !cfg.nativeComp && !cfg.pgtkNativeComp;
+        message = "Can't enable more than one Emacs package!";
       })
     ];
 
@@ -54,6 +59,7 @@ in {
     home.packages = with pkgs; builtins.concatLists [
       (optionals cfg.nativeComp [ ((emacsPackagesFor emacsNativeComp).emacsWithPackages (epkgs: [ epkgs.vterm ])) ])
       (optionals cfg.pgtkNativeComp [ ((emacsPackagesFor emacsPgtkNativeComp).emacsWithPackages (epkgs: [ epkgs.vterm ])) ])
+      (optionals cfg.nixpkgs [ ((emacsPackagesFor emacs).emacsWithPackages (epkgs: [ epkgs.vterm ])) ])
 
       # TODO: Check what hlissner has enabled
       (optionals cfg.doom.enable [
@@ -68,6 +74,9 @@ in {
         pandoc # Org export formats
         maim
         bashInteractive # For keychain
+
+        # TODO: I don't want to have this here permanently, maybe put in a shell.nix if compilation is needed?
+        gcc # Need this for org roam
 
         # withPackages expects a function that gets all the packages as argument and returns a list with the packages we want
         (python310.withPackages (ppkgs: [ ppkgs.pygments ])) # Latex minted
@@ -115,7 +124,7 @@ in {
 
       (mkIf (cfg.doom.enable && cfg.doom.autoSync) {
         syncDoomEmacs = hm.dag.entryAfter [ "writeBoundary" "linkDoomConfig" ] ''
-          ${config.home.homeDirectory}/.emacs.d/bin/doom sync
+          ${config.home.homeDirectory}/.emacs.d/bin/doom sync &
         '';
       })
 
