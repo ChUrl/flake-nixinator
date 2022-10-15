@@ -14,7 +14,7 @@
 
   # Enable flakes
   nix = {
-    package = pkgs.nixFlakes;
+    package = pkgs.nixVersions.stable;
     extraOptions = ''
       experimental-features = nix-command flakes
     '';
@@ -121,14 +121,16 @@
     # Enable networking
     networkmanager.enable = true;
 
+    
+    firewall.enable = true;
     firewall.allowedTCPPorts = [ ];
     firewall.allowedTCPPortRanges = [ ];
 
-    firewall.allowedUDPPorts = [ ];
+    firewall.allowedUDPPorts = [
+      18000 # Anno 1800
+    ];
     firewall.allowedUDPPortRanges = [ ];
 
-    # Or disable the firewall altogether.
-    # firewall.enable = false;
   };
 
   # Enable the X11 windowing system.
@@ -139,18 +141,20 @@
     # Sadly using this with gnome-session doesn't really work
     # displayManager.startx.enable = true;
 
-    # Plasma (X11)
-    # displayManager.sddm.enable = true;
-    # desktopManager.plasma5.enable = true;
-    # desktopManager.plasma5.runUsingSystemd = true;
+    # Plasma
+    # TODO: Had problems with wayland last time, hopefully I get it to work now
+    displayManager.sddm.enable = true;
+    desktopManager.plasma5.enable = true;
+    desktopManager.plasma5.runUsingSystemd = true;
 
     # Gnome (Wayland)
-    displayManager.gdm.enable = true;
+    # NOTE: Not a fan of the overly simplistic nature, also made problems with the audio devices...
+    # displayManager.gdm.enable = true;
     # I had problems with gdm defaulting to X11, after I added this it stopped although I don't know if this
     # was the sole reason
-    displayManager.defaultSession = "gnome";
-    displayManager.gdm.wayland = true; # This is actually the default
-    desktopManager.gnome.enable = true;
+    # displayManager.defaultSession = "gnome";
+    # displayManager.gdm.wayland = true; # This is actually the default
+    # desktopManager.gnome.enable = true;
 
     wacom.enable = true;
 
@@ -163,23 +167,24 @@
       enable = true;
       extraPortals = with pkgs; [
         # xdg-desktop-portal-wlr # For wlroots based desktops
-        # xdg-desktop-portal-gtk # Comes with gnome
-        xdg-desktop-portal-gnome
+        xdg-desktop-portal-kde # Comes with Plasma
+        xdg-desktop-portal-gtk # Comes with Gnome
+        xdg-desktop-portal-gnome # Comes with Gnome
       ];
-      # gtkUsePortal = true; # Deprecated
+      # gtkUsePortal = true; # Deprecated, don't use (gdm takes ages to load and other fishy stuff)
   };
 
   # Enable sound with pipewire.
-  sound.enable = true;
-  hardware.pulseaudio.enable = false;
+  sound.enable = false; # Alsa, seems to conflict with PipeWire
+  hardware.pulseaudio.enable = false; # Get off my lawn
   services.pipewire = {
     enable = true;
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
-    jack.enable = true; # We need this for low latency audio
+    jack.enable = true; # TODO: Was needed for low latency but probably not anymore (?) as Bitwig supports Pipewire now
 
-    wireplumber.enable = true;
+    wireplumber.enable = true; # Probably the default
     media-session.enable = false;
   };
 
@@ -187,33 +192,47 @@
     enableDefaultFonts = true; # Some default fonts for unicode coverage
     fontDir.enable = true; # Puts fonts to /run/current-system/sw/share/X11/fonts
 
-    # Font packages go here, don't do this with HomeManager as I need the fonts in the fontdir for flatpak apps
+    # Font packages go here
+    # NOTE: Don't do this with HomeManager as I need the fonts in the fontdir for flatpak apps
     fonts = with pkgs; [
+      # Mono fonts
       victor-mono
+      jetbrains-mono
       source-code-pro
-      source-sans-pro
-      source-serif-pro
       (pkgs.nerdfonts.override { fonts = [ "VictorMono" ]; })
+
+      # Chinese fonts
       source-han-mono
       source-han-sans
       source-han-serif
+      noto-fonts-cjk-sans
+      noto-fonts-cjk-serif
       wqy_zenhei
       wqy_microhei
-      # jetbrains-mono
-      # etBook  
-      # overpass
+
+      # Sans/Serif fonts
       cantarell-fonts
+      source-sans-pro
+      source-serif-pro
+      noto-fonts
+      noto-fonts-extra
+      noto-fonts-emoji
+
+      # Some fonts from an old emacs config, not longer used
+      # etBook
+      # overpass
     ];
 
     # TODO: Check if this works
-    fontconfig = {
-      enable = true;
-      defaultFonts = {
-        serif = [ "Source Han Serif Regular" ];
-        sansSerif = [ "Source Han Sans Regular" ];
-        monospace = [ "Source Han Mono Regular" ];
-      };
-    };
+    # TODO: Conflicts with kde?
+    # fontconfig = {
+    #   enable = true;
+    #   defaultFonts = {
+    #     serif = [ "Source Han Serif Regular" ];
+    #     sansSerif = [ "Source Han Sans Regular" ];
+    #     monospace = [ "Source Han Mono Regular" ];
+    #   };
+    # };
   };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
@@ -251,31 +270,37 @@
   # Empty since we basically only need git + editor which is enabled below
   environment.systemPackages = with pkgs; [ ];
 
+  # NOTE: Gnome
   # TODO: Identify all the crap
   # Remove these packages that come by default with GNOME
-  environment.gnome.excludePackages = with pkgs.gnome; [
-    # epiphany # gnome webbrowser, could be good with new version
-    # gnome-maps
-    gnome-contacts
+  # environment.gnome.excludePackages = with pkgs.gnome; [
+  #   # epiphany # gnome webbrowser, could be good with new version
+  #   gnome-maps
+  #   gnome-contacts
+  # ];
+
+  # NOTE: Plasma
+  # TODO: Identify all the crap
+  services.xserver.desktopManager.plasma5.excludePackages = with pkgs.libsForQt5; [
   ];
 
   # It is preferred to use the module (if it exists) over environment.systemPackages, as some extra configs are applied.
   # I would prefer to use HomeManager for some of these but the modules don't exist (yet)
   programs = {
     adb.enable = true;
-    dconf.enable = true;
+    dconf.enable = true; # NOTE: Also needed for Plasma Wayland (GTK theming)
     fish.enable = true;
     git.enable = true;
     neovim.enable = true;
     starship.enable = true;
-    thefuck.enable = true; # Not available in HomeManager
+    thefuck.enable = true;
     xwayland.enable = true;
   };
 
   # List services that you want to enable:
   services = {
     # Enable CUPS to print documents.
-    # TODO: Printer driver, Gnome printing
+    # TODO: Printing (driver etc.)
     printing.enable = true;
     avahi.enable = true; # Network printers
     avahi.nssmdns = true;
@@ -283,23 +308,25 @@
     # Enable the OpenSSH daemon.
     openssh.enable = true;
 
+    # Trims the journal if too large
     journald.extraConfig = ''
       SystemMaxUse=50M
     '';
 
     acpid.enable = true;
     dbus.enable = true;
-    flatpak.enable = true; # Not quite the nix style but useful for bottles/proprietary stuff
-    fstrim.enable = true;
-    fwupd.enable = true;
+    flatpak.enable = true; # Not quite the nix style but useful for bottles/proprietary stuff/steam/gaming
+    fstrim.enable = true; # SSD
+    fwupd.enable = true; # Device firmware (I don't think I have any supported devices)
     locate.enable = true; # Periodically update index
-    ntp.enable = true;
+    ntp.enable = true; # Clock sync
+    packagekit.enable = true; # KDE Discover/Gnome Software
 
-    # TODO: Find a way to organize this better as it's split from the Gnome module
-    gnome.gnome-keyring.enable = true;
-    gnome.sushi.enable = true;
-    gnome.gnome-settings-daemon.enable = true;
-    gnome.gnome-online-accounts.enable = true; # Probably Gnome enables this
+    # TODO: Find a way to organize this better as it's split from the Gnome module, Gnome system module?
+    gnome.gnome-keyring.enable = true; # TODO: Is probably also needed for Plasma (some apps require it)
+    # gnome.sushi.enable = true;
+    # gnome.gnome-settings-daemon.enable = true;
+    # gnome.gnome-online-accounts.enable = true; # Probably Gnome enables this
   };
 
   virtualisation = {
@@ -310,11 +337,13 @@
 
     libvirtd.enable = true;
 
+    # NOTE: Pretty unusable as NVidia hardware acceleration is not supported...
     # Follow steps from https://nixos.wiki/wiki/WayDroid
     # waydroid. enable = true;
     # lxd.enable = true;
   };
 
+  # NOTE: Current system was installed on 22.05, do not change
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
   # on your system were taken. It‘s perfectly fine and recommended to leave
