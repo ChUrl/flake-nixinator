@@ -22,6 +22,10 @@
     devshell.url = "github:numtide/devshell";
     # nixvim.url = "github:pta2002/nixvim";
 
+    # plasma-manager.url = "github:pjones/plasma-manager";
+    # plasma-manager.inputs.nixpkgs.follows = "nixpkgs";
+    # plasma-manager.inputs.home-manager.follows = "home-manager";
+
     firefox-gnome-theme.url = "github:rafaelmardojai/firefox-gnome-theme";
     firefox-gnome-theme.flake = false;
 
@@ -77,6 +81,8 @@
 
           hostname = "nixinator";
           username = "christoph";
+
+          extraModules = [ ];
         };
 
         # Usage: sudo nixos-rebuild switch --flake .#nixtop
@@ -85,6 +91,8 @@
 
           hostname = "nixtop";
           username = "christoph";
+
+          extraModules = [ ];
         };
       };
     };
