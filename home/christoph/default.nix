@@ -29,7 +29,9 @@ in rec {
     # Config my modules
     emacs = {
       enable = true;
-      pgtkNativeComp = true;
+      pgtkNativeComp = false;
+      nativeComp = false;
+      nixpkgs = true;
 
       doom.enable = true;
       doom.autoSync = true;
@@ -42,7 +44,7 @@ in rec {
       vaapi = true;
       disableTabBar = true;
       defaultBookmarks = true;
-      gnomeTheme = true;
+      gnomeTheme = true; # I like it also with Plasma
     };
 
     fish.enable = true;
@@ -59,7 +61,7 @@ in rec {
     };
 
     gnome = {
-      enable = true;
+      enable = false;
       extensions = true;
 
       theme = {
@@ -119,7 +121,7 @@ in rec {
 
   # Make fonts installed through user packages available to applications
   # NOTE: I don't think I need this anymore as all fonts are installed through the system config but let's keep this just in case
-  fonts.fontconfig.enable = true; # Also updates the font-cache
+  fonts.fontconfig.enable = false; # Also updates the font-cache
 
   # Generate a list of installed user packages in ~/.local/share/current-user-packages
   home.file.".local/share/current-user-packages".text = let
@@ -181,6 +183,11 @@ in rec {
     neofetch # Easily see interesting package versions/kernel
     lazygit
     yt-dlp
+    pciutils
+    glxinfo
+    wayland-utils
+    aha
+    radeontop
 
     signal-desktop
     protonvpn-cli
@@ -194,8 +201,8 @@ in rec {
     anki-bin # Use anki-bin as anki is some versions behind
     # libreoffice-fresh
     jabref # manage bibilography
-    # wike # Wikipedia viewer
     inputs.nixos-conf-editor.packages."x86_64-linux".nixos-conf-editor
+    octave
 
     # TODO: LaTeX module
     texlab
@@ -203,12 +210,38 @@ in rec {
     # Media
     wacomtablet
     xournalpp
-    kdenlive
-    # davinci-resolve
-    krita
+    # davinci-resolve # Large and slow and overpowered for my purposes
     blender
     godot
     obs-studio
+    vlc
+    kdenlive
+    krita
+
+    # KDE Applications
+    # TODO: Make a module out of this
+    libsForQt5.kate
+    # libsForQt5.kwrited # Already included by default
+    libsForQt5.ark
+    libsForQt5.kdeconnect-kde
+    libsForQt5.kcalc
+    libsForQt5.ksystemlog
+    libsForQt5.kfind
+    libsForQt5.discover
+    libsForQt5.filelight # Drive file size stats
+    libsForQt5.kcolorpicker
+    libsForQt5.kgpg
+    libsForQt5.kparts # Partition manager
+    libsForQt5.kcharselect
+    libsForQt5.kompare # Can't be used as git merge tool, but more integrated than kdiff3
+    libsForQt5.skanlite
+    libsForQt5.kmail
+    libsForQt5.kalendar
+    libsForQt5.plasma-browser-integration
+    okteta
+    kdiff3
+    kgraphviewer
+    kbibtex
 
     # Use NixCommunity binary cache
     cachix
@@ -219,7 +252,7 @@ in rec {
     home-manager.enable = true;
     bat.enable = true;
     exa.enable = true;
-    mpv.enable = true;
+    # mpv.enable = true; # Doesn't work, only blackscreen?
     ssh.enable = true;
 
     direnv = {
