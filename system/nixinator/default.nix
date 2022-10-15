@@ -8,6 +8,7 @@ rec {
     inputs.musnix.nixosModules.musnix
   ];
 
+  # Low latency audio
   musnix = {
     enable = true;
     # musnix.soundcardPciId = ;
@@ -18,7 +19,8 @@ rec {
     layout = "us";
     xkbVariant = "altgr-intl";
 
-    # Proprietary graphics drivers
-    videoDrivers = [ "nvidia" ];
+    # Proprietary graphics drivers, yay :(
+    # videoDrivers = [ "nvidia" ]; # NVIDIA
+    videoDrivers = [ "amdgpu" ];
   };
 }
