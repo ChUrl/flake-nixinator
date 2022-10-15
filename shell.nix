@@ -20,6 +20,11 @@ pkgs.devshell.mkShell {
       command = "watch -n 0.5 -d procs flatpak";
     }
     {
+      name = "util-watch-doom";
+      help = "Show running doom operations";
+      command = "watch -n 0.5 -d procs doom";
+    }
+    {
       name = "util-pkgs-sys";
       help = "List currently installed system packages";
       command = "bat /etc/current-system-packages";
@@ -61,7 +66,7 @@ pkgs.devshell.mkShell {
     {
       name = "store-gc";
       help = "Run NixOS garbage collector";
-      command = "nix-store --gc";
+      command = "nix-store --gc && sudo nix-collect-garbage -d";
     }
     {
       name = "store-optimise";
