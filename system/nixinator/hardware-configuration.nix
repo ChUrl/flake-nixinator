@@ -11,7 +11,8 @@
     # Enable early Nvidia kernel modesetting
     # https://wiki.archlinux.org/title/GDM#GDM_ignores_Wayland_and_uses_X.Org_by_default (not fixed by this)
     # https://wiki.archlinux.org/title/Kernel_mode_setting#Early_KMS_start
-    initrd.kernelModules = [ "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm" ];
+    # initrd.kernelModules = [ "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm" ]; # NVIDIA
+    initrd.kernelModules = [ "amdgpu" ];
     kernelModules = [ "kvm-intel" ];
     # Specific to used kernel (currently linux_zen)
     extraModulePackages = with pkgs.linuxKernel.packages.linux_zen; [
@@ -45,10 +46,11 @@
   };
 
   swapDevices = lib.mkForce [
-    # {
-    #   device = "/var/swap";
-    #   size = 1024 * 16 * 2; # twice the RAM for hibernation
-    # }
+    {
+      device = "/var/swap";
+      # size = 1024 * 16 * 2; # twice the RAM for hibernation
+      size = 1024 * 8; # Without hibernation 4.0 GB to 0.5 x RAM
+    }
   ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
@@ -66,11 +68,19 @@
     enableRedistributableFirmware = true;
     cpu.intel.updateMicrocode = true;
 
-    nvidia.modesetting.enable = true; # Not officially supported by NVidia but needed for wayland
+    # nvidia.modesetting.enable = true; # Not officially supported by NVidia but needed for wayland
     video.hidpi.enable = lib.mkDefault true;
     opengl.enable = true;
+
+    # Vulkan
     opengl.driSupport = true;
     opengl.driSupport32Bit = true;
+
+    # OpenCL
+    opengl.extraPackages = with pkgs; [
+      rocm-opencl-icd
+      rocm-opencl-runtime
+    ];
 
     sane.enable = true; # Scanning
 
