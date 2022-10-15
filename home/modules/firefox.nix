@@ -22,7 +22,7 @@ in {
       (optionals cfg.vaapi [
         libva
         libva-utils
-        nvidia-vaapi-driver
+        # nvidia-vaapi-driver # Nvidia is gone :)
         vulkan-tools
       ])
 
@@ -98,6 +98,7 @@ in {
         h264ify
         keepassxc-browser
         localcdn
+        plasma-integration # TODO: Only when Plasma is used
         privacy-badger
         search-by-image
         single-file
@@ -236,6 +237,8 @@ in {
               "privacy.donottrackheader.enabled" = true;
               "privacy.donottrackheader.value" = 1;
               "privacy.purge_trackers.enabled" = true;
+              "privacy.webrtc.legacyGlobalIndicator" = false;
+              "privacy.webrtc.hideGlobalIndicator" = true;
 
               "reader.parse-on-load.enabled" = false; # "reader view"
 
@@ -254,6 +257,8 @@ in {
               "toolkit.telemetry.server" = "data:,";
               "toolkit.telemetry.archive.enabled" = false;
               "toolkit.telemetry.coverage.opt-out" = true;
+
+              "widget.use-xdg-desktop-portal" = true;
             })
           ];
         };
