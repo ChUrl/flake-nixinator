@@ -3,11 +3,11 @@
     "adwaita-for-steam": {
       "flake": false,
       "locked": {
-        "lastModified": 1665649928,
-        "narHash": "sha256-QHzPVdP7frb/SllAGT5zgFDU/C6CTnRJv27lrlvWSBA=",
+        "lastModified": 1666175030,
+        "narHash": "sha256-o9sxk542LEghfBZ8au3nxiVrccCsxeFzDkAgLhvlTbo=",
         "owner": "tkashkin",
         "repo": "Adwaita-for-Steam",
-        "rev": "3e5044332c86c2c4e197959a65a76b6198a5e643",
+        "rev": "99149cb89c8b427408af238372ba3f97a2df59fc",
         "type": "github"
       },
       "original": {
@@ -41,11 +41,11 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1665824418,
-        "narHash": "sha256-OZX8io9UKzxFAwdRvf4uOThDFpGtlbMyi13RbqIpmoY=",
+        "lastModified": 1666156198,
+        "narHash": "sha256-mTgPP4OIYerBpn9vVwcVdLn4GDjmlsZiqrVxHqZTiNo=",
         "owner": "nix-community",
         "repo": "emacs-overlay",
-        "rev": "08445dd7824253ee8580f06127460a7d14e942cf",
+        "rev": "858214991200eccc2f0a4f929f4baa0ffd8281c6",
         "type": "github"
       },
       "original": {
@@ -102,11 +102,11 @@
     },
     "hardware": {
       "locked": {
-        "lastModified": 1665839131,
-        "narHash": "sha256-0KYo13PfwvPw5i/SC+hGy3hsgR++Co7SIzv+0e9YOnM=",
+        "lastModified": 1665987993,
+        "narHash": "sha256-MvlaIYTRiqefG4dzI5p6vVCfl+9V8A1cPniUjcn6Ngc=",
         "owner": "nixos",
         "repo": "nixos-hardware",
-        "rev": "674d05f9ae2249d606a0e6fc63e522d2031a27ac",
+        "rev": "0e6593630071440eb89cd97a52921497482b22c6",
         "type": "github"
       },
       "original": {
@@ -123,11 +123,11 @@
         "utils": "utils"
       },
       "locked": {
-        "lastModified": 1665655007,
-        "narHash": "sha256-34ZMJlgqJb73RY/gJz8B4cjdM5ukas2crMYQpmyRGeQ=",
+        "lastModified": 1666080735,
+        "narHash": "sha256-4YWYJgzt9mGuAvXAuEziYms+bYlk/1spyt3iLizRL5I=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "8cbc6500dfca22d907054f68c564019b3b6cf295",
+        "rev": "42f81ac107c5a9a177888080107094dba57f134e",
         "type": "github"
       },
       "original": {
@@ -141,11 +141,11 @@
         "nixpkgs": "nixpkgs_3"
       },
       "locked": {
-        "lastModified": 1664705874,
-        "narHash": "sha256-XP6NgAltjGYk9R9rmSyM0KapIa0R3togJPbZGbMbuZw=",
+        "lastModified": 1666142322,
+        "narHash": "sha256-eBRyc+G7+j2BgpFyxfT8DFWh2pAfPTqiGaZddS6JwDc=",
         "owner": "musnix",
         "repo": "musnix",
-        "rev": "85d2886931663ab77e806013a84b443971e63b49",
+        "rev": "30a2d14509c5b186071cd53f0b24b658835419f1",
         "type": "github"
       },
       "original": {
@@ -236,11 +236,11 @@
     },
     "nixpkgs_5": {
       "locked": {
-        "lastModified": 1665732960,
-        "narHash": "sha256-WBZ+uSHKFyjvd0w4inbm0cNExYTn8lpYFcHEes8tmec=",
+        "lastModified": 1666109165,
+        "narHash": "sha256-BMLyNVkr0oONuq3lKlFCRVuYqF75CO68Z8EoCh81Zdk=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "4428e23312933a196724da2df7ab78eb5e67a88e",
+        "rev": "32096899af23d49010bd8cf6a91695888d9d9e73",
         "type": "github"
       },
       "original": {
@@ -252,39 +252,16 @@
     },
     "nur": {
       "locked": {
-        "lastModified": 1665847539,
-        "narHash": "sha256-AszHbWrzfm/0lOjP4dwYazXgZxXaQ/FcFVX3HE32xPA=",
+        "lastModified": 1666162734,
+        "narHash": "sha256-XFgV2TlQ7q2j1yjfgB/mayfORcKtmIAY2BGXTNRqNTs=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "56ce83e92e00dc5147ce96d1986e5eec880931f6",
+        "rev": "15e8a12e8793e845708c17921f1985f486400c2b",
         "type": "github"
       },
       "original": {
         "owner": "nix-community",
         "repo": "NUR",
-        "type": "github"
-      }
-    },
-    "plasma-manager": {
-      "inputs": {
-        "home-manager": [
-          "home-manager"
-        ],
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1664383871,
-        "narHash": "sha256-dOnnzfqd/PCf1K3USKq2PqSGKmIqkr/SD7zHb1yoAyw=",
-        "owner": "pjones",
-        "repo": "plasma-manager",
-        "rev": "16c437e43a0e049b15c9bfd37295f6e978ea9955",
-        "type": "github"
-      },
-      "original": {
-        "owner": "pjones",
-        "repo": "plasma-manager",
         "type": "github"
       }
     },
@@ -299,8 +276,7 @@
         "musnix": "musnix",
         "nixos-conf-editor": "nixos-conf-editor",
         "nixpkgs": "nixpkgs_5",
-        "nur": "nur",
-        "plasma-manager": "plasma-manager"
+        "nur": "nur"
       }
     },
     "utils": {
