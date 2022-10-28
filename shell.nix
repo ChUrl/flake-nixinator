@@ -87,8 +87,13 @@ pkgs.devshell.mkShell {
     }
     {
       name = "rebuild-build-nixinator";
-      help = "Rebuild and diff the nixinator config (to diff systems)";
+      help = "Rebuild the nixinator config (to diff systems)";
       command = "sudo nixos-rebuild build --flake .#nixinator";
+    }
+    {
+      name = "rebuild-boot-nixinator";
+      help = "Rebuild and activate config on next boot";
+      command = "sudo nixos-rebuild boot --flake .#nixinator";
     }
     {
       name = "rebuild-switch-nixtop";
@@ -99,6 +104,11 @@ pkgs.devshell.mkShell {
       name = "rebuild-build-nixtop";
       help = "Rebuild and diff the nixtop config (to diff systems)";
       command = "sudo nixos-rebuild build --flake .#nixtop";
+    }
+    {
+      name = "rebuild-boot-nixtop";
+      help = "Rebuild and activate config on next boot";
+      command = "sudo nixos-rebuild boot --flake .#nixtop";
     }
 
     # Help text (this is pretty stupid)
