@@ -128,6 +128,9 @@
 
     firewall.allowedUDPPorts = [
       18000 # Anno 1800
+      9999 # DashPanel
+      9995 # TelemetryApp
+      9996 # TelemetryApp
     ];
     firewall.allowedUDPPortRanges = [ ];
 
