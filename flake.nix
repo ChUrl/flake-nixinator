@@ -1,4 +1,5 @@
 # The curly braces denote a set of keys and values.
+
 {
   description = "ChUrl's very bad and basic Nix config using Flakes";
 
