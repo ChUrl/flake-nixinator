@@ -61,6 +61,11 @@ in {
       package = pkgs.wrapFirefox pkgs.firefox-unwrapped {
         forceWayland = cfg.wayland;
 
+        # Find options by grepping for "cfg" in https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/networking/browsers/firefox/wrapper.nix
+        cfg = {
+          enablePlasmaBrowserIntegration = true; # TODO: Option
+        };
+
         # About policies: https://github.com/mozilla/policy-templates#enterprisepoliciesenabled
         # NOTE: Some of these settings are duplicated in the about:config settings so they are
         #       not strictly necessary
@@ -98,6 +103,7 @@ in {
         h264ify
         keepassxc-browser
         localcdn
+        octotree # Github on steroids
         plasma-integration # TODO: Only when Plasma is used
         privacy-badger
         search-by-image
