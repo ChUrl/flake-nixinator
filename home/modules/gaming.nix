@@ -12,12 +12,16 @@ in {
     ./flatpak.nix
   ];
 
+  # TODO: Enable flatpak MangoHud, there are multiple versions, Steam.Utility.MangoHud works but can't be configured (in ~/.config/MangoHud), other versions don't even work (need to figure that out as Steam.Utility.MangoHud is EOL...)
+  # TODO: SteamTinkerLaunch option
+  # TODO: Dolphin + SteamRomManager option
+
   options.modules.gaming = {
     enable = mkEnableOpt "Gaming module";
 
-    discordElectron.enable = mkEnableOpt "Discord (Electron)";
+    discordElectron.enable = mkEnableOpt "Discord (Electron) (flatpak)";
     discordChromium.enable = mkEnableOpt "Discord (Chromium)";
-    polymc.enable = mkEnableOpt "PolyMC (flatpak)";
+    prism.enable = mkEnableOpt "PrismLauncher for Minecraft (flatpak)";
     bottles.enable = mkEnableOpt "Bottles (flatpak)";
 
     steam = {
@@ -35,13 +39,17 @@ in {
         assertion = cfgfp.enable;
         message = "Cannot enable Steam without the flatpak module!";
       })
-      (mkIf cfg.polymc.enable {
+      (mkIf cfg.prism.enable {
         assertion = cfgfp.enable;
-        message = "Cannot enable PolyMC without the flatpak module!";
+        message = "Cannot enable PrismLauncher without the flatpak module!";
       })
       (mkIf cfg.bottles.enable {
         assertion = cfgfp.enable;
         message = "Cannot enable Bottles without the flatpak module!";
+      })
+      (mkIf cfg.discordElectron.enable {
+        assertion = cfgfp.enable;
+        message = "Cannot enable Discord (Electron) without the flatpak module!";
       })
     ];
 
@@ -49,12 +57,15 @@ in {
       [
         gamemode # gamemode should be always enabled (could also be enabled by audio module)
         oversteer # TODO: Make option
+        # Sometimes needed for Proton prefix shenenigans (for AC etc.), but probably only works with Protontricks only so disable for now...
+        # wine64 # TODO: Make option or dependant on protontricks?
       ] 
 
       # TODO: Extra config (extensions etc) in chromium module
       (optionals cfg.discordChromium.enable [ chromium ])
 
-      (optionals cfg.discordElectron.enable [ discord ])
+      # Prefer flatpak version as nixpkgs version isn't always updated in time
+      # (optionals cfg.discordElectron.enable [ discord ])
       (optionals cfg.steam.adwaita [ adwaita-for-steam ])
 
       # Prefer flatpak version as this one doesn't find the STEAM_DIR automatically
@@ -109,31 +120,37 @@ in {
     modules.flatpak.bottles.enable = mkIf cfg.bottles.enable true;
 
     modules.flatpak.extraOverride = [
+      # Allow Bottles to manage proton prefixes
       (optionalAttrs cfg.bottles.enable {
-        # Changed com.valvesoftware.Steam/data/Steam to com.valvesoftware.Steam
         "com.usebottles.bottles" = "${config.home.homeDirectory}/.var/app/com.valvesoftware.Steam;${config.home.homeDirectory}/GameSSD;${config.home.homeDirectory}/GameHDD";
       })
-      # TODO: Why can't I specify both overrides inside optionalAttrs cfg.steam.enable?
+      # Allow Steam to access different library folders
+      # Allow Steam to explicitly run something through ProtonGE
       (optionalAttrs cfg.steam.enable {
-        "com.valvesoftware.Steam" = "${config.home.homeDirectory}/GameSSD;${config.home.homeDirectory}/GameHDD";
+        # TODO: Make the second string into a list [ ~/GameSSD ~/GameHDD ] etc.
+        "com.valvesoftware.Steam" = "${config.home.homeDirectory}/GameSSD;${config.home.homeDirectory}/GameHDD;/var/lib/flatpak/runtime/com.valvesoftware.Steam.CompatibilityTool.Proton-GE";
       })
+      # Allow protontricks to change prefixes in different library folders
       (optionalAttrs cfg.steam.enable {
         "com.github.Matoking.protontricks" = "${config.home.homeDirectory}/GameSSD;${config.home.homeDirectory}/GameHDD";
       })
     ];
 
+    # TODO: RetroArch option org.libretro.RetroArch
     modules.flatpak.extraInstall = builtins.concatLists [
-      (optionals cfg.steam.enable [ "com.valvesoftware.Steam" "com.github.Matoking.protontricks" ])
+      (optionals cfg.steam.enable [ "com.valvesoftware.Steam" "com.github.Matoking.protontricks" "com.valvesoftware.Steam.Utility.steamtinkerlaunch" "com.steamgriddb.steam-rom-manager" "org.DolphinEmu.dolphin-emu" ])
       (optionals (cfg.steam.enable && cfg.steam.protonGE) [ "com.valvesoftware.Steam.CompatibilityTool.Proton-GE" ])
       (optionals (cfg.steam.enable && cfg.steam.gamescope) [ "com.valvesoftware.Steam.Utility.gamescope" ])
-      (optionals cfg.polymc.enable [ "org.polymc.PolyMC" ])
+      (optionals (cfg.prism.enable) [ "org.prismlauncher.PrismLauncher" ])
+      (optionals (cfg.discordElectron.enable) [ "com.discordapp.Discord" ])
     ];
 
     modules.flatpak.extraRemove = builtins.concatLists [
-      (optionals (!cfg.steam.enable) [ "com.valvesoftware.Steam" "com.github.Matoking.protontricks" ])
+      (optionals (!cfg.steam.enable) [ "com.valvesoftware.Steam" "com.github.Matoking.protontricks" "com.valvesoftware.Steam.Utility.steamtinkerlaunch" "com.steamgriddb.steam-rom-manager" "org.DolphinEmu.dolphin-emu" ])
       (optionals (!cfg.steam.enable || !cfg.steam.protonGE) [ "com.valvesoftware.Steam.CompatibilityTool.Proton-GE" ])
       (optionals (!cfg.steam.enable || !cfg.steam.gamescope) [ "com.valvesoftware.Steam.Utility.gamescope" ])
-      (optionals (!cfg.polymc.enable) [ "org.polymc.PolyMC" ])
+      (optionals (!cfg.prism.enable) [ "org.prismlauncher.PrismLauncher" ])
+      (optionals (!cfg.discordElectron.enable) [ "com.discordapp.Discord" ])
     ];
   };
 }
