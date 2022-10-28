@@ -105,6 +105,11 @@ in rec {
     };
   };
 
+  # Temporary hack: https://github.com/nix-community/home-manager/issues/3342
+  # TODO: Remove when possible
+  manual.manpages.enable = false;
+  manual.html.enable = false;
+
   # TODO: Gnome terminal config
   # TODO: Store the external binaries for my derivations in GitHub LFS (Vital, NeuralDSP, other plugins etc.)
   # TODO: Derivations for bottles like UPlay, NeuralDSP, LoL (don't know what is possible with bottles-cli though)
@@ -166,51 +171,75 @@ in rec {
   # Add stuff for your user as you see fit:
   home.packages = with pkgs; [
     # CLI Tools
-    procs
-    tokei
-    rsync
-    rclone
-    xclip
-    xorg.xwininfo
-    xdotool
+    # bat # cat with wings (enabled as program)
+    # exa # ls in cool (enabled as program)
+    # delta # diffier diff differ (enabled as program)
+    # fzf # fuzzy find (enabled as program in fish module)
+    procs # Better ps
+    tokei # Text file statistics in a project
+    rsync # cp on steroids
+    rclone # Rsync for cloud
     poppler_utils # pdfunite
-    ffmpeg
-    imagemagick
-    httpie
-    ripgrep
+    ffmpeg # Convert video (magic)
+    imagemagick # Convert image (magic)
+    httpie # Cool http client
+    (ripgrep.override { withPCRE2 = true; }) # fast as fuck
     nvd # nix rebuild diff
-    du-dust
+    du-dust # Disk usage analyzer (for directories)
+    gdu # Alternative to du-dust
+    duf # Disk usage analyzer (for all disk overview)
+    fd # find alternative
+    sd # sed alternative
+    tealdeer # very fast tldr (very readable man)
+    gping # ping with graph
+    curlie # curl a'la httpie
+    dogdns # dns client
+    fclones # duplicate file finder
+    gum # nice shell scripts
+    lazygit # can always use another git client
+
+    # Xooooorg
+    xclip
+    xorg.xwininfo # See what apps run in XWayland
+    xdotool
+
+    # Hardware/Software info
     neofetch # Easily see interesting package versions/kernel
-    lazygit
-    yt-dlp
     pciutils
     glxinfo
     wayland-utils
     aha
     radeontop
 
+    # Web stuff
     signal-desktop
     protonvpn-cli
-    cyberdrop-dl
+    yt-dlp # download videos (from almost anywhere)
+    cyberdrop-dl # TODO: Make this somehow only available in the needed folder (but keep derivation here?)
     filezilla
 
     # Tools
-    # calibre
-    # virt-manager # Let's try gnome-boxes while we're at it
-    gource # Visualize git commit log
+    calibre # Do I even read
+    virt-manager
+    gource # Visualize git commit log, completely useless
     anki-bin # Use anki-bin as anki is some versions behind
-    # libreoffice-fresh
-    jabref # manage bibilography
     inputs.nixos-conf-editor.packages."x86_64-linux".nixos-conf-editor
     octave
+
+    # Office
+    jabref # manage bibilography
+    sioyek # Scientific pdf reader
+    xournalpp # Write with a pen
+    libreoffice-qt
+    hunspell # I cna't type
+    hunspellDicts.en_US
+    hunspellDicts.de_DE
 
     # TODO: LaTeX module
     texlab
 
     # Media
     wacomtablet
-    xournalpp
-    # davinci-resolve # Large and slow and overpowered for my purposes
     blender
     godot
     obs-studio
@@ -221,7 +250,7 @@ in rec {
     # KDE Applications
     # TODO: Make a module out of this
     libsForQt5.kate
-    # libsForQt5.kwrited # Already included by default
+    libsForQt5.kwrited # Already included by default
     libsForQt5.ark
     libsForQt5.kdeconnect-kde
     libsForQt5.kcalc
@@ -237,7 +266,6 @@ in rec {
     libsForQt5.skanlite
     libsForQt5.kmail
     libsForQt5.kalendar
-    libsForQt5.plasma-browser-integration
     okteta
     kdiff3
     kgraphviewer
