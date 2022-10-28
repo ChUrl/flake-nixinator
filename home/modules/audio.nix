@@ -23,7 +23,8 @@ in {
     tenacity.enable = mkEnableOpt "Tenacity (Audacity fork)";
 
     # Instruments/Plugins
-    vcvrack.enable = mkEnableOpt "VCV-Rack (Eurorack simulator)";
+    # vcvrack.enable = mkEnableOpt "VCV-Rack (Eurorack simulator)"; # Replaced by cardinal
+    cardinal.enable = mkEnableOpt "Open Source VCV-Rack plugin wrapper";
     # vital.enable = mkEnableOpt "Vital (Wavetable synthesizer)"; # Replaced by distrho
     distrho.enable = mkEnableOpt "Distrho (Linux VST ports)";
 
@@ -97,7 +98,8 @@ in {
       (optionals cfg.yabridge.enable [ yabridge yabridgectl ])
       (optionals cfg.noisesuppression.noisetorch.enable [ noisetorch ])
 
-      (optionals cfg.vcvrack.enable [ vcv-rack ])
+      # (optionals cfg.vcvrack.enable [ vcv-rack ]) # Replaced by cardinal
+      (optionals cfg.cardinal.enable [ cardinal ])
       # (optionals cfg.vital.enable [ vital-synth ]) # Replaced by distrho
       (optionals cfg.distrho.enable [ distrho ])
     ];
