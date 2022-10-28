@@ -11,8 +11,8 @@ rec {
     audio = {
       enable = true;
 
-      carla.enable = true;
-      bitwig.enable = true;
+      carla.enable = false;
+      bitwig.enable = true; # TODO: Check what happens when upgrade plan ends, do I need to pin the version then?
       tenacity.enable = true;
 
       faust.enable = true;
@@ -25,15 +25,14 @@ rec {
          noisetorch.autostart = true;
       };
 
-      vcvrack.enable = false;
-      # vital.enable = true;
+      cardinal.enable = true;
       distrho.enable = true;
     };
 
     gaming = {
       enable = true;
 
-      polymc.enable = true;
+      prism.enable = true;
       bottles.enable = true;
       discordChromium.enable = true;
       discordElectron.enable = true;
