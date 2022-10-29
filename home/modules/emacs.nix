@@ -63,7 +63,7 @@ in {
 
       # TODO: Check what hlissner has enabled
       (optionals cfg.doom.enable [
-        emacs-all-the-icons-fonts
+        # emacs-all-the-icons-fonts # Needs to be in fonts.fonts
         (ripgrep.override { withPCRE2 = true; })
         fd
         zstd
