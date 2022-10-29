@@ -15,7 +15,6 @@
         };
 
         myPython = pkgs.python310.withPackages (p: with p; [
-          yt-dlp
         ]);
       in {
         devShell = pkgs.devshell.mkShell {
