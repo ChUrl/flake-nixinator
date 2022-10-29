@@ -321,7 +321,7 @@
   (setq! projectile-track-known-projects-automatically t
          projectile-indexing-method 'alien ;; alien is faster than hybrid but doesn't recognize .projectile markers
          projectile-sort-order 'recentf
-         projectile-ignored-projects '("/home/christoph/.emacs.d" "/tmp" "/home/christoph/" "/home/christoph/.emacs.d/.local/straight/repos/")
+         projectile-ignored-projects '("/home/christoph/.emacs.d/" "/tmp/" "/home/christoph/" "/home/christoph/.emacs.d/.local/straight/repos/" "/home/christoph/Videos/")
          ;; projectile-project-root-files #'(".projectile") ;; only recognize .projectile projects
          ;; projectile-project-root-functions #'(projectile-root-top-down
          ;;                                      projectile-root-top-down-recurring
