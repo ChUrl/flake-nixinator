@@ -55,7 +55,7 @@ in rec {
       autoPrune = true;
 
       flatseal.enable = true;
-      discord.enable = false;
+      discord.enable = true;
       spotify.enable = true;
       bottles.enable = true;
     };
@@ -185,8 +185,8 @@ in rec {
     httpie # Cool http client
     (ripgrep.override { withPCRE2 = true; }) # fast as fuck
     nvd # nix rebuild diff
-    du-dust # Disk usage analyzer (for directories)
-    gdu # Alternative to du-dust
+    # du-dust # Disk usage analyzer (for directories)
+    gdu # Alternative to du-dust (I like it better)
     duf # Disk usage analyzer (for all disk overview)
     fd # find alternative
     sd # sed alternative
@@ -197,6 +197,9 @@ in rec {
     fclones # duplicate file finder
     gum # nice shell scripts
     lazygit # can always use another git client
+    graphviz
+    gnuplot
+    pandoc
 
     # Xooooorg
     xclip
@@ -246,6 +249,7 @@ in rec {
     vlc
     kdenlive
     krita
+    inkscape
 
     # KDE Applications
     # TODO: Make a module out of this
