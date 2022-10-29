@@ -166,13 +166,14 @@
   };
 
   # XDG
+  # NOTE: I think only the fitting portal is required
   xdg.portal = {
       enable = true;
       extraPortals = with pkgs; [
         # xdg-desktop-portal-wlr # For wlroots based desktops
         xdg-desktop-portal-kde # Comes with Plasma
-        xdg-desktop-portal-gtk # Comes with Gnome
-        xdg-desktop-portal-gnome # Comes with Gnome
+        # xdg-desktop-portal-gtk # Comes with Gnome
+        # xdg-desktop-portal-gnome # Comes with Gnome
       ];
       # gtkUsePortal = true; # Deprecated, don't use (gdm takes ages to load and other fishy stuff)
   };
@@ -220,6 +221,10 @@
       noto-fonts
       noto-fonts-extra
       noto-fonts-emoji
+
+      # Emacs fonts
+      emacs-all-the-icons-fonts
+      material-design-icons
 
       # Some fonts from an old emacs config, not longer used
       # etBook
