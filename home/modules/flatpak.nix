@@ -71,7 +71,7 @@ in {
     # ];
 
     # TODO: Currently it is not possible to define overrides for the same flatpak from different places
-    # TODO: Also only filesystems overrides are applied
+    # TODO: Also only filesystem overrides are applied
     home.file = let
       # Specific overrides
 
