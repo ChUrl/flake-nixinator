@@ -18,10 +18,6 @@ in {
       # plugins = [];
       shellAbbrs = let
         hasBat = config.programs.bat.enable;
-        hasExa = config.programs.exa.enable;
-        hasRanger = config.modules.ranger.enable;
-        hasProtonVPN = contains config.home.packages pkgs.protonvpn-cli;
-
         batify = string: string + (optionalString hasBat " | bat");
       in mkMerge [
         {
@@ -29,52 +25,56 @@ in {
           q = "exit";
           h = batify "history";
 
+          # tools
           cd = "z";
-          cp = "cp -i";
-          mkd = "mkdir -p";
-
+          # cp = "cp -puri"; # TODO: Is rsync a good replacement?
+          mkdir = "mkdir -p";
           blk = batify "lsblk -o NAME,LABEL,UUID,FSTYPE,SIZE,FSUSE%,MOUNTPOINT,MODEL";
-          fsm = batify "df -h";
-          grp = "grep --color=auto -E";
-          fzp = "fzf --preview 'bat --color=always --style=numbers --line-range=:500 {}'";
-          fre = batify "free -m";
-          wat = "watch -d -c -n -0.5";
-          dus = batify "sudo dust -r";
-          dsi = batify "sudo du -sch .";
-          prc = "procs -t";
+          grep = "grep --color=auto -E";
+          watch = "watch -d -c -n -0.5";
 
-          lg = "lazygit";
+          # git
           gs = "git status";
           gcm = "git commit -m";
           ga = "git add";
           glg = "git log --graph --decorate --oneline";
           gcl = "git clone";
 
-          # This doesn't work at all, many things crash, no internet etc.
-          # gnome = "dbus-run-session gnome-session"; # Requires XDG_SESSION_TYPE to be set for wayland
-
           failed = "systemctl --failed";
           errors = "journalctl -p 3 -xb";
+          kerrors = "journalctl -p 3 -xb -k";
 
-          rsync = "rsync -chavzP --info=progress2";
           xxhamster = "TERM=ansi ssh christoph@217.160.142.51";
 
           mp4 = "yt-dlp -f 'bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4] / bv*+ba/b' --recode-video mp4"; # the -f options are yt-dlp defaults
           mp3 = "yt-dlp -f 'ba' --extract-audio --audio-format mp3";
         }
 
-        (optionalAttrs hasExa {
+        (optionalAttrs (contains config.home.packages pkgs.lazygit) { lg = "lazygit"; })
+        (optionalAttrs (contains config.home.packages pkgs.gping) { ping = "gping"; })
+        (optionalAttrs (contains config.home.packages pkgs.duf) { df = "duf"; })
+        (optionalAttrs (contains config.home.packages pkgs.gdu) { du = "gdu"; })
+        (optionalAttrs (contains config.home.packages pkgs.fzf) {
+          fz = "fzf --preview 'bat --color=always --style=numbers --line-range=:500 {}'";
+        })
+
+        (optionalAttrs (contains config.home.packages pkgs.rsync) {
+          cp = "rsync -ahv --inplace --partial --info=progress2";
+          rsync = "rsync -ahv --inplace --partial --info=progress2";
+        })
+
+        (optionalAttrs config.programs.exa.enable {
           ls = "exa --color always --group-directories-first -F --git --icons"; # color-ls
           lsl = "exa --color always --group-directories-first -F -l --git --icons";
           lsa = "exa --color always --group-directories-first -F -l -a --git --icons";
           tre = "exa --color always --group-directories-first -F -T -L 2 ---icons";
         })
 
-        (optionalAttrs hasRanger {
+        (optionalAttrs config.modules.ranger.enable {
           r = "ranger --choosedir=$HOME/.rangerdir; set LASTDIR (cat $HOME/.rangerdir); cd $LASTDIR";
         })
 
-        (optionalAttrs hasProtonVPN {
+        (optionalAttrs (contains config.home.packages pkgs.protonvpn-cli) {
           vpnat = "protonvpn-cli c --cc at";
           vpnch = "protonvpn-cli c --cc ch";
           vpnlu = "protonvpn-cli c --cc lu";
