@@ -35,7 +35,7 @@ rec {
       prism.enable = true;
       bottles.enable = true;
       discordChromium.enable = true;
-      discordElectron.enable = true;
+      discordElectron.enable = false; # This is the nixpkgs version, prefer the one from flatpak module
 
       steam = {
         enable = true;

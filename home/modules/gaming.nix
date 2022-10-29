@@ -19,7 +19,7 @@ in {
   options.modules.gaming = {
     enable = mkEnableOpt "Gaming module";
 
-    discordElectron.enable = mkEnableOpt "Discord (Electron) (flatpak)";
+    discordElectron.enable = mkEnableOpt "Discord (Electron) (nixpkgs)";
     discordChromium.enable = mkEnableOpt "Discord (Chromium)";
     prism.enable = mkEnableOpt "PrismLauncher for Minecraft (flatpak)";
     bottles.enable = mkEnableOpt "Bottles (flatpak)";
@@ -47,10 +47,6 @@ in {
         assertion = cfgfp.enable;
         message = "Cannot enable Bottles without the flatpak module!";
       })
-      (mkIf cfg.discordElectron.enable {
-        assertion = cfgfp.enable;
-        message = "Cannot enable Discord (Electron) without the flatpak module!";
-      })
     ];
 
     home.packages = with pkgs; builtins.concatLists [
@@ -65,7 +61,7 @@ in {
       (optionals cfg.discordChromium.enable [ chromium ])
 
       # Prefer flatpak version as nixpkgs version isn't always updated in time
-      # (optionals cfg.discordElectron.enable [ discord ])
+      (optionals cfg.discordElectron.enable [ discord ])
       (optionals cfg.steam.adwaita [ adwaita-for-steam ])
 
       # Prefer flatpak version as this one doesn't find the STEAM_DIR automatically
@@ -141,8 +137,7 @@ in {
       (optionals cfg.steam.enable [ "com.valvesoftware.Steam" "com.github.Matoking.protontricks" "com.valvesoftware.Steam.Utility.steamtinkerlaunch" "com.steamgriddb.steam-rom-manager" "org.DolphinEmu.dolphin-emu" ])
       (optionals (cfg.steam.enable && cfg.steam.protonGE) [ "com.valvesoftware.Steam.CompatibilityTool.Proton-GE" ])
       (optionals (cfg.steam.enable && cfg.steam.gamescope) [ "com.valvesoftware.Steam.Utility.gamescope" ])
-      (optionals (cfg.prism.enable) [ "org.prismlauncher.PrismLauncher" ])
-      (optionals (cfg.discordElectron.enable) [ "com.discordapp.Discord" ])
+      (optionals cfg.prism.enable [ "org.prismlauncher.PrismLauncher" ])
     ];
 
     modules.flatpak.extraRemove = builtins.concatLists [
@@ -150,7 +145,6 @@ in {
       (optionals (!cfg.steam.enable || !cfg.steam.protonGE) [ "com.valvesoftware.Steam.CompatibilityTool.Proton-GE" ])
       (optionals (!cfg.steam.enable || !cfg.steam.gamescope) [ "com.valvesoftware.Steam.Utility.gamescope" ])
       (optionals (!cfg.prism.enable) [ "org.prismlauncher.PrismLauncher" ])
-      (optionals (!cfg.discordElectron.enable) [ "com.discordapp.Discord" ])
     ];
   };
 }
