@@ -186,7 +186,7 @@
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
-    jack.enable = true; # TODO: Was needed for low latency but probably not anymore (?) as Bitwig supports Pipewire now
+    jack.enable = false; # TODO: Was needed for low latency but probably not anymore (?) as Bitwig supports Pipewire now
 
     wireplumber.enable = true; # Probably the default
     media-session.enable = false;
