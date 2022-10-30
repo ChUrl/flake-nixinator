@@ -66,7 +66,7 @@ pkgs.devshell.mkShell {
     {
       name = "store-gc";
       help = "Run NixOS garbage collector";
-      command = "nix-store --gc && sudo nix-collect-garbage -d";
+      command = "nix-store --gc && sudo nix-collect-garbage -d && flatpak uninstall --unused";
     }
     {
       name = "store-optimise";
