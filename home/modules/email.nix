@@ -1,3 +1,7 @@
+# Example: https://beb.ninja/post/email/
+# Example: https://sbr.pm/configurations/mails.html
+# NOTE: The passwords must exist in kwallet
+
 { config, nixosConfig, lib, mylib, pkgs, ... }:
 
 with lib;
@@ -11,17 +15,23 @@ in {
     enable = mkEnableOpt "Email";
   };
 
+  # TODO: Add Maildir to nextcloud sync
   config = mkIf cfg.enable {
     programs = {
-      mbsync.enable = true;
+      mbsync.enable = true; # isync package
       msmtp.enable = true;
+      # Run notmuch new to index all new mail
       notmuch = {
         enable = true;
         hooks = {
+          # When running notmuch new all channels will be syncronized by mbsync
           preNew = "mbsync --all";
         };
       };
     };
+
+    # TODO: imapnotify can't parse the configuration, HM bug?
+    services.imapnotify.enable = true;
 
     accounts.email.accounts = {
       urpost = {
@@ -43,8 +53,66 @@ in {
         };
         msmtp.enable = true; # Smtp
         notmuch.enable = true;
+        imapnotify.enable = true;
+        imapnotify.onNotify =  {
+          mail = "${pkgs.notmuch}/bin/notmuch new && ${pkgs.libnotify}/bin/notify-send 'New mail arrived on Urpost'";
+        };
 
         primary = true;
+      };
+
+      hhu = {
+        address = "christoph.urlacher@hhu.de";
+        userName = "churl100";
+        realName = "Christoph Urlacher";
+        signature.showSignature = "none";
+
+        imap.host = "mail.hhu.de";
+        imap.port = 993;
+        smtp.host = "mail.hhu.de";
+        smtp.port = 465;
+
+        passwordCommand = "kwallet-query -f email -r hhu kdewallet";
+
+        mbsync = { # Imap
+          enable = true;
+          create = "maildir";
+        };
+        msmtp.enable = true; # Smtp
+        notmuch.enable = true;
+        imapnotify.enable = true;
+        imapnotify.onNotify =  {
+          mail = "${pkgs.notmuch}/bin/notmuch new && ${pkgs.libnotify}/bin/notify-send 'New mail arrived on HHU'";
+        };
+
+        primary = false;
+      };
+
+      # TODO: Setup the correct groups/patterns
+      gmail = {
+        address = "tobiasmustermann529@gmail.com";
+        userName = "tobiasmustermann529@gmail.com";
+        realName = "Christoph Urlacher";
+        signature.showSignature = "none";
+
+        flavor = "gmail.com";
+
+        # NOTE: Uses Gmail app password
+        passwordCommand = "kwallet-query -f email -r gmail kdewallet";
+
+        mbsync = { # Imap
+          enable = true;
+          create = "maildir";
+          patterns = ["*" "![Gmail]*" "[Gmail]/Sent Mail" "[Gmail]/Starred" "[Gmail]/All Mail"]; # Only sync inbox
+        };
+        msmtp.enable = true; # Smtp
+        notmuch.enable = true;
+        imapnotify.enable = true;
+        imapnotify.onNotify =  {
+          mail = "${pkgs.notmuch}/bin/notmuch new && ${pkgs.libnotify}/bin/notify-send 'New mail arrived on GMail'";
+        };
+
+        primary = false;
       };
     };
   };
