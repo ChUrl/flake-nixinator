@@ -28,7 +28,7 @@ in {
         address = "tobi@urpost.de";
         userName = "tobi@urpost.de";
         realName = "Christoph Urlacher";
-        signatur.showSignature = "none";
+        signature.showSignature = "none";
 
         imap.host = "mail.zeus08.de";
         imap.port = 993;
