@@ -38,6 +38,10 @@ in rec {
       doom.autoUpgrade = false; # Very volatile as the upgrade fails sometimes with bleeding edge emacs
     };
 
+    email = {
+      enable = true;
+    }
+
     firefox = {
       enable = true;
       wayland = true;
@@ -226,7 +230,7 @@ in rec {
     # Web stuff
     signal-desktop
     protonvpn-cli
-    yt-dlp # download videos (from almost anywhere)
+    # yt-dlp # download videos (from almost anywhere) # HM program
     cyberdrop-dl # TODO: Make this somehow only available in the needed folder (but keep derivation here?)
     filezilla
 
@@ -240,7 +244,7 @@ in rec {
 
     # Office
     jabref # manage bibilography
-    sioyek # Scientific pdf reader
+    # sioyek # Scientific pdf reader # HM program
     xournalpp # Write with a pen
     libreoffice-qt
     hunspell # I cna't type
@@ -265,7 +269,7 @@ in rec {
     libsForQt5.kate
     libsForQt5.kwrited # Already included by default
     libsForQt5.ark
-    libsForQt5.kdeconnect-kde
+    libsForQt5.kdeconnect-kde # NOTE: Also has HM program
     libsForQt5.kcalc
     libsForQt5.ksystemlog
     libsForQt5.kfind
@@ -291,9 +295,47 @@ in rec {
   # Packages with extra options managed by HomeManager natively
   programs = {
     home-manager.enable = true;
+
+    # Potential future enables
+    # mangohud.enable = true;
+    # matplotlib.enable = true;
+    # kdeconnect.enable = true;
+
     bat.enable = true;
+    btop.enable = true;
+
+    direnv = {
+      enable = true;
+      nix-direnv.enable = true;
+    };
+
+    # TODO: Configure this
+    # editorconfig.enable = true;
+
     exa.enable = true;
-    ssh.enable = true;
+
+    fzf = {
+      enable = true;
+      enableFishIntegration = config.modules.fish.enable;
+    };
+
+    gallery-dl.enable = true; # TODO: Alternative to cyberdrop-dl?
+
+    git = {
+      enable = true;
+      delta.enable = true;
+      userEmail = "christoph.urlacher@protonmail.com";
+      userName = "ChUrl";
+    };
+
+    # NOTE: If error occurs after system update on fish init run "ssh-add"
+    keychain = {
+      enable = true;
+      enableFishIntegration = config.modules.fish.enable;
+      enableXsessionIntegration = true;
+      agents = [ "ssh" ];
+      keys = [ "id_ed25519" ];
+    };
 
     # Realtime Motion Interpolation: https://gist.github.com/phiresky/4bfcfbbd05b3c2ed8645
     mpv = {
@@ -309,16 +351,31 @@ in rec {
       };
     };
 
-    direnv = {
+    nix-index = {
       enable = true;
-      nix-direnv.enable = true;
+      enableFishIntegration = config.modules.fish.enable;
     };
 
-    git = {
+    # Scientific pdf reader
+    sioyek = {
       enable = true;
-      delta.enable = true;
-      userEmail = "christoph.urlacher@protonmail.com";
-      userName = "ChUrl";
+      # bindings = {};
+      # config = {};
+    };
+
+    ssh.enable = true;
+
+    starship = {
+      enable = true;
+      enableFishIntegration = config.modules.fish.enable;
+    };
+
+    # TODO: Check HM module options
+    yt-dlp.enable = true;
+
+    zoxide = {
+      enable = true;
+      enableFishIntegration = config.modules.fish.enable;
     };
   };
 

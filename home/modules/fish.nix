@@ -45,15 +45,13 @@ in {
           kerrors = "journalctl -p 3 -xb -k";
 
           xxhamster = "TERM=ansi ssh christoph@217.160.142.51";
-
-          mp4 = "yt-dlp -f 'bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4] / bv*+ba/b' --recode-video mp4"; # the -f options are yt-dlp defaults
-          mp3 = "yt-dlp -f 'ba' --extract-audio --audio-format mp3";
         }
 
         (optionalAttrs (contains config.home.packages pkgs.lazygit) { lg = "lazygit"; })
         (optionalAttrs (contains config.home.packages pkgs.gping) { ping = "gping"; })
         (optionalAttrs (contains config.home.packages pkgs.duf) { df = "duf"; })
         (optionalAttrs (contains config.home.packages pkgs.gdu) { du = "gdu"; })
+        (optionalAttrs config.programs.btop.enable { top = "btop"; })
         (optionalAttrs (contains config.home.packages pkgs.fzf) {
           fz = "fzf --preview 'bat --color=always --style=numbers --line-range=:500 {}'";
         })
@@ -83,43 +81,16 @@ in {
           vpnkr = "protonvpn-cli c --cc kr";
           vpnoff = "protonvpn-cli d";
         })
+
+        (optionalAttrs config.programs.yt-dlp.enable {
+          mp4 = "yt-dlp -f 'bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4] / bv*+ba/b' --recode-video mp4"; # the -f options are yt-dlp defaults
+          mp3 = "yt-dlp -f 'ba' --extract-audio --audio-format mp3";
+        })
       ];
 
       shellInit = ''
         set -e fish_greeting
       '';
-    };
-
-    # I put these programs here as they all have fish integration and are connected to the shell,
-    # don't know if I will keep it that way
-
-    programs.fzf = {
-      enable = true;
-      enableFishIntegration = true;
-    };
-
-    # NOTE: If error occurs after system update on fish init run "ssh-add"
-    programs.keychain = {
-      enable = true;
-      enableFishIntegration = true;
-      enableXsessionIntegration = true;
-      agents = [ "ssh" ];
-      keys = [ "id_ed25519" ];
-    };
-
-    programs.nix-index = {
-      enable = true;
-      enableFishIntegration = true;
-    };
-
-    programs.starship = {
-      enable = true;
-      enableFishIntegration = true;
-    };
-
-    programs.zoxide = {
-      enable = true;
-      enableFishIntegration = true;
     };
   };
 }
