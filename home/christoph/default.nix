@@ -40,7 +40,7 @@ in rec {
 
     email = {
       enable = true;
-    }
+    };
 
     firefox = {
       enable = true;
