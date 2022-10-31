@@ -212,6 +212,7 @@ in rec {
     graphviz
     gnuplot
     pandoc
+    libnotify
 
     # Xooooorg
     xclip
