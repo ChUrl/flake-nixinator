@@ -48,6 +48,7 @@ in {
         };
       })
 
+      # TODO: Error: has no wallet, find out how to get imap credentials from this
       (optionalAttrs (cfg.protonmail.enable && cfg.protonmail.autostart) {
         autostart-protonmail = {
           Unit = {
