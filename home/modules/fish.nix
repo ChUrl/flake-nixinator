@@ -98,6 +98,7 @@ in {
       enableFishIntegration = true;
     };
 
+    # NOTE: If error occurs after system update on fish init run "ssh-add"
     programs.keychain = {
       enable = true;
       enableFishIntegration = true;
