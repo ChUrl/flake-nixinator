@@ -4,6 +4,7 @@
   imports = [
     ./audio.nix
     ./emacs.nix
+    ./email.nix
     ./firefox.nix
     ./fish.nix
     ./flatpak.nix
