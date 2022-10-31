@@ -42,7 +42,9 @@ in {
 
           failed = "systemctl --failed";
           errors = "journalctl -p 3 -xb";
-          kerrors = "journalctl -p 3 -xb -k";
+          kernelerrors = "journalctl -p 3 -xb -k";
+          uniterrors = "journalctl -xb --unit=";
+          useruniterrors = "journalctl -xb --user-unit=";
 
           xxhamster = "TERM=ansi ssh christoph@217.160.142.51";
         }
