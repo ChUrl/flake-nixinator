@@ -19,7 +19,6 @@ rec {
     layout = "us";
     xkbVariant = "altgr-intl";
 
-    # Proprietary graphics drivers, yay :(
     # videoDrivers = [ "nvidia" ]; # NVIDIA
     videoDrivers = [ "amdgpu" ];
   };
