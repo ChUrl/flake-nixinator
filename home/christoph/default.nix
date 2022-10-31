@@ -136,6 +136,11 @@ in rec {
   in
     formatted;
 
+  home.file.".config/mpv" = {
+    recursive = true;
+    source = ../../config/mpv;
+  };
+
   home = {
     username = username; # Inherited from flake.nix
     homeDirectory = "/home/${home.username}";
@@ -168,6 +173,8 @@ in rec {
 
   # TODO: Check what packages are installed here and in modules and check if there is already a service/hm-module for it
   # TODO: If so use this or adapt the config from there (example gnome.sushi is also added to dbus packages in services.sushi)
+  # TODO: Make a module for standard UNIX replacements
+  # TODO: Make a video player module
   # Add stuff for your user as you see fit:
   home.packages = with pkgs; [
     # CLI Tools
@@ -193,6 +200,7 @@ in rec {
     tealdeer # very fast tldr (very readable man)
     gping # ping with graph
     curlie # curl a'la httpie
+    wget
     dogdns # dns client
     fclones # duplicate file finder
     gum # nice shell scripts
@@ -213,6 +221,7 @@ in rec {
     wayland-utils
     aha
     radeontop
+    clinfo # OpenCL info
 
     # Web stuff
     signal-desktop
@@ -246,7 +255,7 @@ in rec {
     blender
     godot
     obs-studio
-    vlc
+    # vlc
     kdenlive
     krita
     inkscape
@@ -284,8 +293,21 @@ in rec {
     home-manager.enable = true;
     bat.enable = true;
     exa.enable = true;
-    # mpv.enable = true; # Doesn't work, only blackscreen?
     ssh.enable = true;
+
+    # Realtime Motion Interpolation: https://gist.github.com/phiresky/4bfcfbbd05b3c2ed8645
+    mpv = {
+      enable = true;
+      # NOTE: wrapMpv explained here: https://github.com/NixOS/nixpkgs/blob/nixos-unstable/pkgs/applications/video/mpv/wrapper.nix#L84
+      #       wrapMpv gets two args: the mpv derivation and some options
+      #       Possible overrides for derivation: https://github.com/NixOS/nixpkgs/blob/nixos-unstable/pkgs/applications/video/mpv/default.nix#L222
+      package = pkgs.wrapMpv (pkgs.mpv-unwrapped.override { vapoursynthSupport = true; }) {
+        youtubeSupport = true;
+        extraMakeWrapperArgs = [
+          "--prefix" "LD_LIBRARY_PATH" ":" "${pkgs.vapoursynth-mvtools}/lib"
+        ];
+      };
+    };
 
     direnv = {
       enable = true;
