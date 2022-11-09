@@ -145,6 +145,8 @@ in rec {
     source = ../../config/mpv;
   };
 
+  home.file.".local/share/navi/cheats/christoph.cheat".source = ../../config/navi/christoph.cheat;
+
   home = {
     username = username; # Inherited from flake.nix
     homeDirectory = "/home/${home.username}";
@@ -203,6 +205,7 @@ in rec {
     sd # sed alternative
     tealdeer # very fast tldr (very readable man)
     gping # ping with graph
+    # gtop # graphic top # We have btop already...
     curlie # curl a'la httpie
     wget
     dogdns # dns client
@@ -213,6 +216,8 @@ in rec {
     gnuplot
     pandoc
     libnotify
+    gitbatch
+    mprocs
 
     # Xooooorg
     xclip
@@ -221,12 +226,15 @@ in rec {
 
     # Hardware/Software info
     neofetch # Easily see interesting package versions/kernel
-    pciutils
-    glxinfo
-    wayland-utils
-    aha
+    pciutils # lspci
+    glxinfo # opengl info
+    wayland-utils # wayland-info
+    aha # ansi html adapter? Why did I install this?
     radeontop
     clinfo # OpenCL info
+    vulkan-tools # vulkaninfo
+    libva-utils # vainfo
+    rocminfo # radeon comptute platform info
 
     # Web stuff
     signal-desktop
@@ -350,6 +358,12 @@ in rec {
           "--prefix" "LD_LIBRARY_PATH" ":" "${pkgs.vapoursynth-mvtools}/lib"
         ];
       };
+    };
+
+    # Interactive Cheatsheets
+    navi = {
+      enable = true;
+      enableFishIntegration = config.modules.fish.enable; # Type something "remove first line" and hit Ctrl-G to launch navi on that prompt
     };
 
     nix-index = {
