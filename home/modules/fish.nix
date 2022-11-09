@@ -87,6 +87,10 @@ in {
         })
         (abbrify pkgs.gping { ping = "gping"; })
         (abbrify pkgs.lazygit { lg = "lazygit"; })
+        (abbrify pkgs.notmuch {
+          mailrefresh = "notmuch new";
+          mailsearch = "notmuch search";
+        })
         (abbrify pkgs.protonvpn-cli {
           vpnat = "protonvpn-cli c --cc at";
           vpnch = "protonvpn-cli c --cc ch";
