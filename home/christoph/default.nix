@@ -203,33 +203,33 @@ in rec {
     duf # Disk usage analyzer (for all disk overview)
     fd # find alternative
     sd # sed alternative
-    tealdeer # very fast tldr (very readable man)
+    tealdeer # very fast tldr (so readable man)
     gping # ping with graph
     # gtop # graphic top # We have btop already...
     curlie # curl a'la httpie
-    wget
+    wget # download that shit
     dogdns # dns client
     fclones # duplicate file finder
     gum # nice shell scripts
     lazygit # can always use another git client
-    graphviz
-    gnuplot
-    pandoc
-    libnotify
-    gitbatch
-    mprocs
+    gitbatch # overview over multiple repos
+    graphviz # generate svg graphs etc
+    gnuplot # generate function plots
+    pandoc # document converting madness
+    mprocs # run multiple processes in single terminal window, screen alternative
 
-    # Xooooorg
+    # Xooooorg/Desktop environment stuff
     xclip
     xorg.xwininfo # See what apps run in XWayland
     xdotool
+    libnotify
 
     # Hardware/Software info
     neofetch # Easily see interesting package versions/kernel
     pciutils # lspci
     glxinfo # opengl info
     wayland-utils # wayland-info
-    aha # ansi html adapter? Why did I install this?
+    aha # ansi html adapter? TODO: Why did I install this?
     radeontop
     clinfo # OpenCL info
     vulkan-tools # vulkaninfo
