@@ -17,9 +17,10 @@ in {
       # functions = {};
       # plugins = [];
       shellAbbrs = let
-        hasBat = config.programs.bat.enable;
-        batify = string: string + (optionalString hasBat " | bat");
+        batify = command: command + (optionalString config.programs.bat.enable " | bat");
+        batify2 = command: args: command + (optionalString config.programs.bat.enable (" | bat " + args));
       in mkMerge [
+        # Default abbrs, always available
         {
           c = "clear";
           q = "exit";
@@ -32,14 +33,9 @@ in {
           blk = batify "lsblk -o NAME,LABEL,UUID,FSTYPE,SIZE,FSUSE%,MOUNTPOINT,MODEL";
           grep = "grep --color=auto -E";
           watch = "watch -d -c -n -0.5";
+          listabbrs = batify2 "abbr" "-l fish";
 
-          # git
-          gs = "git status";
-          gcm = "git commit -m";
-          ga = "git add";
-          glg = "git log --graph --decorate --oneline";
-          gcl = "git clone";
-
+          # systemd
           failed = "systemctl --failed";
           errors = "journalctl -p 3 -xb";
           kernelerrors = "journalctl -p 3 -xb -k";
@@ -49,31 +45,31 @@ in {
           xxhamster = "TERM=ansi ssh christoph@217.160.142.51";
         }
 
+        # Abbrs only available if package is installed
         (optionalAttrs (contains config.home.packages pkgs.lazygit) { lg = "lazygit"; })
         (optionalAttrs (contains config.home.packages pkgs.gping) { ping = "gping"; })
         (optionalAttrs (contains config.home.packages pkgs.duf) { df = "duf"; })
         (optionalAttrs (contains config.home.packages pkgs.gdu) { du = "gdu"; })
         (optionalAttrs config.programs.btop.enable { top = "btop"; })
-        (optionalAttrs (contains config.home.packages pkgs.fzf) {
-          fz = "fzf --preview 'bat --color=always --style=numbers --line-range=:500 {}'";
+        (optionalAttrs (contains config.home.packages pkgs.fzf) { fz = "fzf --preview 'bat --color=always --style=numbers --line-range=:500 {}'"; })
+        (optionalAttrs config.modules.ranger.enable { r = "ranger --choosedir=$HOME/.rangerdir; set LASTDIR (cat $HOME/.rangerdir); cd $LASTDIR"; })
+        (optionalAttrs config.programs.git.enable {
+          gs = "git status";
+          gcm = "git commit -m";
+          ga = "git add";
+          glg = "git log --graph --decorate --oneline";
+          gcl = "git clone";
         })
-
         (optionalAttrs (contains config.home.packages pkgs.rsync) {
           cp = "rsync -ahv --inplace --partial --info=progress2";
           rsync = "rsync -ahv --inplace --partial --info=progress2";
         })
-
         (optionalAttrs config.programs.exa.enable {
           ls = "exa --color always --group-directories-first -F --git --icons"; # color-ls
           lsl = "exa --color always --group-directories-first -F -l --git --icons";
           lsa = "exa --color always --group-directories-first -F -l -a --git --icons";
           tre = "exa --color always --group-directories-first -F -T -L 2 ---icons";
         })
-
-        (optionalAttrs config.modules.ranger.enable {
-          r = "ranger --choosedir=$HOME/.rangerdir; set LASTDIR (cat $HOME/.rangerdir); cd $LASTDIR";
-        })
-
         (optionalAttrs (contains config.home.packages pkgs.protonvpn-cli) {
           vpnat = "protonvpn-cli c --cc at";
           vpnch = "protonvpn-cli c --cc ch";
@@ -83,7 +79,6 @@ in {
           vpnkr = "protonvpn-cli c --cc kr";
           vpnoff = "protonvpn-cli d";
         })
-
         (optionalAttrs config.programs.yt-dlp.enable {
           mp4 = "yt-dlp -f 'bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4] / bv*+ba/b' --recode-video mp4"; # the -f options are yt-dlp defaults
           mp3 = "yt-dlp -f 'ba' --extract-audio --audio-format mp3";
