@@ -60,6 +60,7 @@ in {
         in settings_str;
       }
 
+      # TODO: Is cfg.preview double checked?
       (optionalAttrs cfg.preview {
         ".config/ranger/scope.sh".source = mkIf cfg.preview ../../config/ranger/scope.sh;
       })
