@@ -130,19 +130,41 @@ in {
       (optionalAttrs cfg.steam.enable {
         "com.github.Matoking.protontricks" = "${config.home.homeDirectory}/GameSSD;${config.home.homeDirectory}/GameHDD";
       })
+      # Allow ProtonUP-Qt to see game list and access steam
+      (optionalAttrs (cfg.steam.enable && cfg.steam.protonGE) {
+        "net.davidotek.pupgui2" = "${config.home.homeDirectory}/.var/app/com.valvesoftware.Steam;${config.home.homeDirectory}/GameSSD;${config.home.homeDirectory}/GameHDD";
+      })
     ];
 
     # TODO: RetroArch option org.libretro.RetroArch
     modules.flatpak.extraInstall = builtins.concatLists [
-      (optionals cfg.steam.enable [ "com.valvesoftware.Steam" "com.github.Matoking.protontricks" "com.valvesoftware.Steam.Utility.steamtinkerlaunch" "com.steamgriddb.steam-rom-manager" "org.DolphinEmu.dolphin-emu" ])
-      (optionals (cfg.steam.enable && cfg.steam.protonGE) [ "com.valvesoftware.Steam.CompatibilityTool.Proton-GE" ])
+      (optionals cfg.steam.enable [
+        "com.valvesoftware.Steam"
+        "com.github.Matoking.protontricks"
+        # "com.valvesoftware.Steam.Utility.steamtinkerlaunch"
+        # "com.steamgriddb.steam-rom-manager"
+        # "org.DolphinEmu.dolphin-emu"
+      ])
+      (optionals (cfg.steam.enable && cfg.steam.protonGE) [
+        # "com.valvesoftware.Steam.CompatibilityTool.Proton-GE"
+        "net.davidotek.pupgui2"
+      ])
       (optionals (cfg.steam.enable && cfg.steam.gamescope) [ "com.valvesoftware.Steam.Utility.gamescope" ])
       (optionals cfg.prism.enable [ "org.prismlauncher.PrismLauncher" ])
     ];
 
     modules.flatpak.extraRemove = builtins.concatLists [
-      (optionals (!cfg.steam.enable) [ "com.valvesoftware.Steam" "com.github.Matoking.protontricks" "com.valvesoftware.Steam.Utility.steamtinkerlaunch" "com.steamgriddb.steam-rom-manager" "org.DolphinEmu.dolphin-emu" ])
-      (optionals (!cfg.steam.enable || !cfg.steam.protonGE) [ "com.valvesoftware.Steam.CompatibilityTool.Proton-GE" ])
+      (optionals (!cfg.steam.enable) [
+        "com.valvesoftware.Steam"
+        "com.github.Matoking.protontricks"
+        # "com.valvesoftware.Steam.Utility.steamtinkerlaunch"
+        # "com.steamgriddb.steam-rom-manager"
+        # "org.DolphinEmu.dolphin-emu"
+      ])
+      (optionals (!cfg.steam.enable || !cfg.steam.protonGE) [
+        # "com.valvesoftware.Steam.CompatibilityTool.Proton-GE"
+        "net.davidotek.pupgui2"
+      ])
       (optionals (!cfg.steam.enable || !cfg.steam.gamescope) [ "com.valvesoftware.Steam.Utility.gamescope" ])
       (optionals (!cfg.prism.enable) [ "org.prismlauncher.PrismLauncher" ])
     ];
