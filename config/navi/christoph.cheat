@@ -1,4 +1,4 @@
 % nixos, nix-store, link
 
 # Find the storepath of an executable in the users path
-readlink -f (which <executable>)
+readlink -f $(which <executable>)
