@@ -28,8 +28,8 @@ in {
     ];
 
     home.file = mkMerge [
-      (optionalAttrs cfg.kmail.autostart {
-        ".config/autostart/org.kde.kmail2.desktop".source = mkIf cfg.kmail.autostart ../../config/autostart/org.kde.kmail2.desktop;
+      (optionalAttrs (cfg.kmail.enable && cfg.kmail.autostart) {
+        ".config/autostart/org.kde.kmail2.desktop".source = ../../config/autostart/org.kde.kmail2.desktop;
       })
     ];
 
