@@ -20,10 +20,9 @@ in {
     home.packages = with pkgs; builtins.concatLists [
       # TODO: I don't think vaapi works yet
       (optionals cfg.vaapi [
-        libva
-        libva-utils
-        # nvidia-vaapi-driver # Nvidia is gone :)
-        vulkan-tools
+        # NOTE: I put these into hardware.opengl.extrapackages, don't know if they belong there...
+        # libva
+        # libvdpau
       ])
 
       (optionals cfg.gnomeTheme [ firefox-gnome-theme ])
@@ -40,7 +39,7 @@ in {
       })
 
       (optionalAttrs cfg.vaapi {
-        LIBVA_DRIVER_NAME = "nvidia";
+        LIBVA_DRIVER_NAME = "radeonsi"; # "nvidia" for Nvidia card
         MOZ_DISABLE_RDD_SANDBOX = 1;
       })
     ];

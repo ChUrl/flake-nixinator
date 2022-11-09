@@ -76,16 +76,30 @@
     opengl.driSupport = true;
     opengl.driSupport32Bit = true;
 
-    # OpenCL
+    # AMD: https://nixos.wiki/wiki/AMD_GPU
     opengl.extraPackages = with pkgs; [
+      # amdvlk # RADV (mesa) and AMDVLK (amd) can be used simultaneously
+
+      # OpenCL
       rocm-opencl-icd
       rocm-opencl-runtime
+      # rocm-runtime # Wiki doesn't mention this, but it exists...
+
+      # VAAPI/VDPAU: https://nixos.wiki/wiki/Accelerated_Video_Playback
+      vaapiVdpau # Taken from wiki
+      libvdpau-va-gl # Taken from wiki
+
+      # TODO: Figure this out (vainfo), it works this way but I still don't know if this is completely correct
+      libvdpau # NOTE: Don't know if needed/where it belongs...
+      libva # NOTE: Don't know if needed/where it belongs...
     ];
 
     sane.enable = true; # Scanning
 
     xpadneo.enable = true;  # Xbox Controller
   };
+
+  environment.variables.AMD_VULKAN_ICD = "RADV"; # Choose mesa driver by default
 
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
 }
