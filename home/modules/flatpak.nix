@@ -87,7 +87,14 @@ in {
       global_default_overrides =  [
         "/nix/store:ro"
 
-        # These are not necessary
+        # TODO: There are irregular problems with flatpak app font antialiasing, I don't know where it comes from or when
+        #       Also some icons are missing, even when icon dir is accessible
+        #       I remember I did something one time that fixed it, but what was it :(?
+        # NOTE: This doesn't help sadly, also steam can't launch with this because it wants to create a link to ~/.local/share/fonts?
+        # "${config.home.homeDirectory}/.local/share/icons"
+        # "${config.home.homeDirectory}/.local/share/fonts"
+
+        # TODO: These are not necessary (Really?)
         # Make sure flatpaks are allowed to use the icons/fonts that are symlinked by icon/font fix
         # "/run/current-system/sw/share/X11/fonts:ro"
         # "/run/current-system/sw/share/icons:ro"
