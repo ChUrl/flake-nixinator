@@ -40,6 +40,12 @@ in rec {
 
     email = {
       enable = true;
+
+      # Use kmail as viewer for stuff synced by mbsync
+      kmail = {
+        enable = true;
+        autostart = true;
+      };
     };
 
     firefox = {
