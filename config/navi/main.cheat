@@ -1,0 +1,12 @@
+;This is a comment
+;% Denotes the tags under which the cheat is categorized
+;# Denotes the cheat description, followed by the command
+;With $ variable definitions can be provided, if the command outputs multiple lines, fzf can choose between them
+;If no $ is provided for a variable the user can input arbitrary things
+
+% first cheat
+
+# print something
+echo "My name is <name>!"
+
+$ name: whoami
