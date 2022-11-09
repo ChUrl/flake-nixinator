@@ -2,6 +2,8 @@
 # Example: https://sbr.pm/configurations/mails.html
 # NOTE: The passwords must exist in kwallet
 
+# TODO: Emacs mail config
+
 { config, nixosConfig, lib, mylib, pkgs, ... }:
 
 with lib;
@@ -13,6 +15,10 @@ in {
 
   options.modules.email = {
     enable = mkEnableOpt "Email";
+    kmail = {
+      enable = mkEnableOpt "Kmail";
+      autostart = mkEnableOpt "Autostart Kmail";
+    };
   };
 
   # TODO: Add Maildir to nextcloud sync
@@ -28,7 +34,17 @@ in {
           preNew = "mbsync --all";
         };
       };
+
+      home.packages = with pkgs; builtins.concatLists [
+        (optionals cfg.kmail.enable [ kmail ])
+      ];
     };
+
+    home.file = mkMerge [
+      (optionalAttrs cfg.kmail.autostart {
+        ".config/autostart/org.kde.kmail2.desktop".source = mkIf cfg.kmail.autostart ../../config/autostart/org.kde.kmail2.desktop;
+      })
+    ];
 
     # TODO: imapnotify can't parse the configuration, HM bug?
     services.imapnotify.enable = true;
