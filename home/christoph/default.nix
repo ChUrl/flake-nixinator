@@ -258,7 +258,7 @@ in rec {
     octave
 
     # Office
-    jabref # manage bibilography
+    # jabref # manage bibilography # NOTE: Uses jdk18 which is EOL, so can't build
     # sioyek # Scientific pdf reader # HM program
     xournalpp # Write with a pen
     libreoffice-qt
