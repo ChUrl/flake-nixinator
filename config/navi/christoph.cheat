@@ -1,4 +1,27 @@
-% nixos, nix-store, link
+; NixOS
 
+% nixos, nixos-rebuild
+# Rebuild a flake system derivation
+sudo nixos-rebuild <type> --flake .#<flake>
+$ type: echo -e "switch\nbuild\nboot"
+$ flake: echo -e "nixinator\nnixtop"
+
+% nixos, nix-store, closure, dependency
+# Find out why a package is included in the closure when building the system derivation
+nix why-depends /run/current-system nixpkgs#<package>
+
+; Nix-Store
+
+% nixos, nix-store, storepath, link
 # Find the storepath of an executable in the users path
 readlink -f $(which <executable>)
+
+% nixos, nix-store, storepath, libraries
+# Find the wanted dynamic libraries of an executable in the users path
+ldd $(readlink -f $(which <executable>))
+
+; Shell
+
+% shell, process
+# Launch a detached process with suppressed output
+<command> &>/dev/null &
