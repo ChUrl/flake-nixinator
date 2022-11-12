@@ -40,6 +40,8 @@ in rec {
 
     email = {
       enable = true;
+      autosync = true;
+      imapnotify = false;
 
       # Use kmail as viewer for stuff synced by mbsync
       kmail = {
