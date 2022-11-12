@@ -87,6 +87,7 @@ in {
         })
         (abbrify pkgs.gping { ping = "gping"; })
         (abbrify pkgs.lazygit { lg = "lazygit"; })
+        (abbrify pkgs.navi { n = "navi"; })
         (abbrify pkgs.notmuch {
           mailrefresh = "notmuch new";
           mailsearch = "notmuch search";
