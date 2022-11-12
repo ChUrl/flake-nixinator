@@ -15,6 +15,9 @@ in {
 
   options.modules.email = {
     enable = mkEnableOpt "Email";
+    autosync = mkEnableOpt "Automatically call \"notmuch new\" via systemd timer";
+    imapnotify = mkEnableOpt "Use imapnotify to sync and index mail automatically";
+
     kmail = {
       enable = mkEnableOpt "Kmail";
       autostart = mkEnableOpt "Autostart Kmail";
@@ -47,7 +50,25 @@ in {
     };
 
     # TODO: imapnotify can't parse the configuration, HM bug?
-    services.imapnotify.enable = true;
+    services.imapnotify.enable = cfg.imapnotify;
+
+    # Autosync, don't need imapnotify when enabled
+    systemd.user.services.mail-autosync = (mkIf cfg.autosync) {
+      Unit = { Description = "Automatic notmuch/mbsync synchronization"; };
+      Service = {
+        Type = "oneshot";
+        # ExecStart = "${pkgs.isync}/bin/mbsync -a";
+        ExecStart = "${pkgs.notmuch}/bin/notmuch new";
+      };
+    };
+    systemd.user.timers.mail-autosync = (mkIf cfg.autosync) {
+      Unit = { Description = "Automatic notmuch/mbsync synchronization"; };
+      Timer = {
+        OnBootSec = "30";
+        OnUnitActiveSec = "5m";
+      };
+      Install = { WantedBy = [ "timers.target" ]; };
+    };
 
     accounts.email.accounts = {
       urpost = {
@@ -69,7 +90,7 @@ in {
         };
         msmtp.enable = true; # Smtp
         notmuch.enable = true;
-        imapnotify.enable = true;
+        imapnotify.enable = cfg.imapnotify;
         imapnotify.onNotify =  {
           mail = "${pkgs.notmuch}/bin/notmuch new && ${pkgs.libnotify}/bin/notify-send 'New mail arrived on Urpost'";
         };
@@ -96,7 +117,7 @@ in {
         };
         msmtp.enable = true; # Smtp
         notmuch.enable = true;
-        imapnotify.enable = true;
+        imapnotify.enable = cfg.imapnotify;
         imapnotify.onNotify =  {
           mail = "${pkgs.notmuch}/bin/notmuch new && ${pkgs.libnotify}/bin/notify-send 'New mail arrived on HHU'";
         };
@@ -123,7 +144,7 @@ in {
         };
         msmtp.enable = true; # Smtp
         notmuch.enable = true;
-        imapnotify.enable = true;
+        imapnotify.enable = cfg.imapnotify;
         imapnotify.onNotify =  {
           mail = "${pkgs.notmuch}/bin/notmuch new && ${pkgs.libnotify}/bin/notify-send 'New mail arrived on GMail'";
         };
