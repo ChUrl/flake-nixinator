@@ -5,7 +5,7 @@ let
   # By specifying this we can just add our derivation to derivations/default.nix and it will land here
   additions = final: prev: import ../derivations { inherit inputs; pkgs = final; };
 
-  modifications = final: prev: {
+  modifications = final: prev: rec {
     # dconf-editor-wrapped = import ./dconf-editor.nix { inherit final prev; }; # Only kept as an example, has nothing to do with current dconf-editor-wrapped derivation
     # Use dconf-editor.nix: { final, prev }: final.<package>.overrideAttrs (oldAttrs: { ... }) or sth similar
   };

@@ -276,7 +276,7 @@ in rec {
     blender
     godot
     obs-studio
-    # vlc
+    vlc # Addition to mpv without any shaders etc
     kdenlive
     krita
     inkscape
