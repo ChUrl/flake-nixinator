@@ -672,6 +672,7 @@
   :config
   (setq! texfrag-scale 1.3
          texfrag-preview-buffer-at-start t
+         texfrag-subdir ".textfrag"
          texfrag-header-default "\\documentclass{article}
 \\usepackage{amsmath,amsfonts}
 \\usepackage[utf8]{inputenc}
