@@ -1,4 +1,4 @@
-; NixOS
+; TODO: More ffmpeg, yt-dlp
 
 % nixos, nixos-rebuild
 # Rebuild a flake system derivation
@@ -10,7 +10,6 @@ $ flake: echo -e "nixinator\nnixtop"
 # Find out why a package is included in the closure when building the system derivation
 nix why-depends /run/current-system nixpkgs#<package>
 
-; Nix-Store
 
 % nixos, nix-store, storepath, link
 # Find the storepath of an executable in the users path
@@ -20,8 +19,11 @@ readlink -f $(which <executable>)
 # Find the wanted dynamic libraries of an executable in the users path
 ldd $(readlink -f $(which <executable>))
 
-; Shell
 
 % shell, process
 # Launch a detached process with suppressed output
 <command> &>/dev/null &
+
+% ffmpeg, slowmo
+# Create a slow motion version of a video with interpolated/blended frames
+ffmpeg -i <input>.mp4 -filter:v "minterpolate='mi_mode=mci:mc_mode=aobmc:vsbmc=1:fps=<doublefps>',setpts=2*PTS" output.mp4
