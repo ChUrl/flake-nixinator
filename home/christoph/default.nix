@@ -153,6 +153,9 @@ in rec {
     source = ../../config/mpv;
   };
 
+  # TODO: Latex module
+  home.file."texmf/tex/latex/custom/christex.sty".source = ../../config/latex/christex.sty;
+
   home.file.".local/share/navi/cheats/christoph.cheat".source = ../../config/navi/christoph.cheat;
 
   home = {

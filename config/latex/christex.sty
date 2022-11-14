@@ -1,0 +1,220 @@
+\NeedsTeXFormat{LaTeX2e}[1994/06/01]
+\ProvidesPackage{christex}[2021/01/09 v1.0 Christoph LaTeX stuff]
+
+% Required packages
+
+% Localisation
+% \RequirePackage[ngerman]{babel} % Lokalisierung, Silbentrennung % Replaced by polyglossia for LuaLaTeX
+% \selectlanguage{ngerman} % Lokalisierung Babel
+% \RequirePackage[utf8]{inputenc} % Probleme mit Ä? % Don't use with lualatex
+% \RequirePackage[T1]{fontenc} % Westeuro. Kodierung, trennung mit Umlauten % Don't use with lualatex
+
+% Math
+\RequirePackage{amsmath,amsthm} % Mathe, amssymb creates errors
+\RequirePackage{mathtools} % Mathe, erweitert amsmath
+\RequirePackage{graphicx} % Inline graphics
+\RequirePackage{svg} % include svg images
+\RequirePackage{ellipsis} % Zentrierte Punkte
+\RequirePackage{centernot} % Bessere durchgestrichene Pfeile =/=>
+
+% Fonts
+\RequirePackage{beton} % Concrete text font, good with AMS Euler (sehr gut)
+\RequirePackage{eulerpx} % Mischung aus euler und newpxmath (sehr gut)
+\let\openbox\relax
+\RequirePackage[no-math]{fontspec}
+
+% \RequirePackage{libertine}
+% \RequirePackage{libertinust1math}
+
+\RequirePackage{shellesc} % Lualatex --shell-escape fixes (needed for minted?)
+\RequirePackage{booktabs} % Tabellen
+\RequirePackage{tcolorbox} % Textboxen [skins,breakable]
+\RequirePackage{minted}
+\RequirePackage[hidelinks]{hyperref} % Verweise/TOC mit Links
+\RequirePackage{csquotes}
+
+\RequirePackage{polyglossia}
+\setmainlanguage{english}
+\setotherlanguage{german}
+
+\RequirePackage[backend=biber]{biblatex}
+
+\RequirePackage{subfiles} % Individually compilable subfiles
+\RequirePackage[activate={true,nocompatibility},stretch=10,shrink=10]{microtype} % Microspacing
+
+\pagestyle{headings} % Seitenüberschriften
+\addtolength{\jot}{1em} % Space between equations in align
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% All the macros
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Erinnerung: Argumente [4] => 4 mandatory Argumente [4][] => 3 mandatory
+% Argumente, #1 ist optional [1][] => #1 ist optional [2][] => #2 ist mandatory,
+% #1 ist optional Nur #1 kann optional sein
+
+% Double-Stroke Number-Sets
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\K}{\mathbb{K}}
+\newcommand{\Poly}{\mathbb{P}}
+
+% Mathcal\Mathfrak
+\newcommand{\bigO}{\mathcal{O}}
+\newcommand{\bigC}{\mathcal{C}}
+
+% Colored Text
+\newcommand{\cred}[1]{\textcolor{red}{#1}}
+\newcommand{\cblue}[1]{\textcolor{cblue}{#1}}
+\newcommand{\cyan}[1]{\textcolor{cyan}{#1}}
+\newcommand{\cgreen}[1]{\textcolor{green}{#1}}
+\newcommand{\cyellow}[1]{\textcolor{yellow}{#1}}
+\newcommand{\cpurple}[1]{\textcolor{purple}{#1}}
+\newcommand{\corange}[1]{\textcolor{orange}{#1}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Umklammerungen
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Mengendefinition mit Trennstrich
+\newcommand{\set}[2]{\left\lbrace#1\,\middle\vert\,#2\right\rbrace}
+
+% Tupel / Vektor: (x_1, ..., x_n)
+\newcommand{\tup}[2]{\pars{#1,\ldots,#2}}
+
+% Norm ||x||
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+% Norm |||x|||
+\newcommand{\nnorm}[1]{\left\lvert\kern-0.25ex\left\lvert\kern-0.25ex\left\lvert#1\right\rvert\kern-0.25ex\right\rvert\kern-0.25ex\right\rvert}
+
+% Absolute |x|
+\newcommand{\abs}[1]{\left\lvert#1\right\rvert}
+
+% Parenthesis
+\newcommand{\pars}[1]{\left\lparen#1\right\rparen}
+
+% Brackets
+\newcommand{\bracks}[1]{\left\lbrack#1\right\rbrack}
+
+% Braces
+\newcommand{\braces}[1]{\left\lbrace#1\right\rbrace}
+
+% Angles
+\newcommand{\angles}[1]{\left\langle#1\right\rangle}
+
+% Gaußklammer abrunden
+\newcommand{\floor}[1]{\lfloor#1\rfloor}
+
+% Gaußklammer aufrunden
+\newcommand{\ceil}[1]{\lceil#1\rceil}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Intervalle
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Offenes Intervall: ]0, 2[
+\newcommand{\openint}[2]{\left\rbrack#1,#2\right\lbrack}
+
+% Links offenes Intervall: ]0, 2]
+\newcommand{\intleftopen}[2]{\left\rbrack#1,#2\right\rbrack}
+
+% Rechts offenes Intervall: [0, 2[
+\newcommand{\intrightopen}[2]{\left\lbrack#1,#2\right\lbrack}
+
+% Geschlossenes Intervall: [0, 2]
+\newcommand{\intclosed}[2]{\left\lbrack#1,#2\right\rbrack}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Other math stuff
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% n-th root with slightly higher positioned n
+\let\oldsqrt\sqrt%
+\renewcommand{\sqrt}[2][]{\oldsqrt[\uproot{3}#1]{#2}}
+
+% Etwas kürzere Overline
+\newcommand{\overbar}[1]{\mkern1.5mu\overline{\mkern-1.5mu#1\mkern-1.5mu}\mkern1.5mu}
+
+% Immer breitere Tilde
+\let\oldtilde\tilde%
+\renewcommand{\tilde}[1]{\widetilde{#1}}
+
+% Abziehen von einer Menge
+\newcommand{\without}[1]{\setminus\braces{#1}}
+
+% Einschränkung auf eine Menge
+\newcommand{\evalto}[1]{\bigr\rvert_{#1}}
+
+% Tags single Equation in align*
+\newcommand{\markthis}{\tag{\#}}
+
+% Partieller Differentialoperator
+\newcommand{\pdiffop}[2]{\dfrac{\partial#1}{\partial#2}}
+
+% Zweifacher partieller Differentialoperator
+\newcommand{\ppdiffop}[3]{\dfrac{\partial^2 #1}{\partial#2\partial#3}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Layout
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Verkleinert auf footnotesize
+\newcommand{\smaller}[1]{{\footnotesize#1}}
+
+% Verkleinerter Text mit Abstand für Math
+\newcommand{\annleft}[1]{\text{\smaller{#1}}\qquad}
+\newcommand{\annright}[1]{\qquad\text{\smaller{#1}}}
+
+% Verkleinerter Text Zwischen Zeilen für Math
+\newcommand{\anntop}[1]{\intertext{\qquad\smaller{#1}}}
+
+% Normaler Text mit horizontalem Padding
+\newcommand{\qtext}[1]{\quad\text{#1}\quad}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% The environments
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Getönte Box ohne Rand
+\newenvironment{defbox} {
+  \begin{tcolorbox}[enhanced, arc=2pt, outer arc=2pt, colback=white!90!gray,
+      colframe=white!95!gray, boxrule=0.5pt, drop shadow=white!20!gray,
+      parbox=false] % Box
+    }
+    % Content
+    {\end{tcolorbox}}
+
+% Box mit Rand
+\newenvironment{thebox} {
+  \begin{tcolorbox}[enhanced, arc=2pt, outer arc=2pt, colback=white,
+      colframe=gray!10!black, boxrule=0.5pt, drop shadow=white!20!gray, parbox=false] % Box
+    }
+    % Content
+    {\end{tcolorbox}}
+
+% Eingerückte Box
+\newenvironment{indbox} {
+  \begin{tcolorbox}[enhanced, arc=2pt, outer arc=2pt, left skip=0.25cm,
+      colback=white, colframe=gray!90!black, boxrule=0.5pt, drop
+      shadow=white!20!gray, parbox=false]
+    }
+    % Content
+    {\end{tcolorbox}}
+
+% amsthm environments
+\theoremstyle{definition} % plain body
+\newtheorem{definition}{Definition}[section] % section is the parent unit
+
+\theoremstyle{remark} % plain body
+\newtheorem*{remark}{Remark} % * means not numbered
+
+\theoremstyle{plain} % italic body
+\newtheorem{theorem}[definition]{Theorem} % Shares the numbering of definition
+\newtheorem{lemma}[definition]{Lemma}
+\newtheorem{corollary}[definition]{Corollary}
+
+\endinput
