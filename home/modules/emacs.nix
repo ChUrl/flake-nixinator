@@ -84,8 +84,7 @@ in {
         # nixfmt # This belongs in specific flake.nix
         # shellcheck # This belongs in specific flake.nix
 
-        # TODO: Use LaTeX module instead
-        texlive.combined.scheme-medium
+        texlive.combined.scheme-full
       ])
     ];
 
