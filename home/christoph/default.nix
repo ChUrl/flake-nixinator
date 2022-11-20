@@ -156,7 +156,11 @@ in rec {
   # TODO: Latex module
   home.file."texmf/tex/latex/custom/christex.sty".source = ../../config/latex/christex.sty;
 
+  # TODO: If navi enabled
   home.file.".local/share/navi/cheats/christoph.cheat".source = ../../config/navi/christoph.cheat;
+
+  # TODO: If kde plasma enabled
+  home.file.".config/autostart/krunner.desktop".source = ../../config/autostart/krunner.desktop;
 
   home = {
     username = username; # Inherited from flake.nix
@@ -204,7 +208,8 @@ in rec {
     rsync # cp on steroids
     rclone # Rsync for cloud
     poppler_utils # pdfunite
-    ffmpeg # Convert video (magic)
+    # ffmpeg # Convert video (magic), v4
+    ffmpeg_5-full # v5, including ffplay
     imagemagick # Convert image (magic)
     httpie # Cool http client
     (ripgrep.override { withPCRE2 = true; }) # fast as fuck
@@ -224,10 +229,14 @@ in rec {
     gum # nice shell scripts
     lazygit # can always use another git client
     gitbatch # overview over multiple repos
+    mprocs # run multiple processes in single terminal window, screen alternative
+    # TODO: Maybe general document/typesetting module?
     graphviz # generate svg graphs etc
     gnuplot # generate function plots
+    # TODO: Latex module
+    tikzit
+    texlive.combined.scheme-full
     pandoc # document converting madness
-    mprocs # run multiple processes in single terminal window, screen alternative
 
     # Xooooorg/Desktop environment stuff
     xclip
