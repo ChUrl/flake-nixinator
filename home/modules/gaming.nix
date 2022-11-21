@@ -23,6 +23,7 @@ in {
     discordChromium.enable = mkEnableOpt "Discord (Chromium)";
     prism.enable = mkEnableOpt "PrismLauncher for Minecraft (flatpak)";
     bottles.enable = mkEnableOpt "Bottles (flatpak)";
+    dwarffortress.enable = mkEnableOpt "Dwarf Fortress";
 
     steam = {
       enable = mkEnableOpt "Steam (flatpak)";
@@ -66,6 +67,8 @@ in {
 
       # Prefer flatpak version as this one doesn't find the STEAM_DIR automatically
       # (optionals cfg.steam.enable [ protontricks ])
+
+      (optionals cfg.dwarffortress.enable [ dwarf-fortress-full ])
     ];
 
     # This doesn't work because steam doesn't detect symlinked skins, files have to be copied
