@@ -58,7 +58,7 @@ in {
 
       # firefox-unwrapped is the pure firefox browser, wrapFirefox adds configuration ontop
       package = pkgs.wrapFirefox pkgs.firefox-unwrapped {
-        forceWayland = cfg.wayland;
+        # forceWayland = cfg.wayland; # Enabled by default now: https://github.com/NixOS/nixpkgs/commit/c156bdf40d2f0e64b574ade52c5611d90a0b6273
 
         # Find options by grepping for "cfg" in https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/networking/browsers/firefox/wrapper.nix
         cfg = {
