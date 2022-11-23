@@ -68,7 +68,7 @@ in {
       # Prefer flatpak version as this one doesn't find the STEAM_DIR automatically
       # (optionals cfg.steam.enable [ protontricks ])
 
-      (optionals cfg.dwarffortress.enable [ dwarf-fortress-full ])
+      (optionals cfg.dwarffortress.enable [ dwarf-fortress-packages.dwarf-fortress-full ])
     ];
 
     # This doesn't work because steam doesn't detect symlinked skins, files have to be copied
