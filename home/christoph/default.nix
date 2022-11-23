@@ -391,6 +391,12 @@ in rec {
       enableFishIntegration = config.modules.fish.enable;
     };
 
+    # Git status replacement with file selection by number
+    scmpuff = {
+      enable = true;
+      enableFishIntegration = true;
+    };
+
     # Scientific pdf reader
     sioyek = {
       enable = true;
