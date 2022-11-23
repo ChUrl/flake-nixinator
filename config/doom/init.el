@@ -154,7 +154,7 @@
        ;;ocaml             ; an objective camel
        (org +dragndrop +gnuplot +hugo +jupyter +noter +pandoc +present +roam2)               ; organize your plain life in plain text ; disabled +pretty for org-modern
        ;;php               ; perl's insecure younger brother
-       ;;plantuml          ; diagrams for confusing people more
+       plantuml          ; diagrams for confusing people more
        ;;purescript        ; javascript, but functional
        (python +lsp +pyright +tree-sitter)            ; beautiful is better than ugly
        ;;qt                ; the 'cutest' gui framework ever
