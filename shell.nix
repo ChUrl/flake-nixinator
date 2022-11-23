@@ -4,16 +4,16 @@ pkgs.devshell.mkShell {
   name = "NixFlake Shell";
 
   packages = with pkgs; [
-    jetbrains.clion
+    # jetbrains.clion
   ];
 
   commands = [
     # Utility
-    {
-      name = "util-ide";
-      help = "Launch clion in this folder";
-      command = "clion ./ &>/dev/null &";
-    }
+    # {
+    #   name = "util-ide";
+    #   help = "Launch clion in this folder";
+    #   command = "clion ./ &>/dev/null &";
+    # }
     {
       name = "util-watch-flatpak";
       help = "Show running flatpak operations";
