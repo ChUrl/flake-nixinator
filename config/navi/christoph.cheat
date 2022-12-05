@@ -44,3 +44,12 @@ $ input: exa -1
 # Re-encode the video with applied crop settings
 ffmpeg -i <input> -vf crop=<width>:<height>:<x>:<y> -c:a copy output.mp4
 $ input: exa -1
+
+% qemu, cpu
+# Find out what features are supported by different qemu CPUs
+qemu-system-<arch> -cpu help
+
+; https://github.com/flathub/com.discordapp.Discord/wiki/Rich-Precense-(discord-rpc)
+% discord, flatpak, rich-presence
+# Enable rich presence for flatpak Discord
+ln -sf $XDG_RUNTIME_DIR/{app/com.discordapp.Discord,}/discord-ipc-0
