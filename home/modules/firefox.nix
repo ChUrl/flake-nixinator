@@ -1,3 +1,5 @@
+# TODO: https://github.com/nix-community/home-manager/commit/69d19b9839638fc487b370e0600a03577a559081
+
 { inputs, config, nixosConfig, lib, mylib, pkgs, ... }:
 
 with lib;
