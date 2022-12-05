@@ -64,7 +64,7 @@ in {
 
         # Find options by grepping for "cfg" in https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/networking/browsers/firefox/wrapper.nix
         cfg = {
-          enablePlasmaBrowserIntegration = true; # TODO: Option
+          # enablePlasmaBrowserIntegration = true; # TODO: Option, # NOTE: Interferes with mediaplayer, I don't want to start a youtube video when pressing the play key...
         };
 
         # About policies: https://github.com/mozilla/policy-templates#enterprisepoliciesenabled
@@ -95,32 +95,46 @@ in {
       };
 
       extensions = with pkgs.nur.repos.rycee.firefox-addons; [
+        amp2html
         augmented-steam
         betterttv
         bypass-paywalls-clean
+        c-c-search-extension # Press cc in searchbar and profit
         clearurls
         cookie-autodelete
+        display-_anchors # Easier linking to specific website parts
         don-t-fuck-with-paste
         h264ify
         keepassxc-browser
         localcdn
-        octotree # Github on steroids
-        plasma-integration # TODO: Only when Plasma is used
+        lovely-forks # Display notable forks on GitHub repos
+        # octotree # Github on steroids
+        # plasma-integration # TODO: Only when Plasma is used
         privacy-badger
+        privacy-settings
+        protondb-for-steam
+        refined-github
+        return-youtube-dislikes
         search-by-image
         single-file
         skip-redirect
+        smart-referer # Limit referer link information
+        snowflake # Help users from censored countries access the internet
+        sourcegraph # Code intelligence for GitHub/GitLap for 20+ languages
         sponsorblock
+        steam-database
         tab-session-manager
         to-deepl
         transparent-standalone-image
         tree-style-tab
         ublacklist
         ublock-origin
-        # umatrix # Many pages need manual intervention
+        # umatrix # NOTE: Many pages need manual intervention
         unpaywall
         view-image
-        vimium
+        # vimium # NOTE: Shits the bed when site needs general key input outside of text field...
+        # wappalyzer # Identify web technologies
+        youtube-shorts-block
       ];
 
       profiles = {
@@ -154,8 +168,8 @@ in {
             })
 
             (let
-              # Note: This has to be updated when something is changed inside firefox...
-              customizationState = ''{"placements":{"widget-overflow-fixed-list":["jid1-mnnxcxisbpnsxq_jetpack-browser-action","_74145f27-f039-47ce-a470-a662b129930a_-browser-action","_b86e4813-687a-43e6-ab65-0bde4ab75758_-browser-action","cookieautodelete_kennydo_com-browser-action","skipredirect_sblask-browser-action","_ublacklist-browser-action","umatrix_raymondhill_net-browser-action","_2e5ff8c8-32fe-46d0-9fc8-6b8986621f3c_-browser-action","_287dcf75-bec6-4eec-b4f6-71948a2eea29_-browser-action","_d133e097-46d9-4ecc-9903-fa6a722a6e0e_-browser-action","_f209234a-76f0-4735-9920-eb62507a54cd_-browser-action","dontfuckwithpaste_raim_ist-browser-action","sponsorblocker_ajay_app-browser-action","mogultv_mogultv_org-browser-action","jid1-tsgsxbhncspbwq_jetpack-browser-action"],"nav-bar":["back-button","forward-button","downloads-button","urlbar-container","save-to-pocket-button","fxa-toolbar-menu-button","treestyletab_piro_sakura_ne_jp-browser-action","ublock0_raymondhill_net-browser-action","_531906d3-e22f-4a6c-a102-8057b88a1a63_-browser-action","tab-session-manager_sienori-browser-action","_d7742d87-e61d-4b78-b8a1-b469842139fa_-browser-action","keepassxc-browser_keepassxc_org-browser-action"],"toolbar-menubar":["menubar-items"],"TabsToolbar":["tabbrowser-tabs","new-tab-button","alltabs-button"],"PersonalToolbar":["personal-bookmarks"]},"seen":["developer-button","ublock0_raymondhill_net-browser-action","_287dcf75-bec6-4eec-b4f6-71948a2eea29_-browser-action","_2e5ff8c8-32fe-46d0-9fc8-6b8986621f3c_-browser-action","_531906d3-e22f-4a6c-a102-8057b88a1a63_-browser-action","_74145f27-f039-47ce-a470-a662b129930a_-browser-action","_b86e4813-687a-43e6-ab65-0bde4ab75758_-browser-action","_d133e097-46d9-4ecc-9903-fa6a722a6e0e_-browser-action","_d7742d87-e61d-4b78-b8a1-b469842139fa_-browser-action","_f209234a-76f0-4735-9920-eb62507a54cd_-browser-action","_ublacklist-browser-action","cookieautodelete_kennydo_com-browser-action","dontfuckwithpaste_raim_ist-browser-action","jid1-mnnxcxisbpnsxq_jetpack-browser-action","keepassxc-browser_keepassxc_org-browser-action","skipredirect_sblask-browser-action","sponsorblocker_ajay_app-browser-action","tab-session-manager_sienori-browser-action","treestyletab_piro_sakura_ne_jp-browser-action","umatrix_raymondhill_net-browser-action","mogultv_mogultv_org-browser-action","jid1-tsgsxbhncspbwq_jetpack-browser-action"],"dirtyAreaCache":["nav-bar","PersonalToolbar","toolbar-menubar","TabsToolbar","widget-overflow-fixed-list"],"currentVersion":17,"newElementCount":5}'';
+              # NOTE: This has to be updated when something is changed inside firefox...
+              customizationState = ''{"placements":{"widget-overflow-fixed-list":["jid1-mnnxcxisbpnsxq_jetpack-browser-action","_74145f27-f039-47ce-a470-a662b129930a_-browser-action","_b86e4813-687a-43e6-ab65-0bde4ab75758_-browser-action","cookieautodelete_kennydo_com-browser-action","skipredirect_sblask-browser-action","_ublacklist-browser-action","umatrix_raymondhill_net-browser-action","_2e5ff8c8-32fe-46d0-9fc8-6b8986621f3c_-browser-action","_287dcf75-bec6-4eec-b4f6-71948a2eea29_-browser-action","_d133e097-46d9-4ecc-9903-fa6a722a6e0e_-browser-action","_f209234a-76f0-4735-9920-eb62507a54cd_-browser-action","dontfuckwithpaste_raim_ist-browser-action","sponsorblocker_ajay_app-browser-action","mogultv_mogultv_org-browser-action","jid1-tsgsxbhncspbwq_jetpack-browser-action","sourcegraph-for-firefox_sourcegraph_com-browser-action","_b11bea1f-a888-4332-8d8a-cec2be7d24b9_-browser-action","_762f9885-5a13-4abd-9c77-433dcd38b8fd_-browser-action","_34daeb50-c2d2-4f14-886a-7160b24d66a4_-browser-action","smart-referer_meh_paranoid_pk-browser-action","jid1-ckhysaadh4nl6q_jetpack-browser-action","_e737d9cb-82de-4f23-83c6-76f70a82229c_-browser-action","_a4c4eda4-fb84-4a84-b4a1-f7c1cbf2a1ad_-browser-action","github-forks-addon_musicallyut_in-browser-action"],"nav-bar":["back-button","forward-button","downloads-button","urlbar-container","save-to-pocket-button","fxa-toolbar-menu-button","treestyletab_piro_sakura_ne_jp-browser-action","ublock0_raymondhill_net-browser-action","_531906d3-e22f-4a6c-a102-8057b88a1a63_-browser-action","display-anchors_robwu_nl-browser-action","tab-session-manager_sienori-browser-action","_d7742d87-e61d-4b78-b8a1-b469842139fa_-browser-action","keepassxc-browser_keepassxc_org-browser-action"],"toolbar-menubar":["menubar-items"],"TabsToolbar":["firefox-view-button","tabbrowser-tabs","new-tab-button","alltabs-button"],"PersonalToolbar":["personal-bookmarks"]},"seen":["developer-button","ublock0_raymondhill_net-browser-action","_287dcf75-bec6-4eec-b4f6-71948a2eea29_-browser-action","_2e5ff8c8-32fe-46d0-9fc8-6b8986621f3c_-browser-action","_531906d3-e22f-4a6c-a102-8057b88a1a63_-browser-action","_74145f27-f039-47ce-a470-a662b129930a_-browser-action","_b86e4813-687a-43e6-ab65-0bde4ab75758_-browser-action","_d133e097-46d9-4ecc-9903-fa6a722a6e0e_-browser-action","_d7742d87-e61d-4b78-b8a1-b469842139fa_-browser-action","_f209234a-76f0-4735-9920-eb62507a54cd_-browser-action","_ublacklist-browser-action","cookieautodelete_kennydo_com-browser-action","dontfuckwithpaste_raim_ist-browser-action","jid1-mnnxcxisbpnsxq_jetpack-browser-action","keepassxc-browser_keepassxc_org-browser-action","skipredirect_sblask-browser-action","sponsorblocker_ajay_app-browser-action","tab-session-manager_sienori-browser-action","treestyletab_piro_sakura_ne_jp-browser-action","umatrix_raymondhill_net-browser-action","mogultv_mogultv_org-browser-action","jid1-tsgsxbhncspbwq_jetpack-browser-action","display-anchors_robwu_nl-browser-action","github-forks-addon_musicallyut_in-browser-action","_a4c4eda4-fb84-4a84-b4a1-f7c1cbf2a1ad_-browser-action","_e737d9cb-82de-4f23-83c6-76f70a82229c_-browser-action","jid1-ckhysaadh4nl6q_jetpack-browser-action","smart-referer_meh_paranoid_pk-browser-action","_34daeb50-c2d2-4f14-886a-7160b24d66a4_-browser-action","_762f9885-5a13-4abd-9c77-433dcd38b8fd_-browser-action","_b11bea1f-a888-4332-8d8a-cec2be7d24b9_-browser-action","sourcegraph-for-firefox_sourcegraph_com-browser-action"],"dirtyAreaCache":["nav-bar","PersonalToolbar","toolbar-menubar","TabsToolbar","widget-overflow-fixed-list"],"currentVersion":18,"newElementCount":6}'';
             in {
               "accessibility.force_disabled" = 1;
               "app.normandy.enabled" = false; # https://mozilla.github.io/normandy/
