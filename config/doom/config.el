@@ -773,7 +773,7 @@
                                 ))
 (after! lsp-clangd (set-lsp-priority! 'clangd 2))
 (after! flycheck
-  (setq! flycheck-clang-args '("--checks='*'")
+  (setq! ;; flycheck-clang-args '("--checks='*'")
          flycheck-clang-pedantic t))
 
 ;; python
