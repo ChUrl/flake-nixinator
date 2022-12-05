@@ -57,9 +57,9 @@ in {
 
     # What home packages should be enabled
     home.packages = with pkgs; builtins.concatLists [
-      (optionals cfg.nativeComp [ ((emacsPackagesFor emacsNativeComp).emacsWithPackages (epkgs: [ epkgs.vterm ])) ])
-      (optionals cfg.pgtkNativeComp [ ((emacsPackagesFor emacsPgtkNativeComp).emacsWithPackages (epkgs: [ epkgs.vterm ])) ])
-      (optionals cfg.nixpkgs [ ((emacsPackagesFor emacs).emacsWithPackages (epkgs: [ epkgs.vterm ])) ])
+      (optionals cfg.nativeComp [ ((emacsPackagesFor emacsNativeComp).emacsWithPackages (epkgs: [ epkgs.vterm epkgs.pdf-tools ])) ])
+      (optionals cfg.pgtkNativeComp [ ((emacsPackagesFor emacsPgtkNativeComp).emacsWithPackages (epkgs: [ epkgs.vterm epkgs.pdf-tools ])) ])
+      (optionals cfg.nixpkgs [ ((emacsPackagesFor emacs).emacsWithPackages (epkgs: [ epkgs.vterm epkgs.pdf-tools ])) ])
 
       # TODO: Check what hlissner has enabled
       (optionals cfg.doom.enable [
