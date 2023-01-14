@@ -29,41 +29,43 @@ in {
 
     systemd.user.services = mkMerge [
       (optionalAttrs (cfg.keepass.enable && cfg.keepass.autostart) {
-        autostart-keepass = {
-          Unit = {
-            Type = "oneshot";
-            Description = "KeePassXC password manager";
-            PartOf = [ "graphical-session.target" ];
-            After = [ "graphical-session.target" ];
-          };
+        # TODO: Disable only for plasma
+        # autostart-keepass = {
+        #  Unit = {
+        #    Type = "oneshot";
+        #    Description = "KeePassXC password manager";
+        #    PartOf = [ "graphical-session.target" ];
+        #    After = [ "graphical-session.target" ];
+        #  };
 
-          Service = {
-            # Environment = "PATH=${config.home.profileDirectory}/bin"; # Leads to /etc/profiles/per-user/christoph/bin
-            ExecStart = "${pkgs.keepassxc}/bin/keepassxc ${config.home.homeDirectory}/Documents/KeePass/passwords.kbdx";
-            # ExecStop = "${pkgs.noisetorch}/bin/noisetorch -u";
-            Restart = "on-failure";
-          };
+        #  Service = {
+        #    # Environment = "PATH=${config.home.profileDirectory}/bin"; # Leads to /etc/profiles/per-user/christoph/bin
+        #    ExecStart = "${pkgs.keepassxc}/bin/keepassxc ${config.home.homeDirectory}/Documents/KeePass/passwords.kbdx";
+        #    # ExecStop = "${pkgs.noisetorch}/bin/noisetorch -u";
+        #    Restart = "on-failure";
+        #  };
 
-          Install.WantedBy = [ "graphical-session.target" ];
-        };
+        #  Install.WantedBy = [ "graphical-session.target" ];
+        # };
       })
 
+      # TODO: Disable only for plasma
       # TODO: Error: has no wallet, find out how to get imap credentials from this
-      (optionalAttrs (cfg.protonmail.enable && cfg.protonmail.autostart) {
-        autostart-protonmail = {
-          Unit = {
-            Description = "ProtonMail Bridge";
-            After = [ "network.target" ];
-          };
+      # (optionalAttrs (cfg.protonmail.enable && cfg.protonmail.autostart) {
+      #   autostart-protonmail = {
+      #     Unit = {
+      #       Description = "ProtonMail Bridge";
+      #       After = [ "network.target" ];
+      #     };
 
-          Service = {
-            ExecStart = "${pkgs.protonmail-bridge}/bin/protonmail-bridge --no-window --log-level info --noninteractive";
-            Restart = "always";
-          };
+      #     Service = {
+      #       ExecStart = "${pkgs.protonmail-bridge}/bin/protonmail-bridge --no-window --log-level info --noninteractive";
+      #       Restart = "always";
+      #     };
 
-          Install.WantedBy = [ "default.target" ];
-        };
-      })
+      #     Install.WantedBy = [ "default.target" ];
+      #   };
+      # })
     ];
   };
 }
