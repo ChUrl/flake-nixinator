@@ -79,18 +79,8 @@ in {
 
       (optionals cfg.carla.enable [ carla gamemode ])
       (optionals cfg.bitwig.enable [
-        # TODO: The override doesn't help, Bitwig pipewire still fails...
-        # We need to force pipewire into the dependencies so bitwig can access libpipewire
-        # This will probably get patched directly into nixpkgs in the future
-        # NOTE: override overrides the function arguments (this part: { stdenv, fetchurl, ... })
-        #       while overrideAttrs overrides the stuff inside mkDerivation { ... }
-        # NOTE: This attempt didn't work
-        # (bitwig-studio.overrideAttrs (oldAttrs: {
-        #   buildInputs = oldAttrs.buildInputs ++ [ pipewire ];
-        # }))
-        bitwig-studio-pipewire
+        bitwig-studio
         gamemode
-        # bitwig-studio
       ])
       (optionals cfg.tenacity.enable [ tenacity ])
 
@@ -129,25 +119,26 @@ in {
       categories = [ "Music" "Audio" ];
     };
 
+    # TODO: Disable only for plasma
     # TODO: After pipewire.target or partof pipewire.service?
     systemd.user.services = {
-      autostart-noisetorch =
-      (mkIf (cfg.noisesuppression.noisetorch.enable && cfg.noisesuppression.noisetorch.autostart) {
-        Unit = {
-          Type = "oneshot";
-          Description = "Noisetorch noise suppression";
-          PartOf = [ "graphical-session.target" ];
-          After = [ "graphical-session.target" ];
-        };
+      # autostart-noisetorch =
+      # (mkIf (cfg.noisesuppression.noisetorch.enable && cfg.noisesuppression.noisetorch.autostart) {
+      #   Unit = {
+      #     Type = "oneshot";
+      #     Description = "Noisetorch noise suppression";
+      #     PartOf = [ "graphical-session.target" ];
+      #     After = [ "graphical-session.target" ];
+      #   };
 
-        Service = {
-          Environment = "PATH=${config.home.profileDirectory}/bin"; # Leads to /etc/profiles/per-user/christoph/bin
-          ExecStart = "${pkgs.noisetorch}/bin/noisetorch -i";
-          Restart = "on-failure";
-        };
+      #   Service = {
+      #     Environment = "PATH=${config.home.profileDirectory}/bin"; # Leads to /etc/profiles/per-user/christoph/bin
+      #     ExecStart = "${pkgs.noisetorch}/bin/noisetorch -i";
+      #     Restart = "on-failure";
+      #   };
 
-        Install.WantedBy = [ "graphical-session.target" ];
-      });
+      #   Install.WantedBy = [ "graphical-session.target" ];
+      # });
     };
 
     # NOTE: Important to not disable this option if another module enables it
