@@ -28,23 +28,24 @@ in {
     # I want to have nextcloud-client in the path when the module is enabled
     home.packages = with pkgs; [ nextcloud-client ];
 
-    systemd.user.services = (mkIf cfg.autostart) {
-      autostart-nextcloud-client = {
-        Unit = {
-          Description = "Nextcloud Client";
-          PartOf = [ "graphical-session.target" ];
+    # TODO: Disable only for plasma
+    # systemd.user.services = (mkIf cfg.autostart) {
+    #   autostart-nextcloud-client = {
+    #     Unit = {
+    #       Description = "Nextcloud Client";
+    #       PartOf = [ "graphical-session.target" ];
 
-          # was graphical-session-pre.target originally in HM
-          After = [ "graphical-session.target" "network-online.target" ];
-        };
+    #       # was graphical-session-pre.target originally in HM
+    #       After = [ "graphical-session.target" "network-online.target" ];
+    #     };
 
-        Service = {
-          Environment = "PATH=${config.home.profileDirectory}/bin";
-          ExecStart = "${pkgs.nextcloud-client}/bin/nextcloud --background";
-        };
+    #     Service = {
+    #       Environment = "PATH=${config.home.profileDirectory}/bin";
+    #       ExecStart = "${pkgs.nextcloud-client}/bin/nextcloud --background";
+    #     };
 
-        Install.WantedBy = [ "graphical-session.target" ];
-      };
-    };
+    #     Install.WantedBy = [ "graphical-session.target" ];
+    #   };
+    # };
   };
 }
