@@ -15,6 +15,10 @@
         };
 
         myPython = pkgs.python310.withPackages (p: with p; [
+          rich
+          numpy
+          scipy
+          matplotlib
         ]);
       in {
         devShell = pkgs.devshell.mkShell {
