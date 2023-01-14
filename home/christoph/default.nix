@@ -155,10 +155,12 @@ in rec {
 
   # TODO: Latex module
   home.file."texmf/tex/latex/custom/christex.sty".source = ../../config/latex/christex.sty;
+  home.file."Notes/Obsidian/Chriphost/christex.sty".source = ../../config/latex/christex.sty; # For obsidian notes
 
   # TODO: If navi enabled
   home.file.".local/share/navi/cheats/christoph.cheat".source = ../../config/navi/christoph.cheat;
 
+  # TODO: Autostart module that is used by Mail/Plasma/Audio etc.
   # TODO: If kde plasma enabled
   home.file.".config/autostart/krunner.desktop".source = ../../config/autostart/krunner.desktop;
 
@@ -231,12 +233,14 @@ in rec {
     gitbatch # overview over multiple repos
     mprocs # run multiple processes in single terminal window, screen alternative
     # TODO: Maybe general document/typesetting module?
-    graphviz # generate svg graphs etc
+    graphviz # generate graphs from code
+    d2 # generate diagrams from code
     gnuplot # generate function plots
     # TODO: Latex module
     tikzit
     texlive.combined.scheme-full
     pandoc # document converting madness
+    lm_sensors
 
     # Xooooorg/Desktop environment stuff
     xclip
@@ -272,13 +276,32 @@ in rec {
     octave
 
     # Office
-    # jabref # manage bibilography # NOTE: Uses jdk18 which is EOL, so can't build
     # sioyek # Scientific pdf reader # HM program
     xournalpp # Write with a pen
     libreoffice-qt
     hunspell # I cna't type
     hunspellDicts.en_US
     hunspellDicts.de_DE
+    obsidian # knowledge-base, org-roam > obsidian
+    logseq # knowledge-base, logseq > org-roam? logseq && org-roam?
+    # zotero # Citation/source research assistant
+    # jabref # manage bibilography # NOTE: Uses jdk18 which is EOL, so can't build
+
+    # TODO: Development module
+    # TODO: Does this conflict with devshell pythons? If so, use lowPrio
+    # TODO: Merge this somehow? I want multiple pythons to merge to one with all the packages...
+    # (python310.withPackages (p: with p; [
+    #   p.rich
+    #   p.numpy
+    #   p.scipy
+    #   p.matplotlib
+    #   p.pillow # for ranger
+    #   p.pygments # for emacs
+    # ]))
+    # jetbrains.pycharm-professional
+    # jetbrains.idea-ultimate
+    # jetbrains.clion
+
 
     # TODO: LaTeX module
     texlab
@@ -355,6 +378,32 @@ in rec {
       delta.enable = true;
       userEmail = "christoph.urlacher@protonmail.com";
       userName = "ChUrl";
+    };
+
+    # Modal texteditor
+    helix = {
+      enable = true;
+
+      # https://docs.helix-editor.com/configuration.html
+      settings = {
+        # theme = "base16_terminal";
+        editor = {
+          scrolloff = 10;
+          mouse = true; # Default
+          middle-click-paste = true; # Default
+          line-number = "relative";
+          cursorline = true;
+          auto-completion = true; # Default
+          bufferline = "multiple";
+          cursor-shape = {
+            normal = "block";
+            insert = "bar";
+            select = "underline";
+          };
+          lsp.display-messages = true;
+          indent-guides.render = false;
+        };
+      };
     };
 
     # NOTE: If error occurs after system update on fish init run "ssh-add"
