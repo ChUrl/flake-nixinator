@@ -23,9 +23,9 @@ in {
 
       # TODO: Configure
       settings = {
-        editor = "nvim";
+        editor = "hx";
         scrollback_lines = 10000;
-        window_padding_width = 10;
+        window_padding_width = 0;
         # hide_window_decorations = "yes";
 
         # Light Theme
