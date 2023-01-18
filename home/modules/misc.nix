@@ -1,9 +1,13 @@
-{ config, nixosConfig, lib, mylib, pkgs, ... }:
-
+{
+  config,
+  nixosConfig,
+  lib,
+  mylib,
+  pkgs,
+  ...
+}:
 with lib;
-with mylib.modules;
-
-let
+with mylib.modules; let
   cfg = config.modules.misc;
 in {
   options.modules.misc = {
@@ -21,11 +25,11 @@ in {
   };
 
   config = mkIf cfg.enable {
-
-    home.packages = with pkgs; builtins.concatLists [
-      (optionals cfg.keepass.enable [ keepassxc ])
-      (optionals cfg.protonmail.enable [ protonmail-bridge ])
-    ];
+    home.packages = with pkgs;
+      builtins.concatLists [
+        (optionals cfg.keepass.enable [keepassxc])
+        (optionals cfg.protonmail.enable [protonmail-bridge])
+      ];
 
     systemd.user.services = mkMerge [
       (optionalAttrs (cfg.keepass.enable && cfg.keepass.autostart) {

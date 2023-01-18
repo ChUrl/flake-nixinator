@@ -1,12 +1,15 @@
-{ config, nixosConfig, lib, mylib, pkgs, ... }:
-
+{
+  config,
+  nixosConfig,
+  lib,
+  mylib,
+  pkgs,
+  ...
+}:
 with lib;
-with mylib.modules;
-
-let
+with mylib.modules; let
   cfg = config.modules.neovim;
 in {
-
   options.modules.neovim = {
     enable = mkEnableOpt "NeoVim";
     alias = mkBoolOpt false "Link nvim to vim/vi";
@@ -70,7 +73,7 @@ in {
         }
 
         {
-          plugin = (nvim-treesitter.withPlugins (plugins: pkgs.tree-sitter.allGrammars));
+          plugin = nvim-treesitter.withPlugins (plugins: pkgs.tree-sitter.allGrammars);
           config = ''
             lua << EOF
             require('nvim-treesitter.configs').setup {

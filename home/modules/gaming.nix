@@ -1,9 +1,12 @@
-{ config, lib, mylib, pkgs, ... }:
-
+{
+  config,
+  lib,
+  mylib,
+  pkgs,
+  ...
+}:
 with lib;
-with mylib.modules;
-
-let
+with mylib.modules; let
   cfg = config.modules.gaming;
   cfgfp = config.modules.flatpak;
 in {
@@ -50,26 +53,27 @@ in {
       })
     ];
 
-    home.packages = with pkgs; builtins.concatLists [
-      [
-        gamemode # gamemode should be always enabled (could also be enabled by audio module)
-        oversteer # TODO: Make option
-        # Sometimes needed for Proton prefix shenenigans (for AC etc.), but probably only works with Protontricks only so disable for now...
-        # wine64 # TODO: Make option or dependant on protontricks?
-      ] 
+    home.packages = with pkgs;
+      builtins.concatLists [
+        [
+          gamemode # gamemode should be always enabled (could also be enabled by audio module)
+          oversteer # TODO: Make option
+          # Sometimes needed for Proton prefix shenenigans (for AC etc.), but probably only works with Protontricks only so disable for now...
+          # wine64 # TODO: Make option or dependant on protontricks?
+        ]
 
-      # TODO: Extra config (extensions etc) in chromium module
-      (optionals cfg.discordChromium.enable [ chromium ])
+        # TODO: Extra config (extensions etc) in chromium module
+        (optionals cfg.discordChromium.enable [chromium])
 
-      # Prefer flatpak version as nixpkgs version isn't always updated in time
-      (optionals cfg.discordElectron.enable [ discord ])
-      (optionals cfg.steam.adwaita [ adwaita-for-steam ])
+        # Prefer flatpak version as nixpkgs version isn't always updated in time
+        (optionals cfg.discordElectron.enable [discord])
+        (optionals cfg.steam.adwaita [adwaita-for-steam])
 
-      # Prefer flatpak version as this one doesn't find the STEAM_DIR automatically
-      # (optionals cfg.steam.enable [ protontricks ])
+        # Prefer flatpak version as this one doesn't find the STEAM_DIR automatically
+        # (optionals cfg.steam.enable [ protontricks ])
 
-      (optionals cfg.dwarffortress.enable [ dwarf-fortress-packages.dwarf-fortress-full ])
-    ];
+        (optionals cfg.dwarffortress.enable [dwarf-fortress-packages.dwarf-fortress-full])
+      ];
 
     # This doesn't work because steam doesn't detect symlinked skins, files have to be copied
     # https://github.com/ValveSoftware/steam-for-linux/issues/3572
@@ -84,7 +88,7 @@ in {
     # ];
     home.activation = mkMerge [
       (optionalAttrs cfg.steam.adwaita {
-        copySteamAdwaitaSkin = hm.dag.entryAfter [ "writeBoundary" ] ''
+        copySteamAdwaitaSkin = hm.dag.entryAfter ["writeBoundary"] ''
           if [ ! -d ${config.home.homeDirectory}/.var/app/com.valvesoftware.Steam/.local/share/Steam/skins ]; then
             mkdir ${config.home.homeDirectory}/.var/app/com.valvesoftware.Steam/.local/share/Steam/skins
           fi
@@ -100,7 +104,7 @@ in {
       })
 
       (optionalAttrs (! cfg.steam.adwaita) {
-        deleteSteamAdwaitaSkin = hm.dag.entryAfter [ "writeBoundary" ] ''
+        deleteSteamAdwaitaSkin = hm.dag.entryAfter ["writeBoundary"] ''
           rm -rf ${config.home.homeDirectory}/.var/app/com.valvesoftware.Steam/.local/share/Steam/skins/Adwaita
         '';
       })
@@ -112,7 +116,7 @@ in {
       icon = "discord";
       exec = "chromium --new-window discord.com/app";
       terminal = false;
-      categories = [ "Network" "Chat" ];
+      categories = ["Network" "Chat"];
     };
 
     # NOTE: Important to not disable this option if another module enables it
@@ -152,8 +156,8 @@ in {
         # "com.valvesoftware.Steam.CompatibilityTool.Proton-GE"
         "net.davidotek.pupgui2"
       ])
-      (optionals (cfg.steam.enable && cfg.steam.gamescope) [ "com.valvesoftware.Steam.Utility.gamescope" ])
-      (optionals cfg.prism.enable [ "org.prismlauncher.PrismLauncher" ])
+      (optionals (cfg.steam.enable && cfg.steam.gamescope) ["com.valvesoftware.Steam.Utility.gamescope"])
+      (optionals cfg.prism.enable ["org.prismlauncher.PrismLauncher"])
     ];
 
     modules.flatpak.extraRemove = builtins.concatLists [
@@ -168,8 +172,8 @@ in {
         # "com.valvesoftware.Steam.CompatibilityTool.Proton-GE"
         "net.davidotek.pupgui2"
       ])
-      (optionals (!cfg.steam.enable || !cfg.steam.gamescope) [ "com.valvesoftware.Steam.Utility.gamescope" ])
-      (optionals (!cfg.prism.enable) [ "org.prismlauncher.PrismLauncher" ])
+      (optionals (!cfg.steam.enable || !cfg.steam.gamescope) ["com.valvesoftware.Steam.Utility.gamescope"])
+      (optionals (!cfg.prism.enable) ["org.prismlauncher.PrismLauncher"])
     ];
   };
 }

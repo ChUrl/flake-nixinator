@@ -1,10 +1,15 @@
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
-
-{ inputs, hostname, lib, mylib, config, pkgs, ... }:
-
 {
+  inputs,
+  hostname,
+  lib,
+  mylib,
+  config,
+  pkgs,
+  ...
+}: {
   imports = [
     # Import the host-specific system config
     ./${hostname}
@@ -19,7 +24,7 @@
       experimental-features = nix-command flakes
     '';
 
-    settings.trusted-users = [ "root" "christoph" ];
+    settings.trusted-users = ["root" "christoph"];
 
     # Keep nix-shell from garbage collection for direnv (keep-outputs + keep-derivations)
     # NOTE: nix-direnv use nix or use flake should do this automatically
@@ -35,13 +40,13 @@
     # This will add your inputs as registries, making operations with them (such
     # as nix shell nixpkgs#name) consistent with your flake inputs.
     # (Registry contains flakes)
-    registry = lib.mapAttrs' (n: v: lib.nameValuePair n { flake = v; }) inputs;
+    registry = lib.mapAttrs' (n: v: lib.nameValuePair n {flake = v;}) inputs;
   };
 
   # Bootloader/Kernel stuff
   boot = {
     kernelPackages = pkgs.linuxPackages_zen;
-    kernelParams = [ "mitigations=off" ];
+    kernelParams = ["mitigations=off"];
 
     # plymouth.enable = true;
     loader.systemd-boot.enable = true;
@@ -63,7 +68,7 @@
     sudo.enable = true;
     sudo.extraRules = [
       {
-        users = [ "christoph" ];
+        users = ["christoph"];
         commands = [
           # Launch gamemode without password because it is annoying
           # {
@@ -78,7 +83,7 @@
           # We allow running flatpak without password so flatpaks can be installed from the hm config (needs sudo)
           {
             command = "/run/current-system/sw/bin/flatpak";
-            options = [ "SETENV" "NOPASSWD" ];
+            options = ["SETENV" "NOPASSWD"];
           }
         ];
       }
@@ -104,7 +109,7 @@
   };
 
   # https://github.com/NixOS/nixpkgs/issues/179486
-  i18n.supportedLocales = [ "en_US.UTF-8/UTF-8" "de_DE.UTF-8/UTF-8" ];
+  i18n.supportedLocales = ["en_US.UTF-8/UTF-8" "de_DE.UTF-8/UTF-8"];
 
   # TODO: Other ports (tcp/udp/ssh...)?
   # Open ports in the firewall.
@@ -121,10 +126,9 @@
     # Enable networking
     networkmanager.enable = true;
 
-    
     firewall.enable = true;
-    firewall.allowedTCPPorts = [ ];
-    firewall.allowedTCPPortRanges = [ ];
+    firewall.allowedTCPPorts = [];
+    firewall.allowedTCPPortRanges = [];
 
     firewall.allowedUDPPorts = [
       18000 # Anno 1800
@@ -132,8 +136,7 @@
       9995 # TelemetryApp
       9996 # TelemetryApp
     ];
-    firewall.allowedUDPPortRanges = [ ];
-
+    firewall.allowedUDPPortRanges = [];
   };
 
   # Enable the X11 windowing system.
@@ -168,14 +171,14 @@
   # XDG
   # NOTE: I think only the fitting portal is required
   xdg.portal = {
-      enable = true;
-      extraPortals = with pkgs; [
-        # xdg-desktop-portal-wlr # For wlroots based desktops
-        xdg-desktop-portal-kde # Comes with Plasma
-        # xdg-desktop-portal-gtk # Comes with Gnome
-        # xdg-desktop-portal-gnome # Comes with Gnome
-      ];
-      # gtkUsePortal = true; # Deprecated, don't use (gdm takes ages to load and other fishy stuff)
+    enable = true;
+    extraPortals = with pkgs; [
+      # xdg-desktop-portal-wlr # For wlroots based desktops
+      xdg-desktop-portal-kde # Comes with Plasma
+      # xdg-desktop-portal-gtk # Comes with Gnome
+      # xdg-desktop-portal-gnome # Comes with Gnome
+    ];
+    # gtkUsePortal = true; # Deprecated, don't use (gdm takes ages to load and other fishy stuff)
   };
 
   # Enable sound with pipewire.
@@ -203,7 +206,7 @@
       victor-mono
       jetbrains-mono
       source-code-pro
-      (pkgs.nerdfonts.override { fonts = [ "VictorMono" ]; })
+      (pkgs.nerdfonts.override {fonts = ["VictorMono"];})
 
       # Chinese fonts
       source-han-mono
@@ -262,7 +265,7 @@
     ];
     shell = pkgs.fish; # TODO: Is this needed if programs.fish.enable = true?
     # We do this with HomeManager
-    packages = with pkgs; [ ];
+    packages = with pkgs; [];
   };
 
   # Generate a list of installed system packages in /etc/current-system-packages
@@ -273,10 +276,9 @@
   in
     formatted;
 
-
   # We want these packages to be available even when no user profile is active
   # Empty since we basically only need git + editor which is enabled below
-  environment.systemPackages = with pkgs; [ ];
+  environment.systemPackages = with pkgs; [];
 
   # NOTE: Gnome
   # TODO: Identify all the crap

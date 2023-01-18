@@ -1,6 +1,11 @@
-{ inputs, config, lib, mylib, pkgs, ... }:
-
-rec {
+{
+  inputs,
+  config,
+  lib,
+  mylib,
+  pkgs,
+  ...
+}: rec {
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
@@ -12,6 +17,6 @@ rec {
     xkbVariant = "nodeadkeys";
 
     # Proprietary graphics drivers
-    videoDrivers = [ "intel" ];
+    videoDrivers = ["intel"];
   };
 }

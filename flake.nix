@@ -1,5 +1,4 @@
 # The curly braces denote a set of keys and values.
-
 {
   description = "ChUrl's very bad and basic Nix config using Flakes";
 
@@ -39,62 +38,65 @@
   # Outputs is a function that takes the inputs as arguments.
   # To handle extra arguments we use the inputs@ pattern.
   # It gives a name to the ... ellipses.
-  outputs = inputs @ { nixpkgs, home-manager, ... }:
+  outputs = inputs @ {
+    nixpkgs,
+    home-manager,
+    ...
+  }:
+  # With let you can define local variables
+  let
+    system = "x86_64-linux";
 
-    # With let you can define local variables
-    let
-      system = "x86_64-linux";
+    # Set overlays + unfree globally
+    pkgs = import nixpkgs {
+      inherit system;
 
-      # Set overlays + unfree globally
-      pkgs = import nixpkgs {
-        inherit system;
+      config.allowUnfree = true;
+      overlays = [
+        inputs.devshell.overlay
+        inputs.nur.overlay
+        inputs.emacs-overlay.overlay
 
-        config.allowUnfree = true;
-        overlays = [
-          inputs.devshell.overlay
-          inputs.nur.overlay
-          inputs.emacs-overlay.overlay
+        # All my own overlays
+        (import ./overlays {inherit nixpkgs inputs;})
+      ];
+    };
 
-          # All my own overlays
-          (import ./overlays { inherit nixpkgs inputs; })
-        ];
-      };
-
-      # I don't know how to extend the nixpkgs.lib directly so just propagate mylib to the config modules as argument
-      mylib = import ./lib { inherit inputs pkgs; lib = nixpkgs.lib; };
-
+    # I don't know how to extend the nixpkgs.lib directly so just propagate mylib to the config modules as argument
+    mylib = import ./lib {
+      inherit inputs pkgs;
+      lib = nixpkgs.lib;
+    };
     # The rec expression turns a basic set into a set where self-referencing is possible.
     # It is a shorthand for recursive and allows to use the values defined in this set from its own scope.
-    in rec {
+  in rec {
+    # Local shell for NixFlake directory
+    devShells."${system}".default = import ./shell.nix {inherit pkgs;};
 
-      # Local shell for NixFlake directory
-      devShells."${system}".default = import ./shell.nix { inherit pkgs; };
+    # System configurations + HomeManager module
+    # Accessible via 'nixos-rebuild'
+    nixosConfigurations = {
+      # We give our configuration a name (the hostname) to choose a configuration when rebuilding.
+      # This makes it easy to add different configurations (e.g. for a laptop).
+      # Usage: sudo nixos-rebuild switch --flake .#nixinator
+      nixinator = mylib.nixos.mkNixosConfig {
+        inherit system mylib;
 
-      # System configurations + HomeManager module
-      # Accessible via 'nixos-rebuild'
-      nixosConfigurations = {
+        hostname = "nixinator";
+        username = "christoph";
 
-        # We give our configuration a name (the hostname) to choose a configuration when rebuilding.
-        # This makes it easy to add different configurations (e.g. for a laptop).
-        # Usage: sudo nixos-rebuild switch --flake .#nixinator
-        nixinator = mylib.nixos.mkNixosConfig {
-          inherit system mylib;
+        extraModules = [];
+      };
 
-          hostname = "nixinator";
-          username = "christoph";
+      # Usage: sudo nixos-rebuild switch --flake .#nixtop
+      nixtop = mylib.nixos.mkNixosConfig {
+        inherit system mylib;
 
-          extraModules = [ ];
-        };
+        hostname = "nixtop";
+        username = "christoph";
 
-        # Usage: sudo nixos-rebuild switch --flake .#nixtop
-        nixtop = mylib.nixos.mkNixosConfig {
-          inherit system mylib;
-
-          hostname = "nixtop";
-          username = "christoph";
-
-          extraModules = [ ];
-        };
+        extraModules = [];
       };
     };
+  };
 }
