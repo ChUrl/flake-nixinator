@@ -788,6 +788,9 @@
 (after! haskell-mode
   (set-popup-rule! "^\\*haskell repl\\*" :ignore t :quit nil))
 
+;; nix
+(set-formatter! 'alejandra "alejandra --quiet" :modes '(nix-mode))
+
 ;; lsp
 (after! lsp-mode
   (setq! read-process-output-max (* 1024 1024)
