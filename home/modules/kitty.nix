@@ -1,13 +1,16 @@
-{ config, nixosConfig, lib, mylib, pkgs, ... }:
-
+{
+  config,
+  nixosConfig,
+  lib,
+  mylib,
+  pkgs,
+  ...
+}:
 with lib;
-with mylib.modules;
-
-let
+with mylib.modules; let
   cfg = config.modules.kitty;
   # cfgnv = config.modules.neovim;
 in {
-
   options.modules.kitty = {
     enable = mkEnableOpt "Kitty";
   };
@@ -30,7 +33,7 @@ in {
 
         # Light Theme
         # background = "#f7f7f7";
-        # foreground = "#494542";
+        # foreground = "#39FF14"; # Matrix green because I'm a master hacker
         # selection_background = "#a4a1a1";
         # selection_foreground = "#f7f7f7";
         # cursor = "#494542";

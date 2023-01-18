@@ -1,5 +1,4 @@
-{ pkgs }:
-
+{pkgs}:
 pkgs.devshell.mkShell {
   name = "NixFlake Shell";
 

@@ -1,18 +1,19 @@
 # Example: https://beb.ninja/post/email/
 # Example: https://sbr.pm/configurations/mails.html
 # NOTE: The passwords must exist in kwallet
-
 # TODO: Emacs mail config
-
-{ config, nixosConfig, lib, mylib, pkgs, ... }:
-
+{
+  config,
+  nixosConfig,
+  lib,
+  mylib,
+  pkgs,
+  ...
+}:
 with lib;
-with mylib.modules;
-
-let
+with mylib.modules; let
   cfg = config.modules.email;
 in {
-
   options.modules.email = {
     enable = mkEnableOpt "Email";
     autosync = mkEnableOpt "Automatically call \"notmuch new\" via systemd timer";
@@ -26,9 +27,10 @@ in {
 
   # TODO: Add Maildir to nextcloud sync
   config = mkIf cfg.enable {
-    home.packages = with pkgs; builtins.concatLists [
-      (optionals cfg.kmail.enable [ kmail ])
-    ];
+    home.packages = with pkgs;
+      builtins.concatLists [
+        (optionals cfg.kmail.enable [kmail])
+      ];
 
     home.file = mkMerge [
       (optionalAttrs (cfg.kmail.enable && cfg.kmail.autostart) {
@@ -54,7 +56,7 @@ in {
 
     # Autosync, don't need imapnotify when enabled
     systemd.user.services.mail-autosync = (mkIf cfg.autosync) {
-      Unit = { Description = "Automatic notmuch/mbsync synchronization"; };
+      Unit = {Description = "Automatic notmuch/mbsync synchronization";};
       Service = {
         Type = "oneshot";
         # ExecStart = "${pkgs.isync}/bin/mbsync -a";
@@ -62,12 +64,12 @@ in {
       };
     };
     systemd.user.timers.mail-autosync = (mkIf cfg.autosync) {
-      Unit = { Description = "Automatic notmuch/mbsync synchronization"; };
+      Unit = {Description = "Automatic notmuch/mbsync synchronization";};
       Timer = {
         OnBootSec = "30";
         OnUnitActiveSec = "5m";
       };
-      Install = { WantedBy = [ "timers.target" ]; };
+      Install = {WantedBy = ["timers.target"];};
     };
 
     accounts.email.accounts = {
@@ -84,14 +86,15 @@ in {
 
         passwordCommand = "kwallet-query -f email -r urpost kdewallet";
 
-        mbsync = { # Imap
+        mbsync = {
+          # Imap
           enable = true;
           create = "maildir";
         };
         msmtp.enable = true; # Smtp
         notmuch.enable = true;
         imapnotify.enable = cfg.imapnotify;
-        imapnotify.onNotify =  {
+        imapnotify.onNotify = {
           mail = "${pkgs.notmuch}/bin/notmuch new && ${pkgs.libnotify}/bin/notify-send 'New mail arrived on Urpost'";
         };
 
@@ -111,14 +114,15 @@ in {
 
         passwordCommand = "kwallet-query -f email -r hhu kdewallet";
 
-        mbsync = { # Imap
+        mbsync = {
+          # Imap
           enable = true;
           create = "maildir";
         };
         msmtp.enable = true; # Smtp
         notmuch.enable = true;
         imapnotify.enable = cfg.imapnotify;
-        imapnotify.onNotify =  {
+        imapnotify.onNotify = {
           mail = "${pkgs.notmuch}/bin/notmuch new && ${pkgs.libnotify}/bin/notify-send 'New mail arrived on HHU'";
         };
 
@@ -137,7 +141,8 @@ in {
         # NOTE: Uses Gmail app password
         passwordCommand = "kwallet-query -f email -r gmail kdewallet";
 
-        mbsync = { # Imap
+        mbsync = {
+          # Imap
           enable = true;
           create = "maildir";
           patterns = ["*" "![Gmail]*" "[Gmail]/Sent Mail" "[Gmail]/Starred" "[Gmail]/All Mail"]; # Only sync inbox
@@ -145,7 +150,7 @@ in {
         msmtp.enable = true; # Smtp
         notmuch.enable = true;
         imapnotify.enable = cfg.imapnotify;
-        imapnotify.onNotify =  {
+        imapnotify.onNotify = {
           mail = "${pkgs.notmuch}/bin/notmuch new && ${pkgs.libnotify}/bin/notify-send 'New mail arrived on GMail'";
         };
 

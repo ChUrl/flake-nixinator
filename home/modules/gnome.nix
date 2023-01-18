@@ -1,12 +1,15 @@
-{ config, nixosConfig, lib, mylib, pkgs, ... }:
-
+{
+  config,
+  nixosConfig,
+  lib,
+  mylib,
+  pkgs,
+  ...
+}:
 with lib;
-with mylib.modules;
-
-let
+with mylib.modules; let
   cfg = config.modules.gnome;
 in {
-
   options.modules.gnome = {
     enable = mkEnableOpt "Gnome Desktop";
     # TODO: Add option for dash-to-dock
@@ -40,7 +43,7 @@ in {
     ];
 
     gtk = mkMerge [
-      { enable = true; }
+      {enable = true;}
 
       (optionalAttrs cfg.theme.papirusIcons {
         iconTheme.package = pkgs.papirus-icon-theme;
@@ -60,42 +63,43 @@ in {
       })
     ];
 
-    home.packages = with pkgs; builtins.concatLists [
-      [
-        # gnome.gnome-session # Allow to start gnome from tty (sadly this is not usable, many things don't work)
-        gnome.gnome-boxes # VM
-        # gnome.sushi # Gnome files previews (use service, has to be added to dbus packages)
-        gnome.gnome-logs # systemd log viewer
-        gnome.gnome-tweaks # conflicts with nixos/hm gnome settings file sometimes, watch out what settings to change
-        gnome.gnome-nettool
-        gnome.simple-scan
-        gnome.gnome-sound-recorder
-        gnome.file-roller # archive manager
-        # gnome.dconf-editor
-        dconf-editor-wrapped # Sets XDG_DATA_DIRS to include all gsettings-schemas
-        gsettings-desktop-schemas
-        # gnome-usage # Alternative system performance monitor (gnome.gnome-system-monitor is the preinstalled one)
-        # gnome-secrets # Alternative keepass database viewer
-        gnome-firmware
-      ]
+    home.packages = with pkgs;
+      builtins.concatLists [
+        [
+          # gnome.gnome-session # Allow to start gnome from tty (sadly this is not usable, many things don't work)
+          gnome.gnome-boxes # VM
+          # gnome.sushi # Gnome files previews (use service, has to be added to dbus packages)
+          gnome.gnome-logs # systemd log viewer
+          gnome.gnome-tweaks # conflicts with nixos/hm gnome settings file sometimes, watch out what settings to change
+          gnome.gnome-nettool
+          gnome.simple-scan
+          gnome.gnome-sound-recorder
+          gnome.file-roller # archive manager
+          # gnome.dconf-editor
+          dconf-editor-wrapped # Sets XDG_DATA_DIRS to include all gsettings-schemas
+          gsettings-desktop-schemas
+          # gnome-usage # Alternative system performance monitor (gnome.gnome-system-monitor is the preinstalled one)
+          # gnome-secrets # Alternative keepass database viewer
+          gnome-firmware
+        ]
 
-      (optionals cfg.extensions [
-        gnomeExtensions.appindicator
-        gnomeExtensions.auto-activities
-        gnomeExtensions.blur-my-shell
-        gnomeExtensions.custom-hot-corners-extended
-        gnomeExtensions.extensions-sync
-        gnomeExtensions.gamemode
-        gnomeExtensions.launch-new-instance
-        gnomeExtensions.maximize-to-empty-workspace
-        gnomeExtensions.no-overview
-        gnomeExtensions.pip-on-top
-        gnomeExtensions.rounded-window-corners
-        gnomeExtensions.sound-output-device-chooser
-        gnomeExtensions.tweaks-in-system-menu
-        gnomeExtensions.vitals
-      ])
-    ];
+        (optionals cfg.extensions [
+          gnomeExtensions.appindicator
+          gnomeExtensions.auto-activities
+          gnomeExtensions.blur-my-shell
+          gnomeExtensions.custom-hot-corners-extended
+          gnomeExtensions.extensions-sync
+          gnomeExtensions.gamemode
+          gnomeExtensions.launch-new-instance
+          gnomeExtensions.maximize-to-empty-workspace
+          gnomeExtensions.no-overview
+          gnomeExtensions.pip-on-top
+          gnomeExtensions.rounded-window-corners
+          gnomeExtensions.sound-output-device-chooser
+          gnomeExtensions.tweaks-in-system-menu
+          gnomeExtensions.vitals
+        ])
+      ];
 
     # TODO: Check what gnome-tweaks sets
     dconf.settings = with lib.hm.gvariant; {
@@ -216,7 +220,7 @@ in {
       };
 
       "org/gnome/nautilus/icon-view" = {
-        captions = [ "size" "date_modified" "none" ];
+        captions = ["size" "date_modified" "none"];
         default-zoom-level = "larger";
       };
 
@@ -254,28 +258,29 @@ in {
           "drive-menu@gnome-shell-extensions.gcampax.github.com"
           "user-theme@gnome-shell-extensions.gcampax.github.com"
         ];
-        enabled-extensions = with pkgs; builtins.concatLists [
-          [
-            "workspace-indicator@gnome-shell-extensions.gcampax.github.com"
-          ]
+        enabled-extensions = with pkgs;
+          builtins.concatLists [
+            [
+              "workspace-indicator@gnome-shell-extensions.gcampax.github.com"
+            ]
 
-          (optionals cfg.extensions [
-            gnomeExtensions.appindicator.extensionUuid
-            gnomeExtensions.auto-activities.extensionUuid
-            gnomeExtensions.blur-my-shell.extensionUuid
-            gnomeExtensions.custom-hot-corners-extended.extensionUuid
-            gnomeExtensions.extensions-sync.extensionUuid
-            gnomeExtensions.gamemode.extensionUuid
-            gnomeExtensions.launch-new-instance.extensionUuid
-            gnomeExtensions.maximize-to-empty-workspace.extensionUuid
-            gnomeExtensions.no-overview.extensionUuid
-            gnomeExtensions.pip-on-top.extensionUuid
-            gnomeExtensions.rounded-window-corners.extensionUuid
-            gnomeExtensions.sound-output-device-chooser.extensionUuid
-            gnomeExtensions.tweaks-in-system-menu.extensionUuid
-            gnomeExtensions.vitals.extensionUuid
-          ])
-        ];
+            (optionals cfg.extensions [
+              gnomeExtensions.appindicator.extensionUuid
+              gnomeExtensions.auto-activities.extensionUuid
+              gnomeExtensions.blur-my-shell.extensionUuid
+              gnomeExtensions.custom-hot-corners-extended.extensionUuid
+              gnomeExtensions.extensions-sync.extensionUuid
+              gnomeExtensions.gamemode.extensionUuid
+              gnomeExtensions.launch-new-instance.extensionUuid
+              gnomeExtensions.maximize-to-empty-workspace.extensionUuid
+              gnomeExtensions.no-overview.extensionUuid
+              gnomeExtensions.pip-on-top.extensionUuid
+              gnomeExtensions.rounded-window-corners.extensionUuid
+              gnomeExtensions.sound-output-device-chooser.extensionUuid
+              gnomeExtensions.tweaks-in-system-menu.extensionUuid
+              gnomeExtensions.vitals.extensionUuid
+            ])
+          ];
       };
 
       "org/gnome/shell/app-switcher" = {
@@ -310,7 +315,7 @@ in {
         fixed-widths = true;
         hide-icons = false;
         hide-zeros = false;
-        hot-sensors = [ "__network-rx_max__" ];
+        hot-sensors = ["__network-rx_max__"];
         position-in-panel = 2;
         show-battery = false;
         show-fan = false;

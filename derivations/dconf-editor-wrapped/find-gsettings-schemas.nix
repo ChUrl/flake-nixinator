@@ -1,5 +1,4 @@
-{ pkgs, ... }:
-
+{pkgs, ...}:
 pkgs.writeShellScriptBin "find-gsettings-schemas" ''
   schemas=""
   for d in $(ls -1 --ignore "*.drv" /nix/store); do

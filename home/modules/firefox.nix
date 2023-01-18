@@ -1,14 +1,17 @@
 # TODO: https://github.com/nix-community/home-manager/commit/69d19b9839638fc487b370e0600a03577a559081
-
-{ inputs, config, nixosConfig, lib, mylib, pkgs, ... }:
-
+{
+  inputs,
+  config,
+  nixosConfig,
+  lib,
+  mylib,
+  pkgs,
+  ...
+}:
 with lib;
-with mylib.modules;
-
-let
+with mylib.modules; let
   cfg = config.modules.firefox;
 in {
-
   options.modules.firefox = {
     enable = mkEnableOpt "Firefox";
     wayland = mkBoolOpt false "Enable firefox wayland support";
@@ -19,16 +22,17 @@ in {
   };
 
   config = mkIf cfg.enable {
-    home.packages = with pkgs; builtins.concatLists [
-      # TODO: I don't think vaapi works yet
-      (optionals cfg.vaapi [
-        # NOTE: I put these into hardware.opengl.extrapackages, don't know if they belong there...
-        # libva
-        # libvdpau
-      ])
+    home.packages = with pkgs;
+      builtins.concatLists [
+        # TODO: I don't think vaapi works yet
+        (optionals cfg.vaapi [
+          # NOTE: I put these into hardware.opengl.extrapackages, don't know if they belong there...
+          # libva
+          # libvdpau
+        ])
 
-      (optionals cfg.gnomeTheme [ firefox-gnome-theme ])
-    ];
+        (optionals cfg.gnomeTheme [firefox-gnome-theme])
+      ];
 
     home.sessionVariables = mkMerge [
       {
@@ -52,7 +56,7 @@ in {
       icon = "firefox";
       exec = "firefox --private-window %U";
       terminal = false;
-      categories = [ "Network" "WebBrowser" ];
+      categories = ["Network" "WebBrowser"];
     };
 
     programs.firefox = {
@@ -72,7 +76,7 @@ in {
         #       not strictly necessary
         extraPolicies = {
           # TODO: Make library function to allow easy bookmark creation and add my default bookmarks/folders
-          Bookmarks = (optionalAttrs cfg.defaultBookmarks { });
+          Bookmarks = optionalAttrs cfg.defaultBookmarks {};
           CaptivePortal = false;
           DisableFirefoxAccounts = true;
           DisableFirefoxStudies = true;

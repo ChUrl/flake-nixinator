@@ -1,7 +1,15 @@
-{ inputs, hostname, username, lib, mylib, config, nixosConfig, pkgs, ... }:
-
+{
+  inputs,
+  hostname,
+  username,
+  lib,
+  mylib,
+  config,
+  nixosConfig,
+  pkgs,
+  ...
+}:
 # Here goes the stuff that will only be enabled on the desktop
-
 rec {
   imports = [
     ../../modules
@@ -21,8 +29,10 @@ rec {
       yabridge.autoSync = true;
 
       noisesuppression = {
-         noisetorch.enable = true;
-         noisetorch.autostart = true;
+        noisetorch.enable = false;
+        noisetorch.autostart = false;
+        easyeffects.enable = false;
+        easyeffects.autostart = false;
       };
 
       cardinal.enable = true;

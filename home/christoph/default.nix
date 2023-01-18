@@ -1,17 +1,22 @@
 # This is your home-manager configuration file
 # Use this to configure your home environment (it replaces ~/.config/nixpkgs/home.nix)
-
 # The nixosConfig allows to access the toplevel system configuration from within home manager
 # https://github.com/nix-community/home-manager/blob/586ac1fd58d2de10b926ce3d544b3179891e58cb/nixos/default.nix#L19
-{ inputs, hostname, username, lib, mylib, config, nixosConfig, pkgs, ... }:
-
+{
+  inputs,
+  hostname,
+  username,
+  lib,
+  mylib,
+  config,
+  nixosConfig,
+  pkgs,
+  ...
+}:
 # This is a module
 # Because no imports/options/config is defined explicitly, everything is treated as config
 # { inputs, lib, ... }: { ... } gets turned into { inputs, lib, ... }: { config = { ... }; } implicitly
-let
-
-in rec {
-
+rec {
   # Every module is a nix expression, specifically a function { inputs, lib, ... }: { ... }
   # Every module (/function) is called with the same arguments as this module (home.nix)
   # Arguments with matching names are "plugged in" into the right slots,
@@ -214,7 +219,7 @@ in rec {
     ffmpeg_5-full # v5, including ffplay
     imagemagick # Convert image (magic)
     httpie # Cool http client
-    (ripgrep.override { withPCRE2 = true; }) # fast as fuck
+    (ripgrep.override {withPCRE2 = true;}) # fast as fuck
     nvd # nix rebuild diff
     # du-dust # Disk usage analyzer (for directories)
     gdu # Alternative to du-dust (I like it better)
@@ -241,6 +246,8 @@ in rec {
     texlive.combined.scheme-full
     pandoc # document converting madness
     lm_sensors
+    alejandra # nix code formatter
+    nil # nix language server
 
     # Xooooorg/Desktop environment stuff
     xclip
@@ -302,7 +309,6 @@ in rec {
     # jetbrains.idea-ultimate
     # jetbrains.clion
 
-
     # TODO: LaTeX module
     texlab
 
@@ -342,6 +348,8 @@ in rec {
 
     # Use NixCommunity binary cache
     cachix
+
+    # tor-browser-bundle-bin
   ];
 
   # Packages with extra options managed by HomeManager natively
@@ -411,8 +419,8 @@ in rec {
       enable = true;
       enableFishIntegration = config.modules.fish.enable;
       enableXsessionIntegration = true;
-      agents = [ "ssh" ];
-      keys = [ "id_ed25519" ];
+      agents = ["ssh"];
+      keys = ["id_ed25519"];
     };
 
     # Realtime Motion Interpolation: https://gist.github.com/phiresky/4bfcfbbd05b3c2ed8645
@@ -421,10 +429,13 @@ in rec {
       # NOTE: wrapMpv explained here: https://github.com/NixOS/nixpkgs/blob/nixos-unstable/pkgs/applications/video/mpv/wrapper.nix#L84
       #       wrapMpv gets two args: the mpv derivation and some options
       #       Possible overrides for derivation: https://github.com/NixOS/nixpkgs/blob/nixos-unstable/pkgs/applications/video/mpv/default.nix#L222
-      package = pkgs.wrapMpv (pkgs.mpv-unwrapped.override { vapoursynthSupport = true; }) {
+      package = pkgs.wrapMpv (pkgs.mpv-unwrapped.override {vapoursynthSupport = true;}) {
         youtubeSupport = true;
         extraMakeWrapperArgs = [
-          "--prefix" "LD_LIBRARY_PATH" ":" "${pkgs.vapoursynth-mvtools}/lib"
+          "--prefix"
+          "LD_LIBRARY_PATH"
+          ":"
+          "${pkgs.vapoursynth-mvtools}/lib"
         ];
       };
     };

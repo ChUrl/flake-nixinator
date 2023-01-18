@@ -1,8 +1,23 @@
 # Taken from https://github.com/NixOS/nixpkgs/pull/176779/files
-
-{ lib, stdenv, meson, ninja, pkg-config, gettext, cmake, udev, fetchFromGitHub, python3
-, wrapGAppsHook, gtk3, glib, gnome, appstream-glib, gobject-introspection, desktop-file-utils }:
-
+{
+  lib,
+  stdenv,
+  meson,
+  ninja,
+  pkg-config,
+  gettext,
+  cmake,
+  udev,
+  fetchFromGitHub,
+  python3,
+  wrapGAppsHook,
+  gtk3,
+  glib,
+  gnome,
+  appstream-glib,
+  gobject-introspection,
+  desktop-file-utils,
+}:
 python3.pkgs.buildPythonApplication rec {
   pname = "oversteer";
   version = "0.7.1";
@@ -44,9 +59,9 @@ python3.pkgs.buildPythonApplication rec {
     udev
   ];
 
-  buildInputs = [ udev gtk3 glib gnome.adwaita-icon-theme python3 ];
+  buildInputs = [udev gtk3 glib gnome.adwaita-icon-theme python3];
 
-  propagatedBuildInputs = with python3.pkgs; [ pyudev pyxdg evdev pygobject3 matplotlib scipy ];
+  propagatedBuildInputs = with python3.pkgs; [pyudev pyxdg evdev pygobject3 matplotlib scipy];
 
   meta = with lib; {
     description = "Application to configure Logitech steering wheels on Linux";

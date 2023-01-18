@@ -1,5 +1,8 @@
-{ lib, stdenv, src }:
-
+{
+  lib,
+  stdenv,
+  src,
+}:
 stdenv.mkDerivation {
   pname = "adwaita-for-steam";
   version = "unstable";
