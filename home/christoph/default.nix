@@ -271,7 +271,6 @@ rec {
     signal-desktop
     protonvpn-cli
     # yt-dlp # download videos (from almost anywhere) # HM program
-    cyberdrop-dl # TODO: Make this somehow only available in the needed folder (but keep derivation here?)
     filezilla
 
     # Tools
@@ -289,8 +288,8 @@ rec {
     hunspell # I cna't type
     hunspellDicts.en_US
     hunspellDicts.de_DE
-    obsidian # knowledge-base, org-roam > obsidian
-    logseq # knowledge-base, logseq > org-roam? logseq && org-roam?
+    obsidian # knowledge-base
+    # logseq # knowledge-base
     # zotero # Citation/source research assistant
     # jabref # manage bibilography # NOTE: Uses jdk18 which is EOL, so can't build
 
