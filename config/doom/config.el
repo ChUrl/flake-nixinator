@@ -209,6 +209,7 @@
 
 ;; use this to load before evil-snipe, as <s> and <S> conflict
 (use-package! evil-smartparens)
+(remove-hook 'doom-first-buffer-hook #'smartparens-global-mode)
 
 ;; bindings
 (map! :map global-map
@@ -383,6 +384,8 @@
 
 ;; latex
 (setq! +latex-viewers '(pdf-tools)
+       ;; TeX-engine "luatex"
+       TeX-auto-untabify t
        TeX-command-extra-options "-shell-escape" ;; for package minted
        TeX-auto-save t ;; parse on save
        TeX-parse-self t ;; parse on load
