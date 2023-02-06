@@ -89,13 +89,12 @@
       rocm-opencl-runtime
       # rocm-runtime # Wiki doesn't mention this, but it exists...
 
+      # TODO: Disabled for the moment, because hardware acceleration crashes AMDGPU driver
       # VAAPI/VDPAU: https://nixos.wiki/wiki/Accelerated_Video_Playback
-      vaapiVdpau # Taken from wiki
-      libvdpau-va-gl # Taken from wiki
-
-      # TODO: Figure this out (vainfo), it works this way but I still don't know if this is completely correct
-      libvdpau # NOTE: Don't know if needed/where it belongs...
-      libva # NOTE: Don't know if needed/where it belongs...
+      # vaapiVdpau # Taken from wiki
+      # libvdpau-va-gl # Taken from wiki
+      # libvdpau # NOTE: Don't know if needed/where it belongs...
+      # libva # NOTE: Don't know if needed/where it belongs...
     ];
 
     sane.enable = true; # Scanning
