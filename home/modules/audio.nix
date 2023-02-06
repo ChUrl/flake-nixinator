@@ -79,7 +79,10 @@ in {
         # Some of these include gamemode as I use that to enable performance governors for CPU/GPU and other stuff
 
         # Enable some default pipewire stuff if pipewire is enabled
-        (optionals nixosConfig.services.pipewire.enable [helvum])
+        (optionals nixosConfig.services.pipewire.enable [
+          # TODO: Disabled on 03.02.2023 because of temporary build error
+          # helvum
+        ])
 
         (optionals cfg.carla.enable [carla gamemode])
         (optionals cfg.bitwig.enable [
