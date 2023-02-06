@@ -58,7 +58,7 @@ rec {
     firefox = {
       enable = true;
       wayland = true;
-      vaapi = true;
+      vaapi = false; # TODO: Crashes AMDGPU driver
       disableTabBar = true;
       defaultBookmarks = true;
       gnomeTheme = true; # I like it also with Plasma
@@ -161,8 +161,11 @@ rec {
   # TODO: Latex module
   home.file."texmf/tex/latex/custom/christex.sty".source = ../../config/latex/christex.sty;
   home.file."Notes/Obsidian/Chriphost/christex.sty".source = ../../config/latex/christex.sty; # For obsidian notes
+  home.file.".indentconfig.yaml".source = ../../config/latex/.indentconfig.yaml;
+  home.file.".indentsettings.yaml".source = ../../config/latex/.indentsettings.yaml;
 
   # TODO: If navi enabled
+  # TODO: Symlink this, so the config doesn't have to be rebuilt every time
   home.file.".local/share/navi/cheats/christoph.cheat".source = ../../config/navi/christoph.cheat;
 
   # TODO: Autostart module that is used by Mail/Plasma/Audio etc.
@@ -309,7 +312,7 @@ rec {
     # jetbrains.clion
 
     # TODO: LaTeX module
-    texlab
+    # texlab # Incredibly lag
 
     # Media
     wacomtablet
@@ -468,6 +471,128 @@ rec {
     starship = {
       enable = true;
       enableFishIntegration = config.modules.fish.enable;
+    };
+
+    vscode = {
+      enable = true;
+      enableExtensionUpdateCheck = false;
+      enableUpdateCheck = false;
+      extensions = with pkgs.vscode-extensions; [
+        alefragnani.bookmarks
+        alefragnani.project-manager
+        bradlc.vscode-tailwindcss
+        christian-kohler.path-intellisense
+        codezombiech.gitignore
+        # coenraads.bracket-pair-colorizer-2 # Not maintained
+        coolbear.systemd-unit-file
+        eamodio.gitlens
+        formulahendry.auto-rename-tag
+        formulahendry.auto-close-tag
+        gitlab.gitlab-workflow
+        irongeek.vscode-env
+        jnoortheen.nix-ide
+        kamadorueda.alejandra
+        kamikillerto.vscode-colorize
+        llvm-vs-code-extensions.vscode-clangd
+        matklad.rust-analyzer
+        mechatroner.rainbow-csv
+        mikestead.dotenv
+        mkhl.direnv
+        ms-azuretools.vscode-docker
+        ms-kubernetes-tools.vscode-kubernetes-tools
+        ms-python.python
+        ms-toolsai.jupyter
+        ms-vscode.cmake-tools
+        ms-vscode.cpptools
+        ms-vscode.hexeditor
+        ms-vscode.makefile-tools
+        naumovs.color-highlight
+        njpwerner.autodocstring
+        # oderwat.indent-rainbow # Looks ugly
+        james-yu.latex-workshop
+        redhat.java
+        redhat.vscode-xml
+        redhat.vscode-yaml
+        rubymaniac.vscode-paste-and-indent
+        ryu1kn.partial-diff
+        serayuzgur.crates
+        shd101wyy.markdown-preview-enhanced
+        skyapps.fish-vscode
+        tamasfe.even-better-toml
+        timonwong.shellcheck
+        # tomoki1207.pdf # Incompatible with latex workshop
+        vscodevim.vim
+        vscode-icons-team.vscode-icons
+        yzhang.markdown-all-in-one
+      ];
+      # haskell = {};
+      # keybindings = {};
+      userSettings = {
+        "files.autoSave" = "onFocusChange";
+        "editor.fontSize" = 14;
+        "editor.fontFamily" = "Victor Mono Semibold";
+        "editor.renderWhitespace" = "selection";
+        "editor.cursorStyle" = "line";
+        "editor.lineNumbers" = "relative";
+        "editor.linkedEditing" = true;
+        "editor.smoothScrolling" = true;
+        "editor.stickyScroll.enabled" = true;
+        "editor.tabCompletion" = "on";
+        "editor.cursorSmoothCaretAnimation" = true;
+        "editor.cursorSurroundingLines" = 10;
+        "editor.minimap.renderCharacters" = false;
+        "files.trimFinalNewlines" = true;
+        "files.trimTrailingWhitespace" = true;
+        "workbench.enableExperiments" = false;
+        "workbench.list.smoothScrolling" = true;
+        "workbench.colorTheme" = "Default Light+";
+        "workbench.iconTheme" = "vscode-icons";
+        "security.workspace.trust.enabled" = false;
+        "editor.bracketPairColorization.enabled" = true;
+        "editor.guides.bracketPairs" = "active";
+        "editor.guides.bracketPairsHorizontal" = "active";
+        "editor.guides.highlightActiveIndentation" = false;
+        # Looks ugly
+        # "workbench.colorCustomizations" = {
+        #   # Bracket colors
+        #   "editorBracketHighlight.foreground1" = "#FFD700";
+        #   "editorBracketHighlight.foreground2" = "#DA70D6";
+        #   "editorBracketHighlight.foreground3" = "#179fff";
+        #   # Inactive guide colors
+        #   "editorBracketPairGuide.background1" = "#ffd90080";
+        #   "editorBracketPairGuide.background2" = "#CC66CC80";
+        #   "editorBracketPairGuide.background3" = "#87CEFA80";
+        #   # Active guide colors
+        #   "editorBracketPairGuide.activeBackground1" = "#ffd90080";
+        #   "editorBracketPairGuide.activeBackground2" = "#CC66CC80";
+        #   "editorBracketPairGuide.activeBackground3" = "#87CEFA80";
+        # };
+        "latex-workshop.latex.tools" = [
+          {
+            "name" = "latexmk";
+            "command" = "latexmk";
+            "args" = [
+              "-synctex=1"
+              "-shell-escape"
+              "-interaction=nonstopmode"
+              "-file-line-error"
+              "-pdf"
+              "-outdir=%OUTDIR%"
+              "%DOC%"
+            ];
+            "env" = {};
+          }
+        ];
+        "latex-workshop.latexindent.args" = [
+          "-c"
+          "%DIR%/"
+          "%TMPFILE%"
+          "-m"
+          "-y=defaultIndent: '%INDENT%'"
+        ];
+        "[nix]"."editor.tabSize" = 2;
+      };
+      # TODO: Snippets
     };
 
     # TODO: Check HM module options
