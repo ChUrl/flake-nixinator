@@ -53,3 +53,17 @@ qemu-system-<arch> -cpu help
 % discord, flatpak, rich-presence
 # Enable rich presence for flatpak Discord
 ln -sf $XDG_RUNTIME_DIR/{app/com.discordapp.Discord,}/discord-ipc-0
+
+% find
+# Find files under a certain size in the current directory
+find . -type f -name "<glob>" -size -<size>
+
+% objdump, disassemble
+# Disassemble an object file
+objdump -d -S -M intel "<file>" | bat -l nasm
+$ file: exa -1
+
+% pdftocairo, pdf, svg
+# Extract svg figure from pdf page
+pdftocairo -f <page> -l <page> -svg "<input>" "<output>"
+$ input: exa -1

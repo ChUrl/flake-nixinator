@@ -46,7 +46,7 @@ rec {
       bottles.enable = true;
       discordChromium.enable = true;
       discordElectron.enable = false; # This is the nixpkgs version, prefer the one from flatpak module
-      dwarffortress.enable = true;
+      dwarffortress.enable = false;
 
       steam = {
         enable = true;

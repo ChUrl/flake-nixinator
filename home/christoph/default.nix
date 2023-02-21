@@ -316,7 +316,7 @@ rec {
 
     # Media
     wacomtablet
-    blender
+    # blender
     godot
     obs-studio
     vlc # Addition to mpv without any shaders etc
@@ -420,6 +420,7 @@ rec {
     keychain = {
       enable = true;
       enableFishIntegration = config.modules.fish.enable;
+      enableNushellIntegration = false;
       enableXsessionIntegration = true;
       agents = ["ssh"];
       keys = ["id_ed25519"];
@@ -451,6 +452,11 @@ rec {
     nix-index = {
       enable = true;
       enableFishIntegration = config.modules.fish.enable;
+    };
+
+    nushell = {
+      enable = true;
+
     };
 
     # Git status replacement with file selection by number

@@ -16,7 +16,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    # TODO: Configure by enabled editor
+    # TODO: Configure by option
     home.sessionVariables = {
       EDITOR = "nvim";
       VISUAL = "nvim";
