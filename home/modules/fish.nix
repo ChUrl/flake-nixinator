@@ -62,6 +62,9 @@ in {
 
             # ssh locations
             xxhamster = "TERM=ansi ssh christoph@217.160.142.51";
+
+            # disassemble
+            disassemble = "objdump -d -S -M intel";
           }
 
           # Abbrs only available if package is installed

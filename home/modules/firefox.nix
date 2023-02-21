@@ -98,49 +98,6 @@ in {
         };
       };
 
-      extensions = with pkgs.nur.repos.rycee.firefox-addons; [
-        amp2html
-        augmented-steam
-        betterttv
-        bypass-paywalls-clean
-        c-c-search-extension # Press cc in searchbar and profit
-        clearurls
-        cookie-autodelete
-        display-_anchors # Easier linking to specific website parts
-        don-t-fuck-with-paste
-        h264ify
-        keepassxc-browser
-        localcdn
-        lovely-forks # Display notable forks on GitHub repos
-        # octotree # Github on steroids
-        # plasma-integration # TODO: Only when Plasma is used
-        privacy-badger
-        privacy-settings
-        protondb-for-steam
-        refined-github
-        return-youtube-dislikes
-        search-by-image
-        single-file
-        skip-redirect
-        smart-referer # Limit referer link information
-        snowflake # Help users from censored countries access the internet
-        sourcegraph # Code intelligence for GitHub/GitLap for 20+ languages
-        sponsorblock
-        steam-database
-        tab-session-manager
-        to-deepl
-        transparent-standalone-image
-        tree-style-tab
-        ublacklist
-        ublock-origin
-        # umatrix # NOTE: Many pages need manual intervention
-        unpaywall
-        view-image
-        # vimium # NOTE: Shits the bed when site needs general key input outside of text field...
-        # wappalyzer # Identify web technologies
-        youtube-shorts-block
-      ];
-
       profiles = {
         default = {
           id = 0; # 0 is default profile
@@ -153,6 +110,49 @@ in {
             (optionalString cfg.disableTabBar ''
               #TabsToolbar { display: none; }
             '')
+          ];
+
+          extensions = with pkgs.nur.repos.rycee.firefox-addons; [
+            amp2html
+            augmented-steam
+            betterttv
+            bypass-paywalls-clean
+            c-c-search-extension # Press cc in searchbar and profit
+            clearurls
+            cookie-autodelete
+            display-_anchors # Easier linking to specific website parts
+            don-t-fuck-with-paste
+            h264ify
+            keepassxc-browser
+            localcdn
+            lovely-forks # Display notable forks on GitHub repos
+            # octotree # Github on steroids
+            # plasma-integration # TODO: Only when Plasma is used
+            privacy-badger
+            privacy-settings
+            protondb-for-steam
+            refined-github
+            return-youtube-dislikes
+            search-by-image
+            single-file
+            skip-redirect
+            smart-referer # Limit referer link information
+            snowflake # Help users from censored countries access the internet
+            sourcegraph # Code intelligence for GitHub/GitLap for 20+ languages
+            sponsorblock
+            steam-database
+            tab-session-manager
+            to-deepl
+            transparent-standalone-image
+            tree-style-tab
+            ublacklist
+            ublock-origin
+            # umatrix # NOTE: Many pages need manual intervention
+            unpaywall
+            view-image
+            # vimium # NOTE: Shits the bed when site needs general key input outside of text field...
+            # wappalyzer # Identify web technologies
+            youtube-shorts-block
           ];
 
           settings = mkMerge [
