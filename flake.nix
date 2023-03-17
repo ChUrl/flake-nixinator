@@ -53,7 +53,7 @@
 
       config.allowUnfree = true;
       overlays = [
-        inputs.devshell.overlay
+        inputs.devshell.overlays.default
         inputs.nur.overlay
         inputs.emacs-overlay.overlay
 
