@@ -48,6 +48,7 @@ in {
 
             # tools
             cd = "z"; # zoxide for quickjump to previously visited locations
+            b = "z -"; # jump to previous dir
             mkdir = "mkdir -p"; # also create parents (-p)
             blk = batify "lsblk -o NAME,LABEL,UUID,FSTYPE,SIZE,FSUSE%,MOUNTPOINT,MODEL";
             grep = "grep --color=auto -E"; # grep with extended regex
