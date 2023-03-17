@@ -116,7 +116,7 @@ in {
             amp2html
             augmented-steam
             betterttv
-            bypass-paywalls-clean
+            # bypass-paywalls-clean
             c-c-search-extension # Press cc in searchbar and profit
             clearurls
             cookie-autodelete
