@@ -67,3 +67,7 @@ $ file: exa -1
 # Extract svg figure from pdf page
 pdftocairo -f <page> -l <page> -svg "<input>" "<output>"
 $ input: exa -1
+
+% yes, head, file
+# Generate a large text file
+yes "The quick brown fox jumps over the lazy dog" | head -c <size> > <output>
