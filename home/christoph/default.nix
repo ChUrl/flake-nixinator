@@ -106,10 +106,10 @@ rec {
       };
     };
 
-    neovim = {
-      enable = true;
-      alias = true;
-    };
+    # neovim = {
+    #   enable = true;
+    #   alias = true;
+    # };
 
     nextcloud = {
       enable = true;
@@ -124,22 +124,14 @@ rec {
 
   # Temporary hack: https://github.com/nix-community/home-manager/issues/3342
   # TODO: Remove when possible
-  manual.manpages.enable = false;
-  manual.html.enable = false;
+  manual.manpages.enable = true;
+  manual.html.enable = true;
 
   # TODO: Gnome terminal config
   # TODO: Store the external binaries for my derivations in GitHub LFS (Vital, NeuralDSP, other plugins etc.)
   # TODO: Derivations for bottles like UPlay, NeuralDSP, LoL (don't know what is possible with bottles-cli though)
   # TODO: When bottles derivations are there remove the bottles option from audio/gaming module and assert that bottles is enabled in flatpak module
 
-  # Chinese Input
-  i18n.inputMethod.enabled = "fcitx5";
-  i18n.inputMethod.fcitx5.addons = with pkgs; [
-    fcitx5-gtk
-    libsForQt5.fcitx5-qt
-    fcitx5-chinese-addons
-    fcitx5-configtool # TODO: Remove this and set config through HomeManager
-  ];
 
   # Make fonts installed through user packages available to applications
   # NOTE: I don't think I need this anymore as all fonts are installed through the system config but let's keep this just in case
@@ -182,6 +174,9 @@ rec {
     # Environment variables
     sessionVariables = {
       LANG = "en_US.UTF-8";
+
+      EDITOR = "hx";
+      VISUAL = "hx";
 
       DOCKER_BUILDKIT = 1;
 
@@ -242,13 +237,15 @@ rec {
     mprocs # run multiple processes in single terminal window, screen alternative
     # TODO: Maybe general document/typesetting module?
     graphviz # generate graphs from code
+    xdot # .dot file viewer
     d2 # generate diagrams from code
+    plantuml
     gnuplot # generate function plots
     # TODO: Latex module
-    tikzit
+    # tikzit
     texlive.combined.scheme-full
     pandoc # document converting madness
-    lm_sensors
+    # TODO: Programming languages module
     alejandra # nix code formatter
     nil # nix language server
 
@@ -269,9 +266,12 @@ rec {
     vulkan-tools # vulkaninfo
     libva-utils # vainfo
     rocminfo # radeon comptute platform info
+    hwloc
+    lm_sensors
 
     # Web stuff
     signal-desktop
+    element-desktop # matrix client
     protonvpn-cli
     # yt-dlp # download videos (from almost anywhere) # HM program
     filezilla
@@ -282,7 +282,13 @@ rec {
     gource # Visualize git commit log, completely useless
     anki-bin # Use anki-bin as anki is some versions behind
     inputs.nixos-conf-editor.packages."x86_64-linux".nixos-conf-editor
-    octave
+    octave # GNU matlab basically
+    logisim-evolution # Digital circuit simulator
+    digital # Digital circuit simulator
+    quartus-prime-lite # Intel FPGA design software
+
+    # TODO: Module, sync config, try globally
+    jetbrains.clion
 
     # Office
     # sioyek # Scientific pdf reader # HM program
@@ -292,9 +298,10 @@ rec {
     hunspellDicts.en_US
     hunspellDicts.de_DE
     obsidian # knowledge-base
-    # logseq # knowledge-base
+    logseq # knowledge-base
     # zotero # Citation/source research assistant
-    # jabref # manage bibilography # NOTE: Uses jdk18 which is EOL, so can't build
+    # jabref # manage bibilography # NOTE: Uses jdk18 which is EOL, so can't build, use flatpak instead
+    vale # Why not lint everything (including english)?
 
     # TODO: Development module
     # TODO: Does this conflict with devshell pythons? If so, use lowPrio
@@ -324,12 +331,14 @@ rec {
     krita
     inkscape
 
+    AusweisApp2
+
     # KDE Applications
     # TODO: Make a module out of this
     libsForQt5.kate
     libsForQt5.kwrited # Already included by default
     libsForQt5.ark
-    libsForQt5.kdeconnect-kde # NOTE: Also has HM program
+    # libsForQt5.kdeconnect-kde # NOTE: Also has HM service
     libsForQt5.kcalc
     libsForQt5.ksystemlog
     libsForQt5.kfind
@@ -361,7 +370,6 @@ rec {
     # Potential future enables
     # mangohud.enable = true;
     # matplotlib.enable = true;
-    # kdeconnect.enable = true;
 
     bat.enable = true;
     btop.enable = true;
@@ -394,13 +402,27 @@ rec {
     helix = {
       enable = true;
 
+      languages = [
+        {
+          name = "verilog";
+          roots = [
+            ".svls.toml"
+            ".svlint.toml"
+          ];
+          language-server = {
+            command = "svls";
+            args = [];
+          };
+        }
+      ];
+
       # https://docs.helix-editor.com/configuration.html
       settings = {
         # theme = "base16_terminal";
         editor = {
           scrolloff = 10;
-          mouse = true; # Default
-          middle-click-paste = true; # Default
+          mouse = false; # Default true
+          middle-click-paste = false; # Default true
           line-number = "relative";
           cursorline = true;
           auto-completion = true; # Default
@@ -415,6 +437,10 @@ rec {
         };
       };
     };
+
+    # kakoune = {
+    #   enable = true;
+    # };
 
     # NOTE: If error occurs after system update on fish init run "ssh-add"
     keychain = {
@@ -456,7 +482,6 @@ rec {
 
     nushell = {
       enable = true;
-
     };
 
     # Git status replacement with file selection by number
@@ -506,7 +531,7 @@ rec {
         mkhl.direnv
         ms-azuretools.vscode-docker
         ms-kubernetes-tools.vscode-kubernetes-tools
-        ms-python.python
+        # ms-python.python # TODO: Reenable, was disabled bc build failure
         ms-toolsai.jupyter
         ms-vscode.cmake-tools
         ms-vscode.cpptools
@@ -527,6 +552,7 @@ rec {
         tamasfe.even-better-toml
         timonwong.shellcheck
         # tomoki1207.pdf # Incompatible with latex workshop
+        valentjn.vscode-ltex
         vscodevim.vim
         vscode-icons-team.vscode-icons
         yzhang.markdown-all-in-one
@@ -548,7 +574,7 @@ rec {
         "editor.cursorSurroundingLines" = 10;
         "editor.minimap.renderCharacters" = false;
         "files.trimFinalNewlines" = true;
-        "files.trimTrailingWhitespace" = true;
+        "files.trimTrailingWhitespace" = true; # NOTE: If this is enabled with frequent autosave, the current lines whitespace will always be removed, which is obnoxious
         "workbench.enableExperiments" = false;
         "workbench.list.smoothScrolling" = true;
         "workbench.colorTheme" = "Default Light+";
@@ -558,6 +584,7 @@ rec {
         "editor.guides.bracketPairs" = "active";
         "editor.guides.bracketPairsHorizontal" = "active";
         "editor.guides.highlightActiveIndentation" = false;
+        "ltex.checkFrequency" = "manual";
         # Looks ugly
         # "workbench.colorCustomizations" = {
         #   # Bracket colors
@@ -608,6 +635,10 @@ rec {
       enable = true;
       enableFishIntegration = config.modules.fish.enable;
     };
+  };
+
+  services = {
+    # kdeconnect.enable = true; # Note: This does not setup the firewall at all
   };
 
   # Nicely reload system units when changing configs
