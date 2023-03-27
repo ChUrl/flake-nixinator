@@ -15,7 +15,7 @@
       pkgs = import nixpkgs {
         inherit system;
         config.allowUnfree = true; # For clion
-        overlays = [devshell.overlay];
+        overlays = [devshell.overlays.default];
       };
 
       # NOTE: Usual 64 bit compilers that don't collide
@@ -28,8 +28,8 @@
         libc = pkgs.glibc;
         bintools = bintools;
       });
-      clang14 = pkgs.wrapCCWith {
-        cc = pkgs.clang_14.cc;
+      clang15 = pkgs.wrapCCWith {
+        cc = pkgs.clang_15.cc;
         libc = pkgs.glibc;
         bintools = bintools;
       };
@@ -44,8 +44,8 @@
         libc = pkgs.glibc_multi;
         bintools = bintools_multi;
       });
-      clang14_multi = pkgs.wrapCCWith {
-        cc = pkgs.clang_14.cc;
+      clang15_multi = pkgs.wrapCCWith {
+        cc = pkgs.clang_15.cc;
         libc = pkgs.glibc_multi;
         bintools = bintools_multi;
       };
@@ -58,7 +58,7 @@
           # Compilers
           bintools
           gcc12
-          clang14
+          clang15
           # bintools_multi
           # gcc12_multi
           # clang14_multi
@@ -66,11 +66,10 @@
           # Native buildinputs
           gnumake
           cmake
-          nasm
+          # nasm
 
           # Development
-          jetbrains.clion
-          bear # To generate compilation database
+          # bear # To generate compilation database
           gdb
           cling # To try out my bullshit implementations
           # doxygen # Generate docs + graphs
