@@ -73,7 +73,7 @@
     cpu.intel.updateMicrocode = true;
 
     # nvidia.modesetting.enable = true; # Not officially supported by NVidia but needed for wayland
-    video.hidpi.enable = lib.mkDefault true;
+    # video.hidpi.enable = lib.mkDefault true; # No longer has any effect
     opengl.enable = true;
 
     # Vulkan
