@@ -73,8 +73,8 @@ rec {
       autoPrune = true;
 
       flatseal.enable = true;
-      discord.enable = true;
-      spotify.enable = true;
+      discord.enable = false;
+      spotify.enable = false;
       bottles.enable = true;
     };
 
@@ -91,6 +91,16 @@ rec {
       };
     };
 
+    # TODO:
+    # plasma = {
+    #   enable = false;
+    # };
+
+    # hyprland = {
+    #   enable = true;
+    # };
+
+    # TODO: More options, like font?
     kitty.enable = true;
 
     misc = {
@@ -134,6 +144,8 @@ rec {
   # TODO: Remove Plasma, only use Hyprland
   # TODO: I need to pack all Plasma/Hyprland/Gnome related stuff into their respective modules
   # TODO: Then it should only be possible to activate one Desktop at a time
+
+  home.file.".config/hypr/polkit.conf".text = ''exec-once = ${pkgs.libsForQt5.polkit-kde-agent}/libexec/polkit-kde-agent-1 &'';
 
   # Make fonts installed through user packages available to applications
   # NOTE: I don't think I need this anymore as all fonts are installed through the system config but let's keep this just in case
