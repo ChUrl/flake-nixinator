@@ -289,7 +289,7 @@
 
   # NOTE: Plasma
   # TODO: Identify all the crap
-  services.xserver.desktopManager.plasma5.excludePackages = with pkgs.libsForQt5; [
+  environment.plasma5.excludePackages = with pkgs.libsForQt5; [
   ];
 
   # It is preferred to use the module (if it exists) over environment.systemPackages, as some extra configs are applied.
@@ -299,6 +299,7 @@
     dconf.enable = true; # NOTE: Also needed for Plasma Wayland (GTK theming)
     fish.enable = true;
     git.enable = true;
+    kdeconnect.enable = true; # Use this instead of HM for firewall setup
     neovim.enable = true;
     starship.enable = true;
     thefuck.enable = true;
@@ -329,6 +330,11 @@
     locate.enable = true; # Periodically update index
     ntp.enable = true; # Clock sync
     packagekit.enable = true; # KDE Discover/Gnome Software
+    udev = {
+      packages = with pkgs; [
+        usb-blaster-udev-rules
+      ];
+    };
 
     # TODO: Find a way to organize this better as it's split from the Gnome module, Gnome system module?
     gnome.gnome-keyring.enable = true; # TODO: Is probably also needed for Plasma (some apps require it)
