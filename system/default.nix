@@ -276,7 +276,9 @@
 
   # We want these packages to be available even when no user profile is active
   # Empty since we basically only need git + editor which is enabled below
-  environment.systemPackages = with pkgs; [];
+  environment.systemPackages = with pkgs; [
+    killall
+  ];
 
   # NOTE: Gnome
   # TODO: Identify all the crap
