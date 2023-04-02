@@ -44,13 +44,14 @@ rec {
 
       prism.enable = true;
       bottles.enable = true;
-      discordChromium.enable = true;
+      # TODO: Webcord
+      discordChromium.enable = false;
       discordElectron.enable = false; # This is the nixpkgs version, prefer the one from flatpak module
       dwarffortress.enable = false;
 
       steam = {
         enable = true;
-        protonGE = true;
+        protonGE = true; # TODO: Using protonup-qt now
         gamescope = true;
         adwaita = true;
       };
