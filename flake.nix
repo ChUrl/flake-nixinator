@@ -20,6 +20,7 @@
     nur.url = "github:nix-community/NUR";
     musnix.url = "github:musnix/musnix";
     devshell.url = "github:numtide/devshell";
+    hyprland.url = "github:hyprwm/Hyprland";
     # nixvim.url = "github:pta2002/nixvim";
 
     # plasma-manager.url = "github:pjones/plasma-manager";
@@ -40,7 +41,8 @@
   # It gives a name to the ... ellipses.
   outputs = inputs @ {
     nixpkgs,
-    home-manager,
+    # home-manager,
+    hyprland,
     ...
   }:
   # With let you can define local variables
@@ -85,7 +87,9 @@
         hostname = "nixinator";
         username = "christoph";
 
-        extraModules = [];
+        extraModules = [
+          hyprland.nixosModules.default # Use system module for SDDM config
+        ];
       };
 
       # Usage: sudo nixos-rebuild switch --flake .#nixtop
@@ -95,7 +99,9 @@
         hostname = "nixtop";
         username = "christoph";
 
-        extraModules = [];
+        extraModules = [
+          hyprland.nixosModules.default # Use system module for SDDM config
+        ];
       };
     };
   };

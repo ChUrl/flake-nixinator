@@ -31,7 +31,7 @@ in {
 
         extraModules
 
-        # I included the home config statically like this as I am the only user
+        # I included the home config statically like this as I am the only user.
         # I would have liked to make it more flexible (for multiple users on the same host)
         # but I failed because nix stopped autoinjecting the required arguments and I didn't
         # know how to handle that...

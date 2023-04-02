@@ -28,6 +28,7 @@ rec {
     ../modules
 
     # inputs.nixvim.homeManagerModules.nixvim
+    # inputs.hyprland.homeManagerModules.default # NOTE: Use System module, this one doesn't (can't) add the SDDM entry
   ];
 
   modules = {
@@ -122,8 +123,6 @@ rec {
     };
   };
 
-  # Temporary hack: https://github.com/nix-community/home-manager/issues/3342
-  # TODO: Remove when possible
   manual.manpages.enable = true;
   manual.html.enable = true;
 
@@ -132,6 +131,9 @@ rec {
   # TODO: Derivations for bottles like UPlay, NeuralDSP, LoL (don't know what is possible with bottles-cli though)
   # TODO: When bottles derivations are there remove the bottles option from audio/gaming module and assert that bottles is enabled in flatpak module
 
+  # TODO: Remove Plasma, only use Hyprland
+  # TODO: I need to pack all Plasma/Hyprland/Gnome related stuff into their respective modules
+  # TODO: Then it should only be possible to activate one Desktop at a time
 
   # Make fonts installed through user packages available to applications
   # NOTE: I don't think I need this anymore as all fonts are installed through the system config but let's keep this just in case
@@ -149,6 +151,9 @@ rec {
     recursive = true;
     source = ../../config/mpv;
   };
+
+  # TODO: Hyprland Module
+  # TODO: Move Hyprland config to NixFlake/config/hyprland and link from here
 
   # TODO: Latex module
   home.file."texmf/tex/latex/custom/christex.sty".source = ../../config/latex/christex.sty;
@@ -360,7 +365,14 @@ rec {
     # Use NixCommunity binary cache
     cachix
 
-    # tor-browser-bundle-bin
+    # TODO: Module
+    # Hyprland stuff
+    # dunst # NOTE: Use HM service
+    libsForQt5.polkit-kde-agent # No idea if that comes with KDE
+    slurp # Region selector for screensharing
+    # rofi-wayland # App launcher # NOTE: Use HM Program
+    webcord # Unshitted discord? Well, except Krisp of course
+    ncspot # Spotify in cool (but slow)?
   ];
 
   # Packages with extra options managed by HomeManager natively
@@ -484,6 +496,20 @@ rec {
       enable = true;
     };
 
+    # NOTE: For Hyprland -> Enable from hyprland module
+    rofi = {
+      enable = true;
+      package = pkgs.rofi-wayland;
+      plugins = [
+        pkgs.keepmenu # Rofi KeepassXC frontend
+      ];
+      terminal = "${pkgs.kitty}/bin/kitty";
+
+      font = "JetBrains Mono 14";
+      # theme = 
+      # extraConfig = '''';
+    };
+
     # Git status replacement with file selection by number
     scmpuff = {
       enable = true;
@@ -504,6 +530,7 @@ rec {
       enableFishIntegration = config.modules.fish.enable;
     };
 
+    # TODO: Module
     vscode = {
       enable = true;
       enableExtensionUpdateCheck = false;
@@ -628,6 +655,17 @@ rec {
       # TODO: Snippets
     };
 
+    # TODO: Belongs to hyprland module
+    waybar = {
+      enable = true;
+      systemd = {
+        enable = false;
+      };
+
+      # settings = {};
+      # style = '''';
+    };
+
     # TODO: Check HM module options
     yt-dlp.enable = true;
 
@@ -639,6 +677,11 @@ rec {
 
   services = {
     # kdeconnect.enable = true; # Note: This does not setup the firewall at all
+
+    # TODO: To hyprland module
+    dunst = {
+      enable = true;
+    };
   };
 
   # Nicely reload system units when changing configs
