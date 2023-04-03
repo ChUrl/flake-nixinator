@@ -15,57 +15,63 @@ rec {
     ../../modules
   ];
 
-  modules = {
-    audio = {
-      enable = true;
-
-      carla.enable = false;
-      bitwig.enable = true; # TODO: Check what happens when upgrade plan ends, do I need to pin the version then?
-      tenacity.enable = true;
-
-      faust.enable = true;
-      bottles.enable = true;
-      yabridge.enable = true;
-      yabridge.autoSync = true;
-
-      noisesuppression = {
-        noisetorch.enable = false;
-        noisetorch.autostart = false;
-        easyeffects.enable = false;
-        easyeffects.autostart = false;
-      };
-
-      cardinal.enable = true;
-      distrho.enable = true;
-    };
-
-    gaming = {
-      enable = true;
-
-      prism.enable = true;
-      bottles.enable = true;
-      # TODO: Webcord
-      discordChromium.enable = false;
-      discordElectron.enable = false; # This is the nixpkgs version, prefer the one from flatpak module
-      dwarffortress.enable = false;
-
-      steam = {
+  config = {
+    modules = {
+      audio = {
         enable = true;
-        protonGE = true; # TODO: Using protonup-qt now
-        gamescope = true;
-        adwaita = true;
+  
+        carla.enable = false;
+        bitwig.enable = true; # TODO: Check what happens when upgrade plan ends, do I need to pin the version then?
+        tenacity.enable = true;
+  
+        faust.enable = true;
+        bottles.enable = true;
+        yabridge.enable = true;
+        yabridge.autoSync = true;
+  
+        noisesuppression = {
+          noisetorch.enable = false;
+          noisetorch.autostart = false;
+          easyeffects.enable = false;
+          easyeffects.autostart = false;
+        };
+  
+        cardinal.enable = true;
+        distrho.enable = true;
+      };
+  
+      gaming = {
+        enable = true;
+  
+        prism.enable = true;
+        bottles.enable = true;
+        # TODO: Webcord
+        discordChromium.enable = false;
+        discordElectron.enable = false; # This is the nixpkgs version, prefer the one from flatpak module
+        dwarffortress.enable = false;
+  
+        steam = {
+          enable = true;
+          protonGE = true; # TODO: Using protonup-qt now
+          gamescope = true;
+          adwaita = true;
+        };
       };
     };
-  };
+  
+    home.packages = with pkgs; [
+      quartus-prime-lite # Intel FPGA design software
+    ];
 
-  # NOTE: This has been relocated here from the default config, because it forces en-US keyboard layout
-  #       The laptop needs de-DE...
-  # Chinese Input
-  i18n.inputMethod.enabled = "fcitx5";
-  i18n.inputMethod.fcitx5.addons = with pkgs; [
-    fcitx5-gtk
-    libsForQt5.fcitx5-qt
-    fcitx5-chinese-addons
-    fcitx5-configtool # TODO: Remove this and set config through HomeManager
-  ];
+    # NOTE: This has been relocated here from the default config, because it forces en-US keyboard layout
+    #       The laptop needs de-DE...
+    # Chinese Input
+    i18n.inputMethod.enabled = "fcitx5";
+    i18n.inputMethod.fcitx5.addons = with pkgs; [
+      fcitx5-gtk
+      libsForQt5.fcitx5-qt
+      fcitx5-chinese-addons
+      fcitx5-configtool # TODO: Remove this and set config through HomeManager
+    ];
+  };
 }
