@@ -214,6 +214,7 @@ rec {
     stateVersion = "22.05";
   };
 
+  # TODO: Split this more between laptop and desktop...
   # TODO: Check what packages are installed here and in modules and check if there is already a service/hm-module for it
   # TODO: If so use this or adapt the config from there (example gnome.sushi is also added to dbus packages in services.sushi)
   # TODO: Make a module for standard UNIX replacements
@@ -289,6 +290,8 @@ rec {
     # Web stuff
     signal-desktop
     element-desktop # matrix client
+    webcord # Unshitted discord? Well, except Krisp of course
+    ncspot # Spotify in cool (but slow)?
     protonvpn-cli
     # yt-dlp # download videos (from almost anywhere) # HM program
     filezilla
@@ -298,27 +301,26 @@ rec {
     virt-manager
     gource # Visualize git commit log, completely useless
     anki-bin # Use anki-bin as anki is some versions behind
-    inputs.nixos-conf-editor.packages."x86_64-linux".nixos-conf-editor
+    # inputs.nixos-conf-editor.packages."x86_64-linux".nixos-conf-editor
     octave # GNU matlab basically
     logisim-evolution # Digital circuit simulator
     digital # Digital circuit simulator
-    quartus-prime-lite # Intel FPGA design software
 
     # TODO: Module, sync config, try globally
     jetbrains.clion
 
     # Office
     # sioyek # Scientific pdf reader # HM program
-    xournalpp # Write with a pen
+    xournalpp # Write with a pen, like old people
     libreoffice-qt
     hunspell # I cna't type
     hunspellDicts.en_US
     hunspellDicts.de_DE
     obsidian # knowledge-base
-    logseq # knowledge-base
+    # logseq # knowledge-base
     # zotero # Citation/source research assistant
     # jabref # manage bibilography # NOTE: Uses jdk18 which is EOL, so can't build, use flatpak instead
-    vale # Why not lint everything (including english)?
+    # vale # Why not lint everything (including english)?
 
     # TODO: Development module
     # TODO: Does this conflict with devshell pythons? If so, use lowPrio
@@ -383,8 +385,6 @@ rec {
     libsForQt5.polkit-kde-agent # No idea if that comes with KDE
     slurp # Region selector for screensharing
     # rofi-wayland # App launcher # NOTE: Use HM Program
-    webcord # Unshitted discord? Well, except Krisp of course
-    ncspot # Spotify in cool (but slow)?
   ];
 
   # Packages with extra options managed by HomeManager natively
