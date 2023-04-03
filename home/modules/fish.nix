@@ -101,6 +101,7 @@ in {
             mailsearch = "notmuch search";
           })
           (abbrify pkgs.protonvpn-cli {
+            vpnon = "protonvpn-cli c -f";
             vpnat = "protonvpn-cli c --cc at";
             vpnch = "protonvpn-cli c --cc ch";
             vpnlu = "protonvpn-cli c --cc lu";
