@@ -71,3 +71,21 @@ $ input: exa -1
 % yes, head, file
 # Generate a large text file
 yes "The quick brown fox jumps over the lazy dog" | head -c <size> > <output>
+
+% hotspot, create_ap, wifi, wihotspot
+# Open a WiFi Hotspot using "wihotspot"
+sudo create_ap wlp5s0 enp0s31f6 Potshot ThisIsMyPotshot --daemon --hidden
+
+% hotspot, create_ap, wifi, wihotspot
+# List running Hotspots
+sudo create_ap --list-running
+
+% hotspot, create_ap, wifi, wihotspot
+# List connected devices
+watch -d -c -n 0.5 sudo create_ap --list-clients <SSID>
+$ SSID: sudo create_ap --list-running | sd '.+\((.+)\)' '$1'
+
+% hotspot, create_ap, wifi, wihotspot
+# Stop a running hotspot
+sudo create_ap --stop <SSID>
+$ SSID: sudo create_ap --list-running | sd '.+\((.+)\)' '$1'
