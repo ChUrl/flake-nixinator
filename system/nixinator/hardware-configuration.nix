@@ -16,8 +16,13 @@
     # https://wiki.archlinux.org/title/GDM#GDM_ignores_Wayland_and_uses_X.Org_by_default (not fixed by this)
     # https://wiki.archlinux.org/title/Kernel_mode_setting#Early_KMS_start
     # initrd.kernelModules = [ "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm" ]; # NVIDIA
-    initrd.kernelModules = ["amdgpu"];
-    kernelModules = ["kvm-intel"];
+    initrd.kernelModules = ["amdgpu"]; # Initrd modules are always loaded, e.g. when they are required to mount the rootfs
+    kernelModules = ["kvm-intel" "iwlwifi"];
+
+    # extraModprobeConfig = ''
+    #   options iwlwifi 11n_disable=1 wd_disable=0
+    # '';
+    
     # Specific to used kernel (currently linux_zen)
     extraModulePackages = with pkgs.linuxKernel.packages.linux_zen; [
       new-lg4ff # Logitech force feedback
@@ -66,9 +71,15 @@
   # networking.interfaces.enp4s0u2.useDHCP = lib.mkDefault true;
   # networking.interfaces.wlp3s0.useDHCP = lib.mkDefault true;
 
+  # networking.networkmanager.enable = true;
+  # networking.wireless.iwd.enable = true;
+  # networking.networkmanager.wifi.backend = "iwd";
+
+  nixpkgs.config.allowUnfree = true;
+
   hardware = {
     # Use all redistributable firmware (i.e. nonfree)
-    # enableAllFirmware = true;
+    enableAllFirmware = true;
     enableRedistributableFirmware = true;
     cpu.intel.updateMicrocode = true;
 
