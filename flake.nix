@@ -53,7 +53,10 @@
     pkgs = import nixpkgs {
       inherit system;
 
+      # TODO: I don't understand what the f I need to do here?
+      #       Why can't I enable unfree packages for all files used by this flake?
       config.allowUnfree = true;
+
       overlays = [
         inputs.devshell.overlays.default
         inputs.nur.overlay
