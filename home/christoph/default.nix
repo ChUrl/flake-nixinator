@@ -73,8 +73,8 @@ rec {
       autoPrune = true;
 
       flatseal.enable = true;
-      discord.enable = false;
-      spotify.enable = false;
+      discord.enable = true;
+      spotify.enable = true;
       bottles.enable = true;
     };
 
@@ -295,6 +295,8 @@ rec {
     protonvpn-cli
     # yt-dlp # download videos (from almost anywhere) # HM program
     filezilla
+    dnsmasq # For Access Point/Hotspot
+    linux-wifi-hotspot
 
     # Tools
     calibre # Do I even read
@@ -397,6 +399,8 @@ rec {
 
     bat.enable = true;
     btop.enable = true;
+
+    chromium.enable = true;
 
     direnv = {
       enable = true;
@@ -570,7 +574,7 @@ rec {
         mkhl.direnv
         ms-azuretools.vscode-docker
         ms-kubernetes-tools.vscode-kubernetes-tools
-        # ms-python.python # TODO: Reenable, was disabled bc build failure
+        ms-python.python # TODO: Reenable, was disabled bc build failure
         ms-toolsai.jupyter
         ms-vscode.cmake-tools
         ms-vscode.cpptools
@@ -690,7 +694,7 @@ rec {
   services = {
     # kdeconnect.enable = true; # Note: This does not setup the firewall at all
 
-    # TODO: To hyprland module
+    # TODO: To hyprland module, at least not for both, laptop and desktop
     dunst = {
       enable = true;
     };
