@@ -52,7 +52,7 @@ in {
             mkdir = "mkdir -p"; # also create parents (-p)
             blk = batify "lsblk -o NAME,LABEL,UUID,FSTYPE,SIZE,FSUSE%,MOUNTPOINT,MODEL";
             grep = "grep --color=auto -E"; # grep with extended regex
-            watch = "watch -d -c -n -0.5";
+            watch = "watch -d -c -n 0.5";
 
             # systemd
             failed = "systemctl --failed";
