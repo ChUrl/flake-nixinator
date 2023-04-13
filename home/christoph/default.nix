@@ -173,6 +173,9 @@ rec {
   home.file.".indentconfig.yaml".source = ../../config/latex/.indentconfig.yaml;
   home.file.".indentsettings.yaml".source = ../../config/latex/.indentsettings.yaml;
 
+  home.file."Notes/Obsidian/Chriphost/latex_snippets.json".source = ../../config/obsidian/latex_snippets.json;
+  home.file."Notes/Obsidian/Chriphost/.obsidian/snippets/latex_preview.css".source = ../../config/obsidian/css_snippets/latex_preview.css;
+
   # TODO: If navi enabled
   # TODO: Symlink this, so the config doesn't have to be rebuilt every time
   home.file.".local/share/navi/cheats/christoph.cheat".source = ../../config/navi/christoph.cheat;
@@ -251,6 +254,7 @@ rec {
     fclones # duplicate file finder
     gum # nice shell scripts
     lazygit # can always use another git client
+    geteltorito # extreact boot image from iso
     gitbatch # overview over multiple repos
     mprocs # run multiple processes in single terminal window, screen alternative
     # TODO: Maybe general document/typesetting module?
@@ -266,6 +270,7 @@ rec {
     # TODO: Programming languages module
     alejandra # nix code formatter
     nil # nix language server
+    acpica-tools # Dump ACPI tables etc.
 
     # Xooooorg/Desktop environment stuff
     xclip
@@ -318,7 +323,7 @@ rec {
     hunspell # I cna't type
     hunspellDicts.en_US
     hunspellDicts.de_DE
-    obsidian # knowledge-base
+    # obsidian # knowledge-base # Use flatpak for now, as I can't use window splitting with this version for some reason
     # logseq # knowledge-base
     # zotero # Citation/source research assistant
     # jabref # manage bibilography # NOTE: Uses jdk18 which is EOL, so can't build, use flatpak instead
@@ -352,11 +357,15 @@ rec {
     krita
     inkscape
 
+    handbrake
+    makemkv
+
     AusweisApp2
 
     # KDE Applications
     # TODO: Make a module out of this
     libsForQt5.kate
+    libsForQt5.kdenetwork-filesharing
     libsForQt5.kwrited # Already included by default
     libsForQt5.ark
     # libsForQt5.kdeconnect-kde # NOTE: Also has HM service
