@@ -173,7 +173,7 @@
     extraPortals = with pkgs; [
       # xdg-desktop-portal-wlr # For wlroots based desktops
       xdg-desktop-portal-kde # Comes with Plasma
-      # xdg-desktop-portal-gtk # Comes with Gnome
+      xdg-desktop-portal-gtk # Comes with Gnome, should be kept enable for plasma aswell, for GTK apps (should be required for e.g. font antialiasing)
       # xdg-desktop-portal-gnome # Comes with Gnome
     ];
     # gtkUsePortal = true; # Deprecated, don't use (gdm takes ages to load and other fishy stuff)
@@ -190,7 +190,7 @@
     jack.enable = false; # TODO: Was needed for low latency but probably not anymore (?) as Bitwig supports Pipewire now
 
     wireplumber.enable = true; # Probably the default
-    media-session.enable = false;
+    # media-session.enable = false; # Removed upstream
   };
 
   fonts = {
@@ -332,6 +332,13 @@
     locate.enable = true; # Periodically update index
     ntp.enable = true; # Clock sync
     packagekit.enable = true; # KDE Discover/Gnome Software
+
+    samba = {
+      package = pkgs.samba4Full;
+      enable = true;
+      openFirewall = true;
+    };
+    
     udev = {
       packages = with pkgs; [
         usb-blaster-udev-rules
