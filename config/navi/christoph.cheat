@@ -27,23 +27,33 @@ ldd $(readlink -f $(which <executable>))
 ; TODO: Filter out directories from input autocomplete (if there are no directories basic grep doesn't work, always needs a pattern)
 % ffmpeg, slowmo
 # Create a slow motion version of a video with interpolated/blended frames
-ffmpeg -i <input> -filter:v "minterpolate='mi_mode=mci:mc_mode=aobmc:vsbmc=1:fps=<doublefps>',setpts=2*PTS" output.mp4
+ffmpeg -i "<input>" -filter:v "minterpolate='mi_mode=mci:mc_mode=aobmc:vsbmc=1:fps=<doublefps>',setpts=2*PTS" output.mp4
 $ input: exa -1
 
 % ffmpeg, cropdetect
 # Detect black bar dimensions automatically by looking at the first 10 frames
-ffmpeg -i <input> -vframes 10 -vf cropdetect -f null -
+ffmpeg -i "<input>" -vframes 10 -vf cropdetect -f null -
 $ input: exa -1
 
 % ffmpeg, cropdetect, preview
 # Preview video with applied crop settings
-ffplay -vf crop=<width>:<height>:<x>:<y> <input>
+ffplay -vf crop=<width>:<height>:<x>:<y> "<input>"
 $ input: exa -1
 
 % ffmpeg, cropdetect, render
 # Re-encode the video with applied crop settings
-ffmpeg -i <input> -vf crop=<width>:<height>:<x>:<y> -c:a copy output.mp4
+ffmpeg -i "<input>" -vf crop=<width>:<height>:<x>:<y> -c:a copy output.mp4
 $ input: exa -1
+
+% ffmpeg, video compression, h265, render, reencode
+# Reencode and compress the video using the h265 codec
+ffmpeg -i "<input>" -vcodec libx265 -crf <quality> "out_<input>"
+$ input: exa -1
+$ quality: echo -e "24\n25\n26\n27\n28\n29\n30\n"
+
+% ffmpeg, video compression, h256, render, reencode
+# Reencode and compress multiple videos using the h265 codec
+for name in <files>; ffmpeg -i "$name" -vcodec libx265 -crf <quality> "out_$name"; end
 
 % qemu, cpu
 # Find out what features are supported by different qemu CPUs
@@ -89,3 +99,7 @@ $ SSID: sudo create_ap --list-running | sd '.+\((.+)\)' '$1'
 # Stop a running hotspot
 sudo create_ap --stop <SSID>
 $ SSID: sudo create_ap --list-running | sd '.+\((.+)\)' '$1'
+
+% fish, for, loop
+# For-loop in fish shell
+for o in <objects>; <action>; end
