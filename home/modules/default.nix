@@ -20,6 +20,7 @@
     ./misc.nix
     ./neovim.nix
     ./nextcloud.nix
+    ./plasma.nix
     ./ranger.nix
   ];
 }
