@@ -199,6 +199,8 @@ rec {
 
       EDITOR = "hx";
       VISUAL = "hx";
+      TERMINAL = "kitty";
+      BROWSER = "firefox";
 
       DOCKER_BUILDKIT = 1;
 
@@ -206,6 +208,7 @@ rec {
       XDG_SESSION_TYPE = "wayland";
       QT_QPA_PLATFORM = "wayland";
       NIXOS_OZONE_WL = "1";
+      SDL_VIDEODRIVER = "wayland";
 
       # Don't use system wine, use bottles
       # WINEESYNC = 1;
@@ -377,6 +380,12 @@ rec {
     # matplotlib.enable = true;
 
     bat.enable = true;
+
+    broot = {
+      enable = true;
+      enableFishIntegration = true;
+    };
+    
     btop.enable = true;
     chromium.enable = true;
 
