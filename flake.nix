@@ -21,6 +21,7 @@
     musnix.url = "github:musnix/musnix";
     devshell.url = "github:numtide/devshell";
     hyprland.url = "github:hyprwm/Hyprland";
+    hyprpaper.url = "github:hyprwm/hyprpaper";
     # nixvim.url = "github:pta2002/nixvim";
 
     # plasma-manager.url = "github:pjones/plasma-manager";
@@ -61,6 +62,7 @@
         inputs.devshell.overlays.default
         inputs.nur.overlay
         inputs.emacs-overlay.overlay
+        inputs.hyprpaper.overlays.default
 
         # All my own overlays
         (import ./overlays {inherit nixpkgs inputs;})
