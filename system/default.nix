@@ -37,6 +37,7 @@
     settings.auto-optimise-store = true;
     optimise.automatic = true;
 
+    # TODO: I do not understand this
     # This will add your inputs as registries, making operations with them (such
     # as nix shell nixpkgs#name) consistent with your flake inputs.
     # (Registry contains flakes)
@@ -46,7 +47,7 @@
   # Bootloader/Kernel stuff
   boot = {
     kernelPackages = pkgs.linuxPackages_zen;
-    kernelParams = ["mitigations=off"];
+    kernelParams = ["mitigations=off"]; # I don't care about security regarding spectre/meltdown
 
     # plymouth.enable = true;
     loader.systemd-boot.enable = true;
@@ -147,15 +148,14 @@
 
     # Plasma
     # TODO: Had problems with wayland last time, hopefully I get it to work now
-    displayManager.sddm.enable = true;
-    desktopManager.plasma5.enable = true;
-    desktopManager.plasma5.runUsingSystemd = true;
+    displayManager.sddm.enable = true; # Use this for Plasma AND/OR Hyprland
+    # desktopManager.plasma5.enable = true;
+    # desktopManager.plasma5.runUsingSystemd = true;
 
     # Gnome (Wayland)
     # NOTE: Not a fan of the overly simplistic nature, also made problems with the audio devices...
     # displayManager.gdm.enable = true;
-    # I had problems with gdm defaulting to X11, after I added this it stopped although I don't know if this
-    # was the sole reason
+    # I had problems with gdm defaulting to X11, after I added this it stopped although I don't know if this was the sole reason
     # displayManager.defaultSession = "gnome";
     # displayManager.gdm.wayland = true; # This is actually the default
     # desktopManager.gnome.enable = true;
@@ -172,9 +172,10 @@
     enable = true;
     extraPortals = with pkgs; [
       # xdg-desktop-portal-wlr # For wlroots based desktops
-      xdg-desktop-portal-kde # Comes with Plasma
-      xdg-desktop-portal-gtk # Comes with Gnome, should be kept enable for plasma aswell, for GTK apps (should be required for e.g. font antialiasing)
-      # xdg-desktop-portal-gnome # Comes with Gnome
+      xdg-desktop-portal-hyprland
+      # xdg-desktop-portal-kde
+      # xdg-desktop-portal-gtk # TODO: Keep for GTK apps? E.g. for font antialiasing?
+      # xdg-desktop-portal-gnome # Gnome
     ];
     # gtkUsePortal = true; # Deprecated, don't use (gdm takes ages to load and other fishy stuff)
   };
@@ -291,8 +292,8 @@
 
   # NOTE: Plasma
   # TODO: Identify all the crap
-  environment.plasma5.excludePackages = with pkgs.libsForQt5; [
-  ];
+  # environment.plasma5.excludePackages = with pkgs.libsForQt5; [
+  # ];
 
   # It is preferred to use the module (if it exists) over environment.systemPackages, as some extra configs are applied.
   # I would prefer to use HomeManager for some of these but the modules don't exist (yet)
@@ -311,8 +312,13 @@
   # List services that you want to enable:
   services = {
     # Enable CUPS to print documents.
-    # TODO: Printing (driver etc.)
     printing.enable = true;
+    printing.drivers = with pkgs; [
+      # gutenprint
+      # gutenprintBin
+      # foomatic-db-ppds-withNonfreeDb
+      # dell-b1160w # TODO: Broken
+    ];
     avahi.enable = true; # Network printers
     avahi.nssmdns = true;
 
@@ -341,7 +347,7 @@
     
     udev = {
       packages = with pkgs; [
-        usb-blaster-udev-rules
+        usb-blaster-udev-rules # For Intel Quartus
       ];
     };
 
