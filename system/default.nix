@@ -172,7 +172,7 @@
     enable = true;
     extraPortals = with pkgs; [
       # xdg-desktop-portal-wlr # For wlroots based desktops
-      xdg-desktop-portal-hyprland
+      # xdg-desktop-portal-hyprland # Already enabled by hyprland system module
       # xdg-desktop-portal-kde
       # xdg-desktop-portal-gtk # TODO: Keep for GTK apps? E.g. for font antialiasing?
       # xdg-desktop-portal-gnome # Gnome
