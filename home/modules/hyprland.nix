@@ -22,10 +22,19 @@ in {
       }
     ];
 
+    home.sessionVariables = {
+      QT_QPA_PLATFORMTHEME = "qt5ct";
+    };
+
     home.packages = with pkgs; [
+      hyprpaper
+      
       # TODO: These are mostly also present in the Plasma module, find a way to unify this?
       libsForQt5.qt5ct # QT Configurator for unintegrated desktops
       libsForQt5.ark
+      libsForQt5.breeze-gtk
+      libsForQt5.breeze-icons
+      libsForQt5.breeze-qt5
       libsForQt5.dolphin
       libsForQt5.dolphin-plugins
       libsForQt5.ffmpegthumbs
