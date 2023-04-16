@@ -127,6 +127,10 @@ rec {
       autostart = true;
     };
 
+    plasma = {
+      enable = false;
+    };
+
     ranger = {
       enable = true;
       preview = true;
@@ -179,10 +183,6 @@ rec {
   # TODO: If navi enabled
   # TODO: Symlink this, so the config doesn't have to be rebuilt every time
   home.file.".local/share/navi/cheats/christoph.cheat".source = ../../config/navi/christoph.cheat;
-
-  # TODO: Autostart module that is used by Mail/Plasma/Audio etc.
-  # TODO: If kde plasma enabled
-  home.file.".config/autostart/krunner.desktop".source = ../../config/autostart/krunner.desktop;
 
   home = {
     username = username; # Inherited from flake.nix
@@ -260,17 +260,22 @@ rec {
     # TODO: Maybe general document/typesetting module?
     graphviz # generate graphs from code
     xdot # .dot file viewer
+    kgraphviewer # dot graph viewer
     d2 # generate diagrams from code
     plantuml
     gnuplot # generate function plots
-    # TODO: Latex module
-    # tikzit
+    # TODO: Latex module with individual packages
     texlive.combined.scheme-full
+    # tikzit
+    # texlab # Incredibly lag
     pandoc # document converting madness
     # TODO: Programming languages module
     alejandra # nix code formatter
     nil # nix language server
     acpica-tools # Dump ACPI tables etc.
+    parted # partition manager
+    okteta # hex editor
+    kdiff3 # diff/patch tool
 
     # Xooooorg/Desktop environment stuff
     xclip
@@ -302,6 +307,7 @@ rec {
     filezilla
     dnsmasq # For Access Point/Hotspot
     linux-wifi-hotspot
+    nzbget
 
     # Tools
     calibre # Do I even read
@@ -312,9 +318,6 @@ rec {
     octave # GNU matlab basically
     logisim-evolution # Digital circuit simulator
     digital # Digital circuit simulator
-
-    # TODO: Module, sync config, try globally
-    jetbrains.clion
 
     # Office
     # sioyek # Scientific pdf reader # HM program
@@ -327,6 +330,7 @@ rec {
     # logseq # knowledge-base
     # zotero # Citation/source research assistant
     # jabref # manage bibilography # NOTE: Uses jdk18 which is EOL, so can't build, use flatpak instead
+    # kbibtex # bibtex editor
     # vale # Why not lint everything (including english)?
 
     # TODO: Development module
@@ -342,50 +346,49 @@ rec {
     # ]))
     # jetbrains.pycharm-professional
     # jetbrains.idea-ultimate
-    # jetbrains.clion
-
-    # TODO: LaTeX module
-    # texlab # Incredibly lag
+    jetbrains.clion
 
     # Media
     wacomtablet
-    # blender
+    blender
     godot
     obs-studio
     vlc # Addition to mpv without any shaders etc
     kdenlive
     krita
     inkscape
-
     handbrake
     makemkv
 
     AusweisApp2
 
-    # KDE Applications
-    # TODO: Make a module out of this
-    libsForQt5.kate
-    libsForQt5.kdenetwork-filesharing
-    libsForQt5.kwrited # Already included by default
+    # TODO: Hyprland module
+    # TODO: These are mostly also present in the Plasma module, find a way to unify this?
+    libsForQt5.qt5ct # QT Configurator for unintegrated desktops
     libsForQt5.ark
-    # libsForQt5.kdeconnect-kde # NOTE: Also has HM service
-    libsForQt5.kcalc
-    libsForQt5.ksystemlog
-    libsForQt5.kfind
-    libsForQt5.discover
-    libsForQt5.filelight # Drive file size stats
-    libsForQt5.kcolorpicker
-    libsForQt5.kgpg
-    libsForQt5.kparts # Partition manager
-    libsForQt5.kcharselect
-    libsForQt5.kompare # Can't be used as git merge tool, but more integrated than kdiff3
-    libsForQt5.skanlite
-    libsForQt5.kmail
+    libsForQt5.dolphin
+    libsForQt5.dolphin-plugins
+    libsForQt5.ffmpegthumbs
+    libsForQt5.gwenview
     libsForQt5.kalendar
-    okteta
-    kdiff3
-    kgraphviewer
-    kbibtex
+    libsForQt5.kate
+    libsForQt5.kcalc
+    libsForQt5.kcharselect
+    libsForQt5.kcolorpicker
+    libsForQt5.kdenetwork-filesharing
+    libsForQt5.kdegraphics-thumbnailers
+    libsForQt5.kfind
+    libsForQt5.kgpg
+    libsForQt5.kmail
+    libsForQt5.kompare # Can't be used as git merge tool, but more integrated than kdiff3
+    libsForQt5.ksystemlog
+    libsForQt5.kwallet # TODO: How does this integrate with hyprland?
+    libsForQt5.kwalletmanager # TODO: Same as above
+    libsForQt5.kwrited
+    libsForQt5.okular
+    libsForQt5.plasma-systemmonitor
+    libsForQt5.spectacle
+    libsForQt5.skanlite
 
     # Use NixCommunity binary cache
     cachix
@@ -408,7 +411,6 @@ rec {
 
     bat.enable = true;
     btop.enable = true;
-
     chromium.enable = true;
 
     direnv = {
