@@ -178,9 +178,27 @@
         "type": "github"
       }
     },
-    "musnix": {
+    "hyprpaper": {
       "inputs": {
         "nixpkgs": "nixpkgs_4"
+      },
+      "locked": {
+        "lastModified": 1681308705,
+        "narHash": "sha256-Iy1NVydzM04OqBLeD96zDmg1HMilUqa2vFeaOJFOp8o=",
+        "owner": "hyprwm",
+        "repo": "hyprpaper",
+        "rev": "10fd31a5444d25ab81c8105f2df1b4cb0cba68e5",
+        "type": "github"
+      },
+      "original": {
+        "owner": "hyprwm",
+        "repo": "hyprpaper",
+        "type": "github"
+      }
+    },
+    "musnix": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_5"
       },
       "locked": {
         "lastModified": 1679269409,
@@ -198,7 +216,7 @@
     },
     "nixos-conf-editor": {
       "inputs": {
-        "nixpkgs": "nixpkgs_5",
+        "nixpkgs": "nixpkgs_6",
         "utils": "utils_2"
       },
       "locked": {
@@ -265,6 +283,22 @@
     },
     "nixpkgs_4": {
       "locked": {
+        "lastModified": 1674641431,
+        "narHash": "sha256-qfo19qVZBP4qn5M5gXc/h1MDgAtPA5VxJm9s8RUAkVk=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "9b97ad7b4330aacda9b2343396eb3df8a853b4fc",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_5": {
+      "locked": {
         "lastModified": 1677407201,
         "narHash": "sha256-3blwdI9o1BAprkvlByHvtEm5HAIRn/XPjtcfiunpY7s=",
         "owner": "NixOS",
@@ -279,7 +313,7 @@
         "type": "github"
       }
     },
-    "nixpkgs_5": {
+    "nixpkgs_6": {
       "locked": {
         "lastModified": 1673796341,
         "narHash": "sha256-1kZi9OkukpNmOaPY7S5/+SlCDOuYnP3HkXHvNDyLQcc=",
@@ -295,7 +329,7 @@
         "type": "github"
       }
     },
-    "nixpkgs_6": {
+    "nixpkgs_7": {
       "locked": {
         "lastModified": 1680669251,
         "narHash": "sha256-AVNE+0u4HlI3v96KCXE9risH7NKqj0QDLLfSckYXIbA=",
@@ -335,9 +369,10 @@
         "hardware": "hardware",
         "home-manager": "home-manager",
         "hyprland": "hyprland",
+        "hyprpaper": "hyprpaper",
         "musnix": "musnix",
         "nixos-conf-editor": "nixos-conf-editor",
-        "nixpkgs": "nixpkgs_6",
+        "nixpkgs": "nixpkgs_7",
         "nur": "nur"
       }
     },
