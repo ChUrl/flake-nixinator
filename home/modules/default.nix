@@ -16,6 +16,7 @@
     ./flatpak.nix
     ./gaming.nix
     ./gnome.nix
+    ./hyprland.nix
     ./kitty.nix
     ./misc.nix
     ./neovim.nix

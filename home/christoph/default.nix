@@ -91,6 +91,10 @@ rec {
       };
     };
 
+    hyprland = {
+      enable = true;
+    };
+
     # TODO:
     # plasma = {
     #   enable = false;
@@ -148,8 +152,6 @@ rec {
   # TODO: Remove Plasma, only use Hyprland
   # TODO: I need to pack all Plasma/Hyprland/Gnome related stuff into their respective modules
   # TODO: Then it should only be possible to activate one Desktop at a time
-
-  home.file.".config/hypr/polkit.conf".text = ''exec-once = ${pkgs.libsForQt5.polkit-kde-agent}/libexec/polkit-kde-agent-1 &'';
 
   # Make fonts installed through user packages available to applications
   # NOTE: I don't think I need this anymore as all fonts are installed through the system config but let's keep this just in case
@@ -362,43 +364,8 @@ rec {
 
     AusweisApp2
 
-    # TODO: Hyprland module
-    # TODO: These are mostly also present in the Plasma module, find a way to unify this?
-    libsForQt5.qt5ct # QT Configurator for unintegrated desktops
-    libsForQt5.ark
-    libsForQt5.dolphin
-    libsForQt5.dolphin-plugins
-    libsForQt5.ffmpegthumbs
-    libsForQt5.gwenview
-    libsForQt5.kalendar
-    libsForQt5.kate
-    libsForQt5.kcalc
-    libsForQt5.kcharselect
-    libsForQt5.kcolorpicker
-    libsForQt5.kdenetwork-filesharing
-    libsForQt5.kdegraphics-thumbnailers
-    libsForQt5.kfind
-    libsForQt5.kgpg
-    libsForQt5.kmail
-    libsForQt5.kompare # Can't be used as git merge tool, but more integrated than kdiff3
-    libsForQt5.ksystemlog
-    libsForQt5.kwallet # TODO: How does this integrate with hyprland?
-    libsForQt5.kwalletmanager # TODO: Same as above
-    libsForQt5.kwrited
-    libsForQt5.okular
-    libsForQt5.plasma-systemmonitor
-    libsForQt5.spectacle
-    libsForQt5.skanlite
-
     # Use NixCommunity binary cache
     cachix
-
-    # TODO: Module
-    # Hyprland stuff
-    # dunst # NOTE: Use HM service
-    libsForQt5.polkit-kde-agent # No idea if that comes with KDE
-    slurp # Region selector for screensharing
-    # rofi-wayland # App launcher # NOTE: Use HM Program
   ];
 
   # Packages with extra options managed by HomeManager natively
@@ -523,23 +490,9 @@ rec {
       enable = true;
     };
 
-    # NOTE: For Hyprland -> Enable from hyprland module
-    rofi = {
-      enable = true;
-      package = pkgs.rofi-wayland;
-      plugins = [
-        pkgs.keepmenu # Rofi KeepassXC frontend
-      ];
-      terminal = "${pkgs.kitty}/bin/kitty";
-
-      font = "JetBrains Mono 14";
-      # theme = 
-      # extraConfig = '''';
-    };
-
     # Git status replacement with file selection by number
     scmpuff = {
-      enable = true;
+      enable = false;
       enableFishIntegration = true;
     };
 
@@ -682,17 +635,6 @@ rec {
       # TODO: Snippets
     };
 
-    # TODO: Belongs to hyprland module
-    waybar = {
-      enable = true;
-      systemd = {
-        enable = false;
-      };
-
-      # settings = {};
-      # style = '''';
-    };
-
     # TODO: Check HM module options
     yt-dlp.enable = true;
 
@@ -704,11 +646,6 @@ rec {
 
   services = {
     # kdeconnect.enable = true; # Note: This does not setup the firewall at all
-
-    # TODO: To hyprland module, at least not for both, laptop and desktop
-    dunst = {
-      enable = true;
-    };
   };
 
   # Nicely reload system units when changing configs
