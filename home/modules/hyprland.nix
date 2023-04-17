@@ -31,6 +31,7 @@ in {
       wl-clipboard
       clipman # Clipboard manager (wl-paste)
       imv # Image viewer
+      slurp # Region selector for screensharing
       
       # TODO: These are mostly also present in the Plasma module, find a way to unify this?
       libsForQt5.qt5ct # QT Configurator for unintegrated desktops
@@ -38,8 +39,8 @@ in {
       libsForQt5.breeze-gtk # TODO: Remove
       libsForQt5.breeze-icons # TODO: Remove
       libsForQt5.breeze-qt5 # TODO: Remove
-      libsForQt5.dolphin # TODO: Replace
-      libsForQt5.dolphin-plugins # TODO: Remove
+      # libsForQt5.dolphin # TODO: Replace
+      # libsForQt5.dolphin-plugins # TODO: Remove
       # libsForQt5.ffmpegthumbs
       # libsForQt5.gwenview
       # libsForQt5.kalendar
@@ -60,10 +61,8 @@ in {
       libsForQt5.okular
       # libsForQt5.plasma-systemmonitor
       libsForQt5.polkit-kde-agent
-      libsForQt5.spectacle
-      libsForQt5.skanlite
-
-      slurp # Region selector for screensharing
+      # libsForQt5.spectacle
+      # libsForQt5.skanlite
     ];
 
     programs = {
@@ -100,5 +99,12 @@ in {
 
     # Polkit
     home.file.".config/hypr/polkit.conf".text = ''exec-once = ${pkgs.libsForQt5.polkit-kde-agent}/libexec/polkit-kde-agent-1 &'';
+
+    home.activation = {
+      linkHyprlandConfig = hm.dag.entryAfter ["writeBoundary"] (mkLink "~/NixFlake/config/hyprland/hyprland.conf" "~/.config/hypr/hyprland.conf");
+      linkHyprpaperConfig = hm.dag.entryAfter ["writeBoundary"] (mkLink "~/NixFlake/config/hyprland/hyprpaper.conf" "~/.config/hypr/hyprpaper.conf");
+      # TODO: Allow choosing a wallpaper through an option
+      linkWallpaper = hm.dag.entryAfter ["writeBoundary"] (mkLink "~/NixFlake/config/hyprland/wall.jpg" "~/.config/hypr/wall.jpg");
+    };
   };
 }
