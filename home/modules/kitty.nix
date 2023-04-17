@@ -18,6 +18,7 @@ in {
   config = mkIf cfg.enable {
     programs.kitty = {
       enable = true;
+
       font = {
         package = pkgs.victor-mono;
         name = "Victor Mono SemiBold";
@@ -30,6 +31,9 @@ in {
         scrollback_lines = 10000;
         window_padding_width = 0;
         # hide_window_decorations = "yes";
+
+        allow_remote_control = "yes"; # For nnn file preview
+        listen_on = "unix:@mykitty";
 
         # Light Theme
         # background = "#f7f7f7";
