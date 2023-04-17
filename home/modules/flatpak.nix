@@ -28,6 +28,9 @@ with mylib.modules;
       spotify.enable = mkEnableOpt "Spotify";
       flatseal.enable = mkEnableOpt "Flatseal";
       bottles.enable = mkEnableOpt "Bottles";
+      obsidian.enable = mkEnableOpt "Obsidian";
+      jabref.enable = mkEnableOpt "Jabref";
+      # xwaylandvideobridge = mkEnableOpt "XWayland Video Bridge"; # TODO
 
       # This is mainly used by other modules to allow them to use flatpak packages
       extraInstall = mkOption {
@@ -149,6 +152,8 @@ with mylib.modules;
               (optionals cfg.spotify.enable ["com.spotify.Client"])
               (optionals cfg.flatseal.enable ["com.github.tchx84.Flatseal"])
               (optionals cfg.bottles.enable ["com.usebottles.bottles"])
+              (optionals cfg.obsidian.enable ["md.obsidian.Obsidian"])
+              (optionals cfg.jabref.enable ["org.jabref.Jabref"])
               cfg.extraInstall
             ];
 
@@ -168,6 +173,8 @@ with mylib.modules;
               (optionals (!cfg.spotify.enable) ["com.spotify.Client"])
               (optionals (!cfg.flatseal.enable) ["com.github.tchx84.Flatseal"])
               (optionals (!cfg.bottles.enable) ["com.usebottles.bottles"])
+              (optionals (!cfg.obsidian.enable) ["md.obsidian.Obsidian"])
+              (optionals (!cfg.jabref.enable) ["org.jabref.Jabref"])
               # Remove only the flatpaks that are not present in extraInstall
               (without cfg.extraRemove cfg.extraInstall)
             ];

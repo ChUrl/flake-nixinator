@@ -22,17 +22,18 @@ in {
   options.modules.gaming = {
     enable = mkEnableOpt "Gaming module";
 
-    discordElectron.enable = mkEnableOpt "Discord (Electron) (nixpkgs)";
-    discordChromium.enable = mkEnableOpt "Discord (Chromium)";
+    # discordElectron.enable = mkEnableOpt "Discord (Electron) (nixpkgs)";
+    # discordChromium.enable = mkEnableOpt "Discord (Chromium)";
     prism.enable = mkEnableOpt "PrismLauncher for Minecraft (flatpak)";
     bottles.enable = mkEnableOpt "Bottles (flatpak)";
-    dwarffortress.enable = mkEnableOpt "Dwarf Fortress";
+    # dwarffortress.enable = mkEnableOpt "Dwarf Fortress";
 
     steam = {
       enable = mkEnableOpt "Steam (flatpak)";
       protonGE = mkBoolOpt false "Enable Steam Proton GloriousEggroll runner (flatpak)";
       gamescope = mkBoolOpt false "Enable the gamescope micro compositor (flatpak)";
       adwaita = mkBoolOpt false "Enable the adwaita-for-steam skin";
+      protonup = mkBoolOpt false "Enable ProtonUP-QT";
     };
   };
 
@@ -63,16 +64,16 @@ in {
         ]
 
         # TODO: Extra config (extensions etc) in chromium module
-        (optionals cfg.discordChromium.enable [chromium])
+        # (optionals cfg.discordChromium.enable [chromium])
 
         # Prefer flatpak version as nixpkgs version isn't always updated in time
-        (optionals cfg.discordElectron.enable [discord])
+        # (optionals cfg.discordElectron.enable [discord])
         (optionals cfg.steam.adwaita [adwaita-for-steam])
 
         # Prefer flatpak version as this one doesn't find the STEAM_DIR automatically
         # (optionals cfg.steam.enable [ protontricks ])
 
-        (optionals cfg.dwarffortress.enable [dwarf-fortress-packages.dwarf-fortress-full])
+        # (optionals cfg.dwarffortress.enable [dwarf-fortress-packages.dwarf-fortress-full])
       ];
 
     # This doesn't work because steam doesn't detect symlinked skins, files have to be copied
@@ -110,17 +111,18 @@ in {
       })
     ];
 
-    xdg.desktopEntries.discordChromium = mkIf cfg.discordChromium.enable {
-      name = "Discord (Chromium)";
-      genericName = "Online voice chat";
-      icon = "discord";
-      exec = "chromium --new-window discord.com/app";
-      terminal = false;
-      categories = ["Network" "Chat"];
-    };
+    # xdg.desktopEntries.discordChromium = mkIf cfg.discordChromium.enable {
+    #   name = "Discord (Chromium)";
+    #   genericName = "Online voice chat";
+    #   icon = "discord";
+    #   exec = "chromium --new-window discord.com/app";
+    #   terminal = false;
+    #   categories = ["Network" "Chat"];
+    # };
 
+    # TODO: Remove the bottles option from the gaming module (move it to the flatpak module)
     # NOTE: Important to not disable this option if another module enables it
-    modules.flatpak.bottles.enable = mkIf cfg.bottles.enable true;
+    # modules.flatpak.bottles.enable = mkIf cfg.bottles.enable true;
 
     modules.flatpak.extraOverride = [
       # Allow Bottles to manage proton prefixes
@@ -157,6 +159,7 @@ in {
         "net.davidotek.pupgui2"
       ])
       (optionals (cfg.steam.enable && cfg.steam.gamescope) ["com.valvesoftware.Steam.Utility.gamescope"])
+      (optionals (cfg.steam.enable && cfg.steam.protonup) ["net.davidotek.pupgui2"])
       (optionals cfg.prism.enable ["org.prismlauncher.PrismLauncher"])
     ];
 
@@ -173,6 +176,7 @@ in {
         "net.davidotek.pupgui2"
       ])
       (optionals (!cfg.steam.enable || !cfg.steam.gamescope) ["com.valvesoftware.Steam.Utility.gamescope"])
+      (optionals (!cfg.steam.enable || !cfg.steam.protonup) ["net.davidotek.pupgui2"])
       (optionals (!cfg.prism.enable) ["org.prismlauncher.PrismLauncher"])
     ];
   };
