@@ -228,7 +228,7 @@ rec {
       SDL_VIDEODRIVER = "wayland";
 
       # TODO: NNN Module
-      NNN_FIFO = "/tmp/nnn.fifo"; # For nnn preview
+      # NNN_FIFO = "/tmp/nnn.fifo"; # For nnn preview
 
       # Don't use system wine, use bottles
       # WINEESYNC = 1;
