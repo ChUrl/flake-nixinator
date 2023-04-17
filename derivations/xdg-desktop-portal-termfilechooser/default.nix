@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     owner = "GermainZ";
     repo = pname;
     rev = "71dc7ab06751e51de392b9a7af2b50018e40e062"; # Was last commit on 17.04.2023
-    sha256 = "sha256-UztkfvMIbslPd/d262NZFb6WfESc9nBsSSH96BA4Aqw=";
+    sha256 = "sha256-645hoLhQNncqfLKcYCgWLbSrTRUNELh6EAdgUVq3ypM=";
   };
 
   # scdoc: mark as build-time dependency
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   # Add hyprland to portal metainformation
   patches = [(fetchpatch {
     url = "https://patch-diff.githubusercontent.com/raw/GermainZ/xdg-desktop-portal-termfilechooser/pull/6.patch";
-    hash = "sha256-mU1whfp7BoSylaS3y+YwfABImZFOeuItSXCon0C7u20=";
+    hash = "sha256-GjK6GL15liHYm5U0XBSIf5H8Cc4RIWBD0O47lLWcep0=";
   })];
 
   strictDeps = true;
