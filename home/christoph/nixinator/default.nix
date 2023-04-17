@@ -25,7 +25,7 @@ rec {
         tenacity.enable = true;
   
         faust.enable = true;
-        bottles.enable = true;
+        bottles.enable = false;
         yabridge.enable = true;
         yabridge.autoSync = true;
   
@@ -46,15 +46,16 @@ rec {
         prism.enable = true;
         bottles.enable = true;
         # TODO: Webcord
-        discordChromium.enable = false;
-        discordElectron.enable = false; # This is the nixpkgs version, prefer the one from flatpak module
-        dwarffortress.enable = false;
+        # discordChromium.enable = false;
+        # discordElectron.enable = false; # This is the nixpkgs version, prefer the one from flatpak module
+        # dwarffortress.enable = false;
   
         steam = {
           enable = true;
           protonGE = true; # TODO: Using protonup-qt now
           gamescope = true;
           adwaita = true;
+          protonup = true;
         };
       };
     };
