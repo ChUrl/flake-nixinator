@@ -101,6 +101,8 @@ in {
     home.file.".config/hypr/polkit.conf".text = ''exec-once = ${pkgs.libsForQt5.polkit-kde-agent}/libexec/polkit-kde-agent-1 &'';
 
     home.activation = {
+      # TODO: Can I simplify mkLink to include the hm.dag.entryAfter and the name?
+      #       Like mkLink linkHyprlandConfig "source" "target"
       linkHyprlandConfig = hm.dag.entryAfter ["writeBoundary"] (mkLink "~/NixFlake/config/hyprland/hyprland.conf" "~/.config/hypr/hyprland.conf");
       linkHyprpaperConfig = hm.dag.entryAfter ["writeBoundary"] (mkLink "~/NixFlake/config/hyprland/hyprpaper.conf" "~/.config/hypr/hyprpaper.conf");
       # TODO: Allow choosing a wallpaper through an option
