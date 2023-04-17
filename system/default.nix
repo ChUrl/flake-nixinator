@@ -144,11 +144,11 @@
 
     # Startx replaces the displaymanager so default (lightdm) isn't used, start to shell
     # Sadly using this with gnome-session doesn't really work
-    # displayManager.startx.enable = true;
+    displayManager.startx.enable = true;
 
     # Plasma
     # TODO: Had problems with wayland last time, hopefully I get it to work now
-    displayManager.sddm.enable = true; # Use this for Plasma AND/OR Hyprland
+    # displayManager.sddm.enable = true;
     # desktopManager.plasma5.enable = true;
     # desktopManager.plasma5.runUsingSystemd = true;
 
@@ -176,6 +176,7 @@
       # xdg-desktop-portal-kde
       # xdg-desktop-portal-gtk # TODO: Keep for GTK apps? E.g. for font antialiasing?
       # xdg-desktop-portal-gnome # Gnome
+      xdg-desktop-portal-termfilechooser # Filepicker using nnn
     ];
     # gtkUsePortal = true; # Deprecated, don't use (gdm takes ages to load and other fishy stuff)
   };
