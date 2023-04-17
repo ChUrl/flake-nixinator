@@ -59,7 +59,7 @@ rec {
     firefox = {
       enable = true;
       wayland = true;
-      vaapi = false; # TODO: Crashes AMDGPU driver
+      vaapi = false; # NOTE: Crashes AMDGPU driver fairly often (don't know why exactly)
       disableTabBar = true;
       defaultBookmarks = true;
       gnomeTheme = true; # I like it also with Plasma
@@ -71,11 +71,15 @@ rec {
       enable = true;
       autoUpdate = true;
       autoPrune = true;
+      fontFix = true;
+      iconFix = true;
 
       flatseal.enable = true;
       discord.enable = true;
       spotify.enable = true;
-      bottles.enable = true;
+      bottles.enable = false;
+      obsidian.enable = true;
+      jabref.enable = true;
     };
 
     gnome = {
@@ -186,6 +190,19 @@ rec {
   # TODO: Symlink this, so the config doesn't have to be rebuilt every time
   home.file.".local/share/navi/cheats/christoph.cheat".source = ../../config/navi/christoph.cheat;
 
+  # TODO: NNN module
+  xdg.desktopEntries.nnn = {
+    type = "Application";
+    name = "nnn";
+    comment = "Terminal file manager";
+    exec = "nnn";
+    terminal = true;
+    icon = "nnn";
+    mimeType = ["inode/directory"];
+    categories = ["System" "FileTools" "FileManager" "ConsoleOnly"];
+    # keywords = ["File" "Manager" "Management" "Explorer" "Launcher"];
+  };
+
   home = {
     username = username; # Inherited from flake.nix
     homeDirectory = "/home/${home.username}";
@@ -209,6 +226,9 @@ rec {
       QT_QPA_PLATFORM = "wayland";
       NIXOS_OZONE_WL = "1";
       SDL_VIDEODRIVER = "wayland";
+
+      # TODO: NNN Module
+      NNN_FIFO = "/tmp/nnn.fifo"; # For nnn preview
 
       # Don't use system wine, use bottles
       # WINEESYNC = 1;
@@ -493,6 +513,51 @@ rec {
     nix-index = {
       enable = true;
       enableFishIntegration = config.modules.fish.enable;
+    };
+
+    nnn = {
+      package = pkgs.nnn.override { withNerdIcons = true; };
+      enable = true;
+
+      extraPackages = with pkgs; [
+        atool # Archive preview
+        ffmpegthumbnailer # Video thumbnails
+        mediainfo
+        tree # Folder preview
+        xdragon # Drag and drop (why man)
+      ];
+
+      bookmarks = {
+        d = "~/Documents";
+        D = "~/Downloads";
+        n = "~/Notes";
+        t = "~/Notes/TU";
+        h = "~/Notes/HHU";
+        N = "~/NixFlake";
+        p = "~/Pictures";
+        v = "~/Videos";
+      };
+
+      plugins = {
+        mappings = {
+          c = "fzcd";
+          d = "dragdrop";
+          f = "finder";
+          j = "autojump";
+          k = "kdeconnect";
+          p = "preview-tui";
+          # s = "suedit";
+          # s = "x2sel";
+          v = "imgview";
+        };
+
+        src = (pkgs.fetchFromGitHub {
+          owner = "jarun";
+          repo = "nnn";
+          rev = "v4.8";
+          sha256 = "sha256-QbKW2wjhUNej3zoX18LdeUHqjNLYhEKyvPH2MXzp/iQ=";
+        }) + "/plugins";
+      };
     };
 
     nushell = {
