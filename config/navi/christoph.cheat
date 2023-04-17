@@ -51,9 +51,12 @@ ffmpeg -i "<input>" -vcodec libx265 -crf <quality> "out_<input>"
 $ input: exa -1
 $ quality: echo -e "24\n25\n26\n27\n28\n29\n30\n"
 
+; TODO: Setting the default values like this makes them the only possible values
 % ffmpeg, video compression, h256, render, reencode
 # Reencode and compress multiple videos using the h265 codec
-for name in <files>; ffmpeg -i "$name" -vcodec libx265 -crf <quality> "out_$name"; end
+fish -c "for name in <files>; ffmpeg -i '$name' -vcodec libx265 -crf <quality> 'out_$name'; end"
+$ files: echo "(exa -1 | grep \".mp4\")"
+$ quality: echo "28"
 
 % qemu, cpu
 # Find out what features are supported by different qemu CPUs
