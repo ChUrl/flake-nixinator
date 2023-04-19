@@ -297,16 +297,13 @@ rec {
     # TODO: Programming languages module
     alejandra # nix code formatter
     nil # nix language server
-    acpica-tools # Dump ACPI tables etc.
     parted # partition manager
-    okteta # hex editor
-    kdiff3 # diff/patch tool
+    libnotify
 
     # Xooooorg/Desktop environment stuff
-    xclip
+    # xclip
     xorg.xwininfo # See what apps run in XWayland
-    xdotool
-    libnotify
+    # xdotool
 
     # Hardware/Software info
     neofetch # Easily see interesting package versions/kernel
@@ -321,12 +318,13 @@ rec {
     rocminfo # radeon comptute platform info
     hwloc
     lm_sensors
+    acpica-tools # Dump ACPI tables etc.
 
     # Web stuff
     signal-desktop
-    element-desktop # matrix client
-    webcord # Unshitted discord? Well, except Krisp of course
-    ncspot # Spotify in cool (but slow)?
+    # element-desktop # matrix client
+    # webcord # Unshitted discord? Well, except Krisp of course
+    # ncspot # Spotify in cool (but slow)?
     protonvpn-cli
     # yt-dlp # download videos (from almost anywhere) # HM program
     filezilla
@@ -335,19 +333,21 @@ rec {
     nzbget
 
     # Tools
-    calibre # Do I even read
+    # calibre # Do I even read
     virt-manager
-    gource # Visualize git commit log, completely useless
+    # gource # Visualize git commit log, completely useless
     anki-bin # Use anki-bin as anki is some versions behind
     # inputs.nixos-conf-editor.packages."x86_64-linux".nixos-conf-editor
-    octave # GNU matlab basically
+    # octave # GNU matlab basically
     logisim-evolution # Digital circuit simulator
     digital # Digital circuit simulator
+    okteta # hex editor
+    kdiff3 # diff/patch tool
 
     # Office
     # sioyek # Scientific pdf reader # HM program
     xournalpp # Write with a pen, like old people
-    libreoffice-qt
+    # libreoffice-qt
     hunspell # I cna't type
     hunspellDicts.en_US
     hunspellDicts.de_DE
@@ -378,7 +378,7 @@ rec {
     blender
     godot
     obs-studio
-    vlc # Addition to mpv without any shaders etc
+    # vlc # Addition to mpv without any shaders etc
     kdenlive
     krita
     inkscape
@@ -561,7 +561,7 @@ rec {
     };
 
     nushell = {
-      enable = true;
+      enable = false;
     };
 
     # Git status replacement with file selection by number
@@ -571,6 +571,7 @@ rec {
     };
 
     # Scientific pdf reader
+    # TODO
     sioyek = {
       enable = true;
       # bindings = {};
