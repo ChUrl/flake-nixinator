@@ -47,6 +47,7 @@
   # Bootloader/Kernel stuff
   boot = {
     kernelPackages = pkgs.linuxPackages_zen;
+    # kernelPackages = pkgs.linuxPackages_latest; # The package set that includes the kernel and modules
     kernelParams = ["mitigations=off"]; # I don't care about security regarding spectre/meltdown
 
     # plymouth.enable = true;
@@ -112,30 +113,181 @@
   # https://github.com/NixOS/nixpkgs/issues/179486
   i18n.supportedLocales = ["en_US.UTF-8/UTF-8" "de_DE.UTF-8/UTF-8"];
 
-  # TODO: Other ports (tcp/udp/ssh...)?
+  # NOTE: The systemd networking options are not very flexible, so this will be a problem for the laptop. (=> Use IWD for WiFi)
+  systemd = {
+    network = {
+      enable = true;
+
+      # TODO: Not supposed to be used, I use the systemd services below. Kept as example only.
+      # WireGuard for ProtonVPN
+      # netdevs."wg0" = {
+      #   # Here we configure the virtual network device for wireguard
+      #   netdevConfig = {
+      #     Kind = "wireguard";
+      #     Name = "wg0";
+      #     MTUBytes = "1300"; # TODO: What is the value for ProtonVPN? Do I need this?
+      #   };
+
+      #   wireguardConfig = {
+      #     # TODO: This path is bad, it shouldn't be user specific
+      #     # PrivateKeyFile = "/home/christoph/.wireguard-keys/de-115.key";
+      #     PrivateKeyFile = "/var/secrets/wireguard/de-115.key";
+      #     ListenPort = 9918;
+      #   };
+
+      #   wireguardPeers = [{
+      #     wireguardPeerConfig = {
+      #       PublicKey = "9+CorlxrTsQR7qjIOVKsEkk8Z7UUS5WT3R1ccF7a0ic=";
+      #       AllowedIPs = [ "0.0.0.0/0" ]; # TODO: Does this enforce routing through wireguard
+      #       Endpoint = "194.126.177.14:51820"; # Proton IP from their wireguard config
+      #     };
+      #   }];
+      # };
+
+      # networks."10-wg0" = {
+      #   # See also man systemd.network
+      #   matchConfig.Name = "wg0";
+      #   # IP addresses the client interface will have
+      #   address = [
+      #     "10.2.0.2/32" # Given by ProtonVPN wireguard config
+      #   ];
+      #   DHCP = "no";
+      #   dns = [ "10.2.0.1" ]; # Given by ProtonVPN wireguard config
+      #   # ntp = [ "fc00::123" ];
+      #   # gateway = [
+      #   #   "fc00::1"
+      #   #   "10.100.0.1"
+      #   # ];
+      #   networkConfig = {
+      #     IPv6AcceptRA = false;
+      #   };
+      # };
+
+      # LAN
+      networks."50-ether" = {
+        # name = "enp0s31f6"; # Network interface name?
+        enable = true;
+
+        # See man systemd.link, man systemd.netdev, man systemd.network
+        matchConfig = {
+          # This corresponds to the [MATCH] section
+          Name = "enp0s31f6"; # Match ethernet interface
+        };
+
+        # See man systemd.network
+        networkConfig = {
+          # This corresponds to the [NETWORK] section
+          DHCP = "yes";
+          # IPv6AcceptRA = true;
+          # MulticastDNS = "yes"; # Needed?
+          # LLMNR = "no"; # Needed?
+          # LinkLocalAddressing = "no"; # Needed?
+        };
+
+        linkConfig = {
+          # This corresponds to the [LINK] section
+          # RequiredForOnline = "routable";
+        };
+      };
+
+      # TODO: WiFi Hotspot?
+    };
+
+    services = {
+      # See https://reflexivereflection.com/posts/2018-12-18-wireguard-vpn-with-network-namespace-on-nixos.html
+      # See https://try.popho.be/vpn-netns.html#automatic-with-a-systemd.service5
+      # This namespace contains the physical links/interfaces, because the applications don't need to see them, they just need the wireguard tunnel
+      netns-vpn = {
+        description = "Network namespace for ProtonVPN using Wireguard";
+        wantedBy = [ "default.target" ];
+        before = [ "display-manager.service" "network.target" ];
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+
+          ExecStart = pkgs.writeScript "create-vpn-netns" ''
+            #! ${pkgs.bash}/bin/bash
+            ${pkgs.iproute}/bin/ip netns add vpn # Create the Namespace
+            ${pkgs.iproute}/bin/ip -n vpn link set lo up # Enable the Loopback device
+          '';
+
+          ExecStop = "${pkgs.iproute}/bin/ip netns del vpn";
+        };
+      };
+
+      # TODO: This should be parametrized
+      #       - Each server should get its own link?
+      #       - The endpoints/public keys should be in a map?
+      wg0-de-115 = let
+        wgup = ''
+          #! ${pkgs.bash}/bin/bash
+          ${pkgs.iproute}/bin/ip link add wg0 type wireguard
+          ${pkgs.iproute}/bin/ip link set wg0 netns vpn
+          ${pkgs.iproute}/bin/ip netns exec vpn ${pkgs.wireguard-tools}/bin/wg set wg0 \
+            private-key /home/christoph/.secrets/wireguard/proton-de-115.key \
+            peer 9+CorlxrTsQR7qjIOVKsEkk8Z7UUS5WT3R1ccF7a0ic= \
+            allowed-ips 0.0.0.0/0 \
+            endpoint 194.126.177.14:51820
+          ${pkgs.iproute}/bin/ip -n vpn addr add 10.2.0.2/32 dev wg0
+          ${pkgs.iproute}/bin/ip -n vpn link set wg0 up
+          ${pkgs.iproute}/bin/ip -n vpn route add default dev wg0
+        '';
+
+        wgdown = ''
+          #! ${pkgs.bash}/bin/bash
+          ${pkgs.iproute}/bin/ip link del wg0
+        '';
+      in {
+        description = "Wireguard ProtonVPN Server DE-115";
+        requires = [ "netns-vpn.service" ];
+        after = [ "netns-vpn.service" ];
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          ExecStart = pkgs.writeScript "de-115-up" wgup;
+          ExecStop = pkgs.writeScript "de-115-down" wgdown;
+        };
+      };
+    };
+  };
+  services.resolved.enable = true;
+  services.resolved.llmnr = "false";
+
   # Open ports in the firewall.
   networking = {
     # Gets inherited from flake in nixos mylib
     hostName = hostname; # Define your hostname.
 
-    # wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-
     # Configure network proxy if necessary
     # proxy.default = "http://user:password@proxy:port/";
     # proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
-    # Enable networking
-    networkmanager.enable = true;
+    networkmanager.enable = false;
+    useDHCP = false; # Default: true, don't use with networkd
+    dhcpcd.enable = false; # Don't use with networkd
+    useNetworkd = false; # Only use this if the configuration can't be written in systemd.network completely. It translates some of the networking... options to systemd
+    # resolvconf.enable = true;
 
-    firewall.enable = true;
-    firewall.allowedTCPPorts = [];
-    firewall.allowedTCPPortRanges = [];
+    # TODO
+    wireless = {
+      enable = false; # Enables wireless support via wpa_supplicant.
+      iwd.enable = false; # Use iwd instead of NetworkManager
+    };
 
-    firewall.allowedUDPPorts = [
-      18000 # Anno 1800
-      24727 # AusweisApp2
-    ];
-    firewall.allowedUDPPortRanges = [];
+    firewall = {
+      enable = true;
+      # networking.firewall.checkReversePath = "loose";
+      
+      allowedTCPPorts = [];
+      allowedTCPPortRanges = [];
+  
+      allowedUDPPorts = [
+        9918 # Wireguard
+        18000 # Anno 1800
+        24727 # AusweisApp2
+      ];
+      allowedUDPPortRanges = [];
+    };
   };
 
   # Enable the X11 windowing system.
@@ -280,6 +432,8 @@
   # Empty since we basically only need git + editor which is enabled below
   environment.systemPackages = with pkgs; [
     killall
+    wireguard-tools
+    iw
   ];
 
   # NOTE: Gnome
@@ -302,6 +456,7 @@
     adb.enable = true;
     dconf.enable = true; # NOTE: Also needed for Plasma Wayland (GTK theming)
     fish.enable = true;
+    firejail.enable = true;
     git.enable = true;
     kdeconnect.enable = true; # Use this instead of HM for firewall setup
     neovim.enable = true;
