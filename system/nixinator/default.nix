@@ -34,6 +34,7 @@
     recommendedEnvironment = true;
 
     # NOTE: System module hyprland is configured in ~/.config/hypr/
+    # TODO: Lib function to generate this file from my hyprland module
     # extraConfig = ''
     #   bind = SUPER,a,exec,rofi -show drun
 

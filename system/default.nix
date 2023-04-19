@@ -193,7 +193,26 @@
       # TODO: WiFi Hotspot?
     };
 
-    services = {
+    services = let 
+      wgup = interface: privatekey: publickey: endpoint: ''
+        #! ${pkgs.bash}/bin/bash
+        ${pkgs.iproute}/bin/ip link add ${interface} type wireguard
+        ${pkgs.iproute}/bin/ip link set ${interface} netns vpn
+        ${pkgs.iproute}/bin/ip netns exec vpn ${pkgs.wireguard-tools}/bin/wg set ${interface} \
+          private-key /home/christoph/.secrets/wireguard/${privatekey} \
+          peer ${publickey} \
+          allowed-ips 0.0.0.0/0 \
+          endpoint ${endpoint}:51820
+        ${pkgs.iproute}/bin/ip -n vpn addr add 10.2.0.2/32 dev wg0
+        ${pkgs.iproute}/bin/ip -n vpn link set wg0 up
+        ${pkgs.iproute}/bin/ip -n vpn route add default dev wg0
+      '';
+
+      wgdown = interface: ''
+        #! ${pkgs.bash}/bin/bash
+        ${pkgs.iproute}/bin/ip -n vpn link del ${interface}
+      '';
+    in {
       # See https://reflexivereflection.com/posts/2018-12-18-wireguard-vpn-with-network-namespace-on-nixos.html
       # See https://try.popho.be/vpn-netns.html#automatic-with-a-systemd.service5
       # This namespace contains the physical links/interfaces, because the applications don't need to see them, they just need the wireguard tunnel
@@ -218,34 +237,15 @@
       # TODO: This should be parametrized
       #       - Each server should get its own link?
       #       - The endpoints/public keys should be in a map?
-      wg0-de-115 = let
-        wgup = ''
-          #! ${pkgs.bash}/bin/bash
-          ${pkgs.iproute}/bin/ip link add wg0 type wireguard
-          ${pkgs.iproute}/bin/ip link set wg0 netns vpn
-          ${pkgs.iproute}/bin/ip netns exec vpn ${pkgs.wireguard-tools}/bin/wg set wg0 \
-            private-key /home/christoph/.secrets/wireguard/proton-de-115.key \
-            peer 9+CorlxrTsQR7qjIOVKsEkk8Z7UUS5WT3R1ccF7a0ic= \
-            allowed-ips 0.0.0.0/0 \
-            endpoint 194.126.177.14:51820
-          ${pkgs.iproute}/bin/ip -n vpn addr add 10.2.0.2/32 dev wg0
-          ${pkgs.iproute}/bin/ip -n vpn link set wg0 up
-          ${pkgs.iproute}/bin/ip -n vpn route add default dev wg0
-        '';
-
-        wgdown = ''
-          #! ${pkgs.bash}/bin/bash
-          ${pkgs.iproute}/bin/ip link del wg0
-        '';
-      in {
+      wg0-de-115 = {
         description = "Wireguard ProtonVPN Server DE-115";
         requires = [ "netns-vpn.service" ];
         after = [ "netns-vpn.service" ];
         serviceConfig = {
           Type = "oneshot";
           RemainAfterExit = true;
-          ExecStart = pkgs.writeScript "de-115-up" wgup;
-          ExecStop = pkgs.writeScript "de-115-down" wgdown;
+          ExecStart = pkgs.writeScript "de-115-up" (wgup "wg0" "proton-de-115.key" "9+CorlxrTsQR7qjIOVKsEkk8Z7UUS5WT3R1ccF7a0ic=" "194.126.177.14");
+          ExecStop = pkgs.writeScript "de-115-down" (wgdown "wg0");
         };
       };
     };
