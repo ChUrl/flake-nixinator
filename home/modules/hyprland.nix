@@ -32,6 +32,7 @@ in {
       clipman # Clipboard manager (wl-paste)
       imv # Image viewer
       slurp # Region selector for screensharing
+      ncpamixer # ncurses pavucontrol
       
       # TODO: These are mostly also present in the Plasma module, find a way to unify this?
       libsForQt5.qt5ct # QT Configurator for unintegrated desktops
