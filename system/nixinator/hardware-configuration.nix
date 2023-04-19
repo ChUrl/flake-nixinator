@@ -24,7 +24,7 @@
     # '';
     
     # Specific to used kernel (currently linux_zen)
-    extraModulePackages = with pkgs.linuxKernel.packages.linux_zen; [
+    extraModulePackages = with config.boot.kernelPackages; [
       new-lg4ff # Logitech force feedback
     ];
   };
