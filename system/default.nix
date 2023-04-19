@@ -359,6 +359,7 @@
       jetbrains-mono
       source-code-pro
       (pkgs.nerdfonts.override {fonts = ["VictorMono"];})
+      font-awesome
 
       # Chinese fonts
       source-han-mono
