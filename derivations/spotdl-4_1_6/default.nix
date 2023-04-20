@@ -7,14 +7,13 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "spotdl";
   version = "4.1.6";
-
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "spotDL";
     repo = "spotify-downloader";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+hkdrPi3INs16SeAl+iXOE9KFDzG/TYXB3CDd8Tigwk=";
+    hash = "sha256-0Socf9465+gTogilu5Y91sRC3mPsTNr8X+WZaqp+AdQ=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
