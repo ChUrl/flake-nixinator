@@ -8,4 +8,5 @@
   dconf-editor-wrapped = pkgs.callPackage ./dconf-editor-wrapped {};
   dell-b1160w = pkgs.callPackage ./dell-b1160w {};
   xdg-desktop-portal-termfilechooser = pkgs.callPackage ./xdg-desktop-portal-termfilechooser {};
+  spotdl-4_1_6 = pkgs.callPackage ./spotdl-4.1.6 {};
 }
