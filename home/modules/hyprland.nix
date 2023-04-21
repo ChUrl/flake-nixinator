@@ -141,7 +141,8 @@ in {
 
           "modules-right" = [
             # "cava" # Unknown? Maybe needs git version
-            "wireplumber"
+            # "wireplumber"
+            "pulseaudio"
             "network"
             "cpu"
             "memory"
@@ -181,7 +182,8 @@ in {
             # };
           };
 
-          "wireplumber" = {
+          # NOTE: This was wireplumber originally, but that is really unstable
+          "pulseaudio" = {
             "format" = (wrapico "") + "{volume}%";
             "format-muted" = (wrapico "");
             "on-click" = "kitty ncpamixer";
