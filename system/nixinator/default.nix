@@ -31,7 +31,7 @@
   programs.hyprland = {
     enable = true;
     nvidiaPatches = false;
-    recommendedEnvironment = true;
+    # recommendedEnvironment = true;
 
     # NOTE: System module hyprland is configured in ~/.config/hypr/
     # TODO: Lib function to generate this file from my hyprland module
