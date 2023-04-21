@@ -331,6 +331,7 @@ rec {
     dnsmasq # For Access Point/Hotspot
     linux-wifi-hotspot
     nzbget
+    spotdl-4_1_6
 
     # Tools
     # calibre # Do I even read
