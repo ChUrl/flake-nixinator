@@ -59,7 +59,7 @@
     loader.efi.efiSysMountPoint = "/boot/efi";
 
     # Make /tmp volatile
-    tmpOnTmpfs = true;
+    tmp.useTmpfs = true;
   };
 
   security = {
@@ -113,6 +113,7 @@
   # https://github.com/NixOS/nixpkgs/issues/179486
   i18n.supportedLocales = ["en_US.UTF-8/UTF-8" "de_DE.UTF-8/UTF-8"];
 
+  # TODO: Networking system module
   # NOTE: The systemd networking options are not very flexible, so this will be a problem for the laptop. (=> Use IWD for WiFi)
   systemd = {
     network = {
@@ -277,14 +278,24 @@
     firewall = {
       enable = true;
       # networking.firewall.checkReversePath = "loose";
+
+      trustedInterfaces = [
+        "podman0"
+      ];
       
-      allowedTCPPorts = [];
+      allowedTCPPorts = [
+        22 # SSH
+        80 # HTTP
+        443 # HTTPS
+        5800 # Picard
+        8096 # Jellyfin
+      ];
       allowedTCPPortRanges = [];
   
       allowedUDPPorts = [
         9918 # Wireguard
         18000 # Anno 1800
-        24727 # AusweisApp2
+        24727 # AusweisApp2, alternative: programs.ausweisapp.openFirewall
       ];
       allowedUDPPortRanges = [];
     };
@@ -411,6 +422,7 @@
       "realtime"
       "gamemode"
       "docker"
+      "podman"
       "adbusers"
       "scanner"
       "lp"
@@ -457,13 +469,15 @@
     adb.enable = true;
     dconf.enable = true; # NOTE: Also needed for Plasma Wayland (GTK theming)
     fish.enable = true;
-    firejail.enable = true;
+    firejail.enable = true; # Use to run app in network namespace (e.g. through vpn)
     git.enable = true;
     kdeconnect.enable = true; # Use this instead of HM for firewall setup
     neovim.enable = true;
     starship.enable = true;
     thefuck.enable = true;
     xwayland.enable = true;
+
+    # ausweisapp.openFirewall = true; # Directly set port in firewall
   };
 
   # List services that you want to enable:
@@ -494,13 +508,13 @@
     fwupd.enable = true; # Device firmware (I don't think I have any supported devices)
     locate.enable = true; # Periodically update index
     ntp.enable = true; # Clock sync
-    packagekit.enable = true; # KDE Discover/Gnome Software
+    # packagekit.enable = true; # KDE Discover/Gnome Software
 
-    samba = {
-      package = pkgs.samba4Full;
-      enable = true;
-      openFirewall = true;
-    };
+    # samba = {
+    #   package = pkgs.samba4Full;
+    #   enable = true;
+    #   openFirewall = true;
+    # };
     
     udev = {
       packages = with pkgs; [
@@ -517,8 +531,51 @@
 
   virtualisation = {
     docker = {
+      enable = false;
+      autoPrune.enable = true;
+    };
+
+    podman = {
       enable = true;
       autoPrune.enable = true;
+      dockerCompat = true;
+      defaultNetwork.settings.dns_enabled = true;
+
+      extraPackages = with pkgs; [];
+    };
+
+    # TODO: This (or even single containers) should have their own system modules
+    oci-containers.backend = "podman";
+    oci-containers.containers = {
+      jellyfin = {
+        image = "jellyfin/jellyfin";
+        autoStart = false;
+
+        ports = [
+          "8096:8096/tcp"
+        ];
+
+        volumes = [
+          "jellyfin-cache:/cache:Z"
+          "jellyfin-config:/config:Z"
+          "/home/christoph/Videos/Movies:/media/Movies:ro,private"
+          "/home/christoph/Music/Spotify:/media/Music:ro,private"
+        ];
+      };
+
+      picard = {
+        image = "mikenye/picard";
+        autoStart = false;
+
+        ports = [
+          "5800:5800"
+        ];
+
+        volumes = [
+          "picard-config:/config:Z"
+          "/home/christoph/Music/Spotify:/storage:rw,private"
+        ];
+      };
     };
 
     libvirtd.enable = true;
