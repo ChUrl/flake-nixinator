@@ -1,10 +1,10 @@
 { lib
-, python3
+, python310
 , fetchFromGitHub
 , ffmpeg
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python310.pkgs.buildPythonApplication rec {
   pname = "spotdl";
   version = "4.1.6";
   format = "pyproject";
@@ -12,18 +12,19 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "spotDL";
     repo = "spotify-downloader";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-0Socf9465+gTogilu5Y91sRC3mPsTNr8X+WZaqp+AdQ=";
+    rev = "v${version}";
+    hash = "sha256-sKkhZqn386iOKkZ3pzz7YxBPNAfEK9M0Agu+yR6+HsA=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
+  nativeBuildInputs = with python310.pkgs; [
     poetry-core
     pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = true;
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with python310.pkgs; [
+    setuptools
     spotipy
     ytmusicapi
     pytube
@@ -42,7 +43,7 @@ python3.pkgs.buildPythonApplication rec {
     syncedlyrics
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = with python310.pkgs; [
     pytestCheckHook
     pytest-mock
     pytest-vcr
