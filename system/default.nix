@@ -116,53 +116,11 @@
   # TODO: Networking system module
   # NOTE: The systemd networking options are not very flexible, so this will be a problem for the laptop. (=> Use IWD for WiFi)
   systemd = {
-    network = {
+    network = let 
+      eth-interface = "enp0s31f6";
+      wireless-interface = "";
+    in {
       enable = true;
-
-      # TODO: Not supposed to be used, I use the systemd services below. Kept as example only.
-      # WireGuard for ProtonVPN
-      # netdevs."wg0" = {
-      #   # Here we configure the virtual network device for wireguard
-      #   netdevConfig = {
-      #     Kind = "wireguard";
-      #     Name = "wg0";
-      #     MTUBytes = "1300"; # TODO: What is the value for ProtonVPN? Do I need this?
-      #   };
-
-      #   wireguardConfig = {
-      #     # TODO: This path is bad, it shouldn't be user specific
-      #     # PrivateKeyFile = "/home/christoph/.wireguard-keys/de-115.key";
-      #     PrivateKeyFile = "/var/secrets/wireguard/de-115.key";
-      #     ListenPort = 9918;
-      #   };
-
-      #   wireguardPeers = [{
-      #     wireguardPeerConfig = {
-      #       PublicKey = "9+CorlxrTsQR7qjIOVKsEkk8Z7UUS5WT3R1ccF7a0ic=";
-      #       AllowedIPs = [ "0.0.0.0/0" ]; # TODO: Does this enforce routing through wireguard
-      #       Endpoint = "194.126.177.14:51820"; # Proton IP from their wireguard config
-      #     };
-      #   }];
-      # };
-
-      # networks."10-wg0" = {
-      #   # See also man systemd.network
-      #   matchConfig.Name = "wg0";
-      #   # IP addresses the client interface will have
-      #   address = [
-      #     "10.2.0.2/32" # Given by ProtonVPN wireguard config
-      #   ];
-      #   DHCP = "no";
-      #   dns = [ "10.2.0.1" ]; # Given by ProtonVPN wireguard config
-      #   # ntp = [ "fc00::123" ];
-      #   # gateway = [
-      #   #   "fc00::1"
-      #   #   "10.100.0.1"
-      #   # ];
-      #   networkConfig = {
-      #     IPv6AcceptRA = false;
-      #   };
-      # };
 
       # LAN
       networks."50-ether" = {
@@ -172,13 +130,15 @@
         # See man systemd.link, man systemd.netdev, man systemd.network
         matchConfig = {
           # This corresponds to the [MATCH] section
-          Name = "enp0s31f6"; # Match ethernet interface
+          Name = eth-interface; # Match ethernet interface
         };
 
         # See man systemd.network
         networkConfig = {
           # This corresponds to the [NETWORK] section
           DHCP = "yes";
+
+          # TODO: What does this all do?
           # IPv6AcceptRA = true;
           # MulticastDNS = "yes"; # Needed?
           # LLMNR = "no"; # Needed?
@@ -195,6 +155,7 @@
     };
 
     services = let 
+      # TODO: IPv6 Configuration
       wgup = interface: privatekey: publickey: endpoint: ''
         #! ${pkgs.bash}/bin/bash
         ${pkgs.iproute}/bin/ip link add ${interface} type wireguard
@@ -216,7 +177,7 @@
     in {
       # See https://reflexivereflection.com/posts/2018-12-18-wireguard-vpn-with-network-namespace-on-nixos.html
       # See https://try.popho.be/vpn-netns.html#automatic-with-a-systemd.service5
-      # This namespace contains the physical links/interfaces, because the applications don't need to see them, they just need the wireguard tunnel
+      # This namespace contains the WireGuard virtual network device, because this should be the only interface available for apps that should run through VPN
       netns-vpn = {
         description = "Network namespace for ProtonVPN using Wireguard";
         wantedBy = [ "default.target" ];
@@ -263,6 +224,7 @@
     # proxy.default = "http://user:password@proxy:port/";
     # proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
+    enableIPv6 = true;
     networkmanager.enable = false;
     useDHCP = false; # Default: true, don't use with networkd
     dhcpcd.enable = false; # Don't use with networkd
@@ -287,8 +249,13 @@
         22 # SSH
         80 # HTTP
         443 # HTTPS
-        5800 # Picard
-        8096 # Jellyfin
+
+        # Containers
+        # 5800 # Picard
+        # 8096 # Jellyfin
+        # 8097 # Emby
+        # 8123 # Home-Assistant
+        # 32400 # Plex
       ];
       allowedTCPPortRanges = [];
   
@@ -548,7 +515,7 @@
     oci-containers.backend = "podman";
     oci-containers.containers = {
       jellyfin = {
-        image = "jellyfin/jellyfin";
+        image = "linuxserver/jellyfin";
         autoStart = false;
 
         ports = [
@@ -558,8 +525,9 @@
         volumes = [
           "jellyfin-cache:/cache:Z"
           "jellyfin-config:/config:Z"
-          "/home/christoph/Videos/Movies:/media/Movies:ro,private"
-          "/home/christoph/Music/Spotify:/media/Music:ro,private"
+          "/home/christoph/Videos/Movies:/media/Movies:ro"
+          "/home/christoph/Videos/Photos:/media/Photos:ro"
+          # "/home/christoph/Music/Spotify:/media/Music:ro"
         ];
       };
 
@@ -576,6 +544,52 @@
           "/home/christoph/Music/Spotify:/storage:rw,private"
         ];
       };
+
+      homeassistant = {
+        image = "homeassistant/home-assistant";
+        autoStart = false;
+        
+        ports = [
+          "8123:8123"
+        ];
+
+        volumes = [
+          "homeassistant-config:/config:Z"
+        ];
+      };
+
+      # plex = {
+      #   image = "linuxserver/plex";
+      #   autoStart = false;
+
+      #   ports = [
+      #     "32400:32400/tcp"
+      #   ];
+
+      #   volumes = [
+      #     "plex-config:/config:Z"
+      #     "plex-transcode:/transcode:Z"
+      #     "/home/christoph/Videos/Movies:/data/Movies:ro"
+      #     "/home/christoph/Music/Spotify:/data/Music:ro"
+      #   ];
+      # };
+
+      # emby = {
+      #   image = "linuxserver/emby";
+      #   autoStart = false;
+
+      #   ports = [
+      #     # Host port 8096 already used by Jellyfin
+      #     "8097:8096"
+      #   ];
+
+      #   volumes = [
+      #     "emby-config:/config:Z"
+      #     "/home/christoph/Videos/Movies:/data/movies:ro"
+      #     "/home/christoph/Videos/Pictures:/data/pictures:ro"
+      #     "/home/christoph/Music/Spotify:/data/music:ro"
+      #   ];
+      # };
     };
 
     libvirtd.enable = true;
