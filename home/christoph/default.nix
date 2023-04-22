@@ -408,7 +408,22 @@ rec {
     };
     
     btop.enable = true;
-    chromium.enable = true;
+
+    chromium = {
+      enable = true;
+
+      # TODO: Extensions for ungoogled, see https://discourse.nixos.org/t/home-manager-ungoogled-chromium-with-extensions/15214
+      # package = pkgs.ungoogled-chromium;
+
+      extensions = [
+        { id = "cjpalhdlnbpafiamejdnhcphjbkeiagm"; } # UBlock Origin
+        { id = "oboonakemofpalcgghocfoadofidjkkk"; } # KeepassXC Browser
+        { id = "pkehgijcmpdhfbdbbnkijodmdjhbjlgp"; } # Privacy Badger
+        { id = "lckanjgmijmafbedllaakclkaicjfmnk"; } # ClearURLs
+        { id = "njdfdhgcmkocbgbhcioffdbicglldapd"; } # LocalCDN
+        { id = "jaoafjdoijdconemdmodhbfpianehlon"; } # Skip Redirect
+      ];
+    };
 
     direnv = {
       enable = true;
@@ -555,8 +570,8 @@ rec {
         src = (pkgs.fetchFromGitHub {
           owner = "jarun";
           repo = "nnn";
-          rev = "v4.8";
-          sha256 = "sha256-QbKW2wjhUNej3zoX18LdeUHqjNLYhEKyvPH2MXzp/iQ=";
+          rev = "6a8d74a43a2135a186dc59c5a1f561444ca098e4";
+          sha256 = "sha256-jxPfaHRPWy1L87YkK1G/9cBgUwjyJyPXM2jG4VE4+kQ=";
         }) + "/plugins";
       };
     };
