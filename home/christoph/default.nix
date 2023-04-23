@@ -304,6 +304,8 @@ rec {
     nil # nix language server
     parted # partition manager
     libnotify
+    procps # pgrep, pkill
+    inotifyTools # inotifywait etc.
 
     # Xooooorg/Desktop environment stuff
     # xclip
@@ -349,6 +351,7 @@ rec {
     digital # Digital circuit simulator
     okteta # hex editor
     kdiff3 # diff/patch tool
+    font-manager
 
     # Office
     # sioyek # Scientific pdf reader # HM program
@@ -549,6 +552,7 @@ rec {
       ];
 
       bookmarks = {
+        c = "~/.config";
         d = "~/Documents";
         D = "~/Downloads";
         n = "~/Notes";
