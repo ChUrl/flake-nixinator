@@ -30,7 +30,6 @@ in {
 
     steam = {
       enable = mkEnableOpt "Steam (flatpak)";
-      protonGE = mkBoolOpt false "Enable Steam Proton GloriousEggroll runner (flatpak)";
       gamescope = mkBoolOpt false "Enable the gamescope micro compositor (flatpak)";
       adwaita = mkBoolOpt false "Enable the adwaita-for-steam skin";
       protonup = mkBoolOpt false "Enable ProtonUP-QT";
@@ -140,7 +139,7 @@ in {
         "com.github.Matoking.protontricks" = "${config.home.homeDirectory}/GameSSD;${config.home.homeDirectory}/GameHDD";
       })
       # Allow ProtonUP-Qt to see game list and access steam
-      (optionalAttrs (cfg.steam.enable && cfg.steam.protonGE) {
+      (optionalAttrs (cfg.steam.enable && cfg.steam.protonup) {
         "net.davidotek.pupgui2" = "${config.home.homeDirectory}/.var/app/com.valvesoftware.Steam;${config.home.homeDirectory}/GameSSD;${config.home.homeDirectory}/GameHDD";
       })
     ];
@@ -154,10 +153,6 @@ in {
         # "com.steamgriddb.steam-rom-manager"
         # "org.DolphinEmu.dolphin-emu"
       ])
-      (optionals (cfg.steam.enable && cfg.steam.protonGE) [
-        # "com.valvesoftware.Steam.CompatibilityTool.Proton-GE"
-        "net.davidotek.pupgui2"
-      ])
       (optionals (cfg.steam.enable && cfg.steam.gamescope) ["com.valvesoftware.Steam.Utility.gamescope"])
       (optionals (cfg.steam.enable && cfg.steam.protonup) ["net.davidotek.pupgui2"])
       (optionals cfg.prism.enable ["org.prismlauncher.PrismLauncher"])
@@ -170,10 +165,6 @@ in {
         # "com.valvesoftware.Steam.Utility.steamtinkerlaunch"
         # "com.steamgriddb.steam-rom-manager"
         # "org.DolphinEmu.dolphin-emu"
-      ])
-      (optionals (!cfg.steam.enable || !cfg.steam.protonGE) [
-        # "com.valvesoftware.Steam.CompatibilityTool.Proton-GE"
-        "net.davidotek.pupgui2"
       ])
       (optionals (!cfg.steam.enable || !cfg.steam.gamescope) ["com.valvesoftware.Steam.Utility.gamescope"])
       (optionals (!cfg.steam.enable || !cfg.steam.protonup) ["net.davidotek.pupgui2"])
