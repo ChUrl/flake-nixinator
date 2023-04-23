@@ -127,6 +127,7 @@ in {
       ncpamixer # ncurses pavucontrol
 
       xfce.thunar
+      xfce.tumbler # Thunar thumbnails
       libsForQt5.polkit-kde-agent
     ];
 
