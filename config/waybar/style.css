@@ -1,0 +1,52 @@
+@import url("colors/three-bears.css");
+
+/*Order is Top-Right-Bottom-Left for combined properties*/
+
+window#waybar {
+  font-family: Jetbrains Mono;
+  font-weight: bold;
+  color: @dark;
+  background-color: @accent-dark;
+}
+
+/*Square Widgets*/
+#custom-launcher,
+#workspaces button,
+#tray {
+  padding: 0px 10px 0px 10px;
+  margin: 5px 5px 5px 5px;
+  border-radius: 6px;
+}
+
+/*Tux Icon*/
+#custom-launcher {
+  font-size: 18px;
+  padding-right: 0px;
+}
+
+/*Rectangle Widgets*/
+#user,
+#window,
+#pulseaudio,
+#network,
+#cpu,
+#memory,
+#temperature,
+#clock {
+  padding: 0px 10px 0px 10px;
+  margin: 8px 5px 8px 5px;
+  border-radius: 6px;
+}
+
+/*Colors*/
+#custom-launcher { background-color: @pastel-g; }
+#user { background-color: @pastel-f; }
+#window { background-color: @pastel-e; }
+#workspaces button { background-color: @pastel-d; }
+#pulseaudio { background-color: @pastel-e; }
+#network { background-color: @pastel-f; }
+#cpu { background-color: @pastel-g; }
+#memory { background-color: @pastel-h; }
+#temperature { background-color: @pastel-i; }
+#clock { background-color: @pastel-a; }
+#tray { background-color: @pastel-b; }
