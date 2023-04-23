@@ -1,103 +1,81 @@
 configuration{
-    modi: "run,drun";
-    lines: 5;
-    font: "Sarasa Nerd Font 14";
-    show-icons: true;
-    icon-theme: "Oranchelo";
-    terminal: "st";
-    drun-display-format: "{icon} {name}";
-    location: 0;
-    disable-history: false;
-    hide-scrollbar: true;
-    display-drun: "   Apps ";
-    display-run: "   Run ";
-    sidebar-mode: true;
+  modi: "drun";
+  lines: 5;
+  font: "Jetbrains Mono 14";
+  show-icons: true;
+  icon-theme: "Papirus";
+  terminal: "kitty";
+  drun-display-format: "{icon} {name}";
+  location: 0;
+  disable-history: false;
+  hide-scrollbar: true;
+  display-drun: " Apps ";
+  display-run: " Run ";
+  sidebar-mode: false;
 }
 
-@import "colors.rasi"
+@import "colors/three-bears.rasi"
 
-element-text, element-icon , mode-switcher {
-    background-color: inherit;
-    text-color:       inherit;
+element-text,
+element-icon,
+mode-switcher {
+  background-color: inherit;
+  text-color: inherit;
 }
 
 window {
-    height: 360px;
-    width: 700px;
-    border: 3px;
-    border-color: @black;
-    background-color: @background;
+  height: 360px;
+  width: 700px;
+  border-radius: 6px;
+  background-color: @accent-dark;
 }
 
 mainbox {
-    background-color: @background;
+  background-color: @accent-dark;
 }
 
 inputbar {
-    children: [prompt,entry];
-    background-color: @background;
-    border-radius: 5px;
-    padding: 2px;
+  children: [prompt,entry];
+  background-color: @accent-dark;
 }
 
 prompt {
-    background-color: @blue;
-    padding: 6px;
-    text-color: @background;
-    border-radius: 3px;
-    margin: 20px 0px 0px 20px;
-}
-
-textbox-prompt-colon {
-    expand: false;
-    str: ":";
+  background-color: @pastel-g;
+  padding: 6px;
+  text-color: @dark;
+  border-radius: 3px;
+  margin: 20px 0px 0px 20px;
 }
 
 entry {
-    padding: 6px;
-    margin: 20px 0px 0px 10px;
-    text-color: @foreground;
-    background-color: @background;
+  padding: 6px;
+  margin: 20px 20px 0px 10px;
+  text-color: @dark;
+  background-color: @pastel-d;
+  border-radius: 3px;
 }
 
 listview {
-    border: 0px 0px 0px;
-    padding: 6px 0px 0px;
-    margin: 10px 0px 0px 20px;
-    columns: 2;
-    background-color: @background;
+  border: 0px 0px 0px;
+  padding: 6px 0px 0px;
+  margin: 10px 0px 0px 20px;
+  columns: 1;
+  background-color: @accent-dark;
 }
 
 element {
-    padding: 5px;
-    background-color: @background;
-    text-color: @foreground  ;
+  padding: 5px;
+  margin: 0px 20px 0px 0px;
+  background-color: @accent-dark;
+  text-color: @light;
+  border-radius: 3px;
 }
 
 element-icon {
-    size: 25px;
+  size: 25px;
 }
 
 element selected {
-    background-color:  @selected;
-    text-color: @background;
-}
-
-mode-switcher {
-    spacing: 0;
-  }
-
-button {
-    padding: 10px;
-    background-color: @black-darker;
-    text-color: @white;
-    vertical-align: 0.5; 
-    horizontal-align: 0.5;
-}
-
-button selected {
-  border: 1px;
-  border-color: @blue;
-  background-color: @background;
-  text-color: @blue;
+  background-color: @light;
+  text-color: @dark;
 }
