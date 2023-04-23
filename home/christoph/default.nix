@@ -34,7 +34,7 @@ rec {
   modules = {
     # Config my modules
     emacs = {
-      enable = true;
+      enable = false;
       pgtkNativeComp = false;
       nativeComp = false;
       nixpkgs = true;
@@ -51,7 +51,7 @@ rec {
 
       # Use kmail as viewer for stuff synced by mbsync
       kmail = {
-        enable = true;
+        enable = false;
         autostart = true;
       };
     };
@@ -71,8 +71,8 @@ rec {
       enable = true;
       autoUpdate = true;
       autoPrune = true;
-      fontFix = true;
-      iconFix = true;
+      fontFix = false;
+      iconFix = false;
 
       flatseal.enable = true;
       discord.enable = true;
@@ -97,6 +97,11 @@ rec {
 
     hyprland = {
       enable = true;
+      theme = "Three-Bears";
+
+      # TODO:
+      # papirusIcons = true;
+      # bibataCursor = true;
     };
 
     # TODO:
@@ -116,12 +121,12 @@ rec {
 
       keepass = {
         enable = true;
-        autostart = true;
+        autostart = false;
       };
 
       protonmail = {
         enable = true;
-        autostart = true;
+        autostart = false;
       };
     };
 
@@ -132,7 +137,7 @@ rec {
 
     nextcloud = {
       enable = true;
-      autostart = true;
+      autostart = false;
     };
 
     plasma = {
@@ -140,7 +145,7 @@ rec {
     };
 
     ranger = {
-      enable = true;
+      enable = false;
       preview = true;
     };
   };
