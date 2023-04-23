@@ -12,6 +12,11 @@ with mylib.modules; let
 in {
   options.modules.hyprland = {
     enable = mkEnableOpt "Hyprland Window Manager + Compositor";
+
+    theme = mkOption {
+      type = types.str;
+      description = "Wallpaper and colorscheme to use";
+    };
   };
 
   config = mkIf cfg.enable {
@@ -22,68 +27,77 @@ in {
       }
     ];
 
+    gtk = {
+      enable = true;
+      iconTheme.package = pkgs.papirus-icon-theme;
+      iconTheme.name = "Papirus";
+    };
+
+    home.pointerCursor = {
+      gtk.enable = true;
+      x11.enable = true;
+      package = pkgs.bibata-cursors;
+      name = "Bibata-Modern-Classic";
+      size = 16;
+    };
+
     home.sessionVariables = {
-      QT_QPA_PLATFORMTHEME = "qt5ct";
+      # QT_QPA_PLATFORMTHEME = "qt5ct";
+    };
+
+    # Polkit
+    home.file.".config/hypr/polkit.conf".text = ''exec-once = ${pkgs.libsForQt5.polkit-kde-agent}/libexec/polkit-kde-agent-1 &'';
+
+    home.file.".config/hypr/hyprpaper.conf".text = ''
+      preload = ~/NixFlake/wallpapers/${cfg.theme}.png
+      wallpaper = HDMI-A-1, ~/NixFlake/wallpapers/${cfg.theme}.png
+      wallpaper = HDMI-A-2, ~/NixFlake/wallpapers/${cfg.theme}.png
+    '';
+
+    home.activation = {
+      # NOTE: Keep the hyprland config symlinked, to allow easy changes with hotreload
+      # TODO: Can I simplify mkLink to include the hm.dag.entryAfter and the name?
+      #       Like mkLink linkHyprlandConfig "source" "target"
+      linkHyprlandConfig = hm.dag.entryAfter ["writeBoundary"] (mkLink "~/NixFlake/config/hyprland/hyprland.conf" "~/.config/hypr/hyprland.conf");
     };
 
     home.packages = with pkgs; [
       # TODO: Check which of these belong in the global config
       hyprpaper # Wallpaper setter
+      hyprpicker # Color picker
       wl-clipboard
       clipman # Clipboard manager (wl-paste)
       imv # Image viewer
       slurp # Region selector for screensharing
+      grim # Grab images from compositor
       ncpamixer # ncurses pavucontrol
-      wofi
-      cava
+      # wofi
+      cava # TODO: Hyprland cava module
       font-manager
-      
-      # TODO: These are mostly also present in the Plasma module, find a way to unify this?
-      libsForQt5.qt5ct # QT Configurator for unintegrated desktops
-      # libsForQt5.ark
-      libsForQt5.breeze-gtk # TODO: Remove
-      libsForQt5.breeze-icons # TODO: Remove
-      libsForQt5.breeze-qt5 # TODO: Remove
-      # libsForQt5.dolphin # TODO: Replace
-      # libsForQt5.dolphin-plugins # TODO: Remove
-      # libsForQt5.ffmpegthumbs
-      # libsForQt5.gwenview
-      # libsForQt5.kalendar
-      # libsForQt5.kate
-      # libsForQt5.kcalc
-      # libsForQt5.kcharselect
-      # libsForQt5.kcolorpicker
-      # libsForQt5.kdenetwork-filesharing
-      # libsForQt5.kdegraphics-thumbnailers
-      # libsForQt5.kfind
-      # libsForQt5.kgpg
-      libsForQt5.kmail
-      # libsForQt5.kompare # Can't be used as git merge tool, but more integrated than kdiff3
-      # libsForQt5.ksystemlog
-      libsForQt5.kwallet # TODO: How does this integrate with hyprland?
-      libsForQt5.kwalletmanager # TODO: Same as above
-      # libsForQt5.kwrited
-      libsForQt5.okular
-      # libsForQt5.plasma-systemmonitor
+      xfce.thunar
       libsForQt5.polkit-kde-agent
-      # libsForQt5.spectacle
-      # libsForQt5.skanlite
     ];
 
+    services = {
+      # Notification service
+      dunst = {
+        enable = true;
+      };
+    };
+
     programs = {
-      # Use wofi instead
-      # rofi = {
-      #   enable = true;
-      #   package = pkgs.rofi-wayland;
-      #   plugins = [
-      #     pkgs.keepmenu # Rofi KeepassXC frontend
-      #   ];
-      #   terminal = "${pkgs.kitty}/bin/kitty";
+      rofi = {
+        enable = true;
+        package = pkgs.rofi-wayland;
+        plugins = [
+          pkgs.keepmenu # TODO: Rofi KeepassXC frontend
+        ];
+        terminal = "${pkgs.kitty}/bin/kitty";
   
-      #   font = "JetBrains Mono 14";
-      #   # theme = 
-      #   # extraConfig = '''';
-      # };
+        font = "JetBrains Mono 14";
+        # theme = 
+        # extraConfig = '''';
+      };
 
       waybar = let 
         # Taken from https://github.com/Ruixi-rebirth/flakes/blob/main/modules/programs/wayland/waybar/workspace-patch.nix
@@ -266,25 +280,6 @@ in {
           }
         '';
       };
-    };
-
-    services = {
-      # Notification service
-      dunst = {
-        enable = true;
-      };
-    };
-
-    # Polkit
-    home.file.".config/hypr/polkit.conf".text = ''exec-once = ${pkgs.libsForQt5.polkit-kde-agent}/libexec/polkit-kde-agent-1 &'';
-
-    home.activation = {
-      # TODO: Can I simplify mkLink to include the hm.dag.entryAfter and the name?
-      #       Like mkLink linkHyprlandConfig "source" "target"
-      linkHyprlandConfig = hm.dag.entryAfter ["writeBoundary"] (mkLink "~/NixFlake/config/hyprland/hyprland.conf" "~/.config/hypr/hyprland.conf");
-      linkHyprpaperConfig = hm.dag.entryAfter ["writeBoundary"] (mkLink "~/NixFlake/config/hyprland/hyprpaper.conf" "~/.config/hypr/hyprpaper.conf");
-      # TODO: Allow choosing a wallpaper through an option
-      linkWallpaper = hm.dag.entryAfter ["writeBoundary"] (mkLink "~/NixFlake/config/hyprland/wall.jpg" "~/.config/hypr/wall.jpg");
     };
   };
 }
