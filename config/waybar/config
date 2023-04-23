@@ -1,0 +1,82 @@
+[
+  {
+    "layer": "top",
+    "position": "top",
+    "output": "HDMI-A-1",
+    "height": 40,
+    "spacing": 4,
+
+    "modules-left": [
+      "custom/launcher",
+      "user",
+      "hyprland/window"
+    ],
+
+    "modules-center": [
+      "wlr/workspaces"
+    ],
+
+    "modules-right": [
+      "pulseaudio",
+      "network",
+      "cpu",
+      "memory",
+      "temperature",
+      "clock",
+      "tray"
+    ],
+
+    "custom/launcher": {
+      "format": "<span font=\"FontAwesome\"></span> ",
+      "interval": "once",
+      "tooltip": false
+    },
+
+    "wlr/workspaces": {
+      "all-outputs": false,
+      "format": "{name}",
+      "on-click": "activate",
+      "sort-by-coordinates": false,
+      "sort-by-name": true,
+      "sort-by-number": false
+    },
+
+    "pulseaudio": {
+      "format": "<span font=\"FontAwesome\"></span> {volume}%",
+      "format-muted": "<span font=\"FontAwesome\"></span> ",
+      "on-click": "kitty ncpamixer"
+    },
+
+    "network": {
+      "format": "<span font=\"FontAwesome\"></span> {ipaddr}",
+      "format-disconnected": "<span font=\"FontAwesome\"></span> ",
+      "interface": "enp0s31f6",
+      "tooltip-format": "{ifname} via {gwaddr}"
+    },
+
+    "cpu": {
+      "format": "<span font=\"FontAwesome\"></span> {load}%"
+    },
+
+    "memory": {
+      "format": "<span font=\"FontAwesome\"></span> {percentage}%"
+    },
+
+    "temperature": {
+      "format": "<span font=\"FontAwesome\"></span> {temperatureC}°C",
+      "thermal-zone": 3
+    },
+
+    "clock": {
+      "format": "<span font=\"FontAwesome\"></span> {:%H:%M}",
+      "timezone": "Europe/Berlin",
+      "tooltip-format": "<tt><small>{calendar}</small></tt>"
+    },
+
+    "tray": {
+      "icon-size": 20,
+      "show-passive-items": true,
+      "spacing": 5
+    },
+  }
+]
