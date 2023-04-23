@@ -187,13 +187,18 @@ rec {
   home.file."Notes/Obsidian/Chriphost/christex.sty".source = ../../config/latex/christex.sty; # For obsidian notes
   home.file.".indentconfig.yaml".source = ../../config/latex/.indentconfig.yaml;
   home.file.".indentsettings.yaml".source = ../../config/latex/.indentsettings.yaml;
-
-  home.file."Notes/Obsidian/Chriphost/latex_snippets.json".source = ../../config/obsidian/latex_snippets.json;
+  # TODO: Use mkLink
+  # home.file."Notes/Obsidian/Chriphost/latex_snippets.json".source = ../../config/obsidian/latex_snippets.json;
   home.file."Notes/Obsidian/Chriphost/.obsidian/snippets/latex_preview.css".source = ../../config/obsidian/css_snippets/latex_preview.css;
 
   # TODO: If navi enabled
   # TODO: Symlink this, so the config doesn't have to be rebuilt every time
   home.file.".local/share/navi/cheats/christoph.cheat".source = ../../config/navi/christoph.cheat;
+
+  home.activation = {
+    linkObsidianLatexSnippets = lib.hm.dag.entryAfter ["writeBoundary"]
+                                (mylib.modules.mkLink "~/NixFlake/config/obsidian/latex_snippets.json" "~/Notes/Obsidian/Chriphost/latex_snippets.json");
+  };
 
   # TODO: NNN module
   xdg.desktopEntries.nnn = {
@@ -306,6 +311,10 @@ rec {
     libnotify
     procps # pgrep, pkill
     inotifyTools # inotifywait etc.
+    atool # Archive preview
+    ffmpegthumbnailer # Video thumbnails
+    mediainfo
+    tree # Folder preview
 
     # Xooooorg/Desktop environment stuff
     # xclip
@@ -544,10 +553,6 @@ rec {
       enable = true;
 
       extraPackages = with pkgs; [
-        atool # Archive preview
-        ffmpegthumbnailer # Video thumbnails
-        mediainfo
-        tree # Folder preview
         xdragon # Drag and drop (why man)
       ];
 
@@ -596,9 +601,8 @@ rec {
     };
 
     # Scientific pdf reader
-    # TODO
     sioyek = {
-      enable = true;
+      enable = false; # Disabled for now, as it crashes sometimes?
       # bindings = {};
       # config = {};
     };
@@ -737,6 +741,11 @@ rec {
 
     # TODO: Check HM module options
     yt-dlp.enable = true;
+
+    # TODO
+    zathura = {
+      enable = true;
+    };
 
     zoxide = {
       enable = true;
