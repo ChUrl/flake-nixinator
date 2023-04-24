@@ -1,5 +1,7 @@
+/*See https://github.com/davatorium/rofi/blob/1.7.3/doc/rofi-theme.5.markdown#basic-structure-1*/
+
 configuration{
-  modi: "drun";
+  modi: "run,drun,ssh,filebrowser";
   lines: 5;
   font: "Jetbrains Mono 14";
   show-icons: true;
@@ -9,8 +11,10 @@ configuration{
   location: 0;
   disable-history: false;
   hide-scrollbar: true;
-  display-drun: " Apps ";
-  display-run: " Run ";
+  display-drun: " apps ";
+  display-run: " run ";
+  display-filebrowser: " file ";
+  display-ssh: " ssh ";
   sidebar-mode: false;
 }
 
@@ -24,7 +28,7 @@ mode-switcher {
 }
 
 window {
-  height: 360px;
+  height: 500px;
   width: 700px;
   border-radius: 6px;
   background-color: @accent-dark;
@@ -32,6 +36,17 @@ window {
 
 mainbox {
   background-color: @accent-dark;
+}
+
+message {
+  background-color: @accent-dark;
+}
+
+textbox {
+  background-color: @pastel-g;
+  padding: 6px;
+  margin: 20px 20px 0px 20px;
+  border-radius: 3;
 }
 
 inputbar {
