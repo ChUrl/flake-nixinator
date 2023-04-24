@@ -315,12 +315,16 @@
   xdg.mime = {
     enable = true;
 
+    removedAssociations = {
+      "application/pdf" = "chromium-browser.desktop";
+    };
+
     # TODO: This stuff depends on the used desktop...should I use a complementary system module for each DE?
     addedAssociations = {
-      "application/pdf" = "zathura.desktop";
-      "application/x-sh" = "helix.desktop";
-      "application/xhtml+xml" = "helix.desktop";
-      "application/xml" = "helix.desktop";
+      "application/pdf" = "org.pwmt.zathura.desktop";
+      "application/x-sh" = "Helix.desktop";
+      "application/xhtml+xml" = "Helix.desktop";
+      "application/xml" = "Helix.desktop";
 
       "image/bmp" = "imv.desktop";
       "image/jpeg" = "imv.desktop";
@@ -336,25 +340,25 @@
       "video/webm" = "mpv.desktop";
       "video/x-msvideo" = "mpv.desktop";
 
-      "text/css" = "helix.desktop";
-      "text/csv" = "helix.desktop";
-      "text/javascript" = "helix.desktop";
-      "text/json" = "helix.desktop";
-      "text/plain" = "helix.desktop";
-      "text/xml" = "helix.desktop";
+      "text/css" = "Helix.desktop";
+      "text/csv" = "Helix.desktop";
+      "text/javascript" = "Helix.desktop";
+      "text/json" = "Helix.desktop";
+      "text/plain" = "Helix.desktop";
+      "text/xml" = "Helix.desktop";
 
-      "audio/mpeg" = "moc.desktop";
-      "audio/ogg" = "moc.desktop";
-      "audio/opus" = "moc.desktop";
-      "audio/wav" = "moc.desktop";
-      "audio/webm" = "moc.desktop";
+      # "audio/mpeg" = "moc.desktop";
+      # "audio/ogg" = "moc.desktop";
+      # "audio/opus" = "moc.desktop";
+      # "audio/wav" = "moc.desktop";
+      # "audio/webm" = "moc.desktop";
     };
 
     defaultApplications = {
-      "application/pdf" = "zathura.desktop";
-      "application/x-sh" = "helix.desktop";
-      "application/xhtml+xml" = "helix.desktop";
-      "application/xml" = "helix.desktop";
+      "application/pdf" = "org.pwmt.zathura.desktop";
+      "application/x-sh" = "Helix.desktop";
+      "application/xhtml+xml" = "Helix.desktop";
+      "application/xml" = "Helix.desktop";
 
       "image/bmp" = "imv.desktop";
       "image/jpeg" = "imv.desktop";
@@ -370,18 +374,18 @@
       "video/webm" = "mpv.desktop";
       "video/x-msvideo" = "mpv.desktop";
 
-      "text/css" = "helix.desktop";
-      "text/csv" = "helix.desktop";
-      "text/javascript" = "helix.desktop";
-      "text/json" = "helix.desktop";
-      "text/plain" = "helix.desktop";
-      "text/xml" = "helix.desktop";
+      "text/css" = "Helix.desktop";
+      "text/csv" = "Helix.desktop";
+      "text/javascript" = "Helix.desktop";
+      "text/json" = "Helix.desktop";
+      "text/plain" = "Helix.desktop";
+      "text/xml" = "Helix.desktop";
 
-      "audio/mpeg" = "moc.desktop";
-      "audio/ogg" = "moc.desktop";
-      "audio/opus" = "moc.desktop";
-      "audio/wav" = "moc.desktop";
-      "audio/webm" = "moc.desktop";
+      # "audio/mpeg" = "moc.desktop";
+      # "audio/ogg" = "moc.desktop";
+      # "audio/opus" = "moc.desktop";
+      # "audio/wav" = "moc.desktop";
+      # "audio/webm" = "moc.desktop";
     };
   };
 
