@@ -28,7 +28,7 @@ rec {
     ../modules
 
     # inputs.nixvim.homeManagerModules.nixvim
-    # inputs.hyprland.homeManagerModules.default # NOTE: Use System module, this one doesn't (can't) add the SDDM entry
+    # inputs.hyprland.homeManagerModules.default
   ];
 
   modules = {
@@ -264,7 +264,6 @@ rec {
     # exa # ls in cool (enabled as program)
     # delta # diffier diff differ (enabled as program)
     # fzf # fuzzy find (enabled as program in fish module)
-    procs # Better ps
     tokei # Text file statistics in a project
     rsync # cp on steroids
     rclone # Rsync for cloud
@@ -291,7 +290,6 @@ rec {
     lazygit # can always use another git client
     geteltorito # extreact boot image from iso
     gitbatch # overview over multiple repos
-    mprocs # run multiple processes in single terminal window, screen alternative
     # TODO: Maybe general document/typesetting module?
     graphviz # generate graphs from code
     xdot # .dot file viewer
@@ -307,14 +305,13 @@ rec {
     # TODO: Programming languages module
     alejandra # nix code formatter
     nil # nix language server
-    parted # partition manager
     libnotify
-    procps # pgrep, pkill
     inotifyTools # inotifywait etc.
     atool # Archive preview
     ffmpegthumbnailer # Video thumbnails
     mediainfo
     tree # Folder preview
+    # gnome.zenity # Popups from terminal
 
     # Xooooorg/Desktop environment stuff
     # xclip

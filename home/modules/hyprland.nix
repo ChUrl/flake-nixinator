@@ -74,7 +74,7 @@ in {
     };
 
     # Polkit
-    home.file.".config/hypr/polkit.conf".text = ''exec-once = ${pkgs.libsForQt5.polkit-kde-agent}/libexec/polkit-kde-agent-1 &'';
+    home.file.".config/hypr/polkit.conf".text = ''exec-once = ${pkgs.libsForQt5.polkit-kde-agent}/libexec/polkit-kde-authentication-agent-1'';
 
     home.file.".config/hypr/waybar-reload.conf".text = let
       waybar-reload = pkgs.writeScript "waybar-reload" ''
@@ -122,9 +122,10 @@ in {
       clipman # Clipboard manager (wl-paste)
 
       imv # Image viewer
+      moc # Audio player
+      ncpamixer # ncurses pavucontrol
       slurp # Region selector for screensharing
       grim # Grab images from compositor
-      ncpamixer # ncurses pavucontrol
 
       xfce.thunar
       xfce.tumbler # Thunar thumbnails
@@ -145,9 +146,10 @@ in {
         plugins = [
           pkgs.keepmenu # TODO: Rofi KeepassXC frontend
         ];
-        terminal = "${pkgs.kitty}/bin/kitty";
-  
-        font = "JetBrains Mono 14";
+
+        # NOTE: Don't use this, use the configfile for hot-reload
+        # terminal = "${pkgs.kitty}/bin/kitty";
+        # font = "JetBrains Mono 14";
         # theme = 
         # extraConfig = '''';
       };
