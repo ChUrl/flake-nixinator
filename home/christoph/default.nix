@@ -200,6 +200,14 @@ rec {
                                 (mylib.modules.mkLink "~/NixFlake/config/obsidian/latex_snippets.json" "~/Notes/Obsidian/Chriphost/latex_snippets.json");
   };
 
+  xdg.mime.enable = true;
+  xdg.mimeApps = {
+    enable = true;
+    associations.added = nixosConfig.xdg.mime.addedAssociations;
+    associations.removed = nixosConfig.xdg.mime.removedAssociations;
+    defaultApplications = nixosConfig.xdg.mime.defaultApplications;
+  };
+
   # TODO: NNN module
   xdg.desktopEntries.nnn = {
     type = "Application";
