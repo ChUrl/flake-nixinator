@@ -243,6 +243,7 @@
 
       trustedInterfaces = [
         "podman0"
+        "docker0"
       ];
       
       allowedTCPPorts = [
@@ -297,18 +298,91 @@
   };
 
   # XDG
-  # NOTE: I think only the fitting portal is required
   xdg.portal = {
     enable = true;
     extraPortals = with pkgs; [
       # xdg-desktop-portal-wlr # For wlroots based desktops
       # xdg-desktop-portal-hyprland # Already enabled by hyprland system module
       # xdg-desktop-portal-kde
-      # xdg-desktop-portal-gtk # TODO: Keep for GTK apps? E.g. for font antialiasing?
+      xdg-desktop-portal-gtk # TODO: Keep for GTK apps? E.g. for font antialiasing? Might be required for flatpak GTK apps?
       # xdg-desktop-portal-gnome # Gnome
-      xdg-desktop-portal-termfilechooser # Filepicker using nnn
+      # xdg-desktop-portal-termfilechooser # Filepicker using nnn
     ];
     # gtkUsePortal = true; # Deprecated, don't use (gdm takes ages to load and other fishy stuff)
+  };
+
+  # See https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
+  xdg.mime = {
+    enable = true;
+
+    # TODO: This stuff depends on the used desktop...should I use a complementary system module for each DE?
+    addedAssociations = {
+      "application/pdf" = "zathura.desktop";
+      "application/x-sh" = "helix.desktop";
+      "application/xhtml+xml" = "helix.desktop";
+      "application/xml" = "helix.desktop";
+
+      "image/bmp" = "imv.desktop";
+      "image/jpeg" = "imv.desktop";
+      "image/png" = "imv.desktop";
+      "image/svg+xml" = "imv.desktop";
+      "image/tiff" = "imv.desktop";
+      "image/webp" = "imv.desktop";
+
+      "video/mp2t" = "mpv.desktop";
+      "video/mp4" = "mpv.desktop";
+      "video/mpeg" = "mpv.desktop";
+      "video/ogg" = "mpv.desktop";
+      "video/webm" = "mpv.desktop";
+      "video/x-msvideo" = "mpv.desktop";
+
+      "text/css" = "helix.desktop";
+      "text/csv" = "helix.desktop";
+      "text/javascript" = "helix.desktop";
+      "text/json" = "helix.desktop";
+      "text/plain" = "helix.desktop";
+      "text/xml" = "helix.desktop";
+
+      "audio/mpeg" = "moc.desktop";
+      "audio/ogg" = "moc.desktop";
+      "audio/opus" = "moc.desktop";
+      "audio/wav" = "moc.desktop";
+      "audio/webm" = "moc.desktop";
+    };
+
+    defaultApplications = {
+      "application/pdf" = "zathura.desktop";
+      "application/x-sh" = "helix.desktop";
+      "application/xhtml+xml" = "helix.desktop";
+      "application/xml" = "helix.desktop";
+
+      "image/bmp" = "imv.desktop";
+      "image/jpeg" = "imv.desktop";
+      "image/png" = "imv.desktop";
+      "image/svg+xml" = "imv.desktop";
+      "image/tiff" = "imv.desktop";
+      "image/webp" = "imv.desktop";
+
+      "video/mp2t" = "mpv.desktop";
+      "video/mp4" = "mpv.desktop";
+      "video/mpeg" = "mpv.desktop";
+      "video/ogg" = "mpv.desktop";
+      "video/webm" = "mpv.desktop";
+      "video/x-msvideo" = "mpv.desktop";
+
+      "text/css" = "helix.desktop";
+      "text/csv" = "helix.desktop";
+      "text/javascript" = "helix.desktop";
+      "text/json" = "helix.desktop";
+      "text/plain" = "helix.desktop";
+      "text/xml" = "helix.desktop";
+
+      "audio/mpeg" = "moc.desktop";
+      "audio/ogg" = "moc.desktop";
+      "audio/opus" = "moc.desktop";
+      "audio/wav" = "moc.desktop";
+      "audio/webm" = "moc.desktop";
+    };
   };
 
   # Enable sound with pipewire.
@@ -397,7 +471,7 @@
     ];
     shell = pkgs.fish; # TODO: Is this needed if programs.fish.enable = true?
     # We do this with HomeManager
-    packages = with pkgs; [];
+    # packages = with pkgs; [];
   };
 
   # Generate a list of installed system packages in /etc/current-system-packages
@@ -411,9 +485,13 @@
   # We want these packages to be available even when no user profile is active
   # Empty since we basically only need git + editor which is enabled below
   environment.systemPackages = with pkgs; [
-    killall
-    wireguard-tools
     iw
+    mprocs # run multiple processes in single terminal window, screen alternative
+    parted # partition manager
+    procs # Better ps
+    procps # pgrep, pkill
+    slirp4netns # user network namespaces
+    wireguard-tools
   ];
 
   # NOTE: Gnome
@@ -500,19 +578,25 @@
     docker = {
       enable = false;
       autoPrune.enable = true;
+
+      rootless = {
+        enable = true;
+        setSocketVariable = true;
+      };
     };
 
     podman = {
       enable = true;
       autoPrune.enable = true;
       dockerCompat = true;
+      dockerSocket.enable = true;
       defaultNetwork.settings.dns_enabled = true;
 
-      extraPackages = with pkgs; [];
+      # extraPackages = with pkgs; [];
     };
 
     # TODO: This (or even single containers) should have their own system modules
-    oci-containers.backend = "podman";
+    oci-containers.backend = "podman"; # "docker" or "podman"
     oci-containers.containers = {
       jellyfin = {
         image = "linuxserver/jellyfin";
