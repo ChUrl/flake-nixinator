@@ -2,13 +2,11 @@
 
 configuration{
   modi: "run,drun,ssh,filebrowser";
-  lines: 5;
   font: "Jetbrains Mono 14";
   show-icons: true;
   icon-theme: "Papirus";
   terminal: "kitty";
   drun-display-format: "{icon} {name}";
-  location: 0;
   disable-history: false;
   hide-scrollbar: true;
   display-drun: " apps ";
@@ -40,6 +38,11 @@ mainbox {
 
 message {
   background-color: @accent-dark;
+}
+
+error-message {
+  background-color: @accent-dark;
+  margin: 0px 0px 20px 0px;
 }
 
 textbox {
