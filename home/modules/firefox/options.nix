@@ -1,10 +1,9 @@
 {
   lib,
-  mylib
+  mylib,
 }:
 with lib;
-with mylib.modules;
-{
+with mylib.modules; {
   enable = mkEnableOpt "Firefox";
   wayland = mkBoolOpt false "Enable firefox wayland support";
   vaapi = mkBoolOpt false "Enable firefox vaapi support";

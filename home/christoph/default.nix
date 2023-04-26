@@ -196,8 +196,9 @@ rec {
   home.file.".local/share/navi/cheats/christoph.cheat".source = ../../config/navi/christoph.cheat;
 
   home.activation = {
-    linkObsidianLatexSnippets = lib.hm.dag.entryAfter ["writeBoundary"]
-                                (mylib.modules.mkLink "~/NixFlake/config/obsidian/latex_snippets.json" "~/Notes/Obsidian/Chriphost/latex_snippets.json");
+    linkObsidianLatexSnippets =
+      lib.hm.dag.entryAfter ["writeBoundary"]
+      (mylib.modules.mkLink "~/NixFlake/config/obsidian/latex_snippets.json" "~/Notes/Obsidian/Chriphost/latex_snippets.json");
   };
 
   xdg.mime.enable = true;
@@ -428,7 +429,7 @@ rec {
       enable = true;
       enableFishIntegration = true;
     };
-    
+
     btop.enable = true;
 
     chromium = {
@@ -438,12 +439,12 @@ rec {
       # package = pkgs.ungoogled-chromium;
 
       extensions = [
-        { id = "cjpalhdlnbpafiamejdnhcphjbkeiagm"; } # UBlock Origin
-        { id = "oboonakemofpalcgghocfoadofidjkkk"; } # KeepassXC Browser
-        { id = "pkehgijcmpdhfbdbbnkijodmdjhbjlgp"; } # Privacy Badger
-        { id = "lckanjgmijmafbedllaakclkaicjfmnk"; } # ClearURLs
-        { id = "njdfdhgcmkocbgbhcioffdbicglldapd"; } # LocalCDN
-        { id = "jaoafjdoijdconemdmodhbfpianehlon"; } # Skip Redirect
+        {id = "cjpalhdlnbpafiamejdnhcphjbkeiagm";} # UBlock Origin
+        {id = "oboonakemofpalcgghocfoadofidjkkk";} # KeepassXC Browser
+        {id = "pkehgijcmpdhfbdbbnkijodmdjhbjlgp";} # Privacy Badger
+        {id = "lckanjgmijmafbedllaakclkaicjfmnk";} # ClearURLs
+        {id = "njdfdhgcmkocbgbhcioffdbicglldapd";} # LocalCDN
+        {id = "jaoafjdoijdconemdmodhbfpianehlon";} # Skip Redirect
       ];
     };
 
@@ -554,7 +555,7 @@ rec {
     };
 
     nnn = {
-      package = pkgs.nnn.override { withNerdIcons = true; };
+      package = pkgs.nnn.override {withNerdIcons = true;};
       enable = true;
 
       extraPackages = with pkgs; [
@@ -586,12 +587,14 @@ rec {
           v = "imgview";
         };
 
-        src = (pkgs.fetchFromGitHub {
-          owner = "jarun";
-          repo = "nnn";
-          rev = "6a8d74a43a2135a186dc59c5a1f561444ca098e4";
-          sha256 = "sha256-jxPfaHRPWy1L87YkK1G/9cBgUwjyJyPXM2jG4VE4+kQ=";
-        }) + "/plugins";
+        src =
+          (pkgs.fetchFromGitHub {
+            owner = "jarun";
+            repo = "nnn";
+            rev = "6a8d74a43a2135a186dc59c5a1f561444ca098e4";
+            sha256 = "sha256-jxPfaHRPWy1L87YkK1G/9cBgUwjyJyPXM2jG4VE4+kQ=";
+          })
+          + "/plugins";
       };
     };
 

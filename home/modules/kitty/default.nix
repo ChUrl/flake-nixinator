@@ -11,7 +11,7 @@ with mylib.modules; let
   cfg = config.modules.kitty;
   # cfgnv = config.modules.neovim;
 in {
-  options.modules.kitty = import ./options.nix { inherit lib mylib; };
+  options.modules.kitty = import ./options.nix {inherit lib mylib;};
 
   config = mkIf cfg.enable {
     programs.kitty = {

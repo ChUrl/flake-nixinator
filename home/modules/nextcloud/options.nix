@@ -1,10 +1,9 @@
 {
   lib,
-  mylib
+  mylib,
 }:
 with lib;
-with mylib.modules;
-{
+with mylib.modules; {
   enable = mkEnableOpt "Nextcloud Client";
   autostart = mkBoolOpt false "Autostart the Nextcloud client (systemd)";
 }

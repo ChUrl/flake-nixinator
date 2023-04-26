@@ -116,7 +116,7 @@
   # TODO: Networking system module
   # NOTE: The systemd networking options are not very flexible, so this will be a problem for the laptop. (=> Use IWD for WiFi)
   systemd = {
-    network = let 
+    network = let
       eth-interface = "enp0s31f6";
       wireless-interface = "";
     in {
@@ -154,7 +154,7 @@
       # TODO: WiFi Hotspot?
     };
 
-    services = let 
+    services = let
       # TODO: IPv6 Configuration
       wgup = interface: privatekey: publickey: endpoint: ''
         #! ${pkgs.bash}/bin/bash
@@ -180,8 +180,8 @@
       # This namespace contains the WireGuard virtual network device, because this should be the only interface available for apps that should run through VPN
       netns-vpn = {
         description = "Network namespace for ProtonVPN using Wireguard";
-        wantedBy = [ "default.target" ];
-        before = [ "display-manager.service" "network.target" ];
+        wantedBy = ["default.target"];
+        before = ["display-manager.service" "network.target"];
         serviceConfig = {
           Type = "oneshot";
           RemainAfterExit = true;
@@ -201,8 +201,8 @@
       #       - The endpoints/public keys should be in a map?
       wg0-de-115 = {
         description = "Wireguard ProtonVPN Server DE-115";
-        requires = [ "netns-vpn.service" ];
-        after = [ "netns-vpn.service" ];
+        requires = ["netns-vpn.service"];
+        after = ["netns-vpn.service"];
         serviceConfig = {
           Type = "oneshot";
           RemainAfterExit = true;
@@ -245,7 +245,7 @@
         "podman0"
         "docker0"
       ];
-      
+
       allowedTCPPorts = [
         22 # SSH
         80 # HTTP
@@ -259,7 +259,7 @@
         # 32400 # Plex
       ];
       allowedTCPPortRanges = [];
-  
+
       allowedUDPPorts = [
         9918 # Wireguard
         18000 # Anno 1800
@@ -569,7 +569,7 @@
     #   enable = true;
     #   openFirewall = true;
     # };
-    
+
     udev = {
       packages = with pkgs; [
         usb-blaster-udev-rules # For Intel Quartus
@@ -641,7 +641,7 @@
       homeassistant = {
         image = "homeassistant/home-assistant";
         autoStart = false;
-        
+
         ports = [
           "8123:8123"
         ];

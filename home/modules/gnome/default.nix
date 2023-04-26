@@ -10,7 +10,7 @@ with lib;
 with mylib.modules; let
   cfg = config.modules.gnome;
 in {
-  options.modules.gnome = import ./options.nix { inherit lib mylib; };
+  options.modules.gnome = import ./options.nix {inherit lib mylib;};
 
   config = mkIf cfg.enable {
     assertions = [

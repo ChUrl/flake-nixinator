@@ -22,7 +22,7 @@
     # extraModprobeConfig = ''
     #   options iwlwifi 11n_disable=1 wd_disable=0
     # '';
-    
+
     # Specific to used kernel (currently linux_zen)
     extraModulePackages = with config.boot.kernelPackages; [
       new-lg4ff # Logitech force feedback

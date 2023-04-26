@@ -15,7 +15,7 @@ in {
     ../flatpak
   ];
 
-  options.modules.audio = import ./options.nix { inherit lib mylib; };
+  options.modules.audio = import ./options.nix {inherit lib mylib;};
 
   config = mkIf cfg.enable {
     assertions = [
