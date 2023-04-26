@@ -115,112 +115,72 @@
 
   # TODO: Networking system module
   # NOTE: The systemd networking options are not very flexible, so this will be a problem for the laptop. (=> Use IWD for WiFi)
-  systemd = {
-    network = let
-      eth-interface = "enp0s31f6";
-      wireless-interface = "";
-    in {
-      enable = true;
+  systemd.services = let
+    # TODO: IPv6 Configuration
+    wgup = interface: privatekey: publickey: endpoint: ''
+      #! ${pkgs.bash}/bin/bash
+      ${pkgs.iproute}/bin/ip link add ${interface} type wireguard
+      ${pkgs.iproute}/bin/ip link set ${interface} netns vpn
+      ${pkgs.iproute}/bin/ip netns exec vpn ${pkgs.wireguard-tools}/bin/wg set ${interface} \
+        private-key /home/christoph/.secrets/wireguard/${privatekey} \
+        peer ${publickey} \
+        allowed-ips 0.0.0.0/0 \
+        endpoint ${endpoint}:51820
+      ${pkgs.iproute}/bin/ip -n vpn addr add 10.2.0.2/32 dev ${interface}
+      ${pkgs.iproute}/bin/ip -n vpn link set ${interface} up
+      ${pkgs.iproute}/bin/ip -n vpn route add default dev ${interface}
+    '';
 
-      # LAN
-      networks."50-ether" = {
-        # name = "enp0s31f6"; # Network interface name?
-        enable = true;
+    wgdown = interface: ''
+      #! ${pkgs.bash}/bin/bash
+      ${pkgs.iproute}/bin/ip -n vpn link del ${interface}
+    '';
+  in {
+    # See https://reflexivereflection.com/posts/2018-12-18-wireguard-vpn-with-network-namespace-on-nixos.html
+    # See https://try.popho.be/vpn-netns.html#automatic-with-a-systemd.service5
+    # This namespace contains the WireGuard virtual network device, because this should be the only interface available for apps that should run through VPN
+    netns-vpn = {
+      description = "Network namespace for ProtonVPN using Wireguard";
+      wantedBy = ["default.target"];
+      before = ["display-manager.service" "network.target"];
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
 
-        # See man systemd.link, man systemd.netdev, man systemd.network
-        matchConfig = {
-          # This corresponds to the [MATCH] section
-          Name = eth-interface; # Match ethernet interface
-        };
+        ExecStart = pkgs.writeScript "create-vpn-netns" ''
+          #! ${pkgs.bash}/bin/bash
+          ${pkgs.iproute}/bin/ip netns add vpn # Create the Namespace
+          ${pkgs.iproute}/bin/ip -n vpn link set lo up # Enable the Loopback device
+        '';
 
-        # See man systemd.network
-        networkConfig = {
-          # This corresponds to the [NETWORK] section
-          DHCP = "yes";
-
-          # TODO: What does this all do?
-          # IPv6AcceptRA = true;
-          # MulticastDNS = "yes"; # Needed?
-          # LLMNR = "no"; # Needed?
-          # LinkLocalAddressing = "no"; # Needed?
-        };
-
-        linkConfig = {
-          # This corresponds to the [LINK] section
-          # RequiredForOnline = "routable";
-        };
+        ExecStop = "${pkgs.iproute}/bin/ip netns del vpn";
       };
-
-      # TODO: WiFi Hotspot?
     };
 
-    services = let
-      # TODO: IPv6 Configuration
-      wgup = interface: privatekey: publickey: endpoint: ''
-        #! ${pkgs.bash}/bin/bash
-        ${pkgs.iproute}/bin/ip link add ${interface} type wireguard
-        ${pkgs.iproute}/bin/ip link set ${interface} netns vpn
-        ${pkgs.iproute}/bin/ip netns exec vpn ${pkgs.wireguard-tools}/bin/wg set ${interface} \
-          private-key /home/christoph/.secrets/wireguard/${privatekey} \
-          peer ${publickey} \
-          allowed-ips 0.0.0.0/0 \
-          endpoint ${endpoint}:51820
-        ${pkgs.iproute}/bin/ip -n vpn addr add 10.2.0.2/32 dev ${interface}
-        ${pkgs.iproute}/bin/ip -n vpn link set ${interface} up
-        ${pkgs.iproute}/bin/ip -n vpn route add default dev ${interface}
-      '';
-
-      wgdown = interface: ''
-        #! ${pkgs.bash}/bin/bash
-        ${pkgs.iproute}/bin/ip -n vpn link del ${interface}
-      '';
-    in {
-      # See https://reflexivereflection.com/posts/2018-12-18-wireguard-vpn-with-network-namespace-on-nixos.html
-      # See https://try.popho.be/vpn-netns.html#automatic-with-a-systemd.service5
-      # This namespace contains the WireGuard virtual network device, because this should be the only interface available for apps that should run through VPN
-      netns-vpn = {
-        description = "Network namespace for ProtonVPN using Wireguard";
-        wantedBy = ["default.target"];
-        before = ["display-manager.service" "network.target"];
-        serviceConfig = {
-          Type = "oneshot";
-          RemainAfterExit = true;
-
-          ExecStart = pkgs.writeScript "create-vpn-netns" ''
-            #! ${pkgs.bash}/bin/bash
-            ${pkgs.iproute}/bin/ip netns add vpn # Create the Namespace
-            ${pkgs.iproute}/bin/ip -n vpn link set lo up # Enable the Loopback device
-          '';
-
-          ExecStop = "${pkgs.iproute}/bin/ip netns del vpn";
-        };
+    # TODO: This should be parametrized
+    #       - Each server should get its own link?
+    #       - The endpoints/public keys should be in a map?
+    wg0-DE-115 = {
+      description = "Wireguard ProtonVPN Server DE-115";
+      requires = ["netns-vpn.service"];
+      after = ["netns-vpn.service"];
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+        ExecStart = pkgs.writeScript "DE-115-up" (wgup "wg0-de-115" "proton-de-115.key" "9+CorlxrTsQR7qjIOVKsEkk8Z7UUS5WT3R1ccF7a0ic=" "194.126.177.14");
+        ExecStop = pkgs.writeScript "DE-115-down" (wgdown "wg0-de-115");
       };
+    };
 
-      # TODO: This should be parametrized
-      #       - Each server should get its own link?
-      #       - The endpoints/public keys should be in a map?
-      wg0-DE-115 = {
-        description = "Wireguard ProtonVPN Server DE-115";
-        requires = ["netns-vpn.service"];
-        after = ["netns-vpn.service"];
-        serviceConfig = {
-          Type = "oneshot";
-          RemainAfterExit = true;
-          ExecStart = pkgs.writeScript "DE-115-up" (wgup "wg0-de-115" "proton-de-115.key" "9+CorlxrTsQR7qjIOVKsEkk8Z7UUS5WT3R1ccF7a0ic=" "194.126.177.14");
-          ExecStop = pkgs.writeScript "DE-115-down" (wgdown "wg0-de-115");
-        };
-      };
-
-      wg0-LU-16 = {
-        description = "Wireguard ProtonVPN Server LU-16";
-        requires = ["netns-vpn.service"];
-        after = ["netns-vpn.service"];
-        serviceConfig = {
-          Type = "oneshot";
-          RemainAfterExit = true;
-          ExecStart = pkgs.writeScript "LU-16-up" (wgup "wg0-lu-16" "proton-lu-16.key" "asu9KtQoZ3iKwELsDTgjPEiFNcD1XtgGgy3O4CZFg2w=" "92.223.89.133");
-          ExecStop = pkgs.writeScript "LU-16-down" (wgdown "wg0-lu-16");
-        };
+    wg0-LU-16 = {
+      description = "Wireguard ProtonVPN Server LU-16";
+      requires = ["netns-vpn.service"];
+      after = ["netns-vpn.service"];
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+        ExecStart = pkgs.writeScript "LU-16-up" (wgup "wg0-lu-16" "proton-lu-16.key" "asu9KtQoZ3iKwELsDTgjPEiFNcD1XtgGgy3O4CZFg2w=" "92.223.89.133");
+        ExecStop = pkgs.writeScript "LU-16-down" (wgdown "wg0-lu-16");
       };
     };
   };
