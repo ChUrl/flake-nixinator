@@ -28,7 +28,7 @@ mode-switcher {
 window {
   height: 500px;
   width: 700px;
-  border-radius: 6px;
+  border-radius: 0px;
   background-color: @accent-dark;
 }
 
