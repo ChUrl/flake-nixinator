@@ -10,9 +10,7 @@ with lib;
 with mylib.modules; let
   cfg = config.modules.fish;
 in {
-  options.modules.fish = {
-    enable = mkEnableOpt "Fish";
-  };
+  options.modules.fish = import ./options.nix { inherit lib; };
 
   config = mkIf cfg.enable {
     programs.fish = {
@@ -90,7 +88,7 @@ in {
             blk = batify "lsblk -o NAME,LABEL,UUID,FSTYPE,SIZE,FSUSE%,MOUNTPOINT,MODEL";
             grep = "grep --color=auto -E"; # grep with extended regex
             watch = "watch -d -c -n 0.5";
-            n = "nnncd -a -P p"; # Doesn't work with abbrify because I have nnn.override?
+            n = "nnncd -a -P p -e"; # Doesn't work with abbrify because I have nnn.override?
 
             # systemd
             failed = "systemctl --failed";

@@ -11,9 +11,7 @@ with lib;
 with mylib.modules; let
   cfg = config.modules.plasma;
 in {
-  options.modules.plasma = {
-    enable = mkEnableOpt "Plasma Desktop";
-  };
+  options.modules.plasma = import ./options.nix { inherit lib; };
 
   config = mkIf cfg.enable {
     assertions = [

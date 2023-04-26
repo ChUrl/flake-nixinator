@@ -13,10 +13,7 @@ with lib;
 with mylib.modules; let
   cfg = config.modules.nextcloud;
 in {
-  options.modules.nextcloud = {
-    enable = mkEnableOpt "Nextcloud Client";
-    autostart = mkBoolOpt false "Autostart the Nextcloud client (systemd)";
-  };
+  options.modules.nextcloud = import ./options.nix { inherit lib; };
 
   config = mkIf cfg.enable {
     assertions = [

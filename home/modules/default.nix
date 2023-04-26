@@ -8,20 +8,20 @@
   ...
 }: {
   imports = [
-    ./audio.nix
-    ./emacs.nix
-    ./email.nix
-    ./firefox.nix
-    ./fish.nix
-    ./flatpak.nix
-    ./gaming.nix
-    ./gnome.nix
-    ./hyprland.nix
-    ./kitty.nix
-    ./misc.nix
-    ./neovim.nix
-    ./nextcloud.nix
-    ./plasma.nix
-    ./ranger.nix
+    ./audio/default.nix
+    ./emacs/default.nix
+    ./email/default.nix
+    ./firefox/default.nix
+    ./fish/default.nix
+    ./flatpak/default.nix
+    ./gaming/default.nix
+    ./gnome/default.nix
+    ./hyprland/default.nix
+    ./kitty/default.nix
+    ./misc/default.nix
+    ./neovim/default.nix
+    ./nextcloud/default.nix
+    ./plasma/default.nix
+    ./ranger/default.nix
   ];
 }

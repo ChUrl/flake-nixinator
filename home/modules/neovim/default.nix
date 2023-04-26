@@ -10,10 +10,7 @@ with lib;
 with mylib.modules; let
   cfg = config.modules.neovim;
 in {
-  options.modules.neovim = {
-    enable = mkEnableOpt "NeoVim";
-    alias = mkBoolOpt false "Link nvim to vim/vi";
-  };
+  options.modules.neovim = import ./options.nix { inherit lib; };
 
   config = mkIf cfg.enable {
     # TODO: Configure by option

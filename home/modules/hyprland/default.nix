@@ -10,14 +10,7 @@ with lib;
 with mylib.modules; let
   cfg = config.modules.hyprland;
 in {
-  options.modules.hyprland = {
-    enable = mkEnableOpt "Hyprland Window Manager + Compositor";
-
-    theme = mkOption {
-      type = types.str;
-      description = "Wallpaper and colorscheme to use";
-    };
-  };
+  options.modules.hyprland = import ./options.nix { inherit lib; };
 
   config = let
     # Taken from https://github.com/Ruixi-rebirth/flakes/blob/main/modules/programs/wayland/waybar/workspace-patch.nix

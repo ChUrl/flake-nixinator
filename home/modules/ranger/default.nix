@@ -10,10 +10,7 @@ with lib;
 with mylib.modules; let
   cfg = config.modules.ranger;
 in {
-  options.modules.ranger = {
-    enable = mkEnableOpt "Ranger";
-    preview = mkBoolOpt false "Enable Ranger image preview";
-  };
+  options.modules.ranger = import ./options.nix { inherit lib; };
 
   config = mkIf cfg.enable {
     home.packages = with pkgs;

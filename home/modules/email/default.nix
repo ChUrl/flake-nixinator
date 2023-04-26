@@ -14,16 +14,7 @@ with lib;
 with mylib.modules; let
   cfg = config.modules.email;
 in {
-  options.modules.email = {
-    enable = mkEnableOpt "Email";
-    autosync = mkEnableOpt "Automatically call \"notmuch new\" via systemd timer";
-    imapnotify = mkEnableOpt "Use imapnotify to sync and index mail automatically";
-
-    kmail = {
-      enable = mkEnableOpt "Kmail";
-      autostart = mkEnableOpt "Autostart Kmail";
-    };
-  };
+  options.modules.email = import ./options.nix { inherit lib; };
 
   # TODO: Add Maildir to nextcloud sync
   config = mkIf cfg.enable {
