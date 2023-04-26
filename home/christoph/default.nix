@@ -95,15 +95,6 @@ rec {
       };
     };
 
-    hyprland = {
-      enable = true;
-      theme = "Three-Bears";
-
-      # TODO:
-      # papirusIcons = true;
-      # bibataCursor = true;
-    };
-
     # TODO:
     # plasma = {
     #   enable = false;
