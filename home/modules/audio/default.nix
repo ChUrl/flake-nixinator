@@ -12,10 +12,10 @@ with mylib.modules; let
   cfgfp = config.modules.flatpak;
 in {
   imports = [
-    ./flatpak.nix
+    ../flatpak.nix
   ];
 
-  options.modules.audio = import ./options.nix;
+  options.modules.audio = import ./options.nix { inherit lib; };
 
   config = mkIf cfg.enable {
     assertions = [
