@@ -15,7 +15,13 @@ rec {
     ../../modules
   ];
 
-  modules = {
-
+  config = {
+    modules = {
+  
+    };
+  
+    home.packages = with pkgs; [
+      
+    ];
   };
 }
