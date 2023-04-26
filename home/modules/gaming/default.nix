@@ -12,14 +12,14 @@ with mylib.modules; let
 in {
   imports = [
     # NOTE: I don't know if this is the right approach or if I should use config.modules.flatpak
-    ./flatpak.nix
+    ../flatpak
   ];
 
   # TODO: Enable flatpak MangoHud, there are multiple versions, Steam.Utility.MangoHud works but can't be configured (in ~/.config/MangoHud), other versions don't even work (need to figure that out as Steam.Utility.MangoHud is EOL...)
   # TODO: SteamTinkerLaunch option
   # TODO: Dolphin + SteamRomManager option
 
-  options.modules.gaming = import ./options.nix { inherit lib; };
+  options.modules.gaming = import ./options.nix { inherit lib mylib; };
 
   config = mkIf cfg.enable {
     assertions = [

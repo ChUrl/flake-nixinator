@@ -10,7 +10,7 @@ with lib;
 with mylib.modules; let
   cfg = config.modules.hyprland;
 in {
-  options.modules.hyprland = import ./options.nix { inherit lib; };
+  options.modules.hyprland = import ./options.nix { inherit lib mylib; };
 
   config = let
     # Taken from https://github.com/Ruixi-rebirth/flakes/blob/main/modules/programs/wayland/waybar/workspace-patch.nix

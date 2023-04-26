@@ -11,7 +11,7 @@ with lib;
 with mylib.modules; let
   cfg = config.modules.plasma;
 in {
-  options.modules.plasma = import ./options.nix { inherit lib; };
+  options.modules.plasma = import ./options.nix { inherit lib mylib; };
 
   config = mkIf cfg.enable {
     assertions = [
