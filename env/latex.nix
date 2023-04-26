@@ -17,7 +17,6 @@
         config.allowUnfree = true;
         overlays = [devshell.overlays.default];
       };
-
       # TODO: Custom LaTeX "distribution"? With curated packages?
     in {
       devShell = pkgs.devshell.mkShell {

@@ -1,9 +1,9 @@
-{ lib
-, python310
-, fetchFromGitHub
-, ffmpeg
+{
+  lib,
+  python310,
+  fetchFromGitHub,
+  ffmpeg,
 }:
-
 python310.pkgs.buildPythonApplication rec {
   pname = "spotdl";
   version = "4.1.6";
@@ -83,7 +83,10 @@ python310.pkgs.buildPythonApplication rec {
   ];
 
   makeWrapperArgs = [
-    "--prefix" "PATH" ":" (lib.makeBinPath [ ffmpeg ])
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ffmpeg])
   ];
 
   meta = with lib; {
@@ -91,6 +94,6 @@ python310.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/spotDL/spotify-downloader";
     changelog = "https://github.com/spotDL/spotify-downloader/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [dotlambda];
   };
 }

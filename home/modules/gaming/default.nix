@@ -19,7 +19,7 @@ in {
   # TODO: SteamTinkerLaunch option
   # TODO: Dolphin + SteamRomManager option
 
-  options.modules.gaming = import ./options.nix { inherit lib mylib; };
+  options.modules.gaming = import ./options.nix {inherit lib mylib;};
 
   config = mkIf cfg.enable {
     assertions = [

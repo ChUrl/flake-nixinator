@@ -1,14 +1,13 @@
 {
   lib,
-  mylib
+  mylib,
 }:
 with lib;
-with mylib.modules;
-{
+with mylib.modules; {
   enable = mkEnableOpt "Hyprland Window Manager + Compositor";
 
   theme = mkOption {
     type = types.str;
     description = "Wallpaper and colorscheme to use";
-  };  
+  };
 }

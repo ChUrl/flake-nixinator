@@ -10,7 +10,7 @@ with lib;
 with mylib.modules; let
   cfg = config.modules.fish;
 in {
-  options.modules.fish = import ./options.nix { inherit lib mylib; };
+  options.modules.fish = import ./options.nix {inherit lib mylib;};
 
   config = mkIf cfg.enable {
     programs.fish = {
@@ -27,7 +27,7 @@ in {
                 echo "nnn is already running"
                 return
             end
-        
+
             # The behaviour is set to cd on quit (nnn checks if NNN_TMPFILE is set)
             # If NNN_TMPFILE is set to a custom path, it must be exported for nnn to
             # see. To cd on quit only on ^G, remove the "-x" from both lines below,
@@ -37,17 +37,17 @@ in {
             else
                 set -x NNN_TMPFILE "$HOME/.config/nnn/.lastd"
             end
-        
+
             # Unmask ^Q (, ^V etc.) (if required, see `stty -a`) to Quit nnn
             # stty start undef
             # stty stop undef
             # stty lwrap undef
             # stty lnext undef
-        
+
             # The command function allows one to alias this function to `nnn` without
             # making an infinitely recursive alias
             command nnn $argv
-        
+
             if test -e $NNN_TMPFILE
                 source $NNN_TMPFILE
                 rm $NNN_TMPFILE

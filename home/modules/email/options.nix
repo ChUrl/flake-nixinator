@@ -1,10 +1,9 @@
 {
   lib,
-  mylib
+  mylib,
 }:
 with lib;
-with mylib.modules;
-{
+with mylib.modules; {
   enable = mkEnableOpt "Email";
   autosync = mkEnableOpt "Automatically call \"notmuch new\" via systemd timer";
   imapnotify = mkEnableOpt "Use imapnotify to sync and index mail automatically";

@@ -1,25 +1,25 @@
 # NOTE: Adapted from nixpkgs xdg-desktop-portal-wlr derivation
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, makeWrapper
-, meson
-, ninja
-, pkg-config
-, wayland-protocols
-, wayland-scanner
-# , grim
-, inih
-, libdrm
-, mesa
-, pipewire
-, scdoc
-# , slurp
-, systemd
-, wayland
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  makeWrapper,
+  meson,
+  ninja,
+  pkg-config,
+  wayland-protocols,
+  wayland-scanner,
+  # , grim
+  inih,
+  libdrm,
+  mesa,
+  pipewire,
+  scdoc,
+  # , slurp
+  systemd,
+  wayland,
 }:
-
 stdenv.mkDerivation rec {
   pname = "xdg-desktop-portal-termfilechooser";
   version = "0.1.0";
@@ -39,15 +39,17 @@ stdenv.mkDerivation rec {
   # })];
 
   # Add hyprland to portal metainformation
-  patches = [(fetchpatch {
-    url = "https://patch-diff.githubusercontent.com/raw/GermainZ/xdg-desktop-portal-termfilechooser/pull/6.patch";
-    hash = "sha256-GjK6GL15liHYm5U0XBSIf5H8Cc4RIWBD0O47lLWcep0=";
-  })];
+  patches = [
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/GermainZ/xdg-desktop-portal-termfilechooser/pull/6.patch";
+      hash = "sha256-GjK6GL15liHYm5U0XBSIf5H8Cc4RIWBD0O47lLWcep0=";
+    })
+  ];
 
   strictDeps = true;
-  depsBuildBuild = [ pkg-config ];
-  nativeBuildInputs = [ meson ninja pkg-config scdoc wayland-scanner makeWrapper ];
-  buildInputs = [ inih libdrm mesa pipewire systemd wayland wayland-protocols ];
+  depsBuildBuild = [pkg-config];
+  nativeBuildInputs = [meson ninja pkg-config scdoc wayland-scanner makeWrapper];
+  buildInputs = [inih libdrm mesa pipewire systemd wayland wayland-protocols];
 
   mesonFlags = [
     "-Dsd-bus-provider=libsystemd"

@@ -1,10 +1,9 @@
 {
   lib,
-  mylib
+  mylib,
 }:
 with lib;
-with mylib.modules;
-{
+with mylib.modules; {
   enable = mkEnableOpt "Emacs module";
 
   # TODO: Use an enum for this not individual options

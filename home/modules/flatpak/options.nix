@@ -1,10 +1,9 @@
 {
   lib,
-  mylib
+  mylib,
 }:
 with lib;
-with mylib.modules;
-{
+with mylib.modules; {
   enable = mkEnableOpt "Flatpak module";
   fontFix = mkBoolOpt true "Link fonts to ~/.local/share/fonts so flatpak apps can find them";
   iconFix = mkBoolOpt true "Link icons to ~/.local/share/icons so flatpak apps can find them";
