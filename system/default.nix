@@ -199,15 +199,15 @@
       # TODO: This should be parametrized
       #       - Each server should get its own link?
       #       - The endpoints/public keys should be in a map?
-      wg0-de-115 = {
+      wg0-DE-115 = {
         description = "Wireguard ProtonVPN Server DE-115";
         requires = ["netns-vpn.service"];
         after = ["netns-vpn.service"];
         serviceConfig = {
           Type = "oneshot";
           RemainAfterExit = true;
-          ExecStart = pkgs.writeScript "de-115-up" (wgup "wg0" "proton-de-115.key" "9+CorlxrTsQR7qjIOVKsEkk8Z7UUS5WT3R1ccF7a0ic=" "194.126.177.14");
-          ExecStop = pkgs.writeScript "de-115-down" (wgdown "wg0");
+          ExecStart = pkgs.writeScript "DE-115-up" (wgup "wg0-de-115" "proton-de-115.key" "9+CorlxrTsQR7qjIOVKsEkk8Z7UUS5WT3R1ccF7a0ic=" "194.126.177.14");
+          ExecStop = pkgs.writeScript "DE-115-down" (wgdown "wg0-de-115");
         };
       };
     };
