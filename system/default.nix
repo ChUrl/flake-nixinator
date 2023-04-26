@@ -165,9 +165,9 @@
           peer ${publickey} \
           allowed-ips 0.0.0.0/0 \
           endpoint ${endpoint}:51820
-        ${pkgs.iproute}/bin/ip -n vpn addr add 10.2.0.2/32 dev wg0
-        ${pkgs.iproute}/bin/ip -n vpn link set wg0 up
-        ${pkgs.iproute}/bin/ip -n vpn route add default dev wg0
+        ${pkgs.iproute}/bin/ip -n vpn addr add 10.2.0.2/32 dev ${interface}
+        ${pkgs.iproute}/bin/ip -n vpn link set ${interface} up
+        ${pkgs.iproute}/bin/ip -n vpn route add default dev ${interface}
       '';
 
       wgdown = interface: ''
@@ -208,6 +208,18 @@
           RemainAfterExit = true;
           ExecStart = pkgs.writeScript "DE-115-up" (wgup "wg0-de-115" "proton-de-115.key" "9+CorlxrTsQR7qjIOVKsEkk8Z7UUS5WT3R1ccF7a0ic=" "194.126.177.14");
           ExecStop = pkgs.writeScript "DE-115-down" (wgdown "wg0-de-115");
+        };
+      };
+
+      wg0-LU-16 = {
+        description = "Wireguard ProtonVPN Server LU-16";
+        requires = ["netns-vpn.service"];
+        after = ["netns-vpn.service"];
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          ExecStart = pkgs.writeScript "LU-16-up" (wgup "wg0-lu-16" "proton-lu-16.key" "asu9KtQoZ3iKwELsDTgjPEiFNcD1XtgGgy3O4CZFg2w=" "92.223.89.133");
+          ExecStop = pkgs.writeScript "LU-16-down" (wgdown "wg0-lu-16");
         };
       };
     };
