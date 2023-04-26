@@ -15,11 +15,10 @@ if not contains $ACTION $ACTIONS
 end
 
 # Execute command
-set COMMAND_ROOT "pkexec --user root systemctl $ACTION podman-$SERVICE.service"
-set COMMAND_USER "systemctl $ACTION podman-$SERVICE.service"
-set EVAL_RESULT "$(eval $COMMAND_USER)"
+set COMMAND "systemctl $ACTION podman-$SERVICE.service"
+set EVAL_RESULT "$(eval $COMMAND)"
 
-# Display result if it exists
-if test -n "$EVAL_RESULT"
+if test $ACTION = "status" && test -n "$EVAL_RESULT"
+    # Display result if it exists
     rofi -theme ~/NixFlake/config/rofi/rofi.rasi -e "$EVAL_RESULT"
 end
