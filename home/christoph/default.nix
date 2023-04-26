@@ -413,7 +413,12 @@ rec {
 
     # Use NixCommunity binary cache
     cachix
+
+    # Generate documentation
+    modules-options-doc
   ];
+
+  home.file.".options-doc".source = "${pkgs.modules-options-doc}";
 
   # Packages with extra options managed by HomeManager natively
   programs = {
