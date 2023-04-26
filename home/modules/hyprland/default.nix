@@ -70,6 +70,28 @@ in {
       # Polkit
       home.file.".config/hypr/polkit.conf".text = ''exec-once = ${pkgs.libsForQt5.polkit-kde-agent}/libexec/polkit-kde-authentication-agent-1'';
 
+      # Monitors for different systems
+      home.file.".config/hypr/monitors.conf".text = cfg.monitors;
+
+      # Keyboard layout
+      home.file.".config/hypr/input.conf".text = ''
+        input {
+            kb_layout = ${cfg.kb-layout}
+            kb_variant = ${cfg.kb-variant}
+            kb_model = pc104
+            kb_options =
+            kb_rules =
+
+            follow_mouse = 1
+
+            touchpad {
+                natural_scroll = no
+            }
+
+            sensitivity = 0 # -1.0 - 1.0, 0 means no modification.
+        }
+      '';
+
       home.file.".config/hypr/waybar-reload.conf".text = let
         waybar-reload = pkgs.writeScript "waybar-reload" ''
           #! ${pkgs.bash}/bin/bash
