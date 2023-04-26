@@ -10,19 +10,7 @@ with lib;
 with mylib.modules; let
   cfg = config.modules.misc;
 in {
-  options.modules.misc = {
-    enable = mkEnableOpt "Misc module";
-
-    keepass = {
-      enable = mkEnableOpt "KeePassXC";
-      autostart = mkBoolOpt false "Autostart KeePassXC";
-    };
-
-    protonmail = {
-      enable = mkEnableOpt "ProtonMail";
-      autostart = mkBoolOpt false "Autostart ProtonMail Bridge";
-    };
-  };
+  options.modules.misc = import ./options.nix { inherit lib; };
 
   config = mkIf cfg.enable {
     home.packages = with pkgs;
