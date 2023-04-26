@@ -297,6 +297,11 @@
     libinput.enable = true;
   };
 
+  programs.hyprland = {
+    enable = true;
+    nvidiaPatches = false;
+  };
+
   # XDG
   xdg.portal = {
     enable = true;
