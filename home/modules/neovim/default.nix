@@ -10,7 +10,7 @@ with lib;
 with mylib.modules; let
   cfg = config.modules.neovim;
 in {
-  options.modules.neovim = import ./options.nix { inherit lib; };
+  options.modules.neovim = import ./options.nix { inherit lib mylib; };
 
   config = mkIf cfg.enable {
     # TODO: Configure by option

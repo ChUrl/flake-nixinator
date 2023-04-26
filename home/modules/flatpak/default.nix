@@ -14,7 +14,7 @@ with mylib.modules;
   let
     cfg = config.modules.flatpak;
   in {
-    options.modules.flatpak = import ./options.nix { inherit lib; };
+    options.modules.flatpak = import ./options.nix { inherit lib mylib; };
 
     config = mkIf cfg.enable {
       assertions = [

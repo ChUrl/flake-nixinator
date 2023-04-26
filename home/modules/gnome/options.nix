@@ -1,7 +1,9 @@
 {
-  lib
+  lib,
+  mylib
 }:
 with lib;
+with mylib.modules;
 {
     enable = mkEnableOpt "Gnome Desktop";
     # TODO: Add option for dash-to-dock

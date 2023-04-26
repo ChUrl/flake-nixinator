@@ -1,7 +1,9 @@
 {
-  lib
+  lib,
+  mylib
 }:
 with lib;
+with mylib.modules;
 {
   enable = mkEnableOpt "Flatpak module";
   fontFix = mkBoolOpt true "Link fonts to ~/.local/share/fonts so flatpak apps can find them";

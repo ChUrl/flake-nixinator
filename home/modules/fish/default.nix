@@ -10,7 +10,7 @@ with lib;
 with mylib.modules; let
   cfg = config.modules.fish;
 in {
-  options.modules.fish = import ./options.nix { inherit lib; };
+  options.modules.fish = import ./options.nix { inherit lib mylib; };
 
   config = mkIf cfg.enable {
     programs.fish = {

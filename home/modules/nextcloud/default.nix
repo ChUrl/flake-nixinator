@@ -13,7 +13,7 @@ with lib;
 with mylib.modules; let
   cfg = config.modules.nextcloud;
 in {
-  options.modules.nextcloud = import ./options.nix { inherit lib; };
+  options.modules.nextcloud = import ./options.nix { inherit lib mylib; };
 
   config = mkIf cfg.enable {
     assertions = [

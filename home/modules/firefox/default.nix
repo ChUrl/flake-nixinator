@@ -12,7 +12,7 @@ with lib;
 with mylib.modules; let
   cfg = config.modules.firefox;
 in {
-  options.modules.firefox = import ./options.nix { inherit lib; };
+  options.modules.firefox = import ./options.nix { inherit lib mylib; };
 
   config = mkIf cfg.enable {
     home.packages = with pkgs;
