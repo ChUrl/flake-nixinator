@@ -2,45 +2,70 @@
   stdenv,
   lib,
   pkgs,
+  mylib,
   ...
 }: let
-  # evaluate our options
-  eval = lib.evalModules {
-    modules = [
-      ../../home/modules/audio/options.nix
-      ../../home/modules/emacs/options.nix
-      ../../home/modules/email/options.nix
-      ../../home/modules/firefox/options.nix
-      ../../home/modules/fish/options.nix
-      ../../home/modules/flatpak/options.nix
-      ../../home/modules/gaming/options.nix
-      ../../home/modules/gnome/options.nix
-      ../../home/modules/hyprland/options.nix
-      ../../home/modules/kitty/options.nix
-      ../../home/modules/misc/options.nix
-      ../../home/modules/neovim/options.nix
-      ../../home/modules/nextcloud/options.nix
-      ../../home/modules/plasma/options.nix
-      ../../home/modules/ranger/options.nix
-    ];
+  # create a module that only contains the options
+  toModule = name: {options.modules.${name} = (import ../../home/modules/${name}/options.nix {inherit lib mylib;});};
+
+  # evaluate a single module
+  evalModule = name: (lib.evalModules {modules = [(toModule name)];});
+
+  # generate a single module doc
+  optionsDoc = name: pkgs.nixosOptionsDoc {options = (evalModule name).options;};
+
+  # copy the markdown for a single generated optionsDoc
+  optionsMD = name: stdenv.mkDerivation {
+    src = ./.;
+    name = "options-doc-${name}";
+    buildPhase = ''
+      mkdir $out
+      cat ${(optionsDoc name).optionsCommonMark} >> $out/${name}.md
+    '';
   };
 
-  # generate our docs
-  optionsDoc = pkgs.nixosOptionsDoc {
-    inherit (eval) options;
+  # copy the markdown for all generated optionsDocs
+  allOptionsMDs = let 
+    index = stdenv.mkDerivation {
+      src = ./.;
+      name = "modules-options-index-md";
+      buildPhase = ''
+        mkdir $out
+        echo "# Chriphost NixOS Modules Options" >> $out/index.md
+      '';
+    };
+  in 
+  names: pkgs.symlinkJoin {
+    name = "modules-options-doc-md";
+    paths = (map optionsMD names) ++ [index];
   };
 
-  # create a derivation for capturing the markdown output
-  optionsDocMD = pkgs.runCommand "options-doc.md" {} ''
-    cat ${optionsDoc.optionsCommonMark} >> $out
-  '';
+  # generate the actual package (calls all of the above)
+  modules = [
+    "audio"
+    "emacs"
+    "email"
+    "firefox"
+    "fish"
+    "flatpak"
+    "gaming"
+    "gnome"
+    "hyprland"
+    "kitty"
+    "misc"
+    "neovim"
+    "nextcloud"
+    "plasma"
+    "ranger"
+  ];
+  docs = allOptionsMDs modules;
 in
   stdenv.mkDerivation {
     src = ./.;
     name = "modules-options-doc";
 
     # depend on our options doc derivation
-    buildInput = [optionsDocMD];
+    buildInput = [docs];
 
     # mkdocs dependencies
     nativeBuildInputs = with pkgs; [
@@ -51,7 +76,17 @@ in
 
     # symlink our generated docs into the correct folder before generating
     buildPhase = ''
-      ln -s ${optionsDocMD} "./docs/nixos-options.md"
+      # configure mkdocs
+      echo "site_name: Chriphost NixOS Options" >> ./mkdocs.yml
+      echo "use_directory_urls: false" >> ./mkdocs.yml
+      echo "theme:" >> ./mkdocs.yml
+      echo "  name: material" >> ./mkdocs.yml
+      echo "nav:" >> ./mkdocs.yml
+      echo -e "  - ${builtins.concatStringsSep ".md\n  - " modules}.md" >> ./mkdocs.yml
+
+      # mkdir ./docs
+      ln -s ${docs} "./docs"
+
       # generate the site
       mkdocs build
     '';
