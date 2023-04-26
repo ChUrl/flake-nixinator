@@ -51,6 +51,12 @@
   let
     system = "x86_64-linux";
 
+    # I don't know how to extend the nixpkgs.lib directly so just propagate mylib to the config modules as argument
+    mylib = import ./lib {
+      inherit inputs pkgs;
+      lib = nixpkgs.lib;
+    };
+
     # Set overlays + unfree globally
     pkgs = import nixpkgs {
       inherit system;
@@ -67,14 +73,8 @@
         inputs.hyprpicker.overlays.default
 
         # All my own overlays
-        (import ./overlays {inherit nixpkgs inputs;})
+        (import ./overlays {inherit nixpkgs inputs mylib;})
       ];
-    };
-
-    # I don't know how to extend the nixpkgs.lib directly so just propagate mylib to the config modules as argument
-    mylib = import ./lib {
-      inherit inputs pkgs;
-      lib = nixpkgs.lib;
     };
     # The rec expression turns a basic set into a set where self-referencing is possible.
     # It is a shorthand for recursive and allows to use the values defined in this set from its own scope.
