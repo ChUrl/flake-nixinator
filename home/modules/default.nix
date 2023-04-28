@@ -21,6 +21,7 @@
     ./misc
     ./neovim
     ./nextcloud
+    ./nzbget
     ./plasma
     ./ranger
   ];

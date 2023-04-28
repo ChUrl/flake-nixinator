@@ -131,6 +131,11 @@ rec {
       autostart = false;
     };
 
+    nzbget = {
+      enable = true;
+      mainDir = "~/Videos/NzbGet";
+    };
+
     plasma = {
       enable = false;
     };
@@ -312,6 +317,7 @@ rec {
     mediainfo
     tree # Folder preview
     # gnome.zenity # Popups from terminal
+    unrar
 
     # Xooooorg/Desktop environment stuff
     # xclip
@@ -343,7 +349,6 @@ rec {
     filezilla
     dnsmasq # For Access Point/Hotspot
     linux-wifi-hotspot
-    nzbget
     spotdl-4_1_6
 
     # Tools
