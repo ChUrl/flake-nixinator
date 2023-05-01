@@ -34,7 +34,7 @@ in {
       #
       # If you want to distinguish between partially downloaded files and
       # completed downloads, use also option <InterDir>.
-      DestDir=${MainDir}/dst
+      DestDir=${cfg.mainDir}/dst
 
       # Directory to store intermediate files.
       #
@@ -51,7 +51,7 @@ in {
       #
       # NOTE: If the option <InterDir> is set to empty value the downloaded
       # files are put directly to destination directory (option <DestDir>).
-      InterDir=${MainDir}/inter
+      InterDir=${cfg.mainDir}/inter
 
       # Directory for incoming nzb-files.
       #
@@ -63,16 +63,16 @@ in {
       # is found it is added to download queue. The directory can have
       # sub-directories. A nzb-file queued from a subdirectory is automatically
       # assigned to category with sub-directory-name.
-      NzbDir=${MainDir}/nzb
+      NzbDir=${cfg.mainDir}/nzb
 
       # Directory to store program state.
       #
       # This directory is used to save download queue, history, information
       # about fetched RSS feeds, statistics, etc.
-      QueueDir=${MainDir}/queue
+      QueueDir=${cfg.mainDir}/queue
 
       # Directory to store temporary files.
-      TempDir=${MainDir}/tmp
+      TempDir=${cfg.mainDir}/tmp
 
       # Directory with web-interface files.
       #
@@ -88,7 +88,7 @@ in {
       # This option may contain multiple directories separated with commas or semicolons.
       #
       # NOTE: For information on writing scripts visit http://nzbget.net/extension-scripts.
-      ScriptDir=${MainDir}/scripts
+      ScriptDir=${cfg.mainDir}/scripts
 
       # Lock-file for daemon-mode, POSIX only.
       #
@@ -100,12 +100,12 @@ in {
       #
       # Set to empty value to disable the creating of the lock-file and the
       # check for another running instance (not recommended).
-      LockFile=${MainDir}/nzbget.lock
+      LockFile=${cfg.mainDir}/nzbget.lock
 
       # Where to store log file, if it needs to be created.
       #
       # NOTE: See also option <WriteLog>.
-      LogFile=${MainDir}/nzbget.log
+      LogFile=${cfg.mainDir}/nzbget.log
 
       # Configuration file template.
       #
@@ -223,10 +223,12 @@ in {
       Server1.Port=563
 
       # User name to use for authentication.
-      Server1.Username=f8da7b8d1cdc380e
+      # TODO: User File
+      Server1.Username=
 
       # Password to use for authentication.
-      Server1.Password=mYM`*}]([NPA}&+i!dtwJwIkO+DeaH6W
+      # TODO: PW File
+      Server1.Password=
 
       # Server requires "Join Group"-command (yes, no).
       Server1.JoinGroup=no
