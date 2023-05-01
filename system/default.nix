@@ -228,6 +228,7 @@
         # 8096 # Jellyfin
         # 8097 # Emby
         # 8123 # Home-Assistant
+        # 8989 # Sonarr
         # 32400 # Plex
       ];
       allowedTCPPortRanges = [];
@@ -576,87 +577,7 @@
       # extraPackages = with pkgs; [];
     };
 
-    # TODO: This (or even single containers) should have their own system modules
     oci-containers.backend = "podman"; # "docker" or "podman"
-    oci-containers.containers = {
-      jellyfin = {
-        image = "linuxserver/jellyfin";
-        autoStart = false;
-
-        ports = [
-          "8096:8096/tcp"
-        ];
-
-        volumes = [
-          "jellyfin-cache:/cache:Z"
-          "jellyfin-config:/config:Z"
-          "/home/christoph/Videos/Movies:/media/Movies:ro"
-          "/home/christoph/Videos/Photos:/media/Photos:ro"
-          # "/home/christoph/Music/Spotify:/media/Music:ro"
-        ];
-      };
-
-      picard = {
-        image = "mikenye/picard";
-        autoStart = false;
-
-        ports = [
-          "5800:5800"
-        ];
-
-        volumes = [
-          "picard-config:/config:Z"
-          "/home/christoph/Music/Spotify:/storage:rw,private"
-        ];
-      };
-
-      homeassistant = {
-        image = "homeassistant/home-assistant";
-        autoStart = false;
-
-        ports = [
-          "8123:8123"
-        ];
-
-        volumes = [
-          "homeassistant-config:/config:Z"
-        ];
-      };
-
-      # plex = {
-      #   image = "linuxserver/plex";
-      #   autoStart = false;
-
-      #   ports = [
-      #     "32400:32400/tcp"
-      #   ];
-
-      #   volumes = [
-      #     "plex-config:/config:Z"
-      #     "plex-transcode:/transcode:Z"
-      #     "/home/christoph/Videos/Movies:/data/Movies:ro"
-      #     "/home/christoph/Music/Spotify:/data/Music:ro"
-      #   ];
-      # };
-
-      # emby = {
-      #   image = "linuxserver/emby";
-      #   autoStart = false;
-
-      #   ports = [
-      #     # Host port 8096 already used by Jellyfin
-      #     "8097:8096"
-      #   ];
-
-      #   volumes = [
-      #     "emby-config:/config:Z"
-      #     "/home/christoph/Videos/Movies:/data/movies:ro"
-      #     "/home/christoph/Videos/Pictures:/data/pictures:ro"
-      #     "/home/christoph/Music/Spotify:/data/music:ro"
-      #   ];
-      # };
-    };
-
     libvirtd.enable = true;
 
     # NOTE: Pretty unusable as NVidia hardware acceleration is not supported...
