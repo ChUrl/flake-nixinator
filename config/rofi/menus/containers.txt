@@ -1,5 +1,7 @@
 jellyfin
 sonarr
+radarr
+hydra
 sabnzbd
 homeassistant
 picard
