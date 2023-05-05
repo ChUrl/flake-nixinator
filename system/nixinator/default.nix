@@ -78,9 +78,11 @@
       volumes = [
         "jellyfin-cache:/cache:Z"
         "jellyfin-config:/config:Z"
-        "/home/christoph/Videos/Movies:/media/Movies:ro"
-        "/home/christoph/Videos/Photos:/media/Photos:ro"
-        "/home/christoph/Videos/Shows:/media/Shows:ro"
+        "/home/christoph/Videos/Movies:/media/Movies"
+        "/home/christoph/Videos/Shows:/media/Shows"
+        "/home/christoph/Videos/Video:/media/Video"
+        "/home/christoph/Videos/Picture:/media/Picture"
+        "/home/christoph/Videos/Concerts:/media/Concerts"
         # "/home/christoph/Music/Spotify:/media/Music:ro"
       ];
     };
@@ -89,9 +91,9 @@
       image = "linuxserver/sonarr";
       autoStart = false;
 
-      # TODO: When running through the namespace, sonarr can't reach the indexer/downloader
       extraOptions = [
-        # "--network=ns:/var/run/netns/vpn"
+        "--network=ns:/var/run/netns/vpn"
+        "--dns=10.2.0.1"
       ];
 
       ports = [
@@ -105,12 +107,52 @@
       ];
     };
 
+    radarr = {
+      image = "linuxserver/radarr";
+      autoStart = false;
+
+      extraOptions = [
+        "--network=ns:/var/run/netns/vpn"
+        "--dns=10.2.0.1"
+      ];
+
+      ports = [
+        "7878:7878"
+      ];
+
+      volumes = [
+        "radarr-config:/config:Z"
+        "/home/christoph/Videos/Movies:/movies"
+        "/home/christoph/Videos/SabNzbd:/downloads"
+      ];
+    };
+
+    hydra = {
+      image = "linuxserver/nzbhydra2";
+      autoStart = false;
+      
+      extraOptions = [
+        "--network=ns:/var/run/netns/vpn"
+        "--dns=10.2.0.1"
+      ];
+
+      ports = [
+        "5076:5076"
+      ];
+
+      volumes = [
+        "hydra-config:/config:Z"
+        "/home/christoph/Videos/SabNzbd:/downloads"
+      ];
+    };
+
     sabnzbd = {
       image = "linuxserver/sabnzbd";
       autoStart = false;
 
       extraOptions = [
-        # "--network=ns:/var/run/netns/vpn"
+        "--network=ns:/var/run/netns/vpn"
+        "--dns=10.2.0.1"
       ];
 
       ports = [
