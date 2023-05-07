@@ -65,7 +65,25 @@
   security = {
     protectKernelImage = true;
     rtkit.enable = true;
+
     polkit.enable = true;
+    # TODO: Add this to container/podman system module
+    # TODO: Also generate the containers.txt file through the container/podman system module
+    polkit.extraConfig = ''
+      // Allow to manage podman services
+      polkit.addRule(function(action, subject) {
+          if (action.id == "org.freedesktop.systemd1.manage-units" && subject.user == "christoph" &&
+              (action.lookup("unit") == "podman-jellyfin.service" ||
+               action.lookup("unit") == "podman-sonarr.service" ||
+               action.lookup("unit") == "podman-sabnzbd.service" ||
+               action.lookup("unit") == "podman-hydra.service" ||
+               action.lookup("unit") == "podman-homeassistant.service" ||
+               action.lookup("unit") == "podman-picard.service" ||
+               action.lookup("unit") == "podman-radarr.service")) {
+              return polkit.Result.YES;
+          }
+      });
+    '';
 
     sudo.enable = true;
     sudo.extraRules = [
