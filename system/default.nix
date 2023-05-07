@@ -79,7 +79,9 @@
                action.lookup("unit") == "podman-hydra.service" ||
                action.lookup("unit") == "podman-homeassistant.service" ||
                action.lookup("unit") == "podman-picard.service" ||
-               action.lookup("unit") == "podman-radarr.service")) {
+               action.lookup("unit") == "podman-radarr.service" ||
+               action.lookup("unit") == "wg0-LU-16.service" ||
+               action.lookup("unit") == "wg0-DE-115.service")) {
               return polkit.Result.YES;
           }
       });
@@ -335,6 +337,7 @@
       "video/ogg" = "mpv.desktop";
       "video/webm" = "mpv.desktop";
       "video/x-msvideo" = "mpv.desktop";
+      "video/x-ms-wmv" = "mpv.desktop";
 
       "text/css" = "Helix.desktop";
       "text/csv" = "Helix.desktop";
@@ -369,6 +372,7 @@
       "video/ogg" = "mpv.desktop";
       "video/webm" = "mpv.desktop";
       "video/x-msvideo" = "mpv.desktop";
+      "video/x-ms-wmv" = "mpv.desktop";
 
       "text/css" = "Helix.desktop";
       "text/csv" = "Helix.desktop";
