@@ -24,6 +24,7 @@
     hyprpaper.url = "github:hyprwm/hyprpaper";
     hyprpicker.url = "github:hyprwm/hyprpicker";
     # nixvim.url = "github:pta2002/nixvim";
+    # nixified-ai.url = "github:nixified-ai/flake";
 
     # plasma-manager.url = "github:pjones/plasma-manager";
     # plasma-manager.inputs.nixpkgs.follows = "nixpkgs";
