@@ -112,8 +112,8 @@ in {
           })
           (abbrify pkgs.exa {
             ls = "exa --color always --group-directories-first -F --git --icons"; # color-ls
-            lsl = "exa --color always --group-directories-first -F -l --git --icons";
-            lsa = "exa --color always --group-directories-first -F -l -a --git --icons";
+            lsl = "exa --color always --group-directories-first -F -l --git --icons --octal-permissions";
+            lsa = "exa --color always --group-directories-first -F -l -a --git --icons --octal-permissions";
             tre = "exa --color always --group-directories-first -F -T -L 2 ---icons";
           })
           (abbrify pkgs.fd {find = "fd";})
