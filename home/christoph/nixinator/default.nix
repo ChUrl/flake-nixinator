@@ -30,16 +30,16 @@ rec {
           monitor = HDMI-A-2, 1920x1080@60, 0x0, 1
 
           # I have the first 9 workspaces on the main monitor, the last one on the secondary monitor
-          wsbind = 1, HDMI-A-1
-          wsbind = 2, HDMI-A-1
-          wsbind = 3, HDMI-A-1
-          wsbind = 4, HDMI-A-1
-          wsbind = 5, HDMI-A-1
-          wsbind = 6, HDMI-A-1
-          wsbind = 7, HDMI-A-1
-          wsbind = 8, HDMI-A-1
-          wsbind = 9, HDMI-A-1
-          wsbind = 10, HDMI-A-2
+          workspace = 1, monitor:HDMI-A-1
+          workspace = 2, monitor:HDMI-A-1
+          workspace = 3, monitor:HDMI-A-1
+          workspace = 4, monitor:HDMI-A-1
+          workspace = 5, monitor:HDMI-A-1
+          workspace = 6, monitor:HDMI-A-1
+          workspace = 7, monitor:HDMI-A-1
+          workspace = 8, monitor:HDMI-A-1
+          workspace = 9, monitor:HDMI-A-1
+          workspace = 10, monitor:HDMI-A-2
         '';
       };
 
