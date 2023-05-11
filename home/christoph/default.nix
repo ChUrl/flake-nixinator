@@ -318,6 +318,7 @@ rec {
     tree # Folder preview
     # gnome.zenity # Popups from terminal
     unrar
+    p7zip
 
     # Xooooorg/Desktop environment stuff
     # xclip
@@ -349,7 +350,8 @@ rec {
     filezilla
     dnsmasq # For Access Point/Hotspot
     linux-wifi-hotspot
-    spotdl-4_1_6
+    # spotdl-4_1_6 # My derivation as temporary fix
+    spotdl
 
     # Tools
     # calibre # Do I even read
