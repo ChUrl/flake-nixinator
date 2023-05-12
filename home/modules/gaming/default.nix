@@ -58,6 +58,8 @@ in {
         # (optionals cfg.steam.enable [ protontricks ])
 
         # (optionals cfg.dwarffortress.enable [dwarf-fortress-packages.dwarf-fortress-full])
+
+        (optionals cfg.cemu.enable [cemu cdecrypt wiiu-downloader])
       ];
 
     # This doesn't work because steam doesn't detect symlinked skins, files have to be copied

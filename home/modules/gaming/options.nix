@@ -12,6 +12,7 @@ with mylib.modules; {
   prism.enable = mkEnableOpt "PrismLauncher for Minecraft (flatpak)";
   bottles.enable = mkEnableOpt "Bottles (flatpak)";
   # dwarffortress.enable = mkEnableOpt "Dwarf Fortress";
+  cemu.enable = mkEnableOpt "Cemu (nixpkgs)";
 
   steam = {
     enable = mkEnableOpt "Steam (flatpak)";
