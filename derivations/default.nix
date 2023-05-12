@@ -12,4 +12,5 @@
   modules-options-doc = pkgs.callPackage ./modules-options-doc {mylib = mylib;};
   spotdl-4_1_6 = pkgs.callPackage ./spotdl-4_1_6 {};
   xdg-desktop-portal-termfilechooser = pkgs.callPackage ./xdg-desktop-portal-termfilechooser {};
+  wiiu-downloader = pkgs.callPackage ./wiiu-downloader {};
 }
