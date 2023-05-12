@@ -71,6 +71,7 @@ rec {
 
         prism.enable = true;
         bottles.enable = false;
+        cemu.enable = true;
         # TODO: Webcord
         # discordChromium.enable = false;
         # discordElectron.enable = false; # This is the nixpkgs version, prefer the one from flatpak module
