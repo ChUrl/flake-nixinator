@@ -316,50 +316,16 @@
   };
 
   # See https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
-  xdg.mime = {
+  xdg.mime = rec {
     enable = true;
 
     removedAssociations = {
       "application/pdf" = "chromium-browser.desktop";
     };
 
-    # TODO: This stuff depends on the used desktop...should I use a complementary system module for each DE?
-    addedAssociations = {
-      "application/pdf" = "org.pwmt.zathura.desktop";
-      "application/x-sh" = "Helix.desktop";
-      "application/xhtml+xml" = "Helix.desktop";
-      "application/xml" = "Helix.desktop";
-
-      "image/bmp" = "imv.desktop";
-      "image/jpeg" = "imv.desktop";
-      "image/png" = "imv.desktop";
-      "image/svg+xml" = "imv.desktop";
-      "image/tiff" = "imv.desktop";
-      "image/webp" = "imv.desktop";
-
-      "video/mp2t" = "mpv.desktop";
-      "video/mp4" = "mpv.desktop";
-      "video/mpeg" = "mpv.desktop";
-      "video/ogg" = "mpv.desktop";
-      "video/webm" = "mpv.desktop";
-      "video/x-msvideo" = "mpv.desktop";
-      "video/x-ms-wmv" = "mpv.desktop";
-
-      "text/css" = "Helix.desktop";
-      "text/csv" = "Helix.desktop";
-      "text/javascript" = "Helix.desktop";
-      "text/json" = "Helix.desktop";
-      "text/plain" = "Helix.desktop";
-      "text/xml" = "Helix.desktop";
-
-      # "audio/mpeg" = "moc.desktop";
-      # "audio/ogg" = "moc.desktop";
-      # "audio/opus" = "moc.desktop";
-      # "audio/wav" = "moc.desktop";
-      # "audio/webm" = "moc.desktop";
-    };
-
     defaultApplications = {
+      "inode/directory" = "nnn.desktop";
+
       "application/pdf" = "org.pwmt.zathura.desktop";
       "application/x-sh" = "Helix.desktop";
       "application/xhtml+xml" = "Helix.desktop";
@@ -376,7 +342,9 @@
       "video/mp4" = "mpv.desktop";
       "video/mpeg" = "mpv.desktop";
       "video/ogg" = "mpv.desktop";
+      "video/quicktime" = "mpv.desktop";
       "video/webm" = "mpv.desktop";
+      "video/x-matroska" = "mpv.desktop";
       "video/x-msvideo" = "mpv.desktop";
       "video/x-ms-wmv" = "mpv.desktop";
 
@@ -393,6 +361,8 @@
       # "audio/wav" = "moc.desktop";
       # "audio/webm" = "moc.desktop";
     };
+
+    addedAssociations = defaultApplications;
   };
 
   # Enable sound with pipewire.
@@ -416,49 +386,28 @@
     # Font packages go here
     # NOTE: Don't do this with HomeManager as I need the fonts in the fontdir for flatpak apps
     fonts = with pkgs; [
-      # Mono fonts
-      victor-mono
-      jetbrains-mono
-      source-code-pro
-      (pkgs.nerdfonts.override {fonts = ["VictorMono"];})
-      font-awesome
-
-      # Chinese fonts
-      source-han-mono
-      source-han-sans
-      source-han-serif
-      noto-fonts-cjk-sans
-      noto-fonts-cjk-serif
-      wqy_zenhei
-      wqy_microhei
+      # Monospace fonts
+      (nerdfonts.override {fonts = [
+        "JetBrainsMono"
+      ];})
 
       # Sans/Serif fonts
-      cantarell-fonts
-      source-sans-pro
-      source-serif-pro
       noto-fonts
-      noto-fonts-extra
       noto-fonts-emoji
-
-      # Emacs fonts
-      emacs-all-the-icons-fonts
-      material-design-icons
-
-      # Some fonts from an old emacs config, not longer used
-      # etBook
-      # overpass
+      noto-fonts-cjk-sans
+      lxgw-wenkai
     ];
 
     # TODO: Check if this works
     # TODO: Conflicts with kde?
-    # fontconfig = {
-    #   enable = true;
-    #   defaultFonts = {
-    #     serif = [ "Source Han Serif Regular" ];
-    #     sansSerif = [ "Source Han Sans Regular" ];
-    #     monospace = [ "Source Han Mono Regular" ];
-    #   };
-    # };
+    fontconfig = {
+      enable = true;
+      defaultFonts = {
+        serif = [ "Noto Serif CJK SC" ];
+        sansSerif = [ "Noto Sans CJK SC" ];
+        monospace = [ "JetBrainsMono Nerd Font Mono" ];
+      };
+    };
   };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.

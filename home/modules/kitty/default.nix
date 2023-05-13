@@ -18,8 +18,8 @@ in {
       enable = true;
 
       font = {
-        package = pkgs.victor-mono;
-        name = "Victor Mono SemiBold";
+        # package = pkgs.victor-mono;
+        name = "JetBrainsMono Nerd Font Mono";
         size = 12;
       };
 

@@ -327,7 +327,7 @@ in {
 
       "org/gnome/TextEditor" = {
         auto-indent = true;
-        custom-font = "Victor Mono Semi-Bold 11";
+        custom-font = "JetBrainsMono Nerd Font Mono 11";
         highlight-current-line = true;
         indent-style = "space";
         show-gird = false;

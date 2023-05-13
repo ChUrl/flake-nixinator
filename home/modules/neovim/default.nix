@@ -40,8 +40,8 @@ in {
         set undofile
         set undodir=~/.vim/undo
         set hidden
-        set printfont=Victor\ Mono\ SemiBold:h10
-        set guifont=Victor\ Mono\ SemiBold:h12
+        set printfont=JetBrainsMono\ Nerd\ Font\ Mono:h10
+        set guifont=JetBrainsMono\ Nerd\ Font\ Mono:h12
         let printencoding='utf-8'
         set encoding=utf-8
       '';
