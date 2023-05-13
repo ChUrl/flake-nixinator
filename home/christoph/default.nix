@@ -71,7 +71,7 @@ rec {
       enable = true;
       autoUpdate = true;
       autoPrune = true;
-      fontFix = false;
+      fontFix = true; # TODO: This doesn't work reliably...
       iconFix = false;
 
       flatseal.enable = true;
@@ -79,7 +79,7 @@ rec {
       spotify.enable = true;
       bottles.enable = false;
       obsidian.enable = true;
-      jabref.enable = true;
+      jabref.enable = false;
     };
 
     gnome = {
@@ -558,7 +558,11 @@ rec {
     };
 
     nnn = {
-      package = pkgs.nnn.override {withNerdIcons = true;};
+      package = pkgs.nnn.override {
+        # These two are mutually exclusive
+        withIcons = false;
+        withNerdIcons = true;
+      };
       enable = true;
 
       extraPackages = with pkgs; [
@@ -594,8 +598,8 @@ rec {
           (pkgs.fetchFromGitHub {
             owner = "jarun";
             repo = "nnn";
-            rev = "6a8d74a43a2135a186dc59c5a1f561444ca098e4";
-            sha256 = "sha256-jxPfaHRPWy1L87YkK1G/9cBgUwjyJyPXM2jG4VE4+kQ=";
+            rev = "aaf60b93d741ffff211902a10a159434629bbdb9";
+            sha256 = "sha256-MwI3PqPfSyblURUAds4aVsw8WFBAgbDo5hqXMmRbAW4=";
           })
           + "/plugins";
       };
@@ -684,7 +688,7 @@ rec {
       userSettings = {
         "files.autoSave" = "onFocusChange";
         "editor.fontSize" = 14;
-        "editor.fontFamily" = "Victor Mono Semibold";
+        "editor.fontFamily" = "JetBrainsMono Nerd Font Mono";
         "editor.renderWhitespace" = "selection";
         "editor.cursorStyle" = "line";
         "editor.lineNumbers" = "relative";
