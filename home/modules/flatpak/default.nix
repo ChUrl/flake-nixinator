@@ -70,17 +70,32 @@ with mylib.modules;
           ++ extra_overrides);
 
       home.activation = mkMerge [
+        # TODO: Linking isn't always enough, some fonts should be copied aswell...
         # We link like this to be able to address the absolute location, also the fonts won't get copied to store
         # NOTE: This path contains all the fonts because fonts.fontDir.enable is true
         (mkIf cfg.fontFix {
           linkFontDir =
             lib.hm.dag.entryAfter ["writeBoundary"]
-            (mkLink "/run/current-system/sw/share/X11/fonts" "${config.home.homeDirectory}/.local/share/fonts");
+            (mkLink "/run/current-system/sw/share/X11/fonts" "${config.home.homeDirectory}/.local/share/fonts/fonts");
+          copyBaseFonts =
+            lib.hm.dag.entryAfter ["writeBoundary"] ''
+              cp -f ${pkgs.lxgw-wenkai}/share/fonts/truetype/LXGWWenKaiMono-Regular.ttf ${config.home.homeDirectory}/.local/share/fonts/
+              cp -f ${pkgs.nerdfonts.override {fonts = ["JetBrainsMono"];}}/share/fonts/truetype/NerdFonts/JetBrainsMonoNerdFontMono-Regular.ttf ${config.home.homeDirectory}/.local/share/fonts/
+              cp -f ${pkgs.noto-fonts}/share/fonts/noto/NotoSans[wdth,wght].ttf ${config.home.homeDirectory}/.local/share/fonts/
+              cp -f ${pkgs.noto-fonts-emoji}/share/fonts/noto/NotoColorEmoji.ttf ${config.home.homeDirectory}/.local/share/fonts/
+            '';
         })
         (mkElse cfg.fontFix {
           unlinkFontDir =
             lib.hm.dag.entryAfter ["writeBoundary"]
-            (mkUnlink "${config.home.homeDirectory}/.local/share/fonts");
+            (mkUnlink "${config.home.homeDirectory}/.local/share/fonts/fonts");
+          deleteBaseFonts =
+            lib.hm.dag.entryAfter ["writeBoundary"] ''
+              rm ${config.home.homeDirectory}/.local/share/fonts/LXGWWenKaiMono-Regular.ttf
+              rm ${config.home.homeDirectory}/.local/share/fonts/JetBrainsMonoNerdFontMono-Regular.ttf
+              rm ${config.home.homeDirectory}/.local/share/fonts/NotoSans[wdth,wght].ttf
+              rm ${config.home.homeDirectory}/.local/share/fonts/NotoColorEmoji.ttf
+            '';
         })
 
         # Fixes missing icons + cursor
