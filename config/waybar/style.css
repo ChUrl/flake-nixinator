@@ -3,7 +3,7 @@
 /*Order is Top-Right-Bottom-Left for combined properties*/
 
 window#waybar {
-  font-family: Jetbrains Mono;
+  font-family: JetBrainsMono Nerd Font Mono;
   font-weight: bold;
   color: @dark;
   background-color: @accent-dark;
