@@ -21,7 +21,7 @@ rec {
         enable = true;
         theme = "Three-Bears";
 
-        kb-lalyout = "de";
+        kb-layout = "de";
         kb-variant = "nodeadkeys";
         
         monitors = ''
