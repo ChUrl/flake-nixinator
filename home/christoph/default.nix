@@ -696,14 +696,14 @@ rec {
         "editor.smoothScrolling" = true;
         "editor.stickyScroll.enabled" = true;
         "editor.tabCompletion" = "on";
-        "editor.cursorSmoothCaretAnimation" = true;
+        "editor.cursorSmoothCaretAnimation" = "on";
         "editor.cursorSurroundingLines" = 10;
         "editor.minimap.renderCharacters" = false;
         "files.trimFinalNewlines" = true;
         "files.trimTrailingWhitespace" = true; # NOTE: If this is enabled with frequent autosave, the current lines whitespace will always be removed, which is obnoxious
         "workbench.enableExperiments" = false;
         "workbench.list.smoothScrolling" = true;
-        "workbench.colorTheme" = "Default Light+";
+        "workbench.colorTheme" = "Default Light Modern";
         "workbench.iconTheme" = "vscode-icons";
         "security.workspace.trust.enabled" = false;
         "editor.bracketPairColorization.enabled" = true;
