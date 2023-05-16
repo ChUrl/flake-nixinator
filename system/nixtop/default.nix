@@ -22,14 +22,13 @@
 
   
   systemd.network = let
-    eth-interface = "enp0s20u2";
-    wireless-interface = "wlp3s0";
+    eth-interface = "enp*";
+    wireless-interface = "wlp*";
   in {
     enable = true;
 
     # LAN
-    networks."50-tether" = {
-      # name = "enp0s31f6"; # Network interface name?
+    networks."50-ether" = {
       enable = true;
 
       # See man systemd.link, man systemd.netdev, man systemd.network
@@ -42,12 +41,6 @@
       networkConfig = {
         # This corresponds to the [NETWORK] section
         DHCP = "yes";
-
-        # TODO: What does this all do?
-        # IPv6AcceptRA = true;
-        # MulticastDNS = "yes"; # Needed?
-        # LLMNR = "no"; # Needed?
-        # LinkLocalAddressing = "no"; # Needed?
       };
 
       linkConfig = {

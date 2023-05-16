@@ -30,8 +30,10 @@
 
   # TODO: System module for this
   systemd.network = let
-    eth-interface = "enp0s31f6";
-    wireless-interface = "wlp5s0";
+    # eth-interface = "enp0s31f6";
+    eth-interface = "enp*";
+    # wireless-interface = "wlp5s0";
+    wireless-interface = "wlp*";
   in {
     enable = true;
 
