@@ -82,11 +82,11 @@
               action.lookup("unit") == "podman-homeassistant.service" ||
 
               // Various Containers
-              action.lookup("unit") == "podman-stablediffusion.service" ||
+              // action.lookup("unit") == "podman-stablediffusion.service" ||
 
               // VPNs
-              action.lookup("unit") == "wg0-LU-16.service" ||
-              action.lookup("unit") == "wg0-DE-115.service"
+              action.lookup("unit") == "wg0-lu-16.service" ||
+              action.lookup("unit") == "wg0-de-115.service"
           )) {
               return polkit.Result.YES;
           }
@@ -142,71 +142,106 @@
   # TODO: Networking system module
   # NOTE: The systemd networking options are not very flexible, so this will be a problem for the laptop. (=> Use IWD for WiFi)
   systemd.services = let
+    nsup = name: ''
+      ${pkgs.iproute}/bin/ip netns add ${name} # Create the Namespace
+      ${pkgs.iproute}/bin/ip -n ${name} link set lo up # Enable the Loopback device
+    '';
+
+    nsdown = name: ''
+      ${pkgs.iproute}/bin/ip netns del ${name} # Delete the Namespace
+    '';
+
     # TODO: IPv6 Configuration
-    wgup = interface: privatekey: publickey: endpoint: ''
-      #! ${pkgs.bash}/bin/bash
-      ${pkgs.iproute}/bin/ip link add ${interface} type wireguard
-      ${pkgs.iproute}/bin/ip link set ${interface} netns vpn
-      ${pkgs.iproute}/bin/ip netns exec vpn ${pkgs.wireguard-tools}/bin/wg set ${interface} \
+    # NOTE: The interface and netns have the same name, so it's a bit confusing
+    wgup = name: privatekey: publickey: endpoint: ''
+      ${pkgs.iproute}/bin/ip link add ${name} type wireguard
+      ${pkgs.iproute}/bin/ip link set ${name} netns ${name}
+      ${pkgs.iproute}/bin/ip netns exec ${name} ${pkgs.wireguard-tools}/bin/wg set ${name} \
         private-key /home/christoph/.secrets/wireguard/${privatekey} \
         peer ${publickey} \
         allowed-ips 0.0.0.0/0 \
         endpoint ${endpoint}:51820
-      ${pkgs.iproute}/bin/ip -n vpn addr add 10.2.0.2/32 dev ${interface}
-      ${pkgs.iproute}/bin/ip -n vpn link set ${interface} up
-      ${pkgs.iproute}/bin/ip -n vpn route add default dev ${interface}
+      ${pkgs.iproute}/bin/ip -n ${name} addr add 10.2.0.2/32 dev ${name}
+      ${pkgs.iproute}/bin/ip -n ${name} link set ${name} up
+      ${pkgs.iproute}/bin/ip -n ${name} route add default dev ${name}
     '';
 
-    wgdown = interface: ''
-      #! ${pkgs.bash}/bin/bash
-      ${pkgs.iproute}/bin/ip -n vpn link del ${interface}
+    wgdown = name: ''
+      ${pkgs.iproute}/bin/ip -n ${name} link del ${name}
     '';
   in {
     # See https://reflexivereflection.com/posts/2018-12-18-wireguard-vpn-with-network-namespace-on-nixos.html
     # See https://try.popho.be/vpn-netns.html#automatic-with-a-systemd.service5
     # This namespace contains the WireGuard virtual network device, because this should be the only interface available for apps that should run through VPN
-    netns-vpn = {
-      description = "Network namespace for ProtonVPN using Wireguard";
-      wantedBy = ["default.target"];
-      before = ["display-manager.service" "network.target"];
+    # netns-vpn = {
+    #   description = "Network namespace for ProtonVPN using Wireguard";
+    #   wantedBy = ["default.target"];
+    #   before = ["display-manager.service" "network.target"];
+    #   serviceConfig = {
+    #     Type = "oneshot";
+    #     RemainAfterExit = true;
+
+    #     ExecStart = pkgs.writeScript "create-vpn-netns" ''
+    #       #! ${pkgs.bash}/bin/bash
+    #       ${pkgs.iproute}/bin/ip netns add vpn # Create the Namespace
+    #       ${pkgs.iproute}/bin/ip -n vpn link set lo up # Enable the Loopback device
+    #     '';
+
+    #     ExecStop = "${pkgs.iproute}/bin/ip netns del vpn";
+    #   };
+    # };
+
+    # TODO: I want an attrset like this:
+    # {
+    #   wg0-DE-115 = {
+    #     name = "wg0-de-115";
+    #     privatekey = "proton-de-115.key";
+    #     publickey = "9+Corl...";
+    #     endpoint = "194.126.177.14";
+    #   };
+
+    #   wg0-LU-16 = {
+    #     ...
+    #   };
+    # }
+    # And a function that turns this into vpn configurations like below:
+    wg0-de-115 = {
+      description = "Wireguard ProtonVPN Server de-115";
+      # requires = ["netns-vpn.service"];
+      # after = ["netns-vpn.service"];
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;
-
-        ExecStart = pkgs.writeScript "create-vpn-netns" ''
+        ExecStart = pkgs.writeScript "wg0-de-115-up" ''
           #! ${pkgs.bash}/bin/bash
-          ${pkgs.iproute}/bin/ip netns add vpn # Create the Namespace
-          ${pkgs.iproute}/bin/ip -n vpn link set lo up # Enable the Loopback device
+          ${nsup "wg0-de-115"}
+          ${wgup "wg0-de-115" "proton-de-115.key" "9+CorlxrTsQR7qjIOVKsEkk8Z7UUS5WT3R1ccF7a0ic=" "194.126.177.14"}
         '';
-
-        ExecStop = "${pkgs.iproute}/bin/ip netns del vpn";
+        ExecStop = pkgs.writeScript "wg0-de-115-down" ''
+          #! ${pkgs.bash}/bin/bash
+          ${wgdown "wg0-de-115"}
+          ${nsdown "wg0-de-115"}
+        '';
       };
     };
 
-    # TODO: This should be parametrized
-    #       - Each server should get its own link?
-    #       - The endpoints/public keys should be in a map?
-    wg0-DE-115 = {
-      description = "Wireguard ProtonVPN Server DE-115";
-      requires = ["netns-vpn.service"];
-      after = ["netns-vpn.service"];
+    wg0-lu-16 = {
+      description = "Wireguard ProtonVPN Server lu-16";
+      # requires = ["netns-vpn.service"];
+      # after = ["netns-vpn.service"];
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;
-        ExecStart = pkgs.writeScript "DE-115-up" (wgup "wg0-de-115" "proton-de-115.key" "9+CorlxrTsQR7qjIOVKsEkk8Z7UUS5WT3R1ccF7a0ic=" "194.126.177.14");
-        ExecStop = pkgs.writeScript "DE-115-down" (wgdown "wg0-de-115");
-      };
-    };
-
-    wg0-LU-16 = {
-      description = "Wireguard ProtonVPN Server LU-16";
-      requires = ["netns-vpn.service"];
-      after = ["netns-vpn.service"];
-      serviceConfig = {
-        Type = "oneshot";
-        RemainAfterExit = true;
-        ExecStart = pkgs.writeScript "LU-16-up" (wgup "wg0-lu-16" "proton-lu-16.key" "asu9KtQoZ3iKwELsDTgjPEiFNcD1XtgGgy3O4CZFg2w=" "92.223.89.133");
-        ExecStop = pkgs.writeScript "LU-16-down" (wgdown "wg0-lu-16");
+        ExecStart = pkgs.writeScript "wg0-lu-16-up" ''
+          #! ${pkgs.bash}/bin/bash
+          ${nsup "wg0-lu-16"}
+          ${wgup "wg0-lu-16" "proton-lu-16.key" "asu9KtQoZ3iKwELsDTgjPEiFNcD1XtgGgy3O4CZFg2w=" "92.223.89.133"}
+        '';
+        ExecStop = pkgs.writeScript "wg0-lu-16-down" ''
+          #! ${pkgs.bash}/bin/bash
+          ${wgdown "wg0-lu-16"}
+          ${nsdown "wg0-lu-16"}
+        '';
       };
     };
   };
