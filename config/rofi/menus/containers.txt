@@ -4,4 +4,3 @@ radarr
 hydra
 sabnzbd
 homeassistant
-picard
