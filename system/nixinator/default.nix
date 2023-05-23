@@ -71,7 +71,7 @@
   # TODO: I also want a function to generate these configs, I just want to pass volumes, ports, env and image
   virtualisation.oci-containers.containers = {
     jellyfin = {
-      image = "linuxserver/jellyfin";
+      image = "linuxserver/jellyfin:10.8.10";
       autoStart = false;
 
       ports = [
@@ -81,12 +81,13 @@
       volumes = [
         "jellyfin-cache:/cache:Z"
         "jellyfin-config:/config:Z"
-        "/home/christoph/Videos/Movies:/media/Movies"
-        "/home/christoph/Videos/Shows:/media/Shows"
+        # "/home/christoph/Videos/Movies:/media/Movies"
+        # "/home/christoph/Videos/Shows:/media/Shows"
         "/home/christoph/Videos/Video:/media/Video"
         "/home/christoph/Videos/Picture:/media/Picture"
-        "/home/christoph/Videos/Concerts:/media/Concerts"
+        # "/home/christoph/Videos/Concerts:/media/Concerts"
         # "/home/christoph/Music/Spotify:/media/Music:ro"
+        "/home/christoph/GameHDD/Video:/media/Video2"
       ];
 
       environment = {
@@ -119,7 +120,7 @@
     # };
 
     sonarr = {
-      image = "linuxserver/sonarr";
+      image = "linuxserver/sonarr:3.0.10";
       autoStart = false;
 
       extraOptions = [
@@ -145,7 +146,7 @@
     };
 
     radarr = {
-      image = "linuxserver/radarr";
+      image = "linuxserver/radarr:4.4.4";
       autoStart = false;
 
       extraOptions = [
@@ -171,7 +172,7 @@
     };
 
     hydra = {
-      image = "linuxserver/nzbhydra2";
+      image = "linuxserver/nzbhydra2:5.1.8";
       autoStart = false;
       
       extraOptions = [
@@ -196,7 +197,7 @@
     };
 
     sabnzbd = {
-      image = "linuxserver/sabnzbd";
+      image = "linuxserver/sabnzbd:4.0.1";
       autoStart = false;
 
       extraOptions = [
@@ -221,28 +222,8 @@
       };
     };
 
-    # picard = {
-    #   image = "mikenye/picard";
-    #   autoStart = false;
-
-    #   ports = [
-    #     "5800:5800"
-    #   ];
-
-    #   volumes = [
-    #     "picard-config:/config:Z"
-    #     "/home/christoph/Music/Spotify:/storage:rw,private"
-    #   ];
-
-    #   environment = {
-    #     PUID = "1000";
-    #     PGID = "1000";
-    #     TZ = "Europe/Berlin";
-    #   };
-    # };
-
     homeassistant = {
-      image = "homeassistant/home-assistant";
+      image = "homeassistant/home-assistant:2023.5";
       autoStart = false;
 
       ports = [
@@ -260,80 +241,11 @@
       };
     };
 
-    # plex = {
-    #   image = "linuxserver/plex";
-    #   autoStart = false;
-
-    #   ports = [
-    #     "32400:32400/tcp"
-    #   ];
-
-    #   volumes = [
-    #     "plex-config:/config:Z"
-    #     "plex-transcode:/transcode:Z"
-    #     "/home/christoph/Videos/Movies:/data/Movies:ro"
-    #     "/home/christoph/Music/Spotify:/data/Music:ro"
-    #   ];
-    # };
-
-    # emby = {
-    #   image = "linuxserver/emby";
-    #   autoStart = false;
-
-    #   ports = [
-    #     # Host port 8096 already used by Jellyfin
-    #     "8097:8096"
-    #   ];
-
-    #   volumes = [
-    #     "emby-config:/config:Z"
-    #     "/home/christoph/Videos/Movies:/data/movies:ro"
-    #     "/home/christoph/Videos/Pictures:/data/pictures:ro"
-    #     "/home/christoph/Music/Spotify:/data/music:ro"
-    #   ];
-    # };
-
-    # TODO: Doesn't work, image is too large, no space left on device
-    # stablediffusion = let
-    #   webui = pkgs.dockerTools.buildImage {
-    #     name = "stablediffusion-webui";
-    #     # tag = "latest";
-
-    #     # fromImage = "rocm/pytorch";
-    #     fromImage = pkgs.dockerTools.pullImage {
-    #       imageName = "rocm/pytorch";
-    #       imageDigest = "sha256:994bc9eff6839143433caa6b665b7584dd623b03c65dc132f3827cf6480dcec1";
-    #       sha256 = "";
-    #     };
-    #     fromImageTag = "latest";
-
-    #     runAsRoot = ''
-    #       #!${pkgs.runtimeShell}
-    #       cd /webui-data
-    #       git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui
-    #       cd stable-diffusion-webui
-    #       python -m pip install --upgrade pip wheel
-    #     '';
-
-    #     config = {
-    #       WorkingDir = "/webui-data/stable-diffusion-webui";
-    #       Env = {
-    #         REQS_FILE = "/webui-data/stable-diffusion-webui/requirements.txt";
-    #       };
-    #       Cmd = [
-    #         "python"
-    #         "launch.py"
-    #         "--prevision"
-    #         "full"
-    #         "--no-half"
-    #       ];
-    #       ExposedPorts = {
-    #         "7860" = {};
-    #       };
-    #     };
-    #   };
-    # in {
-    #   image = "${webui}";
+    # NOTE: PyTorch ROCM image is 36 GB large...
+    # NOTE: This requires to setup the PodmanROCM direcory beforehand, as described here:
+    #       https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/Install-and-Run-on-AMD-GPUs#running-inside-docker
+    # stablediffusion = {
+    #   image = "rocm/pytorch";
     #   autoStart = false;
 
     #   extraOptions = [
@@ -343,55 +255,24 @@
     #     "--group-add=video"
     #     "--ipc=host"
     #     "--cap-add=SYS_PTRACE"
-    #     "--security-opt seccomp=unconfined"
-    #   ];
-
-    #   ports = [
-    #     "7860:7860"
+    #     "--security-opt=seccomp=unconfined"
     #   ];
 
     #   volumes = [
-    #     "/home/christoph/NoSync/PodmanROCM:/webui-data"
+    #     "/home/christoph/NoSync/StableDiffusionWebUI:/webui-data"
     #   ];
 
+    #   # TODO: User christoph not found in passwd file
+    #   # user = "christoph:users";
+
     #   environment = {
-    #     PUID = "1000";
-    #     PGID = "1000";
+    #     UID = "1000";
+    #     GID = "100";
     #     TZ = "Europe/Berlin";
     #   };
+
+    #   entrypoint = "/webui-data/launch.sh";
     # };
-
-    # NOTE: This requires to setup the PodmanROCM direcory beforehand, as described here:
-    #       https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/Install-and-Run-on-AMD-GPUs#running-inside-docker
-    stablediffusion = {
-      image = "rocm/pytorch";
-      autoStart = false;
-
-      extraOptions = [
-        "--network=host"
-        "--device=/dev/kfd"
-        "--device=/dev/dri"
-        "--group-add=video"
-        "--ipc=host"
-        "--cap-add=SYS_PTRACE"
-        "--security-opt=seccomp=unconfined"
-      ];
-
-      volumes = [
-        "/home/christoph/NoSync/StableDiffusionWebUI:/webui-data"
-      ];
-
-      # TODO: User christoph not found in passwd file
-      # user = "christoph:users";
-
-      environment = {
-        UID = "1000";
-        GID = "100";
-        TZ = "Europe/Berlin";
-      };
-
-      entrypoint = "/webui-data/launch.sh";
-    };
   };
 
   # Make the system services available to the user
