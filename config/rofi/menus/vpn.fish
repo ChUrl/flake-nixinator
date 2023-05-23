@@ -33,5 +33,8 @@ if test $ACTION = "status" && test -n "$EVAL_RESULT"
     rofi -theme ~/NixFlake/config/rofi/rofi.rasi -e "$EVAL_RESULT"
 else if test $ACTION = "start"
     # Launch chromium in firejail
+    # NOTE: With a shared home directory, firejail uses the same instance, so it won't work to
+    #       launch multiple browsers with different VPNs...
+    # firejail --noprofile --allusers --private="~/.firejail-home" --netns="wg0-$SERVER" chromium --incognito --new-window ipaddress.my &>/dev/null
     firejail --noprofile --private --netns="wg0-$SERVER" chromium --incognito --new-window ipaddress.my &>/dev/null
 end
