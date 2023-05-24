@@ -25,5 +25,6 @@
     ./nnn
     ./ranger
     ./vscode
+    ./waybar
   ];
 }

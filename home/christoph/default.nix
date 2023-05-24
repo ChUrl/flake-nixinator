@@ -169,6 +169,10 @@ rec {
     # };
 
     vscode.enable = true;
+
+    waybar = {
+      enable = true;
+    };
   };
 
   manual.manpages.enable = true;
