@@ -71,7 +71,78 @@ in {
       home.file.".config/hypr/polkit.conf".text = ''exec-once = ${pkgs.libsForQt5.polkit-kde-agent}/libexec/polkit-kde-authentication-agent-1'';
 
       # Monitors for different systems
-      home.file.".config/hypr/monitors.conf".text = cfg.monitors;
+      home.file.".config/hypr/monitors.conf".text = let
+        # Used by mapAttrs
+        mkMonitor = name: conf: "monitor = ${name}, ${toString conf.width}x${toString conf.height}@${toString conf.rate}, ${toString conf.x}x${toString conf.y}, ${toString conf.scale}";
+        # Makes "HDMI-A-1" = {width=2560;...} to "HDMI-A-1" = "monitor = ..."
+        monitors-attrs = mapAttrs mkMonitor cfg.monitors;
+        # Makes "HDMI-A-1" = "monitor = ..." to "monitor = ..."
+        monitors-values = attrValues monitors-attrs;
+        monitors = concatStringsSep "\n" monitors-values;
+      in
+        monitors;
+
+      # Bind workspaces to monitors
+      home.file.".config/hypr/workspaces.conf".text = let
+        # Make a single monitor string
+        mkWorkspace = monitor: workspace: "workspace = ${toString workspace}, monitor:${toString monitor}";
+        # Used by mapAttrs
+        mkWorkspaces = monitor: workspace-list: map (mkWorkspace monitor) workspace-list;
+        # Makes {"HDMI-A-1" = [1 2]; ...} to {"HDMI-A-1" = ["monitor = ..." "monitor = ..."] ...}
+        workspaces-attrs = mapAttrs mkWorkspaces cfg.workspaces;
+        # Makes {"HDMI-A-1" = [1 2]; ...} to ["monitor = ..." "monitor = ..." ...]
+        workspaces-values = concatLists (attrValues workspaces-attrs);
+        workspaces = concatStringsSep "\n" workspaces-values;
+      in
+        workspaces;
+
+      # Autostart applications
+      home.file.".config/hypr/autostart.conf".text = let
+        # Stuff that is not negotiable
+        always-exec = [
+          "dunst" # Notifications
+          "hyprpaper"
+          "wl-paste -t text --watch clipman store --no-persist"
+          "wl-paste -p -t text --watch clipman store -P --histpath=\"~/.local/share/clipman-primary.json\""
+          "hyprctl setcursor Bibata-Modern-Classic 16"
+        ];
+
+        mkExec = prog: "exec-once = ${prog}";
+        execs-list = map mkExec (cfg.autostart ++ always-exec);
+        execs = concatStringsSep "\n" execs-list;
+      in
+        execs;
+
+      # Assign windows to workspaces
+      home.file.".config/hypr/workspacerules.conf".text = let
+        mkWorkspaceRule = workspace: class: "windowrulev2 = workspace ${workspace}, class:^(${class})$";
+        mkWorkspaceRules = workspace: class-list: map (mkWorkspaceRule workspace) class-list;
+        workspace-rules-attrs = mapAttrs mkWorkspaceRules cfg.workspacerules;
+        workspace-rules-values = concatLists (attrValues workspace-rules-attrs);
+        workspace-rules = concatStringsSep "\n" workspace-rules-values;
+      in
+        workspace-rules;
+
+      # Make windows float
+      home.file.".config/hypr/floatingrules.conf".text = let
+        mkFloatingRule = attrs:
+          "windowrulev2 = float"
+          + (lib.optionalString (hasAttr "class" attrs) ", class:^(${attrs.class})$")
+          + (lib.optionalString (hasAttr "title" attrs) ", title:^(${attrs.title})$");
+        floating-rules-list = map mkFloatingRule cfg.floating;
+        floating-rules = concatStringsSep "\n" floating-rules-list;
+      in
+        floating-rules;
+
+      # Make windows translucent
+      home.file.".config/hypr/translucentrules.conf".text = let
+        opacity = 0.8;
+
+        mkTranslucentRule = class: "windowrulev2 = opacity ${toString opacity} ${toString opacity}, class:^(${class})$";
+        translucent-rules-list = map mkTranslucentRule cfg.transparent;
+        translucent-rules = concatStringsSep "\n" translucent-rules-list;
+      in
+        translucent-rules;
 
       # Keyboard layout
       home.file.".config/hypr/input.conf".text = ''
@@ -92,6 +163,9 @@ in {
         }
       '';
 
+      # TODO: I want to generate the config in ~/.config/waybar through nix again
+      #       to allow adding waybar options to the hyprland module (like monitor and style).
+      #       The goal is to set the style completely through nix...
       home.file.".config/hypr/waybar-reload.conf".text = let
         waybar-reload = pkgs.writeScript "waybar-reload" ''
           #! ${pkgs.bash}/bin/bash
@@ -108,27 +182,22 @@ in {
         exec-once = ${waybar-reload}
       '';
 
-      home.file.".config/hypr/hyprpaper.conf".text = ''
+      # Set wallpaper for each configured monitor
+      home.file.".config/hypr/hyprpaper.conf".text = let
+        mkWallpaper = monitor: "wallpaper = ${monitor}, ${config.home.homeDirectory}/NixFlake/wallpapers/${cfg.theme}.png";
+        wallpapers-list = map mkWallpaper (attrNames cfg.monitors);
+        wallpapers = concatStringsSep "\n" wallpapers-list;
+      in ''
         preload = ~/NixFlake/wallpapers/${cfg.theme}.png
-        wallpaper = HDMI-A-1, ~/NixFlake/wallpapers/${cfg.theme}.png
-        wallpaper = HDMI-A-2, ~/NixFlake/wallpapers/${cfg.theme}.png
+        ${wallpapers}
       '';
 
       home.activation = {
         # NOTE: Keep the hyprland/waybar config symlinked, to allow easy changes with hotreload
         # TODO: Don't symlink at all, why not just tell Hyprland where the config is? Much easier
-        # TODO: Use this approach for every program that supports it, makes things much easier,
-        #       as everything can just stay in ~/NixFlake/config
         linkHyprlandConfig =
           hm.dag.entryAfter ["writeBoundary"]
           (mkLink "~/NixFlake/config/hyprland/hyprland.conf" "~/.config/hypr/hyprland.conf");
-
-        # linkWaybarConfig = hm.dag.entryAfter ["writeBoundary"]
-        #                    (mkLink "~/NixFlake/config/waybar/config" "~/.config/waybar/config");
-        # linkWaybarStyle = hm.dag.entryAfter ["writeBoundary"]
-        #                   (mkLink "~/NixFlake/config/waybar/style.css" "~/.config/waybar/style.css");
-        # linkWaybarColors = hm.dag.entryAfter ["writeBoundary"]
-        #                    (mkLink "~/NixFlake/config/waybar/colors" "~/.config/waybar/colors");
       };
 
       home.packages = with pkgs; [

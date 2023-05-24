@@ -34,17 +34,16 @@ rec {
   modules = {
     chromium.enable = true;
 
-    # Config my modules
-    emacs = {
-      enable = false;
-      pgtkNativeComp = false;
-      nativeComp = false;
-      nixpkgs = true;
+    # emacs = {
+    #   enable = false;
+    #   pgtkNativeComp = false;
+    #   nativeComp = false;
+    #   nixpkgs = true;
 
-      doom.enable = true;
-      doom.autoSync = true;
-      doom.autoUpgrade = false; # Very volatile as the upgrade fails sometimes with bleeding edge emacs
-    };
+    #   doom.enable = true;
+    #   doom.autoSync = true;
+    #   doom.autoUpgrade = false; # Very volatile as the upgrade fails sometimes with bleeding edge emacs
+    # };
 
     email = {
       enable = true;
@@ -64,7 +63,7 @@ rec {
       vaapi = false; # NOTE: Crashes AMDGPU driver fairly often (don't know why exactly)
       disableTabBar = true;
       defaultBookmarks = true;
-      gnomeTheme = true; # I like it also with Plasma
+      gnomeTheme = true;
     };
 
     fish.enable = true;
@@ -86,6 +85,56 @@ rec {
 
     helix.enable = true;
 
+    hyprland = {
+      enable = true;
+      theme = "Three-Bears";
+
+      autostart = [
+        "kdeconnect-indicator"
+        "nextcloud --background"
+        "keepassxc"
+        "kitty"
+        # "md.obsidian.Obsidian"
+        # "firefox"
+      ];
+
+      workspacerules = {
+        "2" = [
+          "jetbrains-clion"
+          "code-url-handler"
+        ];
+        "3" = [
+          "obsidian"
+        ];
+        "4" = [
+          "firefox"
+        ];
+        "10" = [
+          "discord"
+          "Spotify"
+        ];
+      };
+
+      floating = [
+        {
+          class = "org.kde.polkit-kde-authentication-agent-1";
+        }
+        {
+          class = "thunar";
+          title = "File Operation Progress";
+        }
+      ];
+
+      transparent = [
+        "kitty"
+        "discord"
+        "Spotify"
+        "obsidian"
+        "jetbrains-clion"
+        "code-url-handler"
+      ];
+    };
+
     kitty.enable = true;
 
     misc = {
@@ -103,7 +152,7 @@ rec {
     };
 
     # neovim = {
-    #   enable = true;
+    #   enable = false;
     #   alias = true;
     # };
 
@@ -114,10 +163,10 @@ rec {
 
     nnn.enable = true;
 
-    ranger = {
-      enable = false;
-      preview = true;
-    };
+    # ranger = {
+    #   enable = false;
+    #   preview = true;
+    # };
 
     vscode.enable = true;
   };

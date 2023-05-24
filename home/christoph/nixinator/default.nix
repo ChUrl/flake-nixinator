@@ -18,53 +18,57 @@ rec {
   config = {
     modules = {
       hyprland = {
-        enable = true;
-        theme = "Three-Bears";
-
         kb-layout = "us";
         kb-variant = "altgr-intl";
 
-        monitors = ''
-          # See https://wiki.hyprland.org/Configuring/Monitors/
-          monitor = HDMI-A-1, 2560x1440@144, 1920x0, 1
-          monitor = HDMI-A-2, 1920x1080@60, 0x0, 1
+        monitors = {
+          "HDMI-A-1" = {
+            width = 2560;
+            height = 1440;
+            rate = 144;
+            x = 1920;
+            y = 0;
+            scale = 1;
+          };
 
-          # I have the first 9 workspaces on the main monitor, the last one on the secondary monitor
-          workspace = 1, monitor:HDMI-A-1
-          workspace = 2, monitor:HDMI-A-1
-          workspace = 3, monitor:HDMI-A-1
-          workspace = 4, monitor:HDMI-A-1
-          workspace = 5, monitor:HDMI-A-1
-          workspace = 6, monitor:HDMI-A-1
-          workspace = 7, monitor:HDMI-A-1
-          workspace = 8, monitor:HDMI-A-1
-          workspace = 9, monitor:HDMI-A-1
-          workspace = 10, monitor:HDMI-A-2
-        '';
-      };
-
-      audio = {
-        enable = false;
-
-        carla.enable = false;
-        bitwig.enable = true; # TODO: Check what happens when upgrade plan ends, do I need to pin the version then?
-        tenacity.enable = true;
-
-        faust.enable = true;
-        bottles.enable = false;
-        yabridge.enable = true;
-        yabridge.autoSync = true;
-
-        noisesuppression = {
-          noisetorch.enable = false;
-          noisetorch.autostart = false;
-          easyeffects.enable = false;
-          easyeffects.autostart = false;
+          "HDMI-A-2" = {
+            width = 1920;
+            height = 1080;
+            rate = 60;
+            x = 0;
+            y = 0;
+            scale = 1;
+          };
         };
 
-        cardinal.enable = true;
-        distrho.enable = true;
+        workspaces = {
+          "HDMI-A-1" = [1 2 3 4 5 6 7 8 9];
+          "HDMI-A-2" = [10];
+        };
       };
+
+      # audio = {
+      #   enable = false;
+
+      #   carla.enable = false;
+      #   bitwig.enable = true; # TODO: Check what happens when upgrade plan ends, do I need to pin the version then?
+      #   tenacity.enable = true;
+
+      #   faust.enable = true;
+      #   bottles.enable = false;
+      #   yabridge.enable = true;
+      #   yabridge.autoSync = true;
+
+      #   noisesuppression = {
+      #     noisetorch.enable = false;
+      #     noisetorch.autostart = false;
+      #     easyeffects.enable = false;
+      #     easyeffects.autostart = false;
+      #   };
+
+      #   cardinal.enable = true;
+      #   distrho.enable = true;
+      # };
 
       gaming = {
         enable = true;
