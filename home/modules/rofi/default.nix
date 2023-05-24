@@ -1,3 +1,5 @@
+# TODO: Need some kind of menu generator API that is integrated with hyprland hotkeys
+#       VPN and Container modules should use this rofi module to enable their menus then
 {
   config,
   nixosConfig,
