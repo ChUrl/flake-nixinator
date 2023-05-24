@@ -21,8 +21,11 @@ rec {
         enable = true;
         theme = "Three-Bears";
 
-        kb-layout = "de";
-        kb-variant = "nodeadkeys";
+        # kb-layout = "de";
+        # kb-variant = "nodeadkeys";
+
+        kb-layout = "us";
+        kb-variant = "altgr-intl";
         
         monitors = ''
           # See https://wiki.hyprland.org/Configuring/Monitors/
