@@ -23,7 +23,7 @@ rec {
 
         kb-layout = "us";
         kb-variant = "altgr-intl";
-        
+
         monitors = ''
           # See https://wiki.hyprland.org/Configuring/Monitors/
           monitor = HDMI-A-1, 2560x1440@144, 1920x0, 1

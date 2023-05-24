@@ -5,23 +5,19 @@
   fetchurl,
   fetchFromGitHub,
   gsettings-desktop-schemas,
-  gtk3
+  gtk3,
 }:
-
 # TODO: This doesn't run. Why does it work like this (APPIMAGE_DEBUG_EXEC=bash appimage-run WiiUDownloader-Linux-x86_64.AppImage) though?
 # pkgs.appimageTools.wrapType2 rec {
 #   name = "WiiUDownloader";
 #   version = "v1.32";
-
 #   src = fetchurl {
 #     url = "https://github.com/Xpl0itU/WiiUDownloader/releases/download/${version}/WiiUDownloader-Linux-x86_64.AppImage";
 #     sha256 = "sha256-YWLQd/Wmz5BDyc+oe6JQkT849DaPc5HtJXIDZKUdHNE=";
 #   };
-
 #   profile = ''
 #     export XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS
 #   '';
-
 #   # extraPkgs = pkgs: with pkgs; [
 #   # ];
 # }
@@ -83,6 +79,7 @@ let
       runHook postInstall
     '';
   };
-in pkgs.writeShellScriptBin "wiiu-downloader-wrapped" ''
-  XDG_DATA_DIRS="${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS" ${wiiu-downloader}/bin/WiiUDownloader
-''
+in
+  pkgs.writeShellScriptBin "wiiu-downloader-wrapped" ''
+    XDG_DATA_DIRS="${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS" ${wiiu-downloader}/bin/WiiUDownloader
+  ''
