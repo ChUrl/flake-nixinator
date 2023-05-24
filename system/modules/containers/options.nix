@@ -1,3 +1,7 @@
+# TODO: Rofi Integration
+#       - Hotkey through hyprland module
+#       - Menu through rofi module
+#       - Permissions through polkit module
 {
   lib,
   mylib,
@@ -29,8 +33,6 @@ with mylib.modules; {
     enable = mkEnableOpt "Enable SabNzbd Container";
   };
 
-  # TODO: I need to set the keys through the hyprland module
-  #       and generate the menu through the rofi module
   rofiIntegration = {
     enable = mkEnableOpt "Enable Rofi Menu for Container Servicing";
     hotkey = mkOption {
