@@ -16,7 +16,7 @@ with mylib.modules; {
   };
 
   networks = mkOption {
-    type = types.attrSet;
+    type = types.attrs;
     default = {};
     description = "Systemd-Networkd Networks";
     example = ''
@@ -29,7 +29,7 @@ with mylib.modules; {
   };
 
   wireguard-tunnels = mkOption {
-    type = types.attrSet;
+    type = types.attrs;
     default = {};
     description = "Wireguard VPN Tunnels";
     example = ''
@@ -40,7 +40,7 @@ with mylib.modules; {
   };
 
   allowedTCPPorts = mkOption {
-    type = types.list;
+    type = types.listOf types.int;
     default = [];
     description = "Open TCP Ports in the Firewall";
     example = ''
@@ -49,7 +49,7 @@ with mylib.modules; {
   };
 
   allowedUDPPorts = mkOption {
-    type = types.list;
+    type = types.listOf types.int;
     default = [];
     description = "Open UDP Ports in the Firewall";
     example = ''
