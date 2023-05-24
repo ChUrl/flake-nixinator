@@ -9,9 +9,11 @@
   config,
   pkgs,
   ...
-}: {
+}: 
+with mylib.networking; {
   imports = [
     # Import the host-specific system config
+    ../modules
     ./${hostname}
 
     ./cachix.nix
@@ -93,6 +95,7 @@
       });
     '';
 
+    # TODO: Replace with polkit
     sudo.enable = true;
     sudo.extraRules = [
       {
@@ -139,168 +142,41 @@
   # https://github.com/NixOS/nixpkgs/issues/179486
   i18n.supportedLocales = ["en_US.UTF-8/UTF-8" "de_DE.UTF-8/UTF-8"];
 
-  # TODO: Networking system module
-  # NOTE: The systemd networking options are not very flexible, so this will be a problem for the laptop. (=> Use IWD for WiFi)
-  systemd.services = let
-    nsup = name: ''
-      ${pkgs.iproute}/bin/ip netns add ${name} # Create the Namespace
-      ${pkgs.iproute}/bin/ip -n ${name} link set lo up # Enable the Loopback device
-    '';
+  systemd-networkd = {
+    enable = true;
+    hostname = hostname;
 
-    nsdown = name: ''
-      ${pkgs.iproute}/bin/ip netns del ${name} # Delete the Namespace
-    '';
-
-    # TODO: IPv6 Configuration
-    # NOTE: The interface and netns have the same name, so it's a bit confusing
-    wgup = name: privatekey: publickey: endpoint: ''
-      ${pkgs.iproute}/bin/ip link add ${name} type wireguard
-      ${pkgs.iproute}/bin/ip link set ${name} netns ${name}
-      ${pkgs.iproute}/bin/ip netns exec ${name} ${pkgs.wireguard-tools}/bin/wg set ${name} \
-        private-key /home/christoph/.secrets/wireguard/${privatekey} \
-        peer ${publickey} \
-        allowed-ips 0.0.0.0/0 \
-        endpoint ${endpoint}:51820
-      ${pkgs.iproute}/bin/ip -n ${name} addr add 10.2.0.2/32 dev ${name}
-      ${pkgs.iproute}/bin/ip -n ${name} link set ${name} up
-      ${pkgs.iproute}/bin/ip -n ${name} route add default dev ${name}
-    '';
-
-    wgdown = name: ''
-      ${pkgs.iproute}/bin/ip -n ${name} link del ${name}
-    '';
-  in {
-    # See https://reflexivereflection.com/posts/2018-12-18-wireguard-vpn-with-network-namespace-on-nixos.html
-    # See https://try.popho.be/vpn-netns.html#automatic-with-a-systemd.service5
-    # This namespace contains the WireGuard virtual network device, because this should be the only interface available for apps that should run through VPN
-    # netns-vpn = {
-    #   description = "Network namespace for ProtonVPN using Wireguard";
-    #   wantedBy = ["default.target"];
-    #   before = ["display-manager.service" "network.target"];
-    #   serviceConfig = {
-    #     Type = "oneshot";
-    #     RemainAfterExit = true;
-
-    #     ExecStart = pkgs.writeScript "create-vpn-netns" ''
-    #       #! ${pkgs.bash}/bin/bash
-    #       ${pkgs.iproute}/bin/ip netns add vpn # Create the Namespace
-    #       ${pkgs.iproute}/bin/ip -n vpn link set lo up # Enable the Loopback device
-    #     '';
-
-    #     ExecStop = "${pkgs.iproute}/bin/ip netns del vpn";
-    #   };
-    # };
-
-    # TODO: I want an attrset like this:
-    # {
-    #   wg0-DE-115 = {
-    #     name = "wg0-de-115";
-    #     privatekey = "proton-de-115.key";
-    #     publickey = "9+Corl...";
-    #     endpoint = "194.126.177.14";
-    #   };
-
-    #   wg0-LU-16 = {
-    #     ...
-    #   };
-    # }
-    # And a function that turns this into vpn configurations like below:
-    wg0-de-115 = {
-      description = "Wireguard ProtonVPN Server de-115";
-      # requires = ["netns-vpn.service"];
-      # after = ["netns-vpn.service"];
-      serviceConfig = {
-        Type = "oneshot";
-        RemainAfterExit = true;
-        ExecStart = pkgs.writeScript "wg0-de-115-up" ''
-          #! ${pkgs.bash}/bin/bash
-          ${nsup "wg0-de-115"}
-          ${wgup "wg0-de-115" "proton-de-115.key" "9+CorlxrTsQR7qjIOVKsEkk8Z7UUS5WT3R1ccF7a0ic=" "194.126.177.14"}
-        '';
-        ExecStop = pkgs.writeScript "wg0-de-115-down" ''
-          #! ${pkgs.bash}/bin/bash
-          ${wgdown "wg0-de-115"}
-          ${nsdown "wg0-de-115"}
-        '';
-      };
+    networks = {
+      # Default wildcard ethernet network for all hosts
+      "50-ether" = mkSystemdNetwork "enp*";
     };
 
-    wg0-lu-16 = {
-      description = "Wireguard ProtonVPN Server lu-16";
-      # requires = ["netns-vpn.service"];
-      # after = ["netns-vpn.service"];
-      serviceConfig = {
-        Type = "oneshot";
-        RemainAfterExit = true;
-        ExecStart = pkgs.writeScript "wg0-lu-16-up" ''
-          #! ${pkgs.bash}/bin/bash
-          ${nsup "wg0-lu-16"}
-          ${wgup "wg0-lu-16" "proton-lu-16.key" "asu9KtQoZ3iKwELsDTgjPEiFNcD1XtgGgy3O4CZFg2w=" "92.223.89.133"}
-        '';
-        ExecStop = pkgs.writeScript "wg0-lu-16-down" ''
-          #! ${pkgs.bash}/bin/bash
-          ${wgdown "wg0-lu-16"}
-          ${nsdown "wg0-lu-16"}
-        '';
-      };
-    };
-  };
-  services.resolved.enable = true;
-  services.resolved.llmnr = "false";
+    wireguard-tunnels = {
+      wg0-de-115 = (mkWireguardService
+        "wg0-de-115"
+        "proton-de-115.key"
+        "9+CorlxrTsQR7qjIOVKsEkk8Z7UUS5WT3R1ccF7a0ic="
+        "194.126.177.14"
+      );
 
-  # Open ports in the firewall.
-  networking = {
-    # Gets inherited from flake in nixos mylib
-    hostName = hostname; # Define your hostname.
-
-    # Configure network proxy if necessary
-    # proxy.default = "http://user:password@proxy:port/";
-    # proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
-    enableIPv6 = true;
-    networkmanager.enable = false;
-    useDHCP = false; # Default: true, don't use with networkd
-    dhcpcd.enable = false; # Don't use with networkd
-    useNetworkd = false; # Only use this if the configuration can't be written in systemd.network completely. It translates some of the networking... options to systemd
-    # resolvconf.enable = true;
-
-    # TODO
-    wireless = {
-      enable = false; # Enables wireless support via wpa_supplicant.
-      iwd.enable = false; # Use iwd instead of NetworkManager
+      wg0-lu-16 = (mkWireguardService
+        "wg0-lu-16"
+        "proton-lu-16.key"
+        "asu9KtQoZ3iKwELsDTgjPEiFNcD1XtgGgy3O4CZFg2w="
+        "92.223.89.133"
+      );
     };
 
-    firewall = {
-      enable = true;
-      # networking.firewall.checkReversePath = "loose";
-
-      trustedInterfaces = [
-        "podman0"
-        "docker0"
-      ];
-
-      allowedTCPPorts = [
-        22 # SSH
-        80 # HTTP
-        443 # HTTPS
-
-        # Containers
-        # 5800 # Picard
-        # 8096 # Jellyfin
-        # 8097 # Emby
-        # 8123 # Home-Assistant
-        # 8989 # Sonarr
-        # 32400 # Plex
-      ];
-      allowedTCPPortRanges = [];
-
-      allowedUDPPorts = [
-        9918 # Wireguard
-        18000 # Anno 1800
-        24727 # AusweisApp2, alternative: programs.ausweisapp.openFirewall
-      ];
-      allowedUDPPortRanges = [];
-    };
+    allowedTCPPorts = [
+      22 # SSH
+      80 # HTTP
+      443 # HTTPS
+    ];
+    allowedUDPPorts = [
+      9918 # Wireguard
+      18000 # Anno 1800
+      24727 # AusweisApp2
+    ];
   };
 
   # Enable the X11 windowing system.
@@ -592,9 +468,8 @@
     oci-containers.backend = "podman"; # "docker" or "podman"
     libvirtd.enable = true;
 
-    # NOTE: Pretty unusable as NVidia hardware acceleration is not supported...
     # Follow steps from https://nixos.wiki/wiki/WayDroid
-    # waydroid. enable = true;
+    # waydroid.enable = true;
     # lxd.enable = true;
   };
 
