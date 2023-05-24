@@ -1,3 +1,4 @@
+# TODO: Generate file with VPN names for rofi
 # TODO: Need to set permissions through polkit module
 # TODO: Setup Wireless (IWD/Networkd?)
 {
@@ -27,6 +28,11 @@ in {
 
     # Wireguard VPNs
     systemd.services = cfg.wireguard-tunnels;
+    environment.etc."rofi-vpns".text = let
+      names-list = attrNames cfg.wireguard-tunnels;
+      names = concatStringsSep "\n" names-list;
+    in
+      names;
 
     # General Networking Settings
     networking = {
