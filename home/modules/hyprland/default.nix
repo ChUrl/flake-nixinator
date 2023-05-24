@@ -177,21 +177,5 @@ in {
         enable = true;
       };
     };
-
-    programs = {
-      rofi = {
-        enable = true;
-        package = pkgs.rofi-wayland;
-        plugins = [
-          pkgs.keepmenu # TODO: Rofi KeepassXC frontend
-        ];
-
-        # NOTE: Don't use this, use the configfile for hot-reload
-        # terminal = "${pkgs.kitty}/bin/kitty";
-        # font = "JetBrains Mono 14";
-        # theme =
-        # extraConfig = '''';
-      };
-    };
   };
 }
