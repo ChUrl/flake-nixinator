@@ -1,5 +1,7 @@
 # NixOS Configuration
 
+This is my modular NixOS configuration, using Hyprland for a lightweight desktop.
+
 To install remove everything from ``/etc/nixos`` and symlink the ``flake.nix`` to ``/etc/nixos/flake.nix``.
 
 ## NixFlake/system
@@ -38,4 +40,3 @@ It is then imported by the toplevel ``NixFlake/flake.nix``, to make everything a
 ## NixFlake/docs
 
 This folder contains automatically generated static documentation sites for my Home-Manager modules.
-

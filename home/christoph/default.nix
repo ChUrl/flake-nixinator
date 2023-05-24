@@ -32,6 +32,8 @@ rec {
   ];
 
   modules = {
+    chromium.enable = true;
+
     # Config my modules
     emacs = {
       enable = false;
@@ -82,7 +84,8 @@ rec {
       jabref.enable = false;
     };
 
-    # TODO: More options, like font?
+    helix.enable = true;
+
     kitty.enable = true;
 
     misc = {
@@ -90,12 +93,12 @@ rec {
 
       keepass = {
         enable = true;
-        autostart = false;
+        autostart = false; # TODO: This option should use hyprland module
       };
 
       protonmail = {
         enable = true;
-        autostart = false;
+        autostart = false; # TODO: This option should use hyprland module
       };
     };
 
@@ -106,18 +109,17 @@ rec {
 
     nextcloud = {
       enable = true;
-      autostart = false;
+      autostart = false; # TODO: This option should use hyprland module
     };
 
-    nzbget = {
-      enable = true;
-      mainDir = "~/Videos/NzbGet";
-    };
+    nnn.enable = true;
 
     ranger = {
       enable = false;
       preview = true;
     };
+
+    vscode.enable = true;
   };
 
   manual.manpages.enable = true;
@@ -134,7 +136,7 @@ rec {
 
   # Make fonts installed through user packages available to applications
   # NOTE: I don't think I need this anymore as all fonts are installed through the system config but let's keep this just in case
-  fonts.fontconfig.enable = false; # Also updates the font-cache
+  fonts.fontconfig.enable = true; # Also updates the font-cache
 
   # Generate a list of installed user packages in ~/.local/share/current-user-packages
   home.file.".local/share/current-user-packages".text = let
@@ -148,9 +150,6 @@ rec {
     recursive = true;
     source = ../../config/mpv;
   };
-
-  # TODO: Hyprland Module
-  # TODO: Move Hyprland config to NixFlake/config/hyprland and link from here
 
   # TODO: Latex module
   home.file."texmf/tex/latex/custom/christex.sty".source = ../../config/latex/christex.sty;
@@ -409,29 +408,10 @@ rec {
 
     btop.enable = true;
 
-    chromium = {
-      enable = true;
-
-      # TODO: Extensions for ungoogled, see https://discourse.nixos.org/t/home-manager-ungoogled-chromium-with-extensions/15214
-      # package = pkgs.ungoogled-chromium;
-
-      extensions = [
-        {id = "cjpalhdlnbpafiamejdnhcphjbkeiagm";} # UBlock Origin
-        {id = "oboonakemofpalcgghocfoadofidjkkk";} # KeepassXC Browser
-        {id = "pkehgijcmpdhfbdbbnkijodmdjhbjlgp";} # Privacy Badger
-        {id = "lckanjgmijmafbedllaakclkaicjfmnk";} # ClearURLs
-        {id = "njdfdhgcmkocbgbhcioffdbicglldapd";} # LocalCDN
-        {id = "jaoafjdoijdconemdmodhbfpianehlon";} # Skip Redirect
-      ];
-    };
-
     direnv = {
       enable = true;
       nix-direnv.enable = true;
     };
-
-    # TODO: Configure this
-    # editorconfig.enable = true;
 
     exa.enable = true;
 
@@ -449,7 +429,6 @@ rec {
       userName = "ChUrl";
     };
 
-    # Modal texteditor
     helix = {
       enable = true;
 
@@ -488,13 +467,7 @@ rec {
           indent-guides.render = false;
         };
       };
-    };
-
-    # kakoune = {
-    #   enable = true;
-    # };
-
-    # NOTE: If error occurs after system update on fish init run "ssh-add"
+    }; # NOTE: If error occurs after system update on fish init run "ssh-add"
     keychain = {
       enable = true;
       enableFishIntegration = config.modules.fish.enable;
@@ -532,54 +505,6 @@ rec {
       enableFishIntegration = config.modules.fish.enable;
     };
 
-    nnn = {
-      package = pkgs.nnn.override {
-        # These two are mutually exclusive
-        withIcons = false;
-        withNerdIcons = true;
-      };
-      enable = true;
-
-      extraPackages = with pkgs; [
-        xdragon # Drag and drop (why man)
-      ];
-
-      bookmarks = {
-        c = "~/.config";
-        d = "~/Documents";
-        D = "~/Downloads";
-        n = "~/Notes";
-        t = "~/Notes/TU";
-        h = "~/Notes/HHU";
-        N = "~/NixFlake";
-        p = "~/Pictures";
-        v = "~/Videos";
-      };
-
-      plugins = {
-        mappings = {
-          c = "fzcd";
-          d = "dragdrop";
-          f = "finder";
-          j = "autojump";
-          k = "kdeconnect";
-          p = "preview-tui";
-          # s = "suedit";
-          # s = "x2sel";
-          v = "imgview";
-        };
-
-        src =
-          (pkgs.fetchFromGitHub {
-            owner = "jarun";
-            repo = "nnn";
-            rev = "aaf60b93d741ffff211902a10a159434629bbdb9";
-            sha256 = "sha256-MwI3PqPfSyblURUAds4aVsw8WFBAgbDo5hqXMmRbAW4=";
-          })
-          + "/plugins";
-      };
-    };
-
     nushell = {
       enable = false;
     };
@@ -602,128 +527,6 @@ rec {
     starship = {
       enable = true;
       enableFishIntegration = config.modules.fish.enable;
-    };
-
-    # TODO: Module
-    vscode = {
-      enable = true;
-      enableExtensionUpdateCheck = false;
-      enableUpdateCheck = false;
-      extensions = with pkgs.vscode-extensions; [
-        alefragnani.bookmarks
-        # alefragnani.project-manager # Not much sense with flake dev environments
-        # bradlc.vscode-tailwindcss
-        christian-kohler.path-intellisense
-        codezombiech.gitignore
-        coolbear.systemd-unit-file
-        eamodio.gitlens
-        # formulahendry.auto-rename-tag
-        # formulahendry.auto-close-tag
-        # gitlab.gitlab-workflow
-        # irongeek.vscode-env
-        jnoortheen.nix-ide
-        kamadorueda.alejandra
-        # kamikillerto.vscode-colorize
-        llvm-vs-code-extensions.vscode-clangd
-        matklad.rust-analyzer
-        mechatroner.rainbow-csv
-        # mikestead.dotenv
-        # mkhl.direnv
-        ms-azuretools.vscode-docker
-        ms-kubernetes-tools.vscode-kubernetes-tools
-        ms-python.python # TODO: Reenable, was disabled bc build failure
-        ms-toolsai.jupyter
-        ms-vscode.cmake-tools
-        ms-vscode.cpptools
-        ms-vscode.hexeditor
-        ms-vscode.makefile-tools
-        # naumovs.color-highlight
-        njpwerner.autodocstring
-        james-yu.latex-workshop
-        redhat.java
-        redhat.vscode-xml
-        redhat.vscode-yaml
-        rubymaniac.vscode-paste-and-indent
-        ryu1kn.partial-diff
-        serayuzgur.crates
-        shd101wyy.markdown-preview-enhanced
-        skyapps.fish-vscode
-        tamasfe.even-better-toml
-        timonwong.shellcheck
-        # tomoki1207.pdf # Incompatible with latex workshop
-        valentjn.vscode-ltex
-        vscodevim.vim
-        vscode-icons-team.vscode-icons
-        yzhang.markdown-all-in-one
-      ];
-      # haskell = {};
-      # keybindings = {};
-
-      userSettings = {
-        # VSCode Internals
-        "editor.fontFamily" = "JetBrainsMono Nerd Font Mono";
-        "editor.fontSize" = 14;
-        "editor.renderWhitespace" = "selection";
-        "editor.cursorStyle" = "line"; # Use line for vim plugin
-        "editor.lineNumbers" = "relative";
-        "editor.linkedEditing" = true;
-        "editor.smoothScrolling" = true;
-        "editor.stickyScroll.enabled" = true;
-        "editor.tabCompletion" = "on";
-        "editor.cursorSmoothCaretAnimation" = "on";
-        "editor.cursorSurroundingLines" = 10;
-        "editor.minimap.renderCharacters" = false;
-        "editor.bracketPairColorization.enabled" = true;
-        "editor.guides.bracketPairs" = "active";
-        "editor.guides.bracketPairsHorizontal" = "active";
-        "editor.guides.highlightActiveIndentation" = false;
-
-        "files.autoSave" = "onFocusChange";
-        "files.trimFinalNewlines" = true;
-        "files.trimTrailingWhitespace" = true; # NOTE: If this is enabled with frequent autosave, the current lines whitespace will always be removed, which is obnoxious
-
-        "workbench.enableExperiments" = false;
-        "workbench.list.smoothScrolling" = true;
-        "workbench.colorTheme" = "Default Light Modern";
-        "workbench.iconTheme" = "vscode-icons";
-
-        "security.workspace.trust.enabled" = false;
-
-        # Language Tool
-        "ltex.checkFrequency" = "manual";
-
-        # LaTeX
-        "latex-workshop.latex.tools" = [
-          {
-            "name" = "latexmk";
-            "command" = "latexmk";
-            "args" = [
-              "-synctex=1"
-              "-shell-escape"
-              "-interaction=nonstopmode"
-              "-file-line-error"
-              "-pdf"
-              "-outdir=%OUTDIR%"
-              "%DOC%"
-            ];
-            "env" = {};
-          }
-        ];
-        "latex-workshop.latexindent.args" = [
-          "-c"
-          "%DIR%/"
-          "%TMPFILE%"
-          "-m"
-          "-y=defaultIndent: '%INDENT%'"
-        ];
-
-        # Nix
-        "[nix]"."editor.tabSize" = 2;
-        "nix.enableLanguageServer" = true;
-        "nix.serverPath" = "nil";
-        "nix.formatterPath" = "alejandra";
-      };
-      # TODO: Snippets
     };
 
     # TODO: Check HM module options

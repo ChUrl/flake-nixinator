@@ -1,3 +1,4 @@
+# TODO: Expose some settings
 {
   config,
   nixosConfig,
