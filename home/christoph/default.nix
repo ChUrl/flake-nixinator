@@ -479,19 +479,20 @@ rec {
     helix = {
       enable = true;
 
-      languages = [
-        {
-          name = "verilog";
-          roots = [
-            ".svls.toml"
-            ".svlint.toml"
-          ];
-          language-server = {
-            command = "svls";
-            args = [];
-          };
-        }
-      ];
+      # NOTE: Syntax changed
+      # languages = [
+      #   {
+      #     name = "verilog";
+      #     roots = [
+      #       ".svls.toml"
+      #       ".svlint.toml"
+      #     ];
+      #     language-server = {
+      #       command = "svls";
+      #       args = [];
+      #     };
+      #   }
+      # ];
 
       # https://docs.helix-editor.com/configuration.html
       settings = {
@@ -636,11 +637,10 @@ rec {
       enableUpdateCheck = false;
       extensions = with pkgs.vscode-extensions; [
         alefragnani.bookmarks
-        alefragnani.project-manager
+        # alefragnani.project-manager # Not much sense with flake dev environments
         bradlc.vscode-tailwindcss
         christian-kohler.path-intellisense
         codezombiech.gitignore
-        # coenraads.bracket-pair-colorizer-2 # Not maintained
         coolbear.systemd-unit-file
         eamodio.gitlens
         formulahendry.auto-rename-tag
