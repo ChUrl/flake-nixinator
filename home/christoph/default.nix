@@ -182,15 +182,6 @@ rec {
   manual.manpages.enable = true;
   manual.html.enable = true;
 
-  # TODO: Gnome terminal config
-  # TODO: Store the external binaries for my derivations in GitHub LFS (Vital, NeuralDSP, other plugins etc.)
-  # TODO: Derivations for bottles like UPlay, NeuralDSP, LoL (don't know what is possible with bottles-cli though)
-  # TODO: When bottles derivations are there remove the bottles option from audio/gaming module and assert that bottles is enabled in flatpak module
-
-  # TODO: Remove Plasma, only use Hyprland
-  # TODO: I need to pack all Plasma/Hyprland/Gnome related stuff into their respective modules
-  # TODO: Then it should only be possible to activate one Desktop at a time
-
   # Make fonts installed through user packages available to applications
   # NOTE: I don't think I need this anymore as all fonts are installed through the system config but let's keep this just in case
   fonts.fontconfig.enable = true; # Also updates the font-cache
@@ -233,19 +224,6 @@ rec {
     associations.added = nixosConfig.xdg.mime.addedAssociations;
     associations.removed = nixosConfig.xdg.mime.removedAssociations;
     defaultApplications = nixosConfig.xdg.mime.defaultApplications;
-  };
-
-  # TODO: NNN module
-  xdg.desktopEntries.nnn = {
-    type = "Application";
-    name = "nnn";
-    comment = "Terminal file manager";
-    exec = "nnn";
-    terminal = true;
-    icon = "nnn";
-    mimeType = ["inode/directory"];
-    categories = ["System" "FileTools" "FileManager" "ConsoleOnly"];
-    # keywords = ["File" "Manager" "Management" "Explorer" "Launcher"];
   };
 
   home = {

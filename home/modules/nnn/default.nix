@@ -61,5 +61,17 @@ in {
           + "/plugins";
       };
     };
+
+    xdg.desktopEntries.nnn = {
+      type = "Application";
+      name = "nnn";
+      comment = "Terminal file manager";
+      exec = "nnn";
+      terminal = true;
+      icon = "nnn";
+      mimeType = ["inode/directory"];
+      categories = ["System" "FileTools" "FileManager" "ConsoleOnly"];
+      # keywords = ["File" "Manager" "Management" "Explorer" "Launcher"];
+    };
   };
 }
