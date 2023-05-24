@@ -9,5 +9,6 @@
 }: {
   imports = [
     ./systemd-networkd
+    ./containers
   ];
 }

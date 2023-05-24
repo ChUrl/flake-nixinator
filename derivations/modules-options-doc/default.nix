@@ -82,6 +82,10 @@ in
       python310Packages.pygments
     ];
 
+    # TODO: Use a file, this is stupid
+    # TODO: Fix the navigation sections
+    # TODO: Customize features
+    # TODO: Remove or fix ToC
     # symlink our generated docs into the correct folder before generating
     buildPhase = ''
       # configure mkdocs
@@ -89,8 +93,13 @@ in
       echo "use_directory_urls: false" >> ./mkdocs.yml
       echo "theme:" >> ./mkdocs.yml
       echo "  name: material" >> ./mkdocs.yml
+      echo "  features:" >> ./mkdocs.yml
+      echo "    - navigation.sections" >> ./mkdocs.yml
       echo "nav:" >> ./mkdocs.yml
-      echo -e "  - ${builtins.concatStringsSep ".md\n  - " modules}.md" >> ./mkdocs.yml
+      echo "  - System:"
+      echo -e "      - ${builtins.concatStringsSep ".md\n      - " system-modules}.md" >> ./mkdocs.yml
+      echo "  - Home:"
+      echo -e "      - ${builtins.concatStringsSep ".md\n      - " home-modules}.md" >> ./mkdocs.yml
 
       # mkdir ./docs
       ln -s ${docs} "./docs"
