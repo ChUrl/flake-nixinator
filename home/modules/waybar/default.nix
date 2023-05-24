@@ -11,7 +11,6 @@
 with lib;
 with mylib.modules; let
   cfg = config.modules.waybar;
-  hypr = config.modules.hyprland;
 in {
   options.modules.waybar = import ./options.nix {inherit lib mylib;};
 
@@ -61,13 +60,19 @@ in {
           trap "${pkgs.procps}/bin/pkill waybar" EXIT
 
           while true; do
-              ${waybar-hyprland}/bin/waybar -c $HOME/NixFlake/config/waybar/config -s $HOME/NixFlake/config/waybar/style.css &
-              ${pkgs.inotifyTools}/bin/inotifywait -e create,modify $HOME/NixFlake/config/waybar/config $HOME/NixFlake/config/waybar/style.css
+              ${waybar-hyprland}/bin/waybar -c $HOME/NixFlake/config/waybar/config.json -s $HOME/NixFlake/config/waybar/style.css &
+              ${pkgs.inotifyTools}/bin/inotifywait -e create,modify $HOME/NixFlake/config/waybar/config.json $HOME/NixFlake/config/waybar/style.css
               ${pkgs.procps}/bin/pkill waybar
           done
         '';
       in [
         "${waybar-reload}"
       ];
+
+      home.file.".config/waybar/monitor.json".text = ''
+        {
+          "output": "${cfg.monitor}"
+        }
+      '';
     };
 }
