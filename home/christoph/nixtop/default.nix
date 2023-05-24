@@ -18,30 +18,25 @@ rec {
   config = {
     modules = {
       hyprland = {
-        enable = true;
-        theme = "Three-Bears";
-
         # kb-layout = "de";
         # kb-variant = "nodeadkeys";
-
         kb-layout = "us";
         kb-variant = "altgr-intl";
 
-        monitors = ''
-          # See https://wiki.hyprland.org/Configuring/Monitors/
-          monitor = eDP-1, 1920x1080@60, 0x0, 1
+        monitors = {
+          "eDP-1" = {
+            width = 1920;
+            height = 1080;
+            rate = 60;
+            x = 0;
+            y = 0;
+            scale = 1;
+          };
+        };
 
-          # I have the first 9 workspaces on the main monitor, the last one on the secondary monitor
-          workspace = 1, monitor:eDP-1
-          workspace = 2, monitor:eDP-1
-          workspace = 3, monitor:eDP-1
-          workspace = 4, monitor:eDP-1
-          workspace = 5, monitor:eDP-1
-          workspace = 6, monitor:eDP-1
-          workspace = 7, monitor:eDP-1
-          workspace = 8, monitor:eDP-1
-          workspace = 9, monitor:eDP-1
-        '';
+        workspaces = {
+          "eDP-1" = [1 2 3 4 5 6 7 8 9];
+        };
       };
     };
 
