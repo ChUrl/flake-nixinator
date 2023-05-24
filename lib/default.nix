@@ -6,4 +6,5 @@
 }: {
   nixos = import ./nixos.nix {inherit inputs pkgs lib;};
   modules = import ./modules.nix {inherit inputs pkgs lib;};
+  networking = import ./networking.nix {inherit inputs pkgs lib;};
 }
