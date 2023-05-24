@@ -9,20 +9,21 @@
 }: {
   imports = [
     ./audio
+    ./chromium
     ./emacs
     ./email
     ./firefox
     ./fish
     ./flatpak
     ./gaming
-    ./gnome
+    ./helix
     ./hyprland
     ./kitty
     ./misc
     ./neovim
     ./nextcloud
-    ./nzbget
-    ./plasma
+    ./nnn
     ./ranger
+    ./vscode
   ];
 }
