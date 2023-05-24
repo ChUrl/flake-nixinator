@@ -88,6 +88,8 @@ rec {
           protonup = true;
         };
       };
+
+      waybar.monitor = "HDMI-A-1";
     };
 
     home.packages = with pkgs; [

@@ -1,8 +1,11 @@
 [
   {
+    "include": [
+      "~/.config/waybar/monitor.json"
+    ],
+
     "layer": "top",
     "position": "top",
-    "output": "HDMI-A-1",
     "height": 40,
     "spacing": 4,
 
@@ -77,6 +80,6 @@
       "icon-size": 20,
       "show-passive-items": true,
       "spacing": 5
-    },
+    }
   }
 ]
