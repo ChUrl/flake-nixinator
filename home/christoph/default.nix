@@ -82,28 +82,6 @@ rec {
       jabref.enable = false;
     };
 
-    gnome = {
-      enable = false;
-      extensions = true;
-
-      theme = {
-        papirusIcons = true;
-        numixCursor = true;
-      };
-
-      settings = {
-      };
-    };
-
-    # TODO:
-    # plasma = {
-    #   enable = false;
-    # };
-
-    # hyprland = {
-    #   enable = true;
-    # };
-
     # TODO: More options, like font?
     kitty.enable = true;
 
@@ -134,10 +112,6 @@ rec {
     nzbget = {
       enable = true;
       mainDir = "~/Videos/NzbGet";
-    };
-
-    plasma = {
-      enable = false;
     };
 
     ranger = {
@@ -638,23 +612,23 @@ rec {
       extensions = with pkgs.vscode-extensions; [
         alefragnani.bookmarks
         # alefragnani.project-manager # Not much sense with flake dev environments
-        bradlc.vscode-tailwindcss
+        # bradlc.vscode-tailwindcss
         christian-kohler.path-intellisense
         codezombiech.gitignore
         coolbear.systemd-unit-file
         eamodio.gitlens
-        formulahendry.auto-rename-tag
-        formulahendry.auto-close-tag
-        gitlab.gitlab-workflow
-        irongeek.vscode-env
+        # formulahendry.auto-rename-tag
+        # formulahendry.auto-close-tag
+        # gitlab.gitlab-workflow
+        # irongeek.vscode-env
         jnoortheen.nix-ide
         kamadorueda.alejandra
-        kamikillerto.vscode-colorize
+        # kamikillerto.vscode-colorize
         llvm-vs-code-extensions.vscode-clangd
         matklad.rust-analyzer
         mechatroner.rainbow-csv
-        mikestead.dotenv
-        mkhl.direnv
+        # mikestead.dotenv
+        # mkhl.direnv
         ms-azuretools.vscode-docker
         ms-kubernetes-tools.vscode-kubernetes-tools
         ms-python.python # TODO: Reenable, was disabled bc build failure
@@ -663,9 +637,8 @@ rec {
         ms-vscode.cpptools
         ms-vscode.hexeditor
         ms-vscode.makefile-tools
-        naumovs.color-highlight
+        # naumovs.color-highlight
         njpwerner.autodocstring
-        # oderwat.indent-rainbow # Looks ugly
         james-yu.latex-workshop
         redhat.java
         redhat.vscode-xml
@@ -685,12 +658,13 @@ rec {
       ];
       # haskell = {};
       # keybindings = {};
+
       userSettings = {
-        "files.autoSave" = "onFocusChange";
-        "editor.fontSize" = 14;
+        # VSCode Internals
         "editor.fontFamily" = "JetBrainsMono Nerd Font Mono";
+        "editor.fontSize" = 14;
         "editor.renderWhitespace" = "selection";
-        "editor.cursorStyle" = "line";
+        "editor.cursorStyle" = "line"; # Use line for vim plugin
         "editor.lineNumbers" = "relative";
         "editor.linkedEditing" = true;
         "editor.smoothScrolling" = true;
@@ -699,33 +673,26 @@ rec {
         "editor.cursorSmoothCaretAnimation" = "on";
         "editor.cursorSurroundingLines" = 10;
         "editor.minimap.renderCharacters" = false;
-        "files.trimFinalNewlines" = true;
-        "files.trimTrailingWhitespace" = true; # NOTE: If this is enabled with frequent autosave, the current lines whitespace will always be removed, which is obnoxious
-        "workbench.enableExperiments" = false;
-        "workbench.list.smoothScrolling" = true;
-        "workbench.colorTheme" = "Default Light Modern";
-        "workbench.iconTheme" = "vscode-icons";
-        "security.workspace.trust.enabled" = false;
         "editor.bracketPairColorization.enabled" = true;
         "editor.guides.bracketPairs" = "active";
         "editor.guides.bracketPairsHorizontal" = "active";
         "editor.guides.highlightActiveIndentation" = false;
+
+        "files.autoSave" = "onFocusChange";
+        "files.trimFinalNewlines" = true;
+        "files.trimTrailingWhitespace" = true; # NOTE: If this is enabled with frequent autosave, the current lines whitespace will always be removed, which is obnoxious
+
+        "workbench.enableExperiments" = false;
+        "workbench.list.smoothScrolling" = true;
+        "workbench.colorTheme" = "Default Light Modern";
+        "workbench.iconTheme" = "vscode-icons";
+
+        "security.workspace.trust.enabled" = false;
+
+        # Language Tool
         "ltex.checkFrequency" = "manual";
-        # Looks ugly
-        # "workbench.colorCustomizations" = {
-        #   # Bracket colors
-        #   "editorBracketHighlight.foreground1" = "#FFD700";
-        #   "editorBracketHighlight.foreground2" = "#DA70D6";
-        #   "editorBracketHighlight.foreground3" = "#179fff";
-        #   # Inactive guide colors
-        #   "editorBracketPairGuide.background1" = "#ffd90080";
-        #   "editorBracketPairGuide.background2" = "#CC66CC80";
-        #   "editorBracketPairGuide.background3" = "#87CEFA80";
-        #   # Active guide colors
-        #   "editorBracketPairGuide.activeBackground1" = "#ffd90080";
-        #   "editorBracketPairGuide.activeBackground2" = "#CC66CC80";
-        #   "editorBracketPairGuide.activeBackground3" = "#87CEFA80";
-        # };
+
+        # LaTeX
         "latex-workshop.latex.tools" = [
           {
             "name" = "latexmk";
@@ -749,7 +716,12 @@ rec {
           "-m"
           "-y=defaultIndent: '%INDENT%'"
         ];
+
+        # Nix
         "[nix]"."editor.tabSize" = 2;
+        "nix.enableLanguageServer" = true;
+        "nix.serverPath" = "nil";
+        "nix.formatterPath" = "alejandra";
       };
       # TODO: Snippets
     };
