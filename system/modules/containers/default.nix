@@ -14,7 +14,7 @@ with mylib.modules; let
 in {
   options.modules.containers = import ./options.nix {inherit lib mylib;};
 
-  config = mkIf cfg.enable {
+  config = mkIf cfg.enable rec {
     virtualisation.oci-containers.containers = {
       # Home Automation
       homeassistant = mkIf cfg.homeassistant.enable (mkOciContainer {
@@ -96,5 +96,12 @@ in {
         netdns = "10.2.0.1";
       });
     };
+
+    environment.etc."rofi-containers".text = let
+      containers-list = attrNames virtualisation.oci-containers.containers;
+      containers-filtered = filter (c: cfg.${c}.enable) containers-list;
+      containers = concatStringsSep "\n" containers-filtered;
+    in
+      containers;
   };
 }
