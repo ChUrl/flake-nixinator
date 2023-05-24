@@ -9,10 +9,9 @@
 with lib;
 with mylib.networking;
 with mylib.modules; let
-  cfg = config.modules.network;
-
+  cfg = config.modules.systemd-networkd;
 in {
-  options.modules.network = import ./options.nix {inherit lib mylib;};
+  options.modules.systemd-networkd = import ./options.nix {inherit lib mylib;};
 
   config = mkIf cfg.enable {
     services.resolved.enable = true;
@@ -57,19 +56,9 @@ in {
         ];
 
         allowedTCPPorts = cfg.allowedTCPPorts;
-        # allowedTCPPorts = [
-        #   22 # SSH
-        #   80 # HTTP
-        #   443 # HTTPS
-        # ];
         # allowedTCPPortRanges = [];
 
         allowedUDPPorts = cfg.allowedUDPPorts;
-        # allowedUDPPorts = [
-        #   9918 # Wireguard
-        #   18000 # Anno 1800
-        #   24727 # AusweisApp2, alternative: programs.ausweisapp.openFirewall
-        # ];
         # allowedUDPPortRanges = [];
       };
     };

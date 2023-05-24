@@ -12,12 +12,53 @@
 }: 
 with mylib.networking; {
   imports = [
+    # Import my system modules
+    ./modules
+
     # Import the host-specific system config
-    ../modules
     ./${hostname}
 
     ./cachix.nix
   ];
+
+  modules = {
+    systemd-networkd = {
+      enable = true;
+      hostname = hostname;
+
+      networks = {
+        # Default wildcard ethernet network for all hosts
+        "50-ether" = mkSystemdNetwork "enp*";
+      };
+
+      wireguard-tunnels = {
+        wg0-de-115 = (mkWireguardService
+          "wg0-de-115"
+          "proton-de-115.key"
+          "9+CorlxrTsQR7qjIOVKsEkk8Z7UUS5WT3R1ccF7a0ic="
+          "194.126.177.14"
+        );
+
+        wg0-lu-16 = (mkWireguardService
+          "wg0-lu-16"
+          "proton-lu-16.key"
+          "asu9KtQoZ3iKwELsDTgjPEiFNcD1XtgGgy3O4CZFg2w="
+          "92.223.89.133"
+        );
+      };
+
+      allowedTCPPorts = [
+        22 # SSH
+        80 # HTTP
+        443 # HTTPS
+      ];
+      allowedUDPPorts = [
+        9918 # Wireguard
+        18000 # Anno 1800
+        24727 # AusweisApp2
+      ];
+    };
+  };
 
   # Enable flakes
   nix = {
@@ -141,43 +182,6 @@ with mylib.networking; {
 
   # https://github.com/NixOS/nixpkgs/issues/179486
   i18n.supportedLocales = ["en_US.UTF-8/UTF-8" "de_DE.UTF-8/UTF-8"];
-
-  systemd-networkd = {
-    enable = true;
-    hostname = hostname;
-
-    networks = {
-      # Default wildcard ethernet network for all hosts
-      "50-ether" = mkSystemdNetwork "enp*";
-    };
-
-    wireguard-tunnels = {
-      wg0-de-115 = (mkWireguardService
-        "wg0-de-115"
-        "proton-de-115.key"
-        "9+CorlxrTsQR7qjIOVKsEkk8Z7UUS5WT3R1ccF7a0ic="
-        "194.126.177.14"
-      );
-
-      wg0-lu-16 = (mkWireguardService
-        "wg0-lu-16"
-        "proton-lu-16.key"
-        "asu9KtQoZ3iKwELsDTgjPEiFNcD1XtgGgy3O4CZFg2w="
-        "92.223.89.133"
-      );
-    };
-
-    allowedTCPPorts = [
-      22 # SSH
-      80 # HTTP
-      443 # HTTPS
-    ];
-    allowedUDPPorts = [
-      9918 # Wireguard
-      18000 # Anno 1800
-      24727 # AusweisApp2
-    ];
-  };
 
   # Enable the X11 windowing system.
   services.xserver = {
