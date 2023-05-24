@@ -9,7 +9,7 @@
   config,
   pkgs,
   ...
-}: 
+}:
 with mylib.networking; {
   imports = [
     # Import my system modules
@@ -32,14 +32,16 @@ with mylib.networking; {
       };
 
       wireguard-tunnels = {
-        wg0-de-115 = (mkWireguardService
+        wg0-de-115 = (
+          mkWireguardService
           "wg0-de-115"
           "proton-de-115.key"
           "9+CorlxrTsQR7qjIOVKsEkk8Z7UUS5WT3R1ccF7a0ic="
           "194.126.177.14"
         );
 
-        wg0-lu-16 = (mkWireguardService
+        wg0-lu-16 = (
+          mkWireguardService
           "wg0-lu-16"
           "proton-lu-16.key"
           "asu9KtQoZ3iKwELsDTgjPEiFNcD1XtgGgy3O4CZFg2w="
@@ -302,9 +304,11 @@ with mylib.networking; {
     # NOTE: Don't do this with HomeManager as I need the fonts in the fontdir for flatpak apps
     fonts = with pkgs; [
       # Monospace fonts
-      (nerdfonts.override {fonts = [
-        "JetBrainsMono"
-      ];})
+      (nerdfonts.override {
+        fonts = [
+          "JetBrainsMono"
+        ];
+      })
 
       # Sans/Serif fonts
       noto-fonts
@@ -318,9 +322,9 @@ with mylib.networking; {
     fontconfig = {
       enable = true;
       defaultFonts = {
-        serif = [ "Noto Serif CJK SC" ];
-        sansSerif = [ "Noto Sans CJK SC" ];
-        monospace = [ "JetBrainsMono Nerd Font Mono" ];
+        serif = ["Noto Serif CJK SC"];
+        sansSerif = ["Noto Sans CJK SC"];
+        monospace = ["JetBrainsMono Nerd Font Mono"];
       };
     };
   };

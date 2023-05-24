@@ -6,7 +6,7 @@
   ...
 }: let
   # create a module that only contains the options
-  toModule = name: {options.modules.${name} = (import ../../home/modules/${name}/options.nix {inherit lib mylib;});};
+  toModule = name: {options.modules.${name} = import ../../home/modules/${name}/options.nix {inherit lib mylib;};};
 
   # evaluate a single module
   evalModule = name: (lib.evalModules {modules = [(toModule name)];});
@@ -15,17 +15,18 @@
   optionsDoc = name: pkgs.nixosOptionsDoc {options = (evalModule name).options;};
 
   # copy the markdown for a single generated optionsDoc
-  optionsMD = name: stdenv.mkDerivation {
-    src = ./.;
-    name = "options-doc-${name}";
-    buildPhase = ''
-      mkdir $out
-      cat ${(optionsDoc name).optionsCommonMark} >> $out/${name}.md
-    '';
-  };
+  optionsMD = name:
+    stdenv.mkDerivation {
+      src = ./.;
+      name = "options-doc-${name}";
+      buildPhase = ''
+        mkdir $out
+        cat ${(optionsDoc name).optionsCommonMark} >> $out/${name}.md
+      '';
+    };
 
   # copy the markdown for all generated optionsDocs
-  allOptionsMDs = let 
+  allOptionsMDs = let
     index = stdenv.mkDerivation {
       src = ./.;
       name = "modules-options-index-md";
@@ -34,11 +35,12 @@
         echo "# Chriphost NixOS Modules Options" >> $out/index.md
       '';
     };
-  in 
-  names: pkgs.symlinkJoin {
-    name = "modules-options-doc-md";
-    paths = (map optionsMD names) ++ [index];
-  };
+  in
+    names:
+      pkgs.symlinkJoin {
+        name = "modules-options-doc-md";
+        paths = (map optionsMD names) ++ [index];
+      };
 
   # generate the actual package (calls all of the above)
   modules = [

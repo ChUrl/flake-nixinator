@@ -135,7 +135,7 @@
     hydra = {
       image = "linuxserver/nzbhydra2:5.1.8";
       autoStart = false;
-      
+
       extraOptions = [
         "--network=ns:/var/run/netns/vpn"
         "--dns=10.2.0.1"
@@ -238,17 +238,21 @@
 
   # Make the system services available to the user
   # NOTE: This doesn't work, since the cidfile is located in /run, which is not writable for regular users...
-  systemd.user.services = let 
+  systemd.user.services = let
     # Filter all system service attributes that the user units don't have and add some required attributes
-    system2user = attrs: lib.mergeAttrs (lib.attrsets.filterAttrs (n: v: !(
-      n == "confinement" ||
-      n == "runner" ||
-      n == "environment"
-    )) attrs) {
-      startLimitIntervalSec = 1;
-      startLimitBurst = 5;
-    };
+    system2user = attrs:
+      lib.mergeAttrs (lib.attrsets.filterAttrs (n: v:
+        !(
+          n
+          == "confinement"
+          || n == "runner"
+          || n == "environment"
+        ))
+      attrs) {
+        startLimitIntervalSec = 1;
+        startLimitBurst = 5;
+      };
   in {
-      # podman-stablediffusion = system2user config.systemd.services.podman-stablediffusion;
+    # podman-stablediffusion = system2user config.systemd.services.podman-stablediffusion;
   };
 }
