@@ -28,7 +28,7 @@
 let
   titlesfile = fetchurl {
     url = "https://napi.nbg01.v10lator.de/db";
-    sha256 = "sha256-7B37evlqSE9ZmUM3bND+/I8IUhU4kbvIfwtGrNu0i9A=";
+    sha256 = "sha256-PeNIkm9QwLbeHM0voTomMP6yywrA0lWGzQBOPap7Q/I=";
     curlOptsList = ["--user-agent" "NUSspliBuilder/2.1"];
   };
 
