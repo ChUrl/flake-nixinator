@@ -61,6 +61,7 @@
     "nnn"
     "ranger"
     "vscode"
+    "waybar"
   ];
   system-modules = [
     "containers"
