@@ -168,6 +168,10 @@ rec {
     #   preview = true;
     # };
 
+    rofi = {
+      enable = true;
+    };
+
     vscode.enable = true;
 
     waybar = {
