@@ -5,23 +5,23 @@
   mylib,
   ...
 }: let
-  # create a module that only contains the options
-  toModule = name: {options.modules.${name} = import ../../home/modules/${name}/options.nix {inherit lib mylib;};};
+  # create a module that only contains the options, type can be home or system
+  toModule = type: name: {options.modules.${name} = import ../../${type}/modules/${name}/options.nix {inherit lib mylib;};};
 
   # evaluate a single module
-  evalModule = name: (lib.evalModules {modules = [(toModule name)];});
+  evalModule = type: name: (lib.evalModules {modules = [(toModule type name)];});
 
   # generate a single module doc
-  optionsDoc = name: pkgs.nixosOptionsDoc {options = (evalModule name).options;};
+  optionsDoc = type: name: pkgs.nixosOptionsDoc {options = (evalModule type name).options;};
 
   # copy the markdown for a single generated optionsDoc
-  optionsMD = name:
+  optionsMD = type: name:
     stdenv.mkDerivation {
       src = ./.;
       name = "options-doc-${name}";
       buildPhase = ''
         mkdir $out
-        cat ${(optionsDoc name).optionsCommonMark} >> $out/${name}.md
+        cat ${(optionsDoc type name).optionsCommonMark} >> $out/${name}.md
       '';
     };
 
@@ -36,32 +36,37 @@
       '';
     };
   in
-    names:
+    home-modules: system-modules:
       pkgs.symlinkJoin {
         name = "modules-options-doc-md";
-        paths = (map optionsMD names) ++ [index];
+        paths = (map (optionsMD "home") home-modules) ++ (map (optionsMD "system") system-modules) ++ [index];
       };
 
   # generate the actual package (calls all of the above)
-  modules = [
+  home-modules = [
     "audio"
+    "chromium"
     "emacs"
     "email"
     "firefox"
     "fish"
     "flatpak"
     "gaming"
-    "gnome"
+    "helix"
     "hyprland"
     "kitty"
     "misc"
     "neovim"
     "nextcloud"
-    "nzbget"
-    "plasma"
+    "nnn"
     "ranger"
+    "vscode"
   ];
-  docs = allOptionsMDs modules;
+  system-modules = [
+    "containers"
+    "systemd-networkd"
+  ];
+  docs = allOptionsMDs home-modules system-modules;
 in
   stdenv.mkDerivation {
     src = ./.;
