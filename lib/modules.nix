@@ -1,3 +1,4 @@
+# TODO: Easier mkLink/mkUnlink (include more hm.dag stuff into the function)
 {
   inputs,
   pkgs,
@@ -33,14 +34,6 @@
       rm ${dest}
     fi
   '';
-
-  # TODO
-  mkMultiOptStr = {}: {
-  };
-
-  # TODO
-  mkMultiOptPkg = {}: {
-  };
 
   # Returns true if base contains element
   contains = base: element:

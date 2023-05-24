@@ -1,3 +1,5 @@
+# TODO: Need to set permissions through polkit module
+# TODO: Setup Wireless (IWD/Networkd?)
 {
   inputs,
   config,
@@ -39,7 +41,6 @@ in {
       useNetworkd = false; # Only use this if the configuration can't be written in systemd.network completely. It translates some of the networking... options to systemd
       # resolvconf.enable = true;
 
-      # TODO: Either IWD or WiFi through systemd-networkd
       wireless = {
         enable = false; # Enables wireless support via wpa_supplicant.
         iwd.enable = false; # Use iwd instead of NetworkManager
