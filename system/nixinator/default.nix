@@ -16,6 +16,8 @@
 
   modules = {
     containers = {
+      enable = true;
+
       homeassistant.enable = false;
       jellyfin.enable = true;
       fileflows.enable = false;

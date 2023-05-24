@@ -16,16 +16,16 @@ in {
   config = mkIf cfg.enable {
     virtualisation.oci-containers.containers = {
       # Home Automation
-      homeassistant = mkIf cfg.homeassistant.enable mkOciContainer {
+      homeassistant = mkIf cfg.homeassistant.enable (mkOciContainer {
         image = "homeassistant/home-assistant:2023:5";
         id-ports = [8123];
         vols = [
           "homeassistant-config:/config:Z"
         ];
-      };
+      });
 
       # Multimedia
-      jellyfin = mkIf cfg.jellyfin.enable mkOciContainer {
+      jellyfin = mkIf cfg.jellyfin.enable (mkOciContainer {
         image = "linuxserver/jellyfin:10.8.10";
         id-ports = [8096];
         vols = [
@@ -35,9 +35,9 @@ in {
           "/home/christoph/Videos/Picture:/media/Picture"
           "/home/christoph/GameHDD/Video:/media/Video2"
         ];
-      };
+      });
 
-      fileflows = mkIf cfg.fileflows.enable mkOciContainer {
+      fileflows = mkIf cfg.fileflows.enable (mkOciContainer {
         image = "revenz/fileflows";
         id-ports = [5000];
         vols = [
@@ -45,10 +45,10 @@ in {
           "fileflows-data:/app/Data:Z"
           "/home/christoph/Videos/Video:/media"
         ];
-      };
+      });
 
       # Errr...
-      sonarr = mkIf cfg.sonarr.enable mkOciContainer {
+      sonarr = mkIf cfg.sonarr.enable (mkOciContainer {
         image = "linuxserver/sonarr:3.0.10";
         id-ports = [8989];
         vols = [
@@ -58,9 +58,9 @@ in {
         ];
         netns = "wg0-de-115";
         netdns = "10.2.0.1";
-      };
+      });
 
-      radarr = mkIf cfg.radarr.enable mkOciContainer {
+      radarr = mkIf cfg.radarr.enable (mkOciContainer {
         image = "linuxserver/radarr:4.4.4";
         id-ports = [7878];
         vols = [
@@ -70,9 +70,9 @@ in {
         ];
         netns = "wg0-de-115";
         netdns = "10.2.0.1";
-      };
+      });
 
-      hydra = mkIf cfg.hydra.enable mkOciContainer {
+      hydra = mkIf cfg.hydra.enable (mkOciContainer {
         image = "linuxserver/nzbhydra2:5.1.8";
         id-ports = [5076];
         vols = [
@@ -81,9 +81,9 @@ in {
         ];
         netns = "wg0-de-115";
         netdns = "10.2.0.1";
-      };
+      });
 
-      sabnzbd = mkIf cfg.sabnzbd.enable mkOciContainer {
+      sabnzbd = mkIf cfg.sabnzbd.enable (mkOciContainer {
         image = "linuxserver/sabnzbd:4.0.1";
         id-ports = [8080];
         vols = [
@@ -93,7 +93,7 @@ in {
         ];
         netns = "wg0-de-115";
         netdns = "10.2.0.1";
-      };
+      });
     };
   };
 }
