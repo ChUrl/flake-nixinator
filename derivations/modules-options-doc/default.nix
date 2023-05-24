@@ -60,6 +60,7 @@
     "nextcloud"
     "nnn"
     "ranger"
+    "rofi"
     "vscode"
     "waybar"
   ];

@@ -1,3 +1,4 @@
+# TODO: Generate file with names for rofi
 {
   config,
   nixosConfig,
