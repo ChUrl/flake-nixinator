@@ -170,6 +170,7 @@ rec {
 
     rofi = {
       enable = true;
+      theme = "Three-Bears";
     };
 
     vscode.enable = true;

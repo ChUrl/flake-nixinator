@@ -2,7 +2,7 @@
 
 # User chooses option
 set OPTIONS "Poweroff" "Reboot" "Reload Hyprland" "Exit Hyprland"
-set OPTION (echo -e (string join "\n" $OPTIONS) | rofi -theme ~/NixFlake/config/rofi/rofi.rasi -dmenu -p "power" -i)
+set OPTION (echo -e (string join "\n" $OPTIONS) | rofi -dmenu -p " power " -i)
 if not contains $OPTION $OPTIONS
     exit
 end

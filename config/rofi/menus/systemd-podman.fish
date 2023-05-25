@@ -11,7 +11,7 @@ for SERVICE in $SERVICES
         set PROMPT $PROMPT"<span foreground=\"green\">$SERVICE</span>\n"
     end
 end
-set SERVICE (echo -e $PROMPT | rofi -theme ~/NixFlake/config/rofi/rofi.rasi -dmenu -p "pod" -i -markup-rows)
+set SERVICE (echo -e $PROMPT | rofi -dmenu -p " pod " -i -markup-rows)
 set SERVICE (echo -e $SERVICE | sd "<.*?>" "")
 if not contains $SERVICE $SERVICES
     exit
@@ -19,7 +19,7 @@ end
 
 # User chooses action
 set ACTIONS "start" "stop" "restart" "status"
-set ACTION (echo -e (string join "\n" $ACTIONS) | rofi -theme ~/NixFlake/config/rofi/rofi.rasi -dmenu -p "action" -i)
+set ACTION (echo -e (string join "\n" $ACTIONS) | rofi -dmenu -p " action " -i)
 if not contains $ACTION $ACTIONS
     exit
 end
