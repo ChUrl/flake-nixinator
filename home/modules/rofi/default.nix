@@ -17,12 +17,17 @@ in {
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
       rofi-wayland
-    ];
 
-    home.file.".config/rofi/menu-power.fish".text = mylib.rofi.mkSimpleMenu {
-      "Poweroff" = "poweroff";
-      "Reload Hyprland" = "hyprctl reload";
-    };
+      # Power Menu
+      (mylib.rofi.mkSimpleMenu
+        "power"
+        {
+          "Poweroff" = "poweroff";
+          "Reboot" = "reboot";
+          "Reload Hyprland" = "hyprctl reload";
+          "Exit Hyprland" = "hyprctl dispatch exit";
+        })
+    ];
 
     home.activation = {
       # NOTE: Keep the rofi config symlinked, to allow easy changes with hotreload
