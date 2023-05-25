@@ -23,7 +23,7 @@
       ];
   in
     prompt: attrs:
-      pkgs.writeScriptBin "rofi-menu-${prompt}" ''
+      pkgs.writeScript "rofi-menu-${prompt}" ''
         #! ${pkgs.fish}/bin/fish
 
         # OPTIONS contains all possible values Rofi will display

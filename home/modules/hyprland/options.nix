@@ -110,22 +110,13 @@ with mylib.modules; {
       example = ''
         "SUPER"
       '';
-    };
-
-    mod-bindings = mkOption {
-      type = types.attrs;
-      description = "Hyprland keyboard shortcuts using the modifier key";
-      example = ''
-        {
-          "Q" = ["killactive"];
-          "V" = ["togglefloating"];
-        }
-      '';
+      default = "SUPER";
     };
 
     bindings = mkOption {
       type = types.attrs;
       description = "Hyprland keyboard shortcuts";
+      default = {};
       example = ''
         {
           "CTRL ALT, R" = [

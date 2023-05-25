@@ -95,26 +95,27 @@ in {
 
     # Keybindings
     home.file.".config/hypr/keybindings.conf".text = let
+      always-bind = {
+        # Hyprland control
+        "$mainMod, Q" = ["killactive"];
+        "$mainMod, V" = ["togglefloating"];
+        "$mainMod, F" = ["fullscreen"];
+        "$mainMod, C" = ["exec, clipman pick --tool=rofi"];
+        "$mainMod, G" = ["togglegroup"];
+        "$mainMod, T" = ["exec, kitty"];
+        "ALT, tab" = ["changegroupactive"];
+      };
+
       mkBind = key: action: "bind = ${key}, ${action}";
       mkBinds = key: actions: builtins.map (mkBind key) actions;
-      binds = lib.pipe cfg.keybindings.bindings [
+      binds = lib.pipe (lib.mergeAttrs cfg.keybindings.bindings always-bind) [
         (builtins.mapAttrs mkBinds)
-        builtins.attrValues
-        builtins.concatLists
-        (builtins.concatStringsSep "\n")
-      ];
-
-      mkModBind = key: action: "bind = $mainMod, ${key}, ${action}";
-      mkModBinds = key: actions: builtins.map (mkModBind key) actions;
-      mod-binds = lib.pipe cfg.keybindings.mod-bindings [
-        (builtins.mapAttrs mkModBinds)
         builtins.attrValues
         builtins.concatLists
         (builtins.concatStringsSep "\n")
       ];
     in ''
       $mainMod = ${cfg.keybindings.main-mod}
-      ${mod-binds}
       ${binds}
     '';
 
@@ -170,6 +171,19 @@ in {
         (builtins.concatStringsSep "\n")
       ];
 
+    # Set wallpaper for each configured monitor
+    home.file.".config/hypr/hyprpaper.conf".text = let
+      mkWallpaper = monitor: "wallpaper = ${monitor}, ${config.home.homeDirectory}/NixFlake/wallpapers/${cfg.theme}.png";
+      wallpapers = lib.pipe cfg.monitors [
+        builtins.attrNames
+        (builtins.map mkWallpaper)
+        (builtins.concatStringsSep "\n")
+      ];
+    in ''
+      preload = ~/NixFlake/wallpapers/${cfg.theme}.png
+      ${wallpapers}
+    '';
+
     # Keyboard layout
     home.file.".config/hypr/input.conf".text = ''
       input {
@@ -187,19 +201,6 @@ in {
 
           sensitivity = 0 # -1.0 - 1.0, 0 means no modification.
       }
-    '';
-
-    # Set wallpaper for each configured monitor
-    home.file.".config/hypr/hyprpaper.conf".text = let
-      mkWallpaper = monitor: "wallpaper = ${monitor}, ${config.home.homeDirectory}/NixFlake/wallpapers/${cfg.theme}.png";
-      wallpapers = lib.pipe cfg.monitors [
-        builtins.attrNames
-        (builtins.map mkWallpaper)
-        (builtins.concatStringsSep "\n")
-      ];
-    in ''
-      preload = ~/NixFlake/wallpapers/${cfg.theme}.png
-      ${wallpapers}
     '';
 
     home.activation = {
