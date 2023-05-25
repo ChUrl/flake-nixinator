@@ -89,6 +89,22 @@ rec {
       enable = true;
       theme = "Three-Bears";
 
+      keybindings = {
+        main-mod = "SUPER";
+
+        mod-bindings = {
+          "Q" = ["killactive"];
+          "V" = ["togglefloating"];
+        };
+
+        bindings = {
+          "CTRL ALT, R" = [
+            "moveworkspacetomonitor, 1 HDMI-A-1"
+            "moveworkspacetomonitor, 2 HDMI-A-1"
+          ];
+        };
+      };
+
       autostart = [
         "kdeconnect-indicator"
         "nextcloud --background"
