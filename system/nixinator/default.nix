@@ -19,6 +19,7 @@
       enable = true;
 
       homeassistant.enable = false;
+      stablediffusion.enable = true;
       jellyfin.enable = true;
       fileflows.enable = false;
       sonarr.enable = true;

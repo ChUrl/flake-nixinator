@@ -25,6 +25,30 @@ in {
         ];
       });
 
+      # Development
+      # NOTE: PyTorch ROCM image is 36 GB large...
+      # NOTE: This requires to setup the PodmanROCM direcory beforehand, as described here:
+      #       https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/Install-and-Run-on-AMD-GPUs#running-inside-docker
+      # NOTE: This requires to manually link the launch.sh, since this is a system module (can't use home.file)
+      stablediffusion = mkIf cfg.stablediffusion.enable (mkOciContainer {
+        image = "rocm/pytorch:rocm5.5_ubuntu20.04_py3.8_pytorch_1.13.1";
+        vols = [
+          "/home/christoph/NoSync/StableDiffusionWebUI:/webui-data"
+        ];
+        opts = [
+          "--network=host"
+          "--device=/dev/kfd"
+          "--device=/dev/dri"
+          "--group-add=video"
+          "--ipc=host"
+          "--cap-add=SYS_PTRACE"
+          "--security-opt=seccomp=unconfined"
+        ];
+        extraConfig = {
+          entrypoint = "/webui-data/launch.sh";
+        };
+      });
+
       # Multimedia
       jellyfin = mkIf cfg.jellyfin.enable (mkOciContainer {
         image = "linuxserver/jellyfin:10.8.10";
