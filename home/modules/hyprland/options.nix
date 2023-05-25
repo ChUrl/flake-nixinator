@@ -102,4 +102,38 @@ with mylib.modules; {
       ]
     '';
   };
+
+  keybindings = {
+    main-mod = mkOption {
+      type = types.str;
+      description = "Main modifier key";
+      example = ''
+        "SUPER"
+      '';
+    };
+
+    mod-bindings = mkOption {
+      type = types.attrs;
+      description = "Hyprland keyboard shortcuts using the modifier key";
+      example = ''
+        {
+          "Q" = ["killactive"];
+          "V" = ["togglefloating"];
+        }
+      '';
+    };
+
+    bindings = mkOption {
+      type = types.attrs;
+      description = "Hyprland keyboard shortcuts";
+      example = ''
+        {
+          "CTRL ALT, R" = [
+            "moveworkspacetomonitor, 1 HDMI-A-1"
+            "moveworkspacetomonitor, 2 HDMI-A-1"
+          ];
+        }
+      '';
+    };
+  };
 }
