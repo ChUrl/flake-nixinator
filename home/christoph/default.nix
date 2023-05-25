@@ -92,16 +92,11 @@ rec {
       keybindings = {
         main-mod = "SUPER";
 
-        mod-bindings = {
-          "Q" = ["killactive"];
-          "V" = ["togglefloating"];
-        };
-
         bindings = {
-          "CTRL ALT, R" = [
-            "moveworkspacetomonitor, 1 HDMI-A-1"
-            "moveworkspacetomonitor, 2 HDMI-A-1"
-          ];
+          "$mainMod, E" = ["exec, kitty fish -c \"nnncd -a -P p\""];
+          "$mainMod, P" = ["exec, hyprpicker -a"];
+          "$mainMod, S" = ["exec, grim -g \"$(slurp)\""];
+          "$mainMod CTRL, S" = ["exec, grim -g \"$(slurp)\" - | wl-copy"];
         };
       };
 
