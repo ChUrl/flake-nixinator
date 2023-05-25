@@ -12,6 +12,7 @@
     vols ? [],
     env ? {},
     opts ? [],
+    extraConfig ? {},
     netns ? "",
     netdns ? "",
   }: let
@@ -24,18 +25,19 @@
       ++ (lib.optionals (netdns != "") [
         "--dns=${netdns}"
       ]);
-  in {
-    image = image;
-    autoStart = autoStart;
-    ports = ports ++ expanded-id-ports;
-    volumes = vols;
-    environment = lib.mergeAttrs env {
-      PUID = "1000";
-      PGID = "1000";
-      TZ = "Europe/Berlin";
+  in
+    lib.mergeAttrs extraConfig {
+      image = image;
+      autoStart = autoStart;
+      ports = ports ++ expanded-id-ports;
+      volumes = vols;
+      environment = lib.mergeAttrs env {
+        PUID = "1000";
+        PGID = "1000";
+        TZ = "Europe/Berlin";
+      };
+      extraOptions = opts ++ additional-opts;
     };
-    extraOptions = opts ++ additional-opts;
-  };
 
   # Filter all system service attributes that the user units don't have and add some required attributes
   # Example: podman-stablediffusion = mkOciUserService config.systemd.services.podman-stablediffusion;

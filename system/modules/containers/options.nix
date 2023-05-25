@@ -14,6 +14,9 @@ with mylib.modules; {
   homeassistant = {
     enable = mkEnableOpt "Enable HomeAssistant Container";
   };
+  stablediffusion = {
+    enable = mkEnableOpt "Enable StableDiffusion Container with Automatic1111 WebUI";
+  };
   jellyfin = {
     enable = mkEnableOpt "Enable Jellyfin Container";
   };
