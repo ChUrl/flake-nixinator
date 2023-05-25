@@ -19,6 +19,11 @@ in {
       rofi-wayland
     ];
 
+    home.file.".config/rofi/menu-power.fish".text = mylib.rofi.mkSimpleMenu {
+      "Poweroff" = "poweroff";
+      "Reload Hyprland" = "hyprctl reload";
+    };
+
     home.activation = {
       # NOTE: Keep the rofi config symlinked, to allow easy changes with hotreload
       linkRofiConfig =
