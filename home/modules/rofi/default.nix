@@ -15,18 +15,18 @@ in {
   options.modules.rofi = import ./options.nix {inherit lib mylib;};
 
   config = mkIf cfg.enable {
-    programs.rofi = {
-      enable = true;
-      package = pkgs.rofi-wayland;
-      plugins = [
-        pkgs.keepmenu # TODO: Rofi KeepassXC frontend
-      ];
+    home.packages = with pkgs; [
+      rofi-wayland
+    ];
 
-      # NOTE: Don't use this, use the configfile for hot-reload
-      # terminal = "${pkgs.kitty}/bin/kitty";
-      # font = "JetBrains Mono 14";
-      # theme =
-      # extraConfig = '''';
+    home.activation = {
+      # NOTE: Keep the rofi config symlinked, to allow easy changes with hotreload
+      linkRofiConfig =
+        hm.dag.entryAfter ["writeBoundary"]
+        (mkLink "~/NixFlake/config/rofi/rofi.rasi" "~/.config/rofi/config.rasi");
+      linkRofiColors =
+        hm.dag.entryAfter ["writeBoundary"]
+        (mkLink "~/NixFlake/config/rofi/colors/${cfg.theme}.rasi" "~/.config/rofi/colors.rasi");
     };
   };
 }

@@ -16,7 +16,7 @@ configuration{
   sidebar-mode: false;
 }
 
-@import "colors/three-bears.rasi"
+@theme "colors.rasi"
 
 element-text,
 element-icon,

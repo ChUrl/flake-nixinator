@@ -11,7 +11,7 @@ for SERVER in $SERVERS
         set PROMPT $PROMPT"<span foreground=\"green\">$SERVER</span>\n"
     end
 end
-set SERVER (echo -e $PROMPT | rofi -theme ~/NixFlake/config/rofi/rofi.rasi -dmenu -p "vpn" -i -markup-rows)
+set SERVER (echo -e $PROMPT | rofi -dmenu -p " vpn " -i -markup-rows)
 set SERVER (echo -e $SERVER | sd "<.*?>" "")
 if not contains $SERVER $SERVERS
     exit
@@ -19,7 +19,7 @@ end
 
 # User chooses action
 set ACTIONS "start" "stop" "status"
-set ACTION (echo -e (string join "\n" $ACTIONS) | rofi -theme ~/NixFlake/config/rofi/rofi.rasi -dmenu -p "action" -i)
+set ACTION (echo -e (string join "\n" $ACTIONS) | rofi -dmenu -p " action " -i)
 if not contains $ACTION $ACTIONS
     exit
 end
