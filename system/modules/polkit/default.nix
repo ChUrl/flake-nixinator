@@ -18,11 +18,7 @@ in {
     # TODO: Don't hardcode subject.user == "christoph"
     security.polkit.extraConfig = let
       # Stuff that is non-negotiable
-      always-predicates = [
-        # TODO: Those should be set by the VPN/networkd module
-        "wg0-de-115.service"
-        "wg0-lu-16.service"
-      ];
+      always-predicates = [];
 
       mkServicePredicate = service: "action.lookup(\"unit\") == \"${service}\"";
       predicates = lib.pipe (cfg.allowed-system-services ++ always-predicates) [
