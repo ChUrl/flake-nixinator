@@ -34,6 +34,14 @@ in {
     in
       names;
 
+    modules.polkit.allowed-system-services = let
+      vpn-services = lib.pipe cfg.wireguard-tunnels [
+        attrNames
+        (map (v: "${v}.service"))
+      ];
+    in
+      vpn-services;
+
     # General Networking Settings
     networking = {
       # Gets inherited from flake in nixos mylib and passed through the module option
