@@ -22,6 +22,8 @@ with mylib.networking; {
   ];
 
   modules = {
+    polkit.enable = true;
+
     systemd-networkd = {
       enable = true;
       hostname = hostname;
@@ -110,33 +112,6 @@ with mylib.networking; {
   security = {
     protectKernelImage = true;
     rtkit.enable = true;
-
-    polkit.enable = true;
-    # TODO: Add this to container/podman system module
-    # TODO: Also generate the containers.txt file through the container/podman system module
-    polkit.extraConfig = ''
-      // Allow to manage podman services
-      polkit.addRule(function(action, subject) {
-          if (action.id == "org.freedesktop.systemd1.manage-units" && subject.user == "christoph" && (
-              // HomeLab Selfhosted Services
-              action.lookup("unit") == "podman-jellyfin.service" ||
-              action.lookup("unit") == "podman-sonarr.service" ||
-              action.lookup("unit") == "podman-radarr.service" ||
-              action.lookup("unit") == "podman-hydra.service" ||
-              action.lookup("unit") == "podman-sabnzbd.service" ||
-              action.lookup("unit") == "podman-homeassistant.service" ||
-
-              // Various Containers
-              // action.lookup("unit") == "podman-stablediffusion.service" ||
-
-              // VPNs
-              action.lookup("unit") == "wg0-lu-16.service" ||
-              action.lookup("unit") == "wg0-de-115.service"
-          )) {
-              return polkit.Result.YES;
-          }
-      });
-    '';
 
     # TODO: Replace with polkit
     sudo.enable = true;
