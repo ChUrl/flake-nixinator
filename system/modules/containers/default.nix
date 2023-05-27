@@ -121,6 +121,16 @@ in {
       });
     };
 
+    modules.polkit.allowed-system-services = let
+      container-services = lib.pipe virtualisation.oci-containers.containers [
+        builtins.attrNames
+        (builtins.filter (c: cfg.${c}.enable))
+        (builtins.map (c: "podman-${c}.service"))
+      ];
+    in
+      container-services;
+
+    # TODO: Rewrite with builtins.pipe
     environment.etc."rofi-containers".text = let
       containers-list = attrNames virtualisation.oci-containers.containers;
       containers-filtered = filter (c: cfg.${c}.enable) containers-list;
