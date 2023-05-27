@@ -8,7 +8,8 @@
   ...
 }: {
   imports = [
-    ./systemd-networkd
     ./containers
+    ./polkit
+    ./systemd-networkd
   ];
 }
