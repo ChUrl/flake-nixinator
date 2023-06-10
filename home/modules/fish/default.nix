@@ -13,10 +13,42 @@ in {
   options.modules.fish = import ./options.nix {inherit lib mylib;};
 
   config = mkIf cfg.enable {
+    home.file.".config/fish/themes/catppuccin-latte.theme".text = ''
+      # name: 'Catppuccin Latte'
+      # url: 'https://github.com/catppuccin/fish'
+      # preferred_background: eff1f5
+
+      fish_color_normal 4c4f69
+      fish_color_command 1e66f5
+      fish_color_param dd7878
+      fish_color_keyword d20f39
+      fish_color_quote 40a02b
+      fish_color_redirection ea76cb
+      fish_color_end fe640b
+      fish_color_comment 8c8fa1
+      fish_color_error d20f39
+      fish_color_gray 9ca0b0
+      fish_color_selection --background=ccd0da
+      fish_color_search_match --background=ccd0da
+      fish_color_option 40a02b
+      fish_color_operator ea76cb
+      fish_color_escape e64553
+      fish_color_autosuggestion 9ca0b0
+      fish_color_cancel d20f39
+      fish_color_cwd df8e1d
+      fish_color_user 179299
+      fish_color_host_remote 40a02b
+      fish_color_host 1e66f5
+      fish_color_status d20f39
+      fish_pager_color_progress 9ca0b0
+      fish_pager_color_prefix ea76cb
+      fish_pager_color_completion 4c4f69
+      fish_pager_color_description 9ca0b0
+    '';
+
     programs.fish = {
       enable = true;
 
-      # TODO:
       functions = {
         nnncd = {
           wraps = "nnn";
@@ -56,8 +88,25 @@ in {
         };
       };
 
-      # TODO:
-      # plugins = [];
+      plugins = [
+        # oh-my-fish plugins are stored in their own repositories, which
+        # makes them simple to import into home-manager.
+        # NOTE: Currently, HM ignores theme plugins
+        # {
+        #   name = "Catppuccin Latte";
+        #   src = pkgs.fetchFromGitHub {
+        #     owner = "catppuccin";
+        #     repo = "fish";
+        #     rev = "91e6d6721362be05a5c62e235ed8517d90c567c9";
+        #     sha256 = "sha256-l9V7YMfJWhKDL65dNbxaddhaM6GJ0CFZ6z+4R6MJwBA=";
+        #   };
+        # }
+      ];
+
+      shellInit = ''
+        set -e fish_greeting
+        yes | fish_config theme save "catppuccin-latte"
+      '';
 
       shellAbbrs = let
         # Only add " | bat" if bat is installed
@@ -88,7 +137,8 @@ in {
             blk = batify "lsblk -o NAME,LABEL,UUID,FSTYPE,SIZE,FSUSE%,MOUNTPOINT,MODEL";
             grep = "grep --color=auto -E"; # grep with extended regex
             watch = "watch -d -c -n 0.5";
-            n = "nnncd -a -P p -e"; # Doesn't work with abbrify because I have nnn.override?
+            n = "nnncd -a -e"; # Doesn't work with abbrify because I have nnn.override?
+            np = "nnncd -a -P p -e";
 
             # systemd
             failed = "systemctl --failed";
@@ -157,10 +207,6 @@ in {
             mp3 = "yt-dlp -f 'ba' --extract-audio --audio-format mp3";
           })
         ];
-
-      shellInit = ''
-        set -e fish_greeting
-      '';
     };
   };
 }

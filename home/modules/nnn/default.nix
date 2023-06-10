@@ -14,6 +14,12 @@ in {
   options.modules.nnn = import ./options.nix {inherit lib mylib;};
 
   config = mkIf cfg.enable {
+    home.sessionVariables = {
+      # NNN_TERMINAL = "alacritty";
+      NNN_PAGER = "bat";
+      # NNN_FIFO = "/tmp/nnn.fifo"; # For nnn preview
+    };
+
     programs.nnn = {
       package = pkgs.nnn.override {
         # These two are mutually exclusive

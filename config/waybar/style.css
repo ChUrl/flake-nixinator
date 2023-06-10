@@ -1,12 +1,14 @@
-@import url("colors/three-bears.css");
+/*@import url("colors/three-bears.css");*/
+@import url("colors/foggy-lake.css");
 
 /*Order is Top-Right-Bottom-Left for combined properties*/
 
 window#waybar {
   font-family: JetBrainsMono Nerd Font Mono;
   font-weight: bold;
-  color: @dark;
-  background-color: @accent-dark;
+  color: @base;
+  background-color: @base;
+  opacity: 0.6;
 }
 
 /*Square Widgets*/
@@ -39,14 +41,14 @@ window#waybar {
 }
 
 /*Colors*/
-#custom-launcher { background-color: @pastel-g; }
-#user { background-color: @pastel-f; }
-#window { background-color: @pastel-e; }
-#workspaces button { background-color: @pastel-d; }
-#pulseaudio { background-color: @pastel-e; }
-#network { background-color: @pastel-f; }
-#cpu { background-color: @pastel-g; }
-#memory { background-color: @pastel-h; }
-#temperature { background-color: @pastel-i; }
-#clock { background-color: @pastel-a; }
-#tray { background-color: @pastel-b; }
+#custom-launcher { background-color: @flamingo; }
+#user { background-color: @pink; }
+#window { background-color: @mauve; }
+#workspaces button { background-color: @red; }
+#pulseaudio { background-color: @maroon; }
+#network { background-color: @peach; }
+#cpu { background-color: @yellow; }
+#memory { background-color: @green; }
+#temperature { background-color: @teal; }
+#clock { background-color: @sky; }
+#tray { background-color: @sapphire; }

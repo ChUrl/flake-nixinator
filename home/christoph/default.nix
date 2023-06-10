@@ -87,13 +87,18 @@ rec {
 
     hyprland = {
       enable = true;
-      theme = "Three-Bears";
+      # theme = "Three-Bears";
+      theme = "Foggy-Lake";
 
       keybindings = {
         main-mod = "SUPER";
 
         bindings = {
-          "$mainMod, E" = ["exec, kitty fish -c \"nnncd -a -P p\""];
+          "$mainMod, T" = ["exec, kitty"];
+          "$mainMod, E" = ["exec, kitty"];
+          # "$mainMod, T" = ["exec, alacritty -o font.size=12 -e tmux"];
+          # "$mainMod, E" = ["exec, alacritty -o font.size=12 -e tmux"];
+
           "$mainMod, P" = ["exec, hyprpicker -a"];
           "$mainMod, S" = ["exec, grim -g \"$(slurp)\""];
           "$mainMod CTRL, S" = ["exec, grim -g \"$(slurp)\" - | wl-copy"];
@@ -104,6 +109,7 @@ rec {
         "kdeconnect-indicator"
         "nextcloud --background"
         "keepassxc"
+        # "alacritty -o font.size=12 -e tmux"
         "kitty"
         # "md.obsidian.Obsidian"
         # "firefox"
@@ -138,6 +144,7 @@ rec {
 
       transparent = [
         "kitty"
+        "Alacritty"
         "discord"
         "Spotify"
         "obsidian"
@@ -181,7 +188,8 @@ rec {
 
     rofi = {
       enable = true;
-      theme = "Three-Bears";
+      # theme = "Three-Bears";
+      theme = "Foggy-Lake";
     };
 
     vscode.enable = true;
@@ -251,6 +259,7 @@ rec {
 
       EDITOR = "hx";
       VISUAL = "hx";
+      # TERMINAL = "alacritty -o font.size=12";
       TERMINAL = "kitty";
       BROWSER = "firefox";
 
@@ -261,9 +270,6 @@ rec {
       QT_QPA_PLATFORM = "wayland";
       NIXOS_OZONE_WL = "1";
       SDL_VIDEODRIVER = "wayland";
-
-      # TODO: NNN Module
-      # NNN_FIFO = "/tmp/nnn.fifo"; # For nnn preview
 
       # Don't use system wine, use bottles
       # WINEESYNC = 1;
@@ -290,13 +296,11 @@ rec {
     # delta # diffier diff differ (enabled as program)
     # fzf # fuzzy find (enabled as program in fish module)
     tokei # Text file statistics in a project
-    rsync # cp on steroids
-    rclone # Rsync for cloud
     poppler_utils # pdfunite
     # ffmpeg # Convert video (magic), v4
     ffmpeg_5-full # v5, including ffplay
     imagemagick # Convert image (magic)
-    httpie # Cool http client
+    ueberzugpp # Display images in terminal (alacritty)
     (ripgrep.override {withPCRE2 = true;}) # fast as fuck
     nvd # nix rebuild diff
     # du-dust # Disk usage analyzer (for directories)
@@ -305,14 +309,9 @@ rec {
     fd # find alternative
     sd # sed alternative
     tealdeer # very fast tldr (so readable man)
-    gping # ping with graph
     # gtop # graphic top # We have btop already...
-    curlie # curl a'la httpie
-    wget # download that shit
-    dogdns # dns client
     fclones # duplicate file finder
     gum # nice shell scripts
-    lazygit # can always use another git client
     geteltorito # extreact boot image from iso
     gitbatch # overview over multiple repos
     # TODO: Maybe general document/typesetting module?
@@ -339,6 +338,21 @@ rec {
     # gnome.zenity # Popups from terminal
     unrar
     p7zip
+
+    # Networking
+    dig
+    tcpdump
+    traceroute
+    wireshark
+    gping # ping with graph
+    curlie # curl a'la httpie
+    wget # download that shit
+    dogdns # dns client
+    rsync # cp on steroids
+    rclone # Rsync for cloud
+    httpie # Cool http client
+
+    cool-retro-term
 
     # Xooooorg/Desktop environment stuff
     # xclip
@@ -442,11 +456,146 @@ rec {
   programs = {
     home-manager.enable = true;
 
-    # Potential future enables
-    # mangohud.enable = true;
-    # matplotlib.enable = true;
+    alacritty = {
+      enable = true;
 
-    bat.enable = true;
+      settings = {
+        window = {
+          padding = {
+            x = 10;
+            y = 10;
+          };
+
+          font = {
+            normal = "JetBrainsMono Nerd Font Mono";
+            size = 12;
+          };
+        };
+
+        env = {
+          TERM = "xterm-256color";
+        };
+
+        colors = {
+          # Default colors
+          primary = {
+            background = "#EFF1F5"; # base
+            foreground = "#4C4F69"; # text
+            # Bright and dim foreground colors
+            dim_foreground = "#4C4F69"; # text
+            bright_foreground = "#4C4F69"; # text
+          };
+
+          # Cursor colors
+          cursor = {
+              text = "#EFF1F5"; # base
+              cursor = "#DC8A78"; # rosewater
+          };
+          vi_mode_cursor = {
+              text = "#EFF1F5"; # base
+              cursor = "#7287FD"; # lavender
+          };
+
+          # Search colors
+          search = {
+            matches = {
+              foreground = "#EFF1F5"; # base
+              background = "#6C6F85"; # subtext0
+            };
+            focused_match = {
+              foreground = "#EFF1F5"; # base
+              background = "#40A02B"; # green
+            };
+            footer_bar = {
+              foreground = "#EFF1F5"; # base
+              background = "#6C6F85"; # subtext0
+            };
+          };
+
+          # Keyboard regex hints
+          hints = {
+            start = {
+              foreground = "#EFF1F5"; # base
+              background = "#DF8E1D"; # yellow
+            };
+            end = {
+                foreground = "#EFF1F5"; # base
+                background = "#6C6F85"; # subtext0
+            };
+          };
+
+          # Selection colors
+          selection = {
+            text = "#EFF1F5"; # base
+            background = "#DC8A78"; # rosewater
+          };
+
+          # Normal colors
+          normal = {
+            black = "#5C5F77"; # subtext1
+            red = "#D20F39"; # red
+            green = "#40A02B"; # green
+            yellow = "#DF8E1D"; # yellow
+            blue = "#1E66F5"; # blue
+            magenta = "#EA76CB"; # pink
+            cyan = "#179299"; # teal
+            white = "#ACB0BE"; # surface2
+          };
+
+          # Bright colors
+          bright = {
+            black = "#6C6F85"; # subtext0
+            red = "#D20F39"; # red
+            green = "#40A02B"; # green
+            yellow = "#DF8E1D"; # yellow
+            blue = "#1E66F5"; # blue
+            magenta = "#EA76CB"; # pink
+            cyan = "#179299"; # teal
+            white = "#BCC0CC"; # surface1
+          };
+
+          # Dim colors
+          dim = {
+            black = "#5C5F77"; # subtext1
+            red = "#D20F39"; # red
+            green = "#40A02B"; # green
+            yellow = "#DF8E1D"; # yellow
+            blue = "#1E66F5"; # blue
+            magenta = "#EA76CB"; # pink
+            cyan = "#179299"; # teal
+            white = "#ACB0BE"; # surface2
+          };
+
+          indexed_colors = [
+            {
+              index = 16;
+              color = "#FE640B";
+            }
+            {
+              index = 17;
+              color = "#DC8A78";
+            }
+          ];
+        };
+      };
+    };
+
+    bat = {
+      enable = true;
+
+      themes = {
+        catppuccin-latte = builtins.readFile (pkgs.fetchFromGitHub {
+          owner = "catppuccin";
+          repo = "bat";
+          rev = "ba4d16880d63e656acced2b7d4e034e4a93f74b1";
+          sha256 = "sha256-6WVKQErGdaqb++oaXnY3i6/GuH2FhTgK0v4TN4Y0Wbw=";
+        } + "/Catppuccin-latte.tmTheme");
+      };
+
+      config = {
+        theme = "catppuccin-latte";
+      };
+    };
 
     broot = {
       enable = true;
@@ -515,6 +664,7 @@ rec {
         };
       };
     }; # NOTE: If error occurs after system update on fish init run "ssh-add"
+
     keychain = {
       enable = true;
       enableFishIntegration = config.modules.fish.enable;
@@ -522,6 +672,23 @@ rec {
       enableXsessionIntegration = true;
       agents = ["ssh"];
       keys = ["id_ed25519"];
+    };
+
+    lazygit = {
+      enable = true;
+      settings = {
+        gui.theme = {
+          lightTheme = false;
+          activeBorderColor = ["#40a02b" "bold"];
+          inactiveBorderColor = ["#4c4f69"];
+          optionsTextColor = ["#1e66f5"];
+          selectedLineBgColor = ["#ccd0da"];
+          selectedRangeBgColor = ["#ccd0da"];
+          cherryPickedCommitBgColor = ["#179299"];
+          cherryPickedCommitFgColor = ["#1e66f5"];
+          unstagedChangeColor = ["red"];
+        };
+      };
     };
 
     # Realtime Motion Interpolation: https://gist.github.com/phiresky/4bfcfbbd05b3c2ed8645
@@ -571,17 +738,98 @@ rec {
 
     ssh.enable = true;
 
-    starship = {
+    starship = let
+      flavour = "latte"; # One of `latte`, `frappe`, `macchiato`, or `mocha`
+    in {
       enable = true;
       enableFishIntegration = config.modules.fish.enable;
+      settings =
+        {
+          # Other config here
+          format = "$all"; # Remove this line to disable the default prompt format
+          palette = "catppuccin_${flavour}";
+        }
+        // builtins.fromTOML (builtins.readFile
+          (pkgs.fetchFromGitHub
+            {
+              owner = "catppuccin";
+              repo = "starship";
+              rev = "3e3e54410c3189053f4da7a7043261361a1ed1bc";
+              sha256 = "sha256-soEBVlq3ULeiZFAdQYMRFuswIIhI9bclIU8WXjxd7oY=";
+            }
+            + /palettes/${flavour}.toml));
+    };
+
+    tmux = {
+      enable = true;
+
+      clock24 = true;
+      escapeTime = 0; # Delay after pressing escape
+      # keyMode = "vi";
+      terminal = "xterm-256color";
+
+      plugins = with pkgs; [
+        {
+          plugin = tmuxPlugins.catppuccin;
+          extraConfig = ''
+            set -g @plugin 'catppuccin/tmux'
+            set -g @catppuccin_flavour 'latte' # or frappe, macchiato, mocha
+          '';
+        }
+      ];
+
+      extraConfig = ''
+        set -g default-terminal "xterm-256color"
+        set-option -ga terminal-overrides ",xterm-256color:Tc"
+      '';
     };
 
     # TODO: Check HM module options
     yt-dlp.enable = true;
 
-    # TODO
     zathura = {
       enable = true;
+
+      options = {
+        # Catppuccin Latte
+        default-fg                = "#4C4F69";
+        default-bg 			          = "#EFF1F5";
+
+        completion-bg		          = "#CCD0DA";
+        completion-fg		          = "#4C4F69";
+        completion-highlight-bg	  = "#575268";
+        completion-highlight-fg	  = "#4C4F69";
+        completion-group-bg		    = "#CCD0DA";
+        completion-group-fg		    = "#1E66F5";
+
+        statusbar-fg		          = "#4C4F69";
+        statusbar-bg		          = "#CCD0DA";
+
+        notification-bg		        = "#CCD0DA";
+        notification-fg		        = "#4C4F69";
+        notification-error-bg	    = "#CCD0DA";
+        notification-error-fg	    = "#D20F39";
+        notification-warning-bg	  = "#CCD0DA";
+        notification-warning-fg	  = "#FAE3B0";
+
+        inputbar-fg			          = "#4C4F69";
+        inputbar-bg 		          = "#CCD0DA";
+
+        recolor-lightcolor		    = "#EFF1F5";
+        recolor-darkcolor		      = "#4C4F69";
+
+        index-fg			            = "#4C4F69";
+        index-bg			            = "#EFF1F5";
+        index-active-fg		        = "#4C4F69";
+        index-active-bg		        = "#CCD0DA";
+
+        render-loading-bg		      = "#EFF1F5";
+        render-loading-fg		      = "#4C4F69";
+
+        highlight-color		        = "#575268";
+        highlight-fg              = "#EA76CB";
+        highlight-active-color	  = "#EA76CB";
+      };
     };
 
     zoxide = {

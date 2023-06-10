@@ -35,13 +35,14 @@ in {
 
       # https://docs.helix-editor.com/configuration.html
       settings = {
-        # theme = "base16_terminal";
+        theme = "catppuccin_latte";
         editor = {
           scrolloff = 10;
           mouse = false; # Default true
           middle-click-paste = false; # Default true
           line-number = "relative";
           cursorline = true;
+          color-modes = true;
           auto-completion = true; # Default
           bufferline = "multiple";
           cursor-shape = {

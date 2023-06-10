@@ -26,11 +26,14 @@ in {
       iconTheme.name = "Papirus";
     };
 
+    # TODO: catppuccin-cursors
     home.pointerCursor = {
       gtk.enable = true;
       x11.enable = true;
       package = pkgs.bibata-cursors;
       name = "Bibata-Modern-Classic";
+      # package = pkgs.catppuccin-cursors.latteMauve;
+      # name = "Catppuccin-Latte-Mauve-Cursors";
       size = 16;
     };
 
@@ -56,6 +59,37 @@ in {
       # Notification service
       dunst = {
         enable = true;
+
+        iconTheme.package = pkgs.papirus-icon-theme;
+        iconTheme.name = "Papirus";
+
+        settings = {
+          global = {
+            monitor = 1;
+            font = "JetBrains Nerd Font Mono 11";
+            offset = "20x20";
+            frame_color = "#1E66F5";
+            frame_width = 2;
+            corner_radius = 5;
+            separator_color = "frame";
+          };
+
+          urgency_low = {
+            background = "#EFF1F5";
+            foreground = "#4C4F69";
+          };
+
+          urgency_normal = {
+            background = "#EFF1F5";
+            foreground = "#4C4F69";
+          };
+
+          urgency_critical = {
+            background = "#EFF1F5";
+            foreground = "#4C4F69";
+            frame_color = "#FE640B";
+          };
+        };
       };
     };
 
@@ -102,7 +136,6 @@ in {
         "$mainMod, F" = ["fullscreen"];
         "$mainMod, C" = ["exec, clipman pick --tool=rofi"];
         "$mainMod, G" = ["togglegroup"];
-        "$mainMod, T" = ["exec, kitty"];
         "ALT, tab" = ["changegroupactive"];
       };
 

@@ -22,6 +22,8 @@ in {
         alefragnani.bookmarks
         # alefragnani.project-manager # Not much sense with flake dev environments
         # bradlc.vscode-tailwindcss
+        catppuccin.catppuccin-vsc
+        catppuccin.catppuccin-vsc-icons
         christian-kohler.path-intellisense
         codezombiech.gitignore
         coolbear.systemd-unit-file
@@ -46,6 +48,7 @@ in {
         ms-vscode.cpptools
         ms-vscode.hexeditor
         ms-vscode.makefile-tools
+        ms-vscode-remote.remote-ssh
         # naumovs.color-highlight
         njpwerner.autodocstring
         james-yu.latex-workshop
@@ -91,10 +94,16 @@ in {
         "files.trimFinalNewlines" = true;
         "files.trimTrailingWhitespace" = true; # NOTE: If this is enabled with frequent autosave, the current lines whitespace will always be removed, which is obnoxious
 
+        "window.restoreWindows" = "none";
+
         "workbench.enableExperiments" = false;
         "workbench.list.smoothScrolling" = true;
-        "workbench.colorTheme" = "Default Light Modern";
-        "workbench.iconTheme" = "vscode-icons";
+        # "workbench.colorTheme" = "Default Light Modern";
+        # "workbench.iconTheme" = "vscode-icons";
+        "workbench.colorTheme" = "Catppuccin Latte";
+        "workbench.iconTheme" = "catppuccin-latte";
+
+        "remote.SSH.configFile" = "~/.ssh/custom-config";
 
         "security.workspace.trust.enabled" = false;
 
