@@ -33,24 +33,6 @@ with mylib.networking; {
         "50-ether" = mkSystemdNetwork "enp*";
       };
 
-      wireguard-tunnels = {
-        wg0-de-115 = (
-          mkWireguardService
-          "wg0-de-115"
-          "proton-de-115.key"
-          "9+CorlxrTsQR7qjIOVKsEkk8Z7UUS5WT3R1ccF7a0ic="
-          "194.126.177.14"
-        );
-
-        wg0-lu-16 = (
-          mkWireguardService
-          "wg0-lu-16"
-          "proton-lu-16.key"
-          "asu9KtQoZ3iKwELsDTgjPEiFNcD1XtgGgy3O4CZFg2w="
-          "92.223.89.133"
-        );
-      };
-
       allowedTCPPorts = [
         22 # SSH
         80 # HTTP
