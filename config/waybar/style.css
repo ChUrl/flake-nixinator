@@ -1,3 +1,4 @@
+/*TODO: Set this through nixos module programatically*/
 /*@import url("colors/three-bears.css");*/
 @import url("colors/foggy-lake.css");
 
@@ -18,6 +19,10 @@ window#waybar {
   margin: 5px 5px 5px 5px;
   border-radius: 6px;
   color: @base;
+}
+
+#workspaces button:hover {
+  color: @pink;
 }
 
 /*Tux Icon*/
