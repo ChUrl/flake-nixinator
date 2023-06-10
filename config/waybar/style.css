@@ -7,8 +7,7 @@ window#waybar {
   font-family: JetBrainsMono Nerd Font Mono;
   font-weight: bold;
   color: @base;
-  background-color: @base;
-  opacity: 0.6;
+  background-color: rgba(239,241,245,0.6);
 }
 
 /*Square Widgets*/
@@ -18,6 +17,7 @@ window#waybar {
   padding: 0px 10px 0px 10px;
   margin: 5px 5px 5px 5px;
   border-radius: 6px;
+  color: @base;
 }
 
 /*Tux Icon*/
