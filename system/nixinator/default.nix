@@ -27,6 +27,26 @@
       hydra.enable = true;
       sabnzbd.enable = true;
     };
+
+    systemd-networkd = {
+      wireguard-tunnels = {
+        wg0-de-115 = (
+          mylib.networking.mkWireguardService
+          "wg0-de-115"
+          "proton-de-115.key"
+          "9+CorlxrTsQR7qjIOVKsEkk8Z7UUS5WT3R1ccF7a0ic="
+          "194.126.177.14"
+        );
+
+        wg0-lu-16 = (
+          mylib.networking.mkWireguardService
+          "wg0-lu-16"
+          "proton-lu-16.key"
+          "asu9KtQoZ3iKwELsDTgjPEiFNcD1XtgGgy3O4CZFg2w="
+          "92.223.89.133"
+        );
+      };
+    };
   };
 
   # Low latency audio
