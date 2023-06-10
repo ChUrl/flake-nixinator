@@ -28,12 +28,26 @@ in {
 
     # Wireguard VPNs
     systemd.services = cfg.wireguard-tunnels;
+
+    # NOTE: I can connect to TU Dortmund directly
+    # TODO: Use config with netns, like with wireguard
+    # services.openvpn.servers = {
+    #   # TODO: Can't read config file...
+    #   tu-dortmund-irb = {
+    #     autoStart = false;
+    #     config = "config ~/NixFlake/config/openvpn/tu-dortmund-irb.ovpn";
+    #   };
+    # };
+
+    # TODO: Rewrite with lib.pipe
+    # Generate list of vpns for rofi menu
     environment.etc."rofi-vpns".text = let
       names-list = attrNames cfg.wireguard-tunnels;
       names = concatStringsSep "\n" names-list;
     in
       names;
 
+    # Allow to enable/disable tunnels without root password
     modules.polkit.allowed-system-services = let
       vpn-services = lib.pipe cfg.wireguard-tunnels [
         attrNames
