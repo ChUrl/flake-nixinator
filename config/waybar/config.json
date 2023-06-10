@@ -47,6 +47,7 @@
     "pulseaudio": {
       "format": "<span font=\"FontAwesome\"></span> {volume}%",
       "format-muted": "<span font=\"FontAwesome\"></span> ",
+      // "on-click": "alacritty -o font.size=12 -e ncpamixer"
       "on-click": "kitty ncpamixer"
     },
 

@@ -1,0 +1,7 @@
+* {
+	bg-col-op: rgba(239, 241, 245, 100%);
+    bg-col: rgba(239, 241, 245, 60%);
+    fg-col: #4c4f69;
+    pink: #d20f39;
+	trans: rgba(255, 255, 255, 0);
+}
