@@ -121,6 +121,7 @@ in {
       });
     };
 
+    # Allow start/stop containers without root password
     modules.polkit.allowed-system-services = let
       container-services = lib.pipe virtualisation.oci-containers.containers [
         builtins.attrNames
@@ -130,11 +131,13 @@ in {
     in
       container-services;
 
-    # TODO: Rewrite with builtins.pipe
+    # Generate list of containers for rofi menu
     environment.etc."rofi-containers".text = let
-      containers-list = attrNames virtualisation.oci-containers.containers;
-      containers-filtered = filter (c: cfg.${c}.enable) containers-list;
-      containers = concatStringsSep "\n" containers-filtered;
+      containers = lib.pipe virtualisation.oci-containers.containers [
+        builtins.attrNames
+        (builtins.filter (c: cfg.${c}.enable))
+        (builtins.concatStringsSep "\n")
+      ];
     in
       containers;
   };
