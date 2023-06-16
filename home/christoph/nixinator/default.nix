@@ -70,24 +70,24 @@ rec {
       #   distrho.enable = true;
       # };
 
-      gaming = {
-        enable = false;
+      # gaming = {
+      #   enable = false;
 
-        prism.enable = true;
-        bottles.enable = false;
-        cemu.enable = true;
-        # TODO: Webcord
-        # discordChromium.enable = false;
-        # discordElectron.enable = false; # This is the nixpkgs version, prefer the one from flatpak module
-        # dwarffortress.enable = false;
+      #   prism.enable = true;
+      #   bottles.enable = false;
+      #   cemu.enable = true;
+      #   # TODO: Webcord
+      #   # discordChromium.enable = false;
+      #   # discordElectron.enable = false; # This is the nixpkgs version, prefer the one from flatpak module
+      #   # dwarffortress.enable = false;
 
-        steam = {
-          enable = true;
-          gamescope = true;
-          adwaita = false;
-          protonup = true;
-        };
-      };
+      #   steam = {
+      #     enable = true;
+      #     gamescope = true;
+      #     adwaita = false;
+      #     protonup = true;
+      #   };
+      # };
 
       waybar.monitor = "HDMI-A-1";
     };

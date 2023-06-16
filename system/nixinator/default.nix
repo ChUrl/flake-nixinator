@@ -11,7 +11,7 @@
     ./hardware-configuration.nix
     ../modules
 
-    inputs.musnix.nixosModules.musnix
+    # inputs.musnix.nixosModules.musnix
   ];
 
   modules = {
@@ -50,10 +50,10 @@
   };
 
   # Low latency audio
-  musnix = {
-    enable = true;
-    # musnix.soundcardPciId = ;
-  };
+  # musnix = {
+  #   enable = true;
+  #   # musnix.soundcardPciId = ;
+  # };
 
   services.xserver = {
     # Configure keymap in X11
