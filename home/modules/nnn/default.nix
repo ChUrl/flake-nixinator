@@ -36,11 +36,13 @@ in {
         c = "~/.config";
         d = "~/Documents";
         D = "~/Downloads";
-        n = "~/Notes";
-        t = "~/Notes/TU";
         h = "~/Notes/HHU";
+        l = "~/Local";
+        m = "~/Mount";
+        n = "~/Notes";
         N = "~/NixFlake";
         p = "~/Pictures";
+        t = "~/Notes/TU";
         v = "~/Videos";
       };
 
@@ -61,8 +63,8 @@ in {
           (pkgs.fetchFromGitHub {
             owner = "jarun";
             repo = "nnn";
-            rev = "aaf60b93d741ffff211902a10a159434629bbdb9";
-            sha256 = "sha256-MwI3PqPfSyblURUAds4aVsw8WFBAgbDo5hqXMmRbAW4=";
+            rev = "26d5b5c6141f0424869db8ca47e1d370f7b898d5";
+            sha256 = "sha256-a2Fq17mS/m7wRvPc1EkUun198SoeRZtJEABGjPWW+6E=";
           })
           + "/plugins";
       };
