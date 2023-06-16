@@ -2,7 +2,7 @@
 
 This is my modular NixOS configuration, using Hyprland for a lightweight desktop.
 
-![](desktop.png)
+![](Foggy-Lake.png)
 
 To install remove everything from ``/etc/nixos`` and symlink the ``flake.nix`` to ``/etc/nixos/flake.nix``.
 
