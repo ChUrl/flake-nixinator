@@ -49,6 +49,10 @@
         eval $ACTION
       '';
 
+  # TODO: I want to generate the containers menu using the actionsA and actionsB attrs:
+  #       - actionsA will be generated from the stuff in oci-containers.containers
+  #       - actionsB will be set statically for start, stop, status
+
   # Receives attrs like:
   # {
   #   optionA = "exa -1 -D ~/Notes/TU";
