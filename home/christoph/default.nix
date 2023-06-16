@@ -354,6 +354,8 @@ rec {
 
     cool-retro-term
 
+    ventoy-full # Bootable USB for many ISOs
+
     # Xooooorg/Desktop environment stuff
     # xclip
     xorg.xwininfo # See what apps run in XWayland
@@ -720,7 +722,7 @@ rec {
     };
 
     nushell = {
-      enable = false;
+      enable = true;
     };
 
     # Git status replacement with file selection by number

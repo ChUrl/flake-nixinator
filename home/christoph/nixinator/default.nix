@@ -71,7 +71,7 @@ rec {
       # };
 
       gaming = {
-        enable = true;
+        enable = false;
 
         prism.enable = true;
         bottles.enable = false;
@@ -84,7 +84,7 @@ rec {
         steam = {
           enable = true;
           gamescope = true;
-          adwaita = true;
+          adwaita = false;
           protonup = true;
         };
       };
