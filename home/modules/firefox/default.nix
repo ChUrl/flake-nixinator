@@ -115,6 +115,7 @@ in {
             cookie-autodelete
             display-_anchors # Easier linking to specific website parts
             don-t-fuck-with-paste
+            enhancer-for-youtube
             h264ify
             keepassxc-browser
             localcdn
