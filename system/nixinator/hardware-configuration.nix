@@ -33,6 +33,7 @@
   fileSystems."/" = {
     device = "/dev/disk/by-uuid/b87bbc3d-edd3-434a-b4a3-859bf62b8a17";
     fsType = "ext4";
+    options = [ "noatime" "nodiratime" "discard" ];
   };
 
   fileSystems."/boot/efi" = {
@@ -43,6 +44,13 @@
   fileSystems."/home/christoph/GameSSD" = {
     device = "/dev/disk/by-uuid/fcea57ce-cd8a-44b0-a4bc-5ac11849dfb6";
     fsType = "ext4";
+    options = [ "noatime" "nodiratime" "discard" ];
+  };
+
+  fileSystems."/home/christoph/OldHome" = {
+    device = "/dev/disk/by-uuid/92a1dc32-48cd-4f1c-bb72-7c1c360cbb33";
+    fsType = "ext4";
+    options = [ "noatime" "nodiratime" "discard" ];
   };
 
   fileSystems."/home/christoph/GameHDD" = {
