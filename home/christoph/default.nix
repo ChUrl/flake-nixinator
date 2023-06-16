@@ -106,9 +106,11 @@ rec {
       };
 
       autostart = [
-        "kdeconnect-indicator"
-        "nextcloud --background"
-        "keepassxc"
+        # NOTE: The sleep 15s is a hack for tray icons,
+        #       they need to be launched after waybar
+        "hyprctl dispatch exec \"sleep 15s && kdeconnect-indicator\""
+        "hyprctl dispatch exec \"sleep 15s && nextcloud --background\""
+        "hyprctl dispatch exec \"sleep 15s && keepassxc\""
         # "alacritty -o font.size=12 -e tmux"
         "kitty"
         # "md.obsidian.Obsidian"
