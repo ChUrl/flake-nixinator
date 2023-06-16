@@ -353,8 +353,8 @@ rec {
     httpie # Cool http client
 
     cool-retro-term
-
     ventoy-full # Bootable USB for many ISOs
+    geekbench
 
     # Xooooorg/Desktop environment stuff
     # xclip
