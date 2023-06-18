@@ -31,7 +31,7 @@ rec {
             scale = 1;
           };
 
-          "HDMI-A-2" = {
+          "HDMI-A-3" = {
             width = 1920;
             height = 1080;
             rate = 60;
@@ -43,7 +43,7 @@ rec {
 
         workspaces = {
           "HDMI-A-1" = [1 2 3 4 5 6 7 8 9];
-          "HDMI-A-2" = [10];
+          "HDMI-A-3" = [10];
         };
       };
 

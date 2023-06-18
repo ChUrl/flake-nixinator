@@ -17,7 +17,8 @@
     # https://wiki.archlinux.org/title/Kernel_mode_setting#Early_KMS_start
     # initrd.kernelModules = [ "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm" ]; # NVIDIA
     initrd.kernelModules = ["amdgpu"]; # Initrd modules are always loaded, e.g. when they are required to mount the rootfs
-    kernelModules = ["kvm-intel" "iwlwifi"];
+    # kernelModules = ["kvm-intel" "iwlwifi"];
+    kernelModules = ["kvm-amd"];
 
     # extraModprobeConfig = ''
     #   options iwlwifi 11n_disable=1 wd_disable=0
@@ -25,13 +26,13 @@
 
     # Specific to used kernel (currently linux_zen)
     extraModulePackages = with config.boot.kernelPackages; [
-      new-lg4ff # Logitech force feedback
+      # new-lg4ff # Logitech force feedback
       v4l2loopback
     ];
   };
 
   fileSystems."/" = {
-    device = "/dev/disk/by-uuid/b87bbc3d-edd3-434a-b4a3-859bf62b8a17";
+    device = "/dev/disk/by-uuid/68bd46a0-e95c-4764-a006-44bd9975a6c2";
     fsType = "ext4";
     options = [ "noatime" "nodiratime" "discard" ];
   };
@@ -41,34 +42,12 @@
     fsType = "vfat";
   };
 
-  fileSystems."/home/christoph/GameSSD" = {
-    device = "/dev/disk/by-uuid/fcea57ce-cd8a-44b0-a4bc-5ac11849dfb6";
-    fsType = "ext4";
-    options = [ "noatime" "nodiratime" "discard" ];
-  };
-
-  fileSystems."/home/christoph/OldHome" = {
-    device = "/dev/disk/by-uuid/92a1dc32-48cd-4f1c-bb72-7c1c360cbb33";
-    fsType = "ext4";
-    options = [ "noatime" "nodiratime" "discard" ];
-  };
-
-  fileSystems."/home/christoph/GameHDD" = {
-    device = "/dev/disk/by-uuid/77ae7407-5faa-4d93-8b11-a64ff9a33954";
-    fsType = "ext4";
-  };
-
-  fileSystems."/home/christoph/Videos" = {
-    device = "/dev/disk/by-uuid/4ac26c8e-f9fc-449e-9a80-491558539dbb";
-    fsType = "ext4";
-  };
-
   swapDevices = lib.mkForce [
-    {
-      device = "/var/swap";
-      # size = 1024 * 16 * 2; # twice the RAM for hibernation
-      size = 1024 * 8; # Without hibernation 4.0 GB to 0.5 x RAM
-    }
+    # {
+    #   device = "/var/swap";
+    #   # size = 1024 * 16 * 2; # twice the RAM for hibernation
+    #   size = 1024 * 8; # Without hibernation 4.0 GB to 0.5 x RAM
+    # }
   ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
@@ -90,7 +69,8 @@
     # Use all redistributable firmware (i.e. nonfree)
     enableAllFirmware = true;
     enableRedistributableFirmware = true;
-    cpu.intel.updateMicrocode = true;
+    # cpu.intel.updateMicrocode = true;
+    cpu.amd.updateMicrocode = true;
 
     # nvidia.modesetting.enable = true; # Not officially supported by NVidia but needed for wayland
     # video.hidpi.enable = lib.mkDefault true; # No longer has any effect
@@ -105,8 +85,8 @@
       # amdvlk # RADV (mesa) and AMDVLK (amd) can be used simultaneously
 
       # OpenCL
-      rocm-opencl-icd
-      rocm-opencl-runtime
+      # rocm-opencl-icd
+      # rocm-opencl-runtime
       # rocm-runtime # Wiki doesn't mention this, but it exists...
 
       # TODO: Disabled for the moment, because hardware acceleration crashes AMDGPU driver
