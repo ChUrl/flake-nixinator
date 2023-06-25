@@ -77,7 +77,7 @@ rec {
 
       flatseal.enable = true;
       discord.enable = true;
-      spotify.enable = true;
+      spotify.enable = false; # Can't login because browser doesn't open
       bottles.enable = false;
       obsidian.enable = true;
       jabref.enable = false;
@@ -102,6 +102,9 @@ rec {
           "$mainMod, P" = ["exec, hyprpicker -a"];
           "$mainMod, S" = ["exec, grim -g \"$(slurp)\""];
           "$mainMod CTRL, S" = ["exec, grim -g \"$(slurp)\" - | wl-copy"];
+
+          ", XF86AudioRaiseVolume" = ["exec, wpctl set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 5%+"];
+          ", XF86AudioLowerVolume" = ["exec, wpctl set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 5%-"];
         };
       };
 
@@ -357,7 +360,8 @@ rec {
 
     cool-retro-term
     ventoy-full # Bootable USB for many ISOs
-    geekbench
+    # geekbench
+    spotify
 
     # Xooooorg/Desktop environment stuff
     # xclip
