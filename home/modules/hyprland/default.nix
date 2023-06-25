@@ -44,7 +44,6 @@ in {
       wl-clipboard
       clipman # Clipboard manager (wl-paste)
 
-      imv # Image viewer
       moc # Audio player
       ncpamixer # ncurses pavucontrol
       slurp # Region selector for screensharing
@@ -54,6 +53,15 @@ in {
       xfce.tumbler # Thunar thumbnails
       libsForQt5.polkit-kde-agent
     ];
+
+    programs = {
+      imv = {
+        enable = true;
+        settings = {
+          options.background = "ffffff";
+        };
+      };
+    };
 
     services = {
       # Notification service
