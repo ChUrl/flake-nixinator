@@ -440,7 +440,7 @@ rec {
 
     # Media
     wacomtablet
-    blender
+    # blender
     godot
     obs-studio
     # vlc # Addition to mpv without any shaders etc
