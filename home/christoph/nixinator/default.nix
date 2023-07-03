@@ -45,6 +45,16 @@ rec {
           "HDMI-A-1" = [1 2 3 4 5 6 7 8 9];
           "HDMI-A-2" = [10];
         };
+
+        autostart = [
+          "hyprctl dispatch exec \"sleep 15s && fcitx5\""
+        ];
+
+        floating = [
+          {
+            class = "fcitx";
+          }
+        ];
       };
 
       # audio = {
@@ -93,18 +103,18 @@ rec {
     };
 
     home.packages = with pkgs; [
-      quartus-prime-lite # Intel FPGA design software
+      # quartus-prime-lite # Intel FPGA design software
     ];
 
     # NOTE: This has been relocated here from the default config, because it forces en-US keyboard layout
     #       The laptop needs de-DE...
     # Chinese Input
-    # i18n.inputMethod.enabled = "fcitx5";
-    # i18n.inputMethod.fcitx5.addons = with pkgs; [
-    #   fcitx5-gtk
-    #   libsForQt5.fcitx5-qt
-    #   fcitx5-chinese-addons
-    #   fcitx5-configtool # TODO: Remove this and set config through HomeManager
-    # ];
+    i18n.inputMethod.enabled = "fcitx5";
+    i18n.inputMethod.fcitx5.addons = with pkgs; [
+      fcitx5-gtk
+      libsForQt5.fcitx5-qt
+      fcitx5-chinese-addons
+      fcitx5-configtool # TODO: Remove this and set config through HomeManager
+    ];
   };
 }
