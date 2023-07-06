@@ -44,5 +44,16 @@
   hardware = {
     enableRedistributableFirmware = true;
     cpu.intel.updateMicrocode = true;
+
+    opengl = {
+      enable = true;
+      driSupport = true;
+      extraPackages = with pkgs; [
+        intel-media-driver
+        vaapiIntel
+        vaapiVdpau
+        libvdpau-va-gl
+      ];
+    };
   };
 }
