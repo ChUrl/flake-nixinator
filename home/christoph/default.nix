@@ -400,7 +400,8 @@ rec {
     # calibre # Do I even read
     virt-manager
     # gource # Visualize git commit log, completely useless
-    anki-bin # Use anki-bin as anki is some versions behind
+    # anki-bin # Use anki-bin as anki is some versions behind NOTE: anki-bin doesn't support fcitx5 :(
+    anki
     # inputs.nixos-conf-editor.packages."x86_64-linux".nixos-conf-editor
     # octave # GNU matlab basically
     logisim-evolution # Digital circuit simulator
