@@ -18,8 +18,8 @@
     containers = {
       enable = true;
 
-      homeassistant.enable = false;
-      stablediffusion.enable = true;
+      homeassistant.enable = true;
+      stablediffusion.enable = false;
       jellyfin.enable = true;
       fileflows.enable = false;
       sonarr.enable = true;
