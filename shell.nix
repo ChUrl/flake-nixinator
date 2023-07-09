@@ -109,6 +109,21 @@ pkgs.devshell.mkShell {
       help = "Rebuild and activate config on next boot";
       command = "sudo nixos-rebuild boot --flake .#nixtop";
     }
+    {
+      name = "rebuild-switch-servenix";
+      help = "Rebuild and activate the servenix config";
+      command = "sudo nixos-rebuild switch --flake .#servenix";
+    }
+    {
+      name = "rebuild-build-servenix";
+      help = "Rebuild and diff the servenix config (to diff systems)";
+      command = "sudo nixos-rebuild build --flake .#servenix";
+    }
+    {
+      name = "rebuild-boot-servenix";
+      help = "Rebuild and activate config on next boot";
+      command = "sudo nixos-rebuild boot --flake .#servenix";
+    }
 
     # Help text (this is pretty stupid)
     {
