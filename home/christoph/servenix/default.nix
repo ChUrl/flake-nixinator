@@ -22,22 +22,22 @@ rec {
         kb-variant = "altgr-intl";
 
         monitors = {
-          "HDMI-A-1" = {
-            width = 2560;
-            height = 1440;
-            rate = 144;
-            x = 1920;
+          "HDMI-A-3" = {
+            width = 1920;
+            height = 1080;
+            rate = 60;
+            x = 0;
             y = 0;
             scale = 1;
           };
         };
 
         workspaces = {
-          "HDMI-A-1" = [1 2 3 4 5 6 7 8 9 10];
+          "HDMI-A-3" = [1 2 3 4 5 6 7 8 9 10];
         };
       };
 
-      waybar.monitor = "HDMI-A-1";
+      waybar.monitor = "HDMI-A-3";
     };
 
     home.packages = with pkgs; [
