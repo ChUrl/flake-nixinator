@@ -14,6 +14,9 @@ with mylib.modules; let
 in {
   options.modules.containers = import ./options.nix {inherit lib mylib;};
 
+  # TODO: These need config options exposed through the module,
+  #       e.g. to set paths/volumes/binds differently per system...
+
   config = mkIf cfg.enable rec {
     virtualisation.oci-containers.containers = {
       # Home Automation
@@ -56,9 +59,9 @@ in {
         vols = [
           "jellyfin-cache:/cache:Z"
           "jellyfin-config:/config:Z"
-          "/home/christoph/Videos/Video:/media/Video"
-          "/home/christoph/Videos/Picture:/media/Picture"
-          "/home/christoph/GameHDD/Video:/media/Video2"
+          "/home/christoph/HDD1/Video:/media/Video"
+          "/home/christoph/HDD2/Video:/media/Video2"
+          "/home/christoph/HDD2/Picture:/media/Picture"
         ];
       });
 
@@ -68,7 +71,8 @@ in {
         vols = [
           "fileflows-cache:/temp:Z"
           "fileflows-data:/app/Data:Z"
-          "/home/christoph/Videos/Video:/media"
+          "/home/christoph/HDD1/Video:/media"
+          "/home/christoph/HDD2/Video:/media"
         ];
       });
 
@@ -78,8 +82,8 @@ in {
         id-ports = [8989];
         vols = [
           "sonarr-config:/config:Z"
-          "/home/christoph/Videos/Shows:/tv"
-          "/home/christoph/Videos/SabNzbd:/downloads"
+          "/home/christoph/HDD2/Shows:/tv"
+          "/home/christoph/HDD2/SabNzbd:/downloads"
         ];
         netns = "wg0-de-115";
         netdns = "10.2.0.1";
@@ -90,8 +94,8 @@ in {
         id-ports = [7878];
         vols = [
           "radarr-config:/config:Z"
-          "/home/christoph/Videos/Movies:/movies"
-          "/home/christoph/Videos/SabNzbd:/downloads"
+          "/home/christoph/HDD2/Movies:/movies"
+          "/home/christoph/HDD2/SabNzbd:/downloads"
         ];
         netns = "wg0-de-115";
         netdns = "10.2.0.1";
@@ -102,7 +106,7 @@ in {
         id-ports = [5076];
         vols = [
           "hydra-config:/config:Z"
-          "/home/christoph/Videos/SabNzbd:/downloads"
+          "/home/christoph/HDD2/SabNzbd:/downloads"
         ];
         netns = "wg0-de-115";
         netdns = "10.2.0.1";
@@ -113,8 +117,8 @@ in {
         id-ports = [8080];
         vols = [
           "sabnzbd-config:/config:Z"
-          "/home/christoph/Videos/SabNzbd:/downloads"
-          "/home/christoph/Videos/.sabnzbd:/incomplete-downloads"
+          "/home/christoph/HDD2/SabNzbd:/downloads"
+          "/home/christoph/HDD2/.sabnzbd:/incomplete-downloads"
         ];
         netns = "wg0-de-115";
         netdns = "10.2.0.1";
