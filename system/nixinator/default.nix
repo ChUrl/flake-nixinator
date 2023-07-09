@@ -22,10 +22,10 @@
       stablediffusion.enable = true;
       jellyfin.enable = true;
       fileflows.enable = false;
-      sonarr.enable = true;
-      radarr.enable = true;
-      hydra.enable = true;
-      sabnzbd.enable = true;
+      sonarr.enable = false;
+      radarr.enable = false;
+      hydra.enable = false;
+      sabnzbd.enable = false;
     };
 
     systemd-networkd = {
