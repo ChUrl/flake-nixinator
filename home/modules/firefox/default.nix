@@ -127,7 +127,7 @@ in {
             protondb-for-steam
             refined-github
             return-youtube-dislikes
-            search-by-image
+            # search-by-image # TODO: Failed to build once
             single-file
             skip-redirect
             smart-referer # Limit referer link information
