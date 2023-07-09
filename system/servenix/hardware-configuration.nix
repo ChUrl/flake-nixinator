@@ -35,6 +35,22 @@
     fsType = "vfat";
   };
 
+  fileSystems."/home/christoph/HDD1" = {
+    device = "/dev/disk/by-uuid/77ae7407-5faa-4d93-8b11-a64ff9a33954";
+    fsType = "ext4";
+  };
+
+  fileSystems."/home/christoph/HDD2" = {
+    device = "/dev/disk/by-uuid/4ac26c8e-f9fc-449e-9a80-491558539dbb";
+    fsType = "ext4";
+  };
+
+  fileSystems."/home/christoph/SSD1" = {
+    device = "/dev/disk/by-uuid/fcea57ce-cd8a-44b0-a4bc-5ac11849dfb6";
+    fsType = "ext4";
+    options = [ "noatime" "nodiratime" "discard" ];
+  };
+
   swapDevices = lib.mkForce [
     # {
     #   device = "/var/swap";
