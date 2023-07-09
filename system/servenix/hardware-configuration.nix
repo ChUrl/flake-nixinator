@@ -11,34 +11,27 @@
   imports = [(modulesPath + "/installer/scan/not-detected.nix")];
 
   boot = {
-    initrd.availableKernelModules = ["xhci_pci" "ahci" "nvme" "usbhid" "usb_storage" "sd_mod"];
-    # Enable early Nvidia kernel modesetting
-    # https://wiki.archlinux.org/title/GDM#GDM_ignores_Wayland_and_uses_X.Org_by_default (not fixed by this)
-    # https://wiki.archlinux.org/title/Kernel_mode_setting#Early_KMS_start
-    # initrd.kernelModules = [ "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm" ]; # NVIDIA
-    initrd.kernelModules = ["amdgpu"]; # Initrd modules are always loaded, e.g. when they are required to mount the rootfs
-    # kernelModules = ["kvm-intel" "iwlwifi"];
-    kernelModules = ["kvm-amd"];
+    initrd.availableKernelModules = ["xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod"];
+    initrd.kernelModules = []; # Initrd modules are always loaded, e.g. when they are required to mount the rootfs
+    kernelModules = ["kvm-intel" "iwlwifi"];
+    # kernelModules = ["kvm-amd"];
 
     # extraModprobeConfig = ''
     #   options iwlwifi 11n_disable=1 wd_disable=0
     # '';
 
     # Specific to used kernel (currently linux_zen)
-    extraModulePackages = with config.boot.kernelPackages; [
-      # new-lg4ff # Logitech force feedback
-      v4l2loopback
-    ];
+    extraModulePackages = with config.boot.kernelPackages; [];
   };
 
   fileSystems."/" = {
-    device = "/dev/disk/by-uuid/68bd46a0-e95c-4764-a006-44bd9975a6c2";
+    device = "/dev/disk/by-uuid/611e86c7-67e4-41ce-a7ee-e6639bbe8f07";
     fsType = "ext4";
     options = [ "noatime" "nodiratime" "discard" ];
   };
 
   fileSystems."/boot/efi" = {
-    device = "/dev/disk/by-uuid/36A9-3D74";
+    device = "/dev/disk/by-uuid/CD5E-E3AB";
     fsType = "vfat";
   };
 
@@ -69,8 +62,7 @@
     # Use all redistributable firmware (i.e. nonfree)
     enableAllFirmware = true;
     enableRedistributableFirmware = true;
-    # cpu.intel.updateMicrocode = true;
-    cpu.amd.updateMicrocode = true;
+    cpu.intel.updateMicrocode = true;
 
     # nvidia.modesetting.enable = true; # Not officially supported by NVidia but needed for wayland
     # video.hidpi.enable = lib.mkDefault true; # No longer has any effect
@@ -96,13 +88,7 @@
       # libvdpau # NOTE: Don't know if needed/where it belongs...
       # libva # NOTE: Don't know if needed/where it belongs...
     ];
-
-    sane.enable = true; # Scanning
-
-    xpadneo.enable = true; # Xbox Controller
   };
-
-  environment.variables.AMD_VULKAN_ICD = "RADV"; # Choose mesa driver by default
 
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
 }
