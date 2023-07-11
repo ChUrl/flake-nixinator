@@ -45,11 +45,11 @@
     fsType = "ext4";
   };
 
-  fileSystems."/home/christoph/SSD1" = {
-    device = "/dev/disk/by-uuid/fcea57ce-cd8a-44b0-a4bc-5ac11849dfb6";
-    fsType = "ext4";
-    options = [ "noatime" "nodiratime" "discard" ];
-  };
+  # fileSystems."/home/christoph/SSD1" = {
+  #   device = "/dev/disk/by-uuid/fcea57ce-cd8a-44b0-a4bc-5ac11849dfb6";
+  #   fsType = "ext4";
+  #   options = [ "noatime" "nodiratime" "discard" ];
+  # };
 
   swapDevices = lib.mkForce [
     # {
