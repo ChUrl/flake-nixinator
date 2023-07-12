@@ -19,6 +19,7 @@ rec {
     # Use mkForce to not pull the entire ballast from /home/christoph/default.nix
 
     modules = lib.mkForce {
+      flatpak.enable = false;
       fish.enable = true;
       helix.enable = true;
       nnn.enable = true;
