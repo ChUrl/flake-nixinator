@@ -81,10 +81,7 @@
     fwupd.enable = false;
     locate.enable = false;
     ntp.enable = false;
-    gvfs = { # Network shares
-      enable = true;
-      package = lib.mkForce pkgs.gnome3.gvfs;
-    };
+    gvfs.enable = true;
     qemuGuest.enable = true;
     gnome.gnome-keyring.enable = true;
   };
