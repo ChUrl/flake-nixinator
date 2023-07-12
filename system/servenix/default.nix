@@ -15,6 +15,8 @@
   ];
 
   boot.loader = lib.mkForce {
+    systemd-boot.enable = false;
+
     grub.enable = true;
     grub.device = "/dev/sda";
     grub.useOSProber = true;
