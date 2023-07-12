@@ -74,7 +74,6 @@
     printing.enable = lib.mkForce false;
     avahi.enable = lib.mkForce false;
     flatpak.enable = lib.mkForce false;
+    qemuGuest.enable = true;
   };
-
-  virtualisation.qemu.guestAgent.enable = true;
 }
