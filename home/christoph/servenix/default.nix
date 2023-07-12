@@ -40,8 +40,12 @@ rec {
       waybar.monitor = "HDMI-A-3";
     };
 
-    home.packages = with pkgs; [
-      # quartus-prime-lite # Intel FPGA design software
+    # Use mkForce to not pull the entire ballast from /home/christoph/default.nix
+    home.packages = with pkgs; mkForce [
+      ffmpeg_5-full # v5, including ffplay
+      imagemagick # Convert image (magic)
+      unrar
+      p7zip
     ];
   };
 }
