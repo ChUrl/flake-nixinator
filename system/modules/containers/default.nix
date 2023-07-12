@@ -59,9 +59,8 @@ in {
         vols = [
           "jellyfin-cache:/cache:Z"
           "jellyfin-config:/config:Z"
-          "/home/christoph/HDD1/Video:/media/Video"
-          "/home/christoph/HDD2/Video:/media/Video2"
-          "/home/christoph/HDD2/Picture:/media/Picture"
+          "/media/Picture:/media/Picture"
+          "/media/Video:/media/Video"
         ];
       });
 
