@@ -49,18 +49,6 @@
     };
   };
 
-  services.xserver = {
-    enable = lib.mkForce false;
-
-    # Configure keymap in X11
-    layout = "us";
-    xkbVariant = "altgr-intl";
-
-    # videoDrivers = [ "nvidia" ]; # NVIDIA
-    # videoDrivers = ["amdgpu"];
-    # videoDrivers = ["intel"];
-  };
-
   programs = lib.mkForce {
     fish.enable = true;
     firejail.enable = true;
@@ -69,11 +57,35 @@
     starship.enable = true;
   };
 
-  services = {
-    pipewire.enable = lib.mkForce false;
-    printing.enable = lib.mkForce false;
-    avahi.enable = lib.mkForce false;
-    flatpak.enable = lib.mkForce false;
+  services = lib.mkForce {
+    xserver = {
+      enable = false;
+
+      # Configure keymap in X11
+      layout = "us";
+      xkbVariant = "altgr-intl";
+
+      # videoDrivers = [ "nvidia" ]; # NVIDIA
+      # videoDrivers = ["amdgpu"];
+      # videoDrivers = ["intel"];
+    };
+
+    pipewire.enable = false;
+    printing.enable = false;
+    avahi.enable = false;
+    openssh.enable = true;
+    acpid.enable = false;
+    dbus.enable = true;
+    flatpak.enable = false;
+    fstrim.enable = true;
+    fwupd.enable = false;
+    locate.enable = false;
+    ntp.enable = false;
+    gvfs = { # Network shares
+      enable = true;
+      package = lib.mkForce pkgs.gnome3.gvfs;
+    };
     qemuGuest.enable = true;
+    gnome.gnome-keyring.enable = true;
   };
 }
