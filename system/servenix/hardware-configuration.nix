@@ -13,7 +13,7 @@
 
   boot = {
     # initrd.availableKernelModules = ["xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod"];
-    initrd.availableKernelModules = ["ata_piix" "ahci_hcd" "virtio_pci" "virtio_scsi" "sd_mod" "sr_mod"];
+    initrd.availableKernelModules = ["ata_piix" "uhci_hcd" "virtio_pci" "virtio_scsi" "sd_mod" "sr_mod"];
     initrd.kernelModules = []; # Initrd modules are always loaded, e.g. when they are required to mount the rootfs
     # kernelModules = ["kvm-intel" "iwlwifi"];
     # kernelModules = ["kvm-amd"];
