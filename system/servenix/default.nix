@@ -49,19 +49,32 @@
     };
   };
 
-  # Low latency audio
-  # musnix = {
-  #   enable = true;
-  #   # musnix.soundcardPciId = ;
-  # };
-
   services.xserver = {
+    enable = lib.mkForce false;
+
     # Configure keymap in X11
     layout = "us";
     xkbVariant = "altgr-intl";
 
     # videoDrivers = [ "nvidia" ]; # NVIDIA
     # videoDrivers = ["amdgpu"];
-    videoDrivers = ["intel"];
+    # videoDrivers = ["intel"];
   };
+
+  programs = lib.mkForce {
+    fish.enable = true;
+    firejail.enable = true;
+    git.enable = true;
+    neovim.enable = true;
+    starship.enable = true;
+  };
+
+  services = {
+    pipewire.enable = lib.mkForce false;
+    printing.enable = lib.mkForce false;
+    avahi.enable = lib.mkForce false;
+    flatpak.enable = lib.mkForce false;
+  };
+
+  virtualisation.qemu.guestAgent.enable = true;
 }
