@@ -20,6 +20,7 @@ rec {
 
     modules = lib.mkForce {
       flatpak.enable = false;
+      hyprland.enable = false;
       fish.enable = true;
       helix.enable = true;
       nnn.enable = true;
