@@ -19,11 +19,25 @@ rec {
     # Use mkForce to not pull the entire ballast from /home/christoph/default.nix
 
     modules = lib.mkForce {
-      flatpak.enable = false;
-      hyprland.enable = false;
+      audio.enable = false;
+      chromium.enable = false;
+      emacs.enable = false;
+      email.enable = false;
+      firefox.enable = false;
       fish.enable = true;
+      flatpak.enable = false;
+      gaming.enable = false;
       helix.enable = true;
+      hyprland.enable = false;
+      kitty.enable = false;
+      misc.enable = false;
+      neovim.enable = false;
+      nextcloud.enable = false;
       nnn.enable = true;
+      ranger.enable = false;
+      rofi.enable = false;
+      vscode.enable = false;
+      waybar.enable = false;
     };
 
     home.packages = with pkgs; lib.mkForce [
