@@ -86,7 +86,7 @@ rec {
         flavour = "latte"; # One of `latte`, `frappe`, `macchiato`, or `mocha`
       in {
         enable = true;
-        enableFishIntegration = config.modules.fish.enable;
+        enableFishIntegration = true;
         settings =
           {
             # Other config here
