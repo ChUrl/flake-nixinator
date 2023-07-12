@@ -8,13 +8,16 @@
   modulesPath,
   ...
 }: {
-  imports = [(modulesPath + "/installer/scan/not-detected.nix")];
+  # imports = [(modulesPath + "/installer/scan/not-detected.nix")];
+  imports = [(modulesPath + "/profiles/qemu-guest.nix")];
 
   boot = {
-    initrd.availableKernelModules = ["xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod"];
+    # initrd.availableKernelModules = ["xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod"];
+    initrd.availableKernelModules = ["ata_piix" "ahci_hcd" "virtio_pci" "virtio_scsi" "sd_mod" "sr_mod"];
     initrd.kernelModules = []; # Initrd modules are always loaded, e.g. when they are required to mount the rootfs
-    kernelModules = ["kvm-intel" "iwlwifi"];
+    # kernelModules = ["kvm-intel" "iwlwifi"];
     # kernelModules = ["kvm-amd"];
+    kernelModules = [];
 
     # extraModprobeConfig = ''
     #   options iwlwifi 11n_disable=1 wd_disable=0
@@ -25,31 +28,15 @@
   };
 
   fileSystems."/" = {
-    device = "/dev/disk/by-uuid/611e86c7-67e4-41ce-a7ee-e6639bbe8f07";
+    device = "/dev/disk/by-uuid/e02c3151-1174-4e96-be86-89b42999fc43";
     fsType = "ext4";
     options = [ "noatime" "nodiratime" "discard" ];
   };
 
   fileSystems."/boot/efi" = {
-    device = "/dev/disk/by-uuid/CD5E-E3AB";
+    device = "/dev/disk/by-uuid/566A-C84B";
     fsType = "vfat";
   };
-
-  fileSystems."/home/christoph/HDD1" = {
-    device = "/dev/disk/by-uuid/77ae7407-5faa-4d93-8b11-a64ff9a33954";
-    fsType = "ext4";
-  };
-
-  fileSystems."/home/christoph/HDD2" = {
-    device = "/dev/disk/by-uuid/4ac26c8e-f9fc-449e-9a80-491558539dbb";
-    fsType = "ext4";
-  };
-
-  # fileSystems."/home/christoph/SSD1" = {
-  #   device = "/dev/disk/by-uuid/fcea57ce-cd8a-44b0-a4bc-5ac11849dfb6";
-  #   fsType = "ext4";
-  #   options = [ "noatime" "nodiratime" "discard" ];
-  # };
 
   swapDevices = lib.mkForce [
     # {
@@ -72,21 +59,21 @@
   # networking.wireless.iwd.enable = true;
   # networking.networkmanager.wifi.backend = "iwd";
 
-  nixpkgs.config.allowUnfree = true;
+  # nixpkgs.config.allowUnfree = true;
 
   hardware = {
     # Use all redistributable firmware (i.e. nonfree)
-    enableAllFirmware = true;
-    enableRedistributableFirmware = true;
-    cpu.intel.updateMicrocode = true;
+    # enableAllFirmware = true;
+    # enableRedistributableFirmware = true;
+    # cpu.intel.updateMicrocode = true;
 
     # nvidia.modesetting.enable = true; # Not officially supported by NVidia but needed for wayland
     # video.hidpi.enable = lib.mkDefault true; # No longer has any effect
-    opengl.enable = true;
+    # opengl.enable = true;
 
     # Vulkan
-    opengl.driSupport = true;
-    opengl.driSupport32Bit = true;
+    # opengl.driSupport = true;
+    # opengl.driSupport32Bit = true;
 
     # AMD: https://nixos.wiki/wiki/AMD_GPU
     opengl.extraPackages = with pkgs; [
