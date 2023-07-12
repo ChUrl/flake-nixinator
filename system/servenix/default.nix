@@ -14,6 +14,12 @@
     # inputs.musnix.nixosModules.musnix
   ];
 
+  boot.loader = lib.mkForce {
+    grub.enable = true;
+    grub.device = "/dev/sda";
+    grub.useOSProber = true;
+  };
+
   modules = {
     containers = {
       enable = true;
