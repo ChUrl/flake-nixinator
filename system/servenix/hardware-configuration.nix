@@ -33,6 +33,26 @@
     options = [ "noatime" "nodiratime" "discard" ];
   };
 
+  fileSystems."/media/Picture" = {
+    device = "//192.168.86.100/Picture";
+      fsType = "cifs";
+      options = let
+        # this line prevents hanging on network split
+        automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
+
+      in ["${automount_opts},credentials=/home/christoph/samba.login"];
+  };
+
+  fileSystems."/media/Video" = {
+    device = "//192.168.86.100/Video";
+      fsType = "cifs";
+      options = let
+        # this line prevents hanging on network split
+        automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
+
+      in ["${automount_opts},credentials=/home/christoph/samba.login"];
+  };
+
   swapDevices = lib.mkForce [
     # {
     #   device = "/var/swap";
