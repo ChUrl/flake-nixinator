@@ -391,8 +391,8 @@ rec {
     protonvpn-cli
     # yt-dlp # download videos (from almost anywhere) # HM program
     filezilla
-    dnsmasq # For Access Point/Hotspot
-    linux-wifi-hotspot
+    # dnsmasq # For Access Point/Hotspot
+    # linux-wifi-hotspot
     # spotdl-4_1_6 # My derivation as temporary fix
     spotdl
 
@@ -448,8 +448,8 @@ rec {
     kdenlive
     krita
     inkscape
-    handbrake
-    makemkv
+    # handbrake
+    # makemkv
 
     AusweisApp2
 
@@ -635,45 +635,45 @@ rec {
       userName = "ChUrl";
     };
 
-    helix = {
-      enable = true;
+    # helix = {
+    #   enable = true;
 
-      # NOTE: Syntax changed
-      # languages = [
-      #   {
-      #     name = "verilog";
-      #     roots = [
-      #       ".svls.toml"
-      #       ".svlint.toml"
-      #     ];
-      #     language-server = {
-      #       command = "svls";
-      #       args = [];
-      #     };
-      #   }
-      # ];
+    #   # NOTE: Syntax changed
+    #   # languages = [
+    #   #   {
+    #   #     name = "verilog";
+    #   #     roots = [
+    #   #       ".svls.toml"
+    #   #       ".svlint.toml"
+    #   #     ];
+    #   #     language-server = {
+    #   #       command = "svls";
+    #   #       args = [];
+    #   #     };
+    #   #   }
+    #   # ];
 
-      # https://docs.helix-editor.com/configuration.html
-      settings = {
-        # theme = "base16_terminal";
-        editor = {
-          scrolloff = 10;
-          mouse = false; # Default true
-          middle-click-paste = false; # Default true
-          line-number = "relative";
-          cursorline = true;
-          auto-completion = true; # Default
-          bufferline = "multiple";
-          cursor-shape = {
-            normal = "block";
-            insert = "bar";
-            select = "underline";
-          };
-          lsp.display-messages = true;
-          indent-guides.render = false;
-        };
-      };
-    }; # NOTE: If error occurs after system update on fish init run "ssh-add"
+    #   # https://docs.helix-editor.com/configuration.html
+    #   settings = {
+    #     # theme = "base16_terminal";
+    #     editor = {
+    #       scrolloff = 10;
+    #       mouse = false; # Default true
+    #       middle-click-paste = false; # Default true
+    #       line-number = "relative";
+    #       cursorline = true;
+    #       auto-completion = true; # Default
+    #       bufferline = "multiple";
+    #       cursor-shape = {
+    #         normal = "block";
+    #         insert = "bar";
+    #         select = "underline";
+    #       };
+    #       lsp.display-messages = true;
+    #       indent-guides.render = false;
+    #     };
+    #   };
+    # }; # NOTE: If error occurs after system update on fish init run "ssh-add"
 
     keychain = {
       enable = true;
