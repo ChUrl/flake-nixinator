@@ -28,14 +28,9 @@
   };
 
   fileSystems."/" = {
-    device = "/dev/disk/by-uuid/a78b180d-1b8b-40be-9fb6-21652a6b137e";
+    device = "/dev/disk/by-uuid/f7871268-76f6-49d3-a75b-7fe78e8c55b4";
     fsType = "ext4";
     options = [ "noatime" "nodiratime" "discard" ];
-  };
-
-  fileSystems."/boot/efi" = {
-    device = "/dev/disk/by-uuid/7CDE-0373";
-    fsType = "vfat";
   };
 
   swapDevices = lib.mkForce [
