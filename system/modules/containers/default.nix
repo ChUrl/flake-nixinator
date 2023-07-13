@@ -56,7 +56,7 @@ in {
       jellyfin = mkIf cfg.jellyfin.enable (mkOciContainer {
         image = "linuxserver/jellyfin:10.8.10";
         id-ports = [8096];
-        autostart = true;
+        autoStart = true;
         vols = [
           "jellyfin-cache:/cache:Z"
           "jellyfin-config:/config:Z"
