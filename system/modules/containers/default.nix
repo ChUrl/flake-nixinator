@@ -71,8 +71,9 @@ in {
         vols = [
           "fileflows-cache:/temp:Z"
           "fileflows-data:/app/Data:Z"
-          "/home/christoph/HDD1/Video:/media"
-          "/home/christoph/HDD2/Video:/media"
+          "/media/Shows:/media/Shows"
+          "/media/Movies:/media/Movies"
+          "/media/Video:/media/Video"
         ];
       });
 
@@ -82,8 +83,8 @@ in {
         id-ports = [8989];
         vols = [
           "sonarr-config:/config:Z"
-          "/home/christoph/HDD2/Shows:/tv"
-          "/home/christoph/HDD2/SabNzbd:/downloads"
+          "/media/Shows:/media/Shows"
+          "/media/Usenet:/media/Usenet"
         ];
         netns = "wg0-de-115";
         netdns = "10.2.0.1";
@@ -94,8 +95,8 @@ in {
         id-ports = [7878];
         vols = [
           "radarr-config:/config:Z"
-          "/home/christoph/HDD2/Movies:/movies"
-          "/home/christoph/HDD2/SabNzbd:/downloads"
+          "/media/Movies:/media/Movies"
+          "/media/Usenet:/media/Usenet"
         ];
         netns = "wg0-de-115";
         netdns = "10.2.0.1";
@@ -106,7 +107,7 @@ in {
         id-ports = [5076];
         vols = [
           "hydra-config:/config:Z"
-          "/home/christoph/HDD2/SabNzbd:/downloads"
+          "/media/Usenet:/media/Usenet"
         ];
         netns = "wg0-de-115";
         netdns = "10.2.0.1";
@@ -117,8 +118,7 @@ in {
         id-ports = [8080];
         vols = [
           "sabnzbd-config:/config:Z"
-          "/home/christoph/HDD2/SabNzbd:/downloads"
-          "/home/christoph/HDD2/.sabnzbd:/incomplete-downloads"
+          "/media/Usenet:/media/Usenet"
         ];
         netns = "wg0-de-115";
         netdns = "10.2.0.1";
