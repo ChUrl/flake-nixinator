@@ -20,12 +20,12 @@
 
       homeassistant.enable = false;
       stablediffusion.enable = true;
-      jellyfin.enable = true;
+      jellyfin.enable = false;
       fileflows.enable = false;
-      sonarr.enable = false;
-      radarr.enable = false;
-      hydra.enable = false;
-      sabnzbd.enable = false;
+      sonarr.enable = true;
+      radarr.enable = true;
+      hydra.enable = true;
+      sabnzbd.enable = true;
     };
 
     systemd-networkd = {
