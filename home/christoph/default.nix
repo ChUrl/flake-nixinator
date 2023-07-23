@@ -357,6 +357,7 @@ rec {
     rsync # cp on steroids
     rclone # Rsync for cloud
     httpie # Cool http client
+    # suricata
 
     cool-retro-term
     ventoy-full # Bootable USB for many ISOs

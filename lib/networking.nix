@@ -29,7 +29,7 @@
 
     linkConfig = {
       # This corresponds to the [LINK] section
-      # RequiredForOnline = "routable";
+      RequiredForOnline = "routable";
     };
   };
 
