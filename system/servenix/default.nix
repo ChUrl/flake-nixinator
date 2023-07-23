@@ -26,14 +26,18 @@
     containers = {
       enable = true;
 
-      homeassistant.enable = true;
+      homeassistant.enable = false;
       stablediffusion.enable = false;
       jellyfin.enable = true;
       fileflows.enable = false;
-      sonarr.enable = true;
-      radarr.enable = true;
-      hydra.enable = true;
-      sabnzbd.enable = true;
+
+      # TODO: These have to be moved from nixinator to servenix
+      #       The netns is the problem: Can't access UI when it's running in NS,
+      #       somehow connect to netns from other PC?
+      sonarr.enable = false;
+      radarr.enable = false;
+      hydra.enable = false;
+      sabnzbd.enable = false;
     };
 
     systemd-networkd = {
