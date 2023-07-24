@@ -49,7 +49,7 @@
         # this line prevents hanging on network split
         automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
 
-      in ["${automount_opts},credentials=/home/christoph/samba.login"];
+      in ["${automount_opts},credentials=/home/christoph/samba.login" "uid=1000" "gid=1000"];
   };
 
   fileSystems."/media/Video" = {
@@ -59,7 +59,7 @@
         # this line prevents hanging on network split
         automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
 
-      in ["${automount_opts},credentials=/home/christoph/samba.login"];
+      in ["${automount_opts},credentials=/home/christoph/samba.login" "uid=1000" "gid=1000"];
   };
 
   fileSystems."/media/Usenet" = {
@@ -69,7 +69,7 @@
         # this line prevents hanging on network split
         automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
 
-      in ["${automount_opts},credentials=/home/christoph/samba.login"];
+      in ["${automount_opts},credentials=/home/christoph/samba.login" "uid=1000" "gid=1000"];
   };
 
   swapDevices = lib.mkForce [
