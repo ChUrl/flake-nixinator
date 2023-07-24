@@ -438,7 +438,8 @@ rec {
     # ]))
     # jetbrains.pycharm-professional
     # jetbrains.idea-ultimate
-    jetbrains.clion
+    jetbrains.clion # TODO: Use toolbox instead
+    jetbrains-toolbox
 
     # Media
     wacomtablet
