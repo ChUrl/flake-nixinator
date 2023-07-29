@@ -46,6 +46,12 @@ with mylib.networking; {
     };
   };
 
+  networking.hosts = {
+    "192.168.86.101" = ["servenix"];
+    "192.168.86.100" = ["truenas"];
+    "192.168.86.69" = ["proxmox"];
+  };
+
   # Enable flakes
   nix = {
     package = pkgs.nixVersions.stable;
