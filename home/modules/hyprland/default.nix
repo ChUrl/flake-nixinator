@@ -49,8 +49,8 @@ in {
       slurp # Region selector for screensharing
       grim # Grab images from compositor
 
-      xfce.thunar
-      xfce.tumbler # Thunar thumbnails
+      # xfce.thunar
+      # xfce.tumbler # Thunar thumbnails
       libsForQt5.polkit-kde-agent
     ];
 
@@ -64,6 +64,7 @@ in {
     };
 
     services = {
+      # TODO: Make a module out of this
       # Notification service
       dunst = {
         enable = true;
