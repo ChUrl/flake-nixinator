@@ -42,35 +42,36 @@
     fsType = "vfat";
   };
 
-  fileSystems."/media/Picture" = {
-    device = "//192.168.86.100/Picture";
-      fsType = "cifs";
-      options = let
-        # this line prevents hanging on network split
-        automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
+  # TODO: Figure out those mount options, it makes many operations (e.g. filepicker) extremely slow as the gvs stuff hangs
+  # fileSystems."/media/Picture" = {
+  #   device = "//192.168.86.100/Picture";
+  #     fsType = "cifs";
+  #     options = let
+  #       # this line prevents hanging on network split
+  #       automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
 
-      in ["${automount_opts},credentials=/home/christoph/samba.login" "uid=1000" "gid=1000"];
-  };
+  #     in ["${automount_opts},credentials=/home/christoph/samba.login" "uid=1000" "gid=1000"];
+  # };
 
-  fileSystems."/media/Video" = {
-    device = "//192.168.86.100/Video";
-      fsType = "cifs";
-      options = let
-        # this line prevents hanging on network split
-        automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
+  # fileSystems."/media/Video" = {
+  #   device = "//192.168.86.100/Video";
+  #     fsType = "cifs";
+  #     options = let
+  #       # this line prevents hanging on network split
+  #       automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
 
-      in ["${automount_opts},credentials=/home/christoph/samba.login" "uid=1000" "gid=1000"];
-  };
+  #     in ["${automount_opts},credentials=/home/christoph/samba.login" "uid=1000" "gid=1000"];
+  # };
 
-  fileSystems."/media/Usenet" = {
-    device = "//192.168.86.100/Usenet";
-      fsType = "cifs";
-      options = let
-        # this line prevents hanging on network split
-        automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
+  # fileSystems."/media/Usenet" = {
+  #   device = "//192.168.86.100/Usenet";
+  #     fsType = "cifs";
+  #     options = let
+  #       # this line prevents hanging on network split
+  #       automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
 
-      in ["${automount_opts},credentials=/home/christoph/samba.login" "uid=1000" "gid=1000"];
-  };
+  #     in ["${automount_opts},credentials=/home/christoph/samba.login" "uid=1000" "gid=1000"];
+  # };
 
   swapDevices = lib.mkForce [
     # {
