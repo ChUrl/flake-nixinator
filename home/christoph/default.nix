@@ -79,7 +79,7 @@ rec {
       discord.enable = true;
       spotify.enable = false; # Can't login because browser doesn't open
       bottles.enable = false;
-      obsidian.enable = true;
+      obsidian.enable = false; # Extremely low graph draw performance?
       jabref.enable = false;
     };
 
@@ -358,6 +358,9 @@ rec {
     rclone # Rsync for cloud
     httpie # Cool http client
     # suricata
+    cifs-utils # Mount samba shares
+
+    appimage-run
 
     cool-retro-term
     ventoy-full # Bootable USB for many ISOs
@@ -418,7 +421,7 @@ rec {
     hunspell # I cna't type
     hunspellDicts.en_US
     hunspellDicts.de_DE
-    # obsidian # knowledge-base # Use flatpak for now, as I can't use window splitting with this version for some reason
+    obsidian # knowledge-base # Use flatpak for now, as I can't use window splitting with this version for some reason
     # logseq # knowledge-base
     # zotero # Citation/source research assistant
     # jabref # manage bibilography # NOTE: Uses jdk18 which is EOL, so can't build, use flatpak instead
