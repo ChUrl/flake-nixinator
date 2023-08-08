@@ -363,6 +363,8 @@ with mylib.networking; {
     thefuck.enable = true;
     xwayland.enable = true;
 
+    fuse.userAllowOther = true; # Allow users to mount e.g. samba shares (cifs)
+
     # ausweisapp.openFirewall = true; # Directly set port in firewall
   };
 
