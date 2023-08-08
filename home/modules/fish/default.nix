@@ -147,6 +147,12 @@ in {
             uniterrors = "journalctl -xb --unit=";
             useruniterrors = "journalctl -xb --user-unit=";
 
+            # samba
+            # TODO: Make a rofi menu out of this? Maybe general purpose menu? Or menu for all abbrs?
+            musenet = "sudo mount.cifs -o credentials=/home/christoph/.samba.login,uid=1000,gid=100 //truenas/Usenet /media/Usenet";
+            mpicture = "sudo mount.cifs -o credentials=/home/christoph/.samba.login,uid=1000,gid=100 //truenas/Picture /media/Picture";
+            mvideo = "sudo mount.cifs -o credentials=/home/christoph/.samba.login,uid=1000,gid=100 //truenas/Video /media/Video";
+
             # ssh locations
             xxhamster = "TERM=ansi ssh christoph@217.160.142.51";
 
