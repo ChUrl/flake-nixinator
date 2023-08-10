@@ -343,6 +343,7 @@ rec {
     # gnome.zenity # Popups from terminal
     unrar
     p7zip
+    unzip
     progress
 
     # Networking
