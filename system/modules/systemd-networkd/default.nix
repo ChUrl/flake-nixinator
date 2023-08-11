@@ -69,6 +69,7 @@ in {
       useNetworkd = false; # Only use this if the configuration can't be written in systemd.network completely. It translates some of the networking... options to systemd
       # resolvconf.enable = true;
 
+      # TODO
       wireless = {
         enable = false; # Enables wireless support via wpa_supplicant.
         iwd.enable = false; # Use iwd instead of NetworkManager
