@@ -29,7 +29,8 @@
 
     linkConfig = {
       # This corresponds to the [LINK] section
-      RequiredForOnline = "routable";
+      # RequiredForOnline = "routable";
+      RequiredForOnline = "no"; # Don't make nixos-rebuild wait for systemd-networkd-wait-online.service
     };
   };
 
