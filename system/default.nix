@@ -47,9 +47,11 @@ with mylib.networking; {
   };
 
   networking.hosts = {
-    "192.168.86.101" = ["servenix"];
-    "192.168.86.100" = ["truenas"];
+    "192.168.86.42" = ["nixinator"];
     "192.168.86.69" = ["proxmox"];
+    "192.168.86.100" = ["truenas"];
+    "192.168.86.101" = ["servenix"];
+    "192.168.86.102" = ["portainer"];
   };
 
   # Enable flakes

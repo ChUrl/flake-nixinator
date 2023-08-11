@@ -37,6 +37,8 @@
     adwaita-for-steam.flake = false;
 
     nixos-conf-editor.url = "github:vlinkz/nixos-conf-editor";
+
+    # nix-matlab.url = "gitlab:doronbehar/nix-matlab";
   };
 
   # Outputs is a function that takes the inputs as arguments.
