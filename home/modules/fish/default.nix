@@ -139,6 +139,7 @@ in {
             watch = "watch -d -c -n 0.5";
             n = "nnncd -a -e"; # Doesn't work with abbrify because I have nnn.override?
             np = "nnncd -a -P p -e";
+            ssh = "kitty +kitten ssh";
 
             # systemd
             failed = "systemctl --failed";
