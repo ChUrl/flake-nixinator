@@ -89,7 +89,7 @@ with mylib.networking; {
 
     # plymouth.enable = true;
     loader.systemd-boot.enable = true;
-    loader.systemd-boot.configurationLimit = 5;
+    loader.systemd-boot.configurationLimit = 60;
     loader.systemd-boot.editor = false;
     loader.systemd-boot.consoleMode = "max";
     loader.efi.canTouchEfiVariables = true;
