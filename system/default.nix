@@ -89,7 +89,7 @@ with mylib.networking; {
 
     # plymouth.enable = true;
     loader = {
-      timeout = null;
+      timeout = 120;
       systemd-boot.enable = true;
       systemd-boot.configurationLimit = 5;
       systemd-boot.editor = false;
