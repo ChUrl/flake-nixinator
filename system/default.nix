@@ -88,12 +88,15 @@ with mylib.networking; {
     kernelParams = ["mitigations=off"]; # I don't care about security regarding spectre/meltdown
 
     # plymouth.enable = true;
-    loader.systemd-boot.enable = true;
-    loader.systemd-boot.configurationLimit = 60;
-    loader.systemd-boot.editor = false;
-    loader.systemd-boot.consoleMode = "max";
-    loader.efi.canTouchEfiVariables = true;
-    loader.efi.efiSysMountPoint = "/boot/efi";
+    loader = {
+      timeout = null;
+      systemd-boot.enable = true;
+      systemd-boot.configurationLimit = 5;
+      systemd-boot.editor = false;
+      systemd-boot.consoleMode = "max";
+      efi.canTouchEfiVariables = true;
+      efi.efiSysMountPoint = "/boot/efi";
+    };
 
     # Make /tmp volatile
     tmp.useTmpfs = true;
