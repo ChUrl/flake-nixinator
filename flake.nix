@@ -113,18 +113,6 @@
           hyprland.nixosModules.default # Use system module for SDDM config
         ];
       };
-
-      # Usage: sudo nixos-rebuild switch --flake .#nixtop
-      servenix = mylib.nixos.mkNixosConfig {
-        inherit system mylib;
-
-        hostname = "servenix";
-        username = "christoph";
-
-        extraModules = [
-          hyprland.nixosModules.default # Use system module for SDDM config
-        ];
-      };
     };
   };
 }
