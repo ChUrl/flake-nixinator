@@ -463,10 +463,10 @@ rec {
     cachix
 
     # Generate documentation
-    # modules-options-doc # TODO: Deprecated, needs update at 24.05
+    modules-options-doc
   ];
 
-  # home.file.".options-doc".source = "${pkgs.modules-options-doc}";
+  home.file.".options-doc".source = "${pkgs.modules-options-doc}";
 
   # Packages with extra options managed by HomeManager natively
   programs = {
