@@ -40,7 +40,6 @@ with mylib.networking; {
       ];
       allowedUDPPorts = [
         9918 # Wireguard
-        18000 # Anno 1800
         24727 # AusweisApp2
       ];
     };
@@ -50,8 +49,8 @@ with mylib.networking; {
     "192.168.86.42" = ["nixinator"];
     "192.168.86.69" = ["proxmox"];
     "192.168.86.100" = ["truenas"];
-    "192.168.86.101" = ["servenix"];
-    "192.168.86.102" = ["portainer"];
+    "192.168.86.102" = ["opnsense"];
+    "192.168.86.105" = ["servenix"];
   };
 
   # Enable flakes
@@ -183,7 +182,7 @@ with mylib.networking; {
 
   programs.hyprland = {
     enable = true;
-    nvidiaPatches = false;
+    enableNvidiaPatches = false;
   };
 
   # XDG
@@ -265,12 +264,12 @@ with mylib.networking; {
   };
 
   fonts = {
-    enableDefaultFonts = true; # Some default fonts for unicode coverage
+    enableDefaultPackages = true; # Some default fonts for unicode coverage
     fontDir.enable = true; # Puts fonts to /run/current-system/sw/share/X11/fonts
 
     # Font packages go here
     # NOTE: Don't do this with HomeManager as I need the fonts in the fontdir for flatpak apps
-    fonts = with pkgs; [
+    packages = with pkgs; [
       # Monospace fonts
       (nerdfonts.override {
         fonts = [
