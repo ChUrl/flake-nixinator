@@ -16,7 +16,7 @@
     ],
 
     "modules-center": [
-      "wlr/workspaces"
+      "hyprland/workspaces"
     ],
 
     "modules-right": [
@@ -35,7 +35,7 @@
       "tooltip": false
     },
 
-    "wlr/workspaces": {
+    "hyprland/workspaces": {
       "all-outputs": false,
       "format": "{name}",
       "on-click": "activate",
