@@ -29,6 +29,17 @@
     };
 
     systemd-networkd = {
+      networks = {
+        # This should override the default network 50-ether
+        "10-ether-2_5G" = mylib.networking.mkStaticSystemdNetwork {
+          interface = "enp10s0";
+          ip = ["192.168.86.50/24"];
+          router = ["192.168.86.5"];
+          nameserver = ["192.168.86.25"];
+        };
+        # "10-ether-1G" = mylib.networking.mkStaticSystemdNetwork {...};
+      };
+
       wireguard-tunnels = {
         wg0-de-115 = (
           mylib.networking.mkWireguardService
