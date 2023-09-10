@@ -54,7 +54,7 @@
     "network": {
       "format": "<span font=\"FontAwesome\"></span> {ipaddr}",
       "format-disconnected": "<span font=\"FontAwesome\"></span> ",
-      "interface": "enp7s0",
+      "interface": "enp10s0",
       "tooltip-format": "{ifname} via {gwaddr}"
     },
 
