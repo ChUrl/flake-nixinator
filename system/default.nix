@@ -45,13 +45,14 @@ with mylib.networking; {
     };
   };
 
-  networking.hosts = {
-    "192.168.86.50" = ["nixinator"];
-    "192.168.86.4" = ["proxmox"];
-    "192.168.86.20" = ["truenas"];
-    "192.168.86.5" = ["opnsense"];
-    "192.168.86.25" = ["servenix"];
-  };
+  # NOTE: This should be handled by my local DNS
+  # networking.hosts = {
+  #   "192.168.86.50" = ["nixinator"];
+  #   "192.168.86.4" = ["proxmox"];
+  #   "192.168.86.20" = ["truenas"];
+  #   "192.168.86.5" = ["opnsense"];
+  #   "192.168.86.25" = ["servenix"];
+  # };
 
   # Enable flakes
   nix = {
