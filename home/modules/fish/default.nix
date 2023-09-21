@@ -150,9 +150,11 @@ in {
 
             # samba
             # TODO: Make a rofi menu out of this? Maybe general purpose menu? Or menu for all abbrs?
-            musenet = "sudo mount.cifs -o credentials=/home/christoph/.samba.login,uid=1000,gid=100 //truenas/Usenet /media/Usenet";
-            mpicture = "sudo mount.cifs -o credentials=/home/christoph/.samba.login,uid=1000,gid=100 //truenas/Picture /media/Picture";
-            mvideo = "sudo mount.cifs -o credentials=/home/christoph/.samba.login,uid=1000,gid=100 //truenas/Video /media/Video";
+            musenet = "sudo mount.nfs4 192.168.86.20:/mnt/WD\\ Blue\\ Stripe\\ 2T/Usenet /media/Usenet";
+            mpicture = "sudo mount.nfs4 192.168.86.20:/mnt/WD\\ Blue\\ Stripe\\ 2T/Picture /media/Picture";
+            mvideo = "sudo mount.nfs4 192.168.86.20:/mnt/WD\\ Blue\\ Stripe\\ 2T/Video /media/Video";
+            mmovie = "sudo mount.nfs4 192.168.86.20:/mnt/WD\\ Blue\\ Stripe\\ 2T/Movie /media/Movie";
+            mshow = "sudo mount.nfs4 192.168.86.20:/mnt/WD\\ Blue\\ Stripe\\ 2T/Show /media/Show";
 
             # ssh locations
             xxhamster = "TERM=ansi ssh christoph@217.160.142.51";
