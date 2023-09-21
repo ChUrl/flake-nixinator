@@ -42,37 +42,6 @@
     fsType = "vfat";
   };
 
-  # TODO: Figure out those mount options, it makes many operations (e.g. filepicker) extremely slow as the gvs stuff hangs
-  # fileSystems."/media/Picture" = {
-  #   device = "//192.168.86.100/Picture";
-  #     fsType = "cifs";
-  #     options = let
-  #       # this line prevents hanging on network split
-  #       automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
-
-  #     in ["${automount_opts},credentials=/home/christoph/samba.login" "uid=1000" "gid=1000"];
-  # };
-
-  # fileSystems."/media/Video" = {
-  #   device = "//192.168.86.100/Video";
-  #     fsType = "cifs";
-  #     options = let
-  #       # this line prevents hanging on network split
-  #       automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
-
-  #     in ["${automount_opts},credentials=/home/christoph/samba.login" "uid=1000" "gid=1000"];
-  # };
-
-  # fileSystems."/media/Usenet" = {
-  #   device = "//192.168.86.100/Usenet";
-  #     fsType = "cifs";
-  #     options = let
-  #       # this line prevents hanging on network split
-  #       automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
-
-  #     in ["${automount_opts},credentials=/home/christoph/samba.login" "uid=1000" "gid=1000"];
-  # };
-
   swapDevices = lib.mkForce [
     # {
     #   device = "/var/swap";
@@ -105,28 +74,31 @@
 
     # nvidia.modesetting.enable = true; # Not officially supported by NVidia but needed for wayland
     # video.hidpi.enable = lib.mkDefault true; # No longer has any effect
-    opengl.enable = true;
+    opengl = {
+      enable = true;
 
-    # Vulkan
-    opengl.driSupport = true;
-    opengl.driSupport32Bit = true;
+      # Vulkan
+      driSupport = true;
+      driSupport32Bit = true;
 
-    # AMD: https://nixos.wiki/wiki/AMD_GPU
-    opengl.extraPackages = with pkgs; [
-      # amdvlk # RADV (mesa) and AMDVLK (amd) can be used simultaneously
+      # AMD: https://nixos.wiki/wiki/AMD_GPU
+      extraPackages = with pkgs; [
+        # amdvlk # RADV (mesa) and AMDVLK (amd) can be used simultaneously
 
-      # OpenCL
-      # rocm-opencl-icd
-      # rocm-opencl-runtime
-      # rocm-runtime # Wiki doesn't mention this, but it exists...
+        # OpenCL
+        rocm-opencl-icd
+        rocm-opencl-runtime
+        # rocm-runtime # Wiki doesn't mention this, but it exists...
 
-      # TODO: Disabled for the moment, because hardware acceleration crashes AMDGPU driver
-      # VAAPI/VDPAU: https://nixos.wiki/wiki/Accelerated_Video_Playback
-      # vaapiVdpau # Taken from wiki
-      # libvdpau-va-gl # Taken from wiki
-      # libvdpau # NOTE: Don't know if needed/where it belongs...
-      # libva # NOTE: Don't know if needed/where it belongs...
-    ];
+        # TODO: Disabled for the moment, because hardware acceleration crashes AMDGPU driver
+        # VAAPI/VDPAU: https://nixos.wiki/wiki/Accelerated_Video_Playback
+        vaapiVdpau # Taken from wiki
+        libvdpau-va-gl # Taken from wiki
+        libvdpau # NOTE: Don't know if needed/where it belongs...
+        libva # NOTE: Don't know if needed/where it belongs...
+      ];
+      
+    };
 
     sane.enable = true; # Scanning
 
