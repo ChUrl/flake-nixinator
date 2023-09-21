@@ -60,7 +60,7 @@ rec {
     firefox = {
       enable = true;
       wayland = true;
-      vaapi = false; # NOTE: Crashes AMDGPU driver fairly often (don't know why exactly)
+      vaapi = true; # NOTE: Crashes AMDGPU driver fairly often (don't know why exactly)
       disableTabBar = true;
       defaultBookmarks = true;
       gnomeTheme = true;
@@ -303,7 +303,8 @@ rec {
     tokei # Text file statistics in a project
     poppler_utils # pdfunite
     # ffmpeg # Convert video (magic), v4
-    ffmpeg_5-full # v5, including ffplay
+    ffmpeg_5-full # I love ffmpeg (v5, including ffplay)
+    x265
     imagemagick # Convert image (magic)
     ueberzugpp # Display images in terminal (alacritty)
     (ripgrep.override {withPCRE2 = true;}) # fast as fuck
@@ -360,6 +361,7 @@ rec {
     httpie # Cool http client
     # suricata
     cifs-utils # Mount samba shares
+    nfs-utils
 
     appimage-run
 
@@ -383,6 +385,7 @@ rec {
     clinfo # OpenCL info
     vulkan-tools # vulkaninfo
     libva-utils # vainfo
+    vdpauinfo
     rocminfo # radeon comptute platform info
     hwloc
     lm_sensors

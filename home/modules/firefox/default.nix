@@ -35,6 +35,7 @@ in {
       (optionalAttrs cfg.wayland {
         MOZ_ENABLE_WAYLAND = 1;
         EGL_PLATFORM = "wayland";
+        # XDG_CURRENT_DESKTOP = "Hyprland"; # TODO: Or "sway"? # Already set by hyprland
       })
 
       (optionalAttrs cfg.vaapi {
@@ -153,16 +154,17 @@ in {
             (optionalAttrs cfg.vaapi {
               # Firefox wayland hardware video acceleration
               # https://github.com/elFarto/nvidia-vaapi-driver/#firefox=
-              "gfx.canvas.accelerated" = true;
-              "gfx.webrender.enabled" = true; # Should be set on gnome anyway
+              # TODO: Disable and check if it works by default
+              # "gfx.canvas.accelerated" = true; # Default value
+              # "gfx.webrender.enabled" = true; # Does not exist?
               "gfx.x11-egl.force-enabled" = true;
               "layers.acceleration.force-enabled" = true;
-              "media.av1.enabled" = false;
+              # "media.av1.enabled" = false;
               "media.ffmpeg.vaapi.enabled" = true;
               "media.hardware-video-decoding.force-enabled" = true;
-              "media.rdd-ffmpeg.enabled" = true;
-              "widget.dmabuf.force-enabled" = true;
-              "widget.wayland-dmabuf-vaapi.enabled" = true;
+              # "media.rdd-ffmpeg.enabled" = true; # Default value
+              # "widget.dmabuf.force-enabled" = true;
+              # "widget.wayland-dmabuf-vaapi.enabled" = true; # Does not exist?
             })
 
             (let
