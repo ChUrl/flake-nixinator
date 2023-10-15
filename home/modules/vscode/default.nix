@@ -96,6 +96,10 @@ in {
 
         "window.restoreWindows" = "none";
 
+        "window.titleBarStyle" = "custom"; # NOTE: Should help with crashing on wayland?
+        # "window.titleBarStyle" = "native";
+        # "window.menuBarVisibility" = "toggle";
+
         "workbench.enableExperiments" = false;
         "workbench.list.smoothScrolling" = true;
         # "workbench.colorTheme" = "Default Light Modern";
