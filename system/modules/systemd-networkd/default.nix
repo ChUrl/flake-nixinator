@@ -23,6 +23,7 @@ in {
     # Main Networks
     systemd.network = {
       enable = true;
+      wait-online.anyInterface = true; # Don't wait for all networks to be configured, as e.g. wg0 will only be upon manual activation
       networks = cfg.networks;
     };
 
