@@ -297,7 +297,8 @@ rec {
   home.packages = with pkgs; [
     # CLI Tools
     # bat # cat with wings (enabled as program)
-    # exa # ls in cool (enabled as program)
+    # exa # ls in cool (enabled as program) # NOTE: Unmaintained
+    eza
     # delta # diffier diff differ (enabled as program)
     # fzf # fuzzy find (enabled as program in fish module)
     tokei # Text file statistics in a project
@@ -364,6 +365,7 @@ rec {
     nfs-utils
 
     appimage-run
+    decker
 
     cool-retro-term
     ventoy-full # Bootable USB for many ISOs
@@ -390,6 +392,8 @@ rec {
     hwloc
     lm_sensors
     acpica-tools # Dump ACPI tables etc.
+
+    python311
 
     # Web stuff
     signal-desktop
@@ -446,7 +450,7 @@ rec {
     # jetbrains.pycharm-professional
     # jetbrains.idea-ultimate
     jetbrains.clion # TODO: Use toolbox instead
-    jetbrains-toolbox
+    # jetbrains-toolbox
 
     # Media
     wacomtablet
@@ -628,7 +632,7 @@ rec {
       nix-direnv.enable = true;
     };
 
-    exa.enable = true;
+    # exa.enable = true; # NOTE: Unmaintained
 
     fzf = {
       enable = true;
