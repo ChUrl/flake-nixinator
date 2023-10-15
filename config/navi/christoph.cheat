@@ -28,34 +28,34 @@ ldd $(readlink -f $(which <executable>))
 % ffmpeg, slowmo
 # Create a slow motion version of a video with interpolated/blended frames
 ffmpeg -i "<input>" -filter:v "minterpolate='mi_mode=mci:mc_mode=aobmc:vsbmc=1:fps=<doublefps>',setpts=2*PTS" output.mp4
-$ input: exa -1
+$ input: eza -1
 
 % ffmpeg, cropdetect
 # Detect black bar dimensions automatically by looking at the first 10 frames
 ffmpeg -i "<input>" -vframes 10 -vf cropdetect -f null -
-$ input: exa -1
+$ input: eza -1
 
 % ffmpeg, cropdetect, preview
 # Preview video with applied crop settings
 ffplay -vf crop=<width>:<height>:<x>:<y> "<input>"
-$ input: exa -1
+$ input: eza -1
 
 % ffmpeg, cropdetect, render
 # Re-encode the video with applied crop settings
 ffmpeg -i "<input>" -vf crop=<width>:<height>:<x>:<y> -c:a copy output.mp4
-$ input: exa -1
+$ input: eza -1
 
 % ffmpeg, video compression, h265, render, reencode
 # Reencode and compress the video using the h265 codec
 ffmpeg -i "<input>" -vcodec libx265 -crf <quality> "out_<input>"
-$ input: exa -1
+$ input: eza -1
 $ quality: echo -e "24\n25\n26\n27\n28\n29\n30\n"
 
 ; TODO: Setting the default values like this makes them the only possible values
 % ffmpeg, video compression, h256, render, reencode
 # Reencode and compress multiple videos using the h265 codec
 fish -c "for name in <files>; ffmpeg -i '$name' -vcodec libx265 -crf <quality> 'out_$name'; end"
-$ files: echo "(exa -1 | grep \".mp4\")"
+$ files: echo "(eza -1 | grep \".mp4\")"
 $ quality: echo "28"
 
 % qemu, cpu
@@ -74,12 +74,12 @@ find . -type f -name "<glob>" -size -<size>
 % objdump, disassemble
 # Disassemble an object file
 objdump -d -S -M intel "<file>" | bat -l nasm
-$ file: exa -1
+$ file: eza -1
 
 % pdftocairo, pdf, svg
 # Extract svg figure from pdf page
 pdftocairo -f <page> -l <page> -svg "<input>" "<output>"
-$ input: exa -1
+$ input: eza -1
 
 % yes, head, file
 # Generate a large text file
