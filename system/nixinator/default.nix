@@ -32,7 +32,7 @@
       networks = {
         # This should override the default network 50-ether
         "10-ether-2_5G" = mylib.networking.mkStaticSystemdNetwork {
-          interface = "enp10s0";
+          interface = "enp8s0";
           ip = ["192.168.86.50/24"];
           router = ["192.168.86.5"];
           nameserver = ["192.168.86.25"];
