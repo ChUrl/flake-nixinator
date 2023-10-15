@@ -90,17 +90,13 @@
       extraPackages = with pkgs; [
         # amdvlk # RADV (mesa) and AMDVLK (amd) can be used simultaneously
 
-        # OpenCL
-        # rocm-opencl-icd
-        # rocm-opencl-runtime
-        # rocm-runtime # Wiki doesn't mention this, but it exists...
-
-        # TODO: Disabled for the moment, because hardware acceleration crashes AMDGPU driver
         # VAAPI/VDPAU: https://nixos.wiki/wiki/Accelerated_Video_Playback
         vaapiVdpau # Taken from wiki
         libvdpau-va-gl # Taken from wiki
-        # libvdpau # NOTE: Don't know if needed/where it belongs...
-        # libva # NOTE: Don't know if needed/where it belongs...
+        libvdpau # NOTE: Don't know if needed/where it belongs...
+        libva # NOTE: Don't know if needed/where it belongs...
+
+        nvidia-vaapi-driver
       ];
       
     };
