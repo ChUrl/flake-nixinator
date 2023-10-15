@@ -22,7 +22,7 @@ rec {
         kb-variant = "altgr-intl";
 
         monitors = {
-          "HDMI-A-1" = {
+          "DP-1" = {
             width = 2560;
             height = 1440;
             rate = 144;
@@ -31,7 +31,7 @@ rec {
             scale = 1;
           };
 
-          "HDMI-A-2" = {
+          "HDMI-A-1" = {
             width = 1920;
             height = 1080;
             rate = 60;
@@ -42,8 +42,8 @@ rec {
         };
 
         workspaces = {
-          "HDMI-A-1" = [1 2 3 4 5 6 7 8 9];
-          "HDMI-A-2" = [10];
+          "DP-1" = [1 2 3 4 5 6 7 8 9];
+          "HDMI-A-1" = [10];
         };
 
         autostart = [
@@ -99,7 +99,7 @@ rec {
       #   };
       # };
 
-      waybar.monitor = "HDMI-A-1";
+      waybar.monitor = "DP-1";
     };
 
     home.packages = with pkgs; [
