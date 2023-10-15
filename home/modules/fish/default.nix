@@ -169,11 +169,11 @@ in {
             df = "duf";
             disksummary = "duf";
           })
-          (abbrify pkgs.exa {
-            ls = "exa --color always --group-directories-first -F --git --icons"; # color-ls
-            lsl = "exa --color always --group-directories-first -F -l --git --icons --octal-permissions";
-            lsa = "exa --color always --group-directories-first -F -l -a --git --icons --octal-permissions";
-            tre = "exa --color always --group-directories-first -F -T -L 2 ---icons";
+          (abbrify pkgs.eza {
+            ls = "eza --color always --group-directories-first -F --git --icons"; # color-ls
+            lsl = "eza --color always --group-directories-first -F -l --git --icons --octal-permissions";
+            lsa = "eza --color always --group-directories-first -F -l -a --git --icons --octal-permissions";
+            tre = "eza --color always --group-directories-first -F -T -L 2 ---icons";
           })
           (abbrify pkgs.fd {find = "fd";})
           (abbrify pkgs.fzf {fuzzy = "fzf --preview 'bat --color=always --style=numbers --line-range=:500 {}'";})

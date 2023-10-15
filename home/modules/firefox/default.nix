@@ -39,7 +39,8 @@ in {
       })
 
       (optionalAttrs cfg.vaapi {
-        LIBVA_DRIVER_NAME = "radeonsi"; # "nvidia" for Nvidia card
+        # LIBVA_DRIVER_NAME = "radeonsi"; # "nvidia" for Nvidia card
+        LIBVA_DRIVER_NAME = "nvidia";
         MOZ_DISABLE_RDD_SANDBOX = 1;
       })
     ];

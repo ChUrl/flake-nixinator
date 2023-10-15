@@ -183,7 +183,7 @@ with mylib.networking; {
 
   programs.hyprland = {
     enable = true;
-    enableNvidiaPatches = false;
+    enableNvidiaPatches = true;
   };
 
   # XDG
@@ -399,7 +399,7 @@ with mylib.networking; {
     flatpak.enable = true; # Not quite the nix style but useful for bottles/proprietary stuff/steam/gaming
     fstrim.enable = true; # SSD
     fwupd.enable = true; # Device firmware (I don't think I have any supported devices)
-    locate.enable = true; # Periodically update index
+    # locate.enable = true; # Periodically update index
     ntp.enable = true; # Clock sync
     gvfs = { # Network shares
       enable = true;

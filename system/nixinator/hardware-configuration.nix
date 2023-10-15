@@ -15,8 +15,8 @@
     # Enable early Nvidia kernel modesetting
     # https://wiki.archlinux.org/title/GDM#GDM_ignores_Wayland_and_uses_X.Org_by_default (not fixed by this)
     # https://wiki.archlinux.org/title/Kernel_mode_setting#Early_KMS_start
-    # initrd.kernelModules = [ "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm" ]; # NVIDIA
-    initrd.kernelModules = ["amdgpu"]; # Initrd modules are always loaded, e.g. when they are required to mount the rootfs
+    initrd.kernelModules = [ "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm" ]; # NVIDIA
+    # initrd.kernelModules = ["amdgpu"]; # Initrd modules are always loaded, e.g. when they are required to mount the rootfs
     # kernelModules = ["kvm-intel" "iwlwifi"];
     kernelModules = ["kvm-amd"];
 
@@ -63,7 +63,7 @@
   # networking.wireless.iwd.enable = true;
   # networking.networkmanager.wifi.backend = "iwd";
 
-  nixpkgs.config.allowUnfree = true;
+  # nixpkgs.config.allowUnfree = true;
 
   hardware = {
     # Use all redistributable firmware (i.e. nonfree)
@@ -72,7 +72,12 @@
     # cpu.intel.updateMicrocode = true;
     cpu.amd.updateMicrocode = true;
 
-    # nvidia.modesetting.enable = true; # Not officially supported by NVidia but needed for wayland
+    nvidia = {
+      modesetting.enable = true; # Not officially supported by NVidia but needed for wayland
+      open = true;
+      nvidiaSettings = true;
+    };
+    
     # video.hidpi.enable = lib.mkDefault true; # No longer has any effect
     opengl = {
       enable = true;
@@ -86,16 +91,16 @@
         # amdvlk # RADV (mesa) and AMDVLK (amd) can be used simultaneously
 
         # OpenCL
-        rocm-opencl-icd
-        rocm-opencl-runtime
+        # rocm-opencl-icd
+        # rocm-opencl-runtime
         # rocm-runtime # Wiki doesn't mention this, but it exists...
 
         # TODO: Disabled for the moment, because hardware acceleration crashes AMDGPU driver
         # VAAPI/VDPAU: https://nixos.wiki/wiki/Accelerated_Video_Playback
         vaapiVdpau # Taken from wiki
         libvdpau-va-gl # Taken from wiki
-        libvdpau # NOTE: Don't know if needed/where it belongs...
-        libva # NOTE: Don't know if needed/where it belongs...
+        # libvdpau # NOTE: Don't know if needed/where it belongs...
+        # libva # NOTE: Don't know if needed/where it belongs...
       ];
       
     };

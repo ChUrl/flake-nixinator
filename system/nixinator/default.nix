@@ -56,6 +56,14 @@
           "asu9KtQoZ3iKwELsDTgjPEiFNcD1XtgGgy3O4CZFg2w="
           "92.223.89.133"
         );
+
+        wg0-kh-8 = (
+          mylib.networking.mkWireguardService
+          "wg0-kh-8"
+          "proton-kh-8.key"
+          "D4M0O60wCBf1nYWOmXRfK7IpgG7VBBwQLeWVFLIqFG4="
+          "188.215.235.82"
+        );
       };
     };
   };
@@ -71,7 +79,7 @@
     layout = "us";
     xkbVariant = "altgr-intl";
 
-    # videoDrivers = [ "nvidia" ]; # NVIDIA
-    videoDrivers = ["amdgpu"];
+    videoDrivers = [ "nvidia" ]; # NVIDIA
+    # videoDrivers = ["amdgpu"];
   };
 }
