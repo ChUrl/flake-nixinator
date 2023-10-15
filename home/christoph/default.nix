@@ -328,6 +328,7 @@ rec {
     d2 # generate diagrams from code
     plantuml
     gnuplot # generate function plots
+    pdf2svg
     # TODO: Latex module with individual packages
     texlive.combined.scheme-full
     # tikzit
