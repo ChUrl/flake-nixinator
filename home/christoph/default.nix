@@ -367,6 +367,8 @@ rec {
 
     appimage-run
     decker
+    google-chrome # Trash, but required for decker pdf export
+    (pkgs.writeShellScriptBin "chrome" "exec -a $0 ${google-chrome}/bin/google-chrome-stable $@")
 
     cool-retro-term
     ventoy-full # Bootable USB for many ISOs
