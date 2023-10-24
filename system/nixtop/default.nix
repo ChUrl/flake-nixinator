@@ -36,6 +36,10 @@
 
   programs.light.enable = true;
 
+  programs.hyprland = {
+    enableNvidiaPatches = false;
+  };
+
   services.xserver = {
     # Configure keymap in X11
     layout = "de";
