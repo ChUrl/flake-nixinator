@@ -183,7 +183,7 @@ with mylib.networking; {
 
   programs.hyprland = {
     enable = true;
-    enableNvidiaPatches = true;
+    # enableNvidiaPatches = false; # NOTE: Enabled only in nixinator config
   };
 
   # XDG
