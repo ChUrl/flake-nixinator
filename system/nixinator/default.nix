@@ -64,6 +64,14 @@
           "D4M0O60wCBf1nYWOmXRfK7IpgG7VBBwQLeWVFLIqFG4="
           "188.215.235.82"
         );
+
+        wg0-ch-70 = (
+          mylib.networking.mkWireguardService
+          "wg0-ch-70"
+          "proton-ch-70.key"
+          "17I34jHOMcmI7LKBqxosTfLgwGjO5OKApLcRSPlyymM="
+          "185.159.157.13"
+        );
       };
     };
   };
