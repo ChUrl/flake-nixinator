@@ -19,54 +19,56 @@ in {
       enableExtensionUpdateCheck = false;
       enableUpdateCheck = false;
       extensions = with pkgs.vscode-extensions; [
-        alefragnani.bookmarks
-        # alefragnani.project-manager # Not much sense with flake dev environments
-        # bradlc.vscode-tailwindcss
+        # alefragnani.bookmarks # TODO: Use inline bookmarks instead
+        # alefragnani.project-manager # NOTE: Not much sense with flake dev environments
         catppuccin.catppuccin-vsc
         catppuccin.catppuccin-vsc-icons
         christian-kohler.path-intellisense
-        codezombiech.gitignore
-        coolbear.systemd-unit-file
+        # codezombiech.gitignore # NOTE: Superfluous
+        # coolbear.systemd-unit-file # NOTE: Unnecessary on NixOS
         eamodio.gitlens
         # formulahendry.auto-rename-tag
         # formulahendry.auto-close-tag
         # gitlab.gitlab-workflow
         # irongeek.vscode-env
-        jnoortheen.nix-ide
-        kamadorueda.alejandra
+        # jnoortheen.nix-ide
+        # kamadorueda.alejandra
         # kamikillerto.vscode-colorize
-        llvm-vs-code-extensions.vscode-clangd
-        matklad.rust-analyzer
+        # llvm-vs-code-extensions.vscode-clangd
+        # matklad.rust-analyzer
         mechatroner.rainbow-csv
         # mikestead.dotenv
         # mkhl.direnv
-        ms-azuretools.vscode-docker
-        ms-kubernetes-tools.vscode-kubernetes-tools
-        ms-python.python # TODO: Reenable, was disabled bc build failure
+        # ms-azuretools.vscode-docker
+        # ms-kubernetes-tools.vscode-kubernetes-tools
+        ms-python.python
         ms-toolsai.jupyter
-        ms-vscode.cmake-tools
-        ms-vscode.cpptools
-        ms-vscode.hexeditor
-        ms-vscode.makefile-tools
+        # ms-vscode.cmake-tools
+        # ms-vscode.cpptools
+        # ms-vscode.hexeditor
+        # ms-vscode.makefile-tools
+        ms-python.black-formatter
+        ms-python.vscode-pylance
         ms-vscode-remote.remote-ssh
         # naumovs.color-highlight
         njpwerner.autodocstring
-        james-yu.latex-workshop
-        redhat.java
-        redhat.vscode-xml
-        redhat.vscode-yaml
-        rubymaniac.vscode-paste-and-indent
+        # james-yu.latex-workshop
+        # redhat.java
+        # redhat.vscode-xml
+        # redhat.vscode-yaml
+        ritwickdey.liveserver
+        # rubymaniac.vscode-paste-and-indent
         ryu1kn.partial-diff
-        serayuzgur.crates
+        # serayuzgur.crates
         shd101wyy.markdown-preview-enhanced
-        skyapps.fish-vscode
-        tamasfe.even-better-toml
-        timonwong.shellcheck
+        # skyapps.fish-vscode
+        # tamasfe.even-better-toml
+        # timonwong.shellcheck
         # tomoki1207.pdf # Incompatible with latex workshop
-        valentjn.vscode-ltex
+        # valentjn.vscode-ltex
         vscodevim.vim
         vscode-icons-team.vscode-icons
-        yzhang.markdown-all-in-one
+        # yzhang.markdown-all-in-one
       ];
       # haskell = {};
       # keybindings = {};
@@ -96,7 +98,7 @@ in {
 
         "window.restoreWindows" = "none";
 
-        "window.titleBarStyle" = "custom"; # NOTE: Should help with crashing on wayland?
+        "window.titleBarStyle" = "custom"; # NOTE: Should help with crashing on wayland
         # "window.titleBarStyle" = "native";
         # "window.menuBarVisibility" = "toggle";
 
@@ -144,6 +146,9 @@ in {
         "nix.enableLanguageServer" = true;
         "nix.serverPath" = "nil";
         "nix.formatterPath" = "alejandra";
+
+        # C++
+        # "C_Cpp.intelliSenseEngine" = "disabled"; # IntelliSense conflics with Clangd
       };
       # TODO: Snippets
     };
