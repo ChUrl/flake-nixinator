@@ -452,7 +452,10 @@ rec {
     # ]))
     # jetbrains.pycharm-professional
     # jetbrains.idea-ultimate
-    jetbrains.clion # TODO: Use toolbox instead
+    jetbrains.clion
+    jetbrains.rust-rover
+    jetbrains.pycharm-professional
+    jetbrains.idea-ultimate
     # jetbrains-toolbox
 
     # Media
