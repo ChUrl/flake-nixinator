@@ -37,7 +37,6 @@ in {
     #        } else {
     #   '';
     # };
-
     # waybar-hyprland = pkgs.waybar.overrideAttrs (oldAttrs: {
     #   mesonFlags = oldAttrs.mesonFlags ++ ["-Dexperimental=true"];
     #   patches = (oldAttrs.patches or []) ++ [workspaces-patch];

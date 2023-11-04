@@ -401,7 +401,8 @@ with mylib.networking; {
     fwupd.enable = true; # Device firmware (I don't think I have any supported devices)
     # locate.enable = true; # Periodically update index
     ntp.enable = true; # Clock sync
-    gvfs = { # Network shares
+    gvfs = {
+      # Network shares
       enable = true;
       package = lib.mkForce pkgs.gnome3.gvfs;
     };
