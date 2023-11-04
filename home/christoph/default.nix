@@ -409,7 +409,7 @@ rec {
     # dnsmasq # For Access Point/Hotspot
     # linux-wifi-hotspot
     # spotdl-4_1_6 # My derivation as temporary fix
-    spotdl
+    # spotdl
 
     # Tools
     # calibre # Do I even read
