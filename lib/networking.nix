@@ -34,7 +34,12 @@
     };
   };
 
-  mkStaticSystemdNetwork = {interface, ip, router, nameserver}: {
+  mkStaticSystemdNetwork = {
+    interface,
+    ip,
+    router,
+    nameserver,
+  }: {
     # name = "enp0s31f6"; # Network interface name?
     enable = true;
 
@@ -50,9 +55,9 @@
     dns = nameserver;
 
     # routes = [
-      # {
-        # routeConfig.Gateway = (lib.head router);
-      # }
+    # {
+    # routeConfig.Gateway = (lib.head router);
+    # }
     # ];
 
     # See man systemd.network

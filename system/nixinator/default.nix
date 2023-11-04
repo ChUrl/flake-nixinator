@@ -91,7 +91,7 @@
     layout = "us";
     xkbVariant = "altgr-intl";
 
-    videoDrivers = [ "nvidia" ]; # NVIDIA
+    videoDrivers = ["nvidia"]; # NVIDIA
     # videoDrivers = ["amdgpu"];
   };
 }

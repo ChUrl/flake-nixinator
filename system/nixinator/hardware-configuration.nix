@@ -15,7 +15,7 @@
     # Enable early Nvidia kernel modesetting
     # https://wiki.archlinux.org/title/GDM#GDM_ignores_Wayland_and_uses_X.Org_by_default (not fixed by this)
     # https://wiki.archlinux.org/title/Kernel_mode_setting#Early_KMS_start
-    initrd.kernelModules = [ "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm" ]; # NVIDIA
+    initrd.kernelModules = ["nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm"]; # NVIDIA
     # initrd.kernelModules = ["amdgpu"]; # Initrd modules are always loaded, e.g. when they are required to mount the rootfs
     # kernelModules = ["kvm-intel" "iwlwifi"];
     kernelModules = ["kvm-amd"];
@@ -34,7 +34,7 @@
   fileSystems."/" = {
     device = "/dev/disk/by-uuid/68bd46a0-e95c-4764-a006-44bd9975a6c2";
     fsType = "ext4";
-    options = [ "noatime" "nodiratime" "discard" ];
+    options = ["noatime" "nodiratime" "discard"];
   };
 
   fileSystems."/boot/efi" = {
@@ -77,7 +77,7 @@
       open = true;
       nvidiaSettings = true;
     };
-    
+
     # video.hidpi.enable = lib.mkDefault true; # No longer has any effect
     opengl = {
       enable = true;
@@ -98,7 +98,6 @@
 
         nvidia-vaapi-driver
       ];
-      
     };
 
     sane.enable = true; # Scanning
