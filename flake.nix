@@ -18,7 +18,7 @@
     # Other Flakes
     emacs-overlay.url = "github:nix-community/emacs-overlay";
     nur.url = "github:nix-community/NUR";
-    musnix.url = "github:musnix/musnix";
+    # musnix.url = "github:musnix/musnix";
     devshell.url = "github:numtide/devshell";
     hyprland.url = "github:hyprwm/Hyprland";
     hyprpaper.url = "github:hyprwm/hyprpaper";
@@ -33,10 +33,10 @@
     firefox-gnome-theme.url = "github:rafaelmardojai/firefox-gnome-theme";
     firefox-gnome-theme.flake = false;
 
-    adwaita-for-steam.url = "github:tkashkin/Adwaita-for-Steam";
-    adwaita-for-steam.flake = false;
+    # adwaita-for-steam.url = "github:tkashkin/Adwaita-for-Steam";
+    # adwaita-for-steam.flake = false;
 
-    nixos-conf-editor.url = "github:vlinkz/nixos-conf-editor";
+    # nixos-conf-editor.url = "github:vlinkz/nixos-conf-editor";
 
     # nix-matlab.url = "gitlab:doronbehar/nix-matlab";
   };
