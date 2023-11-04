@@ -7,7 +7,7 @@
   zlib,
   bzip2,
   ncurses,
-  gmp
+  gmp,
 }: let
   resources = fetchFromGitHub {
     owner = "decker-edu";
