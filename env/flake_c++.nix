@@ -69,7 +69,7 @@
           # Development
           # bear # To generate compilation database
           gdb
-          cling # To try out my bullshit implementations
+          # cling # To try out my bullshit implementations
           # doxygen # Generate docs + graphs
 
           # Libraries

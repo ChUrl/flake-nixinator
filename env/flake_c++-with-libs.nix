@@ -71,16 +71,16 @@
           # Development
           # bear # To generate compilation database
           gdb
-          cling # To try out my bullshit implementations
+          # cling # To try out my bullshit implementations
           # doxygen # Generate docs + graphs
         ];
 
         commands = [
-          {
-            name = "ide";
-            help = "Run clion for project";
-            command = "clion &>/dev/null ./ &";
-          }
+          # {
+          #   name = "ide";
+          #   help = "Run clion for project";
+          #   command = "clion &>/dev/null ./ &";
+          # }
         ];
       };
     });

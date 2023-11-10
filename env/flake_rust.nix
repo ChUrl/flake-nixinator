@@ -1,5 +1,5 @@
 {
-  description = "Rust development shell";
+  description = "Rust Environment";
 
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
   inputs.flake-utils.url = "github:numtide/flake-utils";
@@ -18,7 +18,7 @@
         inherit system;
         config.allowUnfree = true; # For clion
         overlays = [
-          devshell.overlay
+          devshell.overlays.default
           rust-overlay.overlays.default
         ];
       };
@@ -29,13 +29,11 @@
       };
     in {
       devShell = pkgs.devshell.mkShell {
-        name = "Rust development shell";
+        name = "Rust Environment";
 
         packages = with pkgs; [
           rust-stable
           rust-analyzer
-
-          jetbrains.clion
         ];
 
         env = [
@@ -53,11 +51,11 @@
         ];
 
         commands = [
-          {
-            name = "ide";
-            help = "Run clion for project";
-            command = "clion &>/dev/null ./ &";
-          }
+          # {
+          #   name = "ide";
+          #   help = "Run clion for project";
+          #   command = "clion &>/dev/null ./ &";
+          # }
         ];
       };
     });
