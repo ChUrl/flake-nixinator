@@ -1,5 +1,5 @@
 {
-  description = "";
+  description = "LaTeX Environment";
 
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
   inputs.flake-utils.url = "github:numtide/flake-utils";
@@ -15,32 +15,28 @@
       pkgs = import nixpkgs {
         inherit system;
         config.allowUnfree = true;
-        overlays = [devshell.overlay];
+        overlays = [devshell.overlays.default];
       };
 
-      myPython = pkgs.python310.withPackages (p:
+      latexPython = pkgs.python311.withPackages (p:
         with p; [
           rich
-          numpy
-          scipy
-          matplotlib
+          pygments
         ]);
     in {
       devShell = pkgs.devshell.mkShell {
-        name = "";
+        name = "LaTeX Environment";
 
         packages = with pkgs; [
-          myPython
+          texlive.combined.scheme-full
+          inkscape
+          latexPython
+          texlab
         ];
 
         # Use $1 for positional args
-        commands = [
-          # {
-          #   name = "";
-          #   help = "";
-          #   command = "";
-          # }
-        ];
+        # commands = [
+        # ];
       };
     });
 }
