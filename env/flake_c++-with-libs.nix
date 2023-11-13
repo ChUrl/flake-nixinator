@@ -1,5 +1,5 @@
 {
-  description = "C/C++ Environment";
+  description = "C/C++ Environment with Libraries";
 
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
   inputs.flake-utils.url = "github:numtide/flake-utils";
@@ -50,11 +50,9 @@
         bintools = bintools_multi;
       };
     in {
-      # devShell = pkgs.devshell.mkShell ...
-      devShell = pkgs.devshell.mkShell {
-        name = "C/C++ Environment";
-
-        packages = with pkgs; [
+      # NOTE: We cannot use devshell, as it doesn't propagate library paths (yet?)
+      devShells.default = pkgs.mkShell {
+        buildInputs = with pkgs; [
           # Compilers
           bintools
           gcc13
@@ -73,14 +71,16 @@
           gdb
           # cling # To try out my bullshit implementations
           # doxygen # Generate docs + graphs
-        ];
 
-        commands = [
-          # {
-          #   name = "ide";
-          #   help = "Run clion for project";
-          #   command = "clion &>/dev/null ./ &";
-          # }
+          # C++ Libraries
+          # boost181
+          # raylib
+          # sfml
+
+          # C Libraries
+          # blas
+          # lapack
+          # libsvm
         ];
       };
     });
