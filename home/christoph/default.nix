@@ -45,8 +45,9 @@ rec {
     #   doom.autoUpgrade = false; # Very volatile as the upgrade fails sometimes with bleeding edge emacs
     # };
 
+    # TODO: Only sync protonmail using its bridge
     email = {
-      enable = true;
+      enable = false;
       autosync = true;
       imapnotify = false;
 
