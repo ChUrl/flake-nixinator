@@ -23,13 +23,13 @@
         bintools = pkgs.bintools.bintools;
         libc = pkgs.glibc;
       };
-      gcc12 = pkgs.hiPrio (pkgs.wrapCCWith {
-        cc = pkgs.gcc12.cc;
+      gcc13 = pkgs.hiPrio (pkgs.wrapCCWith {
+        cc = pkgs.gcc13.cc;
         libc = pkgs.glibc;
         bintools = bintools;
       });
-      clang15 = pkgs.wrapCCWith {
-        cc = pkgs.clang_15.cc;
+      clang16 = pkgs.wrapCCWith {
+        cc = pkgs.clang_16.cc;
         libc = pkgs.glibc;
         bintools = bintools;
       };
@@ -39,13 +39,13 @@
         bintools = pkgs.bintools.bintools; # Get the unwrapped bintools from the wrapper
         libc = pkgs.glibc_multi;
       };
-      gcc12_multi = pkgs.hiPrio (pkgs.wrapCCWith {
-        cc = pkgs.gcc12.cc; # Get the unwrapped gcc from the wrapper
+      gcc13_multi = pkgs.hiPrio (pkgs.wrapCCWith {
+        cc = pkgs.gcc13.cc; # Get the unwrapped gcc from the wrapper
         libc = pkgs.glibc_multi;
         bintools = bintools_multi;
       });
-      clang15_multi = pkgs.wrapCCWith {
-        cc = pkgs.clang_15.cc;
+      clang16_multi = pkgs.wrapCCWith {
+        cc = pkgs.clang_16.cc;
         libc = pkgs.glibc_multi;
         bintools = bintools_multi;
       };
@@ -57,11 +57,11 @@
         packages = with pkgs; [
           # Compilers
           bintools
-          gcc12
-          clang15
+          gcc13
+          clang16
           # bintools_multi
-          # gcc12_multi
-          # clang14_multi
+          # gcc13_multi
+          # clang15_multi
 
           # Native buildinputs
           gnumake
