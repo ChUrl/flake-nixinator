@@ -132,6 +132,10 @@ with mylib.networking; {
     ];
   };
 
+  documentation.enable = true;
+  documentation.man.enable = true;
+  documentation.dev.enable = true;
+
   # Set your time zone.
   time.timeZone = "Europe/Berlin";
 
@@ -338,6 +342,8 @@ with mylib.networking; {
     procps # pgrep, pkill
     slirp4netns # user network namespaces
     wireguard-tools
+    man-pages
+    man-pages-posix
   ];
 
   # NOTE: Gnome
