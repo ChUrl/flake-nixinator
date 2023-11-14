@@ -457,7 +457,7 @@ rec {
     jetbrains.rust-rover
     jetbrains.pycharm-professional
     jetbrains.idea-ultimate
-    # jetbrains-toolbox
+    jetbrains-toolbox # TODO: Difficult to make work
 
     # Media
     wacomtablet
