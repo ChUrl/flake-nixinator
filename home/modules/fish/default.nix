@@ -148,16 +148,14 @@ in {
             uniterrors = "journalctl -xb --unit=";
             useruniterrors = "journalctl -xb --user-unit=";
 
-            # samba
+            # NFS shares
             # TODO: Make a rofi menu out of this? Maybe general purpose menu? Or menu for all abbrs?
-            musenet = "sudo mount.nfs4 192.168.86.20:/mnt/WD\\ Blue\\ Stripe\\ 2T/Usenet /media/Usenet";
-            mpicture = "sudo mount.nfs4 192.168.86.20:/mnt/WD\\ Blue\\ Stripe\\ 2T/Picture /media/Picture";
-            mvideo = "sudo mount.nfs4 192.168.86.20:/mnt/WD\\ Blue\\ Stripe\\ 2T/Video /media/Video";
-            mmovie = "sudo mount.nfs4 192.168.86.20:/mnt/WD\\ Blue\\ Stripe\\ 2T/Movie /media/Movie";
-            mshow = "sudo mount.nfs4 192.168.86.20:/mnt/WD\\ Blue\\ Stripe\\ 2T/Show /media/Show";
-
-            # ssh locations
-            xxhamster = "TERM=ansi ssh christoph@217.160.142.51";
+            msusenet = "sudo mount.nfs4 192.168.86.20:/mnt/WD\\ Blue\\ Stripe\\ 2T/Usenet /media/Stash-Usenet";
+            mspicture = "sudo mount.nfs4 192.168.86.20:/mnt/WD\\ Blue\\ Stripe\\ 2T/Picture /media/Stash-Picture";
+            msvideo = "sudo mount.nfs4 192.168.86.20:/mnt/WD\\ Blue\\ Stripe\\ 2T/Video /media/Stash-Video";
+            mmovie = "sudo mount.nfs4 192.168.86.20:/mnt/SG\\ Exos\\ Mirror\\ 18TB/Movie /media/Movie";
+            mshow = "sudo mount.nfs4 192.168.86.20:/mnt/SG\\ Exos\\ Mirror\\ 18TB/Show /media/Show";
+            musenet = "sudo mount.nfs4 192.168.86.20:/mnt/SG\\ Exos\\ Mirror\\ 18TB/Usenet /media/Usenet";
 
             # disassemble
             disassemble = "objdump -d -S -M intel";
