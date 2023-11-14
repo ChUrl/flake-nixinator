@@ -43,8 +43,8 @@ in {
         # ms-kubernetes-tools.vscode-kubernetes-tools
         ms-python.python
         ms-toolsai.jupyter
-        # ms-vscode.cmake-tools
-        # ms-vscode.cpptools
+        ms-vscode.cmake-tools
+        ms-vscode.cpptools
         # ms-vscode.hexeditor
         # ms-vscode.makefile-tools
         ms-python.black-formatter
