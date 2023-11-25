@@ -20,9 +20,9 @@
     nur.url = "github:nix-community/NUR";
     # musnix.url = "github:musnix/musnix";
     devshell.url = "github:numtide/devshell";
-    hyprland.url = "github:hyprwm/Hyprland";
-    hyprpaper.url = "github:hyprwm/hyprpaper";
-    hyprpicker.url = "github:hyprwm/hyprpicker";
+    # hyprland.url = "github:hyprwm/Hyprland"; # NOTE: only for Home-Manager, NixOS includes hyprland
+    # hyprpaper.url = "github:hyprwm/hyprpaper"; # NOTE: replaced with hyprpaper package
+    # hyprpicker.url = "github:hyprwm/hyprpicker"; # NOTE: replaced with hyprpicker package
     # nixvim.url = "github:pta2002/nixvim";
     # nixified-ai.url = "github:nixified-ai/flake";
 
@@ -47,7 +47,7 @@
   outputs = inputs @ {
     nixpkgs,
     # home-manager,
-    hyprland,
+    # hyprland,
     ...
   }:
   # With let you can define local variables
@@ -72,8 +72,8 @@
         inputs.devshell.overlays.default
         inputs.nur.overlay
         inputs.emacs-overlay.overlay
-        inputs.hyprpaper.overlays.default
-        inputs.hyprpicker.overlays.default
+        # inputs.hyprpaper.overlays.default
+        # inputs.hyprpicker.overlays.default
 
         # All my own overlays
         (import ./overlays {inherit nixpkgs inputs mylib;})
@@ -98,7 +98,7 @@
         username = "christoph";
 
         extraModules = [
-          hyprland.nixosModules.default # Use system module for SDDM config
+          # hyprland.nixosModules.default # NOTE: NixOS includes system module
         ];
       };
 
@@ -110,7 +110,7 @@
         username = "christoph";
 
         extraModules = [
-          hyprland.nixosModules.default # Use system module for SDDM config
+          # hyprland.nixosModules.default # NOTE: NixOS includes system module
         ];
       };
     };
