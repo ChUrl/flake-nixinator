@@ -76,7 +76,7 @@ in {
       userSettings = {
         # VSCode Internals
         "editor.fontFamily" = "JetBrainsMono Nerd Font Mono";
-        "editor.fontSize" = 14;
+        "editor.fontSize" = 16;
         "editor.renderWhitespace" = "selection";
         "editor.cursorStyle" = "line"; # Use line for vim plugin
         "editor.lineNumbers" = "relative";
