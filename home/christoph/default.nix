@@ -306,6 +306,7 @@ rec {
     poppler_utils # pdfunite
     # ffmpeg # Convert video (magic), v4
     ffmpeg_5-full # I love ffmpeg (v5, including ffplay)
+    ffmpeg-normalize
     x265
     imagemagick # Convert image (magic)
     ueberzugpp # Display images in terminal (alacritty)
