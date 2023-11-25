@@ -193,15 +193,13 @@ with mylib.networking; {
   # XDG
   xdg.portal = {
     enable = true;
+    wlr.enable = false; # I think hyprland has its own portal automatically enabled...
     extraPortals = with pkgs; [
-      # xdg-desktop-portal-wlr # For wlroots based desktops
+      xdg-desktop-portal-kde
+      xdg-desktop-portal-gtk
       # xdg-desktop-portal-hyprland # Already enabled by hyprland system module
-      # xdg-desktop-portal-kde
-      xdg-desktop-portal-gtk # TODO: Keep for GTK apps? E.g. for font antialiasing? Might be required for flatpak GTK apps?
-      # xdg-desktop-portal-gnome # Gnome
       # xdg-desktop-portal-termfilechooser # Filepicker using nnn
     ];
-    # gtkUsePortal = true; # Deprecated, don't use (gdm takes ages to load and other fishy stuff)
   };
 
   # See https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
