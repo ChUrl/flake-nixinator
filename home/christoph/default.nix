@@ -653,9 +653,11 @@ rec {
 
     git = {
       enable = true;
+      lfs.enable = true;
       delta.enable = true;
+
       userEmail = "christoph.urlacher@protonmail.com";
-      userName = "ChUrl";
+      userName = "Christoph Urlacher";
     };
 
     # helix = {
