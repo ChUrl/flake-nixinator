@@ -291,6 +291,10 @@ with mylib.networking; {
     # TODO: Conflicts with kde?
     fontconfig = {
       enable = true;
+      antialias = true;
+      hinting.enable = true;
+      hinting.autohint = true;
+      cache32Bit = true;
       defaultFonts = {
         serif = ["Noto Serif CJK SC"];
         sansSerif = ["Noto Sans CJK SC"];
