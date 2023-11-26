@@ -309,6 +309,7 @@ rec {
     ffmpeg-normalize
     x265
     imagemagick # Convert image (magic)
+    vlc
     ueberzugpp # Display images in terminal (alacritty)
     (ripgrep.override {withPCRE2 = true;}) # fast as fuck
     nvd # nix rebuild diff
