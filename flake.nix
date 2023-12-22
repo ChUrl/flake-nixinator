@@ -64,9 +64,11 @@
     pkgs = import nixpkgs {
       inherit system;
 
-      # TODO: I don't understand what the f I need to do here?
-      #       Why can't I enable unfree packages for all files used by this flake?
       config.allowUnfree = true;
+      
+      # NOTE: Probably shouldn't enable CUDA globally, but in the environment flakes where it is needed?
+      #       Would it even work here? Since the flake imports its own nixpkgs...
+      # config.cudaSupport = true;
 
       overlays = [
         inputs.devshell.overlays.default
