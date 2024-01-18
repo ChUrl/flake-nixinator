@@ -37,7 +37,7 @@
   programs.light.enable = true;
 
   programs.hyprland = {
-    enableNvidiaPatches = false;
+    # enableNvidiaPatches = false; # NOTE: Deprecated
   };
 
   services.xserver = {

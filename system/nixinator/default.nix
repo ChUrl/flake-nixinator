@@ -77,7 +77,7 @@
   };
 
   programs.hyprland = {
-    enableNvidiaPatches = true;
+    # enableNvidiaPatches = true; # NOTE: Deprecated
   };
 
   # Low latency audio
