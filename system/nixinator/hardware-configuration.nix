@@ -74,7 +74,7 @@
 
     nvidia = {
       modesetting.enable = true; # Not officially supported by NVidia but needed for wayland
-      open = true;
+      open = false; # TODO: Build failure on 2024-18-01
       nvidiaSettings = true;
     };
 
