@@ -392,7 +392,7 @@ with mylib.networking; {
       # dell-b1160w # TODO: Broken
     ];
     avahi.enable = true; # Network printers
-    avahi.nssmdns = true;
+    avahi.nssmdns4 = true;
 
     # Enable the OpenSSH daemon.
     openssh.enable = true;
