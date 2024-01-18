@@ -65,6 +65,9 @@
       inherit system;
 
       config.allowUnfree = true;
+
+      # NOTE: Obsidian 1.5.3 depends on an unsupported Electron version. As long as Obsidian isn't updated, allow this version.
+      config.permittedInsecurePackages = pkgs.lib.optional (pkgs.obsidian.version == "1.5.3") "electron-25.9.0";
       
       # NOTE: Probably shouldn't enable CUDA globally, but in the environment flakes where it is needed?
       #       Would it even work here? Since the flake imports its own nixpkgs...
