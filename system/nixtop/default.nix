@@ -42,8 +42,8 @@
 
   services.xserver = {
     # Configure keymap in X11
-    layout = "de";
-    xkbVariant = "nodeadkeys";
+    xkb.layout = "de";
+    xkb.variant = "nodeadkeys";
 
     # Proprietary graphics drivers
     videoDrivers = ["intel"];
