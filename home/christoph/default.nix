@@ -378,6 +378,10 @@ rec {
     # geekbench
     spotify
 
+    sqlitebrowser # To modify tables
+    dbeaver # To import/export data + diagrams
+    hoppscotch # Test APIs
+
     # Xooooorg/Desktop environment stuff
     # xclip
     xorg.xwininfo # See what apps run in XWayland
@@ -459,7 +463,7 @@ rec {
     jetbrains.rust-rover
     jetbrains.pycharm-professional
     jetbrains.idea-ultimate
-    jetbrains-toolbox # TODO: Difficult to make work
+    # jetbrains-toolbox # TODO: Difficult to make work
 
     # Media
     wacomtablet
