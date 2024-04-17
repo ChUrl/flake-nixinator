@@ -338,6 +338,11 @@ with mylib.networking; {
   # Empty since we basically only need git + editor which is enabled below
   environment.systemPackages = with pkgs; [
     iw
+
+    # iPhone tethering + mounting
+    libimobiledevice
+    ifuse
+
     mprocs # run multiple processes in single terminal window, screen alternative
     parted # partition manager
     procs # Better ps
