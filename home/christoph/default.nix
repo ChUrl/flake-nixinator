@@ -369,7 +369,7 @@ rec {
     nfs-utils
 
     appimage-run
-    decker
+    # decker # TODO: Build failure
     google-chrome # Trash, but required for decker pdf export
     (pkgs.writeShellScriptBin "chrome" "exec -a $0 ${google-chrome}/bin/google-chrome-stable $@")
 
@@ -457,8 +457,6 @@ rec {
     #   p.pillow # for ranger
     #   p.pygments # for emacs
     # ]))
-    # jetbrains.pycharm-professional
-    # jetbrains.idea-ultimate
     jetbrains.clion
     jetbrains.rust-rover
     jetbrains.pycharm-professional
@@ -468,7 +466,7 @@ rec {
     # Media
     wacomtablet
     # blender
-    godot_4
+    # godot_4
     obs-studio
     # vlc # Addition to mpv without any shaders etc
     kdenlive
