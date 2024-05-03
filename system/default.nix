@@ -180,10 +180,10 @@ with mylib.networking; {
     # desktopManager.gnome.enable = true;
 
     wacom.enable = true;
-
-    # Enable touchpad support (enabled default in most desktopManager).
-    libinput.enable = true;
   };
+
+  # Enable touchpad support (enabled default in most desktopManager).
+  services.libinput.enable = true;
 
   programs.hyprland = {
     enable = true;
