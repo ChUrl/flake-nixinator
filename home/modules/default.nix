@@ -27,5 +27,7 @@
     ./rofi
     ./vscode
     ./waybar
+
+    inputs.nix-flatpak.homeManagerModules.nix-flatpak
   ];
 }

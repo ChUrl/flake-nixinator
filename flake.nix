@@ -33,6 +33,8 @@
     firefox-gnome-theme.url = "github:rafaelmardojai/firefox-gnome-theme";
     firefox-gnome-theme.flake = false;
 
+    nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=v0.4.1";
+
     # adwaita-for-steam.url = "github:tkashkin/Adwaita-for-Steam";
     # adwaita-for-steam.flake = false;
 
@@ -104,6 +106,7 @@
 
         extraModules = [
           # hyprland.nixosModules.default # NOTE: NixOS includes system module
+          # inputs.nix-flatpak.nixosModules.nix-flatpak
         ];
       };
 
@@ -116,6 +119,7 @@
 
         extraModules = [
           # hyprland.nixosModules.default # NOTE: NixOS includes system module
+          # inputs.nix-flatpak.nixosModules.nix-flatpak
         ];
       };
     };

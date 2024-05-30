@@ -69,20 +69,20 @@ rec {
 
     fish.enable = true;
 
-    flatpak = {
-      enable = true;
-      autoUpdate = true;
-      autoPrune = true;
-      fontFix = true; # TODO: This doesn't work reliably...
-      iconFix = false;
+    # flatpak = {
+    #   enable = false;
+    #   autoUpdate = true;
+    #   autoPrune = true;
+    #   fontFix = true; # TODO: This doesn't work reliably...
+    #   iconFix = false;
 
-      flatseal.enable = true;
-      discord.enable = true;
-      spotify.enable = false; # Can't login because browser doesn't open
-      bottles.enable = false;
-      obsidian.enable = false; # Extremely low graph draw performance?
-      jabref.enable = false;
-    };
+    #   flatseal.enable = true;
+    #   discord.enable = true;
+    #   spotify.enable = true;
+    #   bottles.enable = false;
+    #   obsidian.enable = false; # Extremely low graph draw performance?
+    #   jabref.enable = false;
+    # };
 
     helix.enable = true;
 
@@ -175,10 +175,10 @@ rec {
       };
     };
 
-    # neovim = {
-    #   enable = false;
-    #   alias = true;
-    # };
+    neovim = {
+      enable = false;
+      alias = true;
+    };
 
     nextcloud = {
       enable = true;
@@ -376,10 +376,11 @@ rec {
     cool-retro-term
     ventoy-full # Bootable USB for many ISOs
     # geekbench
-    spotify
+    # spotify # NOTE: Uses flatpak
+    neovide
 
     sqlitebrowser # To modify tables
-    dbeaver # To import/export data + diagrams
+    dbeaver-bin # To import/export data + diagrams
     hoppscotch # Test APIs
 
     # Xooooorg/Desktop environment stuff
@@ -879,6 +880,38 @@ rec {
 
   services = {
     # kdeconnect.enable = true; # Note: This does not setup the firewall at all
+
+    flatpak = {
+      packages = [
+        "com.github.tchx84.Flatseal"
+        "com.discordapp.Discord"
+        "com.spotify.Client"
+      ];
+
+      uninstallUnmanaged = true;
+
+      update.auto = {
+        enable = true;
+        onCalendar = "weekly"; # Default value
+      };
+
+      overrides = {
+        global = {
+          # Force Wayland by default
+          Context.sockets = ["wayland" "!x11" "!fallback-x11"];
+
+          Context.filesystems = ["/nix/store:ro"];
+
+          Environment = {
+            # Fix un-themed cursor in some Wayland apps
+            XCURSOR_PATH = "/run/host/user-share/icons:/run/host/share/icons";
+
+            # Force correct theme for some GTK apps
+            # GTK_THEME = "Adwaita:dark";
+          };
+        };
+      };
+    };
   };
 
   # Nicely reload system units when changing configs
