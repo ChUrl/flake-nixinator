@@ -18,13 +18,13 @@
     # Other Flakes
     emacs-overlay.url = "github:nix-community/emacs-overlay";
     nur.url = "github:nix-community/NUR";
-    # musnix.url = "github:musnix/musnix";
     devshell.url = "github:numtide/devshell";
-    # hyprland.url = "github:hyprwm/Hyprland"; # NOTE: only for Home-Manager, NixOS includes hyprland
-    # hyprpaper.url = "github:hyprwm/hyprpaper"; # NOTE: replaced with hyprpaper package
-    # hyprpicker.url = "github:hyprwm/hyprpicker"; # NOTE: replaced with hyprpicker package
-    # nixvim.url = "github:pta2002/nixvim";
+    nixvim.url = "github:nix-community/nixvim";
+    nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=v0.4.1";
+    # musnix.url = "github:musnix/musnix";
     # nixified-ai.url = "github:nixified-ai/flake";
+    # nixos-conf-editor.url = "github:vlinkz/nixos-conf-editor";
+    # nix-matlab.url = "gitlab:doronbehar/nix-matlab";
 
     # plasma-manager.url = "github:pjones/plasma-manager";
     # plasma-manager.inputs.nixpkgs.follows = "nixpkgs";
@@ -33,14 +33,12 @@
     firefox-gnome-theme.url = "github:rafaelmardojai/firefox-gnome-theme";
     firefox-gnome-theme.flake = false;
 
-    nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=v0.4.1";
-
     # adwaita-for-steam.url = "github:tkashkin/Adwaita-for-Steam";
     # adwaita-for-steam.flake = false;
 
-    # nixos-conf-editor.url = "github:vlinkz/nixos-conf-editor";
-
-    # nix-matlab.url = "gitlab:doronbehar/nix-matlab";
+    # hyprland.url = "github:hyprwm/Hyprland"; # NOTE: only for Home-Manager, NixOS includes hyprland
+    # hyprpaper.url = "github:hyprwm/hyprpaper"; # NOTE: replaced with hyprpaper package
+    # hyprpicker.url = "github:hyprwm/hyprpicker"; # NOTE: replaced with hyprpicker package
   };
 
   # Outputs is a function that takes the inputs as arguments.
