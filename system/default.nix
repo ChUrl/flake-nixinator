@@ -30,7 +30,7 @@ with mylib.networking; {
 
       networks = {
         # Default wildcard ethernet network for all hosts
-        "50-ether" = mkSystemdNetwork "enp*";
+        "50-ether" = mkSystemdNetwork "enp*" false;
       };
 
       allowedTCPPorts = [

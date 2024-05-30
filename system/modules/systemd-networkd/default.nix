@@ -23,7 +23,18 @@ in {
     # Main Networks
     systemd.network = {
       enable = true;
-      wait-online.anyInterface = true; # Don't wait for all networks to be configured, as e.g. wg0 will only be upon manual activation
+      wait-online.timeout = 10;
+
+      # Don't wait for all networks to be configured, as e.g. wg0 will only be upon manual activation
+      wait-online.anyInterface = true; 
+
+      # TODO: Apparently anyInterface doesn't work?
+      # wait-online.ignoredInterfaces = [
+      #   "wg0"
+      #   "wlp7s0"
+      #   "enp5s0"
+      # ];
+
       networks = cfg.networks;
     };
 

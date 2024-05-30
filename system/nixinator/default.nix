@@ -36,6 +36,7 @@
           ip = ["192.168.86.50/24"];
           router = ["192.168.86.5"];
           nameserver = ["192.168.86.26"];
+          routable = true;
         };
         # "10-ether-1G" = mylib.networking.mkStaticSystemdNetwork {...};
       };

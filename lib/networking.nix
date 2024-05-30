@@ -5,7 +5,7 @@
   lib,
   ...
 }: rec {
-  mkSystemdNetwork = interface: {
+  mkSystemdNetwork = interface: routable: {
     # name = "enp0s31f6"; # Network interface name?
     enable = true;
 
@@ -30,7 +30,7 @@
     linkConfig = {
       # This corresponds to the [LINK] section
       # RequiredForOnline = "routable";
-      RequiredForOnline = "no"; # Don't make nixos-rebuild wait for systemd-networkd-wait-online.service
+      RequiredForOnline = if routable then "routable" else "no"; # Don't make nixos-rebuild wait for systemd-networkd-wait-online.service
     };
   };
 
@@ -39,6 +39,7 @@
     ip,
     router,
     nameserver,
+    routable,
   }: {
     # name = "enp0s31f6"; # Network interface name?
     enable = true;
@@ -75,7 +76,7 @@
     linkConfig = {
       # This corresponds to the [LINK] section
       # RequiredForOnline = "routable";
-      RequiredForOnline = "no"; # Don't make nixos-rebuild wait for systemd-networkd-wait-online.service
+      RequiredForOnline = if routable then "routable" else "no"; # Don't make nixos-rebuild wait for systemd-networkd-wait-online.service
     };
   };
 
