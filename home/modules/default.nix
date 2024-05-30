@@ -29,5 +29,6 @@
     ./waybar
 
     inputs.nix-flatpak.homeManagerModules.nix-flatpak
+    inputs.nixvim.homeManagerModules.nixvim
   ];
 }

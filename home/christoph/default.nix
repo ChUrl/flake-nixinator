@@ -84,7 +84,7 @@ rec {
     #   jabref.enable = false;
     # };
 
-    helix.enable = true;
+    helix.enable = false;
 
     hyprland = {
       enable = true;
@@ -176,7 +176,7 @@ rec {
     };
 
     neovim = {
-      enable = false;
+      enable = true;
       alias = true;
     };
 
@@ -263,8 +263,10 @@ rec {
     sessionVariables = {
       LANG = "en_US.UTF-8";
 
-      EDITOR = "hx";
-      VISUAL = "hx";
+      # TODO: Configure in neovim/helix modules and choose a winner
+      # EDITOR = "hx";
+      # VISUAL = "hx";
+
       # TERMINAL = "alacritty -o font.size=12";
       TERMINAL = "kitty";
       BROWSER = "firefox";
@@ -367,6 +369,7 @@ rec {
     # suricata
     cifs-utils # Mount samba shares
     nfs-utils
+    sshfs
 
     appimage-run
     # decker # TODO: Build failure
