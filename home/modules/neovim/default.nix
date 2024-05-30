@@ -14,10 +14,10 @@ in {
 
   config = mkIf cfg.enable {
     # TODO: Configure by option
-    home.sessionVariables = {
-      EDITOR = "nvim";
-      VISUAL = "nvim";
-    };
+    # home.sessionVariables = {
+    #   EDITOR = "nvim";
+    #   VISUAL = "nvim";
+    # };
 
     programs.neovim = {
       enable = true;
