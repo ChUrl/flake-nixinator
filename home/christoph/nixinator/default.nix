@@ -110,11 +110,15 @@ rec {
     #       The laptop needs de-DE...
     # Chinese Input
     i18n.inputMethod.enabled = "fcitx5";
-    i18n.inputMethod.fcitx5.addons = with pkgs; [
-      fcitx5-gtk
-      libsForQt5.fcitx5-qt
-      fcitx5-chinese-addons
-      fcitx5-configtool # TODO: Remove this and set config through HomeManager
-    ];
+    i18n.inputMethod.fcitx5 = {
+      waylandFrontend = true;
+
+      addons = with pkgs; [
+        fcitx5-gtk
+        libsForQt5.fcitx5-qt
+        fcitx5-chinese-addons
+        fcitx5-configtool # TODO: Remove this and set config through HomeManager
+      ];
+    };
   };
 }
