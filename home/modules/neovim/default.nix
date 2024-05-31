@@ -14,12 +14,14 @@ in {
 
   config = mkIf cfg.enable {
     # TODO: Configure by option
-    # home.sessionVariables = {
-    #   EDITOR = "nvim";
-    #   VISUAL = "nvim";
-    # };
+    home.sessionVariables = {
+      EDITOR = "nvim";
+      VISUAL = "nvim";
+    };
 
     home.packages = with pkgs; [
+      (pkgs.ripgrep.override {withPCRE2 = true;})
+
       # Linters
       vale
 
@@ -34,38 +36,98 @@ in {
       defaultEditor = true;
       enableMan = true;
       colorschemes.catppuccin.enable = true;
+      viAlias = cfg.alias;
+      vimAlias = cfg.alias;
+
+      globals = {
+        mapleader = " ";
+        mallocalleader = " ";
+      };
 
       opts = {
-        ruler = true; # Show cursor position in status line
-        number = true;
-        relativenumber = false;
         showmode = false; # Status line already shows this
         backspace = ["indent" "eol" "start"];
-        undofile = true;
-        undodir = "~/.vim/undo";
-        encoding = "utf-8";
+        termguicolors = true; # Required by multiple plugins
+        hidden = true; # Don't unload buffers immediately
+        mouse = "a";
+        completeopt = ["menuone" "noselect" "noinsert"];
+        timeoutlen = 100;
+        pumheight = 0;
+        formatexpr = "v:lua.require'conform'.formatexpr()";
+        laststatus = 3;
 
-        # TODO: Move neovide config to this module
-        # printfont = "JetBrainsMono Nerd Font Mono:h10";
-        # guifont = "JetBrainsMono Nerd Font Mono:h12";
+        # Cursor
+        ruler = true; # Show cursor position in status line
+        number = true;
+        relativenumber = true;
+        signcolumn = "yes";
+        cursorline = true;
+        scrolloff = 10;
+
+        # Folding
+        foldcolumn = "0";
+        foldlevel = 99;
+        foldlevelstart = 99;
+        foldenable = true;
+
+        # Files
+        encoding = "utf-8";
+        fileencoding = "utf-8";
+        swapfile = false;
+        backup = false;
+        undofile = true;
+        undodir = "/home/christoph/.vim/undo";
+        # autochdir = true;
 
         # Search
         incsearch = true; # Already highlight results while typing
         hlsearch = true;
         ignorecase = true;
-        laststatus = 2;
-        hidden = true; # Don't unload buffers immediately
+        smartcase = true;
+        grepprg = "rg --vimgrep";
+        grepformat = "%f:%l:%c:%m";
 
         # Indentation
-        autoindent = true;
-        expandtab = true;
-        smartindent = true;
+        autoindent = false; # Might mess up comment indentation
+        smartindent = false; # Might mess up comment indentation
+        cindent = true;
+        cinkeys = "0{,0},0),0],:,!^F,o,O,e"; # Fix comment (#) indentation and intellitab (somehow)
         smarttab = true;
+        expandtab = true;
         shiftwidth = 4;
+        tabstop = 4;
         softtabstop = 4;
 
-        termguicolors = true; # For bufferline
+        splitbelow = true;
+        splitright = true;
       };
+
+      # TODO: Use conform-nvim.formatOnSave, also make this toggleable and add a "Format" command
+      # TODO: Half of the neovide config doesn't work
+      extraConfigLua = ''
+        local opt = vim.opt
+        local g = vim.g
+        local o = vim.o
+
+        -- Neovide
+        if g.neovide then
+          -- Neovide options
+          g.neovide_fullscreen = false
+          g.neovide_hide_mouse_when_typing = false
+          g.neovide_refresh_rate = 144
+          -- g.neovide_cursor_vfx_mode = "ripple"
+          g.neovide_cursor_animate_command_line = true
+          g.neovide_cursor_animate_in_insert_mode = true
+          g.neovide_cursor_vfx_particle_lifetime = 5.0
+          g.neovide_cursor_vfx_particle_density = 14.0
+          g.neovide_cursor_vfx_particle_speed = 12.0
+          -- g.neovide_transparency = 0.8
+          g.neovide_theme = 'light'
+
+          -- Neovide Fonts
+          o.guifont = "JetBrainsMono Nerd Font:h13:Medium:i"
+        end
+      '';
 
       extraLuaPackages = with pkgs.lua51Packages; [
         # lua-curl # For rest
@@ -79,28 +141,349 @@ in {
         # nvim-nio # For rest
       ];
 
-      plugins = {
-        # TODO: Fix the terribly ugly right side with the line numbers etc.
-        # Status line, alternative to lualine
-        airline = {
-          enable = false;
+      keymaps = [
+        # {
+        #   action = "<cmd>make<CR>";
+        #   key = "<C-m>";
+        #   options = {
+        #     silent = true;
+        #   };
+        # }
 
-          settings = {
-            powerline_fonts = true;
-            theme = "catppuccin";
-          };
-        };
+        # Disable arrow keys
+        # {
+        #   mode = ["n" "i"];
+        #   key = "<Up>";
+        #   action = "<Nop>";
+        #   options = {
+        #     silent = true;
+        #     noremap = true;
+        #     desc = "Disable Up arrow key";
+        #   };
+        # }
+        # {
+        #   mode = ["n" "i"];
+        #   key = "<Down>";
+        #   action = "<Nop>";
+        #   options = {
+        #     silent = true;
+        #     noremap = true;
+        #     desc = "Disable Down arrow key";
+        #   };
+        # }
+        # {
+        #   mode = ["n" "i"];
+        #   key = "<Right>";
+        #   action = "<Nop>";
+        #   options = {
+        #     silent = true;
+        #     noremap = true;
+        #     desc = "Disable Right arrow key";
+        #   };
+        # }
+        # {
+        #   mode = ["n" "i"];
+        #   key = "<Left>";
+        #   action = "<Nop>";
+        #   options = {
+        #     silent = true;
+        #     noremap = true;
+        #     desc = "Disable Left arrow key";
+        #   };
+        # }
+
+        # No Leader
+        {
+          mode = "v";
+          key = "<";
+          action = "<gv";
+          options.desc = "Outdent";
+        }
+        {
+          mode = "v";
+          key = ">";
+          action = ">gv";
+          options.desc = "Indent";
+        }
+        {
+          mode = "n";
+          key = "<C-d>";
+          action = "<C-d>zz";
+          options.desc = "Jump down";
+        }
+        {
+          mode = "n";
+          key = "<C-u>";
+          action = "<C-u>zz";
+          options.desc = "Jump up";
+        }
+        {
+          mode = "n";
+          key = "n";
+          action = "nzzzv";
+          options.desc = "Next match";
+        }
+        {
+          mode = "n";
+          key = "N";
+          action = "Nzzzv";
+          options.desc = "Previous match";
+        }
+        # { # Already included in intellitab config
+        #   mode = "i";
+        #   key = "<Tab>";
+        #   action = "<cmd>lua require('intellitab').indent()<CR>";
+        #   options.desc = "Indent";
+        # }
+        {
+          mode = "i";
+          key = "<C-BS>";
+          action = "<C-w>";
+          options.desc = "Delete previous word";
+        }
+        {
+          mode = "i";
+          key = "<M-BS>";
+          action = "<C-w>";
+          options.desc = "Delete previous word";
+        }
+
+        # General <leader>
+        {
+          mode = "n";
+          key = "<leader>f";
+          action = "<cmd>Telescope find_files<CR>";
+          options.desc = "Find file";
+        }
+        {
+          mode = "n";
+          key = "<leader>u";
+          action = "<cmd>Telescope undo<CR>";
+          options.desc = "View undo history";
+        }
+        {
+          mode = "n";
+          key = "<leader>/";
+          action = "<cmd>Telescope current_buffer_fuzzy_find<CR>";
+          options.desc = "Find in current buffer";
+        }
+        {
+          mode = "n";
+          key = "<leader>s";
+          action = "<cmd>Telescope live_grep<CR>";
+          options.desc = "Find in working directory";
+        }
+        {
+          mode = "n";
+          key = "<leader>d";
+          action = "<cmd>Telescope diagnostics<CR>";
+          options.desc = "View diagnostics";
+        }
+        {
+          mode = "n";
+          key = "<leader>?";
+          action = "<cmd>Telescope keymaps<CR>";
+          options.desc = "View keymaps";
+        }
+        {
+          mode = "n";
+          key = "<leader>:";
+          action = "<cmd>Telescope commands<CR>";
+          options.desc = "Execute command";
+        }
+
+        # Buffers <leader>b
+        {
+          mode = "n";
+          key = "<leader>b";
+          action = "+buffers";
+        }
+        {
+          mode = "n";
+          key = "<leader>bb";
+          action = "<cmd>Telescope buffers<CR>";
+          options.desc = "View open buffers";
+        }
+        {
+          mode = "n";
+          key = "<leader>bn";
+          action = "<cmd>bnext<CR>";
+          options.desc = "Goto next buffer";
+        }
+        {
+          mode = "n";
+          key = "<leader>bp";
+          action = "<cmd>bprevious<CR>";
+          options.desc = "Goto previous buffer";
+        }
+        {
+          mode = "n";
+          key = "<leader>bq";
+          action = "<cmd>Bdelete<CR>";
+          options.desc = "Close current buffer";
+        }
+
+        # Windows <leader>w
+        {
+          mode = "n";
+          key = "<leader>w";
+          action = "+windows";
+        }
+        {
+          mode = "n";
+          key = "<leader>ws";
+          action = "<C-w>v";
+          options.desc = "Split window vertically";
+        }
+        {
+          mode = "n";
+          key = "<leader>wq";
+          action = "<C-w>c";
+          options.desc = "Close current window";
+        }
+        # {
+        #   mode = "n";
+        #   key = "<leader>wh";
+        #   action = "<C-W>s";
+        #   options.desc = "Split window horizontally";
+        # }
+        {
+          mode = "n";
+          key = "<leader>wh";
+          action = "<C-w>h";
+          options.desc = "Goto left window";
+        }
+        {
+          mode = "n";
+          key = "<leader>wl";
+          action = "<C-w>l";
+          options.desc = "Goto right window";
+        }
+        {
+          mode = "n";
+          key = "<leader>wj";
+          action = "<C-w>j";
+          options.desc = "Goto bottom window";
+        }
+        {
+          mode = "n";
+          key = "<leader>wk";
+          action = "<C-w>k";
+          options.desc = "Goto top window";
+        }
+        {
+          mode = "n";
+          key = "<leader>ww";
+          action = "<C-w>p";
+          options.desc = "Goto other window";
+        }
+
+        # Toggles <leader>t
+        {
+          mode = "n";
+          key = "<leader>t";
+          action = "+toggle";
+        }
+        {
+          mode = "n";
+          key = "<leader>tt";
+          action = "<cmd>Neotree toggle<CR>";
+          options.desc = "Toggle NeoTree";
+        }
+        # {
+        #   mode = "n";
+        #   key = "<leader>tg";
+        #   action = "<cmd>LazyGit<CR>";
+        # }
+        # {
+        #   mode = "n";
+        #   key = "<leader>tp";
+        #   action = "<cmd>TroubleToggle<CR>";
+        # }
+
+        # Git <leader>g
+        {
+          mode = "n";
+          key = "<leader>g";
+          action = "+git";
+        }
+        {
+          mode = "n";
+          key = "<leader>gg";
+          action = "<cmd>LazyGit<CR>";
+          options.desc = "Toggle LazyGit";
+        }
+        {
+          mode = "n";
+          key = "<leader>gm";
+          action = "<cmd>GitMessenger<CR>";
+          options.desc = "Toggle GitMessenger";
+        }
+        # {
+        #   mode = "n";
+        #   key = "<leader>gs";
+        #   action = "<cmd>Git status<CR>";
+        # }
+        {
+          mode = "n";
+          key = "<leader>gs";
+          action = "<cmd>Telescope git_status<CR>";
+          options.desc = "View Git status";
+        }
+        {
+          mode = "n";
+          key = "<leader>gc";
+          action = "<cmd>Telescope git_commits<CR>";
+          options.desc = "View Git log";
+        }
+        {
+          mode = "n";
+          key = "<leader>gb";
+          action = "<cmd>Telescope git_branches<CR>";
+          options.desc = "View Git branches";
+        }
+        {
+          mode = "n";
+          key = "<leader>gf";
+          action = "<cmd>Telescope git_bcommits<CR>";
+          options.desc = "View Git log for current file";
+        }
+
+        # Code <leader>c
+        {
+          mode = "n";
+          key = "<leader>c";
+          action = "+code";
+        }
+        # TODO: Autoformat https://github.com/redyf/Neve/blob/main/config/lsp/conform.nix
+        {
+          mode = "n";
+          key = "<leader>cf";
+          action = "<cmd>lua require('conform').format()<CR>";
+          options.desc = "Format current buffer";
+        }
+      ];
+
+      plugins = {
+        # Status line, alternative to lualine
+        # airline = {
+        #   enable = false;
+        #
+        #   settings = {
+        #     powerline_fonts = true;
+        #     theme = "catppuccin";
+        #   };
+        # };
 
         # Auto-close parenthesis, alternative to nvim-autopairs
-        autoclose = {
-          enable = true;
-        };
+        # autoclose = {
+        #   enable = true;
+        # };
 
-        # TODO: Remove once I have telescope
         # Alternative to bufferline
-        barbar = {
-          enable = true;
-        };
+        # barbar = {
+        #   enable = true;
+        # };
 
         # Escape insert mode by pressing jk
         better-escape = {
@@ -120,38 +503,74 @@ in {
         # };
 
         # Directory tree
-        chadtree = {
-          enable = true;
-        };
+        # chadtree = {
+        #   enable = true;
+        # };
 
-        # TODO: Requires LSP
-        clangd-extensions = {
-          enable = false;
-        };
+        # clangd-extensions = {
+        #   enable = false;
+        # };
 
         # Completion engine
         cmp = {
           enable = true;
 
+          autoEnableSources = false;
+
           settings = {
             sources = [
-              { name = "async_path"; }
-              { name = "emoji"; }
-              { name = "nvim_lsp"; }
-              { name = "nvim_lsp_signature_help"; }
+              {name = "async_path";}
+              {name = "emoji";}
+              {name = "nvim_lsp";}
+              {name = "nvim_lsp_signature_help";}
+              {name = "luasnip";}
+              # {name = "cmdline";}
             ];
+
+            snippet.expand = ''
+              function(args)
+                require('luasnip').lsp_expand(args.body)
+              end
+            '';
+
+            window = {
+              completion.border = "rounded";
+              completion.winhighlight = "Normal:Normal,FloatBorder:FloatBorder,CursorLine:Visual,Search:None";
+              documentation.border = "rounded";
+            };
+
+            mapping = {
+              __raw = ''
+                cmp.mapping.preset.insert({
+                  ['<Down>'] = cmp.mapping.select_next_item(),
+                  ['<Up>'] = cmp.mapping.select_prev_item(),
+                  ['<C-e>'] = cmp.mapping.abort(),
+                  ['<Esc>'] = cmp.mapping.abort(),
+                  ['<C-Up>'] = cmp.mapping.scroll_docs(-4),
+                  ['<C-Down>'] = cmp.mapping.scroll_docs(4),
+                  ['<CR>'] = cmp.mapping.confirm({ select = true }),
+                })
+              '';
+            };
           };
         };
 
-        # TODO: Add snippet engine completion
         cmp-async-path.enable = true;
         cmp-emoji.enable = true;
         cmp-nvim-lsp.enable = true;
         cmp-nvim-lsp-signature-help.enable = true;
+        cmp_luasnip.enable = true;
+        # cmp-cmdline.enable = true;
 
         # Comment/Uncomment line/selection etc.
         comment = {
           enable = true;
+
+          settings = {
+            mappings.extra = false;
+            opleader.line = "<C-c>";
+            toggler.line = "<C-c>";
+          };
         };
 
         # TODO: Setup formatters
@@ -160,50 +579,55 @@ in {
           enable = true;
 
           formattersByFt = {
-            nix = [ "alejandra" ];
+            c = ["clang-format"];
+            h = ["clang-format"];
+            cpp = ["clang-format"];
+            hpp = ["clang-format"];
+            css = [["prettierd" "prettier"]];
+            html = [["prettierd" "prettier"]];
+            java = ["google-java-format"];
+            javascript = [["prettierd" "prettier"]];
+            markdown = [["prettierd" "prettier"]];
+            nix = ["alejandra"];
+            python = ["black"];
+            rust = ["rustfmt"];
           };
 
           # TODO: formatOnSave = " [???] ";
         };
 
-        # TODO: Doesn't work, need LSP/treesitter?
-        # Highlight words under cursor, alternative to illuminate
-        cursorline = {
-          enable = false;
-        };
-
         # TODO: Figure out how debugging from nvim works...
         # Debug-Adapter-Protocol
-        dap = {
-          enable = false;
-        };
+        # dap = {
+        #   enable = false;
+        # };
 
         # TODO: Figure out how diff-mode works...
-        diffview = {
-          enable = false;
-        };
+        # diffview = {
+        #   enable = false;
+        # };
 
         # TODO: Compare after telescope etc. are enabled
         # Changes nvim UI components, alternative to Noice
-        dressing = {
-          enable = false;
-        };
+        # dressing = {
+        #   enable = false;
+        # };
 
         # Notifications + LSP progress, alternative to Noice
-        fidget = {
-          enable = false;
-        };
+        # fidget = {
+        #   enable = true;
+        # };
 
         # TODO: Doesn't work
         # Search labels
-        flash = {
-          enable = true;
-        };
+        # flash = {
+        #   enable = true;
+        # };
 
         # Git client
-        fugitive = {
-          enable = true;
-        };
+        # fugitive = {
+        #   enable = true;
+        # };
 
         # Alternative to gitsigns
         # gitgutter = {
@@ -227,22 +651,21 @@ in {
         };
 
         # Vim habit trainer, blocks keys
-        hardtime = {
-          enable = false;
-        };
+        # hardtime = {
+        #   enable = false;
+        # };
 
         # TODO: Maybe, don't know yet (also, telescope)
         # Mark files and jump to them
-        harpoon = {
-          enable = false;
-        };
+        # harpoon = {
+        #   enable = false;
+        # };
 
         # Markdown etc. heading highlights
         headlines = {
           enable = true;
         };
 
-        # TODO:
         # Alternative to cursorline
         illuminate = {
           enable = true;
@@ -253,7 +676,6 @@ in {
           enable = true;
         };
 
-        # TODO: Shortcut compatible with cmp
         # Indent to current level on empty line
         intellitab = {
           enable = true;
@@ -284,26 +706,35 @@ in {
           };
         };
 
-        # TODO: Maybe too much?
         # Render diagnostics as virtual line overlay
-        lsp-lines = {
-          enable = true;
-        };
+        # lsp-lines = {
+        #   enable = true;
+        # };
 
         # Statusline, alternative to airline
         lualine = {
           enable = true;
 
           globalstatus = true;
-          sectionSeparators = { left = ""; right = ""; };
-          componentSeparators = { left = ""; right = ""; };
+          sectionSeparators = {
+            left = "";
+            right = "";
+          };
+          componentSeparators = {
+            left = "";
+            right = "";
+          };
         };
-        
+
+        luasnip = {
+          enable = true;
+        };
+
         # TODO: When I start actually using marks
         # Show marks in the gutter
-        marks = {
-          enable = false;
-        };
+        # marks = {
+        #   enable = false;
+        # };
 
         # Structural overview
         navbuddy = {
@@ -313,28 +744,81 @@ in {
         };
 
         # Generate doc comments
-        neogen = {
-          enable = true;
-        };
+        # neogen = {
+        #   enable = true;
+        # };
 
         # TODO: When I need this
         # Interact with test frameworks
-        neotest = {
-          enable = false;
+        # neotest = {
+        #   enable = false;
+        # };
+
+        neo-tree = {
+          enable = true;
+
+          enableDiagnostics = true;
+          enableGitStatus = true;
+          enableModifiedMarkers = true;
+          enableRefreshOnWrite = true;
+          closeIfLastWindow = true;
+          popupBorderStyle = "rounded";
+
+          buffers = {
+            bindToCwd = false;
+            followCurrentFile = {
+              enabled = true;
+            };
+          };
+
+          window = {
+            width = 40;
+            height = 15;
+            autoExpandWidth = false;
+            mappings = {
+              "<space>" = "none";
+            };
+          };
         };
 
-        # NeoVim UI refresh, alternative to fidget and dressing
+        # NeoVim UI refresh, alternative to fidget, dressing and notify
         noice = {
           enable = true;
+
+          lsp.override = {
+            "vim.lsp.util.convert_input_to_markdown_lines" = true;
+            "vim.lsp.util.stylize_markdown" = true;
+            "cmp.entry.get_documentation" = true;
+          };
+
+          notify = {
+            enabled = true;
+          };
+
+          popupmenu = {
+            enabled = true;
+            backend = "cmp";
+          };
+
+          routes = [
+            {
+              filter = {
+                event = "msg_show";
+                kind = "search_count";
+              };
+              opts = { skip = true; };
+            }
+          ];
         };
 
+        # Alternative to noice.notify
         notify = {
           enable = true;
         };
 
         # Alternative to autoclose
         nvim-autopairs = {
-          enable = false;
+          enable = true;
         };
 
         # Colorize color hex codes etc.
@@ -345,13 +829,13 @@ in {
         # TODO: Folds the entire code at startup???
         # Code folding
         nvim-ufo = {
-          enable = false;
+          enable = true;
         };
 
         # File system explorer that is editable like a normal buffer
-        oil = {
-          enable = true;
-        };
+        # oil = {
+        #   enable = true;
+        # };
 
         # Colorize paranthesis
         rainbow-delimiters = {
@@ -360,14 +844,14 @@ in {
 
         # TODO: Lua deps not found
         # REST/HTTP client
-        rest = {
-          enable = false;
-        };
+        # rest = {
+        #   enable = false;
+        # };
 
         # TODO:
-        rustaceanvim = {
-          enable = false;
-        };
+        # rustaceanvim = {
+        #   enable = false;
+        # };
 
         # Work with pairs of delimiters
         sandwich = {
@@ -381,9 +865,9 @@ in {
 
         # TODO: Doesn't show up
         # Left-hand side status column with folding markers
-        statuscol = {
-          enable = false;
-        };
+        # statuscol = {
+        #   enable = false;
+        # };
 
         # Select something
         telescope = {
@@ -396,13 +880,16 @@ in {
           };
         };
 
-        # TODO: Folds at startup
+        toggleterm = {
+          enable = true;
+        };
+
         treesitter = {
           enable = true;
 
           ensureInstalled = "all";
-          folding = false;
-          indent = true;
+          folding = true; # TODO: Folds at startup
+          indent = true; # Required by intellitab
 
           incrementalSelection = {
             enable = true;
@@ -415,9 +902,9 @@ in {
         };
 
         # Window listing detected linting/lsp problems
-        trouble = {
-          enable = true;
-        };
+        # trouble = {
+        #   enable = true;
+        # };
 
         # Don't mess up splits when closing buffers
         vim-bbye = {
@@ -426,11 +913,11 @@ in {
 
         # TODO: Setup
         # LaTeX
-        vimtex = {
-          enable = true;
-
-          texlivePackage = null; # Don't auto-install
-        };
+        # vimtex = {
+        #   enable = true;
+        #
+        #   texlivePackage = null; # Don't auto-install
+        # };
 
         # Display keybindings help
         which-key = {
@@ -443,19 +930,6 @@ in {
           enable = true;
         };
       };
-
-      # TODO: Use conform-nvim.formatOnSave, also make this toggleable and add a "Format" command
-      extraConfigLua = ''
-        vim.api.nvim_create_autocmd("BufWritePre", {
-          pattern = "*",
-          callback = function(args)
-            require("conform").format({ bufnr = args.buf })
-          end,
-        })
-      '';
-
-      viAlias = cfg.alias;
-      vimAlias = cfg.alias;
     };
   };
 }
