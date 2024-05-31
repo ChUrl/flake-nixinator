@@ -85,8 +85,8 @@ in {
         # Files
         encoding = "utf-8";
         fileencoding = "utf-8";
-        swapfile = false;
-        backup = false;
+        # swapfile = true;
+        # backup = false;
         undofile = true;
         undodir = "/home/christoph/.vim/undo";
         # autochdir = true;
@@ -139,9 +139,10 @@ in {
           o.guifont = "JetBrainsMono Nerd Font:h13:Medium:i"
         end
 
-        -- Hide inline diagnostics
+        -- Hide inline diagnostics and show border
         vim.diagnostic.config({
           virtual_text = false,
+          float = { border = "rounded" }
         })
 
         -- Allow navigating popupmenu completion with Up/Down
@@ -167,56 +168,6 @@ in {
       ];
 
       keymaps = [
-        # {
-        #   action = "<cmd>make<CR>";
-        #   key = "<C-m>";
-        #   options = {
-        #     silent = true;
-        #   };
-        # }
-
-        # Disable arrow keys
-        # {
-        #   mode = ["n" "i"];
-        #   key = "<Up>";
-        #   action = "<Nop>";
-        #   options = {
-        #     silent = true;
-        #     noremap = true;
-        #     desc = "Disable Up arrow key";
-        #   };
-        # }
-        # {
-        #   mode = ["n" "i"];
-        #   key = "<Down>";
-        #   action = "<Nop>";
-        #   options = {
-        #     silent = true;
-        #     noremap = true;
-        #     desc = "Disable Down arrow key";
-        #   };
-        # }
-        # {
-        #   mode = ["n" "i"];
-        #   key = "<Right>";
-        #   action = "<Nop>";
-        #   options = {
-        #     silent = true;
-        #     noremap = true;
-        #     desc = "Disable Right arrow key";
-        #   };
-        # }
-        # {
-        #   mode = ["n" "i"];
-        #   key = "<Left>";
-        #   action = "<Nop>";
-        #   options = {
-        #     silent = true;
-        #     noremap = true;
-        #     desc = "Disable Left arrow key";
-        #   };
-        # }
-
         # No Leader
         {
           mode = "v";
@@ -320,7 +271,7 @@ in {
           mode = "n";
           key = "<leader>u";
           action = "<cmd>Telescope undo<CR>";
-          options.desc = "View undo history";
+          options.desc = "Show undo history";
         }
         {
           mode = "n";
@@ -344,7 +295,7 @@ in {
           mode = "n";
           key = "<leader>?";
           action = "<cmd>Telescope keymaps<CR>";
-          options.desc = "View keymaps";
+          options.desc = "Show keymaps";
         }
         {
           mode = "n";
@@ -387,7 +338,7 @@ in {
           mode = "n";
           key = "<leader>bb";
           action = "<cmd>Telescope buffers<CR>";
-          options.desc = "View open buffers";
+          options.desc = "Show open buffers";
         }
         {
           mode = "n";
@@ -525,25 +476,25 @@ in {
           mode = "n";
           key = "<leader>gs";
           action = "<cmd>Telescope git_status<CR>";
-          options.desc = "View Git status";
+          options.desc = "Show Git status";
         }
         {
           mode = "n";
           key = "<leader>gc";
           action = "<cmd>Telescope git_commits<CR>";
-          options.desc = "View Git log";
+          options.desc = "Show Git log";
         }
         {
           mode = "n";
           key = "<leader>gb";
           action = "<cmd>Telescope git_branches<CR>";
-          options.desc = "View Git branches";
+          options.desc = "Show Git branches";
         }
         {
           mode = "n";
           key = "<leader>gf";
           action = "<cmd>Telescope git_bcommits<CR>";
-          options.desc = "View Git log for current file";
+          options.desc = "Show Git log for current file";
         }
 
         # LSP <leader>l
@@ -605,7 +556,7 @@ in {
           mode = "n";
           key = "<leader>cd";
           action = "<cmd>Telescope diagnostics<CR>";
-          options.desc = "View diagnostics";
+          options.desc = "Show diagnostics";
         }
       ];
 
@@ -801,6 +752,7 @@ in {
           enable = true;
 
           settings = {
+            mappings.basic = true; # Apparently required for opleader/toggler config
             mappings.extra = false;
             opleader.line = "<C-c>";
             toggler.line = "<C-c>";
@@ -979,15 +931,21 @@ in {
             lspBuf = {
               K = {
                 action = "hover";
-                desc = "Hover";
+                desc = "Hover information";
               };
               "<leader>cr" = {
                 action = "rename";
-                desc = "Rename";
+                desc = "Rename symbol";
               };
               "<leader>ca" = {
                 action = "code_action";
-                desc = "Code Action";
+                desc = "Show code actions";
+              };
+            };
+            diagnostic = {
+              "<leader>cD" = {
+                action = "open_float";
+                desc = "Show line diagnostic";
               };
             };
           };
