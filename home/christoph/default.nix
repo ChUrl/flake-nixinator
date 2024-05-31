@@ -180,6 +180,11 @@ rec {
       alias = true;
     };
 
+    # lazyvim = {
+    #   enable = true;
+    #   alias = true;
+    # };
+
     nextcloud = {
       enable = true;
       autostart = false; # TODO: This option should use hyprland module
@@ -900,8 +905,9 @@ rec {
 
       overrides = {
         global = {
+          # TODO: Makes discord crash
           # Force Wayland by default
-          Context.sockets = ["wayland" "!x11" "!fallback-x11"];
+          # Context.sockets = ["wayland" "!x11" "!fallback-x11"];
 
           Context.filesystems = ["/nix/store:ro"];
 
