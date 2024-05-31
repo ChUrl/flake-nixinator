@@ -168,10 +168,10 @@ in {
             disksummary = "duf";
           })
           (abbrify pkgs.eza {
-            ls = "eza --color always --group-directories-first -F --git --icons"; # color-ls
-            lsl = "eza --color always --group-directories-first -F -l --git --icons --octal-permissions";
-            lsa = "eza --color always --group-directories-first -F -l -a --git --icons --octal-permissions";
-            tre = "eza --color always --group-directories-first -F -T -L 2 ---icons";
+            ls = "eza --color=always --group-directories-first -F --git --icons=always"; # color-ls
+            lsl = "eza --color=always --group-directories-first -F -l --git --icons=always --octal-permissions";
+            lsa = "eza --color=always --group-directories-first -F -l -a --git --icons=always --octal-permissions";
+            tre = "eza --color=always --group-directories-first -F -T -L 2 ---icons=always";
           })
           (abbrify pkgs.fd {find = "fd";})
           (abbrify pkgs.fzf {fuzzy = "fzf --preview 'bat --color=always --style=numbers --line-range=:500 {}'";})
