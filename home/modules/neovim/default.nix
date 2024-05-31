@@ -23,12 +23,22 @@ in {
       (pkgs.ripgrep.override {withPCRE2 = true;})
 
       # Linters
-      vale
+      clippy # rust
+      checkstyle # java
+      clj-kondo # clojure
+      eslint_d # javascript
+      python312Packages.flake8
+      vale # text
+      statix # nix
 
       # Formatters
       alejandra # nix
+      google-java-format
+      html-tidy
       jq # json
-      html-tidy # html
+      prettierd # html/css/js
+      # rustfmt
+      # clang-tools
     ];
 
     programs.nixvim = {
@@ -51,7 +61,7 @@ in {
         hidden = true; # Don't unload buffers immediately
         mouse = "a";
         completeopt = ["menuone" "noselect" "noinsert"];
-        timeoutlen = 100;
+        timeoutlen = 50;
         pumheight = 0;
         formatexpr = "v:lua.require'conform'.formatexpr()";
         laststatus = 3;
@@ -69,6 +79,8 @@ in {
         foldlevel = 99;
         foldlevelstart = 99;
         foldenable = true;
+        # foldmethod = "expr";
+        # foldexpr = "nvim_treesitter#foldexpr()";
 
         # Files
         encoding = "utf-8";
@@ -88,8 +100,8 @@ in {
         grepformat = "%f:%l:%c:%m";
 
         # Indentation
-        autoindent = false; # Might mess up comment indentation
-        smartindent = false; # Might mess up comment indentation
+        autoindent = false; # Use previous line indentation level - Might mess up comment indentation
+        smartindent = false; # Like autoindent but recognizes some C syntax - Might mess up comment indentation
         cindent = true;
         cinkeys = "0{,0},0),0],:,!^F,o,O,e"; # Fix comment (#) indentation and intellitab (somehow)
         smarttab = true;
@@ -102,8 +114,8 @@ in {
         splitright = true;
       };
 
-      # TODO: Use conform-nvim.formatOnSave, also make this toggleable and add a "Format" command
       # TODO: Half of the neovide config doesn't work
+      # TODO: LSP Window doesn't work. Noice?
       extraConfigLua = ''
         local opt = vim.opt
         local g = vim.g
@@ -111,7 +123,6 @@ in {
 
         -- Neovide
         if g.neovide then
-          -- Neovide options
           g.neovide_fullscreen = false
           g.neovide_hide_mouse_when_typing = false
           g.neovide_refresh_rate = 144
@@ -127,6 +138,19 @@ in {
           -- Neovide Fonts
           o.guifont = "JetBrainsMono Nerd Font:h13:Medium:i"
         end
+
+        -- Hide inline diagnostics
+        vim.diagnostic.config({
+          virtual_text = false,
+        })
+
+        -- Allow navigating popupmenu completion with Up/Down
+        vim.api.nvim_set_keymap('c', '<Down>', 'v:lua.get_wildmenu_key("<right>", "<down>")', { expr = true })
+        vim.api.nvim_set_keymap('c', '<Up>', 'v:lua.get_wildmenu_key("<left>", "<up>")', { expr = true })
+
+        function _G.get_wildmenu_key(key_wildmenu, key_regular)
+          return vim.fn.wildmenumode() ~= 0 and key_wildmenu or key_regular
+        end
       '';
 
       extraLuaPackages = with pkgs.lua51Packages; [
@@ -138,6 +162,7 @@ in {
       extraPlugins = with pkgs.vimPlugins; [
         vim-airline-themes
         nvim-web-devicons
+        nui-nvim # For noice
         # nvim-nio # For rest
       ];
 
@@ -207,6 +232,18 @@ in {
         }
         {
           mode = "n";
+          key = "<";
+          action = "v<<Esc>";
+          options.desc = "Outdent";
+        }
+        {
+          mode = "n";
+          key = ">";
+          action = "v><Esc>";
+          options.desc = "Indent";
+        }
+        {
+          mode = "n";
           key = "<C-d>";
           action = "<C-d>zz";
           options.desc = "Jump down";
@@ -247,8 +284,32 @@ in {
           action = "<C-w>";
           options.desc = "Delete previous word";
         }
+        {
+          mode = "i";
+          key = "<C-S-v>";
+          action = "<Esc>\"+pi";
+          options.desc = "Paste from clipboard";
+        }
+        {
+          mode = "v";
+          key = "<C-S-c>";
+          action = "\"+y";
+          options.desc = "Copy to clipboard";
+        }
+        {
+          mode = "n";
+          key = "<C-h>";
+          action = "<cmd>nohlsearch<CR>";
+          options.desc = "Clear search highlights";
+        }
 
         # General <leader>
+        {
+          mode = "n";
+          key = "<leader>qq";
+          action = "<cmd>quitall<CR>";
+          options.desc = "Quit";
+        }
         {
           mode = "n";
           key = "<leader>f";
@@ -275,9 +336,9 @@ in {
         }
         {
           mode = "n";
-          key = "<leader>d";
-          action = "<cmd>Telescope diagnostics<CR>";
-          options.desc = "View diagnostics";
+          key = "<leader>r";
+          action = "<cmd>Telescope resume<CR>";
+          options.desc = "Show last telescope picker";
         }
         {
           mode = "n";
@@ -290,6 +351,30 @@ in {
           key = "<leader>:";
           action = "<cmd>Telescope commands<CR>";
           options.desc = "Execute command";
+        }
+        {
+          mode = "n";
+          key = "<leader>M";
+          action = "<cmd>Telescope marks<CR>";
+          options.desc = "Show marks";
+        }
+        {
+          mode = "n";
+          key = "<leader>J";
+          action = "<cmd>Telescope jumplist<CR>";
+          options.desc = "Show jumplist";
+        }
+        {
+          mode = "n";
+          key = "<leader>m";
+          action = "<cmd>Telescope man_pages<CR>";
+          options.desc = "Show manpages";
+        }
+        {
+          mode = "n";
+          key = "<leader>h";
+          action = "<cmd>Telescope help_tags<CR>";
+          options.desc = "Show help tags";
         }
 
         # Buffers <leader>b
@@ -318,7 +403,7 @@ in {
         }
         {
           mode = "n";
-          key = "<leader>bq";
+          key = "<leader>bd";
           action = "<cmd>Bdelete<CR>";
           options.desc = "Close current buffer";
         }
@@ -332,12 +417,18 @@ in {
         {
           mode = "n";
           key = "<leader>ws";
+          action = "<C-w>s";
+          options.desc = "Split window horizontally";
+        }
+        {
+          mode = "n";
+          key = "<leader>wv";
           action = "<C-w>v";
           options.desc = "Split window vertically";
         }
         {
           mode = "n";
-          key = "<leader>wq";
+          key = "<leader>wd";
           action = "<C-w>c";
           options.desc = "Close current window";
         }
@@ -387,8 +478,14 @@ in {
         {
           mode = "n";
           key = "<leader>tt";
-          action = "<cmd>Neotree toggle<CR>";
+          action = "<cmd>Neotree action=show toggle=true<CR>";
           options.desc = "Toggle NeoTree";
+        }
+        {
+          mode = "n";
+          key = "<leader>tn";
+          action = "<cmd>Navbuddy<CR>";
+          options.desc = "Toggle NavBuddy";
         }
         # {
         #   mode = "n";
@@ -449,18 +546,66 @@ in {
           options.desc = "View Git log for current file";
         }
 
+        # LSP <leader>l
+        {
+          mode = "n";
+          key = "<leader>l";
+          action = "+lsp";
+        }
+        {
+          mode = "n";
+          key = "<leader>lr";
+          action = "<cmd>Telescope lsp_references<CR>";
+          options.desc = "Goto references";
+        }
+        {
+          mode = "n";
+          key = "<leader>ld";
+          action = "<cmd>Telescope lsp_definitions<CR>";
+          options.desc = "Goto definition";
+        }
+        {
+          mode = "n";
+          key = "<leader>li";
+          action = "<cmd>Telescope lsp_implementations<CR>";
+          options.desc = "Goto implementation";
+        }
+        {
+          mode = "n";
+          key = "<leader>lt";
+          action = "<cmd>Telescope lsp_type_definitions<CR>";
+          options.desc = "Goto type definition";
+        }
+        {
+          mode = "n";
+          key = "<leader>lI";
+          action = "<cmd>Telescope lsp_incoming_calls<CR>";
+          options.desc = "Show incoming calls";
+        }
+        {
+          mode = "n";
+          key = "<leader>lO";
+          action = "<cmd>Telescope lsp_outgoing_calls<CR>";
+          options.desc = "Show outgoing calls";
+        }
+
         # Code <leader>c
         {
           mode = "n";
           key = "<leader>c";
           action = "+code";
         }
-        # TODO: Autoformat https://github.com/redyf/Neve/blob/main/config/lsp/conform.nix
         {
           mode = "n";
           key = "<leader>cf";
           action = "<cmd>lua require('conform').format()<CR>";
           options.desc = "Format current buffer";
+        }
+        {
+          mode = "n";
+          key = "<leader>cd";
+          action = "<cmd>Telescope diagnostics<CR>";
+          options.desc = "View diagnostics";
         }
       ];
 
@@ -514,7 +659,6 @@ in {
         # Completion engine
         cmp = {
           enable = true;
-
           autoEnableSources = false;
 
           settings = {
@@ -548,14 +692,104 @@ in {
                   ['<Esc>'] = cmp.mapping.abort(),
                   ['<C-Up>'] = cmp.mapping.scroll_docs(-4),
                   ['<C-Down>'] = cmp.mapping.scroll_docs(4),
-                  ['<CR>'] = cmp.mapping.confirm({ select = true }),
+                  -- ['<C-Space>'] = cmp.complete(),
+
+                  ['<CR>'] = cmp.mapping(function(fallback)
+                    if cmp.visible() then
+                      if require('luasnip').expandable() then
+                        require('luasnip').expand()
+                      else
+                        cmp.confirm({ select = true })
+                      end
+                    else
+                      fallback()
+                    end
+                  end),
+
+                  ["<Tab>"] = cmp.mapping(function(fallback)
+                    if cmp.visible() then
+                      cmp.select_next_item()
+                    elseif require('luasnip').locally_jumpable(1) then
+                      require('luasnip').jump(1)
+                    else
+                      fallback()
+                    end
+                  end, { "i", "s" }),
+
+                  ["<S-Tab>"] = cmp.mapping(function(fallback)
+                    if cmp.visible() then
+                      cmp.select_prev_item()
+                    elseif require('luasnip').locally_jumpable(-1) then
+                      require('luasnip').jump(-1)
+                    else
+                      fallback()
+                    end
+                  end, { "i", "s" }),
                 })
               '';
             };
+
+            extraConfigLua = ''
+              -- local cmp = require('cmp')
+
+              -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
+              -- cmp.setup.cmdline({'/', "?" }, {
+              --   sources = {
+              --     { name = 'buffer' }
+              --   }
+              -- })
+
+              -- Set configuration for specific filetype.
+              -- cmp.setup.filetype('gitcommit', {
+              --   sources = cmp.config.sources({
+              --     { name = 'cmp_git' }, -- You can specify the `cmp_git` source if you were installed it.
+              --   }, {
+              --     { name = 'buffer' },
+              --   })
+              -- })
+
+              -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
+              -- cmp.setup.cmdline(':', {
+              --   sources = cmp.config.sources({
+              --     { name = 'path' }
+              --   }, {
+              --     { name = 'cmdline' }
+              --   }),
+              -- })
+
+              kind_icons = {
+                Text = "󰊄",
+                Method = "",
+                Function = "󰡱",
+                Constructor = "",
+                Field = "",
+                Variable = "󱀍",
+                Class = "",
+                Interface = "",
+                Module = "󰕳",
+                Property = "",
+                Unit = "",
+                Value = "",
+                Enum = "",
+                Keyword = "",
+                Snippet = "",
+                Color = "",
+                File = "",
+                Reference = "",
+                Folder = "",
+                EnumMember = "",
+                Constant = "",
+                Struct = "",
+                Event = "",
+                Operator = "",
+                TypeParameter = "",
+              }
+            '';
           };
         };
 
         cmp-async-path.enable = true;
+        cmp-buffer.enable = true;
         cmp-emoji.enable = true;
         cmp-nvim-lsp.enable = true;
         cmp-nvim-lsp-signature-help.enable = true;
@@ -573,7 +807,7 @@ in {
           };
         };
 
-        # TODO: Setup formatters
+        # TODO: Format on save + format region after paste
         # File formatter in addition to LSP (uses LSP as fallback)
         conform-nvim = {
           enable = true;
@@ -593,7 +827,8 @@ in {
             rust = ["rustfmt"];
           };
 
-          # TODO: formatOnSave = " [???] ";
+          # TODO: Autoformat https://github.com/redyf/Neve/blob/main/config/lsp/conform.nix
+          # formatOnSave = " [???] ";
         };
 
         # TODO: Figure out how debugging from nvim works...
@@ -607,7 +842,6 @@ in {
         #   enable = false;
         # };
 
-        # TODO: Compare after telescope etc. are enabled
         # Changes nvim UI components, alternative to Noice
         # dressing = {
         #   enable = false;
@@ -615,12 +849,6 @@ in {
 
         # Notifications + LSP progress, alternative to Noice
         # fidget = {
-        #   enable = true;
-        # };
-
-        # TODO: Doesn't work
-        # Search labels
-        # flash = {
         #   enable = true;
         # };
 
@@ -639,6 +867,7 @@ in {
         # Display message of commit that modified the current line
         gitmessenger = {
           enable = true;
+          noDefaultMappings = true;
         };
 
         # Alternative to gitgutter
@@ -655,12 +884,6 @@ in {
         #   enable = false;
         # };
 
-        # TODO: Maybe, don't know yet (also, telescope)
-        # Mark files and jump to them
-        # harpoon = {
-        #   enable = false;
-        # };
-
         # Markdown etc. heading highlights
         headlines = {
           enable = true;
@@ -669,6 +892,17 @@ in {
         # Alternative to cursorline
         illuminate = {
           enable = true;
+          filetypesDenylist = [
+            "DressingSelect"
+            "Outline"
+            "TelescopePrompt"
+            "alpha"
+            "harpoon"
+            "toggleterm"
+            "neo-tree"
+            "Spectre"
+            "reason"
+          ];
         };
 
         # Live-preview of LSP renamings
@@ -681,30 +915,87 @@ in {
           enable = true;
         };
 
+        # Open file at last place
+        lastplace = {
+          enable = true;
+        };
+
         lazygit = {
           enable = true;
         };
 
-        # TODO: More linters
         # Linting as addition to LSP
         lint = {
           enable = true;
 
           lintersByFt = {
-            text = ["vale"];
+            c = ["clang-tidy"];
+            h = ["clang-tidy"];
+            cpp = ["clang-tidy"];
+            hpp = ["clang-tidy"];
+            clojure = ["clj-kondo"];
+            java = ["checkstyle"];
+            javascript = ["eslint_d"];
             markdown = ["vale"];
+            nix = ["statix"];
+            python = ["flake8"];
+            rust = ["clippy"];
+            text = ["vale"];
           };
         };
 
-        # TODO: More LSP servers
         # Language-Server-Protocol
         lsp = {
           enable = true;
 
           servers = {
+            clangd.enable = true;
+            clojure-lsp.enable = true;
+            cmake.enable = true;
+            cssls.enable = true;
+            dockerls.enable = true;
+            eslint.enable = true;
+            hls.enable = true;
+            html.enable = true;
+            java-language-server.enable = true;
+            jsonls.enable = true;
+            ltex = {
+              enable = true;
+              autostart = true;
+            };
+            marksman.enable = true;
             nil_ls.enable = true;
+            pyright.enable = true;
+            rust-analyzer = {
+              enable = true;
+              installCargo = false;
+              installRustc = false;
+            };
+            tailwindcss.enable = true;
+            texlab.enable = true;
+          };
+
+          keymaps = {
+            lspBuf = {
+              K = {
+                action = "hover";
+                desc = "Hover";
+              };
+              "<leader>cr" = {
+                action = "rename";
+                desc = "Rename";
+              };
+              "<leader>ca" = {
+                action = "code_action";
+                desc = "Code Action";
+              };
+            };
           };
         };
+
+        # lsp-format = {
+        #   enable = false;
+        # };
 
         # Render diagnostics as virtual line overlay
         # lsp-lines = {
@@ -715,22 +1006,37 @@ in {
         lualine = {
           enable = true;
 
+          alwaysDivideMiddle = true;
           globalstatus = true;
+          ignoreFocus = ["neo-tree"];
+          extensions = ["fzf"];
+
+          sections = {
+            lualine_a = ["mode"];
+            lualine_b = ["branch" "diff" "diagnostics"];
+            lualine_c = ["filename"];
+
+            lualine_x = ["filetype" "encoding" "fileformat"];
+            lualine_y = ["progress"];
+            lualine_z = ["location" "searchcount" "selectioncount"];
+          };
+
           sectionSeparators = {
             left = "";
             right = "";
           };
+
           componentSeparators = {
             left = "";
             right = "";
           };
         };
 
+        # TODO: Snippet configs
         luasnip = {
           enable = true;
         };
 
-        # TODO: When I start actually using marks
         # Show marks in the gutter
         # marks = {
         #   enable = false;
@@ -741,6 +1047,7 @@ in {
           enable = true;
 
           lsp.autoAttach = true;
+          window.border = "rounded";
         };
 
         # Generate doc comments
@@ -748,7 +1055,6 @@ in {
         #   enable = true;
         # };
 
-        # TODO: When I need this
         # Interact with test frameworks
         # neotest = {
         #   enable = false;
@@ -765,9 +1071,9 @@ in {
           popupBorderStyle = "rounded";
 
           buffers = {
-            bindToCwd = false;
+            bindToCwd = true;
             followCurrentFile = {
-              enabled = true;
+              enabled = true; # TODO: Doesn't work
             };
           };
 
@@ -781,14 +1087,39 @@ in {
           };
         };
 
-        # NeoVim UI refresh, alternative to fidget, dressing and notify
+        # NeoVim UI refresh, alternative to fidget, dressing, notify and lspsaga
         noice = {
           enable = true;
 
-          lsp.override = {
-            "vim.lsp.util.convert_input_to_markdown_lines" = true;
-            "vim.lsp.util.stylize_markdown" = true;
-            "cmp.entry.get_documentation" = true;
+          presets = {
+            bottom_search = false;
+            command_palette = true;
+            long_message_to_split = true;
+            inc_rename = true;
+            lsp_doc_border = true;
+          };
+
+          lsp = {
+            documentation = {
+              opts = {
+                lang = "markdown";
+                replace = true;
+                render = "plain";
+                border = "rounded"; # single or rounded
+                format = ["{message}"];
+                win_options = {
+                  concealcursor = "n";
+                  conceallevel = 3;
+                };
+              };
+              view = "hover";
+            };
+
+            override = {
+              "vim.lsp.util.convert_input_to_markdown_lines" = true;
+              "vim.lsp.util.stylize_markdown" = true;
+              "cmp.entry.get_documentation" = true;
+            };
           };
 
           notify = {
@@ -797,8 +1128,11 @@ in {
 
           popupmenu = {
             enabled = true;
-            backend = "cmp";
+            backend = "nui";
           };
+
+          # cmdline.enabled = false;
+          # messages.enabled = false;
 
           routes = [
             {
@@ -806,7 +1140,7 @@ in {
                 event = "msg_show";
                 kind = "search_count";
               };
-              opts = { skip = true; };
+              opts = {skip = true;};
             }
           ];
         };
@@ -826,7 +1160,6 @@ in {
           enable = true;
         };
 
-        # TODO: Folds the entire code at startup???
         # Code folding
         nvim-ufo = {
           enable = true;
@@ -848,11 +1181,6 @@ in {
         #   enable = false;
         # };
 
-        # TODO:
-        # rustaceanvim = {
-        #   enable = false;
-        # };
-
         # Work with pairs of delimiters
         sandwich = {
           enable = true;
@@ -863,12 +1191,6 @@ in {
           enable = true;
         };
 
-        # TODO: Doesn't show up
-        # Left-hand side status column with folding markers
-        # statuscol = {
-        #   enable = false;
-        # };
-
         # Select something
         telescope = {
           enable = true;
@@ -878,18 +1200,55 @@ in {
             ui-select.enable = true;
             undo.enable = true;
           };
+
+          settings = {
+            defaults = {
+              mappings = {
+                i = {
+                  "<esc>" = {
+                    __raw = ''
+                      function(...)
+                        return require("telescope.actions").close(...)
+                      end
+                    '';
+                  };
+                };
+              };
+            };
+          };
         };
 
         toggleterm = {
           enable = true;
+
+          settings = {
+            open_mapping = "[[<C-t>]]";
+            hide_numbers = true;
+            shade_terminals = true;
+            start_in_insert = true;
+            terminal_mappings = true;
+            persist_mode = true;
+            insert_mappings = true;
+            close_on_exit = true;
+            shell = "fish";
+            direction = "horizontal"; # 'vertical' | 'horizontal' | 'window' | 'float'
+            auto_scroll = true;
+            float_opts = {
+              border = "curved"; # 'single' | 'double' | 'shadow' | 'curved'
+              width = 80;
+              height = 20;
+              winblend = 0;
+            };
+          };
         };
 
         treesitter = {
           enable = true;
 
           ensureInstalled = "all";
-          folding = true; # TODO: Folds at startup
+          folding = true;
           indent = true; # Required by intellitab
+          nixvimInjections = true;
 
           incrementalSelection = {
             enable = true;
