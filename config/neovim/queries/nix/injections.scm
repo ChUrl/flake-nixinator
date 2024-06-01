@@ -1,0 +1,1 @@
+/nix/store/szac9bif2rhcw4q45vbqy4whbcjx2fwb-hm_nvimqueriesnixinjections.scm
