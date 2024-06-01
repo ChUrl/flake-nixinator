@@ -631,6 +631,21 @@ in {
       ];
 
       plugins = {
+        # TODO: Migrate the entire config to lazy? Then the config is usable even without nix...
+        # Plugins not supported by NixVim are installed here
+        lazy = {
+          enable = true;
+
+          # plugins = [
+          #   {
+          #     name = "nvim-lspconfig";
+          #     pkg = pkgs.vimPlugins.nvim-lspconfig;
+          #     enabled = true;
+          #     lazy = true;
+          #   }
+          # ];
+        };
+
         # Escape insert mode by pressing jk
         better-escape = {
           enable = true;
