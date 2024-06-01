@@ -32,7 +32,10 @@ rec {
   ];
 
   modules = {
-    chromium.enable = true;
+    chromium = {
+      enable = true;
+      google = false;
+    };
 
     # emacs = {
     #   enable = false;
@@ -125,6 +128,7 @@ rec {
         "2" = [
           "jetbrains-clion"
           "code-url-handler"
+          "neovide"
         ];
         "3" = [
           "obsidian"
@@ -156,6 +160,7 @@ rec {
         "obsidian"
         "jetbrains-clion"
         "code-url-handler"
+        "neovide"
       ];
     };
 
@@ -378,14 +383,14 @@ rec {
 
     appimage-run
     # decker # TODO: Build failure
-    google-chrome # Trash, but required for decker pdf export
-    (pkgs.writeShellScriptBin "chrome" "exec -a $0 ${google-chrome}/bin/google-chrome-stable $@")
+    # google-chrome # Trash, but required for decker pdf export
+    # (pkgs.writeShellScriptBin "chrome" "exec -a $0 ${google-chrome}/bin/google-chrome-stable $@")
 
     cool-retro-term
     ventoy-full # Bootable USB for many ISOs
     # geekbench
     # spotify # NOTE: Uses flatpak
-    neovide
+    # neovide # NOTE: Installed in modules/neovim
 
     sqlitebrowser # To modify tables
     dbeaver-bin # To import/export data + diagrams
@@ -894,18 +899,19 @@ rec {
         "com.github.tchx84.Flatseal"
         "com.discordapp.Discord"
         "com.spotify.Client"
+        "com.google.Chrome"
       ];
 
       uninstallUnmanaged = true;
 
       update.auto = {
         enable = true;
-        onCalendar = "weekly"; # Default value
+        onCalendar = "daily"; # Default value: weekly
       };
 
       overrides = {
         global = {
-          # TODO: Makes discord crash
+          # NOTE: Makes discord crash
           # Force Wayland by default
           # Context.sockets = ["wayland" "!x11" "!fallback-x11"];
 
@@ -916,7 +922,7 @@ rec {
             XCURSOR_PATH = "/run/host/user-share/icons:/run/host/share/icons";
 
             # Force correct theme for some GTK apps
-            # GTK_THEME = "Adwaita:dark";
+            GTK_THEME = "Adwaita:light";
           };
         };
       };
