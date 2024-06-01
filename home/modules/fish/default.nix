@@ -205,7 +205,7 @@ in {
           })
           (abbrify pkgs.ranger {r = "ranger --choosedir=$HOME/.rangerdir; set LASTDIR (cat $HOME/.rangerdir); cd $LASTDIR";})
           (abbrify pkgs.rsync {
-            cp = "rsync -ahv --inplace --partial --info=progress2";
+            # cp = "rsync -ahv --inplace --partial --info=progress2";
             rsync = "rsync -ahv --inplace --partial --info=progress2";
           })
           (abbrify pkgs.sd {sed = "sd";})
