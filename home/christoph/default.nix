@@ -183,6 +183,7 @@ rec {
     neovim = {
       enable = true;
       alias = true;
+      neovide = true;
     };
 
     # lazyvim = {
@@ -417,8 +418,6 @@ rec {
     lm_sensors
     acpica-tools # Dump ACPI tables etc.
 
-    python311
-
     # Web stuff
     signal-desktop
     # element-desktop # matrix client
@@ -460,17 +459,20 @@ rec {
     # kbibtex # bibtex editor
     # vale # Why not lint everything (including english)?
 
-    # TODO: Development module
-    # TODO: Does this conflict with devshell pythons? If so, use lowPrio
-    # TODO: Merge this somehow? I want multiple pythons to merge to one with all the packages...
-    # (python310.withPackages (p: with p; [
-    #   p.rich
-    #   p.numpy
-    #   p.scipy
-    #   p.matplotlib
-    #   p.pillow # for ranger
-    #   p.pygments # for emacs
-    # ]))
+    # TODO: Development module, I need multiple modules to be able to add python packages to a single python install...
+    (python311.withPackages (p: with p; [
+      # p.rich
+      # p.numpy
+      # p.scipy
+      # p.matplotlib
+      # p.pillow # for ranger
+      # p.pygments # for emacs
+
+      # For nvim CHADtree
+      pyyaml
+      std2
+      pynvim
+    ]))
     jetbrains.clion
     jetbrains.rust-rover
     jetbrains.pycharm-professional
