@@ -1,13 +1,6 @@
-require("catppuccin").setup({})
-
 -- Set up globals {{{
 do
-    local nixvim_globals = {
-        ["git_messenger_no_default_mappings"] = true,
-        ["mallocalleader"] = " ",
-        ["mapleader"] = " ",
-        ["skip_ts_context_commentstring_module"] = true,
-    }
+    local nixvim_globals = { ["mallocalleader"] = " ", ["mapleader"] = " " }
 
     for k, v in pairs(nixvim_globals) do
         vim.g[k] = v
@@ -29,11 +22,9 @@ do
         ["fileencoding"] = "utf-8",
         ["foldcolumn"] = "0",
         ["foldenable"] = true,
-        ["foldexpr"] = "nvim_treesitter#foldexpr()",
         ["foldlevel"] = 99,
         ["foldlevelstart"] = 99,
-        ["foldmethod"] = "expr",
-        ["formatexpr"] = "v:lua.require'conform'.formatexpr()",
+        ["formatexpr"] = "v:lua.require('conform').formatexpr()",
         ["grepformat"] = "%f:%l:%c:%m",
         ["grepprg"] = "rg --vimgrep",
         ["hidden"] = true,
@@ -72,375 +63,693 @@ end
 vim.loader.disable()
 
 vim.cmd([[
-  let $BAT_THEME = 'catppuccin'
-
-colorscheme catppuccin
-
+  
 ]])
-require("yanky").setup({})
-
-require("which-key").setup({})
-
-require("trim").setup({})
-
-require("toggleterm").setup({
-    ["auto_scroll"] = true,
-    ["close_on_exit"] = true,
-    ["direction"] = "horizontal",
-    ["float_opts"] = { ["border"] = "curved", ["height"] = 20, ["width"] = 80, ["winblend"] = 0 },
-    ["hide_numbers"] = true,
-    ["insert_mappings"] = true,
-    ["open_mapping"] = [[<C-t>]],
-    ["persist_mode"] = true,
-    ["shade_terminals"] = true,
-    ["shell"] = "fish",
-    ["start_in_insert"] = true,
-    ["terminal_mappings"] = true,
-})
-
-require("ufo").setup({})
-
-require("colorizer").setup({
-    filetypes = nil,
-    user_default_options = nil,
-    buftypes = nil,
-})
-
-require("nvim-autopairs").setup({})
-
-vim.notify = require("notify")
-require("notify").setup({})
-
-local actions = require("nvim-navbuddy.actions")
-require("nvim-navbuddy").setup({ ["lsp"] = { ["auto_attach"] = true }, ["window"] = { ["border"] = "rounded" } })
-
-require("nvim-lastplace").setup({})
-
-require("illuminate").configure({
-    ["filetypes_denylist"] = {
-        "DressingSelect",
-        "Outline",
-        "TelescopePrompt",
-        "alpha",
-        "harpoon",
-        "toggleterm",
-        "neo-tree",
-        "Spectre",
-        "reason",
+require("lazy").setup({
+    dev = {
+        path = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins",
+        patterns = { "." },
+        fallback = false,
     },
-})
+    spec = {
+        {
+            "catppuccin",
+            ["config"] = function(_, opts)
+                require("catppuccin").setup(opts)
 
-require("flash").setup({})
-
-require("Comment").setup({
-    ["mappings"] = { ["basic"] = true, ["extra"] = false },
-    ["opleader"] = { ["line"] = "<C-c>" },
-    ["toggler"] = { ["line"] = "<C-c>" },
-})
-
-require("better_escape").setup({ ["mapping"] = { "jk" }, ["timeout"] = 200 })
-
-require("noice").setup({
-    ["lsp"] = {
-        ["documentation"] = {
-            ["opts"] = {
-                ["border"] = "rounded",
-                ["format"] = { "{message}" },
-                ["lang"] = "markdown",
-                ["render"] = "plain",
-                ["replace"] = true,
-                ["win_options"] = { ["concealcursor"] = "n", ["conceallevel"] = 3 },
-            },
-            ["view"] = "hover",
-        },
-        ["override"] = {
-            ["cmp.entry.get_documentation"] = true,
-            ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
-            ["vim.lsp.util.stylize_markdown"] = true,
-        },
-    },
-    ["notify"] = { ["enabled"] = true },
-    ["popupmenu"] = { ["backend"] = "nui", ["enabled"] = true },
-    ["presets"] = {
-        ["bottom_search"] = false,
-        ["command_palette"] = true,
-        ["inc_rename"] = true,
-        ["long_message_to_split"] = true,
-        ["lsp_doc_border"] = true,
-    },
-    ["routes"] = { { ["filter"] = { ["event"] = "msg_show", ["kind"] = "search_count" }, ["opts"] = { ["skip"] = true } } },
-})
-
-require("headlines").setup({})
-
-require("telescope").setup({
-    ["defaults"] = {
-        ["mappings"] = { ["i"] = {
-            ["<esc>"] = function(...)
-                return require("telescope.actions").close(...)
+                vim.cmd([[
+    let $BAT_THEME = "catppuccin"
+    colorscheme catppuccin
+  ]])
             end,
-        } },
-    },
-})
-
-local __telescopeExtensions = { "undo", "ui-select", "fzf" }
-for i, extension in ipairs(__telescopeExtensions) do
-    require("telescope").load_extension(extension)
-end
-
-require("lualine").setup({
-    ["extensions"] = { "fzf", "chadtree", "neo-tree", "toggleterm", "trouble" },
-    ["options"] = {
-        ["always_divide_middle"] = true,
-        ["component_separators"] = { ["left"] = "", ["right"] = "" },
-        ["globalstatus"] = true,
-        ["icons_enabled"] = true,
-        ["ignore_focus"] = { "neo-tree", "chadtree" },
-        ["section_separators"] = { ["left"] = "", ["right"] = "" },
-    },
-    ["sections"] = {
-        ["lualine_a"] = { { "mode" } },
-        ["lualine_b"] = { "branch", "diff", "diagnostics" },
-        ["lualine_c"] = { { "filename", ["path"] = 1 } },
-        ["lualine_x"] = { "filetype", "encoding", "fileformat" },
-        ["lualine_y"] = { "progress", "searchcount", "selectioncount" },
-        ["lualine_z"] = { { "location" } },
-    },
-    ["tabline"] = { ["lualine_a"] = { "buffers" }, ["lualine_z"] = { "tabs" } },
-})
-require("luasnip").config.set_config({})
-
-require("trouble").setup({})
-
-require("inc_rename").setup({})
-
-require("conform").setup({
-    ["formatters_by_ft"] = {
-        ["c"] = { "clang-format" },
-        ["cpp"] = { "clang-format" },
-        ["css"] = { { "prettierd", "prettier" } },
-        ["h"] = { "clang-format" },
-        ["hpp"] = { "clang-format" },
-        ["html"] = { { "prettierd", "prettier" } },
-        ["java"] = { "google-java-format" },
-        ["javascript"] = { { "prettierd", "prettier" } },
-        ["markdown"] = { { "prettierd", "prettier" } },
-        ["nix"] = { "alejandra" },
-        ["python"] = { "black" },
-        ["rust"] = { "rustfmt" },
-    },
-})
-
--- LSP {{{
-do
-    local __lspServers = {
-        { ["name"] = "texlab" },
-        { ["name"] = "tailwindcss" },
-        { ["name"] = "rust_analyzer" },
-        { ["name"] = "pyright" },
-        { ["name"] = "nil_ls" },
-        { ["name"] = "marksman" },
-        { ["extraOptions"] = { ["autostart"] = true }, ["name"] = "ltex" },
-        {
-            ["extraOptions"] = {
-                ["cmd"] = {
-                    "/nix/store/c1k19pbnplsnzh9ljcgkyj1p08wb0rdc-vscode-langservers-extracted-4.10.0/bin/vscode-json-language-server",
-                    "--stdio",
-                },
-            },
-            ["name"] = "jsonls",
+            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/catppuccin-nvim",
+            ["lazy"] = false,
+            ["name"] = "catppuccin",
+            ["opts"] = { ["background"] = { ["dark"] = "mocha", ["light"] = "latte" }, ["flavour"] = "latte" },
+            ["priority"] = 1000,
         },
         {
-            ["extraOptions"] = {
-                ["cmd"] = {
-                    "/nix/store/4ab3m037j0lkzsap5wh7683fdsv8m8na-java-language-server-0.2.46/bin/java-language-server",
-                },
-            },
-            ["name"] = "java_language_server",
-        },
-        {
-            ["extraOptions"] = {
-                ["cmd"] = {
-                    "/nix/store/c1k19pbnplsnzh9ljcgkyj1p08wb0rdc-vscode-langservers-extracted-4.10.0/bin/vscode-html-language-server",
-                    "--stdio",
-                },
-            },
-            ["name"] = "html",
-        },
-        { ["extraOptions"] = { ["cmd"] = { "haskell-language-server-wrapper", "--lsp" } }, ["name"] = "hls" },
-        {
-            ["extraOptions"] = {
-                ["cmd"] = {
-                    "/nix/store/c1k19pbnplsnzh9ljcgkyj1p08wb0rdc-vscode-langservers-extracted-4.10.0/bin/vscode-eslint-language-server",
-                    "--stdio",
-                },
-            },
-            ["name"] = "eslint",
-        },
-        {
-            ["extraOptions"] = {
-                ["cmd"] = {
-                    "/nix/store/z8y5rlr53mzh0r0wj00kaprajs1hjib6-dockerfile-language-server-nodejs-0.11.0/bin/docker-langserver",
-                    "--stdio",
-                },
-            },
-            ["name"] = "dockerls",
-        },
-        {
-            ["extraOptions"] = {
-                ["cmd"] = {
-                    "/nix/store/c1k19pbnplsnzh9ljcgkyj1p08wb0rdc-vscode-langservers-extracted-4.10.0/bin/vscode-css-language-server",
-                    "--stdio",
-                },
-            },
-            ["name"] = "cssls",
-        },
-        { ["name"] = "cmake" },
-        { ["name"] = "clojure_lsp" },
-        { ["name"] = "clangd" },
-    }
-    local __lspOnAttach = function(client, bufnr) end
-    local __lspCapabilities = function()
-        capabilities = vim.lsp.protocol.make_client_capabilities()
+            "lspconfig",
+            ["config"] = function(_, opts)
+                local __lspOnAttach = function(client, bufnr) end
 
-        capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
-
-        return capabilities
-    end
-
-    local __setup = {
-        on_attach = __lspOnAttach,
-        capabilities = __lspCapabilities(),
-    }
-
-    for i, server in ipairs(__lspServers) do
-        if type(server) == "string" then
-            require("lspconfig")[server].setup(__setup)
-        else
-            local options = server.extraOptions
-
-            if options == nil then
-                options = __setup
-            else
-                options = vim.tbl_extend("keep", options, __setup)
-            end
-
-            require("lspconfig")[server.name].setup(options)
-        end
-    end
-end
--- }}}
-
-require("ts_context_commentstring").setup({})
-
-require("nvim-treesitter.configs").setup({
-    ["highlight"] = { ["enable"] = true },
-    ["incremental_selection"] = {
-        ["enable"] = true,
-        ["keymaps"] = {
-            ["init_selection"] = "gnn",
-            ["node_decremental"] = "grm",
-            ["node_incremental"] = "grn",
-            ["scope_incremental"] = "grc",
-        },
-    },
-    ["indent"] = { ["enable"] = true },
-})
-
-__lint = require("lint")
-__lint.linters_by_ft = {
-    ["c"] = { "clang-tidy" },
-    ["clojure"] = { "clj-kondo" },
-    ["cpp"] = { "clang-tidy" },
-    ["h"] = { "clang-tidy" },
-    ["hpp"] = { "clang-tidy" },
-    ["java"] = { "checkstyle" },
-    ["javascript"] = { "eslint_d" },
-    ["markdown"] = { "vale" },
-    ["nix"] = { "statix" },
-    ["python"] = { "flake8" },
-    ["rust"] = { "clippy" },
-    ["text"] = { "vale" },
-}
-
-require("gitsigns").setup({ ["current_line_blame"] = false })
-
-vim.api.nvim_set_var(
-    "chadtree_settings",
-    { ["theme"] = { ["text_colour_set"] = "nerdtree_syntax_dark" }, ["xdg"] = true }
-)
-
-local cmp = require("cmp")
-cmp.setup({
-    ["extraConfigLua"] = '-- local cmp = require(\'cmp\')\n\n-- Use buffer source for `/` (if you enabled `native_menu`, this won\'t work anymore).\n-- cmp.setup.cmdline({\'/\', "?" }, {\n--   sources = {\n--     { name = \'buffer\' }\n--   }\n-- })\n\n-- Set configuration for specific filetype.\n-- cmp.setup.filetype(\'gitcommit\', {\n--   sources = cmp.config.sources({\n--     { name = \'cmp_git\' }, -- You can specify the `cmp_git` source if you were installed it.\n--   }, {\n--     { name = \'buffer\' },\n--   })\n-- })\n\n-- Use cmdline & path source for \':\' (if you enabled `native_menu`, this won\'t work anymore).\n-- cmp.setup.cmdline(\':\', {\n--   sources = cmp.config.sources({\n--     { name = \'path\' }\n--   }, {\n--     { name = \'cmdline\' }\n--   }),\n-- })\n\nkind_icons = {\n  Text = "󰊄",\n  Method = "",\n  Function = "󰡱",\n  Constructor = "",\n  Field = "",\n  Variable = "󱀍",\n  Class = "",\n  Interface = "",\n  Module = "󰕳",\n  Property = "",\n  Unit = "",\n  Value = "",\n  Enum = "",\n  Keyword = "",\n  Snippet = "",\n  Color = "",\n  File = "",\n  Reference = "",\n  Folder = "",\n  EnumMember = "",\n  Constant = "",\n  Struct = "",\n  Event = "",\n  Operator = "",\n  TypeParameter = "",\n}\n',
-    ["mapping"] = cmp.mapping.preset.insert({
-        ["<Down>"] = cmp.mapping.select_next_item(),
-        ["<Up>"] = cmp.mapping.select_prev_item(),
-        ["<C-e>"] = cmp.mapping.abort(),
-        ["<Esc>"] = cmp.mapping.abort(),
-        ["<C-Up>"] = cmp.mapping.scroll_docs(-4),
-        ["<C-Down>"] = cmp.mapping.scroll_docs(4),
-        -- ['<C-Space>'] = cmp.complete(),
-
-        ["<CR>"] = cmp.mapping(function(fallback)
-            if cmp.visible() then
-                if require("luasnip").expandable() then
-                    require("luasnip").expand()
-                else
-                    cmp.confirm({ select = true })
+                local __lspCapabilities = function()
+                    capabilities = vim.lsp.protocol.make_client_capabilities()
+                    capabilities =
+                        vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
+                    return capabilities
                 end
-            else
-                fallback()
-            end
-        end),
 
-        ["<Tab>"] = cmp.mapping(function(fallback)
-            if cmp.visible() then
-                cmp.select_next_item()
-            elseif require("luasnip").locally_jumpable(1) then
-                require("luasnip").jump(1)
-            else
-                fallback()
-            end
-        end, { "i", "s" }),
+                local __setup = {
+                    on_attach = __lspOnAttach,
+                    capabilities = __lspCapabilities(),
+                }
 
-        ["<S-Tab>"] = cmp.mapping(function(fallback)
-            if cmp.visible() then
-                cmp.select_prev_item()
-            elseif require("luasnip").locally_jumpable(-1) then
-                require("luasnip").jump(-1)
-            else
-                fallback()
-            end
-        end, { "i", "s" }),
-    }),
-    ["snippet"] = {
-        ["expand"] = function(args)
-            require("luasnip").lsp_expand(args.body)
-        end,
-    },
-    ["sources"] = {
-        { ["name"] = "async_path" },
-        { ["name"] = "emoji" },
-        { ["name"] = "nvim_lsp" },
-        { ["name"] = "nvim_lsp_signature_help" },
-        { ["name"] = "luasnip" },
-    },
-    ["window"] = {
-        ["completion"] = {
-            ["border"] = "rounded",
-            ["winhighlight"] = "Normal:Normal,FloatBorder:FloatBorder,CursorLine:Visual,Search:None",
+                for i, server in ipairs({
+                    { ["name"] = "cmake" },
+                    { ["name"] = "clojure_lsp" },
+                    { ["name"] = "clangd" },
+                    { ["name"] = "texlab" },
+                    { ["name"] = "rust_analyzer" },
+                    { ["name"] = "pyright" },
+                    { ["name"] = "nil_ls" },
+                    { ["cmd"] = { "haskell-language-server-wrapper", "--lsp" }, ["name"] = "hls" },
+                }) do
+                    if type(server) == "string" then
+                        require("lspconfig")[server].setup(__setup)
+                    else
+                        local options = server.extraOptions
+
+                        if options == nil then
+                            options = __setup
+                        else
+                            options = vim.tbl_extend("keep", options, __setup)
+                        end
+
+                        require("lspconfig")[server.name].setup(options)
+                    end
+                end
+            end,
+            ["dependencies"] = {
+                {
+                    "cmp",
+                    ["config"] = function(_, opts)
+                        require("cmp").setup(opts)
+                    end,
+                    ["dependencies"] = {
+                        {
+                            "cmp-async-path",
+                            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/cmp-async-path",
+                            ["name"] = "cmp-async-path",
+                        },
+                        {
+                            "cmp-buffer",
+                            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/cmp-buffer",
+                            ["enabled"] = false,
+                            ["name"] = "cmp-buffer",
+                        },
+                        {
+                            "cmp-cmdline",
+                            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/cmp-cmdline",
+                            ["enabled"] = false,
+                            ["name"] = "cmp-cmdline",
+                        },
+                        {
+                            "cmp-emoji",
+                            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/cmp-emoji",
+                            ["name"] = "cmp-emoji",
+                        },
+                        {
+                            "cmp-nvim-lsp",
+                            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/cmp-nvim-lsp",
+                            ["name"] = "cmp-nvim-lsp",
+                        },
+                        {
+                            "cmp-nvim-lsp-signature-help",
+                            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/cmp-nvim-lsp-signature-help",
+                            ["name"] = "cmp-nvim-lsp-signature-help",
+                        },
+                        {
+                            "cmp-luasnip",
+                            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/cmp_luasnip",
+                            ["name"] = "cmp-luasnip",
+                        },
+                    },
+                    ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/nvim-cmp",
+                    ["lazy"] = false,
+                    ["name"] = "cmp",
+                    ["opts"] = function()
+                        local cmp = require("cmp")
+                        local luasnip = require("luasnip")
+
+                        local has_words_before = function()
+                            unpack = unpack or table.unpack
+                            local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+                            return col ~= 0
+                                and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s")
+                                    == nil
+                        end
+
+                        return {
+                            sources = cmp.config.sources({
+                                { ["name"] = "async_path" },
+                                { ["name"] = "emoji" },
+                                { ["name"] = "nvim_lsp" },
+                                { ["name"] = "nvim_lsp_signature_help" },
+                                { ["name"] = "luasnip" },
+                            }),
+
+                            snippet = {
+                                expand = function(args)
+                                    require("luasnip").lsp_expand(args.body)
+                                end,
+                            },
+
+                            window = {
+                                completion = cmp.config.window.bordered(),
+                                documentation = cmp.config.window.bordered(),
+                                -- completion.border = "rounded",
+                                -- documentation.border = "rounded",
+                            },
+
+                            mapping = cmp.mapping.preset.insert({
+                                ["<Down>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
+                                ["<Up>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
+                                ["<C-e>"] = cmp.mapping.abort(),
+                                ["<Esc>"] = cmp.mapping.abort(),
+                                ["<C-Up>"] = cmp.mapping.scroll_docs(-4),
+                                ["<C-Down>"] = cmp.mapping.scroll_docs(4),
+                                ["<C-Space>"] = cmp.mapping.complete({}),
+
+                                ["<CR>"] = cmp.mapping.confirm({ select = true }),
+
+                                ["<Tab>"] = cmp.mapping(function(fallback)
+                                    if cmp.visible() then
+                                        cmp.select_next_item()
+                                    elseif require("luasnip").expand_or_jumpable() then
+                                        require("luasnip").expand_or_jump()
+                                    elseif has_words_before() then
+                                        cmp.complete()
+                                    else
+                                        fallback()
+                                    end
+                                end, { "i", "s" }),
+
+                                ["<S-Tab>"] = cmp.mapping(function(fallback)
+                                    if cmp.visible() then
+                                        cmp.select_prev_item()
+                                    elseif luasnip.jumpable(-1) then
+                                        luasnip.jump(-1)
+                                    else
+                                        fallback()
+                                    end
+                                end, { "i", "s" }),
+                            }),
+                        }
+                    end,
+                },
+                {
+                    "illuminate",
+                    ["config"] = function(_, opts)
+                        require("illuminate").configure(opts)
+                    end,
+                    ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/vim-illuminate",
+                    ["lazy"] = false,
+                    ["name"] = "illuminate",
+                    ["opts"] = {
+                        ["filetypesDenylist"] = {
+                            "DressingSelect",
+                            "Outline",
+                            "TelescopePrompt",
+                            "alpha",
+                            "harpoon",
+                            "toggleterm",
+                            "neo-tree",
+                            "Spectre",
+                            "reason",
+                        },
+                    },
+                },
+            },
+            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/nvim-lspconfig",
+            ["lazy"] = false,
+            ["name"] = "lspconfig",
         },
-        ["documentation"] = { ["border"] = "rounded" },
+        {
+            "web-devicons",
+            ["config"] = function(_, opts)
+                require("nvim-web-devicons").setup(opts)
+            end,
+            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/nvim-web-devicons",
+            ["lazy"] = false,
+            ["name"] = "web-devicons",
+        },
+        {
+            "better-escape",
+            ["config"] = function(_, opts)
+                require("better_escape").setup(opts)
+            end,
+            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/better-escape.nvim",
+            ["lazy"] = false,
+            ["name"] = "better-escape",
+            ["opts"] = { ["mapping"] = { "jk" }, ["timeout"] = 200 },
+        },
+        {
+            "chadtree",
+            ["config"] = function(_, opts)
+                vim.api.nvim_set_var("chadtree_settings", opts)
+            end,
+            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/chadtree",
+            ["name"] = "chadtree",
+            ["opts"] = { ["theme"] = { ["text_colour_set"] = "nerdtree_syntax_dark" }, ["xdg"] = true },
+        },
+        {
+            "comment",
+            ["config"] = function(_, opts)
+                require("Comment").setup(opts)
+            end,
+            ["dependencies"] = {
+                {
+                    "ts-context-commentstring",
+                    ["config"] = function(_, opts)
+                        vim.g.skip_ts_context_commentstring_module = true -- Skip compatibility checks
+
+                        require("ts_context_commentstring").setup(opts)
+                    end,
+                    ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/nvim-ts-context-commentstring",
+                    ["lazy"] = false,
+                    ["name"] = "ts-context-commentstring",
+                },
+            },
+            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/comment.nvim",
+            ["name"] = "comment",
+            ["opts"] = {
+                ["mappings"] = { ["basic"] = true, ["extra"] = false },
+                ["opleader"] = { ["block"] = "<C-b>", ["line"] = "<C-c>" },
+                ["pre_hook"] = function()
+                    require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook()
+                end,
+                ["toggler"] = { ["block"] = "<C-b>", ["line"] = "<C-c>" },
+            },
+        },
+        {
+            "conform",
+            ["config"] = function(_, opts)
+                require("conform").setup(opts)
+            end,
+            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/conform.nvim",
+            ["name"] = "conform",
+            ["opts"] = {
+                ["formatters_by_ft"] = {
+                    ["c"] = { "clang-format" },
+                    ["cpp"] = { "clang-format" },
+                    ["css"] = { { "prettierd", "prettier" } },
+                    ["h"] = { "clang-format" },
+                    ["hpp"] = { "clang-format" },
+                    ["html"] = { { "prettierd", "prettier" } },
+                    ["java"] = { "google-java-format" },
+                    ["javascript"] = { { "prettierd", "prettier" } },
+                    ["markdown"] = { { "prettierd", "prettier" } },
+                    ["nix"] = { "alejandra" },
+                    ["python"] = { "black" },
+                    ["rust"] = { "rustfmt" },
+                },
+            },
+        },
+        {
+            "flash",
+            ["config"] = function(_, opts)
+                require("flash").setup(opts)
+            end,
+            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/flash.nvim",
+            ["name"] = "flash",
+        },
+        {
+            "gitmessenger",
+            ["config"] = function(_, opts)
+                for k, v in pairs(opts) do
+                    vim.g[k] = v
+                end
+            end,
+            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/git-messenger.vim",
+            ["name"] = "gitmessenger",
+            ["opts"] = {
+                ["git_messenger_floating_win_opts"] = { ["border"] = "rounded" },
+                ["git_messenger_no_default_mappings"] = true,
+            },
+        },
+        {
+            "gitsigns",
+            ["config"] = function(_, opts)
+                require("gitsigns").setup(opts)
+            end,
+            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/gitsigns.nvim",
+            ["lazy"] = false,
+            ["name"] = "gitsigns",
+            ["opts"] = { ["current_line_blame"] = false },
+        },
+        {
+            "headlines",
+            ["config"] = function(_, opts)
+                require("headlines").setup(opts)
+            end,
+            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/headlines.nvim",
+            ["name"] = "headlines",
+        },
+        {
+            "intellitab",
+            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/intellitab.nvim",
+            ["lazy"] = false,
+            ["name"] = "intellitab",
+        },
+        {
+            "lastplace",
+            ["config"] = function(_, opts)
+                require("nvim-lastplace").setup(opts)
+            end,
+            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/nvim-lastplace",
+            ["lazy"] = false,
+            ["name"] = "lastplace",
+        },
+        {
+            "lazygit",
+            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/lazygit.nvim",
+            ["name"] = "lazygit",
+        },
+        {
+            "lint",
+            ["config"] = function(_, opts)
+                local lint = require("lint")
+
+                for k, v in pairs(opts) do
+                    lint[k] = v
+                end
+            end,
+            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/nvim-lint",
+            ["lazy"] = false,
+            ["name"] = "lint",
+            ["opts"] = {
+                ["linters_by_ft"] = {
+                    ["c"] = { "clang-tidy" },
+                    ["clojure"] = { "clj-kondo" },
+                    ["cpp"] = { "clang-tidy" },
+                    ["h"] = { "clang-tidy" },
+                    ["hpp"] = { "clang-tidy" },
+                    ["java"] = { "checkstyle" },
+                    ["javascript"] = { "eslint_d" },
+                    ["markdown"] = { "vale" },
+                    ["nix"] = { "statix" },
+                    ["python"] = { "flake8" },
+                    ["rust"] = { "clippy" },
+                    ["text"] = { "vale" },
+                },
+            },
+        },
+        {
+            "lualine",
+            ["config"] = function(_, opts)
+                require("lualine").setup(opts)
+            end,
+            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/lualine.nvim",
+            ["lazy"] = false,
+            ["name"] = "lualine",
+            ["opts"] = {
+                ["extensions"] = { "fzf", "chadtree", "neo-tree", "toggleterm", "trouble" },
+                ["options"] = {
+                    ["always_divide_middle"] = true,
+                    ["component_separators"] = { ["left"] = "", ["right"] = "" },
+                    ["globalstatus"] = true,
+                    ["ignore_focus"] = { "neo-tree", "chadtree" },
+                    ["section_separators"] = { ["left"] = "", ["right"] = "" },
+                },
+                ["sections"] = {
+                    ["lualine_a"] = { { ["name"] = "mode" } },
+                    ["lualine_b"] = { "branch", "diff", "diagnostics" },
+                    ["lualine_c"] = { { ["extraConfig"] = { ["path"] = 1 }, ["name"] = "filename" } },
+                    ["lualine_x"] = { "filetype", "encoding", "fileformat" },
+                    ["lualine_y"] = { "progress", "searchcount", "selectioncount" },
+                    ["lualine_z"] = { { ["name"] = "location" } },
+                },
+                ["tabline"] = { ["lualine_a"] = { "buffers" }, ["lualine_z"] = { "tabs" } },
+            },
+        },
+        {
+            "luasnip",
+            ["config"] = function(_, opts)
+                require("luasnip").config.set_config(opts)
+            end,
+            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/luasnip",
+            ["name"] = "luasnip",
+        },
+        {
+            "navbuddy",
+            ["config"] = function(_, opts)
+                local actions = require("nvim-navbuddy.actions") -- ?
+                require("nvim-navbuddy").setup(opts)
+            end,
+            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/nvim-navbuddy",
+            ["name"] = "navbuddy",
+            ["opts"] = { ["lsp"] = { ["auto_attach"] = true }, ["window"] = { ["border"] = "rounded" } },
+        },
+        {
+            "navic",
+            ["config"] = function(_, opts)
+                require("nvim-navic").setup(opts)
+            end,
+            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/nvim-navic",
+            ["name"] = "navic",
+            ["opts"] = { ["click"] = true, ["highlight"] = true, ["lsp"] = { ["auto_attach"] = true } },
+        },
+        {
+            "noice",
+            ["config"] = function(_, opts)
+                require("noice").setup(opts)
+            end,
+            ["dependencies"] = {
+                {
+                    "nui",
+                    ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/nui.nvim",
+                    ["lazy"] = false,
+                    ["name"] = "nui",
+                },
+            },
+            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/noice.nvim",
+            ["lazy"] = false,
+            ["name"] = "noice",
+            ["opts"] = {
+                ["lsp"] = {
+                    ["documentation"] = {
+                        ["opts"] = {
+                            ["border"] = "rounded",
+                            ["format"] = { "{message}" },
+                            ["lang"] = "markdown",
+                            ["render"] = "plain",
+                            ["replace"] = true,
+                            ["win_options"] = { ["concealcursor"] = "n", ["conceallevel"] = 3 },
+                        },
+                        ["view"] = "hover",
+                    },
+                    ["override"] = {
+                        ["cmp.entry.get_documentation"] = true,
+                        ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+                        ["vim.lsp.util.stylize_markdown"] = true,
+                    },
+                },
+                ["notify"] = { ["enabled"] = true },
+                ["popupmenu"] = { ["backend"] = "nui", ["enabled"] = true },
+                ["presets"] = {
+                    ["bottom_search"] = false,
+                    ["command_palette"] = true,
+                    ["inc_rename"] = true,
+                    ["long_message_to_split"] = true,
+                    ["lsp_doc_border"] = true,
+                },
+                ["routes"] = {
+                    { ["filter"] = { ["event"] = "msg_show", ["kind"] = "search_count" }, ["opts"] = { ["skip"] = true } },
+                },
+            },
+        },
+        {
+            "notify",
+            ["config"] = function(_, opts)
+                vim.notify = require("notify")
+                require("notify").setup(opts)
+            end,
+            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/nvim-notify",
+            ["lazy"] = false,
+            ["name"] = "notify",
+        },
+        {
+            "autopairs",
+            ["config"] = function(_, opts)
+                require("nvim-autopairs").setup(opts)
+            end,
+            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/nvim-autopairs",
+            ["lazy"] = false,
+            ["name"] = "autopairs",
+        },
+        {
+            "colorizer",
+            ["config"] = function(_, opts)
+                require("colorizer").setup(opts)
+            end,
+            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/nvim-colorizer.lua",
+            ["lazy"] = false,
+            ["name"] = "colorizer",
+        },
+        {
+            "ufo",
+            ["config"] = function(_, opts)
+                require("ufo").setup(opts)
+            end,
+            ["dependencies"] = {
+                {
+                    "promise",
+                    ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/promise-async",
+                    ["name"] = "promise",
+                },
+            },
+            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/nvim-ufo",
+            ["name"] = "ufo",
+        },
+        {
+            "rainbow-delimiters",
+            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/rainbow-delimiters.nvim",
+            ["lazy"] = false,
+            ["name"] = "rainbow-delimiters",
+        },
+        {
+            "sandwich",
+            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/vim-sandwich",
+            ["lazy"] = false,
+            ["name"] = "sandwich",
+        },
+        {
+            "sleuth",
+            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/vim-sleuth",
+            ["lazy"] = false,
+            ["name"] = "sleuth",
+        },
+        {
+            "telescope",
+            ["config"] = function(_, opts)
+                local telescope = require("telescope")
+                telescope.setup(opts)
+
+                for i, extension in ipairs({ "undo", "ui-select", "fzf" }) do
+                    telescope.load_extension(extension)
+                end
+            end,
+            ["dependencies"] = {
+                {
+                    "plenary",
+                    ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/plenary.nvim",
+                    ["name"] = "plenary",
+                },
+                {
+                    "telescope-undo",
+                    ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/telescope-undo.nvim",
+                    ["name"] = "telescope-undo",
+                },
+                {
+                    "telescope-ui-select",
+                    ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/telescope-ui-select.nvim",
+                    ["name"] = "telescope-ui-select",
+                },
+                {
+                    "telescope-fzf-native",
+                    ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/telescope-fzf-native.nvim",
+                    ["name"] = "telescope-fzf-native",
+                },
+            },
+            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/telescope.nvim",
+            ["lazy"] = false,
+            ["name"] = "telescope",
+            ["opts"] = {
+                ["defaults"] = {
+                    ["mappings"] = {
+                        ["i"] = {
+                            ["<Esc>"] = function(...)
+                                return require("telescope.actions").close(...)
+                            end,
+                        },
+                    },
+                },
+            },
+        },
+        {
+            "toggleterm",
+            ["config"] = function(_, opts)
+                require("toggleterm").setup(opts)
+            end,
+            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/toggleterm.nvim",
+            ["name"] = "toggleterm",
+            ["opts"] = {
+                ["auto_scroll"] = true,
+                ["close_on_exit"] = true,
+                ["direction"] = "horizontal",
+                ["float_opts"] = { ["border"] = "curved", ["height"] = 20, ["width"] = 80, ["winblend"] = 0 },
+                ["hide_numbers"] = true,
+                ["insert_mappings"] = true,
+                ["open_mapping"] = "[[<C-t>]]",
+                ["persist_mode"] = true,
+                ["shade_terminals"] = true,
+                ["shell"] = "fish",
+                ["start_in_insert"] = true,
+                ["terminal_mappings"] = true,
+            },
+        },
+        {
+            "treesitter",
+            ["config"] = function(_, opts)
+                require("nvim-treesitter.configs").setup(opts)
+            end,
+            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/nvim-treesitter",
+            ["lazy"] = false,
+            ["name"] = "treesitter",
+            ["opts"] = {
+                ["highlight"] = { ["enable"] = true },
+                ["incremental_selection"] = {
+                    ["enable"] = true,
+                    ["keymaps"] = {
+                        ["init_selection"] = "gnn",
+                        ["node_decremental"] = "grm",
+                        ["node_incremental"] = "grn",
+                        ["scope_incremental"] = "grc",
+                    },
+                },
+                ["indent"] = { ["enable"] = true },
+            },
+        },
+        {
+            "trim",
+            ["config"] = function(_, opts)
+                require("trim").setup(opts)
+            end,
+            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/trim.nvim",
+            ["lazy"] = false,
+            ["name"] = "trim",
+        },
+        {
+            "trouble",
+            ["config"] = function(_, opts)
+                require("trouble").setup(opts)
+            end,
+            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/trouble.nvim",
+            ["name"] = "trouble",
+        },
+        { "bbye", ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/vim-bbye", ["name"] = "bbye" },
+        {
+            "which-key",
+            ["config"] = function(_, opts)
+                require("which-key").setup(opts)
+            end,
+            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/which-key.nvim",
+            ["lazy"] = false,
+            ["name"] = "which-key",
+            ["priority"] = 100,
+        },
+        {
+            "yanky",
+            ["config"] = function(_, opts)
+                require("yanky").setup(opts)
+            end,
+            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/yanky.nvim",
+            ["lazy"] = false,
+            ["name"] = "yanky",
+        },
     },
 })
-
-require("nvim-navic").setup({ ["click"] = true, ["highlight"] = true, ["lsp"] = { ["auto_attach"] = true } })
 
 -- Set up keybinds {{{
 do
     local __nixvim_binds = {
-        { ["action"] = require("intellitab").indent, ["key"] = "<Tab>", ["mode"] = "i" },
+        { ["action"] = "<cmd>w<CR>", ["key"] = "<C-s>", ["mode"] = "n", ["options"] = {
+            ["desc"] = "Save current buffer",
+        } },
+        { ["action"] = "<cmd>wa<CR>", ["key"] = "<C-S-s>", ["mode"] = "n", ["options"] = {
+            ["desc"] = "Save all buffers",
+        } },
         { ["action"] = "<gv", ["key"] = "<", ["mode"] = "v", ["options"] = { ["desc"] = "Outdent" } },
         { ["action"] = ">gv", ["key"] = ">", ["mode"] = "v", ["options"] = { ["desc"] = "Indent" } },
         { ["action"] = "v<<Esc>", ["key"] = "<", ["mode"] = "n", ["options"] = { ["desc"] = "Outdent" } },
@@ -449,6 +758,12 @@ do
         { ["action"] = "<C-u>zz", ["key"] = "<C-u>", ["mode"] = "n", ["options"] = { ["desc"] = "Jump up" } },
         { ["action"] = "nzzzv", ["key"] = "n", ["mode"] = "n", ["options"] = { ["desc"] = "Next match" } },
         { ["action"] = "Nzzzv", ["key"] = "N", ["mode"] = "n", ["options"] = { ["desc"] = "Previous match" } },
+        {
+            ["action"] = "<cmd>lua require('intellitab').indent()<CR>",
+            ["key"] = "<Tab>",
+            ["mode"] = "i",
+            ["options"] = { ["desc"] = "Indent" },
+        },
         { ["action"] = "<C-w>", ["key"] = "<C-BS>", ["mode"] = "i", ["options"] = { ["desc"] = "Delete previous word" } },
         { ["action"] = "<C-w>", ["key"] = "<M-BS>", ["mode"] = "i", ["options"] = { ["desc"] = "Delete previous word" } },
         {
@@ -467,7 +782,20 @@ do
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Clear search highlights" },
         },
+        {
+            ["action"] = "<cmd>lua vim.lsp.buf.hover()<CR>",
+            ["key"] = "K",
+            ["mode"] = "n",
+            ["options"] = { ["desc"] = "Show LSP hover" },
+        },
         { ["action"] = "<cmd>quitall<CR>", ["key"] = "<leader>qq", ["mode"] = "n", ["options"] = { ["desc"] = "Quit" } },
+        {
+            ["action"] = "<cmd>quitall!<CR>",
+            ["key"] = "<leader>q!",
+            ["mode"] = "n",
+            ["options"] = { ["desc"] = "Forceful quit" },
+        },
+        { ["action"] = "<cmd>Lazy<CR>", ["key"] = "<leader>L", ["mode"] = "n", ["options"] = { ["desc"] = "Show Lazy" } },
         {
             ["action"] = "<cmd>Telescope buffers<CR>",
             ["key"] = "<leader><Space>",
@@ -719,6 +1047,24 @@ do
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Show diagnostics" },
         },
+        {
+            ["action"] = "<cmd>lua vim.lsp.buf.rename()<CR>",
+            ["key"] = "<leader>cr",
+            ["mode"] = "n",
+            ["options"] = { ["desc"] = "Rename LSP symbol" },
+        },
+        {
+            ["action"] = "<cmd>lua vim.lsp.buf.code_action()<CR>",
+            ["key"] = "<leader>ca",
+            ["mode"] = "n",
+            ["options"] = { ["desc"] = "Show LSP code actions" },
+        },
+        {
+            ["action"] = "<cmd>lua vim.diagnostic.open_float()<CR>",
+            ["key"] = "<leader>cD",
+            ["mode"] = "n",
+            ["options"] = { ["desc"] = "Show LSP line diagnostics" },
+        },
     }
     for i, map in ipairs(__nixvim_binds) do
         vim.keymap.set(map.mode, map.key, map.action, map.options)
@@ -727,6 +1073,45 @@ end
 -- }}}
 
 vim.filetype.add({ ["extension"] = { ["v"] = "vlang" } })
+
+-- Hide inline diagnostics and show border
+vim.diagnostic.config({
+    virtual_text = false,
+    float = { border = "rounded" },
+})
+
+-- Allow navigating popupmenu completion with Up/Down
+vim.api.nvim_set_keymap("c", "<Down>", 'v:lua.get_wildmenu_key("<right>", "<down>")', { expr = true })
+vim.api.nvim_set_keymap("c", "<Up>", 'v:lua.get_wildmenu_key("<left>", "<up>")', { expr = true })
+
+function _G.get_wildmenu_key(key_wildmenu, key_regular)
+    return vim.fn.wildmenumode() ~= 0 and key_wildmenu or key_regular
+end
+
+-- Set up autocommands {{
+do
+    local __nixvim_autocommands =
+        { {
+            ["callback"] = function()
+                require("lint").try_lint()
+            end,
+            ["event"] = { "BufWritePost" },
+        } }
+
+    for _, autocmd in ipairs(__nixvim_autocommands) do
+        vim.api.nvim_create_autocmd(autocmd.event, {
+            group = autocmd.group,
+            pattern = autocmd.pattern,
+            buffer = autocmd.buffer,
+            desc = autocmd.desc,
+            callback = autocmd.callback,
+            command = autocmd.command,
+            once = autocmd.once,
+            nested = autocmd.nested,
+        })
+    end
+end
+-- }}
 
 local opt = vim.opt
 local g = vim.g
@@ -752,90 +1137,3 @@ if g.neovide then
 else
     require("notify").notify("Not running in NeoVide")
 end
-
--- Hide inline diagnostics and show border
-vim.diagnostic.config({
-    virtual_text = false,
-    float = { border = "rounded" },
-})
-
--- Allow navigating popupmenu completion with Up/Down
-vim.api.nvim_set_keymap("c", "<Down>", 'v:lua.get_wildmenu_key("<right>", "<down>")', { expr = true })
-vim.api.nvim_set_keymap("c", "<Up>", 'v:lua.get_wildmenu_key("<left>", "<up>")', { expr = true })
-
-function _G.get_wildmenu_key(key_wildmenu, key_regular)
-    return vim.fn.wildmenumode() ~= 0 and key_wildmenu or key_regular
-end
-
--- Set up autogroups {{
-do
-    local __nixvim_autogroups = { ["nixvim_binds_LspAttach"] = { ["clear"] = true } }
-
-    for group_name, options in pairs(__nixvim_autogroups) do
-        vim.api.nvim_create_augroup(group_name, options)
-    end
-end
--- }}
--- Set up autocommands {{
-do
-    local __nixvim_autocommands = {
-        {
-            ["callback"] = function()
-                require("lint").try_lint()
-            end,
-            ["event"] = "BufWritePost",
-        },
-        {
-            ["callback"] = function()
-                do
-                    local __nixvim_binds = {
-                        {
-                            ["action"] = vim.diagnostic.open_float,
-                            ["key"] = "<leader>cD",
-                            ["mode"] = "n",
-                            ["options"] = { ["desc"] = "Show line diagnostic", ["silent"] = false },
-                        },
-                        {
-                            ["action"] = vim.lsp.buf.code_action,
-                            ["key"] = "<leader>ca",
-                            ["mode"] = "n",
-                            ["options"] = { ["desc"] = "Show code actions", ["silent"] = false },
-                        },
-                        {
-                            ["action"] = vim.lsp.buf.rename,
-                            ["key"] = "<leader>cr",
-                            ["mode"] = "n",
-                            ["options"] = { ["desc"] = "Rename symbol", ["silent"] = false },
-                        },
-                        {
-                            ["action"] = vim.lsp.buf.hover,
-                            ["key"] = "K",
-                            ["mode"] = "n",
-                            ["options"] = { ["desc"] = "Hover information", ["silent"] = false },
-                        },
-                    }
-                    for i, map in ipairs(__nixvim_binds) do
-                        vim.keymap.set(map.mode, map.key, map.action, map.options)
-                    end
-                end
-            end,
-            ["desc"] = "Load keymaps for LspAttach",
-            ["event"] = "LspAttach",
-            ["group"] = "nixvim_binds_LspAttach",
-        },
-    }
-
-    for _, autocmd in ipairs(__nixvim_autocommands) do
-        vim.api.nvim_create_autocmd(autocmd.event, {
-            group = autocmd.group,
-            pattern = autocmd.pattern,
-            buffer = autocmd.buffer,
-            desc = autocmd.desc,
-            callback = autocmd.callback,
-            command = autocmd.command,
-            once = autocmd.once,
-            nested = autocmd.nested,
-        })
-    end
-end
--- }}
