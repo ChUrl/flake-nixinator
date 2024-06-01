@@ -505,7 +505,7 @@ in {
         {
           mode = "n";
           key = "<leader>td";
-          action = "<cmd>TroubleToggle<CR>";
+          action = "<cmd>TroubleToggle focus=false<CR>";
           options.desc = "Toggle Trouble";
         }
         # {
