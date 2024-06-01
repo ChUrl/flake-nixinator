@@ -19,27 +19,53 @@ in {
       VISUAL = "nvim";
     };
 
-    home.packages = with pkgs; [
-      (pkgs.ripgrep.override {withPCRE2 = true;})
+    home.packages = with pkgs;
+      builtins.concatLists [
+        (optionals cfg.neovide [neovide])
 
-      # Linters
-      clippy # rust
-      checkstyle # java
-      clj-kondo # clojure
-      eslint_d # javascript
-      python312Packages.flake8
-      vale # text
-      statix # nix
+        [
+          (pkgs.ripgrep.override {withPCRE2 = true;})
+          # NOTE: Requires python311packages.{pyyaml, std2, pynvim} in home/christoph/default.nix for chadtree
 
-      # Formatters
-      alejandra # nix
-      google-java-format
-      html-tidy
-      jq # json
-      prettierd # html/css/js
-      # rustfmt
-      # clang-tools
-    ];
+          # Linters
+          clippy # rust
+          checkstyle # java
+          clj-kondo # clojure
+          eslint_d # javascript
+          python312Packages.flake8
+          vale # text
+          statix # nix
+
+          # Formatters
+          alejandra # nix
+          google-java-format
+          html-tidy
+          jq # json
+          prettierd # html/css/js
+          # rustfmt
+          # clang-tools
+        ]
+      ];
+
+    # NOTE: Use nixvim.extraConfigLua configuration
+    # home.file.".config/neovide/config.toml".text = ''
+    #   [font]
+    #     normal = ["JetBrainsMono Nerd Font Mono"] # Will use the bundled Fira Code Nerd Font by default
+    #     size = 13.0
+    #
+    #   fork = true
+    #   frame = "full" # full, buttonless, none
+    #   idle = true
+    #   maximized = false
+    #   # neovim-bin = "/usr/bin/nvim" # in reality found dynamically on $PATH if unset
+    #   no-multigrid = false
+    #   srgb = false
+    #   tabs = true
+    #   theme = "light"
+    #   title-hidden = true
+    #   vsync = true
+    #   wsl = false
+    # '';
 
     programs.nixvim = {
       enable = true;
@@ -115,7 +141,6 @@ in {
       };
 
       # TODO: Half of the neovide config doesn't work
-      # TODO: LSP Window doesn't work. Noice?
       extraConfigLua = ''
         local opt = vim.opt
         local g = vim.g
@@ -123,20 +148,23 @@ in {
 
         -- Neovide
         if g.neovide then
-          g.neovide_fullscreen = false
-          g.neovide_hide_mouse_when_typing = false
-          g.neovide_refresh_rate = 144
-          -- g.neovide_cursor_vfx_mode = "ripple"
+          require("notify").notify("Running in NeoVide")
+
           g.neovide_cursor_animate_command_line = true
           g.neovide_cursor_animate_in_insert_mode = true
-          g.neovide_cursor_vfx_particle_lifetime = 5.0
-          g.neovide_cursor_vfx_particle_density = 14.0
-          g.neovide_cursor_vfx_particle_speed = 12.0
-          -- g.neovide_transparency = 0.8
+          g.neovide_fullscreen = false
+          g.neovide_hide_mouse_when_typing = false
+          g.neovide_padding_top = 0
+          g.neovide_padding_bottom = 0
+          g.neovide_padding_right = 0
+          g.neovide_padding_left = 0
+          g.neovide_refresh_rate = 144
           g.neovide_theme = 'light'
 
           -- Neovide Fonts
-          o.guifont = "JetBrainsMono Nerd Font:h13:Medium:i"
+          o.guifont = "JetBrainsMono Nerd Font:h13:Medium"
+        else
+          require("notify").notify("Not running in NeoVide")
         end
 
         -- Hide inline diagnostics and show border
@@ -242,6 +270,12 @@ in {
           options.desc = "Paste from clipboard";
         }
         {
+          mode = "i";
+          key = "<C-v>";
+          action = "<Esc>\"+pi";
+          options.desc = "Paste from clipboard";
+        }
+        {
           mode = "v";
           key = "<C-S-c>";
           action = "\"+y";
@@ -263,9 +297,27 @@ in {
         }
         {
           mode = "n";
+          key = "<leader><Space>";
+          action = "<cmd>Telescope buffers<CR>";
+          options.desc = "Show open buffers";
+        }
+        {
+          mode = "n";
+          key = "<leader>S";
+          action = "<cmd>wa<CR>";
+          options.desc = "Save all buffers";
+        }
+        {
+          mode = "n";
           key = "<leader>f";
           action = "<cmd>Telescope find_files<CR>";
           options.desc = "Find file";
+        }
+        {
+          mode = "n";
+          key = "<leader>o";
+          action = "<cmd>Telescope vim_options<CR>";
+          options.desc = "Show Vim options";
         }
         {
           mode = "n";
@@ -278,6 +330,12 @@ in {
           key = "<leader>/";
           action = "<cmd>Telescope current_buffer_fuzzy_find<CR>";
           options.desc = "Find in current buffer";
+        }
+        {
+          mode = "n";
+          key = "<leader>n";
+          action = "<cmd>Telescope notify<CR>";
+          options.desc = "Show notify history";
         }
         {
           mode = "n";
@@ -426,17 +484,29 @@ in {
           key = "<leader>t";
           action = "+toggle";
         }
+        # {
+        #   mode = "n";
+        #   key = "<leader>tt";
+        #   action = "<cmd>Neotree action=show toggle=true<CR>";
+        #   options.desc = "Toggle NeoTree";
+        # }
         {
           mode = "n";
           key = "<leader>tt";
-          action = "<cmd>Neotree action=show toggle=true<CR>";
-          options.desc = "Toggle NeoTree";
+          action = "<cmd>CHADopen --nofocus<CR>";
+          options.desc = "Toggle CHADtree";
         }
         {
           mode = "n";
           key = "<leader>tn";
           action = "<cmd>Navbuddy<CR>";
           options.desc = "Toggle NavBuddy";
+        }
+        {
+          mode = "n";
+          key = "<leader>td";
+          action = "<cmd>TroubleToggle<CR>";
+          options.desc = "Toggle Trouble";
         }
         # {
         #   mode = "n";
@@ -459,13 +529,13 @@ in {
           mode = "n";
           key = "<leader>gg";
           action = "<cmd>LazyGit<CR>";
-          options.desc = "Toggle LazyGit";
+          options.desc = "Show LazyGit";
         }
         {
           mode = "n";
           key = "<leader>gm";
           action = "<cmd>GitMessenger<CR>";
-          options.desc = "Toggle GitMessenger";
+          options.desc = "Show GitMessenger";
         }
         # {
         #   mode = "n";
@@ -561,26 +631,6 @@ in {
       ];
 
       plugins = {
-        # Status line, alternative to lualine
-        # airline = {
-        #   enable = false;
-        #
-        #   settings = {
-        #     powerline_fonts = true;
-        #     theme = "catppuccin";
-        #   };
-        # };
-
-        # Auto-close parenthesis, alternative to nvim-autopairs
-        # autoclose = {
-        #   enable = true;
-        # };
-
-        # Alternative to bufferline
-        # barbar = {
-        #   enable = true;
-        # };
-
         # Escape insert mode by pressing jk
         better-escape = {
           enable = true;
@@ -589,19 +639,12 @@ in {
           timeout = 200; # In ms
         };
 
-        # Alternative to barbar
-        # bufferline = {
-        #   enable = true;
-
-        #   middleMouseCommand = "bdelete! %d";
-        #   # rightMouseCommand = "BufferLineTogglePin";
-        #   separatorStyle = "thin";
-        # };
-
         # Directory tree
-        # chadtree = {
-        #   enable = true;
-        # };
+        chadtree = {
+          enable = true;
+
+          theme.textColourSet = "nerdtree_syntax_dark";
+        };
 
         # clangd-extensions = {
         #   enable = false;
@@ -794,27 +837,10 @@ in {
         #   enable = false;
         # };
 
-        # Changes nvim UI components, alternative to Noice
-        # dressing = {
-        #   enable = false;
-        # };
-
-        # Notifications + LSP progress, alternative to Noice
-        # fidget = {
-        #   enable = true;
-        # };
-
-        # Git client
-        # fugitive = {
-        #   enable = true;
-        # };
-
-        # Alternative to gitsigns
-        # gitgutter = {
-        #   enable = true;
-        #   grep.package = (pkgs.ripgrep.override {withPCRE2 = true;});
-        #   grep.command = "rg";
-        # };
+        # TODO: Config
+        flash = {
+          enable = true;
+        };
 
         # Display message of commit that modified the current line
         gitmessenger = {
@@ -830,11 +856,6 @@ in {
             current_line_blame = false;
           };
         };
-
-        # Vim habit trainer, blocks keys
-        # hardtime = {
-        #   enable = false;
-        # };
 
         # Markdown etc. heading highlights
         headlines = {
@@ -955,38 +976,69 @@ in {
         #   enable = false;
         # };
 
-        # Render diagnostics as virtual line overlay
-        # lsp-lines = {
-        #   enable = true;
-        # };
-
         # Statusline, alternative to airline
         lualine = {
           enable = true;
 
           alwaysDivideMiddle = true;
           globalstatus = true;
-          ignoreFocus = ["neo-tree"];
-          extensions = ["fzf"];
+          ignoreFocus = ["neo-tree" "chadtree"];
+          extensions = ["fzf" "chadtree" "neo-tree" "toggleterm" "trouble"];
 
           sections = {
-            lualine_a = ["mode"];
+            lualine_a = [
+              {
+                name = "mode";
+                # extraConfig = {
+                #   separator = {
+                #     left = "";
+                #   };
+                #   right_padding = "2";
+                # };
+              }
+            ];
             lualine_b = ["branch" "diff" "diagnostics"];
-            lualine_c = ["filename"];
+            lualine_c = [
+              {
+                name = "filename";
+                extraConfig = {
+                  path = 1;
+                };
+              }
+            ];
 
             lualine_x = ["filetype" "encoding" "fileformat"];
-            lualine_y = ["progress"];
-            lualine_z = ["location" "searchcount" "selectioncount"];
+            lualine_y = ["progress" "searchcount" "selectioncount"];
+            lualine_z = [
+              {
+                name = "location";
+                # extraConfig = {
+                #   separator = {
+                #     right = "";
+                #   };
+                #   left_padding = "2";
+                # };
+              }
+            ];
+          };
+
+          tabline = {
+            lualine_a = ["buffers"];
+            lualine_z = ["tabs"];
           };
 
           sectionSeparators = {
             left = "";
             right = "";
+            # left = "";
+            # right = "";
           };
 
           componentSeparators = {
             left = "";
             right = "";
+            # left = "";
+            # right = "";
           };
         };
 
@@ -1008,6 +1060,14 @@ in {
           window.border = "rounded";
         };
 
+        navic = {
+          enable = true;
+
+          lsp.autoAttach = true;
+          click = true;
+          highlight = true;
+        };
+
         # Generate doc comments
         # neogen = {
         #   enable = true;
@@ -1018,32 +1078,32 @@ in {
         #   enable = false;
         # };
 
-        neo-tree = {
-          enable = true;
+        # neo-tree = {
+        #   enable = true;
 
-          enableDiagnostics = true;
-          enableGitStatus = true;
-          enableModifiedMarkers = true;
-          enableRefreshOnWrite = true;
-          closeIfLastWindow = true;
-          popupBorderStyle = "rounded";
+        #   enableDiagnostics = true;
+        #   enableGitStatus = true;
+        #   enableModifiedMarkers = true;
+        #   enableRefreshOnWrite = true;
+        #   closeIfLastWindow = true;
+        #   popupBorderStyle = "rounded";
 
-          buffers = {
-            bindToCwd = true;
-            followCurrentFile = {
-              enabled = true; # TODO: Doesn't work
-            };
-          };
+        #   buffers = {
+        #     bindToCwd = true;
+        #     followCurrentFile = {
+        #       enabled = true; # TODO: Doesn't work
+        #     };
+        #   };
 
-          window = {
-            width = 40;
-            height = 15;
-            autoExpandWidth = false;
-            mappings = {
-              "<space>" = "none";
-            };
-          };
-        };
+        #   window = {
+        #     width = 40;
+        #     height = 15;
+        #     autoExpandWidth = false;
+        #     mappings = {
+        #       "<space>" = "none";
+        #     };
+        #   };
+        # };
 
         # NeoVim UI refresh, alternative to fidget, dressing, notify and lspsaga
         noice = {
@@ -1086,13 +1146,14 @@ in {
 
           popupmenu = {
             enabled = true;
-            backend = "nui";
+            backend = "nui"; # cmp completion is broken
           };
 
           # cmdline.enabled = false;
           # messages.enabled = false;
 
           routes = [
+            # Hide inline search count info
             {
               filter = {
                 event = "msg_show";
@@ -1103,9 +1164,16 @@ in {
           ];
         };
 
-        # Alternative to noice.notify
+        # TODO: Background color in terminal is borked
+        # Backend noice.notify
         notify = {
           enable = true;
+
+          # backgroundColour = ''
+          #   function()
+          #     return vim.api.nvim_command_output("echo synIDattr(hlID("Normal"), "bg")")
+          #   end
+          # '';
         };
 
         # Alternative to autoclose
@@ -1122,11 +1190,6 @@ in {
         nvim-ufo = {
           enable = true;
         };
-
-        # File system explorer that is editable like a normal buffer
-        # oil = {
-        #   enable = true;
-        # };
 
         # Colorize paranthesis
         rainbow-delimiters = {
@@ -1218,10 +1281,15 @@ in {
           enable = true;
         };
 
+        # Detect correct comment string, e.g. for inline langs
+        ts-context-commentstring = {
+          enable = true;
+        };
+
         # Window listing detected linting/lsp problems
-        # trouble = {
-        #   enable = true;
-        # };
+        trouble = {
+          enable = true;
+        };
 
         # Don't mess up splits when closing buffers
         vim-bbye = {
