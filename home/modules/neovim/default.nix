@@ -13,7 +13,6 @@ in {
   options.modules.neovim = import ./options.nix {inherit lib mylib;};
 
   config = mkIf cfg.enable {
-    # TODO: Configure by option
     home.sessionVariables = {
       EDITOR = "nvim";
       VISUAL = "nvim";
@@ -25,7 +24,6 @@ in {
 
         [
           (pkgs.ripgrep.override {withPCRE2 = true;})
-          # NOTE: Requires python311packages.{pyyaml, std2, pynvim} in home/christoph/default.nix for chadtree
 
           # Linters
           clippy # rust
@@ -71,7 +69,7 @@ in {
       enable = true;
       defaultEditor = true;
       enableMan = true;
-      colorschemes.catppuccin.enable = true;
+      # colorschemes.catppuccin.enable = true; # NOTE: Managed using Lazy
       viAlias = cfg.alias;
       vimAlias = cfg.alias;
 
@@ -89,7 +87,7 @@ in {
         completeopt = ["menuone" "noselect" "noinsert"];
         timeoutlen = 50;
         pumheight = 0;
-        formatexpr = "v:lua.require'conform'.formatexpr()";
+        formatexpr = "v:lua.require('conform').formatexpr()";
         laststatus = 3;
 
         # Cursor
@@ -140,8 +138,7 @@ in {
         splitright = true;
       };
 
-      # TODO: Half of the neovide config doesn't work
-      extraConfigLua = ''
+      extraConfigLuaPost = ''
         local opt = vim.opt
         local g = vim.g
         local o = vim.o
@@ -166,7 +163,9 @@ in {
         else
           require("notify").notify("Not running in NeoVide")
         end
+      '';
 
+      extraConfigLua = ''
         -- Hide inline diagnostics and show border
         vim.diagnostic.config({
           virtual_text = false,
@@ -183,20 +182,47 @@ in {
       '';
 
       extraLuaPackages = with pkgs.lua51Packages; [
-        # lua-curl # For rest
-        # xml2lua # For rest
-        # mimetypes # For rest
+        # TODO: Doesn't work
+        # For rest
+        # lua-curl
+        # xml2lua
+        # mimetypes
+
+        jsregexp # For tree-sitter
       ];
 
-      extraPlugins = with pkgs.vimPlugins; [
-        vim-airline-themes
-        nvim-web-devicons
-        nui-nvim # For noice
-        # nvim-nio # For rest
+      extraPython3Packages = p: [
+        # For CHADtree
+        p.pyyaml
+        p.pynvim-pp
+        p.std2
       ];
 
+      autoCmd = [
+        {
+          event = ["BufWritePost"];
+          # pattern = "*";
+          callback = {__raw = "function() require('lint').try_lint() end";};
+        }
+      ];
+
+      # TODO: Toggle wrapping
+      # TODO: Toggle format on save
+      # TODO: Toggle format on paste
       keymaps = [
         # No Leader
+        {
+          mode = "n";
+          key = "<C-s>";
+          action = "<cmd>w<CR>";
+          options.desc = "Save current buffer";
+        }
+        {
+          mode = "n";
+          key = "<C-S-s>";
+          action = "<cmd>wa<CR>";
+          options.desc = "Save all buffers";
+        }
         {
           mode = "v";
           key = "<";
@@ -245,12 +271,12 @@ in {
           action = "Nzzzv";
           options.desc = "Previous match";
         }
-        # { # Already included in intellitab config
-        #   mode = "i";
-        #   key = "<Tab>";
-        #   action = "<cmd>lua require('intellitab').indent()<CR>";
-        #   options.desc = "Indent";
-        # }
+        {
+          mode = "i";
+          key = "<Tab>";
+          action = "<cmd>lua require('intellitab').indent()<CR>";
+          options.desc = "Indent";
+        }
         {
           mode = "i";
           key = "<C-BS>";
@@ -287,6 +313,12 @@ in {
           action = "<cmd>nohlsearch<CR>";
           options.desc = "Clear search highlights";
         }
+        {
+          mode = "n";
+          key = "K";
+          action = "<cmd>lua vim.lsp.buf.hover()<CR>";
+          options.desc = "Show LSP hover";
+        }
 
         # General <leader>
         {
@@ -294,6 +326,18 @@ in {
           key = "<leader>qq";
           action = "<cmd>quitall<CR>";
           options.desc = "Quit";
+        }
+        {
+          mode = "n";
+          key = "<leader>q!";
+          action = "<cmd>quitall!<CR>";
+          options.desc = "Forceful quit";
+        }
+        {
+          mode = "n";
+          key = "<leader>L";
+          action = "<cmd>Lazy<CR>";
+          options.desc = "Show Lazy";
         }
         {
           mode = "n";
@@ -628,708 +672,953 @@ in {
           action = "<cmd>Telescope diagnostics<CR>";
           options.desc = "Show diagnostics";
         }
+        {
+          mode = "n";
+          key = "<leader>cr";
+          action = "<cmd>lua vim.lsp.buf.rename()<CR>";
+          options.desc = "Rename LSP symbol";
+        }
+        {
+          mode = "n";
+          key = "<leader>ca";
+          action = "<cmd>lua vim.lsp.buf.code_action()<CR>";
+          options.desc = "Show LSP code actions";
+        }
+        {
+          mode = "n";
+          key = "<leader>cD";
+          action = "<cmd>lua vim.diagnostic.open_float()<CR>";
+          options.desc = "Show LSP line diagnostics";
+        }
       ];
 
-      plugins = {
-        # TODO: Migrate the entire config to lazy? Then the config is usable even without nix...
-        # Plugins not supported by NixVim are installed here
-        lazy = {
-          enable = true;
+      ##################################################################################################################################
+      # Lazy Plugins                                                                                                                   #
+      ##################################################################################################################################
+      plugins.lazy = {
+        enable = true;
 
-          # plugins = [
-          #   {
-          #     name = "nvim-lspconfig";
-          #     pkg = pkgs.vimPlugins.nvim-lspconfig;
-          #     enabled = true;
-          #     lazy = true;
-          #   }
-          # ];
-        };
+        # TODO: Would be nicer if large dependencies could be referenced by name
+        plugins = [
+          #
+          # Not available in NixVim
+          #
 
-        # Escape insert mode by pressing jk
-        better-escape = {
-          enable = true;
-          # keys = "keys.__raw = '' function() return vim.api.nvim_win_get_cursor(0)[2] > 1 and ‘<esc>l’ or ‘<esc>’ end '';";
-          mapping = ["jk"];
-          timeout = 200; # In ms
-        };
+          {
+            name = "catppuccin";
+            pkg = pkgs.vimPlugins.catppuccin-nvim;
+            lazy = false;
+            priority = 1000;
+            config = ''
+              function(_, opts)
+                require("catppuccin").setup(opts)
 
-        # Directory tree
-        chadtree = {
-          enable = true;
-
-          theme.textColourSet = "nerdtree_syntax_dark";
-        };
-
-        # clangd-extensions = {
-        #   enable = false;
-        # };
-
-        # Completion engine
-        cmp = {
-          enable = true;
-          autoEnableSources = false;
-
-          settings = {
-            sources = [
-              {name = "async_path";}
-              {name = "emoji";}
-              {name = "nvim_lsp";}
-              {name = "nvim_lsp_signature_help";}
-              {name = "luasnip";}
-              # {name = "cmdline";}
-            ];
-
-            snippet.expand = ''
-              function(args)
-                require('luasnip').lsp_expand(args.body)
+                vim.cmd([[
+                  let $BAT_THEME = "catppuccin"
+                  colorscheme catppuccin
+                ]])
               end
             '';
-
-            window = {
-              completion.border = "rounded";
-              completion.winhighlight = "Normal:Normal,FloatBorder:FloatBorder,CursorLine:Visual,Search:None";
-              documentation.border = "rounded";
+            opts = {
+              flavour = "latte"; # latte, frappe, macchiato, mocha
+              background = {
+                light = "latte";
+                dark = "mocha";
+              };
             };
+          }
 
-            mapping = {
-              __raw = ''
-                cmp.mapping.preset.insert({
-                  ['<Down>'] = cmp.mapping.select_next_item(),
-                  ['<Up>'] = cmp.mapping.select_prev_item(),
-                  ['<C-e>'] = cmp.mapping.abort(),
-                  ['<Esc>'] = cmp.mapping.abort(),
-                  ['<C-Up>'] = cmp.mapping.scroll_docs(-4),
-                  ['<C-Down>'] = cmp.mapping.scroll_docs(4),
-                  -- ['<C-Space>'] = cmp.complete(),
+          {
+            name = "lspconfig";
+            pkg = pkgs.vimPlugins.nvim-lspconfig;
+            dependencies = [
+              {
+                name = "cmp";
+                pkg = pkgs.vimPlugins.nvim-cmp;
+                dependencies = [
+                  {
+                    name = "cmp-async-path";
+                    pkg = pkgs.vimPlugins.cmp-async-path;
+                  }
+                  {
+                    name = "cmp-buffer";
+                    pkg = pkgs.vimPlugins.cmp-buffer;
+                    enabled = false;
+                  }
+                  {
+                    name = "cmp-cmdline";
+                    pkg = pkgs.vimPlugins.cmp-cmdline;
+                    enabled = false;
+                  }
+                  {
+                    name = "cmp-emoji";
+                    pkg = pkgs.vimPlugins.cmp-emoji;
+                  }
+                  {
+                    name = "cmp-nvim-lsp";
+                    pkg = pkgs.vimPlugins.cmp-nvim-lsp;
+                  }
+                  {
+                    name = "cmp-nvim-lsp-signature-help";
+                    pkg = pkgs.vimPlugins.cmp-nvim-lsp-signature-help;
+                  }
+                  {
+                    name = "cmp-luasnip";
+                    pkg = pkgs.vimPlugins.cmp_luasnip;
+                  }
+                ];
+                lazy = false;
+                config = ''
+                  function(_, opts)
+                    require("cmp").setup(opts)
+                  end
+                '';
+                opts = let
+                  sources = mylib.generators.toLuaObject [
+                    {name = "async_path";}
+                    # {name = "buffer";}
+                    # {name = "cmdline";}
+                    {name = "emoji";}
+                    {name = "nvim_lsp";}
+                    {name = "nvim_lsp_signature_help";}
+                    {name = "luasnip";}
+                  ];
+                in {
+                  __raw = ''
+                      function()
+                        local cmp = require("cmp")
+                        local luasnip = require("luasnip")
 
-                  ['<CR>'] = cmp.mapping(function(fallback)
-                    if cmp.visible() then
-                      if require('luasnip').expandable() then
-                        require('luasnip').expand()
-                      else
-                        cmp.confirm({ select = true })
+                        local has_words_before = function()
+                          unpack = unpack or table.unpack
+                          local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+                          return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+                        end
+
+                        return {
+                          sources = cmp.config.sources(${sources}),
+
+                          snippet = {
+                    expand = function(args)
+                    	require("luasnip").lsp_expand(args.body)
+                    end,
+                     },
+
+                          window = {
+                            completion = cmp.config.window.bordered(),
+                    documentation = cmp.config.window.bordered(),
+                            -- completion.border = "rounded",
+                            -- documentation.border = "rounded",
+                          },
+
+                          mapping = cmp.mapping.preset.insert({
+                            ["<Down>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
+                            ["<Up>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
+                            ["<C-e>"] = cmp.mapping.abort();
+                            ["<Esc>"] = cmp.mapping.abort();
+                            ["<C-Up>"] = cmp.mapping.scroll_docs(-4),
+                            ["<C-Down>"] = cmp.mapping.scroll_docs(4),
+                            ["<C-Space>"] = cmp.mapping.complete({}),
+
+                            ["<CR>"] = cmp.mapping.confirm({ select = true }),
+
+                            ["<Tab>"] = cmp.mapping(function(fallback)
+                              if cmp.visible() then
+                                cmp.select_next_item()
+                              elseif require("luasnip").expand_or_jumpable() then
+                                require("luasnip").expand_or_jump()
+                              elseif has_words_before() then
+                                cmp.complete()
+                              else
+                                fallback()
+                              end
+                            end, { "i", "s" }),
+
+                            ["<S-Tab>"] = cmp.mapping(function(fallback)
+                              if cmp.visible() then
+                                cmp.select_prev_item()
+                              elseif luasnip.jumpable(-1) then
+                                luasnip.jump(-1)
+                              else
+                                fallback()
+                              end
+                            end, { "i", "s" }),
+                          }),
+                        }
                       end
-                    else
-                      fallback()
-                    end
-                  end),
-
-                  ["<Tab>"] = cmp.mapping(function(fallback)
-                    if cmp.visible() then
-                      cmp.select_next_item()
-                    elseif require('luasnip').locally_jumpable(1) then
-                      require('luasnip').jump(1)
-                    else
-                      fallback()
-                    end
-                  end, { "i", "s" }),
-
-                  ["<S-Tab>"] = cmp.mapping(function(fallback)
-                    if cmp.visible() then
-                      cmp.select_prev_item()
-                    elseif require('luasnip').locally_jumpable(-1) then
-                      require('luasnip').jump(-1)
-                    else
-                      fallback()
-                    end
-                  end, { "i", "s" }),
-                })
-              '';
-            };
-
-            extraConfigLua = ''
-              -- local cmp = require('cmp')
-
-              -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
-              -- cmp.setup.cmdline({'/', "?" }, {
-              --   sources = {
-              --     { name = 'buffer' }
-              --   }
-              -- })
-
-              -- Set configuration for specific filetype.
-              -- cmp.setup.filetype('gitcommit', {
-              --   sources = cmp.config.sources({
-              --     { name = 'cmp_git' }, -- You can specify the `cmp_git` source if you were installed it.
-              --   }, {
-              --     { name = 'buffer' },
-              --   })
-              -- })
-
-              -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
-              -- cmp.setup.cmdline(':', {
-              --   sources = cmp.config.sources({
-              --     { name = 'path' }
-              --   }, {
-              --     { name = 'cmdline' }
-              --   }),
-              -- })
-
-              kind_icons = {
-                Text = "󰊄",
-                Method = "",
-                Function = "󰡱",
-                Constructor = "",
-                Field = "",
-                Variable = "󱀍",
-                Class = "",
-                Interface = "",
-                Module = "󰕳",
-                Property = "",
-                Unit = "",
-                Value = "",
-                Enum = "",
-                Keyword = "",
-                Snippet = "",
-                Color = "",
-                File = "",
-                Reference = "",
-                Folder = "",
-                EnumMember = "",
-                Constant = "",
-                Struct = "",
-                Event = "",
-                Operator = "",
-                TypeParameter = "",
+                  '';
+                };
               }
+              {
+                name = "illuminate";
+                pkg = pkgs.vimPlugins.vim-illuminate;
+                lazy = false;
+                config = ''
+                  function(_, opts)
+                    require("illuminate").configure(opts)
+                  end
+                '';
+                opts = {
+                  filetypesDenylist = [
+                    "DressingSelect"
+                    "Outline"
+                    "TelescopePrompt"
+                    "alpha"
+                    "harpoon"
+                    "toggleterm"
+                    "neo-tree"
+                    "Spectre"
+                    "reason"
+                  ];
+                };
+              }
+              # {
+              #   name = "inc-rename";
+              #   pkg = pkgs.vimPlugins.inc-rename-nvim;
+              #   config = ''
+              #     function(_, opts)
+              #       require("inc_rename").setup(opts)
+              #     end
+              #   '';
+              # }
+            ];
+            lazy = false;
+            config = let
+              servers = mylib.generators.toLuaObject [
+                {name = "cmake";}
+                {name = "clojure_lsp";}
+                {name = "clangd";}
+                {name = "texlab";}
+                {name = "rust_analyzer";}
+                {name = "pyright";}
+                {name = "nil_ls";}
+
+                {
+                  name = "hls";
+                  cmd = [
+                    "haskell-language-server-wrapper"
+                    "--lsp"
+                  ];
+                }
+              ];
+            in ''
+              function(_, opts)
+                local __lspOnAttach = function(client, bufnr) end
+
+                local __lspCapabilities = function()
+                  capabilities = vim.lsp.protocol.make_client_capabilities()
+                  capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
+                  return capabilities
+                end
+
+                local __setup = {
+                  on_attach = __lspOnAttach,
+                  capabilities = __lspCapabilities(),
+                }
+
+                for i, server in ipairs(${servers}) do
+                  if type(server) == "string" then
+                    require("lspconfig")[server].setup(__setup)
+                  else
+                    local options = server.extraOptions
+
+                    if options == nil then
+                      options = __setup
+                    else
+                      options = vim.tbl_extend("keep", options, __setup)
+                    end
+
+                    require("lspconfig")[server.name].setup(options)
+                  end
+                end
+              end
             '';
-          };
-        };
+          }
 
-        cmp-async-path.enable = true;
-        cmp-buffer.enable = true;
-        cmp-emoji.enable = true;
-        cmp-nvim-lsp.enable = true;
-        cmp-nvim-lsp-signature-help.enable = true;
-        cmp_luasnip.enable = true;
-        # cmp-cmdline.enable = true;
+          {
+            name = "web-devicons";
+            pkg = pkgs.vimPlugins.nvim-web-devicons;
+            lazy = false;
+            config = ''
+              function(_, opts)
+                require("nvim-web-devicons").setup(opts)
+              end
+            '';
+          }
 
-        # Comment/Uncomment line/selection etc.
-        comment = {
-          enable = true;
+          #
+          # Also available in NixVim
+          #
 
-          settings = {
-            mappings.basic = true; # Apparently required for opleader/toggler config
-            mappings.extra = false;
-            opleader.line = "<C-c>";
-            toggler.line = "<C-c>";
-          };
-        };
-
-        # TODO: Format on save + format region after paste
-        # File formatter in addition to LSP (uses LSP as fallback)
-        conform-nvim = {
-          enable = true;
-
-          formattersByFt = {
-            c = ["clang-format"];
-            h = ["clang-format"];
-            cpp = ["clang-format"];
-            hpp = ["clang-format"];
-            css = [["prettierd" "prettier"]];
-            html = [["prettierd" "prettier"]];
-            java = ["google-java-format"];
-            javascript = [["prettierd" "prettier"]];
-            markdown = [["prettierd" "prettier"]];
-            nix = ["alejandra"];
-            python = ["black"];
-            rust = ["rustfmt"];
-          };
-
-          # TODO: Autoformat https://github.com/redyf/Neve/blob/main/config/lsp/conform.nix
-          # formatOnSave = " [???] ";
-        };
-
-        # TODO: Figure out how debugging from nvim works...
-        # Debug-Adapter-Protocol
-        # dap = {
-        #   enable = false;
-        # };
-
-        # TODO: Figure out how diff-mode works...
-        # diffview = {
-        #   enable = false;
-        # };
-
-        # TODO: Config
-        flash = {
-          enable = true;
-        };
-
-        # Display message of commit that modified the current line
-        gitmessenger = {
-          enable = true;
-          noDefaultMappings = true;
-        };
-
-        # Alternative to gitgutter
-        gitsigns = {
-          enable = true;
-
-          settings = {
-            current_line_blame = false;
-          };
-        };
-
-        # Markdown etc. heading highlights
-        headlines = {
-          enable = true;
-        };
-
-        # Alternative to cursorline
-        illuminate = {
-          enable = true;
-          filetypesDenylist = [
-            "DressingSelect"
-            "Outline"
-            "TelescopePrompt"
-            "alpha"
-            "harpoon"
-            "toggleterm"
-            "neo-tree"
-            "Spectre"
-            "reason"
-          ];
-        };
-
-        # Live-preview of LSP renamings
-        inc-rename = {
-          enable = true;
-        };
-
-        # Indent to current level on empty line
-        intellitab = {
-          enable = true;
-        };
-
-        # Open file at last place
-        lastplace = {
-          enable = true;
-        };
-
-        lazygit = {
-          enable = true;
-        };
-
-        # Linting as addition to LSP
-        lint = {
-          enable = true;
-
-          lintersByFt = {
-            c = ["clang-tidy"];
-            h = ["clang-tidy"];
-            cpp = ["clang-tidy"];
-            hpp = ["clang-tidy"];
-            clojure = ["clj-kondo"];
-            java = ["checkstyle"];
-            javascript = ["eslint_d"];
-            markdown = ["vale"];
-            nix = ["statix"];
-            python = ["flake8"];
-            rust = ["clippy"];
-            text = ["vale"];
-          };
-        };
-
-        # Language-Server-Protocol
-        lsp = {
-          enable = true;
-
-          servers = {
-            clangd.enable = true;
-            clojure-lsp.enable = true;
-            cmake.enable = true;
-            cssls.enable = true;
-            dockerls.enable = true;
-            eslint.enable = true;
-            hls.enable = true;
-            html.enable = true;
-            java-language-server.enable = true;
-            jsonls.enable = true;
-            ltex = {
-              enable = true;
-              autostart = true;
+          {
+            name = "better-escape";
+            pkg = pkgs.vimPlugins.better-escape-nvim;
+            lazy = false;
+            config = ''
+              function(_, opts)
+                require("better_escape").setup(opts)
+              end
+            '';
+            opts = {
+              mapping = ["jk"];
+              timeout = 200; # In ms
             };
-            marksman.enable = true;
-            nil_ls.enable = true;
-            pyright.enable = true;
-            rust-analyzer = {
-              enable = true;
-              installCargo = false;
-              installRustc = false;
+          }
+
+          {
+            name = "chadtree";
+            pkg = pkgs.vimPlugins.chadtree;
+            config = ''
+              function(_, opts)
+                vim.api.nvim_set_var("chadtree_settings", opts)
+              end
+            '';
+            opts = {
+              theme.text_colour_set = "nerdtree_syntax_dark";
+              xdg = true;
             };
-            tailwindcss.enable = true;
-            texlab.enable = true;
-          };
+          }
 
-          keymaps = {
-            lspBuf = {
-              K = {
-                action = "hover";
-                desc = "Hover information";
-              };
-              "<leader>cr" = {
-                action = "rename";
-                desc = "Rename symbol";
-              };
-              "<leader>ca" = {
-                action = "code_action";
-                desc = "Show code actions";
-              };
-            };
-            diagnostic = {
-              "<leader>cD" = {
-                action = "open_float";
-                desc = "Show line diagnostic";
-              };
-            };
-          };
-        };
-
-        # lsp-format = {
-        #   enable = false;
-        # };
-
-        # Statusline, alternative to airline
-        lualine = {
-          enable = true;
-
-          alwaysDivideMiddle = true;
-          globalstatus = true;
-          ignoreFocus = ["neo-tree" "chadtree"];
-          extensions = ["fzf" "chadtree" "neo-tree" "toggleterm" "trouble"];
-
-          sections = {
-            lualine_a = [
+          {
+            name = "comment";
+            pkg = pkgs.vimPlugins.comment-nvim;
+            dependencies = [
               {
-                name = "mode";
-                # extraConfig = {
-                #   separator = {
-                #     left = "";
-                #   };
-                #   right_padding = "2";
-                # };
+                name = "ts-context-commentstring";
+                pkg = pkgs.vimPlugins.nvim-ts-context-commentstring;
+                lazy = false;
+                config = ''
+                  function(_, opts)
+                    vim.g.skip_ts_context_commentstring_module = true -- Skip compatibility checks
+
+                    require("ts_context_commentstring").setup(opts);
+                  end
+                '';
               }
             ];
-            lualine_b = ["branch" "diff" "diagnostics"];
-            lualine_c = [
-              {
-                name = "filename";
-                extraConfig = {
-                  path = 1;
+            config = ''
+              function(_, opts)
+                require("Comment").setup(opts)
+              end
+            '';
+            opts = {
+              pre_hook = {__raw = "function() require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook() end";};
+
+              mappings.basic = true; # Apparently required for opleader/toggler config
+              mappings.extra = false;
+              opleader.line = "<C-c>";
+              toggler.line = "<C-c>";
+              opleader.block = "<C-b>";
+              toggler.block = "<C-b>";
+            };
+          }
+
+          {
+            name = "conform";
+            pkg = pkgs.vimPlugins.conform-nvim;
+            config = ''
+              function(_, opts)
+                require("conform").setup(opts)
+              end
+            '';
+            opts = {
+              formatters_by_ft = {
+                c = ["clang-format"];
+                h = ["clang-format"];
+                cpp = ["clang-format"];
+                hpp = ["clang-format"];
+                css = [["prettierd" "prettier"]];
+                html = [["prettierd" "prettier"]];
+                java = ["google-java-format"];
+                javascript = [["prettierd" "prettier"]];
+                markdown = [["prettierd" "prettier"]];
+                nix = ["alejandra"];
+                python = ["black"];
+                rust = ["rustfmt"];
+              };
+            };
+          }
+
+          # TODO: Config
+          {
+            name = "flash";
+            pkg = pkgs.vimPlugins.flash-nvim;
+            config = ''
+              function(_, opts)
+                require("flash").setup(opts)
+              end
+            '';
+          }
+
+          {
+            name = "gitmessenger";
+            pkg = pkgs.vimPlugins.git-messenger-vim;
+            config = ''
+              function(_, opts)
+                for k, v in pairs(opts) do
+                  vim.g[k] = v
+                end
+              end
+            '';
+            opts = {
+              git_messenger_no_default_mappings = true;
+              git_messenger_floating_win_opts = {
+                border = "rounded";
+              };
+            };
+          }
+
+          {
+            name = "gitsigns";
+            pkg = pkgs.vimPlugins.gitsigns-nvim;
+            lazy = false;
+            config = ''
+              function(_, opts)
+                require("gitsigns").setup(opts)
+              end
+            '';
+            opts = {
+              current_line_blame = false;
+            };
+          }
+
+          {
+            name = "headlines";
+            pkg = pkgs.vimPlugins.headlines-nvim;
+            config = ''
+              function(_, opts)
+                require("headlines").setup(opts)
+              end
+            '';
+          }
+
+          {
+            name = "intellitab";
+            pkg = pkgs.vimPlugins.intellitab-nvim;
+            lazy = false;
+          }
+
+          {
+            name = "lastplace";
+            pkg = pkgs.vimPlugins.nvim-lastplace;
+            lazy = false;
+            config = ''
+              function(_, opts)
+                require("nvim-lastplace").setup(opts)
+              end
+            '';
+          }
+
+          {
+            name = "lazygit";
+            pkg = pkgs.vimPlugins.lazygit-nvim;
+          }
+
+          {
+            name = "lint";
+            pkg = pkgs.vimPlugins.nvim-lint;
+            lazy = false;
+            config = ''
+              function(_, opts)
+                local lint = require("lint")
+
+                for k, v in pairs(opts) do
+                  lint[k] = v
+                end
+              end
+            '';
+            opts = {
+              linters_by_ft = {
+                c = ["clang-tidy"];
+                h = ["clang-tidy"];
+                cpp = ["clang-tidy"];
+                hpp = ["clang-tidy"];
+                clojure = ["clj-kondo"];
+                java = ["checkstyle"];
+                javascript = ["eslint_d"];
+                markdown = ["vale"];
+                nix = ["statix"];
+                python = ["flake8"];
+                rust = ["clippy"];
+                text = ["vale"];
+              };
+            };
+          }
+
+          {
+            name = "lualine";
+            pkg = pkgs.vimPlugins.lualine-nvim;
+            lazy = false;
+            config = ''
+              function(_, opts)
+                require("lualine").setup(opts)
+              end
+            '';
+            opts = {
+              extensions = ["fzf" "chadtree" "neo-tree" "toggleterm" "trouble"];
+
+              options = {
+                always_divide_middle = true;
+                globalstatus = true;
+                ignore_focus = ["neo-tree" "chadtree"];
+                section_separators = {
+                  left = "";
+                  right = "";
+                  # left = "";
+                  # right = "";
                 };
-              }
-            ];
 
-            lualine_x = ["filetype" "encoding" "fileformat"];
-            lualine_y = ["progress" "searchcount" "selectioncount"];
-            lualine_z = [
-              {
-                name = "location";
-                # extraConfig = {
-                #   separator = {
-                #     right = "";
-                #   };
-                #   left_padding = "2";
-                # };
-              }
-            ];
-          };
-
-          tabline = {
-            lualine_a = ["buffers"];
-            lualine_z = ["tabs"];
-          };
-
-          sectionSeparators = {
-            left = "";
-            right = "";
-            # left = "";
-            # right = "";
-          };
-
-          componentSeparators = {
-            left = "";
-            right = "";
-            # left = "";
-            # right = "";
-          };
-        };
-
-        # TODO: Snippet configs
-        luasnip = {
-          enable = true;
-        };
-
-        # Show marks in the gutter
-        # marks = {
-        #   enable = false;
-        # };
-
-        # Structural overview
-        navbuddy = {
-          enable = true;
-
-          lsp.autoAttach = true;
-          window.border = "rounded";
-        };
-
-        navic = {
-          enable = true;
-
-          lsp.autoAttach = true;
-          click = true;
-          highlight = true;
-        };
-
-        # Generate doc comments
-        # neogen = {
-        #   enable = true;
-        # };
-
-        # Interact with test frameworks
-        # neotest = {
-        #   enable = false;
-        # };
-
-        # neo-tree = {
-        #   enable = true;
-
-        #   enableDiagnostics = true;
-        #   enableGitStatus = true;
-        #   enableModifiedMarkers = true;
-        #   enableRefreshOnWrite = true;
-        #   closeIfLastWindow = true;
-        #   popupBorderStyle = "rounded";
-
-        #   buffers = {
-        #     bindToCwd = true;
-        #     followCurrentFile = {
-        #       enabled = true; # TODO: Doesn't work
-        #     };
-        #   };
-
-        #   window = {
-        #     width = 40;
-        #     height = 15;
-        #     autoExpandWidth = false;
-        #     mappings = {
-        #       "<space>" = "none";
-        #     };
-        #   };
-        # };
-
-        # NeoVim UI refresh, alternative to fidget, dressing, notify and lspsaga
-        noice = {
-          enable = true;
-
-          presets = {
-            bottom_search = false;
-            command_palette = true;
-            long_message_to_split = true;
-            inc_rename = true;
-            lsp_doc_border = true;
-          };
-
-          lsp = {
-            documentation = {
-              opts = {
-                lang = "markdown";
-                replace = true;
-                render = "plain";
-                border = "rounded"; # single or rounded
-                format = ["{message}"];
-                win_options = {
-                  concealcursor = "n";
-                  conceallevel = 3;
+                component_separators = {
+                  left = "";
+                  right = "";
+                  # left = "";
+                  # right = "";
                 };
               };
-              view = "hover";
-            };
 
-            override = {
-              "vim.lsp.util.convert_input_to_markdown_lines" = true;
-              "vim.lsp.util.stylize_markdown" = true;
-              "cmp.entry.get_documentation" = true;
-            };
-          };
+              sections = {
+                lualine_a = [
+                  {
+                    name = "mode";
+                    # extraConfig = {
+                    #   separator = {
+                    #     left = "";
+                    #   };
+                    #   right_padding = "2";
+                    # };
+                  }
+                ];
+                lualine_b = ["branch" "diff" "diagnostics"];
+                lualine_c = [
+                  {
+                    name = "filename";
+                    extraConfig = {
+                      path = 1;
+                    };
+                  }
+                ];
 
-          notify = {
-            enabled = true;
-          };
-
-          popupmenu = {
-            enabled = true;
-            backend = "nui"; # cmp completion is broken
-          };
-
-          # cmdline.enabled = false;
-          # messages.enabled = false;
-
-          routes = [
-            # Hide inline search count info
-            {
-              filter = {
-                event = "msg_show";
-                kind = "search_count";
+                lualine_x = ["filetype" "encoding" "fileformat"];
+                lualine_y = ["progress" "searchcount" "selectioncount"];
+                lualine_z = [
+                  {
+                    name = "location";
+                    # extraConfig = {
+                    #   separator = {
+                    #     right = "";
+                    #   };
+                    #   left_padding = "2";
+                    # };
+                  }
+                ];
               };
-              opts = {skip = true;};
-            }
-          ];
-        };
 
-        # TODO: Background color in terminal is borked
-        # Backend noice.notify
-        notify = {
-          enable = true;
+              tabline = {
+                lualine_a = ["buffers"];
+                lualine_z = ["tabs"];
+              };
+            };
+          }
 
-          # backgroundColour = ''
-          #   function()
-          #     return vim.api.nvim_command_output("echo synIDattr(hlID("Normal"), "bg")")
-          #   end
-          # '';
-        };
+          # TODO: Snippet configs
+          {
+            name = "luasnip";
+            pkg = pkgs.vimPlugins.luasnip;
+            config = ''
+              function(_, opts)
+                require("luasnip").config.set_config(opts)
+              end
+            '';
+          }
 
-        # Alternative to autoclose
-        nvim-autopairs = {
-          enable = true;
-        };
+          {
+            name = "navbuddy";
+            pkg = pkgs.vimPlugins.nvim-navbuddy;
+            config = ''
+              function(_, opts)
+                local actions = require("nvim-navbuddy.actions") -- ?
+                require("nvim-navbuddy").setup(opts)
+              end
+            '';
+            opts = {
+              lsp.auto_attach = true;
+              window.border = "rounded";
+            };
+          }
 
-        # Colorize color hex codes etc.
-        nvim-colorizer = {
-          enable = true;
-        };
+          # TODO: Doesn't show up
+          {
+            name = "navic";
+            pkg = pkgs.vimPlugins.nvim-navic;
+            config = ''
+              function(_, opts)
+                require("nvim-navic").setup(opts)
+              end
+            '';
+            opts = {
+              lsp.auto_attach = true;
+              click = true;
+              highlight = true;
+            };
+          }
 
-        # Code folding
-        nvim-ufo = {
-          enable = true;
-        };
+          {
+            name = "noice";
+            pkg = pkgs.vimPlugins.noice-nvim;
+            dependencies = [
+              {
+                name = "nui"; # For noice
+                pkg = pkgs.vimPlugins.nui-nvim;
+                lazy = false;
+              }
+            ];
+            lazy = false;
+            config = ''
+              function(_, opts)
+                require("noice").setup(opts)
+              end
+            '';
+            opts = {
+              presets = {
+                bottom_search = false;
+                command_palette = true;
+                long_message_to_split = true;
+                inc_rename = true;
+                lsp_doc_border = true;
+              };
 
-        # Colorize paranthesis
-        rainbow-delimiters = {
-          enable = true;
-        };
+              lsp = {
+                documentation = {
+                  opts = {
+                    lang = "markdown";
+                    replace = true;
+                    render = "plain";
+                    border = "rounded"; # single or rounded
+                    format = ["{message}"];
+                    win_options = {
+                      concealcursor = "n";
+                      conceallevel = 3;
+                    };
+                  };
+                  view = "hover";
+                };
 
-        # TODO: Lua deps not found
-        # REST/HTTP client
-        # rest = {
-        #   enable = false;
-        # };
+                override = {
+                  "vim.lsp.util.convert_input_to_markdown_lines" = true;
+                  "vim.lsp.util.stylize_markdown" = true;
+                  "cmp.entry.get_documentation" = true;
+                };
+              };
 
-        # Work with pairs of delimiters
-        sandwich = {
-          enable = true;
-        };
+              notify = {
+                enabled = true;
+              };
 
-        # Automatically infer tab width
-        sleuth = {
-          enable = true;
-        };
+              popupmenu = {
+                enabled = true;
+                backend = "nui"; # cmp completion is broken
+              };
 
-        # Select something
-        telescope = {
-          enable = true;
+              # cmdline.enabled = false;
+              # messages.enabled = false;
 
-          extensions = {
-            fzf-native.enable = true;
-            ui-select.enable = true;
-            undo.enable = true;
-          };
+              routes = [
+                # Hide inline search count info
+                {
+                  filter = {
+                    event = "msg_show";
+                    kind = "search_count";
+                  };
+                  opts = {skip = true;};
+                }
+              ];
+            };
+          }
 
-          settings = {
-            defaults = {
-              mappings = {
-                i = {
-                  "<esc>" = {
-                    __raw = ''
-                      function(...)
-                        return require("telescope.actions").close(...)
-                      end
-                    '';
+          {
+            name = "notify";
+            pkg = pkgs.vimPlugins.nvim-notify;
+            lazy = false;
+            config = ''
+              function(_, opts)
+                vim.notify = require("notify")
+                require("notify").setup(opts)
+              end
+            '';
+          }
+
+          {
+            name = "autopairs";
+            pkg = pkgs.vimPlugins.nvim-autopairs;
+            lazy = false;
+            config = ''
+              function(_, opts)
+                require("nvim-autopairs").setup(opts)
+              end
+            '';
+          }
+
+          {
+            name = "colorizer";
+            pkg = pkgs.vimPlugins.nvim-colorizer-lua;
+            lazy = false;
+            config = ''
+              function(_, opts)
+                require("colorizer").setup(opts)
+              end
+            '';
+            opts = {
+              filtetypes = null;
+              user_default_options = null;
+              buftypes = null;
+            };
+          }
+
+          {
+            name = "ufo";
+            pkg = pkgs.vimPlugins.nvim-ufo;
+            dependencies = [
+              {
+                name = "promise";
+                pkg = pkgs.vimPlugins.promise-async;
+              }
+            ];
+            config = ''
+              function(_, opts)
+                require("ufo").setup(opts)
+              end
+            '';
+          }
+
+          {
+            name = "rainbow-delimiters";
+            pkg = pkgs.vimPlugins.rainbow-delimiters-nvim;
+            lazy = false;
+          }
+
+          {
+            name = "sandwich";
+            pkg = pkgs.vimPlugins.vim-sandwich;
+            lazy = false;
+          }
+
+          {
+            name = "sleuth";
+            pkg = pkgs.vimPlugins.vim-sleuth;
+            lazy = false;
+          }
+
+          {
+            name = "telescope";
+            pkg = pkgs.vimPlugins.telescope-nvim;
+            dependencies = [
+              {
+                name = "plenary"; # For telescope
+                pkg = pkgs.vimPlugins.plenary-nvim;
+              }
+              {
+                name = "telescope-undo";
+                pkg = pkgs.vimPlugins.telescope-undo-nvim;
+              }
+              {
+                name = "telescope-ui-select";
+                pkg = pkgs.vimPlugins.telescope-ui-select-nvim;
+              }
+              {
+                name = "telescope-fzf-native";
+                pkg = pkgs.vimPlugins.telescope-fzf-native-nvim;
+              }
+            ];
+            lazy = false;
+            config = let
+              extensions = mylib.generators.toLuaObject [
+                "undo"
+                "ui-select"
+                "fzf"
+              ];
+            in ''
+              function(_, opts)
+                local telescope = require("telescope")
+                telescope.setup(opts)
+
+                for i, extension in ipairs(${extensions}) do
+                    telescope.load_extension(extension)
+                end
+              end
+            '';
+            opts = {
+              defaults = {
+                mappings = {
+                  i = {
+                    "<Esc>" = {__raw = ''function(...) return require("telescope.actions").close(...) end'';};
                   };
                 };
               };
             };
-          };
-        };
+          }
 
-        toggleterm = {
-          enable = true;
-
-          settings = {
-            open_mapping = "[[<C-t>]]";
-            hide_numbers = true;
-            shade_terminals = true;
-            start_in_insert = true;
-            terminal_mappings = true;
-            persist_mode = true;
-            insert_mappings = true;
-            close_on_exit = true;
-            shell = "fish";
-            direction = "horizontal"; # 'vertical' | 'horizontal' | 'window' | 'float'
-            auto_scroll = true;
-            float_opts = {
-              border = "curved"; # 'single' | 'double' | 'shadow' | 'curved'
-              width = 80;
-              height = 20;
-              winblend = 0;
+          {
+            name = "toggleterm";
+            pkg = pkgs.vimPlugins.toggleterm-nvim;
+            config = ''
+              function(_, opts)
+                require("toggleterm").setup(opts)
+              end
+            '';
+            opts = {
+              open_mapping = "[[<C-t>]]"; # TODO: Doesn't work
+              hide_numbers = true;
+              shade_terminals = true;
+              start_in_insert = true;
+              terminal_mappings = true;
+              persist_mode = true;
+              insert_mappings = true;
+              close_on_exit = true;
+              shell = "fish";
+              direction = "horizontal"; # 'vertical' | 'horizontal' | 'window' | 'float'
+              auto_scroll = true;
+              float_opts = {
+                border = "curved"; # 'single' | 'double' | 'shadow' | 'curved'
+                width = 80;
+                height = 20;
+                winblend = 0;
+              };
             };
-          };
-        };
+          }
 
-        treesitter = {
-          enable = true;
+          {
+            name = "treesitter";
+            pkg = pkgs.vimPlugins.nvim-treesitter.withAllGrammars;
+            lazy = false;
+            config = ''
+              function(_, opts)
+                require("nvim-treesitter.configs").setup(opts)
+              end
+            '';
+            opts = {
+              highlight.enable = true;
+              indent.enable = true;
 
-          ensureInstalled = "all";
-          folding = true;
-          indent = true; # Required by intellitab
-          nixvimInjections = true;
+              # TODO: Doesn't work
+              incremental_selection = {
+                enable = true;
+                keymaps = {
+                  "init_selection" = "gnn";
+                  "node_decremental" = "grm";
+                  "node_incremental" = "grn";
+                  "scope_incremental" = "grc";
+                };
+              };
+            };
+          }
 
-          incrementalSelection = {
-            enable = true;
-          };
-        };
+          {
+            name = "trim";
+            pkg = pkgs.vimPlugins.trim-nvim;
+            lazy = false;
+            config = ''
+              function(_, opts)
+                require("trim").setup(opts)
+              end
+            '';
+          }
 
-        # Trim whitespace
-        trim = {
-          enable = true;
-        };
+          {
+            name = "trouble";
+            pkg = pkgs.vimPlugins.trouble-nvim;
+            config = ''
+              function(_, opts)
+                require("trouble").setup(opts)
+              end
+            '';
+          }
 
-        # Detect correct comment string, e.g. for inline langs
-        ts-context-commentstring = {
-          enable = true;
-        };
+          {
+            name = "bbye";
+            pkg = pkgs.vimPlugins.vim-bbye;
+          }
 
-        # Window listing detected linting/lsp problems
-        trouble = {
-          enable = true;
-        };
+          {
+            name = "which-key";
+            pkg = pkgs.vimPlugins.which-key-nvim;
+            lazy = false;
+            priority = 100;
+            config = ''
+              function(_, opts)
+                require("which-key").setup(opts)
+              end
+            '';
+          }
 
-        # Don't mess up splits when closing buffers
-        vim-bbye = {
-          enable = true;
-        };
-
-        # TODO: Setup
-        # LaTeX
-        # vimtex = {
-        #   enable = true;
-        #
-        #   texlivePackage = null; # Don't auto-install
-        # };
-
-        # Display keybindings help
-        which-key = {
-          enable = true;
-        };
-
-        # TODO: Bindings
-        # Clipboard enhancements (e.g. history)
-        yanky = {
-          enable = true;
-        };
+          {
+            name = "yanky"; # TODO: Bindings
+            pkg = pkgs.vimPlugins.yanky-nvim;
+            lazy = false;
+            config = ''
+              function(_, opts)
+                require("yanky").setup(opts)
+              end
+            '';
+          }
+        ];
       };
+
+      ##################################################################################################################################
+      # NixVim Plugins                                                                                                                 #
+      ##################################################################################################################################
+
+      # TODO
+      # clangd-extensions = {
+      #   enable = true;
+      # };
+
+      # TODO: Figure out how debugging from nvim works...
+      # Debug-Adapter-Protocol
+      # dap = {
+      #   enable = true;
+      # };
+
+      # TODO: Figure out how diff-mode works...
+      # diffview = {
+      #   enable = true;
+      # };
+
+      # TODO: Need enabled for conform fallback?
+      # lsp-format = {
+      #   enable = true;
+      # };
+
+      # TODO
+      # Show marks in the gutter
+      # marks = {
+      #   enable = true;
+      # };
+
+      # TODO
+      # Generate doc comments
+      # neogen = {
+      #   enable = true;
+      # };
+
+      # TODO
+      # Interact with test frameworks
+      # neotest = {
+      #   enable = true;
+      # };
+
+      # TODO: Lua deps not found
+      # REST/HTTP client
+      # rest = {
+      #   enable = true;
+      # };
+
+      # TODO: Setup
+      # LaTeX
+      # vimtex = {
+      #   enable = true;
+      #
+      #   texlivePackage = null; # Don't auto-install
+      # };
     };
   };
 }
