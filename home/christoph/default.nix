@@ -460,19 +460,21 @@ rec {
     # vale # Why not lint everything (including english)?
 
     # TODO: Development module, I need multiple modules to be able to add python packages to a single python install...
-    (python311.withPackages (p: with p; [
-      # p.rich
-      # p.numpy
-      # p.scipy
-      # p.matplotlib
-      # p.pillow # for ranger
-      # p.pygments # for emacs
+    (python311.withPackages (p:
+      with p; [
+        # p.rich
+        # p.numpy
+        # p.scipy
+        # p.matplotlib
+        # p.pillow # for ranger
+        # p.pygments # for emacs
 
-      # For nvim CHADtree
-      pyyaml
-      std2
-      pynvim
-    ]))
+        # For nvim CHADtree
+        pyyaml
+        std2
+        pynvim
+        pynvim-pp
+      ]))
     jetbrains.clion
     jetbrains.rust-rover
     jetbrains.pycharm-professional

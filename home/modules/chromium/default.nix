@@ -14,12 +14,13 @@ in {
   options.modules.chromium = import ./options.nix {inherit lib mylib;};
 
   config = mkIf cfg.enable {
-    home.packages = with pkgs; builtins.concatLists [
-      (optionals cfg.google [
-        google-chrome # Trash, but required for decker pdf export
-        (pkgs.writeShellScriptBin "chrome" "exec -a $0 ${google-chrome}/bin/google-chrome-stable $@")
-      ])
-    ];
+    home.packages = with pkgs;
+      builtins.concatLists [
+        (optionals cfg.google [
+          google-chrome # Trash, but required for decker pdf export
+          (pkgs.writeShellScriptBin "chrome" "exec -a $0 ${google-chrome}/bin/google-chrome-stable $@")
+        ])
+      ];
 
     programs.chromium = {
       enable = true;

@@ -30,7 +30,10 @@
     linkConfig = {
       # This corresponds to the [LINK] section
       # RequiredForOnline = "routable";
-      RequiredForOnline = if routable then "routable" else "no"; # Don't make nixos-rebuild wait for systemd-networkd-wait-online.service
+      RequiredForOnline =
+        if routable
+        then "routable"
+        else "no"; # Don't make nixos-rebuild wait for systemd-networkd-wait-online.service
     };
   };
 
@@ -76,7 +79,10 @@
     linkConfig = {
       # This corresponds to the [LINK] section
       # RequiredForOnline = "routable";
-      RequiredForOnline = if routable then "routable" else "no"; # Don't make nixos-rebuild wait for systemd-networkd-wait-online.service
+      RequiredForOnline =
+        if routable
+        then "routable"
+        else "no"; # Don't make nixos-rebuild wait for systemd-networkd-wait-online.service
     };
   };
 
