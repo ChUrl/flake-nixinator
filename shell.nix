@@ -136,5 +136,10 @@ pkgs.devshell.mkShell {
       help = "Display the wanted dynamic libraries by a binary";
       command = "echo 'ldd (readlink -f (which <arg>))'";
     }
+    {
+      name = "help-closure";
+      help = "Display the closure of a package";
+      command = "echo 'nix path-info --recursive --size --closure-size --human-readable (readlink -f (which <arg>))'";
+    }
   ];
 }
