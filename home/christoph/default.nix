@@ -468,12 +468,8 @@ rec {
         # p.matplotlib
         # p.pillow # for ranger
         # p.pygments # for emacs
-
-        # For nvim CHADtree
-        pyyaml
-        std2
-        pynvim
-        pynvim-pp
+        # flake8 # Linter
+        # black
       ]))
     jetbrains.clion
     jetbrains.rust-rover
