@@ -92,12 +92,12 @@
 
         # VAAPI/VDPAU: https://nixos.wiki/wiki/Accelerated_Video_Playback
         vaapiVdpau # Taken from wiki, this is also part of nixos-hardware/common/gpu/nvidia
+        libvdpau-va-gl # Taken from wiki
 
-        # libvdpau-va-gl # Taken from wiki, but for Intel?
         # libvdpau # NOTE: Don't know if needed/where it belongs...
         # libva # NOTE: Don't know if needed/where it belongs...
 
-        # nvidia-vaapi-driver # Wild guess
+        nvidia-vaapi-driver # Experimental, doesn't work with chromium
       ];
     };
 
@@ -106,6 +106,10 @@
   };
 
   # environment.variables.AMD_VULKAN_ICD = "RADV"; # Choose mesa driver by default
+  environment.variables = {
+    LIBVA_DRIVER_NAME = "nvidia";
+    GBM_BACKEND = "nvidia-drm";
+  };
 
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
 }
