@@ -40,7 +40,7 @@ in {
 
       (optionalAttrs cfg.vaapi {
         # LIBVA_DRIVER_NAME = "radeonsi"; # "nvidia" for Nvidia card
-        LIBVA_DRIVER_NAME = "nvidia";
+        # LIBVA_DRIVER_NAME = "nvidia"; # Specified in hardware-configuration
         MOZ_DISABLE_RDD_SANDBOX = 1;
       })
     ];
@@ -161,11 +161,11 @@ in {
               # "gfx.webrender.enabled" = true; # Does not exist?
               "gfx.x11-egl.force-enabled" = true;
               "layers.acceleration.force-enabled" = true;
-              # "media.av1.enabled" = false;
+              "media.av1.enabled" = true;
               "media.ffmpeg.vaapi.enabled" = true;
               "media.hardware-video-decoding.force-enabled" = true;
-              # "media.rdd-ffmpeg.enabled" = true; # Default value
-              # "widget.dmabuf.force-enabled" = true;
+              "media.rdd-ffmpeg.enabled" = true; # Default value
+              "widget.dmabuf.force-enabled" = true;
               # "widget.wayland-dmabuf-vaapi.enabled" = true; # Does not exist?
             })
 
