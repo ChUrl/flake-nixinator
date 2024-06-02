@@ -45,7 +45,7 @@
   swapDevices = lib.mkForce [
     # {
     #   device = "/var/swap";
-    #   # size = 1024 * 16 * 2; # twice the RAM for hibernation
+    #   # size = 1024 * 32 * 2; # twice the RAM for hibernation
     #   size = 1024 * 8; # Without hibernation 4.0 GB to 0.5 x RAM
     # }
   ];
@@ -75,7 +75,7 @@
     nvidia = {
       modesetting.enable = true; # Not officially supported by NVidia but needed for wayland
       open = false; # TODO: Build failure on 2024-18-01
-      nvidiaSettings = true;
+      nvidiaSettings = false; # Those are for x-server
     };
 
     # video.hidpi.enable = lib.mkDefault true; # No longer has any effect
@@ -91,21 +91,21 @@
         # amdvlk # RADV (mesa) and AMDVLK (amd) can be used simultaneously
 
         # VAAPI/VDPAU: https://nixos.wiki/wiki/Accelerated_Video_Playback
-        vaapiVdpau # Taken from wiki
-        libvdpau-va-gl # Taken from wiki
-        libvdpau # NOTE: Don't know if needed/where it belongs...
-        libva # NOTE: Don't know if needed/where it belongs...
+        vaapiVdpau # Taken from wiki, this is also part of nixos-hardware/common/gpu/nvidia
 
-        nvidia-vaapi-driver
+        # libvdpau-va-gl # Taken from wiki, but for Intel?
+        # libvdpau # NOTE: Don't know if needed/where it belongs...
+        # libva # NOTE: Don't know if needed/where it belongs...
+
+        # nvidia-vaapi-driver # Wild guess
       ];
     };
 
-    sane.enable = true; # Scanning
-
-    xpadneo.enable = true; # Xbox Controller
+    # sane.enable = true; # Scanning
+    # xpadneo.enable = true; # Xbox Controller
   };
 
-  environment.variables.AMD_VULKAN_ICD = "RADV"; # Choose mesa driver by default
+  # environment.variables.AMD_VULKAN_ICD = "RADV"; # Choose mesa driver by default
 
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
 }
