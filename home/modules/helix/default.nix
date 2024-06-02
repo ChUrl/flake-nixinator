@@ -15,6 +15,11 @@ in {
   options.modules.helix = import ./options.nix {inherit lib mylib;};
 
   config = mkIf cfg.enable {
+    home.sessionVariables = {
+      EDITOR = "hx";
+      VISUAL = "hx";
+    };
+
     programs.helix = {
       enable = true;
 
