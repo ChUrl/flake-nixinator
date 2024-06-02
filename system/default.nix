@@ -208,45 +208,51 @@ with mylib.networking; {
 
     removedAssociations = {
       "application/pdf" = "chromium-browser.desktop";
+      "text/plain" = "code.desktop";
     };
 
-    defaultApplications = {
+    defaultApplications = let
+      textEditor = "neovide.desktop"; # Helix.desktop
+      videoPlayer = "mpv.desktop";
+      imageViewer = "imv.desktop";
+      audioPlayer = "vlc.desktop"; # mov.desktop
+    in {
       "inode/directory" = "nnn.desktop";
 
       "application/pdf" = "org.pwmt.zathura.desktop";
-      "application/x-sh" = "Helix.desktop";
-      "application/xhtml+xml" = "Helix.desktop";
-      "application/xml" = "Helix.desktop";
+      "application/x-sh" = "${textEditor}";
+      "application/xhtml+xml" = "${textEditor}";
+      "application/xml" = "${textEditor}";
 
-      "image/bmp" = "imv.desktop";
-      "image/jpeg" = "imv.desktop";
-      "image/png" = "imv.desktop";
-      "image/svg+xml" = "imv.desktop";
-      "image/tiff" = "imv.desktop";
-      "image/webp" = "imv.desktop";
+      "image/bmp" = "${imageViewer}";
+      "image/jpeg" = "${imageViewer}";
+      "image/png" = "${imageViewer}";
+      "image/svg+xml" = "${imageViewer}";
+      "image/tiff" = "${imageViewer}";
+      "image/webp" = "${imageViewer}";
 
-      "video/mp2t" = "mpv.desktop";
-      "video/mp4" = "mpv.desktop";
-      "video/mpeg" = "mpv.desktop";
-      "video/ogg" = "mpv.desktop";
-      "video/quicktime" = "mpv.desktop";
-      "video/webm" = "mpv.desktop";
-      "video/x-matroska" = "mpv.desktop";
-      "video/x-msvideo" = "mpv.desktop";
-      "video/x-ms-wmv" = "mpv.desktop";
+      "video/mp2t" = "${videoPlayer}";
+      "video/mp4" = "${videoPlayer}";
+      "video/mpeg" = "${videoPlayer}";
+      "video/ogg" = "${videoPlayer}";
+      "video/quicktime" = "${videoPlayer}";
+      "video/webm" = "${videoPlayer}";
+      "video/x-matroska" = "${videoPlayer}";
+      "video/x-msvideo" = "${videoPlayer}";
+      "video/x-ms-wmv" = "${videoPlayer}";
 
-      "text/css" = "Helix.desktop";
-      "text/csv" = "Helix.desktop";
-      "text/javascript" = "Helix.desktop";
-      "text/json" = "Helix.desktop";
-      "text/plain" = "Helix.desktop";
-      "text/xml" = "Helix.desktop";
+      "text/css" = "${textEditor}";
+      "text/csv" = "${textEditor}";
+      "text/javascript" = "${textEditor}";
+      "text/json" = "${textEditor}";
+      "text/plain" = "${textEditor}";
+      "text/xml" = "${textEditor}";
 
-      # "audio/mpeg" = "moc.desktop";
-      # "audio/ogg" = "moc.desktop";
-      # "audio/opus" = "moc.desktop";
-      # "audio/wav" = "moc.desktop";
-      # "audio/webm" = "moc.desktop";
+      "audio/mpeg" = "${audioPlayer}";
+      "audio/ogg" = "${audioPlayer}";
+      "audio/opus" = "${audioPlayer}";
+      "audio/wav" = "${audioPlayer}";
+      "audio/webm" = "${audioPlayer}";
     };
 
     addedAssociations = defaultApplications;
