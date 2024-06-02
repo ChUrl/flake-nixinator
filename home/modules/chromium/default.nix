@@ -27,6 +27,12 @@ in {
     programs.chromium = {
       enable = true;
 
+      commandLineArgs = [
+        "--ignore-gpu-blocklist"
+        "--use-angle=" # Prevents chromium from spamming stdout and crashing
+        "--ozone-platform=wayland"
+      ];
+
       # TODO: Extensions for ungoogled, see https://discourse.nixos.org/t/home-manager-ungoogled-chromium-with-extensions/15214
       # package = pkgs.ungoogled-chromium;
 
