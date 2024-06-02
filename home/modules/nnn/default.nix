@@ -33,26 +33,27 @@ in {
       ];
 
       bookmarks = {
+        b = "~/";
         c = "~/.config";
         d = "~/Documents";
         D = "~/Downloads";
-        h = "~/Notes/HHU";
-        l = "~/Local";
-        m = "~/Mount";
-        n = "~/Notes";
+        # h = "~/Notes/HHU";
+        # l = "~/Local";
+        # m = "~/Mount";
+        # n = "~/Notes";
         N = "~/NixFlake";
-        p = "~/Pictures";
+        # p = "~/Pictures";
         t = "~/Notes/TU";
-        v = "~/Videos";
+        # v = "~/Videos";
       };
 
       plugins = {
         mappings = {
           c = "fzcd";
           d = "dragdrop";
-          f = "finder";
+          # f = "finder";
           j = "autojump";
-          k = "kdeconnect";
+          # k = "kdeconnect";
           p = "preview-tui";
           # s = "suedit";
           # s = "x2sel";
@@ -63,8 +64,8 @@ in {
           (pkgs.fetchFromGitHub {
             owner = "jarun";
             repo = "nnn";
-            rev = "26d5b5c6141f0424869db8ca47e1d370f7b898d5";
-            sha256 = "sha256-a2Fq17mS/m7wRvPc1EkUun198SoeRZtJEABGjPWW+6E=";
+            rev = "33126ee813ed92726aa66295b9771ffe93e7ff0a";
+            sha256 = "sha256-g19uI36HyzTF2YUQKFP4DE2ZBsArGryVHhX79Y0XzhU=";
           })
           + "/plugins";
       };
