@@ -50,7 +50,7 @@ do
         ["tabstop"] = 4,
         ["termguicolors"] = true,
         ["timeoutlen"] = 50,
-        ["undodir"] = "/home/christoph/.vim/undo",
+        ["undodir"] = "/home/lab/smchurla/.vim/undo",
         ["undofile"] = true,
     }
 

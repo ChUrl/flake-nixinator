@@ -49,3 +49,7 @@ do
         fi
     done
 done
+echo ""
+
+sd "/home/christoph" "/home/lab/smchurla" ./config.lua
+echo "Substituted /home/christoph with /home/lab/smchurla"
