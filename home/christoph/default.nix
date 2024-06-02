@@ -274,10 +274,6 @@ rec {
     sessionVariables = {
       LANG = "en_US.UTF-8";
 
-      # TODO: Configure in neovim/helix modules and choose a winner
-      # EDITOR = "hx";
-      # VISUAL = "hx";
-
       # TERMINAL = "alacritty -o font.size=12";
       TERMINAL = "kitty";
       BROWSER = "firefox";
@@ -303,67 +299,67 @@ rec {
   };
 
   # TODO: Split this more between laptop and desktop...
-  # TODO: Check what packages are installed here and in modules and check if there is already a service/hm-module for it
-  # TODO: If so use this or adapt the config from there (example gnome.sushi is also added to dbus packages in services.sushi)
   # TODO: Make a module for standard UNIX replacements
-  # TODO: Make a video player module
   # Add stuff for your user as you see fit:
   home.packages = with pkgs; [
-    # CLI Tools
-    # bat # cat with wings (enabled as program)
-    # exa # ls in cool (enabled as program) # NOTE: Unmaintained
-    eza
-    # delta # diffier diff differ (enabled as program)
-    # fzf # fuzzy find (enabled as program in fish module)
+    # Shell utils
+    (ripgrep.override {withPCRE2 = true;}) # fast as fuck
+    gdu # Alternative to du-dust (I like it better)
+    duf # Disk usage analyzer (for all disk overview)
+    sd # sed alternative
+    fclones # duplicate file finder
+    tealdeer # very fast tldr (so readable man)
+    atool # Archive preview
+    ffmpegthumbnailer # Video thumbnails
+    mediainfo
+    tree # Folder preview
+    unrar
+    p7zip
+    unzip
+    progress
     tokei # Text file statistics in a project
-    poppler_utils # pdfunite
-    # ffmpeg # Convert video (magic), v4
+    appimage-run
+    nvd # nix rebuild diff
+    file
+    # spotdl # TODO: Borked
+    # geteltorito # extreact boot image from iso
+    # gitbatch # overview over multiple repos
+
+    # Hardware/Software info
+    pciutils # lspci
+    glxinfo # opengl info
+    wayland-utils # wayland-info
+    aha # ansi html adapter? TODO: Why did I install this?
+    # radeontop
+    clinfo # OpenCL info
+    vulkan-tools # vulkaninfo
+    libva-utils # vainfo
+    vdpauinfo
+    # rocminfo # radeon comptute platform info
+    hwloc
+    lm_sensors
+    acpica-tools # Dump ACPI tables etc.
+
+    # Video/Image utils
     ffmpeg_5-full # I love ffmpeg (v5, including ffplay)
     ffmpeg-normalize
     x265
     imagemagick # Convert image (magic)
-    vlc
     ueberzugpp # Display images in terminal (alacritty)
-    (ripgrep.override {withPCRE2 = true;}) # fast as fuck
-    nvd # nix rebuild diff
-    # du-dust # Disk usage analyzer (for directories)
-    gdu # Alternative to du-dust (I like it better)
-    duf # Disk usage analyzer (for all disk overview)
-    fd # find alternative
-    sd # sed alternative
-    tealdeer # very fast tldr (so readable man)
-    # gtop # graphic top # We have btop already...
-    fclones # duplicate file finder
-    gum # nice shell scripts
-    geteltorito # extreact boot image from iso
-    gitbatch # overview over multiple repos
-    # TODO: Maybe general document/typesetting module?
+
+    # Document utils
+    poppler_utils # pdfunite
     graphviz # generate graphs from code
-    xdot # .dot file viewer
-    kgraphviewer # dot graph viewer
-    d2 # generate diagrams from code
+    # xdot # .dot file viewer
+    # kgraphviewer # dot graph viewer
+    # d2 # generate diagrams from code
     plantuml
     gnuplot # generate function plots
     pdf2svg
     # TODO: Latex module with individual packages
     texlive.combined.scheme-full
     # tikzit
-    # texlab # Incredibly lag
     pandoc # document converting madness
-    # TODO: Programming languages module
-    alejandra # nix code formatter
-    nil # nix language server
-    libnotify
-    inotifyTools # inotifywait etc.
-    atool # Archive preview
-    ffmpegthumbnailer # Video thumbnails
-    mediainfo
-    tree # Folder preview
-    # gnome.zenity # Popups from terminal
-    unrar
-    p7zip
-    unzip
-    progress
 
     # Networking
     dig
@@ -381,68 +377,30 @@ rec {
     cifs-utils # Mount samba shares
     nfs-utils
     sshfs
+    protonvpn-cli
 
-    appimage-run
-    # decker # TODO: Build failure
-    # google-chrome # Trash, but required for decker pdf export
-    # (pkgs.writeShellScriptBin "chrome" "exec -a $0 ${google-chrome}/bin/google-chrome-stable $@")
-
+    # GUI apps
+    vlc
     cool-retro-term
     ventoy-full # Bootable USB for many ISOs
-    # geekbench
-    # spotify # NOTE: Uses flatpak
-    # neovide # NOTE: Installed in modules/neovim
-
+    # spotify # Uses flatpak
     sqlitebrowser # To modify tables
     dbeaver-bin # To import/export data + diagrams
     hoppscotch # Test APIs
-
-    # Xooooorg/Desktop environment stuff
-    # xclip
-    xorg.xwininfo # See what apps run in XWayland
-    # xdotool
-
-    # Hardware/Software info
-    neofetch # Easily see interesting package versions/kernel
-    pciutils # lspci
-    glxinfo # opengl info
-    wayland-utils # wayland-info
-    aha # ansi html adapter? TODO: Why did I install this?
-    # radeontop
-    clinfo # OpenCL info
-    vulkan-tools # vulkaninfo
-    libva-utils # vainfo
-    vdpauinfo
-    # rocminfo # radeon comptute platform info
-    hwloc
-    lm_sensors
-    acpica-tools # Dump ACPI tables etc.
-
-    # Web stuff
+    # decker # TODO: Build failure
     signal-desktop
-    # element-desktop # matrix client
-    # webcord # Unshitted discord? Well, except Krisp of course
-    # ncspot # Spotify in cool (but slow)?
-    protonvpn-cli
-    # yt-dlp # download videos (from almost anywhere) # HM program
     filezilla
-    # dnsmasq # For Access Point/Hotspot
-    # linux-wifi-hotspot
-    # spotdl-4_1_6 # My derivation as temporary fix
-    # spotdl # TODO: Borked
-
-    # Tools
     # calibre # Do I even read
-    virt-manager
+    # virt-manager
     # gource # Visualize git commit log, completely useless
     # anki-bin # Use anki-bin as anki is some versions behind NOTE: anki-bin doesn't support fcitx5 :(
     anki
     # inputs.nixos-conf-editor.packages."x86_64-linux".nixos-conf-editor
     # octave # GNU matlab basically
-    logisim-evolution # Digital circuit simulator
-    digital # Digital circuit simulator
-    okteta # hex editor
-    kdiff3 # diff/patch tool
+    # logisim-evolution # Digital circuit simulator
+    # digital # Digital circuit simulator
+    # okteta # hex editor
+    # kdiff3 # diff/patch tool
     font-manager
 
     # Office
@@ -460,7 +418,7 @@ rec {
     # vale # Why not lint everything (including english)?
 
     # TODO: Development module, I need multiple modules to be able to add python packages to a single python install...
-    (python311.withPackages (p:
+    (python312.withPackages (p:
       with p; [
         # p.rich
         # p.numpy
@@ -488,7 +446,6 @@ rec {
     inkscape
     # handbrake
     # makemkv
-
     AusweisApp2
 
     # Use NixCommunity binary cache
@@ -505,7 +462,7 @@ rec {
     home-manager.enable = true;
 
     alacritty = {
-      enable = true;
+      enable = false;
 
       settings = {
         window = {
@@ -648,11 +605,6 @@ rec {
       };
     };
 
-    broot = {
-      enable = true;
-      enableFishIntegration = true;
-    };
-
     btop.enable = true;
 
     direnv = {
@@ -660,14 +612,25 @@ rec {
       nix-direnv.enable = true;
     };
 
-    # exa.enable = true; # NOTE: Unmaintained
+    eza = {
+      enable = true;
+      enableFishIntegration = config.modules.fish.enable;
+    };
+
+    fastfetch = {
+      enable = true;
+    };
+
+    fd = {
+      enable = true;
+    };
 
     fzf = {
       enable = true;
       enableFishIntegration = config.modules.fish.enable;
     };
 
-    gallery-dl.enable = true; # TODO: Alternative to cyberdrop-dl?
+    gallery-dl.enable = false; # TODO: Alternative to cyberdrop-dl?
 
     git = {
       enable = true;
@@ -677,46 +640,6 @@ rec {
       userEmail = "christoph.urlacher@protonmail.com";
       userName = "Christoph Urlacher";
     };
-
-    # helix = {
-    #   enable = true;
-
-    #   # NOTE: Syntax changed
-    #   # languages = [
-    #   #   {
-    #   #     name = "verilog";
-    #   #     roots = [
-    #   #       ".svls.toml"
-    #   #       ".svlint.toml"
-    #   #     ];
-    #   #     language-server = {
-    #   #       command = "svls";
-    #   #       args = [];
-    #   #     };
-    #   #   }
-    #   # ];
-
-    #   # https://docs.helix-editor.com/configuration.html
-    #   settings = {
-    #     # theme = "base16_terminal";
-    #     editor = {
-    #       scrolloff = 10;
-    #       mouse = false; # Default true
-    #       middle-click-paste = false; # Default true
-    #       line-number = "relative";
-    #       cursorline = true;
-    #       auto-completion = true; # Default
-    #       bufferline = "multiple";
-    #       cursor-shape = {
-    #         normal = "block";
-    #         insert = "bar";
-    #         select = "underline";
-    #       };
-    #       lsp.display-messages = true;
-    #       indent-guides.render = false;
-    #     };
-    #   };
-    # }; # NOTE: If error occurs after system update on fish init run "ssh-add"
 
     keychain = {
       enable = true;
@@ -773,7 +696,7 @@ rec {
     };
 
     nushell = {
-      enable = true;
+      enable = false;
     };
 
     # Git status replacement with file selection by number
