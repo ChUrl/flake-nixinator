@@ -357,6 +357,8 @@ with mylib.networking; {
     wireguard-tools
     man-pages
     man-pages-posix
+
+    # egl-wayland
   ];
 
   # NOTE: Gnome
