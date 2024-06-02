@@ -43,14 +43,16 @@ in {
 
       wl-clipboard
       clipman # Clipboard manager (wl-paste)
+      libnotify
+      inotifyTools # inotifywait etc.
 
       moc # Audio player
       ncpamixer # ncurses pavucontrol
       slurp # Region selector for screensharing
       grim # Grab images from compositor
 
-      xfce.thunar
-      xfce.tumbler # Thunar thumbnails
+      # xfce.thunar
+      # xfce.tumbler # Thunar thumbnails
       libsForQt5.polkit-kde-agent
     ];
 
