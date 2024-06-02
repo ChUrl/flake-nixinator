@@ -5,6 +5,16 @@
   ...
 }: [
   {
+    name = "clangd-extensions";
+    pkg = pkgs.vimPlugins.clangd_extensions-nvim;
+    config = ''
+      function(_, opts)
+        require("clangd_extensions").setup(opts)
+      end
+    '';
+  }
+
+  {
     name = "conform";
     pkg = pkgs.vimPlugins.conform-nvim;
     config = ''
@@ -29,6 +39,12 @@
         rust = ["rustfmt"];
       };
     };
+  }
+
+  {
+    name = "haskell-tools";
+    pkg = pkgs.vimPlugins.haskell-tools-nvim;
+    # Don't call setup!
   }
 
   {
@@ -66,25 +82,29 @@
   {
     name = "lspconfig";
     pkg = pkgs.vimPlugins.nvim-lspconfig;
+    dependencies = [
+      {
+        name = "neodev";
+        pkg = pkgs.vimPlugins.neodev-nvim;
+        config = ''
+          function(_, opts)
+            require("neodev").setup(opts)
+          end
+        '';
+      }
+    ];
     lazy = false;
     config = let
       servers = mylib.generators.toLuaObject [
         {name = "clangd";}
         {name = "clojure_lsp";}
         {name = "cmake";}
-        {name = "lua-ls";}
+        {name = "lua_ls";}
         {name = "nil_ls";}
         {name = "pyright";}
-        {name = "rust_analyzer";}
+        # {name = "rust_analyzer";} # Don't set up when using rustaceanvim
         {name = "texlab";}
-
-        {
-          name = "hls";
-          cmd = [
-            "haskell-language-server-wrapper"
-            "--lsp"
-          ];
-        }
+        # {name = "hls";} # Don't set up when using haskell-tools
       ];
     in ''
       function(_, opts)
@@ -121,17 +141,94 @@
   }
 
   {
+    name = "rustaceanvim";
+    pkg = pkgs.vimPlugins.rustaceanvim;
+    # Don't call setup!
+  }
+
+  (let
+    nvim-plugintree = pkgs.vimPlugins.nvim-treesitter.withPlugins (
+      p:
+        with p; [
+          bash
+          bibtex
+          c
+          clojure
+          cmake
+          cpp
+          csv
+          disassembly
+          dockerfile
+          dot
+          doxygen
+          fish
+          gitignore
+          haskell
+          haskell_persistent
+          html
+          ini
+          java
+          javascript
+          json
+          julia
+          kotlin
+          lua
+          make
+          markdown
+          markdown_inline
+          nasm
+          nix
+          objdump
+          org
+          passwd
+          perl
+          printf
+          python
+          r
+          regex
+          requirements
+          ruby
+          rust
+          scala
+          scss
+          sql
+          toml
+          typescript
+          verilog
+          xml
+          yaml
+        ]
+    );
+    treesitter-parsers = pkgs.symlinkJoin {
+      name = "treesitter-parsers";
+      paths = nvim-plugintree.dependencies;
+    };
+  in {
     name = "treesitter";
-    pkg = pkgs.vimPlugins.nvim-treesitter.withAllGrammars;
+    pkg = pkgs.vimPlugins.nvim-treesitter;
     lazy = false;
     config = ''
       function(_, opts)
+        vim.opt.runtimepath:append("${nvim-plugintree}")
+        vim.opt.runtimepath:append("${treesitter-parsers}")
+
         require("nvim-treesitter.configs").setup(opts)
       end
     '';
     opts = {
-      highlight.enable = true;
-      indent.enable = true;
+      auto_install = false;
+      ensure_installed = [];
+      parser_install_dir = "${treesitter-parsers}";
+
+      indent = {
+        enable = true;
+        # disable = ["python" "yaml"];
+      };
+      highlight = {
+        enable = true;
+        # disable = ["yaml"];
+        additional_vim_regex_highlighting = false;
+      };
 
       # TODO: Doesn't work
       incremental_selection = {
@@ -144,5 +241,5 @@
         };
       };
     };
-  }
+  })
 ]
