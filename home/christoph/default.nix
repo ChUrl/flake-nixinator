@@ -186,10 +186,11 @@ rec {
       neovide = true;
     };
 
-    # lazyvim = {
-    #   enable = true;
-    #   alias = true;
-    # };
+    lazyvim = {
+      # enable = true;
+      alias = true;
+      neovide = true;
+    };
 
     nextcloud = {
       enable = true;
