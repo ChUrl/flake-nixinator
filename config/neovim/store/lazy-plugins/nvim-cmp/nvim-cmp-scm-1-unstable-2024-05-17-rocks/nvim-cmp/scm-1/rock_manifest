@@ -1,0 +1,80 @@
+rock_manifest = {
+   autoload = {
+      ["cmp.vim"] = "3486f63ca3381e0b6bf094569f028665"
+   },
+   doc = {
+      ["cmp.txt"] = "0ed9ef42d5a72bfd6f805b64cd00276a"
+   },
+   lua = {
+      cmp = {
+         config = {
+            ["compare.lua"] = "a3570d9e528aba104a6ba6bd7f510da8",
+            ["context.lua"] = "28e9f4e9575f6183d1d05bbee4c4408c",
+            ["default.lua"] = "2f2648b4528925dc6a98f0fa4d93c6fc",
+            ["mapping.lua"] = "39b88ca1fa06ced8522ec0ee27cb24f2",
+            ["sources.lua"] = "81bb51dbe8997bfabd46541a394b4b41",
+            ["window.lua"] = "ae25fe313122f0e90b651c5e9d7dfd2e"
+         },
+         ["config.lua"] = "3a196d30b4572b8935ea4e879f900f59",
+         ["context.lua"] = "aa01e370d568a387e98389103e3e01df",
+         ["context_spec.lua"] = "d5b2fb143dd2efaee3f71bfe1bdc31a9",
+         ["core.lua"] = "0d7de2518b5be40093c777416bb36af1",
+         ["core_spec.lua"] = "edbefcd3d75e48e9d7bc4326f100a864",
+         ["entry.lua"] = "6bc6aba58cea17879cd2ccdffee61631",
+         ["entry_spec.lua"] = "ca2aff02436ad84ca62d3df331173f01",
+         ["init.lua"] = "dd38eea91cabba39091ce75117f3dda7",
+         ["matcher.lua"] = "55af0d4c7ce03827a3dbda8715a1b472",
+         ["matcher_spec.lua"] = "59da9197d47615ada5bf93011766356c",
+         ["source.lua"] = "60cc28eea79e72914142fe5dc5ad95d1",
+         ["source_spec.lua"] = "2b54677be2c92d7c3984783140b7018c",
+         types = {
+            ["cmp.lua"] = "174d92640f57fb2f3c0f2c62eb5f8654",
+            ["init.lua"] = "d372a58d9966fbc24e7ccd3d6c30a834",
+            ["lsp.lua"] = "401502e8b85568aee57584948953feb5",
+            ["lsp_spec.lua"] = "72e9da2b231e4716ac39d0759c387b44",
+            ["vim.lua"] = "a6796b027eb76f5d1cce7fa8172eabea"
+         },
+         utils = {
+            ["api.lua"] = "53067718473650f4d109780a1a7bcdc6",
+            ["api_spec.lua"] = "89fe537ce824cad191576272d8cdc47a",
+            ["async.lua"] = "2b968476962ba1c22a86a5392b62da9f",
+            ["async_spec.lua"] = "679338ab70a4c1ea72d7173e77143b68",
+            ["autocmd.lua"] = "322672f88beaeec084dbcd4086a78b8c",
+            ["binary.lua"] = "385a0844080b9d281a2ea0a254e09ddd",
+            ["binary_spec.lua"] = "cb428e4eded68b6bf27c2dd778cba44c",
+            ["buffer.lua"] = "0d72e16d90fecb8dbed6843d4ce46553",
+            ["cache.lua"] = "622af76c4c7bf212b9fd6f2c6c832ddd",
+            ["char.lua"] = "723a8066d2e67d40034ffce692250a58",
+            ["debug.lua"] = "c87003d9480670c22d73a1ba670e8c89",
+            ["event.lua"] = "38b59f97402a0c71ac21fb1408536c0d",
+            ["feedkeys.lua"] = "abbd5d1828baec177ffbc9a1c47ce7c5",
+            ["feedkeys_spec.lua"] = "76b9acca3b02ef4163ae070b9fd78ed9",
+            ["highlight.lua"] = "f9bf48596410a2105e7e1f9214ff3a33",
+            ["keymap.lua"] = "791262dc36492c6daa8a485c8c855f28",
+            ["keymap_spec.lua"] = "6cd866f56f97a1d5ed70fa8dd20c6d53",
+            ["misc.lua"] = "4a5ef5ee10bf1dd5ada4b4cd75c840c1",
+            ["misc_spec.lua"] = "691adf08c16f1312976594986340dab4",
+            ["options.lua"] = "b076c4f8f9c915f6334944ec9749fdb0",
+            ["pattern.lua"] = "e77acfc76798494a14c6e62472a2ef7b",
+            ["snippet.lua"] = "de00ee60d79f76eb7d42defb969e1eb8",
+            ["spec.lua"] = "484dcd49b1a4cfb8fc195f16b2dc38c1",
+            ["str.lua"] = "075a6cbb4683b4b2bd52ceeb3af96755",
+            ["str_spec.lua"] = "5b17025edaa3a49892951521da0bc9c4",
+            ["window.lua"] = "8b90f3cbc1992529e7326cc5ec109b47"
+         },
+         view = {
+            ["custom_entries_view.lua"] = "7011cd4c8a63f645c1e8bab3ca30d293",
+            ["docs_view.lua"] = "527e58b879a27b67382048808b1c599b",
+            ["ghost_text_view.lua"] = "7cc83940d6b631caf1e9643faf647a0a",
+            ["native_entries_view.lua"] = "fbf5f842464ee3e399f3c7825bb2604b",
+            ["wildmenu_entries_view.lua"] = "002776dbd93c238824d042a1a1ef41b6"
+         },
+         ["view.lua"] = "4604db1f3975e50e724fa14b76ffc932",
+         ["vim_source.lua"] = "205a75409f6ae2debad0bf96e7041466"
+      }
+   },
+   ["nvim-cmp-scm-1.rockspec"] = "92079ac860d2bbb56eb8dc343423d1ac",
+   plugin = {
+      ["cmp.lua"] = "070df415c09de0e23bb521a820f1614d"
+   }
+}

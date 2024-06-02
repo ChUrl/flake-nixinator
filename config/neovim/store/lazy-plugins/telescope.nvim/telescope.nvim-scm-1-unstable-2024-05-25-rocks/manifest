@@ -1,0 +1,330 @@
+commands = {}
+dependencies = {
+   ["plenary.nvim"] = {},
+   ["telescope.nvim"] = {
+      ["scm-1"] = {
+         {
+            constraints = {
+               {
+                  op = "==",
+                  version = {
+                     5, 1, string = "5.1"
+                  }
+               }
+            },
+            name = "lua"
+         },
+         {
+            constraints = {},
+            name = "plenary.nvim"
+         }
+      }
+   }
+}
+modules = {
+   ["telescope._"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["telescope._extensions.init"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["telescope.actions.generate"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["telescope.actions.history"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["telescope.actions.init"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["telescope.actions.layout"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["telescope.actions.mt"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["telescope.actions.set"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["telescope.actions.state"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["telescope.actions.utils"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["telescope.algos.fzy"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["telescope.algos.linked_list"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["telescope.algos.string_distance"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["telescope.builtin.__diagnostics"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["telescope.builtin.__files"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["telescope.builtin.__git"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["telescope.builtin.__internal"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["telescope.builtin.__lsp"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["telescope.builtin.init"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["telescope.command"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["telescope.config"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["telescope.config.resolve"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["telescope.debounce"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["telescope.deprecated"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["telescope.entry_manager"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["telescope.finders"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["telescope.finders.async_job_finder"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["telescope.finders.async_oneshot_finder"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["telescope.finders.async_static_finder"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["telescope.from_entry"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["telescope.health"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["telescope.init"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["telescope.log"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["telescope.make_entry"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["telescope.mappings"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["telescope.operators"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["telescope.pickers"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["telescope.pickers.entry_display"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["telescope.pickers.highlights"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["telescope.pickers.layout"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["telescope.pickers.layout_strategies"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["telescope.pickers.multi"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["telescope.pickers.scroller"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["telescope.pickers.window"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["telescope.previewers.buffer_previewer"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["telescope.previewers.init"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["telescope.previewers.previewer"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["telescope.previewers.term_previewer"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["telescope.previewers.utils"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["telescope.sorters"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["telescope.state"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["telescope.testharness.helpers"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["telescope.testharness.init"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["telescope.testharness.runner"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["telescope.themes"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["telescope.utils"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["tests.automated.action_spec"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["tests.automated.command_spec"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["tests.automated.entry_display_spec"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["tests.automated.entry_manager_spec"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["tests.automated.layout_strategies_spec"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["tests.automated.linked_list_spec"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["tests.automated.pickers.find_files_spec"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["tests.automated.resolver_spec"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["tests.automated.scroller_spec"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["tests.automated.sorters_spec"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["tests.automated.telescope_spec"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["tests.automated.utils_spec"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["tests.helpers"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["tests.pickers.find_files__readme"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["tests.pickers.find_files__scrolling_descending_cycle"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["tests/fixtures/find_files/file_a.txt"] = {
+      "telescope.nvim/scm-1"
+   },
+   ["tests/fixtures/find_files/file_abc.txt"] = {
+      "telescope.nvim/scm-1"
+   }
+}
+repository = {
+   ["telescope.nvim"] = {
+      ["scm-1"] = {
+         {
+            arch = "installed",
+            commands = {},
+            dependencies = {},
+            modules = {
+               ["telescope._"] = "telescope/_.lua",
+               ["telescope._extensions.init"] = "telescope/_extensions/init.lua",
+               ["telescope.actions.generate"] = "telescope/actions/generate.lua",
+               ["telescope.actions.history"] = "telescope/actions/history.lua",
+               ["telescope.actions.init"] = "telescope/actions/init.lua",
+               ["telescope.actions.layout"] = "telescope/actions/layout.lua",
+               ["telescope.actions.mt"] = "telescope/actions/mt.lua",
+               ["telescope.actions.set"] = "telescope/actions/set.lua",
+               ["telescope.actions.state"] = "telescope/actions/state.lua",
+               ["telescope.actions.utils"] = "telescope/actions/utils.lua",
+               ["telescope.algos.fzy"] = "telescope/algos/fzy.lua",
+               ["telescope.algos.linked_list"] = "telescope/algos/linked_list.lua",
+               ["telescope.algos.string_distance"] = "telescope/algos/string_distance.lua",
+               ["telescope.builtin.__diagnostics"] = "telescope/builtin/__diagnostics.lua",
+               ["telescope.builtin.__files"] = "telescope/builtin/__files.lua",
+               ["telescope.builtin.__git"] = "telescope/builtin/__git.lua",
+               ["telescope.builtin.__internal"] = "telescope/builtin/__internal.lua",
+               ["telescope.builtin.__lsp"] = "telescope/builtin/__lsp.lua",
+               ["telescope.builtin.init"] = "telescope/builtin/init.lua",
+               ["telescope.command"] = "telescope/command.lua",
+               ["telescope.config"] = "telescope/config.lua",
+               ["telescope.config.resolve"] = "telescope/config/resolve.lua",
+               ["telescope.debounce"] = "telescope/debounce.lua",
+               ["telescope.deprecated"] = "telescope/deprecated.lua",
+               ["telescope.entry_manager"] = "telescope/entry_manager.lua",
+               ["telescope.finders"] = "telescope/finders.lua",
+               ["telescope.finders.async_job_finder"] = "telescope/finders/async_job_finder.lua",
+               ["telescope.finders.async_oneshot_finder"] = "telescope/finders/async_oneshot_finder.lua",
+               ["telescope.finders.async_static_finder"] = "telescope/finders/async_static_finder.lua",
+               ["telescope.from_entry"] = "telescope/from_entry.lua",
+               ["telescope.health"] = "telescope/health.lua",
+               ["telescope.init"] = "telescope/init.lua",
+               ["telescope.log"] = "telescope/log.lua",
+               ["telescope.make_entry"] = "telescope/make_entry.lua",
+               ["telescope.mappings"] = "telescope/mappings.lua",
+               ["telescope.operators"] = "telescope/operators.lua",
+               ["telescope.pickers"] = "telescope/pickers.lua",
+               ["telescope.pickers.entry_display"] = "telescope/pickers/entry_display.lua",
+               ["telescope.pickers.highlights"] = "telescope/pickers/highlights.lua",
+               ["telescope.pickers.layout"] = "telescope/pickers/layout.lua",
+               ["telescope.pickers.layout_strategies"] = "telescope/pickers/layout_strategies.lua",
+               ["telescope.pickers.multi"] = "telescope/pickers/multi.lua",
+               ["telescope.pickers.scroller"] = "telescope/pickers/scroller.lua",
+               ["telescope.pickers.window"] = "telescope/pickers/window.lua",
+               ["telescope.previewers.buffer_previewer"] = "telescope/previewers/buffer_previewer.lua",
+               ["telescope.previewers.init"] = "telescope/previewers/init.lua",
+               ["telescope.previewers.previewer"] = "telescope/previewers/previewer.lua",
+               ["telescope.previewers.term_previewer"] = "telescope/previewers/term_previewer.lua",
+               ["telescope.previewers.utils"] = "telescope/previewers/utils.lua",
+               ["telescope.sorters"] = "telescope/sorters.lua",
+               ["telescope.state"] = "telescope/state.lua",
+               ["telescope.testharness.helpers"] = "telescope/testharness/helpers.lua",
+               ["telescope.testharness.init"] = "telescope/testharness/init.lua",
+               ["telescope.testharness.runner"] = "telescope/testharness/runner.lua",
+               ["telescope.themes"] = "telescope/themes.lua",
+               ["telescope.utils"] = "telescope/utils.lua",
+               ["tests.automated.action_spec"] = "tests/automated/action_spec.lua",
+               ["tests.automated.command_spec"] = "tests/automated/command_spec.lua",
+               ["tests.automated.entry_display_spec"] = "tests/automated/entry_display_spec.lua",
+               ["tests.automated.entry_manager_spec"] = "tests/automated/entry_manager_spec.lua",
+               ["tests.automated.layout_strategies_spec"] = "tests/automated/layout_strategies_spec.lua",
+               ["tests.automated.linked_list_spec"] = "tests/automated/linked_list_spec.lua",
+               ["tests.automated.pickers.find_files_spec"] = "tests/automated/pickers/find_files_spec.lua",
+               ["tests.automated.resolver_spec"] = "tests/automated/resolver_spec.lua",
+               ["tests.automated.scroller_spec"] = "tests/automated/scroller_spec.lua",
+               ["tests.automated.sorters_spec"] = "tests/automated/sorters_spec.lua",
+               ["tests.automated.telescope_spec"] = "tests/automated/telescope_spec.lua",
+               ["tests.automated.utils_spec"] = "tests/automated/utils_spec.lua",
+               ["tests.helpers"] = "tests/helpers.lua",
+               ["tests.pickers.find_files__readme"] = "tests/pickers/find_files__readme.lua",
+               ["tests.pickers.find_files__scrolling_descending_cycle"] = "tests/pickers/find_files__scrolling_descending_cycle.lua",
+               ["tests/fixtures/find_files/file_a.txt"] = "tests/fixtures/find_files/file_a.txt",
+               ["tests/fixtures/find_files/file_abc.txt"] = "tests/fixtures/find_files/file_abc.txt"
+            }
+         }
+      }
+   }
+}

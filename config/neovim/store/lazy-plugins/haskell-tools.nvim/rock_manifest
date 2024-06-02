@@ -1,0 +1,73 @@
+rock_manifest = {
+   doc = {
+      ["haskell-tools.txt"] = "dea283444425fa165997d28c1ac610c8"
+   },
+   ftplugin = {
+      ["cabal.lua"] = "4f72e96d3601fed58fd4a24e9633172d",
+      ["cabalproject.lua"] = "4f72e96d3601fed58fd4a24e9633172d",
+      ["haskell.lua"] = "4f72e96d3601fed58fd4a24e9633172d",
+      ["lhaskell.lua"] = "4f72e96d3601fed58fd4a24e9633172d"
+   },
+   ["haskell-tools.nvim-3.1.8-1.rockspec"] = "653d0f8f3d848afa2ac2e8d64e470886",
+   lua = {
+      ["haskell-tools"] = {
+         ["compat.lua"] = "1457323a47d791e5ff2393871a112357",
+         config = {
+            ["check.lua"] = "4c6c96c3b51efe53b54c8bc4f14d93d6",
+            ["init.lua"] = "e1f6bc006747eb79f131b527acb83b1f",
+            ["internal.lua"] = "373f754423a5786afbfcdea048d74bc7"
+         },
+         dap = {
+            ["init.lua"] = "007e49a6c0a33047d9dc3cc0c76474e7",
+            ["internal.lua"] = "f30905af3fdff69d13c20682767c44a2"
+         },
+         ["deps.lua"] = "ff7e0f06f003b497c958805a391c1eaf",
+         ["health.lua"] = "941c948e1667a8a532f2b93f59d0347b",
+         hoogle = {
+            ["helpers.lua"] = "e5428112e897aa06b0a76d186679b110",
+            ["init.lua"] = "5385afa48b78262001e50154b6f02ec3",
+            ["local.lua"] = "eca412a13b7a33cba0b2935c4024d864",
+            ["web.lua"] = "4ebe05b9a484b20e88ff51af76f6a88e"
+         },
+         ["init.lua"] = "81946a46a32bdc3066333f6cac348712",
+         ["internal.lua"] = "f149d8830ae8f0516393ffb31b573765",
+         log = {
+            ["init.lua"] = "c8b080a5a9701cb8ae3c526acd868964",
+            ["internal.lua"] = "ed9e8200543b60724d27d5a991191a3e"
+         },
+         lsp = {
+            ["definition.lua"] = "04348f8215b227a5da688b92e1cfe23b",
+            ["eval.lua"] = "69614508eab450ad811c9cbdd46130a9",
+            ["helpers.lua"] = "010ab78c87db24c8142c29ac35c218e8",
+            ["hover.lua"] = "9e03896e1877b06c98f11ce1b643343c",
+            ["init.lua"] = "44c4d7be0311e2d746e00308710345e9"
+         },
+         ["os.lua"] = "110cd7ec57e6587360092f8f78025783",
+         ["parser.lua"] = "402dc6ebad5cffbe6700e774ad64724a",
+         project = {
+            ["cabal.lua"] = "ef4d57f352f6f15cb21bc3dc72e37872",
+            ["helpers.lua"] = "c167cfdaca3d44feb95eb921470dbaf0",
+            ["init.lua"] = "eebdb000f25db6280299ccc89ee64fc6",
+            ["stack.lua"] = "71c00101f8004f9c905a9ddb33dc6889"
+         },
+         repl = {
+            ["builtin.lua"] = "c1b6210d95f533ec06bb3857f8d1dc7e",
+            ["init.lua"] = "3529ee48e2a8e39f962fd6d351ff6ee3",
+            ["toggleterm.lua"] = "f62892e49e2f5b25394f0c254a9cebb6"
+         },
+         ["strings.lua"] = "6429d6757a6c08856f425b72d7d8362c",
+         ["tags.lua"] = "b82dd1a468edfc13323b2f290f73dc24",
+         types = {
+            ["internal.lua"] = "a078237ae853c7f19c396a7d5001fa28"
+         }
+      },
+      telescope = {
+         _extensions = {
+            ht = {
+               ["extension.lua"] = "040c10b48645d3230bba5952281ea858"
+            },
+            ["ht.lua"] = "ebd1a0ec34353b6b42b5e6012ff69dd9"
+         }
+      }
+   }
+}

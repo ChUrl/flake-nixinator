@@ -1,0 +1,363 @@
+commands = {}
+dependencies = {
+   jsregexp = {},
+   luasnip = {
+      ["2.3.0-1"] = {
+         {
+            constraints = {
+               {
+                  op = ">=",
+                  version = {
+                     5, 1, string = "5.1"
+                  }
+               }
+            },
+            name = "lua"
+         },
+         {
+            constraints = {
+               {
+                  op = ">=",
+                  version = {
+                     0, 0, 5, string = "0.0.5"
+                  }
+               },
+               {
+                  op = "<=",
+                  version = {
+                     0, 0, 7, string = "0.0.7"
+                  }
+               }
+            },
+            name = "jsregexp"
+         }
+      }
+   }
+}
+modules = {
+   ["luasnip._types"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.config"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.default_config"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.extras._extra_types"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.extras._lambda"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.extras._parser_combinator"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.extras._treesitter"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.extras.conditions.expand"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.extras.conditions.init"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.extras.conditions.show"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.extras.expand_conditions"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.extras.filetype_functions"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.extras.fmt"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.extras.init"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.extras.otf"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.extras.postfix"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.extras.select_choice"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.extras.snip_location"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.extras.snippet_list"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.extras.treesitter_postfix"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.health"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.init"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.loaders.data"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.loaders.from_lua"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.loaders.from_snipmate"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.loaders.from_vscode"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.loaders.fs_watchers"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.loaders.init"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.loaders.snippet_cache"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.loaders.types"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.loaders.util"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.nodes.absolute_indexer"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.nodes.choiceNode"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.nodes.duplicate"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.nodes.dynamicNode"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.nodes.functionNode"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.nodes.insertNode"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.nodes.key_indexer"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.nodes.multiSnippet"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.nodes.node"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.nodes.restoreNode"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.nodes.snippet"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.nodes.snippetProxy"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.nodes.textNode"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.nodes.util"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.nodes.util.trig_engines"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.session.enqueueable_operations"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.session.init"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.session.snippet_collection.init"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.session.snippet_collection.source"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.snippets"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.util._builtin_vars"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.util.auto_table"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.util.dict"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.util.directed_graph"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.util.environ"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.util.events"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.util.ext_opts"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.util.extend_decorator"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.util.functions"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.util.jsonc"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.util.jsregexp"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.util.lazy_table"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.util.log"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.util.mark"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.util.parser.ast_parser"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.util.parser.ast_utils"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.util.parser.init"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.util.parser.neovim_ast"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.util.parser.neovim_parser"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.util.path"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.util.pattern_tokenizer"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.util.select"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.util.str"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.util.table"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.util.time"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.util.types"] = {
+      "luasnip/2.3.0-1"
+   },
+   ["luasnip.util.util"] = {
+      "luasnip/2.3.0-1"
+   }
+}
+repository = {
+   luasnip = {
+      ["2.3.0-1"] = {
+         {
+            arch = "installed",
+            commands = {},
+            dependencies = {},
+            modules = {
+               ["luasnip._types"] = "luasnip/_types.lua",
+               ["luasnip.config"] = "luasnip/config.lua",
+               ["luasnip.default_config"] = "luasnip/default_config.lua",
+               ["luasnip.extras._extra_types"] = "luasnip/extras/_extra_types.lua",
+               ["luasnip.extras._lambda"] = "luasnip/extras/_lambda.lua",
+               ["luasnip.extras._parser_combinator"] = "luasnip/extras/_parser_combinator.lua",
+               ["luasnip.extras._treesitter"] = "luasnip/extras/_treesitter.lua",
+               ["luasnip.extras.conditions.expand"] = "luasnip/extras/conditions/expand.lua",
+               ["luasnip.extras.conditions.init"] = "luasnip/extras/conditions/init.lua",
+               ["luasnip.extras.conditions.show"] = "luasnip/extras/conditions/show.lua",
+               ["luasnip.extras.expand_conditions"] = "luasnip/extras/expand_conditions.lua",
+               ["luasnip.extras.filetype_functions"] = "luasnip/extras/filetype_functions.lua",
+               ["luasnip.extras.fmt"] = "luasnip/extras/fmt.lua",
+               ["luasnip.extras.init"] = "luasnip/extras/init.lua",
+               ["luasnip.extras.otf"] = "luasnip/extras/otf.lua",
+               ["luasnip.extras.postfix"] = "luasnip/extras/postfix.lua",
+               ["luasnip.extras.select_choice"] = "luasnip/extras/select_choice.lua",
+               ["luasnip.extras.snip_location"] = "luasnip/extras/snip_location.lua",
+               ["luasnip.extras.snippet_list"] = "luasnip/extras/snippet_list.lua",
+               ["luasnip.extras.treesitter_postfix"] = "luasnip/extras/treesitter_postfix.lua",
+               ["luasnip.health"] = "luasnip/health.lua",
+               ["luasnip.init"] = "luasnip/init.lua",
+               ["luasnip.loaders.data"] = "luasnip/loaders/data.lua",
+               ["luasnip.loaders.from_lua"] = "luasnip/loaders/from_lua.lua",
+               ["luasnip.loaders.from_snipmate"] = "luasnip/loaders/from_snipmate.lua",
+               ["luasnip.loaders.from_vscode"] = "luasnip/loaders/from_vscode.lua",
+               ["luasnip.loaders.fs_watchers"] = "luasnip/loaders/fs_watchers.lua",
+               ["luasnip.loaders.init"] = "luasnip/loaders/init.lua",
+               ["luasnip.loaders.snippet_cache"] = "luasnip/loaders/snippet_cache.lua",
+               ["luasnip.loaders.types"] = "luasnip/loaders/types.lua",
+               ["luasnip.loaders.util"] = "luasnip/loaders/util.lua",
+               ["luasnip.nodes.absolute_indexer"] = "luasnip/nodes/absolute_indexer.lua",
+               ["luasnip.nodes.choiceNode"] = "luasnip/nodes/choiceNode.lua",
+               ["luasnip.nodes.duplicate"] = "luasnip/nodes/duplicate.lua",
+               ["luasnip.nodes.dynamicNode"] = "luasnip/nodes/dynamicNode.lua",
+               ["luasnip.nodes.functionNode"] = "luasnip/nodes/functionNode.lua",
+               ["luasnip.nodes.insertNode"] = "luasnip/nodes/insertNode.lua",
+               ["luasnip.nodes.key_indexer"] = "luasnip/nodes/key_indexer.lua",
+               ["luasnip.nodes.multiSnippet"] = "luasnip/nodes/multiSnippet.lua",
+               ["luasnip.nodes.node"] = "luasnip/nodes/node.lua",
+               ["luasnip.nodes.restoreNode"] = "luasnip/nodes/restoreNode.lua",
+               ["luasnip.nodes.snippet"] = "luasnip/nodes/snippet.lua",
+               ["luasnip.nodes.snippetProxy"] = "luasnip/nodes/snippetProxy.lua",
+               ["luasnip.nodes.textNode"] = "luasnip/nodes/textNode.lua",
+               ["luasnip.nodes.util"] = "luasnip/nodes/util.lua",
+               ["luasnip.nodes.util.trig_engines"] = "luasnip/nodes/util/trig_engines.lua",
+               ["luasnip.session.enqueueable_operations"] = "luasnip/session/enqueueable_operations.lua",
+               ["luasnip.session.init"] = "luasnip/session/init.lua",
+               ["luasnip.session.snippet_collection.init"] = "luasnip/session/snippet_collection/init.lua",
+               ["luasnip.session.snippet_collection.source"] = "luasnip/session/snippet_collection/source.lua",
+               ["luasnip.snippets"] = "luasnip/snippets.lua",
+               ["luasnip.util._builtin_vars"] = "luasnip/util/_builtin_vars.lua",
+               ["luasnip.util.auto_table"] = "luasnip/util/auto_table.lua",
+               ["luasnip.util.dict"] = "luasnip/util/dict.lua",
+               ["luasnip.util.directed_graph"] = "luasnip/util/directed_graph.lua",
+               ["luasnip.util.environ"] = "luasnip/util/environ.lua",
+               ["luasnip.util.events"] = "luasnip/util/events.lua",
+               ["luasnip.util.ext_opts"] = "luasnip/util/ext_opts.lua",
+               ["luasnip.util.extend_decorator"] = "luasnip/util/extend_decorator.lua",
+               ["luasnip.util.functions"] = "luasnip/util/functions.lua",
+               ["luasnip.util.jsonc"] = "luasnip/util/jsonc.lua",
+               ["luasnip.util.jsregexp"] = "luasnip/util/jsregexp.lua",
+               ["luasnip.util.lazy_table"] = "luasnip/util/lazy_table.lua",
+               ["luasnip.util.log"] = "luasnip/util/log.lua",
+               ["luasnip.util.mark"] = "luasnip/util/mark.lua",
+               ["luasnip.util.parser.ast_parser"] = "luasnip/util/parser/ast_parser.lua",
+               ["luasnip.util.parser.ast_utils"] = "luasnip/util/parser/ast_utils.lua",
+               ["luasnip.util.parser.init"] = "luasnip/util/parser/init.lua",
+               ["luasnip.util.parser.neovim_ast"] = "luasnip/util/parser/neovim_ast.lua",
+               ["luasnip.util.parser.neovim_parser"] = "luasnip/util/parser/neovim_parser.lua",
+               ["luasnip.util.path"] = "luasnip/util/path.lua",
+               ["luasnip.util.pattern_tokenizer"] = "luasnip/util/pattern_tokenizer.lua",
+               ["luasnip.util.select"] = "luasnip/util/select.lua",
+               ["luasnip.util.str"] = "luasnip/util/str.lua",
+               ["luasnip.util.table"] = "luasnip/util/table.lua",
+               ["luasnip.util.time"] = "luasnip/util/time.lua",
+               ["luasnip.util.types"] = "luasnip/util/types.lua",
+               ["luasnip.util.util"] = "luasnip/util/util.lua"
+            }
+         }
+      }
+   }
+}

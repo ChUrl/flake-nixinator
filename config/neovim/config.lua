@@ -60,397 +60,24 @@ do
 end
 -- }}}
 
-vim.loader.disable()
+vim.loader.enable()
 
 vim.cmd([[
   
 ]])
 require("lazy").setup({
     dev = {
-        path = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins",
+        path = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins",
         patterns = { "." },
         fallback = false,
     },
     spec = {
         {
-            "catppuccin",
-            ["config"] = function(_, opts)
-                require("catppuccin").setup(opts)
-
-                vim.cmd([[
-    let $BAT_THEME = "catppuccin"
-    colorscheme catppuccin
-  ]])
-            end,
-            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/catppuccin-nvim",
-            ["lazy"] = false,
-            ["name"] = "catppuccin",
-            ["opts"] = { ["background"] = { ["dark"] = "mocha", ["light"] = "latte" }, ["flavour"] = "latte" },
-            ["priority"] = 1000,
-        },
-        {
-            "lspconfig",
-            ["config"] = function(_, opts)
-                local __lspOnAttach = function(client, bufnr) end
-
-                local __lspCapabilities = function()
-                    capabilities = vim.lsp.protocol.make_client_capabilities()
-                    capabilities =
-                        vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
-                    return capabilities
-                end
-
-                local __setup = {
-                    on_attach = __lspOnAttach,
-                    capabilities = __lspCapabilities(),
-                }
-
-                for i, server in ipairs({
-                    { ["name"] = "cmake" },
-                    { ["name"] = "clojure_lsp" },
-                    { ["name"] = "clangd" },
-                    { ["name"] = "texlab" },
-                    { ["name"] = "rust_analyzer" },
-                    { ["name"] = "pyright" },
-                    { ["name"] = "nil_ls" },
-                    { ["cmd"] = { "haskell-language-server-wrapper", "--lsp" }, ["name"] = "hls" },
-                }) do
-                    if type(server) == "string" then
-                        require("lspconfig")[server].setup(__setup)
-                    else
-                        local options = server.extraOptions
-
-                        if options == nil then
-                            options = __setup
-                        else
-                            options = vim.tbl_extend("keep", options, __setup)
-                        end
-
-                        require("lspconfig")[server.name].setup(options)
-                    end
-                end
-            end,
-            ["dependencies"] = {
-                {
-                    "cmp",
-                    ["config"] = function(_, opts)
-                        require("cmp").setup(opts)
-                    end,
-                    ["dependencies"] = {
-                        {
-                            "cmp-async-path",
-                            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/cmp-async-path",
-                            ["name"] = "cmp-async-path",
-                        },
-                        {
-                            "cmp-buffer",
-                            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/cmp-buffer",
-                            ["enabled"] = false,
-                            ["name"] = "cmp-buffer",
-                        },
-                        {
-                            "cmp-cmdline",
-                            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/cmp-cmdline",
-                            ["enabled"] = false,
-                            ["name"] = "cmp-cmdline",
-                        },
-                        {
-                            "cmp-emoji",
-                            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/cmp-emoji",
-                            ["name"] = "cmp-emoji",
-                        },
-                        {
-                            "cmp-nvim-lsp",
-                            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/cmp-nvim-lsp",
-                            ["name"] = "cmp-nvim-lsp",
-                        },
-                        {
-                            "cmp-nvim-lsp-signature-help",
-                            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/cmp-nvim-lsp-signature-help",
-                            ["name"] = "cmp-nvim-lsp-signature-help",
-                        },
-                        {
-                            "cmp-luasnip",
-                            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/cmp_luasnip",
-                            ["name"] = "cmp-luasnip",
-                        },
-                    },
-                    ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/nvim-cmp",
-                    ["lazy"] = false,
-                    ["name"] = "cmp",
-                    ["opts"] = function()
-                        local cmp = require("cmp")
-                        local luasnip = require("luasnip")
-
-                        local has_words_before = function()
-                            unpack = unpack or table.unpack
-                            local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-                            return col ~= 0
-                                and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s")
-                                    == nil
-                        end
-
-                        return {
-                            sources = cmp.config.sources({
-                                { ["name"] = "async_path" },
-                                { ["name"] = "emoji" },
-                                { ["name"] = "nvim_lsp" },
-                                { ["name"] = "nvim_lsp_signature_help" },
-                                { ["name"] = "luasnip" },
-                            }),
-
-                            snippet = {
-                                expand = function(args)
-                                    require("luasnip").lsp_expand(args.body)
-                                end,
-                            },
-
-                            window = {
-                                completion = cmp.config.window.bordered(),
-                                documentation = cmp.config.window.bordered(),
-                                -- completion.border = "rounded",
-                                -- documentation.border = "rounded",
-                            },
-
-                            mapping = cmp.mapping.preset.insert({
-                                ["<Down>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
-                                ["<Up>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
-                                ["<C-e>"] = cmp.mapping.abort(),
-                                ["<Esc>"] = cmp.mapping.abort(),
-                                ["<C-Up>"] = cmp.mapping.scroll_docs(-4),
-                                ["<C-Down>"] = cmp.mapping.scroll_docs(4),
-                                ["<C-Space>"] = cmp.mapping.complete({}),
-
-                                ["<CR>"] = cmp.mapping.confirm({ select = true }),
-
-                                ["<Tab>"] = cmp.mapping(function(fallback)
-                                    if cmp.visible() then
-                                        cmp.select_next_item()
-                                    elseif require("luasnip").expand_or_jumpable() then
-                                        require("luasnip").expand_or_jump()
-                                    elseif has_words_before() then
-                                        cmp.complete()
-                                    else
-                                        fallback()
-                                    end
-                                end, { "i", "s" }),
-
-                                ["<S-Tab>"] = cmp.mapping(function(fallback)
-                                    if cmp.visible() then
-                                        cmp.select_prev_item()
-                                    elseif luasnip.jumpable(-1) then
-                                        luasnip.jump(-1)
-                                    else
-                                        fallback()
-                                    end
-                                end, { "i", "s" }),
-                            }),
-                        }
-                    end,
-                },
-                {
-                    "illuminate",
-                    ["config"] = function(_, opts)
-                        require("illuminate").configure(opts)
-                    end,
-                    ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/vim-illuminate",
-                    ["lazy"] = false,
-                    ["name"] = "illuminate",
-                    ["opts"] = {
-                        ["filetypesDenylist"] = {
-                            "DressingSelect",
-                            "Outline",
-                            "TelescopePrompt",
-                            "alpha",
-                            "harpoon",
-                            "toggleterm",
-                            "neo-tree",
-                            "Spectre",
-                            "reason",
-                        },
-                    },
-                },
-            },
-            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/nvim-lspconfig",
-            ["lazy"] = false,
-            ["name"] = "lspconfig",
-        },
-        {
-            "web-devicons",
-            ["config"] = function(_, opts)
-                require("nvim-web-devicons").setup(opts)
-            end,
-            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/nvim-web-devicons",
-            ["lazy"] = false,
-            ["name"] = "web-devicons",
-        },
-        {
-            "better-escape",
-            ["config"] = function(_, opts)
-                require("better_escape").setup(opts)
-            end,
-            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/better-escape.nvim",
-            ["lazy"] = false,
-            ["name"] = "better-escape",
-            ["opts"] = { ["mapping"] = { "jk" }, ["timeout"] = 200 },
-        },
-        {
-            "chadtree",
-            ["config"] = function(_, opts)
-                vim.api.nvim_set_var("chadtree_settings", opts)
-            end,
-            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/chadtree",
-            ["name"] = "chadtree",
-            ["opts"] = { ["theme"] = { ["text_colour_set"] = "nerdtree_syntax_dark" }, ["xdg"] = true },
-        },
-        {
-            "comment",
-            ["config"] = function(_, opts)
-                require("Comment").setup(opts)
-            end,
-            ["dependencies"] = {
-                {
-                    "ts-context-commentstring",
-                    ["config"] = function(_, opts)
-                        vim.g.skip_ts_context_commentstring_module = true -- Skip compatibility checks
-
-                        require("ts_context_commentstring").setup(opts)
-                    end,
-                    ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/nvim-ts-context-commentstring",
-                    ["lazy"] = false,
-                    ["name"] = "ts-context-commentstring",
-                },
-            },
-            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/comment.nvim",
-            ["name"] = "comment",
-            ["opts"] = {
-                ["mappings"] = { ["basic"] = true, ["extra"] = false },
-                ["opleader"] = { ["block"] = "<C-b>", ["line"] = "<C-c>" },
-                ["pre_hook"] = function()
-                    require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook()
-                end,
-                ["toggler"] = { ["block"] = "<C-b>", ["line"] = "<C-c>" },
-            },
-        },
-        {
-            "conform",
-            ["config"] = function(_, opts)
-                require("conform").setup(opts)
-            end,
-            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/conform.nvim",
-            ["name"] = "conform",
-            ["opts"] = {
-                ["formatters_by_ft"] = {
-                    ["c"] = { "clang-format" },
-                    ["cpp"] = { "clang-format" },
-                    ["css"] = { { "prettierd", "prettier" } },
-                    ["h"] = { "clang-format" },
-                    ["hpp"] = { "clang-format" },
-                    ["html"] = { { "prettierd", "prettier" } },
-                    ["java"] = { "google-java-format" },
-                    ["javascript"] = { { "prettierd", "prettier" } },
-                    ["markdown"] = { { "prettierd", "prettier" } },
-                    ["nix"] = { "alejandra" },
-                    ["python"] = { "black" },
-                    ["rust"] = { "rustfmt" },
-                },
-            },
-        },
-        {
-            "flash",
-            ["config"] = function(_, opts)
-                require("flash").setup(opts)
-            end,
-            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/flash.nvim",
-            ["name"] = "flash",
-        },
-        {
-            "gitmessenger",
-            ["config"] = function(_, opts)
-                for k, v in pairs(opts) do
-                    vim.g[k] = v
-                end
-            end,
-            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/git-messenger.vim",
-            ["name"] = "gitmessenger",
-            ["opts"] = {
-                ["git_messenger_floating_win_opts"] = { ["border"] = "rounded" },
-                ["git_messenger_no_default_mappings"] = true,
-            },
-        },
-        {
-            "gitsigns",
-            ["config"] = function(_, opts)
-                require("gitsigns").setup(opts)
-            end,
-            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/gitsigns.nvim",
-            ["lazy"] = false,
-            ["name"] = "gitsigns",
-            ["opts"] = { ["current_line_blame"] = false },
-        },
-        {
-            "headlines",
-            ["config"] = function(_, opts)
-                require("headlines").setup(opts)
-            end,
-            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/headlines.nvim",
-            ["name"] = "headlines",
-        },
-        {
-            "intellitab",
-            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/intellitab.nvim",
-            ["lazy"] = false,
-            ["name"] = "intellitab",
-        },
-        {
-            "lastplace",
-            ["config"] = function(_, opts)
-                require("nvim-lastplace").setup(opts)
-            end,
-            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/nvim-lastplace",
-            ["lazy"] = false,
-            ["name"] = "lastplace",
-        },
-        {
-            "lazygit",
-            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/lazygit.nvim",
-            ["name"] = "lazygit",
-        },
-        {
-            "lint",
-            ["config"] = function(_, opts)
-                local lint = require("lint")
-
-                for k, v in pairs(opts) do
-                    lint[k] = v
-                end
-            end,
-            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/nvim-lint",
-            ["lazy"] = false,
-            ["name"] = "lint",
-            ["opts"] = {
-                ["linters_by_ft"] = {
-                    ["c"] = { "clang-tidy" },
-                    ["clojure"] = { "clj-kondo" },
-                    ["cpp"] = { "clang-tidy" },
-                    ["h"] = { "clang-tidy" },
-                    ["hpp"] = { "clang-tidy" },
-                    ["java"] = { "checkstyle" },
-                    ["javascript"] = { "eslint_d" },
-                    ["markdown"] = { "vale" },
-                    ["nix"] = { "statix" },
-                    ["python"] = { "flake8" },
-                    ["rust"] = { "clippy" },
-                    ["text"] = { "vale" },
-                },
-            },
-        },
-        {
             "lualine",
             ["config"] = function(_, opts)
                 require("lualine").setup(opts)
             end,
-            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/lualine.nvim",
+            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/lualine.nvim",
             ["lazy"] = false,
             ["name"] = "lualine",
             ["opts"] = {
@@ -474,33 +101,6 @@ require("lazy").setup({
             },
         },
         {
-            "luasnip",
-            ["config"] = function(_, opts)
-                require("luasnip").config.set_config(opts)
-            end,
-            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/luasnip",
-            ["name"] = "luasnip",
-        },
-        {
-            "navbuddy",
-            ["config"] = function(_, opts)
-                local actions = require("nvim-navbuddy.actions") -- ?
-                require("nvim-navbuddy").setup(opts)
-            end,
-            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/nvim-navbuddy",
-            ["name"] = "navbuddy",
-            ["opts"] = { ["lsp"] = { ["auto_attach"] = true }, ["window"] = { ["border"] = "rounded" } },
-        },
-        {
-            "navic",
-            ["config"] = function(_, opts)
-                require("nvim-navic").setup(opts)
-            end,
-            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/nvim-navic",
-            ["name"] = "navic",
-            ["opts"] = { ["click"] = true, ["highlight"] = true, ["lsp"] = { ["auto_attach"] = true } },
-        },
-        {
             "noice",
             ["config"] = function(_, opts)
                 require("noice").setup(opts)
@@ -508,12 +108,12 @@ require("lazy").setup({
             ["dependencies"] = {
                 {
                     "nui",
-                    ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/nui.nvim",
+                    ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/nui.nvim",
                     ["lazy"] = false,
                     ["name"] = "nui",
                 },
             },
-            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/noice.nvim",
+            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/noice.nvim",
             ["lazy"] = false,
             ["name"] = "noice",
             ["opts"] = {
@@ -555,60 +155,9 @@ require("lazy").setup({
                 vim.notify = require("notify")
                 require("notify").setup(opts)
             end,
-            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/nvim-notify",
+            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/nvim-notify",
             ["lazy"] = false,
             ["name"] = "notify",
-        },
-        {
-            "autopairs",
-            ["config"] = function(_, opts)
-                require("nvim-autopairs").setup(opts)
-            end,
-            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/nvim-autopairs",
-            ["lazy"] = false,
-            ["name"] = "autopairs",
-        },
-        {
-            "colorizer",
-            ["config"] = function(_, opts)
-                require("colorizer").setup(opts)
-            end,
-            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/nvim-colorizer.lua",
-            ["lazy"] = false,
-            ["name"] = "colorizer",
-        },
-        {
-            "ufo",
-            ["config"] = function(_, opts)
-                require("ufo").setup(opts)
-            end,
-            ["dependencies"] = {
-                {
-                    "promise",
-                    ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/promise-async",
-                    ["name"] = "promise",
-                },
-            },
-            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/nvim-ufo",
-            ["name"] = "ufo",
-        },
-        {
-            "rainbow-delimiters",
-            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/rainbow-delimiters.nvim",
-            ["lazy"] = false,
-            ["name"] = "rainbow-delimiters",
-        },
-        {
-            "sandwich",
-            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/vim-sandwich",
-            ["lazy"] = false,
-            ["name"] = "sandwich",
-        },
-        {
-            "sleuth",
-            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/vim-sleuth",
-            ["lazy"] = false,
-            ["name"] = "sleuth",
         },
         {
             "telescope",
@@ -623,26 +172,26 @@ require("lazy").setup({
             ["dependencies"] = {
                 {
                     "plenary",
-                    ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/plenary.nvim",
+                    ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/plenary.nvim",
                     ["name"] = "plenary",
                 },
                 {
                     "telescope-undo",
-                    ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/telescope-undo.nvim",
+                    ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/telescope-undo.nvim",
                     ["name"] = "telescope-undo",
                 },
                 {
                     "telescope-ui-select",
-                    ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/telescope-ui-select.nvim",
+                    ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/telescope-ui-select.nvim",
                     ["name"] = "telescope-ui-select",
                 },
                 {
                     "telescope-fzf-native",
-                    ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/telescope-fzf-native.nvim",
+                    ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/telescope-fzf-native.nvim",
                     ["name"] = "telescope-fzf-native",
                 },
             },
-            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/telescope.nvim",
+            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/telescope.nvim",
             ["lazy"] = false,
             ["name"] = "telescope",
             ["opts"] = {
@@ -658,37 +207,159 @@ require("lazy").setup({
             },
         },
         {
-            "toggleterm",
+            "which-key",
             ["config"] = function(_, opts)
-                require("toggleterm").setup(opts)
+                require("which-key").setup(opts)
             end,
-            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/toggleterm.nvim",
-            ["name"] = "toggleterm",
+            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/which-key.nvim",
+            ["lazy"] = false,
+            ["name"] = "which-key",
+            ["priority"] = 100,
+        },
+        {
+            "clangd-extensions",
+            ["config"] = function(_, opts)
+                require("clangd_extensions").setup(opts)
+            end,
+            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/clangd_extensions.nvim",
+            ["name"] = "clangd-extensions",
+        },
+        {
+            "conform",
+            ["config"] = function(_, opts)
+                require("conform").setup(opts)
+            end,
+            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/conform.nvim",
+            ["name"] = "conform",
             ["opts"] = {
-                ["auto_scroll"] = true,
-                ["close_on_exit"] = true,
-                ["direction"] = "horizontal",
-                ["float_opts"] = { ["border"] = "curved", ["height"] = 20, ["width"] = 80, ["winblend"] = 0 },
-                ["hide_numbers"] = true,
-                ["insert_mappings"] = true,
-                ["open_mapping"] = "[[<C-t>]]",
-                ["persist_mode"] = true,
-                ["shade_terminals"] = true,
-                ["shell"] = "fish",
-                ["start_in_insert"] = true,
-                ["terminal_mappings"] = true,
+                ["formatters_by_ft"] = {
+                    ["c"] = { "clang-format" },
+                    ["cpp"] = { "clang-format" },
+                    ["css"] = { { "prettierd", "prettier" } },
+                    ["h"] = { "clang-format" },
+                    ["hpp"] = { "clang-format" },
+                    ["html"] = { { "prettierd", "prettier" } },
+                    ["java"] = { "google-java-format" },
+                    ["javascript"] = { { "prettierd", "prettier" } },
+                    ["lua"] = { "stylua" },
+                    ["markdown"] = { { "prettierd", "prettier" } },
+                    ["nix"] = { "alejandra" },
+                    ["python"] = { "black" },
+                    ["rust"] = { "rustfmt" },
+                },
             },
+        },
+        {
+            "haskell-tools",
+            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/haskell-tools.nvim",
+            ["name"] = "haskell-tools",
+        },
+        {
+            "lint",
+            ["config"] = function(_, opts)
+                local lint = require("lint")
+
+                for k, v in pairs(opts) do
+                    lint[k] = v
+                end
+            end,
+            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/nvim-lint",
+            ["lazy"] = false,
+            ["name"] = "lint",
+            ["opts"] = {
+                ["linters_by_ft"] = {
+                    ["c"] = { "clang-tidy" },
+                    ["clojure"] = { "clj-kondo" },
+                    ["cpp"] = { "clang-tidy" },
+                    ["h"] = { "clang-tidy" },
+                    ["hpp"] = { "clang-tidy" },
+                    ["java"] = { "checkstyle" },
+                    ["javascript"] = { "eslint_d" },
+                    ["lua"] = { "luacheck" },
+                    ["markdown"] = { "vale" },
+                    ["nix"] = { "statix" },
+                    ["python"] = { "flake8" },
+                    ["rust"] = { "clippy" },
+                    ["text"] = { "vale" },
+                },
+            },
+        },
+        {
+            "lspconfig",
+            ["config"] = function(_, opts)
+                local __lspOnAttach = function(client, bufnr) end
+
+                local __lspCapabilities = function()
+                    capabilities = vim.lsp.protocol.make_client_capabilities()
+                    capabilities =
+                        vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
+                    return capabilities
+                end
+
+                local __setup = {
+                    on_attach = __lspOnAttach,
+                    capabilities = __lspCapabilities(),
+                }
+
+                for i, server in ipairs({
+                    { ["name"] = "clangd" },
+                    { ["name"] = "clojure_lsp" },
+                    { ["name"] = "cmake" },
+                    { ["name"] = "lua_ls" },
+                    { ["name"] = "nil_ls" },
+                    { ["name"] = "pyright" },
+                    { ["name"] = "texlab" },
+                }) do
+                    if type(server) == "string" then
+                        require("lspconfig")[server].setup(__setup)
+                    else
+                        local options = server.extraOptions
+
+                        if options == nil then
+                            options = __setup
+                        else
+                            options = vim.tbl_extend("keep", options, __setup)
+                        end
+
+                        require("lspconfig")[server.name].setup(options)
+                    end
+                end
+            end,
+            ["dependencies"] = {
+                {
+                    "neodev",
+                    ["config"] = function(_, opts)
+                        require("neodev").setup(opts)
+                    end,
+                    ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/neodev.nvim",
+                    ["name"] = "neodev",
+                },
+            },
+            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/nvim-lspconfig",
+            ["lazy"] = false,
+            ["name"] = "lspconfig",
+        },
+        {
+            "rustaceanvim",
+            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/rustaceanvim",
+            ["name"] = "rustaceanvim",
         },
         {
             "treesitter",
             ["config"] = function(_, opts)
+                vim.opt.runtimepath:append(
+                    "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/nvim-treesitter"
+                )
+                vim.opt.runtimepath:append("/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/treesitter-parsers")
+
                 require("nvim-treesitter.configs").setup(opts)
             end,
-            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/nvim-treesitter",
+            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/nvim-treesitter",
             ["lazy"] = false,
             ["name"] = "treesitter",
             ["opts"] = {
-                ["highlight"] = { ["enable"] = true },
+                ["auto_install"] = false,
+                ["highlight"] = { ["additional_vim_regex_highlighting"] = false, ["enable"] = true },
                 ["incremental_selection"] = {
                     ["enable"] = true,
                     ["keymaps"] = {
@@ -699,6 +370,371 @@ require("lazy").setup({
                     },
                 },
                 ["indent"] = { ["enable"] = true },
+                ["parser_install_dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/treesitter-parsers",
+            },
+        },
+        {
+            "catppuccin",
+            ["config"] = function(_, opts)
+                require("catppuccin").setup(opts)
+
+                vim.cmd([[
+    let $BAT_THEME = "catppuccin"
+    colorscheme catppuccin
+  ]])
+            end,
+            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/catppuccin-nvim",
+            ["lazy"] = false,
+            ["name"] = "catppuccin",
+            ["opts"] = { ["background"] = { ["dark"] = "mocha", ["light"] = "latte" }, ["flavour"] = "mocha" },
+            ["priority"] = 1000,
+        },
+        {
+            "web-devicons",
+            ["config"] = function(_, opts)
+                require("nvim-web-devicons").setup(opts)
+            end,
+            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/nvim-web-devicons",
+            ["lazy"] = false,
+            ["name"] = "web-devicons",
+        },
+        {
+            "better-escape",
+            ["config"] = function(_, opts)
+                require("better_escape").setup(opts)
+            end,
+            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/better-escape.nvim",
+            ["lazy"] = false,
+            ["name"] = "better-escape",
+            ["opts"] = { ["mapping"] = { "jk" }, ["timeout"] = 200 },
+        },
+        {
+            "chadtree",
+            ["config"] = function(_, opts)
+                vim.api.nvim_set_var("chadtree_settings", opts)
+            end,
+            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/chadtree",
+            ["name"] = "chadtree",
+            ["opts"] = { ["theme"] = { ["text_colour_set"] = "nerdtree_syntax_dark" }, ["xdg"] = true },
+        },
+        {
+            "cmp",
+            ["config"] = function(_, opts)
+                require("cmp").setup(opts)
+            end,
+            ["dependencies"] = {
+                {
+                    "cmp-async-path",
+                    ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/cmp-async-path",
+                    ["name"] = "cmp-async-path",
+                },
+                {
+                    "cmp-buffer",
+                    ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/cmp-buffer",
+                    ["enabled"] = false,
+                    ["name"] = "cmp-buffer",
+                },
+                {
+                    "cmp-cmdline",
+                    ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/cmp-cmdline",
+                    ["enabled"] = false,
+                    ["name"] = "cmp-cmdline",
+                },
+                {
+                    "cmp-emoji",
+                    ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/cmp-emoji",
+                    ["name"] = "cmp-emoji",
+                },
+                {
+                    "cmp-nvim-lsp",
+                    ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/cmp-nvim-lsp",
+                    ["name"] = "cmp-nvim-lsp",
+                },
+                {
+                    "cmp-nvim-lsp-signature-help",
+                    ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/cmp-nvim-lsp-signature-help",
+                    ["name"] = "cmp-nvim-lsp-signature-help",
+                },
+                {
+                    "cmp-luasnip",
+                    ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/cmp_luasnip",
+                    ["name"] = "cmp-luasnip",
+                },
+            },
+            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/nvim-cmp",
+            ["lazy"] = false,
+            ["name"] = "cmp",
+            ["opts"] = function()
+                local cmp = require("cmp")
+                local luasnip = require("luasnip")
+
+                local has_words_before = function()
+                    unpack = unpack or table.unpack
+                    local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+                    return col ~= 0
+                        and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+                end
+
+                return {
+                    sources = cmp.config.sources({
+                        { ["name"] = "async_path" },
+                        { ["name"] = "emoji" },
+                        { ["name"] = "nvim_lsp" },
+                        { ["name"] = "nvim_lsp_signature_help" },
+                        { ["name"] = "luasnip" },
+                    }),
+
+                    snippet = {
+                        expand = function(args)
+                            require("luasnip").lsp_expand(args.body)
+                        end,
+                    },
+
+                    window = {
+                        completion = cmp.config.window.bordered(),
+                        documentation = cmp.config.window.bordered(),
+                        -- completion.border = "rounded",
+                        -- documentation.border = "rounded",
+                    },
+
+                    mapping = cmp.mapping.preset.insert({
+                        ["<Down>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
+                        ["<Up>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
+                        ["<C-e>"] = cmp.mapping.abort(),
+                        ["<Esc>"] = cmp.mapping.abort(),
+                        ["<C-Up>"] = cmp.mapping.scroll_docs(-4),
+                        ["<C-Down>"] = cmp.mapping.scroll_docs(4),
+                        ["<C-Space>"] = cmp.mapping.complete({}),
+
+                        ["<CR>"] = cmp.mapping.confirm({ select = true }),
+
+                        ["<Tab>"] = cmp.mapping(function(fallback)
+                            if cmp.visible() then
+                                cmp.select_next_item()
+                            elseif require("luasnip").expand_or_jumpable() then
+                                require("luasnip").expand_or_jump()
+                            elseif has_words_before() then
+                                cmp.complete()
+                            else
+                                fallback()
+                            end
+                        end, { "i", "s" }),
+
+                        ["<S-Tab>"] = cmp.mapping(function(fallback)
+                            if cmp.visible() then
+                                cmp.select_prev_item()
+                            elseif luasnip.jumpable(-1) then
+                                luasnip.jump(-1)
+                            else
+                                fallback()
+                            end
+                        end, { "i", "s" }),
+                    }),
+                }
+            end,
+        },
+        {
+            "comment",
+            ["config"] = function(_, opts)
+                require("Comment").setup(opts)
+            end,
+            ["dependencies"] = {
+                {
+                    "ts-context-commentstring",
+                    ["config"] = function(_, opts)
+                        vim.g.skip_ts_context_commentstring_module = true -- Skip compatibility checks
+
+                        require("ts_context_commentstring").setup(opts)
+                    end,
+                    ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/nvim-ts-context-commentstring",
+                    ["lazy"] = false,
+                    ["name"] = "ts-context-commentstring",
+                },
+            },
+            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/comment.nvim",
+            ["name"] = "comment",
+            ["opts"] = {
+                ["mappings"] = { ["basic"] = true, ["extra"] = false },
+                ["opleader"] = { ["block"] = "<C-b>", ["line"] = "<C-c>" },
+                ["pre_hook"] = function()
+                    require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook()
+                end,
+                ["toggler"] = { ["block"] = "<C-b>", ["line"] = "<C-c>" },
+            },
+        },
+        {
+            "flash",
+            ["config"] = function(_, opts)
+                require("flash").setup(opts)
+            end,
+            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/flash.nvim",
+            ["name"] = "flash",
+        },
+        {
+            "gitmessenger",
+            ["config"] = function(_, opts)
+                for k, v in pairs(opts) do
+                    vim.g[k] = v
+                end
+            end,
+            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/git-messenger.vim",
+            ["name"] = "gitmessenger",
+            ["opts"] = {
+                ["git_messenger_floating_win_opts"] = { ["border"] = "rounded" },
+                ["git_messenger_no_default_mappings"] = true,
+            },
+        },
+        {
+            "gitsigns",
+            ["config"] = function(_, opts)
+                require("gitsigns").setup(opts)
+            end,
+            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/gitsigns.nvim",
+            ["lazy"] = false,
+            ["name"] = "gitsigns",
+            ["opts"] = { ["current_line_blame"] = false },
+        },
+        {
+            "illuminate",
+            ["config"] = function(_, opts)
+                require("illuminate").configure(opts)
+            end,
+            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/vim-illuminate",
+            ["lazy"] = false,
+            ["name"] = "illuminate",
+            ["opts"] = {
+                ["filetypesDenylist"] = {
+                    "DressingSelect",
+                    "Outline",
+                    "TelescopePrompt",
+                    "alpha",
+                    "harpoon",
+                    "toggleterm",
+                    "neo-tree",
+                    "Spectre",
+                    "reason",
+                },
+            },
+        },
+        {
+            "intellitab",
+            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/intellitab.nvim",
+            ["lazy"] = false,
+            ["name"] = "intellitab",
+        },
+        {
+            "lastplace",
+            ["config"] = function(_, opts)
+                require("nvim-lastplace").setup(opts)
+            end,
+            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/nvim-lastplace",
+            ["lazy"] = false,
+            ["name"] = "lastplace",
+        },
+        {
+            "lazygit",
+            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/lazygit.nvim",
+            ["name"] = "lazygit",
+        },
+        {
+            "luasnip",
+            ["config"] = function(_, opts)
+                require("luasnip").config.set_config(opts)
+            end,
+            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/luasnip",
+            ["name"] = "luasnip",
+        },
+        {
+            "navbuddy",
+            ["config"] = function(_, opts)
+                local actions = require("nvim-navbuddy.actions") -- ?
+                require("nvim-navbuddy").setup(opts)
+            end,
+            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/nvim-navbuddy",
+            ["name"] = "navbuddy",
+            ["opts"] = { ["lsp"] = { ["auto_attach"] = true }, ["window"] = { ["border"] = "rounded" } },
+        },
+        {
+            "navic",
+            ["config"] = function(_, opts)
+                require("nvim-navic").setup(opts)
+            end,
+            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/nvim-navic",
+            ["name"] = "navic",
+            ["opts"] = { ["click"] = true, ["highlight"] = true, ["lsp"] = { ["auto_attach"] = true } },
+        },
+        {
+            "autopairs",
+            ["config"] = function(_, opts)
+                require("nvim-autopairs").setup(opts)
+            end,
+            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/nvim-autopairs",
+            ["lazy"] = false,
+            ["name"] = "autopairs",
+        },
+        {
+            "colorizer",
+            ["config"] = function(_, opts)
+                require("colorizer").setup(opts)
+            end,
+            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/nvim-colorizer.lua",
+            ["lazy"] = false,
+            ["name"] = "colorizer",
+        },
+        {
+            "ufo",
+            ["config"] = function(_, opts)
+                require("ufo").setup(opts)
+            end,
+            ["dependencies"] = {
+                {
+                    "promise",
+                    ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/promise-async",
+                    ["name"] = "promise",
+                },
+            },
+            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/nvim-ufo",
+            ["name"] = "ufo",
+        },
+        {
+            "rainbow-delimiters",
+            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/rainbow-delimiters.nvim",
+            ["lazy"] = false,
+            ["name"] = "rainbow-delimiters",
+        },
+        {
+            "sandwich",
+            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/vim-sandwich",
+            ["lazy"] = false,
+            ["name"] = "sandwich",
+        },
+        {
+            "sleuth",
+            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/vim-sleuth",
+            ["lazy"] = false,
+            ["name"] = "sleuth",
+        },
+        {
+            "toggleterm",
+            ["config"] = function(_, opts)
+                require("toggleterm").setup(opts)
+            end,
+            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/toggleterm.nvim",
+            ["lazy"] = false,
+            ["name"] = "toggleterm",
+            ["opts"] = {
+                ["auto_scroll"] = true,
+                ["close_on_exit"] = true,
+                ["direction"] = "horizontal",
+                ["float_opts"] = { ["border"] = "curved", ["height"] = 20, ["width"] = 80, ["winblend"] = 0 },
+                ["hide_numbers"] = true,
+                ["insert_mappings"] = true,
+                ["open_mapping"] = [[<C-/>]],
+                ["persist_mode"] = true,
+                ["shade_terminals"] = true,
+                ["shell"] = "fish",
+                ["start_in_insert"] = true,
+                ["terminal_mappings"] = true,
             },
         },
         {
@@ -706,7 +742,7 @@ require("lazy").setup({
             ["config"] = function(_, opts)
                 require("trim").setup(opts)
             end,
-            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/trim.nvim",
+            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/trim.nvim",
             ["lazy"] = false,
             ["name"] = "trim",
         },
@@ -715,26 +751,16 @@ require("lazy").setup({
             ["config"] = function(_, opts)
                 require("trouble").setup(opts)
             end,
-            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/trouble.nvim",
+            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/trouble.nvim",
             ["name"] = "trouble",
         },
-        { "bbye", ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/vim-bbye", ["name"] = "bbye" },
-        {
-            "which-key",
-            ["config"] = function(_, opts)
-                require("which-key").setup(opts)
-            end,
-            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/which-key.nvim",
-            ["lazy"] = false,
-            ["name"] = "which-key",
-            ["priority"] = 100,
-        },
+        { "bbye", ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/vim-bbye", ["name"] = "bbye" },
         {
             "yanky",
             ["config"] = function(_, opts)
                 require("yanky").setup(opts)
             end,
-            ["dir"] = "/nix/store/q4kqqb39sgasra0y3v6ci25605wqx6id-lazy-plugins/yanky.nvim",
+            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/yanky.nvim",
             ["lazy"] = false,
             ["name"] = "yanky",
         },
@@ -886,6 +912,7 @@ do
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Show help tags" },
         },
+        { ["action"] = "+quit", ["key"] = "<leader>q", ["mode"] = "n" },
         { ["action"] = "+buffers", ["key"] = "<leader>b", ["mode"] = "n" },
         {
             ["action"] = "<cmd>Telescope buffers<CR>",
@@ -1090,13 +1117,20 @@ end
 
 -- Set up autocommands {{
 do
-    local __nixvim_autocommands =
-        { {
+    local __nixvim_autocommands = {
+        {
             ["callback"] = function()
                 require("lint").try_lint()
             end,
             ["event"] = { "BufWritePost" },
-        } }
+        },
+        {
+            ["callback"] = function()
+                require("conform").format()
+            end,
+            ["event"] = { "BufWritePre" },
+        },
+    }
 
     for _, autocmd in ipairs(__nixvim_autocommands) do
         vim.api.nvim_create_autocmd(autocmd.event, {
@@ -1119,21 +1153,21 @@ local o = vim.o
 
 -- Neovide
 if g.neovide then
-    require("notify").notify("Running in NeoVide")
+    -- require("notify").notify("Running in NeoVide")
 
     g.neovide_cursor_animate_command_line = true
     g.neovide_cursor_animate_in_insert_mode = true
-    g.neovide_fullscreen = false
-    g.neovide_hide_mouse_when_typing = false
+    -- g.neovide_fullscreen = false
+    g.neovide_hide_mouse_when_typing = true
     g.neovide_padding_top = 0
     g.neovide_padding_bottom = 0
     g.neovide_padding_right = 0
     g.neovide_padding_left = 0
     g.neovide_refresh_rate = 144
-    g.neovide_theme = "light"
+    -- g.neovide_theme = "light"
 
     -- Neovide Fonts
     o.guifont = "JetBrainsMono Nerd Font:h13:Medium"
 else
-    require("notify").notify("Not running in NeoVide")
+    -- require("notify").notify("Not running in NeoVide")
 end

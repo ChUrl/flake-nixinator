@@ -1,0 +1,173 @@
+commands = {}
+dependencies = {
+   ["haskell-tools.nvim"] = {
+      ["3.1.8-1"] = {
+         {
+            constraints = {
+               {
+                  op = ">=",
+                  version = {
+                     5, 1, string = "5.1"
+                  }
+               }
+            },
+            name = "lua"
+         }
+      }
+   }
+}
+modules = {
+   ["haskell-tools.compat"] = {
+      "haskell-tools.nvim/3.1.8-1"
+   },
+   ["haskell-tools.config.check"] = {
+      "haskell-tools.nvim/3.1.8-1"
+   },
+   ["haskell-tools.config.init"] = {
+      "haskell-tools.nvim/3.1.8-1"
+   },
+   ["haskell-tools.config.internal"] = {
+      "haskell-tools.nvim/3.1.8-1"
+   },
+   ["haskell-tools.dap.init"] = {
+      "haskell-tools.nvim/3.1.8-1"
+   },
+   ["haskell-tools.dap.internal"] = {
+      "haskell-tools.nvim/3.1.8-1"
+   },
+   ["haskell-tools.deps"] = {
+      "haskell-tools.nvim/3.1.8-1"
+   },
+   ["haskell-tools.health"] = {
+      "haskell-tools.nvim/3.1.8-1"
+   },
+   ["haskell-tools.hoogle.helpers"] = {
+      "haskell-tools.nvim/3.1.8-1"
+   },
+   ["haskell-tools.hoogle.init"] = {
+      "haskell-tools.nvim/3.1.8-1"
+   },
+   ["haskell-tools.hoogle.local"] = {
+      "haskell-tools.nvim/3.1.8-1"
+   },
+   ["haskell-tools.hoogle.web"] = {
+      "haskell-tools.nvim/3.1.8-1"
+   },
+   ["haskell-tools.init"] = {
+      "haskell-tools.nvim/3.1.8-1"
+   },
+   ["haskell-tools.internal"] = {
+      "haskell-tools.nvim/3.1.8-1"
+   },
+   ["haskell-tools.log.init"] = {
+      "haskell-tools.nvim/3.1.8-1"
+   },
+   ["haskell-tools.log.internal"] = {
+      "haskell-tools.nvim/3.1.8-1"
+   },
+   ["haskell-tools.lsp.definition"] = {
+      "haskell-tools.nvim/3.1.8-1"
+   },
+   ["haskell-tools.lsp.eval"] = {
+      "haskell-tools.nvim/3.1.8-1"
+   },
+   ["haskell-tools.lsp.helpers"] = {
+      "haskell-tools.nvim/3.1.8-1"
+   },
+   ["haskell-tools.lsp.hover"] = {
+      "haskell-tools.nvim/3.1.8-1"
+   },
+   ["haskell-tools.lsp.init"] = {
+      "haskell-tools.nvim/3.1.8-1"
+   },
+   ["haskell-tools.os"] = {
+      "haskell-tools.nvim/3.1.8-1"
+   },
+   ["haskell-tools.parser"] = {
+      "haskell-tools.nvim/3.1.8-1"
+   },
+   ["haskell-tools.project.cabal"] = {
+      "haskell-tools.nvim/3.1.8-1"
+   },
+   ["haskell-tools.project.helpers"] = {
+      "haskell-tools.nvim/3.1.8-1"
+   },
+   ["haskell-tools.project.init"] = {
+      "haskell-tools.nvim/3.1.8-1"
+   },
+   ["haskell-tools.project.stack"] = {
+      "haskell-tools.nvim/3.1.8-1"
+   },
+   ["haskell-tools.repl.builtin"] = {
+      "haskell-tools.nvim/3.1.8-1"
+   },
+   ["haskell-tools.repl.init"] = {
+      "haskell-tools.nvim/3.1.8-1"
+   },
+   ["haskell-tools.repl.toggleterm"] = {
+      "haskell-tools.nvim/3.1.8-1"
+   },
+   ["haskell-tools.strings"] = {
+      "haskell-tools.nvim/3.1.8-1"
+   },
+   ["haskell-tools.tags"] = {
+      "haskell-tools.nvim/3.1.8-1"
+   },
+   ["haskell-tools.types.internal"] = {
+      "haskell-tools.nvim/3.1.8-1"
+   },
+   ["telescope._extensions.ht"] = {
+      "haskell-tools.nvim/3.1.8-1"
+   },
+   ["telescope._extensions.ht.extension"] = {
+      "haskell-tools.nvim/3.1.8-1"
+   }
+}
+repository = {
+   ["haskell-tools.nvim"] = {
+      ["3.1.8-1"] = {
+         {
+            arch = "installed",
+            commands = {},
+            dependencies = {},
+            modules = {
+               ["haskell-tools.compat"] = "haskell-tools/compat.lua",
+               ["haskell-tools.config.check"] = "haskell-tools/config/check.lua",
+               ["haskell-tools.config.init"] = "haskell-tools/config/init.lua",
+               ["haskell-tools.config.internal"] = "haskell-tools/config/internal.lua",
+               ["haskell-tools.dap.init"] = "haskell-tools/dap/init.lua",
+               ["haskell-tools.dap.internal"] = "haskell-tools/dap/internal.lua",
+               ["haskell-tools.deps"] = "haskell-tools/deps.lua",
+               ["haskell-tools.health"] = "haskell-tools/health.lua",
+               ["haskell-tools.hoogle.helpers"] = "haskell-tools/hoogle/helpers.lua",
+               ["haskell-tools.hoogle.init"] = "haskell-tools/hoogle/init.lua",
+               ["haskell-tools.hoogle.local"] = "haskell-tools/hoogle/local.lua",
+               ["haskell-tools.hoogle.web"] = "haskell-tools/hoogle/web.lua",
+               ["haskell-tools.init"] = "haskell-tools/init.lua",
+               ["haskell-tools.internal"] = "haskell-tools/internal.lua",
+               ["haskell-tools.log.init"] = "haskell-tools/log/init.lua",
+               ["haskell-tools.log.internal"] = "haskell-tools/log/internal.lua",
+               ["haskell-tools.lsp.definition"] = "haskell-tools/lsp/definition.lua",
+               ["haskell-tools.lsp.eval"] = "haskell-tools/lsp/eval.lua",
+               ["haskell-tools.lsp.helpers"] = "haskell-tools/lsp/helpers.lua",
+               ["haskell-tools.lsp.hover"] = "haskell-tools/lsp/hover.lua",
+               ["haskell-tools.lsp.init"] = "haskell-tools/lsp/init.lua",
+               ["haskell-tools.os"] = "haskell-tools/os.lua",
+               ["haskell-tools.parser"] = "haskell-tools/parser.lua",
+               ["haskell-tools.project.cabal"] = "haskell-tools/project/cabal.lua",
+               ["haskell-tools.project.helpers"] = "haskell-tools/project/helpers.lua",
+               ["haskell-tools.project.init"] = "haskell-tools/project/init.lua",
+               ["haskell-tools.project.stack"] = "haskell-tools/project/stack.lua",
+               ["haskell-tools.repl.builtin"] = "haskell-tools/repl/builtin.lua",
+               ["haskell-tools.repl.init"] = "haskell-tools/repl/init.lua",
+               ["haskell-tools.repl.toggleterm"] = "haskell-tools/repl/toggleterm.lua",
+               ["haskell-tools.strings"] = "haskell-tools/strings.lua",
+               ["haskell-tools.tags"] = "haskell-tools/tags.lua",
+               ["haskell-tools.types.internal"] = "haskell-tools/types/internal.lua",
+               ["telescope._extensions.ht"] = "telescope/_extensions/ht.lua",
+               ["telescope._extensions.ht.extension"] = "telescope/_extensions/ht/extension.lua"
+            }
+         }
+      }
+   }
+}
