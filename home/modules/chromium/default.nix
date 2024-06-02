@@ -18,6 +18,8 @@ in {
       builtins.concatLists [
         (optionals cfg.google [
           google-chrome # Trash, but required for decker pdf export
+
+          # Required for some flatpak compatibility
           (pkgs.writeShellScriptBin "chrome" "exec -a $0 ${google-chrome}/bin/google-chrome-stable $@")
         ])
       ];
