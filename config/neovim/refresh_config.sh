@@ -2,10 +2,12 @@
 
 INIT_PATH="$(readlink -f ~/.config/nvim/init.lua)"
 cp -f "$INIT_PATH" ./config.lua
-echo "Copied $INIT_PATH to ./config.lua"
+cp -f "$INIT_PATH" ./config_nix.lua
+echo "Copied $INIT_PATH to ./config.lua and ./config_nix.lua"
 
 chmod +w ./config.lua
-echo "Fixed permission for ./config.lua"
+chmod +w ./config_nix.lua
+echo "Fixed permission for ./config.lua and ./config_nix.lua"
 echo ""
 
 rm -rf ./store/*

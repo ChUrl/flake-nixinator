@@ -50,7 +50,7 @@ do
         ["tabstop"] = 4,
         ["termguicolors"] = true,
         ["timeoutlen"] = 50,
-        ["undodir"] = "/home/lab/smchurla/.vim/undo",
+        ["undodir"] = "/home/christoph/.vim/undo",
         ["undofile"] = true,
     }
 
@@ -67,7 +67,7 @@ vim.cmd([[
 ]])
 require("lazy").setup({
     dev = {
-        path = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins",
+        path = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins",
         patterns = { "." },
         fallback = false,
     },
@@ -82,7 +82,7 @@ require("lazy").setup({
     colorscheme catppuccin
   ]])
             end,
-            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/catppuccin-nvim",
+            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/catppuccin-nvim",
             ["lazy"] = false,
             ["name"] = "catppuccin",
             ["opts"] = { ["background"] = { ["dark"] = "mocha", ["light"] = "latte" }, ["flavour"] = "mocha" },
@@ -93,7 +93,7 @@ require("lazy").setup({
             ["config"] = function(_, opts)
                 require("nvim-web-devicons").setup(opts)
             end,
-            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/nvim-web-devicons",
+            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/nvim-web-devicons",
             ["lazy"] = false,
             ["name"] = "web-devicons",
         },
@@ -102,13 +102,13 @@ require("lazy").setup({
             ["config"] = function(_, opts)
                 require("nvim-autopairs").setup(opts)
             end,
-            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/nvim-autopairs",
+            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/nvim-autopairs",
             ["lazy"] = false,
             ["name"] = "autopairs",
         },
         {
             "bbye",
-            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/vim-bbye",
+            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/vim-bbye",
             ["lazy"] = false,
             ["name"] = "bbye",
         },
@@ -117,7 +117,7 @@ require("lazy").setup({
             ["config"] = function(_, opts)
                 require("better_escape").setup(opts)
             end,
-            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/better-escape.nvim",
+            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/better-escape.nvim",
             ["lazy"] = false,
             ["name"] = "better-escape",
             ["opts"] = { ["mapping"] = { "jk" }, ["timeout"] = 200 },
@@ -127,7 +127,7 @@ require("lazy").setup({
             ["config"] = function(_, opts)
                 vim.api.nvim_set_var("chadtree_settings", opts)
             end,
-            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/chadtree",
+            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/chadtree",
             ["lazy"] = false,
             ["name"] = "chadtree",
             ["opts"] = { ["theme"] = { ["text_colour_set"] = "nord" }, ["xdg"] = true },
@@ -137,7 +137,7 @@ require("lazy").setup({
             ["config"] = function(_, opts)
                 require("clangd_extensions").setup(opts)
             end,
-            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/clangd_extensions.nvim",
+            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/clangd_extensions.nvim",
             ["lazy"] = false,
             ["name"] = "clangd-extensions",
         },
@@ -149,50 +149,50 @@ require("lazy").setup({
             ["dependencies"] = {
                 {
                     "cmp-async-path",
-                    ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/cmp-async-path",
+                    ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/cmp-async-path",
                     ["lazy"] = false,
                     ["name"] = "cmp-async-path",
                 },
                 {
                     "cmp-buffer",
-                    ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/cmp-buffer",
+                    ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/cmp-buffer",
                     ["enabled"] = false,
                     ["lazy"] = false,
                     ["name"] = "cmp-buffer",
                 },
                 {
                     "cmp-cmdline",
-                    ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/cmp-cmdline",
+                    ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/cmp-cmdline",
                     ["enabled"] = false,
                     ["lazy"] = false,
                     ["name"] = "cmp-cmdline",
                 },
                 {
                     "cmp-emoji",
-                    ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/cmp-emoji",
+                    ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/cmp-emoji",
                     ["lazy"] = false,
                     ["name"] = "cmp-emoji",
                 },
                 {
                     "cmp-nvim-lsp",
-                    ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/cmp-nvim-lsp",
+                    ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/cmp-nvim-lsp",
                     ["lazy"] = false,
                     ["name"] = "cmp-nvim-lsp",
                 },
                 {
                     "cmp-nvim-lsp-signature-help",
-                    ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/cmp-nvim-lsp-signature-help",
+                    ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/cmp-nvim-lsp-signature-help",
                     ["lazy"] = false,
                     ["name"] = "cmp-nvim-lsp-signature-help",
                 },
                 {
                     "cmp-luasnip",
-                    ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/cmp_luasnip",
+                    ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/cmp_luasnip",
                     ["lazy"] = false,
                     ["name"] = "cmp-luasnip",
                 },
             },
-            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/nvim-cmp",
+            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/nvim-cmp",
             ["lazy"] = false,
             ["name"] = "cmp",
             ["opts"] = function()
@@ -269,7 +269,7 @@ require("lazy").setup({
             ["config"] = function(_, opts)
                 require("colorizer").setup(opts)
             end,
-            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/nvim-colorizer.lua",
+            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/nvim-colorizer.lua",
             ["lazy"] = false,
             ["name"] = "colorizer",
         },
@@ -286,12 +286,12 @@ require("lazy").setup({
 
                         require("ts_context_commentstring").setup(opts)
                     end,
-                    ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/nvim-ts-context-commentstring",
+                    ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/nvim-ts-context-commentstring",
                     ["lazy"] = false,
                     ["name"] = "ts-context-commentstring",
                 },
             },
-            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/comment.nvim",
+            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/comment.nvim",
             ["lazy"] = false,
             ["name"] = "comment",
             ["opts"] = {
@@ -308,7 +308,7 @@ require("lazy").setup({
             ["config"] = function(_, opts)
                 require("conform").setup(opts)
             end,
-            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/conform.nvim",
+            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/conform.nvim",
             ["lazy"] = false,
             ["name"] = "conform",
             ["opts"] = {
@@ -334,7 +334,7 @@ require("lazy").setup({
             ["config"] = function(_, opts)
                 require("flash").setup(opts)
             end,
-            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/flash.nvim",
+            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/flash.nvim",
             ["lazy"] = false,
             ["name"] = "flash",
         },
@@ -345,7 +345,7 @@ require("lazy").setup({
                     vim.g[k] = v
                 end
             end,
-            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/git-messenger.vim",
+            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/git-messenger.vim",
             ["lazy"] = false,
             ["name"] = "gitmessenger",
             ["opts"] = {
@@ -358,14 +358,14 @@ require("lazy").setup({
             ["config"] = function(_, opts)
                 require("gitsigns").setup(opts)
             end,
-            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/gitsigns.nvim",
+            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/gitsigns.nvim",
             ["lazy"] = false,
             ["name"] = "gitsigns",
             ["opts"] = { ["current_line_blame"] = false },
         },
         {
             "haskell-tools",
-            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/haskell-tools.nvim",
+            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/haskell-tools.nvim",
             ["lazy"] = false,
             ["name"] = "haskell-tools",
         },
@@ -374,7 +374,7 @@ require("lazy").setup({
             ["config"] = function(_, opts)
                 require("illuminate").configure(opts)
             end,
-            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/vim-illuminate",
+            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/vim-illuminate",
             ["lazy"] = false,
             ["name"] = "illuminate",
             ["opts"] = {
@@ -393,7 +393,7 @@ require("lazy").setup({
         },
         {
             "intellitab",
-            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/intellitab.nvim",
+            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/intellitab.nvim",
             ["lazy"] = false,
             ["name"] = "intellitab",
         },
@@ -402,13 +402,13 @@ require("lazy").setup({
             ["config"] = function(_, opts)
                 require("nvim-lastplace").setup(opts)
             end,
-            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/nvim-lastplace",
+            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/nvim-lastplace",
             ["lazy"] = false,
             ["name"] = "lastplace",
         },
         {
             "lazygit",
-            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/lazygit.nvim",
+            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/lazygit.nvim",
             ["lazy"] = false,
             ["name"] = "lazygit",
         },
@@ -421,7 +421,7 @@ require("lazy").setup({
                     lint[k] = v
                 end
             end,
-            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/nvim-lint",
+            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/nvim-lint",
             ["lazy"] = false,
             ["name"] = "lint",
             ["opts"] = {
@@ -489,12 +489,12 @@ require("lazy").setup({
                     ["config"] = function(_, opts)
                         require("neodev").setup(opts)
                     end,
-                    ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/neodev.nvim",
+                    ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/neodev.nvim",
                     ["lazy"] = false,
                     ["name"] = "neodev",
                 },
             },
-            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/nvim-lspconfig",
+            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/nvim-lspconfig",
             ["lazy"] = false,
             ["name"] = "lspconfig",
         },
@@ -503,7 +503,7 @@ require("lazy").setup({
             ["config"] = function(_, opts)
                 require("lualine").setup(opts)
             end,
-            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/lualine.nvim",
+            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/lualine.nvim",
             ["lazy"] = false,
             ["name"] = "lualine",
             ["opts"] = {
@@ -531,7 +531,7 @@ require("lazy").setup({
             ["config"] = function(_, opts)
                 require("luasnip").config.set_config(opts)
             end,
-            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/luasnip",
+            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/luasnip",
             ["lazy"] = false,
             ["name"] = "luasnip",
         },
@@ -541,7 +541,7 @@ require("lazy").setup({
                 local actions = require("nvim-navbuddy.actions") -- ?
                 require("nvim-navbuddy").setup(opts)
             end,
-            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/nvim-navbuddy",
+            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/nvim-navbuddy",
             ["lazy"] = false,
             ["name"] = "navbuddy",
             ["opts"] = { ["lsp"] = { ["auto_attach"] = true }, ["window"] = { ["border"] = "rounded" } },
@@ -551,7 +551,7 @@ require("lazy").setup({
             ["config"] = function(_, opts)
                 require("nvim-navic").setup(opts)
             end,
-            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/nvim-navic",
+            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/nvim-navic",
             ["lazy"] = false,
             ["name"] = "navic",
             ["opts"] = { ["click"] = true, ["highlight"] = true, ["lsp"] = { ["auto_attach"] = true } },
@@ -564,12 +564,12 @@ require("lazy").setup({
             ["dependencies"] = {
                 {
                     "nui",
-                    ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/nui.nvim",
+                    ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/nui.nvim",
                     ["lazy"] = false,
                     ["name"] = "nui",
                 },
             },
-            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/noice.nvim",
+            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/noice.nvim",
             ["lazy"] = false,
             ["name"] = "noice",
             ["opts"] = {
@@ -611,31 +611,31 @@ require("lazy").setup({
                 vim.notify = require("notify")
                 require("notify").setup(opts)
             end,
-            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/nvim-notify",
+            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/nvim-notify",
             ["lazy"] = false,
             ["name"] = "notify",
         },
         {
             "rainbow-delimiters",
-            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/rainbow-delimiters.nvim",
+            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/rainbow-delimiters.nvim",
             ["lazy"] = false,
             ["name"] = "rainbow-delimiters",
         },
         {
             "rustaceanvim",
-            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/rustaceanvim",
+            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/rustaceanvim",
             ["lazy"] = false,
             ["name"] = "rustaceanvim",
         },
         {
             "sandwich",
-            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/vim-sandwich",
+            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/vim-sandwich",
             ["lazy"] = false,
             ["name"] = "sandwich",
         },
         {
             "sleuth",
-            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/vim-sleuth",
+            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/vim-sleuth",
             ["lazy"] = false,
             ["name"] = "sleuth",
         },
@@ -652,30 +652,30 @@ require("lazy").setup({
             ["dependencies"] = {
                 {
                     "plenary",
-                    ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/plenary.nvim",
+                    ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/plenary.nvim",
                     ["lazy"] = false,
                     ["name"] = "plenary",
                 },
                 {
                     "telescope-undo",
-                    ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/telescope-undo.nvim",
+                    ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/telescope-undo.nvim",
                     ["lazy"] = false,
                     ["name"] = "telescope-undo",
                 },
                 {
                     "telescope-ui-select",
-                    ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/telescope-ui-select.nvim",
+                    ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/telescope-ui-select.nvim",
                     ["lazy"] = false,
                     ["name"] = "telescope-ui-select",
                 },
                 {
                     "telescope-fzf-native",
-                    ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/telescope-fzf-native.nvim",
+                    ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/telescope-fzf-native.nvim",
                     ["lazy"] = false,
                     ["name"] = "telescope-fzf-native",
                 },
             },
-            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/telescope.nvim",
+            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/telescope.nvim",
             ["lazy"] = false,
             ["name"] = "telescope",
             ["opts"] = {
@@ -695,12 +695,12 @@ require("lazy").setup({
             ["dependencies"] = {
                 {
                     "plenary",
-                    ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/plenary.nvim",
+                    ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/plenary.nvim",
                     ["lazy"] = false,
                     ["name"] = "plenary",
                 },
             },
-            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/todo-comments.nvim",
+            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/todo-comments.nvim",
             ["lazy"] = false,
             ["name"] = "todo-comments",
         },
@@ -709,7 +709,7 @@ require("lazy").setup({
             ["config"] = function(_, opts)
                 require("toggleterm").setup(opts)
             end,
-            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/toggleterm.nvim",
+            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/toggleterm.nvim",
             ["lazy"] = false,
             ["name"] = "toggleterm",
             ["opts"] = {
@@ -731,13 +731,13 @@ require("lazy").setup({
             "treesitter",
             ["config"] = function(_, opts)
                 vim.opt.runtimepath:append(
-                    "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/nvim-treesitter"
+                    "/nix/store/a05m2wf9i4lx3010pagz1p5s4vl1dva2-vimplugin-nvim-treesitter-2024-05-25"
                 )
-                vim.opt.runtimepath:append("/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/treesitter-parsers")
+                vim.opt.runtimepath:append("/nix/store/7lrj56kr2nj7591m4kjiq03hq9kwabm9-treesitter-parsers")
 
                 require("nvim-treesitter.configs").setup(opts)
             end,
-            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/nvim-treesitter",
+            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/nvim-treesitter",
             ["lazy"] = false,
             ["name"] = "treesitter",
             ["opts"] = {
@@ -753,7 +753,7 @@ require("lazy").setup({
                     },
                 },
                 ["indent"] = { ["enable"] = true },
-                ["parser_install_dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/treesitter-parsers",
+                ["parser_install_dir"] = "/nix/store/7lrj56kr2nj7591m4kjiq03hq9kwabm9-treesitter-parsers",
             },
         },
         {
@@ -761,7 +761,7 @@ require("lazy").setup({
             ["config"] = function(_, opts)
                 require("trim").setup(opts)
             end,
-            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/trim.nvim",
+            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/trim.nvim",
             ["lazy"] = false,
             ["name"] = "trim",
         },
@@ -770,7 +770,7 @@ require("lazy").setup({
             ["config"] = function(_, opts)
                 require("trouble").setup(opts)
             end,
-            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/trouble.nvim",
+            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/trouble.nvim",
             ["lazy"] = false,
             ["name"] = "trouble",
         },
@@ -782,12 +782,12 @@ require("lazy").setup({
             ["dependencies"] = {
                 {
                     "promise",
-                    ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/promise-async",
+                    ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/promise-async",
                     ["lazy"] = false,
                     ["name"] = "promise",
                 },
             },
-            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/nvim-ufo",
+            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/nvim-ufo",
             ["lazy"] = false,
             ["name"] = "ufo",
         },
@@ -796,7 +796,7 @@ require("lazy").setup({
             ["config"] = function(_, opts)
                 require("which-key").setup(opts)
             end,
-            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/which-key.nvim",
+            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/which-key.nvim",
             ["lazy"] = false,
             ["name"] = "which-key",
             ["priority"] = 500,
@@ -806,7 +806,7 @@ require("lazy").setup({
             ["config"] = function(_, opts)
                 require("yanky").setup(opts)
             end,
-            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/yanky.nvim",
+            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/yanky.nvim",
             ["lazy"] = false,
             ["name"] = "yanky",
         },
