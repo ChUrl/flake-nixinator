@@ -137,8 +137,8 @@ in {
             blk = batify "lsblk -o NAME,LABEL,UUID,FSTYPE,SIZE,FSUSE%,MOUNTPOINT,MODEL";
             grep = "grep --color=auto -E"; # grep with extended regex
             watch = "watch -d -c -n 0.5";
-            n = "nnncd -a -e"; # Doesn't work with abbrify because I have nnn.override?
-            np = "nnncd -a -P p -e";
+            n = "nnncd -a"; # Doesn't work with abbrify because I have nnn.override?
+            np = "nnncd -a -P p";
             ssh = "kitty +kitten ssh";
 
             # systemd
