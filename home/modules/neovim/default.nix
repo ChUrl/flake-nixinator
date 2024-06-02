@@ -64,35 +64,14 @@ in {
         ]
       ];
 
-    home.file.".config/neovide/config.toml".text = ''
-      fork = true # Start neovide detached
-      frame = "none" # full, buttonless, none
-      idle = true # Don't render frames without changes
-      # maximized = true
-      title-hidden = true
-      # vsync = true
-    '';
-
-    home.file.".config/vale/.vale.ini".text = ''
-      # Core settings appear at the top
-      # (the "global" section).
-
-      [formats]
-      # Format associations appear under
-      # the optional "formats" section.
-
-      [*]
-      # Format-specific settings appear
-      # under a user-provided "glob"
-      # pattern.
-    '';
+    home.file.".config/neovide/config.toml".source = ./neovide_config.ini;
+    home.file.".config/vale/.vale.ini".source = ./vale_config.ini;
 
     programs.nixvim = {
       enable = true;
       defaultEditor = true;
       enableMan = true;
       luaLoader.enable = true; # NOTE: Experimental
-      # colorschemes.catppuccin.enable = true; # Managed using Lazy
       viAlias = cfg.alias;
       vimAlias = cfg.alias;
 
@@ -104,6 +83,7 @@ in {
       opts = import ./vim_opts.nix {inherit lib mylib;};
       extraConfigLuaPost = builtins.readFile ./extraConfigLuaPost.lua;
       extraConfigLua = builtins.readFile ./extraConfigLua.lua;
+
       # extraLuaPackages = with pkgs.lua51Packages; [];
 
       extraPython3Packages = p: [
@@ -1002,6 +982,7 @@ in {
             lazy = false;
             config = ''
               function(_, opts)
+                -- Fix treesitter grammars/parsers on nix
                 vim.opt.runtimepath:append("${nvim-plugintree}")
                 vim.opt.runtimepath:append("${treesitter-parsers}")
 

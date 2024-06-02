@@ -730,6 +730,7 @@ require("lazy").setup({
         {
             "treesitter",
             ["config"] = function(_, opts)
+                -- Fix treesitter grammars/parsers on nix
                 vim.opt.runtimepath:append(
                     "/nix/store/a05m2wf9i4lx3010pagz1p5s4vl1dva2-vimplugin-nvim-treesitter-2024-05-25"
                 )
