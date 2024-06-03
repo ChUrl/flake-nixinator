@@ -35,10 +35,6 @@
 
     # adwaita-for-steam.url = "github:tkashkin/Adwaita-for-Steam";
     # adwaita-for-steam.flake = false;
-
-    # hyprland.url = "github:hyprwm/Hyprland"; # NOTE: only for Home-Manager, NixOS includes hyprland
-    # hyprpaper.url = "github:hyprwm/hyprpaper"; # NOTE: replaced with hyprpaper package
-    # hyprpicker.url = "github:hyprwm/hyprpicker"; # NOTE: replaced with hyprpicker package
   };
 
   # Outputs is a function that takes the inputs as arguments.
@@ -57,7 +53,7 @@
     # I don't know how to extend the nixpkgs.lib directly so just propagate mylib to the config modules as argument
     mylib = import ./lib {
       inherit inputs pkgs;
-      lib = nixpkgs.lib;
+      inherit (nixpkgs) lib; # Equal to "lib = nixpkgs.lib;"
     };
 
     # Set overlays + unfree globally
@@ -86,7 +82,7 @@
     };
     # The rec expression turns a basic set into a set where self-referencing is possible.
     # It is a shorthand for recursive and allows to use the values defined in this set from its own scope.
-  in rec {
+  in {
     # Local shell for NixFlake directory
     devShells."${system}".default = import ./shell.nix {inherit pkgs;};
 
@@ -103,8 +99,6 @@
         username = "christoph";
 
         extraModules = [
-          # hyprland.nixosModules.default # NOTE: NixOS includes system module
-          # inputs.nix-flatpak.nixosModules.nix-flatpak
         ];
       };
 
@@ -116,8 +110,6 @@
         username = "christoph";
 
         extraModules = [
-          # hyprland.nixosModules.default # NOTE: NixOS includes system module
-          # inputs.nix-flatpak.nixosModules.nix-flatpak
         ];
       };
     };
