@@ -3,7 +3,6 @@
 # The nixosConfig allows to access the toplevel system configuration from within home manager
 # https://github.com/nix-community/home-manager/blob/586ac1fd58d2de10b926ce3d544b3179891e58cb/nixos/default.nix#L19
 {
-  inputs,
   hostname,
   username,
   lib,
@@ -100,6 +99,7 @@ rec {
         bindings = {
           "$mainMod, T" = ["exec, kitty"];
           "$mainMod, E" = ["exec, kitty"];
+          "$mainMod, N" = ["exec, neovide"];
           # "$mainMod, T" = ["exec, alacritty -o font.size=12 -e tmux"];
           # "$mainMod, E" = ["exec, alacritty -o font.size=12 -e tmux"];
 
@@ -112,33 +112,43 @@ rec {
         };
       };
 
-      autostart = [
-        # NOTE: The sleep 15s is a hack for tray icons,
-        #       they need to be launched after waybar
-        "hyprctl dispatch exec \"sleep 15s && kdeconnect-indicator\""
-        "hyprctl dispatch exec \"sleep 15s && nextcloud --background\""
-        "hyprctl dispatch exec \"sleep 15s && keepassxc\""
-        # "alacritty -o font.size=12 -e tmux"
-        "kitty"
-        # "md.obsidian.Obsidian"
-        # "firefox"
-      ];
+      autostart = {
+        immediate = [
+          "kitty"
+        ];
+
+        delayed = [
+          # "kdeconnect-indicator"
+          "nextcloud --background"
+          "keepassxc"
+        ];
+      };
 
       workspacerules = {
         "2" = [
-          "jetbrains-clion"
-          "code-url-handler"
           "neovide"
+          "jetbrains-clion"
+          "jetbrains-idea"
+          "jetbrains-pycharm"
+          "jetbrains-rustrover"
+          "code-url-handler"
         ];
         "3" = [
           "obsidian"
         ];
         "4" = [
           "firefox"
+          "chromium-browser"
+          "Google-chrome"
         ];
-        "10" = [
-          "discord"
+        "7" = [
+          "signal"
+        ];
+        "8" = [
           "Spotify"
+        ];
+        "9" = [
+          "discord"
         ];
       };
 
@@ -159,6 +169,9 @@ rec {
         "Spotify"
         "obsidian"
         "jetbrains-clion"
+        "jetbrains-idea"
+        "jetbrains-pycharm"
+        "jetbrains-rustrover"
         "code-url-handler"
         "neovide"
       ];
@@ -186,11 +199,11 @@ rec {
       neovide = true;
     };
 
-    lazyvim = {
-      # enable = true;
-      alias = true;
-      neovide = true;
-    };
+    # lazyvim = {
+    #   enable = true;
+    #   alias = true;
+    #   neovide = true;
+    # };
 
     nextcloud = {
       enable = true;
@@ -261,11 +274,12 @@ rec {
     enable = true;
     associations.added = nixosConfig.xdg.mime.addedAssociations;
     associations.removed = nixosConfig.xdg.mime.removedAssociations;
-    defaultApplications = nixosConfig.xdg.mime.defaultApplications;
+    inherit (nixosConfig.xdg.mime) defaultApplications; # Equal to "defaultApplications = nixosConfig.xdg.mime.defaultApplications"
   };
 
   home = {
-    username = username; # Inherited from flake.nix
+    inherit username; # Inherited from flake.nix
+
     homeDirectory = "/home/${home.username}";
     enableNixpkgsReleaseCheck = true;
 
@@ -323,20 +337,16 @@ rec {
     nvd # nix rebuild diff
     file
     # spotdl # TODO: Borked
-    # geteltorito # extreact boot image from iso
-    # gitbatch # overview over multiple repos
 
     # Hardware/Software info
     pciutils # lspci
     glxinfo # opengl info
     wayland-utils # wayland-info
     aha # ansi html adapter? TODO: Why did I install this?
-    # radeontop
     clinfo # OpenCL info
     vulkan-tools # vulkaninfo
     libva-utils # vainfo
     vdpauinfo
-    # rocminfo # radeon comptute platform info
     hwloc
     lm_sensors
     acpica-tools # Dump ACPI tables etc.
@@ -349,17 +359,13 @@ rec {
     ueberzugpp # Display images in terminal (alacritty)
 
     # Document utils
+    # TODO: Latex module with individual packages or HomeManager
+    texlive.combined.scheme-full
     poppler_utils # pdfunite
     graphviz # generate graphs from code
-    # xdot # .dot file viewer
-    # kgraphviewer # dot graph viewer
-    # d2 # generate diagrams from code
     plantuml
     gnuplot # generate function plots
     pdf2svg
-    # TODO: Latex module with individual packages
-    texlive.combined.scheme-full
-    # tikzit
     pandoc # document converting madness
 
     # Networking
@@ -411,30 +417,15 @@ rec {
     hunspell # I cna't type
     hunspellDicts.en_US
     hunspellDicts.de_DE
-    obsidian # knowledge-base # Use flatpak for now, as I can't use window splitting with this version for some reason
+    obsidian # knowledge-base
     # logseq # knowledge-base
-    # zotero # Citation/source research assistant
-    # jabref # manage bibilography # NOTE: Uses jdk18 which is EOL, so can't build, use flatpak instead
-    # kbibtex # bibtex editor
-    # vale # Why not lint everything (including english)?
 
-    # TODO: Development module, I need multiple modules to be able to add python packages to a single python install...
-    (python312.withPackages (p:
-      with p; [
-        # p.rich
-        # p.numpy
-        # p.scipy
-        # p.matplotlib
-        # p.pillow # for ranger
-        # p.pygments # for emacs
-        # flake8 # Linter
-        # black
-      ]))
+    # TODO: Module, I need to add python packages from multiple modules to the same interpreter
+    python312
     jetbrains.clion
     jetbrains.rust-rover
     jetbrains.pycharm-professional
     jetbrains.idea-ultimate
-    # jetbrains-toolbox # TODO: Difficult to make work
 
     # Media
     wacomtablet

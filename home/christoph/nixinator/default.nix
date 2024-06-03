@@ -1,16 +1,5 @@
-{
-  inputs,
-  hostname,
-  username,
-  lib,
-  mylib,
-  config,
-  nixosConfig,
-  pkgs,
-  ...
-}:
 # Here goes the stuff that will only be enabled on the desktop
-rec {
+{...}: {
   imports = [
     ../../modules
   ];
@@ -46,9 +35,11 @@ rec {
           "DP-1" = [10];
         };
 
-        autostart = [
-          "hyprctl dispatch exec \"sleep 15s && fcitx5\""
-        ];
+        autostart = {
+          delayed = [
+            "fcitx5"
+          ];
+        };
 
         floating = [
           {
@@ -102,8 +93,8 @@ rec {
       waybar.monitor = "HDMI-A-1";
     };
 
-    home.packages = with pkgs; [
-      # quartus-prime-lite # Intel FPGA design software
-    ];
+    # home.packages = with pkgs; [
+    #   quartus-prime-lite # Intel FPGA design software
+    # ];
   };
 }

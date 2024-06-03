@@ -1,12 +1,4 @@
-{
-  inputs,
-  config,
-  nixosConfig,
-  lib,
-  pkgs,
-  mylib,
-  ...
-}: {
+{inputs, ...}: {
   imports = [
     ./audio
     ./chromium

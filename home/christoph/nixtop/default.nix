@@ -1,16 +1,5 @@
-{
-  inputs,
-  hostname,
-  username,
-  lib,
-  mylib,
-  config,
-  nixosConfig,
-  pkgs,
-  ...
-}:
 # Here goes the stuff that will only be enabled on the laptop
-rec {
+{...}: {
   imports = [
     ../../modules
   ];
@@ -42,7 +31,6 @@ rec {
       waybar.monitor = "eDP-1";
     };
 
-    home.packages = with pkgs; [
-    ];
+    # home.packages = with pkgs; [];
   };
 }
