@@ -1,8 +1,10 @@
 .owncloudsync.log
+.nextcloudsync.log
 .sync_*
-result
+.directory
 .direnv
 .idea
-/.directory
-.nextcloudsync.log
 .docs
+result
+
+config/neovim/store
