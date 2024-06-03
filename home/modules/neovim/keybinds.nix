@@ -1,25 +1,126 @@
-{
-  lib,
-  mylib,
-  ...
-}: let
+{...}: let
   no-leader = [
     {
       mode = "n";
+      key = "j";
+      action = "v:count == 0 ? 'gj' : 'j'";
+      options.desc = "Move cursor down";
+      options.expr = true;
+    }
+    {
+      mode = "n";
+      key = "<Down>";
+      action = "v:count == 0 ? 'gj' : 'j'";
+      options.desc = "Move cursor down";
+      options.expr = true;
+    }
+    {
+      mode = "n";
+      key = "k";
+      action = "v:count == 0 ? 'gk' : 'k'";
+      options.desc = "Move cursor up";
+      options.expr = true;
+    }
+    {
+      mode = "n";
+      key = "<Up>";
+      action = "v:count == 0 ? 'gk' : 'k'";
+      options.desc = "Move cursor up";
+      options.expr = true;
+    }
+
+    {
+      mode = "n";
+      key = "<C-h>";
+      action = "<cmd>vertical resize -2<cr>";
+      options.desc = "Decrease window width";
+    }
+    {
+      mode = "n";
+      key = "<C-l>";
+      action = "<cmd>vertical resize +2<cr>";
+      options.desc = "Increase window width";
+    }
+    {
+      mode = "n";
+      key = "<C-j>";
+      action = "<cmd>resize -2<cr>";
+      options.desc = "Decrease window height";
+    }
+    {
+      mode = "n";
+      key = "<C-k>";
+      action = "<cmd>resize +2<cr>";
+      options.desc = "Increase window height";
+    }
+
+    {
+      mode = "n";
+      key = "<M-j>";
+      action = "<cmd>m .+1<cr>==";
+      options.desc = "Move line down";
+    }
+    {
+      mode = "i";
+      key = "<M-j>";
+      action = "<Esc><cmd>m .+1<cr>==gi";
+      options.desc = "Move line down";
+    }
+    {
+      mode = "v";
+      key = "<M-j>";
+      action = ":m '>+1<cr>gv=gv";
+      options.desc = "Move line down";
+    }
+    {
+      mode = "n";
+      key = "<M-k>";
+      action = "<cmd>m .-2<cr>==";
+      options.desc = "Move line up";
+    }
+    {
+      mode = "i";
+      key = "<M-k>";
+      action = "<Esc><cmd>m .-2<cr>==gi";
+      options.desc = "Move line up";
+    }
+    {
+      mode = "v";
+      key = "<M-k>";
+      action = ":m '<-2<cr>gv=gv";
+      options.desc = "Move line up";
+    }
+
+    {
+      mode = "n";
       key = "<C-s>";
-      action = "<cmd>w<CR>";
+      action = "<cmd>w<cr>";
       options.desc = "Save current buffer";
     }
     {
       mode = "n";
       key = "<C-S-s>";
-      action = "<cmd>wa<CR>";
+      action = "<cmd>wa<cr>";
       options.desc = "Save all buffers";
     }
+
+    {
+      mode = "v";
+      key = ";";
+      action = "<Esc>";
+      options.desc = "Exit visual mode";
+    }
+
     {
       mode = "v";
       key = "<";
       action = "<gv";
+      options.desc = "Outdent";
+    }
+    {
+      mode = "n";
+      key = "<";
+      action = "v<<Esc>";
       options.desc = "Outdent";
     }
     {
@@ -30,16 +131,17 @@
     }
     {
       mode = "n";
-      key = "<";
-      action = "v<<Esc>";
-      options.desc = "Outdent";
-    }
-    {
-      mode = "n";
       key = ">";
       action = "v><Esc>";
       options.desc = "Indent";
     }
+    {
+      mode = "i";
+      key = "<Tab>";
+      action = "<cmd>lua require('intellitab').indent()<cr>";
+      options.desc = "Indent (IntelliTab)";
+    }
+
     {
       mode = "n";
       key = "<C-d>";
@@ -64,12 +166,7 @@
       action = "Nzzzv";
       options.desc = "Previous match (centered)";
     }
-    {
-      mode = "i";
-      key = "<Tab>";
-      action = "<cmd>lua require('intellitab').indent()<CR>";
-      options.desc = "Indent (IntelliTab)";
-    }
+
     {
       mode = "i";
       key = "<C-BS>";
@@ -82,6 +179,7 @@
       action = "<C-w>";
       options.desc = "Delete previous word"; # TODO: Breaks backspace <C-v><S-i> multiline cursor?
     }
+
     {
       mode = "i";
       key = "<C-S-v>";
@@ -100,17 +198,26 @@
       action = "\"+y";
       options.desc = "Copy to clipboard";
     }
+
     {
       mode = "n";
       key = "<C-h>";
-      action = "<cmd>nohlsearch<CR>";
+      action = "<cmd>nohlsearch<cr>";
       options.desc = "Clear search highlights";
     }
+
     {
       mode = "n";
       key = "K";
-      action = "<cmd>lua vim.lsp.buf.hover()<CR>";
+      action = "<cmd>lua vim.lsp.buf.hover()<cr>";
       options.desc = "Show LSP hover";
+    }
+
+    {
+      mode = "n";
+      key = "/";
+      action = "<cmd>Telescope current_buffer_fuzzy_find<cr>";
+      options.desc = "Find in current buffer";
     }
   ];
 
@@ -118,97 +225,106 @@
     {
       mode = "n";
       key = "<leader>L";
-      action = "<cmd>Lazy<CR>";
+      action = "<cmd>Lazy<cr>";
       options.desc = "Show Lazy";
     }
+
     {
       mode = "n";
-      key = "<leader><Space>";
-      action = "<cmd>Telescope buffers<CR>";
-      options.desc = "Show open buffers";
+      key = "<leader>s";
+      action = "<cmd>w<cr>";
+      options.desc = "Save current buffer";
     }
     {
       mode = "n";
       key = "<leader>S";
-      action = "<cmd>wa<CR>";
+      action = "<cmd>wa<cr>";
       options.desc = "Save all buffers";
+    }
+
+    {
+      mode = "n";
+      key = "<leader>R";
+      action = "<cmd>edit!<cr>";
+      options.desc = "Reload current buffer";
+    }
+
+    {
+      mode = "n";
+      key = "<leader><Space>";
+      action = "<cmd>Telescope buffers<cr>";
+      options.desc = "Show open buffers";
     }
     {
       mode = "n";
       key = "<leader>f";
-      action = "<cmd>Telescope find_files<CR>";
+      action = "<cmd>Telescope find_files<cr>";
       options.desc = "Find file";
     }
     {
       mode = "n";
       key = "<leader>o";
-      action = "<cmd>Telescope vim_options<CR>";
+      action = "<cmd>Telescope vim_options<cr>";
       options.desc = "Show Vim options";
     }
     {
       mode = "n";
       key = "<leader>u";
-      action = "<cmd>Telescope undo<CR>";
+      action = "<cmd>Telescope undo<cr>";
       options.desc = "Show undo history";
     }
     {
       mode = "n";
       key = "<leader>/";
-      action = "<cmd>Telescope current_buffer_fuzzy_find<CR>";
-      options.desc = "Find in current buffer";
-    }
-    {
-      mode = "n";
-      key = "<leader>n";
-      action = "<cmd>Telescope notify<CR>";
-      options.desc = "Show notify history";
-    }
-    {
-      mode = "n";
-      key = "<leader>s";
-      action = "<cmd>Telescope live_grep<CR>";
+      action = "<cmd>Telescope live_grep<cr>";
       options.desc = "Find in working directory";
     }
     {
       mode = "n";
+      key = "<leader>n";
+      action = "<cmd>Telescope notify<cr>";
+      options.desc = "Show notify history";
+    }
+    {
+      mode = "n";
       key = "<leader>r";
-      action = "<cmd>Telescope resume<CR>";
+      action = "<cmd>Telescope resume<cr>";
       options.desc = "Show last telescope picker";
     }
     {
       mode = "n";
       key = "<leader>?";
-      action = "<cmd>Telescope keymaps<CR>";
+      action = "<cmd>Telescope keymaps<cr>";
       options.desc = "Show keymaps";
     }
     {
       mode = "n";
       key = "<leader>:";
-      action = "<cmd>Telescope commands<CR>";
+      action = "<cmd>Telescope commands<cr>";
       options.desc = "Execute command";
     }
     {
       mode = "n";
       key = "<leader>M";
-      action = "<cmd>Telescope marks<CR>";
+      action = "<cmd>Telescope marks<cr>";
       options.desc = "Show marks";
     }
     {
       mode = "n";
       key = "<leader>J";
-      action = "<cmd>Telescope jumplist<CR>";
+      action = "<cmd>Telescope jumplist<cr>";
       options.desc = "Show jumplist";
     }
     {
       mode = "n";
       key = "<leader>m";
-      action = "<cmd>Telescope man_pages<CR>";
+      action = "<cmd>Telescope man_pages<cr>";
       options.desc = "Show manpages";
     }
     {
       mode = "n";
       key = "<leader>h";
-      action = "<cmd>Telescope help_tags<CR>";
+      action = "<cmd>Telescope help_tags<cr>";
       options.desc = "Show help tags";
     }
   ];
@@ -222,13 +338,13 @@
     {
       mode = "n";
       key = "<leader>qq";
-      action = "<cmd>quitall<CR>";
+      action = "<cmd>quitall<cr>";
       options.desc = "Quit";
     }
     {
       mode = "n";
       key = "<leader>q!";
-      action = "<cmd>quitall!<CR>";
+      action = "<cmd>quitall!<cr>";
       options.desc = "Quit forcefully";
     }
   ];
@@ -242,25 +358,25 @@
     {
       mode = "n";
       key = "<leader>bb";
-      action = "<cmd>Telescope buffers<CR>";
+      action = "<cmd>Telescope buffers<cr>";
       options.desc = "Show open buffers";
     }
     {
       mode = "n";
       key = "<leader>bn";
-      action = "<cmd>bnext<CR>";
+      action = "<cmd>bnext<cr>";
       options.desc = "Goto next buffer";
     }
     {
       mode = "n";
       key = "<leader>bp";
-      action = "<cmd>bprevious<CR>";
+      action = "<cmd>bprevious<cr>";
       options.desc = "Goto previous buffer";
     }
     {
       mode = "n";
       key = "<leader>bd";
-      action = "<cmd>Bdelete<CR>";
+      action = "<cmd>Bdelete<cr>";
       options.desc = "Close current buffer";
     }
   ];
@@ -271,6 +387,14 @@
       key = "<leader>w";
       action = "+windows";
     }
+
+    {
+      mode = "n";
+      key = "<leader>wd";
+      action = "<C-w>c";
+      options.desc = "Close current window";
+    }
+
     {
       mode = "n";
       key = "<leader>ws";
@@ -289,12 +413,7 @@
       action = "<C-w>=";
       options.desc = "Balance windows";
     }
-    {
-      mode = "n";
-      key = "<leader>wd";
-      action = "<C-w>c";
-      options.desc = "Close current window";
-    }
+
     {
       mode = "n";
       key = "<leader>wh";
@@ -336,26 +455,47 @@
     {
       mode = "n";
       key = "<leader>tt";
-      action = "<cmd>Neotree action=show toggle=true<CR>";
+      action = "<cmd>Neotree action=show toggle=true<cr><C-w>=";
       options.desc = "Toggle NeoTree";
     }
     # {
     #   mode = "n";
     #   key = "<leader>tt";
-    #   action = "<cmd>CHADopen --nofocus<CR>";
+    #   action = "<cmd>CHADopen --nofocus<cr>";
     #   options.desc = "Toggle CHADtree";
     # }
     {
       mode = "n";
       key = "<leader>tn";
-      action = "<cmd>Navbuddy<CR>";
+      action = "<cmd>Navbuddy<cr>";
       options.desc = "Toggle NavBuddy";
     }
     {
       mode = "n";
       key = "<leader>td";
-      action = "<cmd>TroubleToggle focus=false<CR>";
+      action = "<cmd>TroubleToggle focus=false<cr>";
       options.desc = "Toggle Trouble";
+    }
+
+    {
+      mode = "n";
+      key = "<leader>tf";
+      action = "<cmd>ToggleAutoformat<cr>";
+      options.desc = "Toggle autoformat-on-save";
+    }
+
+    {
+      mode = "n";
+      key = "<leader>tD";
+      action = "<cmd>ToggleInlineDiagnostics<cr>";
+      options.desc = "Toggle inline diagnostics";
+    }
+
+    {
+      mode = "n";
+      key = "<leader>tw";
+      action = "<cmd>:set wrap!<cr>";
+      options.desc = "Toggle word-wrap";
     }
   ];
 
@@ -368,37 +508,38 @@
     {
       mode = "n";
       key = "<leader>gg";
-      action = "<cmd>LazyGit<CR>";
+      action = "<cmd>LazyGit<cr>";
       options.desc = "Show LazyGit";
     }
     {
       mode = "n";
       key = "<leader>gm";
-      action = "<cmd>GitMessenger<CR>";
+      action = "<cmd>GitMessenger<cr>";
       options.desc = "Show GitMessenger";
     }
+
     {
       mode = "n";
       key = "<leader>gs";
-      action = "<cmd>Telescope git_status<CR>";
+      action = "<cmd>Telescope git_status<cr>";
       options.desc = "Show Git status";
     }
     {
       mode = "n";
       key = "<leader>gc";
-      action = "<cmd>Telescope git_commits<CR>";
+      action = "<cmd>Telescope git_commits<cr>";
       options.desc = "Show Git log";
     }
     {
       mode = "n";
       key = "<leader>gb";
-      action = "<cmd>Telescope git_branches<CR>";
+      action = "<cmd>Telescope git_branches<cr>";
       options.desc = "Show Git branches";
     }
     {
       mode = "n";
       key = "<leader>gf";
-      action = "<cmd>Telescope git_bcommits<CR>";
+      action = "<cmd>Telescope git_bcommits<cr>";
       options.desc = "Show Git log for current file";
     }
   ];
@@ -412,37 +553,37 @@
     {
       mode = "n";
       key = "<leader>lr";
-      action = "<cmd>Telescope lsp_references<CR>";
+      action = "<cmd>Telescope lsp_references<cr>";
       options.desc = "Goto references";
     }
     {
       mode = "n";
       key = "<leader>ld";
-      action = "<cmd>Telescope lsp_definitions<CR>";
+      action = "<cmd>Telescope lsp_definitions<cr>";
       options.desc = "Goto definition";
     }
     {
       mode = "n";
       key = "<leader>li";
-      action = "<cmd>Telescope lsp_implementations<CR>";
+      action = "<cmd>Telescope lsp_implementations<cr>";
       options.desc = "Goto implementation";
     }
     {
       mode = "n";
       key = "<leader>lt";
-      action = "<cmd>Telescope lsp_type_definitions<CR>";
+      action = "<cmd>Telescope lsp_type_definitions<cr>";
       options.desc = "Goto type definition";
     }
     {
       mode = "n";
       key = "<leader>lI";
-      action = "<cmd>Telescope lsp_incoming_calls<CR>";
+      action = "<cmd>Telescope lsp_incoming_calls<cr>";
       options.desc = "Show incoming calls";
     }
     {
       mode = "n";
       key = "<leader>lO";
-      action = "<cmd>Telescope lsp_outgoing_calls<CR>";
+      action = "<cmd>Telescope lsp_outgoing_calls<cr>";
       options.desc = "Show outgoing calls";
     }
   ];
@@ -456,32 +597,40 @@
     {
       mode = "n";
       key = "<leader>cf";
-      action = "<cmd>lua require('conform').format()<CR>";
+      action = "<cmd>lua require('conform').format()<cr>";
       options.desc = "Format current buffer";
     }
+
     {
       mode = "n";
       key = "<leader>cd";
-      action = "<cmd>Telescope diagnostics<CR>";
-      options.desc = "Show diagnostics";
+      action = "<cmd>lua vim.diagnostic.open_float()<cr>";
+      options.desc = "Show LSP line diagnostics";
     }
     {
       mode = "n";
+      key = "<leader>cD";
+      action = "<cmd>Telescope diagnostics<cr>";
+      options.desc = "Show diagnostics";
+    }
+
+    {
+      mode = "n";
       key = "<leader>cr";
-      action = "<cmd>lua vim.lsp.buf.rename()<CR>";
+      action = "<cmd>lua vim.lsp.buf.rename()<cr>";
       options.desc = "Rename LSP symbol";
     }
     {
       mode = "n";
       key = "<leader>ca";
-      action = "<cmd>lua vim.lsp.buf.code_action()<CR>";
+      action = "<cmd>lua vim.lsp.buf.code_action()<cr>";
       options.desc = "Show LSP code actions";
     }
     {
       mode = "n";
-      key = "<leader>cD";
-      action = "<cmd>lua vim.diagnostic.open_float()<CR>";
-      options.desc = "Show LSP line diagnostics";
+      key = "<leader>ch";
+      action = "<cmd>ClangdSwitchSourceHeader<cr>";
+      options.desc = "Switch C/C++ source/header";
     }
   ];
 in

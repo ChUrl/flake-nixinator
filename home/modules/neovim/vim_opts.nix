@@ -6,20 +6,22 @@
   showmode = false; # Status line already shows this
   backspace = ["indent" "eol" "start"];
   termguicolors = true; # Required by multiple plugins
-  hidden = true; # Don't unload buffers immediately
+  hidden = true; # Don't unload buffers immediately (required for terminal persistence)
   mouse = "a";
   completeopt = ["menuone" "noselect" "noinsert"];
-  timeoutlen = 50;
+  timeoutlen = 50; # Controls which-key delay
   pumheight = 0;
   formatexpr = "v:lua.require('conform').formatexpr()";
-  laststatus = 3;
-  # winblend = 30;
+  laststatus = 3; # Global statusline
+  winblend = 30; # Floating popup transparency
+  sessionoptions = ["buffers" "curdir" "tabpages" "winsize" "help" "globals" "skiprtp" "folds"];
+  showtabline = 0; # Disable tabline
 
   # Cursor
   ruler = true; # Show cursor position in status line
   number = true;
   relativenumber = true;
-  signcolumn = "yes";
+  signcolumn = "yes"; # Always show to reduce window jumping
   cursorline = true;
   scrolloff = 10;
 
@@ -38,7 +40,9 @@
   # backup = false;
   undofile = true;
   undodir = "/home/christoph/.vim/undo";
+  undolevels = 10000;
   # autochdir = true;
+  confirm = true;
 
   # Search
   incsearch = true; # Already highlight results while typing
