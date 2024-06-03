@@ -53,15 +53,27 @@ with mylib.modules; {
     '';
   };
 
-  autostart = mkOption {
-    type = types.listOf types.str;
-    description = "Programs to launch when Hyprland starts";
-    example = ''
-      [
-        "keepassxc"
-        "nextcloud --background"
-      ]
-    '';
+  autostart = {
+    immediate = mkOption {
+      type = types.listOf types.str;
+      description = "Programs to launch when Hyprland starts";
+      example = ''
+        [
+          "kitty"
+        ]
+      '';
+    };
+
+    delayed = mkOption {
+      type = types.listOf types.str;
+      description = "Programs to launch with a slight delay when Hyprland starts (e.g. because they need waybar to display tray indicators)";
+      example = ''
+        [
+          "keepassxc"
+          "nextcloud --background"
+        ];
+      '';
+    };
   };
 
   workspacerules = mkOption {
