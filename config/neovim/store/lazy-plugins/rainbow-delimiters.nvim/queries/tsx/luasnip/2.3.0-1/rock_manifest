@@ -1,0 +1,116 @@
+rock_manifest = {
+   doc = {
+      ["luasnip.txt"] = "5014cf9a2bb7c7360fd34a1a02356207"
+   },
+   ftplugin = {
+      ["snippets.vim"] = "ecd77fcf256c792985acf12ea7603322"
+   },
+   lua = {
+      luasnip = {
+         ["_types.lua"] = "a1b1fc45d496f8ece3e17dc3541e5f93",
+         ["config.lua"] = "1bb0edf593b14b243b116d70cbb605c9",
+         ["default_config.lua"] = "51eea9c217eed18af81d580129c70461",
+         extras = {
+            ["_extra_types.lua"] = "b8f4a120d5abe22f0112efdcae358817",
+            ["_lambda.lua"] = "e94a2ad0606ed3c4276a573d4e7ab205",
+            ["_parser_combinator.lua"] = "bacc166557d1b5f9f03aff25a56bc801",
+            ["_treesitter.lua"] = "d9fb19599b9d95edab033fdda0684c32",
+            conditions = {
+               ["expand.lua"] = "35c3ab55ec8e9916ed7cde31cc807b08",
+               ["init.lua"] = "12f7e4b6fd6b5796c36ce61db5844efd",
+               ["show.lua"] = "0cd4059f6ba5582f409ced580e9fef13"
+            },
+            ["expand_conditions.lua"] = "6ea7479cea2e5fac95a2045a6a283d4b",
+            ["filetype_functions.lua"] = "bdab365ff7bd2d7d148fdc6b3b78d9b4",
+            ["fmt.lua"] = "014768af82d3e7e58437e41335553eb6",
+            ["init.lua"] = "560335e3043e97a826fc8aee4b250fbc",
+            ["otf.lua"] = "8a95cdb7b582497542069bdd0886776b",
+            ["postfix.lua"] = "5e94359e6642b52d8ef6c9df3a90e167",
+            ["select_choice.lua"] = "8c924f05ee0d55ab9b0d9e5c603e1a52",
+            ["snip_location.lua"] = "bd0f8a7f1c61f6a001fa5781c15839d5",
+            ["snippet_list.lua"] = "fe61183934e0bb966b83461febdd1dcb",
+            ["treesitter_postfix.lua"] = "42a5143ad3c647d292b2183566fd6776"
+         },
+         ["health.lua"] = "b6bd288f728f6897674347ad46917a5b",
+         ["init.lua"] = "96451aae98dbaf3ece53873298479172",
+         loaders = {
+            ["data.lua"] = "498490d7dfcf2f0374b0d20f429ba6fb",
+            ["from_lua.lua"] = "78d20ec3694e16581e21ed4948c26385",
+            ["from_snipmate.lua"] = "93e1cdc6e024549d9aa6bc917325de24",
+            ["from_vscode.lua"] = "0ff819764a09a735f9ea8ef51413ae83",
+            ["fs_watchers.lua"] = "b36b9f60988b568602350c41b032f9e6",
+            ["init.lua"] = "d470bc3c7bd4690199cf1c0d214782cf",
+            ["snippet_cache.lua"] = "e2b5cf9a46713fb3f108067100e77e0c",
+            ["types.lua"] = "89e18f0f21c1e77be74c1cbe85757d11",
+            ["util.lua"] = "77a85743643bf4d15cbe91af429908d5"
+         },
+         nodes = {
+            ["absolute_indexer.lua"] = "efa73978bd91f2d90f2fc9ef53a9c38c",
+            ["choiceNode.lua"] = "c63618056997ec5aec6524fffff7f2fb",
+            ["duplicate.lua"] = "454e20ad45dbf371aa7d09aa21861f1c",
+            ["dynamicNode.lua"] = "28f4e7a46281dc3a2af0875ffc5ff58c",
+            ["functionNode.lua"] = "cf7cb4efb677a139618fd9255734873e",
+            ["insertNode.lua"] = "a25a723746e7ab5973901855de1d1f11",
+            ["key_indexer.lua"] = "d1c4887dfc10501f09b7851aea25f842",
+            ["multiSnippet.lua"] = "2eab1e75c5ee87096f03db006da31844",
+            ["node.lua"] = "c1d2f45dd25dcf5c1574ff63e0f9e88c",
+            ["restoreNode.lua"] = "9613ce23458968aa12737365dd302be7",
+            ["snippet.lua"] = "d6a31a62f45a460bc642822b6d0244f7",
+            ["snippetProxy.lua"] = "68262858f0f9a20a41640d5a11c43481",
+            ["textNode.lua"] = "c22395ab8305a581f021982cd88e2931",
+            util = {
+               ["trig_engines.lua"] = "a023c5ca92103478cbf40b7ffe2de903"
+            },
+            ["util.lua"] = "a6be1172f1b37f2018460900b0ab987d"
+         },
+         session = {
+            ["enqueueable_operations.lua"] = "2e4f57314f0573601e35943f56e8d4d8",
+            ["init.lua"] = "213d2ea8110e267278d62f5853151ceb",
+            snippet_collection = {
+               ["init.lua"] = "2d5015eb7cb5717f5aa44fdeebffbe59",
+               ["source.lua"] = "17f2f0c590d4deb57ae0e7af20c153ec"
+            }
+         },
+         ["snippets.lua"] = "d41d8cd98f00b204e9800998ecf8427e",
+         util = {
+            ["_builtin_vars.lua"] = "cb7e73099c5711556f8df8821ca4a182",
+            ["auto_table.lua"] = "f9c5f84a99e71df229c4b6506a447727",
+            ["dict.lua"] = "83d98b784cfe6ab28c1d3727e7220110",
+            ["directed_graph.lua"] = "7eb06677cf726e6be7d64d470660677c",
+            ["environ.lua"] = "61b0b01947a335f749e854f039ec77ac",
+            ["events.lua"] = "cdac0c08202f1295a0bd9f5ee5909b3b",
+            ["ext_opts.lua"] = "55f3ee33870b070d50c3eae516b4724a",
+            ["extend_decorator.lua"] = "07576b8535b2729c9d70f5ba5b036a92",
+            ["functions.lua"] = "86ccff508ce6b6eeefc455308e7d4994",
+            ["jsonc.lua"] = "94fbde2a919a24f3957d004aaf7d136d",
+            ["jsregexp.lua"] = "59eb40a43fa328e82b086863dcbfa626",
+            ["lazy_table.lua"] = "7b0f31805982e74c3e693fd60ad42ec2",
+            ["log.lua"] = "ffe073da229ae489cc72e576c0ab6bee",
+            ["mark.lua"] = "135f7a32a6f1031ea0eb80688997f3d3",
+            parser = {
+               ["ast_parser.lua"] = "230087c74af6009d8a858259808f3e51",
+               ["ast_utils.lua"] = "7013bc099f5ed408c4cd49b29e4ce63c",
+               ["init.lua"] = "5ae80471a9893a45b12b77a35ecc8d81",
+               ["neovim_ast.lua"] = "08e136ffd26023ef3172ec2aed4ad2e9",
+               ["neovim_parser.lua"] = "c25f144947bceed6036e3d40b70bdef0"
+            },
+            ["path.lua"] = "3767ba134238fa42469cfcbcfdf16147",
+            ["pattern_tokenizer.lua"] = "f4f99d27e6a6fb5385f583abc70beaab",
+            ["select.lua"] = "b0a8180922f7995a86ea9df7eabb162e",
+            ["str.lua"] = "06645f5bc876c73af9c4fd3296d620e0",
+            ["table.lua"] = "f4a54a5775133c776d65643be728cfdb",
+            ["time.lua"] = "54483e160266c85209e4399fbfc43e1b",
+            ["types.lua"] = "6605cc2d2293f7080d104c63663c0dac",
+            ["util.lua"] = "ac9ec42f0d014d908ff24c5af8172335"
+         }
+      }
+   },
+   ["luasnip-2.3.0-1.rockspec"] = "51f9eecc66d3003eb668326f1e4a0e68",
+   plugin = {
+      ["luasnip.lua"] = "189a598faa80a372be83a52dc57fb491",
+      ["luasnip.vim"] = "e3d30107f8659679f6766d579ce5bf56"
+   },
+   syntax = {
+      ["snippets.vim"] = "5ea760f9406519fc824e2c941ef4d858"
+   }
+}
