@@ -1,0 +1,16 @@
+navic	navic.txt	/*navic*
+navic-api	navic.txt	/*navic-api*
+navic-components	navic.txt	/*navic-components*
+navic-customise	navic.txt	/*navic-customise*
+navic-highlights	navic.txt	/*navic-highlights*
+navic-usage	navic.txt	/*navic-usage*
+navic-variables	navic.txt	/*navic-variables*
+navic.attach	navic.txt	/*navic.attach*
+navic.format_data	navic.txt	/*navic.format_data*
+navic.get_data	navic.txt	/*navic.get_data*
+navic.get_location	navic.txt	/*navic.get_location*
+navic.is_available	navic.txt	/*navic.is_available*
+navic.setup	navic.txt	/*navic.setup*
+nvim-navic	navic.txt	/*nvim-navic*
+vim.b.navic_lazy_update_context	navic.txt	/*vim.b.navic_lazy_update_context*
+vim.g.navic_silence	navic.txt	/*vim.g.navic_silence*

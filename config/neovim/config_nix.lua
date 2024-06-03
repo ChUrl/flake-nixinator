@@ -67,7 +67,7 @@ vim.cmd([[
 ]])
 require("lazy").setup({
     dev = {
-        path = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins",
+        path = "/nix/store/8bx1xnvd173gghqaak7qyfr9ay7vxdw3-lazy-plugins",
         patterns = { "." },
         fallback = false,
     },
@@ -82,7 +82,7 @@ require("lazy").setup({
     colorscheme catppuccin
   ]])
             end,
-            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/catppuccin-nvim",
+            ["dir"] = "/nix/store/8bx1xnvd173gghqaak7qyfr9ay7vxdw3-lazy-plugins/catppuccin-nvim",
             ["lazy"] = false,
             ["name"] = "catppuccin",
             ["opts"] = { ["background"] = { ["dark"] = "mocha", ["light"] = "latte" }, ["flavour"] = "mocha" },
@@ -93,8 +93,8 @@ require("lazy").setup({
             ["config"] = function(_, opts)
                 require("nvim-web-devicons").setup(opts)
             end,
-            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/nvim-web-devicons",
-            ["lazy"] = false,
+            ["dir"] = "/nix/store/8bx1xnvd173gghqaak7qyfr9ay7vxdw3-lazy-plugins/nvim-web-devicons",
+            ["lazy"] = true,
             ["name"] = "web-devicons",
         },
         {
@@ -102,13 +102,13 @@ require("lazy").setup({
             ["config"] = function(_, opts)
                 require("nvim-autopairs").setup(opts)
             end,
-            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/nvim-autopairs",
+            ["dir"] = "/nix/store/8bx1xnvd173gghqaak7qyfr9ay7vxdw3-lazy-plugins/nvim-autopairs",
             ["lazy"] = false,
             ["name"] = "autopairs",
         },
         {
             "bbye",
-            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/vim-bbye",
+            ["dir"] = "/nix/store/8bx1xnvd173gghqaak7qyfr9ay7vxdw3-lazy-plugins/vim-bbye",
             ["lazy"] = false,
             ["name"] = "bbye",
         },
@@ -117,27 +117,17 @@ require("lazy").setup({
             ["config"] = function(_, opts)
                 require("better_escape").setup(opts)
             end,
-            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/better-escape.nvim",
+            ["dir"] = "/nix/store/8bx1xnvd173gghqaak7qyfr9ay7vxdw3-lazy-plugins/better-escape.nvim",
             ["lazy"] = false,
             ["name"] = "better-escape",
             ["opts"] = { ["mapping"] = { "jk" }, ["timeout"] = 200 },
-        },
-        {
-            "chadtree",
-            ["config"] = function(_, opts)
-                vim.api.nvim_set_var("chadtree_settings", opts)
-            end,
-            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/chadtree",
-            ["lazy"] = false,
-            ["name"] = "chadtree",
-            ["opts"] = { ["theme"] = { ["text_colour_set"] = "nord" }, ["xdg"] = true },
         },
         {
             "clangd-extensions",
             ["config"] = function(_, opts)
                 require("clangd_extensions").setup(opts)
             end,
-            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/clangd_extensions.nvim",
+            ["dir"] = "/nix/store/8bx1xnvd173gghqaak7qyfr9ay7vxdw3-lazy-plugins/clangd_extensions.nvim",
             ["lazy"] = false,
             ["name"] = "clangd-extensions",
         },
@@ -149,50 +139,50 @@ require("lazy").setup({
             ["dependencies"] = {
                 {
                     "cmp-async-path",
-                    ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/cmp-async-path",
-                    ["lazy"] = false,
+                    ["dir"] = "/nix/store/8bx1xnvd173gghqaak7qyfr9ay7vxdw3-lazy-plugins/cmp-async-path",
+                    ["lazy"] = true,
                     ["name"] = "cmp-async-path",
                 },
                 {
                     "cmp-buffer",
-                    ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/cmp-buffer",
+                    ["dir"] = "/nix/store/8bx1xnvd173gghqaak7qyfr9ay7vxdw3-lazy-plugins/cmp-buffer",
                     ["enabled"] = false,
-                    ["lazy"] = false,
+                    ["lazy"] = true,
                     ["name"] = "cmp-buffer",
                 },
                 {
                     "cmp-cmdline",
-                    ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/cmp-cmdline",
+                    ["dir"] = "/nix/store/8bx1xnvd173gghqaak7qyfr9ay7vxdw3-lazy-plugins/cmp-cmdline",
                     ["enabled"] = false,
-                    ["lazy"] = false,
+                    ["lazy"] = true,
                     ["name"] = "cmp-cmdline",
                 },
                 {
                     "cmp-emoji",
-                    ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/cmp-emoji",
-                    ["lazy"] = false,
+                    ["dir"] = "/nix/store/8bx1xnvd173gghqaak7qyfr9ay7vxdw3-lazy-plugins/cmp-emoji",
+                    ["lazy"] = true,
                     ["name"] = "cmp-emoji",
                 },
                 {
                     "cmp-nvim-lsp",
-                    ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/cmp-nvim-lsp",
-                    ["lazy"] = false,
+                    ["dir"] = "/nix/store/8bx1xnvd173gghqaak7qyfr9ay7vxdw3-lazy-plugins/cmp-nvim-lsp",
+                    ["lazy"] = true,
                     ["name"] = "cmp-nvim-lsp",
                 },
                 {
                     "cmp-nvim-lsp-signature-help",
-                    ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/cmp-nvim-lsp-signature-help",
-                    ["lazy"] = false,
+                    ["dir"] = "/nix/store/8bx1xnvd173gghqaak7qyfr9ay7vxdw3-lazy-plugins/cmp-nvim-lsp-signature-help",
+                    ["lazy"] = true,
                     ["name"] = "cmp-nvim-lsp-signature-help",
                 },
                 {
                     "cmp-luasnip",
-                    ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/cmp_luasnip",
-                    ["lazy"] = false,
+                    ["dir"] = "/nix/store/8bx1xnvd173gghqaak7qyfr9ay7vxdw3-lazy-plugins/cmp_luasnip",
+                    ["lazy"] = true,
                     ["name"] = "cmp-luasnip",
                 },
             },
-            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/nvim-cmp",
+            ["dir"] = "/nix/store/8bx1xnvd173gghqaak7qyfr9ay7vxdw3-lazy-plugins/nvim-cmp",
             ["lazy"] = false,
             ["name"] = "cmp",
             ["opts"] = function()
@@ -229,16 +219,22 @@ require("lazy").setup({
                     },
 
                     mapping = cmp.mapping.preset.insert({
-                        ["<Down>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
-                        ["<Up>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
-                        ["<C-e>"] = cmp.mapping.abort(),
-                        ["<Esc>"] = cmp.mapping.abort(),
-                        ["<C-Up>"] = cmp.mapping.scroll_docs(-4),
                         ["<C-Down>"] = cmp.mapping.scroll_docs(4),
                         ["<C-Space>"] = cmp.mapping.complete({}),
-
+                        ["<C-Up>"] = cmp.mapping.scroll_docs(-4),
+                        ["<C-e>"] = cmp.mapping.abort(),
                         ["<CR>"] = cmp.mapping.confirm({ select = true }),
-
+                        ["<Down>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
+                        ["<Esc>"] = cmp.mapping.abort(),
+                        ["<S-Tab>"] = cmp.mapping(function(fallback)
+                            if cmp.visible() then
+                                cmp.select_prev_item()
+                            elseif luasnip.jumpable(-1) then
+                                luasnip.jump(-1)
+                            else
+                                fallback()
+                            end
+                        end, { "i", "s" }),
                         ["<Tab>"] = cmp.mapping(function(fallback)
                             if cmp.visible() then
                                 cmp.select_next_item()
@@ -250,16 +246,7 @@ require("lazy").setup({
                                 fallback()
                             end
                         end, { "i", "s" }),
-
-                        ["<S-Tab>"] = cmp.mapping(function(fallback)
-                            if cmp.visible() then
-                                cmp.select_prev_item()
-                            elseif luasnip.jumpable(-1) then
-                                luasnip.jump(-1)
-                            else
-                                fallback()
-                            end
-                        end, { "i", "s" }),
+                        ["<Up>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
                     }),
                 }
             end,
@@ -269,7 +256,7 @@ require("lazy").setup({
             ["config"] = function(_, opts)
                 require("colorizer").setup(opts)
             end,
-            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/nvim-colorizer.lua",
+            ["dir"] = "/nix/store/8bx1xnvd173gghqaak7qyfr9ay7vxdw3-lazy-plugins/nvim-colorizer.lua",
             ["lazy"] = false,
             ["name"] = "colorizer",
         },
@@ -282,16 +269,17 @@ require("lazy").setup({
                 {
                     "ts-context-commentstring",
                     ["config"] = function(_, opts)
-                        vim.g.skip_ts_context_commentstring_module = true -- Skip compatibility checks
+                        -- Skip compatibility checks
+                        vim.g.skip_ts_context_commentstring_module = true
 
                         require("ts_context_commentstring").setup(opts)
                     end,
-                    ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/nvim-ts-context-commentstring",
-                    ["lazy"] = false,
+                    ["dir"] = "/nix/store/8bx1xnvd173gghqaak7qyfr9ay7vxdw3-lazy-plugins/nvim-ts-context-commentstring",
+                    ["lazy"] = true,
                     ["name"] = "ts-context-commentstring",
                 },
             },
-            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/comment.nvim",
+            ["dir"] = "/nix/store/8bx1xnvd173gghqaak7qyfr9ay7vxdw3-lazy-plugins/comment.nvim",
             ["lazy"] = false,
             ["name"] = "comment",
             ["opts"] = {
@@ -308,7 +296,7 @@ require("lazy").setup({
             ["config"] = function(_, opts)
                 require("conform").setup(opts)
             end,
-            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/conform.nvim",
+            ["dir"] = "/nix/store/8bx1xnvd173gghqaak7qyfr9ay7vxdw3-lazy-plugins/conform.nvim",
             ["lazy"] = false,
             ["name"] = "conform",
             ["opts"] = {
@@ -334,8 +322,8 @@ require("lazy").setup({
             ["config"] = function(_, opts)
                 require("flash").setup(opts)
             end,
-            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/flash.nvim",
-            ["lazy"] = false,
+            ["dir"] = "/nix/store/8bx1xnvd173gghqaak7qyfr9ay7vxdw3-lazy-plugins/flash.nvim",
+            ["lazy"] = true,
             ["name"] = "flash",
         },
         {
@@ -345,7 +333,7 @@ require("lazy").setup({
                     vim.g[k] = v
                 end
             end,
-            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/git-messenger.vim",
+            ["dir"] = "/nix/store/8bx1xnvd173gghqaak7qyfr9ay7vxdw3-lazy-plugins/git-messenger.vim",
             ["lazy"] = false,
             ["name"] = "gitmessenger",
             ["opts"] = {
@@ -358,14 +346,14 @@ require("lazy").setup({
             ["config"] = function(_, opts)
                 require("gitsigns").setup(opts)
             end,
-            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/gitsigns.nvim",
+            ["dir"] = "/nix/store/8bx1xnvd173gghqaak7qyfr9ay7vxdw3-lazy-plugins/gitsigns.nvim",
             ["lazy"] = false,
             ["name"] = "gitsigns",
             ["opts"] = { ["current_line_blame"] = false },
         },
         {
             "haskell-tools",
-            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/haskell-tools.nvim",
+            ["dir"] = "/nix/store/8bx1xnvd173gghqaak7qyfr9ay7vxdw3-lazy-plugins/haskell-tools.nvim",
             ["lazy"] = false,
             ["name"] = "haskell-tools",
         },
@@ -374,7 +362,7 @@ require("lazy").setup({
             ["config"] = function(_, opts)
                 require("illuminate").configure(opts)
             end,
-            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/vim-illuminate",
+            ["dir"] = "/nix/store/8bx1xnvd173gghqaak7qyfr9ay7vxdw3-lazy-plugins/vim-illuminate",
             ["lazy"] = false,
             ["name"] = "illuminate",
             ["opts"] = {
@@ -393,7 +381,7 @@ require("lazy").setup({
         },
         {
             "intellitab",
-            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/intellitab.nvim",
+            ["dir"] = "/nix/store/8bx1xnvd173gghqaak7qyfr9ay7vxdw3-lazy-plugins/intellitab.nvim",
             ["lazy"] = false,
             ["name"] = "intellitab",
         },
@@ -402,13 +390,13 @@ require("lazy").setup({
             ["config"] = function(_, opts)
                 require("nvim-lastplace").setup(opts)
             end,
-            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/nvim-lastplace",
+            ["dir"] = "/nix/store/8bx1xnvd173gghqaak7qyfr9ay7vxdw3-lazy-plugins/nvim-lastplace",
             ["lazy"] = false,
             ["name"] = "lastplace",
         },
         {
             "lazygit",
-            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/lazygit.nvim",
+            ["dir"] = "/nix/store/8bx1xnvd173gghqaak7qyfr9ay7vxdw3-lazy-plugins/lazygit.nvim",
             ["lazy"] = false,
             ["name"] = "lazygit",
         },
@@ -421,7 +409,7 @@ require("lazy").setup({
                     lint[k] = v
                 end
             end,
-            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/nvim-lint",
+            ["dir"] = "/nix/store/8bx1xnvd173gghqaak7qyfr9ay7vxdw3-lazy-plugins/nvim-lint",
             ["lazy"] = false,
             ["name"] = "lint",
             ["opts"] = {
@@ -489,21 +477,29 @@ require("lazy").setup({
                     ["config"] = function(_, opts)
                         require("neodev").setup(opts)
                     end,
-                    ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/neodev.nvim",
+                    ["dir"] = "/nix/store/8bx1xnvd173gghqaak7qyfr9ay7vxdw3-lazy-plugins/neodev.nvim",
                     ["lazy"] = false,
                     ["name"] = "neodev",
                 },
             },
-            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/nvim-lspconfig",
+            ["dir"] = "/nix/store/8bx1xnvd173gghqaak7qyfr9ay7vxdw3-lazy-plugins/nvim-lspconfig",
             ["lazy"] = false,
             ["name"] = "lspconfig",
         },
         {
             "lualine",
             ["config"] = function(_, opts)
-                require("lualine").setup(opts)
+                local lualine = require("lualine")
+
+                lualine.setup(opts)
+
+                -- Disable tabline/winbar sections
+                lualine.hide({
+                    place = { "tabline", "winbar" },
+                    unhide = false,
+                })
             end,
-            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/lualine.nvim",
+            ["dir"] = "/nix/store/8bx1xnvd173gghqaak7qyfr9ay7vxdw3-lazy-plugins/lualine.nvim",
             ["lazy"] = false,
             ["name"] = "lualine",
             ["opts"] = {
@@ -518,12 +514,11 @@ require("lazy").setup({
                 ["sections"] = {
                     ["lualine_a"] = { "mode" },
                     ["lualine_b"] = { "branch", "diff", "diagnostics" },
-                    ["lualine_c"] = { { ["extraConfig"] = { ["path"] = 1 }, ["name"] = "filename" } },
+                    ["lualine_c"] = { { "filename", path = 1 } },
                     ["lualine_x"] = { "filetype", "encoding", "fileformat" },
                     ["lualine_y"] = { "progress", "searchcount", "selectioncount" },
                     ["lualine_z"] = { "location" },
                 },
-                ["tabline"] = { ["lualine_a"] = { "buffers" }, ["lualine_z"] = { "tabs" } },
             },
         },
         {
@@ -531,7 +526,7 @@ require("lazy").setup({
             ["config"] = function(_, opts)
                 require("luasnip").config.set_config(opts)
             end,
-            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/luasnip",
+            ["dir"] = "/nix/store/8bx1xnvd173gghqaak7qyfr9ay7vxdw3-lazy-plugins/luasnip",
             ["lazy"] = false,
             ["name"] = "luasnip",
         },
@@ -541,7 +536,7 @@ require("lazy").setup({
                 local actions = require("nvim-navbuddy.actions") -- ?
                 require("nvim-navbuddy").setup(opts)
             end,
-            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/nvim-navbuddy",
+            ["dir"] = "/nix/store/8bx1xnvd173gghqaak7qyfr9ay7vxdw3-lazy-plugins/nvim-navbuddy",
             ["lazy"] = false,
             ["name"] = "navbuddy",
             ["opts"] = { ["lsp"] = { ["auto_attach"] = true }, ["window"] = { ["border"] = "rounded" } },
@@ -551,10 +546,57 @@ require("lazy").setup({
             ["config"] = function(_, opts)
                 require("nvim-navic").setup(opts)
             end,
-            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/nvim-navic",
+            ["dir"] = "/nix/store/8bx1xnvd173gghqaak7qyfr9ay7vxdw3-lazy-plugins/nvim-navic",
             ["lazy"] = false,
             ["name"] = "navic",
             ["opts"] = { ["click"] = true, ["highlight"] = true, ["lsp"] = { ["auto_attach"] = true } },
+        },
+        {
+            "neo-tree",
+            ["cmd"] = "Neotree",
+            ["config"] = function(_, opts)
+                require("neo-tree").setup(opts)
+            end,
+            ["dependencies"] = {
+                {
+                    "plenary",
+                    ["dir"] = "/nix/store/8bx1xnvd173gghqaak7qyfr9ay7vxdw3-lazy-plugins/plenary.nvim",
+                    ["lazy"] = true,
+                    ["name"] = "plenary",
+                },
+                {
+                    "web-devicons",
+                    ["config"] = function(_, opts)
+                        require("nvim-web-devicons").setup(opts)
+                    end,
+                    ["dir"] = "/nix/store/8bx1xnvd173gghqaak7qyfr9ay7vxdw3-lazy-plugins/nvim-web-devicons",
+                    ["lazy"] = true,
+                    ["name"] = "web-devicons",
+                },
+                {
+                    "nui",
+                    ["dir"] = "/nix/store/8bx1xnvd173gghqaak7qyfr9ay7vxdw3-lazy-plugins/nui.nvim",
+                    ["lazy"] = true,
+                    ["name"] = "nui",
+                },
+            },
+            ["dir"] = "/nix/store/8bx1xnvd173gghqaak7qyfr9ay7vxdw3-lazy-plugins/neo-tree.nvim",
+            ["lazy"] = true,
+            ["name"] = "neo-tree",
+            ["opts"] = {
+                ["buffers"] = { ["follow_current_file"] = { ["enabled"] = true, ["leave_dirs_open"] = false } },
+                ["filesystem"] = { ["follow_current_file"] = { ["enabled"] = true, ["leave_dirs_open"] = false } },
+                ["use_default_mappings"] = false,
+                ["window"] = {
+                    ["mappings"] = {
+                        ["/"] = "fuzzy_finder",
+                        ["<CR>"] = "toggle_node",
+                        ["<Esc>"] = "cancel",
+                        ["<S-CR>"] = "open",
+                        ["?"] = "show_help",
+                    },
+                },
+            },
         },
         {
             "noice",
@@ -563,13 +605,23 @@ require("lazy").setup({
             end,
             ["dependencies"] = {
                 {
+                    "notify",
+                    ["config"] = function(_, opts)
+                        vim.notify = require("notify")
+                        require("notify").setup(opts)
+                    end,
+                    ["dir"] = "/nix/store/8bx1xnvd173gghqaak7qyfr9ay7vxdw3-lazy-plugins/nvim-notify",
+                    ["lazy"] = true,
+                    ["name"] = "notify",
+                },
+                {
                     "nui",
-                    ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/nui.nvim",
-                    ["lazy"] = false,
+                    ["dir"] = "/nix/store/8bx1xnvd173gghqaak7qyfr9ay7vxdw3-lazy-plugins/nui.nvim",
+                    ["lazy"] = true,
                     ["name"] = "nui",
                 },
             },
-            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/noice.nvim",
+            ["dir"] = "/nix/store/8bx1xnvd173gghqaak7qyfr9ay7vxdw3-lazy-plugins/noice.nvim",
             ["lazy"] = false,
             ["name"] = "noice",
             ["opts"] = {
@@ -606,41 +658,32 @@ require("lazy").setup({
             },
         },
         {
-            "notify",
-            ["config"] = function(_, opts)
-                vim.notify = require("notify")
-                require("notify").setup(opts)
-            end,
-            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/nvim-notify",
-            ["lazy"] = false,
-            ["name"] = "notify",
-        },
-        {
             "rainbow-delimiters",
-            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/rainbow-delimiters.nvim",
+            ["dir"] = "/nix/store/8bx1xnvd173gghqaak7qyfr9ay7vxdw3-lazy-plugins/rainbow-delimiters.nvim",
             ["lazy"] = false,
             ["name"] = "rainbow-delimiters",
         },
         {
             "rustaceanvim",
-            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/rustaceanvim",
+            ["dir"] = "/nix/store/8bx1xnvd173gghqaak7qyfr9ay7vxdw3-lazy-plugins/rustaceanvim",
             ["lazy"] = false,
             ["name"] = "rustaceanvim",
         },
         {
             "sandwich",
-            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/vim-sandwich",
+            ["dir"] = "/nix/store/8bx1xnvd173gghqaak7qyfr9ay7vxdw3-lazy-plugins/vim-sandwich",
             ["lazy"] = false,
             ["name"] = "sandwich",
         },
         {
             "sleuth",
-            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/vim-sleuth",
+            ["dir"] = "/nix/store/8bx1xnvd173gghqaak7qyfr9ay7vxdw3-lazy-plugins/vim-sleuth",
             ["lazy"] = false,
             ["name"] = "sleuth",
         },
         {
             "telescope",
+            ["cmd"] = "Telescope",
             ["config"] = function(_, opts)
                 local telescope = require("telescope")
                 telescope.setup(opts)
@@ -652,31 +695,31 @@ require("lazy").setup({
             ["dependencies"] = {
                 {
                     "plenary",
-                    ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/plenary.nvim",
-                    ["lazy"] = false,
+                    ["dir"] = "/nix/store/8bx1xnvd173gghqaak7qyfr9ay7vxdw3-lazy-plugins/plenary.nvim",
+                    ["lazy"] = true,
                     ["name"] = "plenary",
                 },
                 {
+                    "telescope-fzf-native",
+                    ["dir"] = "/nix/store/8bx1xnvd173gghqaak7qyfr9ay7vxdw3-lazy-plugins/telescope-fzf-native.nvim",
+                    ["lazy"] = true,
+                    ["name"] = "telescope-fzf-native",
+                },
+                {
                     "telescope-undo",
-                    ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/telescope-undo.nvim",
-                    ["lazy"] = false,
+                    ["dir"] = "/nix/store/8bx1xnvd173gghqaak7qyfr9ay7vxdw3-lazy-plugins/telescope-undo.nvim",
+                    ["lazy"] = true,
                     ["name"] = "telescope-undo",
                 },
                 {
                     "telescope-ui-select",
-                    ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/telescope-ui-select.nvim",
-                    ["lazy"] = false,
+                    ["dir"] = "/nix/store/8bx1xnvd173gghqaak7qyfr9ay7vxdw3-lazy-plugins/telescope-ui-select.nvim",
+                    ["lazy"] = true,
                     ["name"] = "telescope-ui-select",
                 },
-                {
-                    "telescope-fzf-native",
-                    ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/telescope-fzf-native.nvim",
-                    ["lazy"] = false,
-                    ["name"] = "telescope-fzf-native",
-                },
             },
-            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/telescope.nvim",
-            ["lazy"] = false,
+            ["dir"] = "/nix/store/8bx1xnvd173gghqaak7qyfr9ay7vxdw3-lazy-plugins/telescope.nvim",
+            ["lazy"] = true,
             ["name"] = "telescope",
             ["opts"] = {
                 ["defaults"] = {
@@ -692,15 +735,18 @@ require("lazy").setup({
         },
         {
             "todo-comments",
+            ["config"] = function(_, opts)
+                require("todo-comments").setup(opts)
+            end,
             ["dependencies"] = {
                 {
                     "plenary",
-                    ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/plenary.nvim",
-                    ["lazy"] = false,
+                    ["dir"] = "/nix/store/8bx1xnvd173gghqaak7qyfr9ay7vxdw3-lazy-plugins/plenary.nvim",
+                    ["lazy"] = true,
                     ["name"] = "plenary",
                 },
             },
-            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/todo-comments.nvim",
+            ["dir"] = "/nix/store/8bx1xnvd173gghqaak7qyfr9ay7vxdw3-lazy-plugins/todo-comments.nvim",
             ["lazy"] = false,
             ["name"] = "todo-comments",
         },
@@ -709,7 +755,7 @@ require("lazy").setup({
             ["config"] = function(_, opts)
                 require("toggleterm").setup(opts)
             end,
-            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/toggleterm.nvim",
+            ["dir"] = "/nix/store/8bx1xnvd173gghqaak7qyfr9ay7vxdw3-lazy-plugins/toggleterm.nvim",
             ["lazy"] = false,
             ["name"] = "toggleterm",
             ["opts"] = {
@@ -732,13 +778,13 @@ require("lazy").setup({
             ["config"] = function(_, opts)
                 -- Fix treesitter grammars/parsers on nix
                 vim.opt.runtimepath:append(
-                    "/nix/store/a05m2wf9i4lx3010pagz1p5s4vl1dva2-vimplugin-nvim-treesitter-2024-05-25"
+                    "/nix/store/dks5shbpaksflcsig4dspi8vs9a06yqw-vimplugin-nvim-treesitter-2024-05-28"
                 )
-                vim.opt.runtimepath:append("/nix/store/7lrj56kr2nj7591m4kjiq03hq9kwabm9-treesitter-parsers")
+                vim.opt.runtimepath:append("/nix/store/774ydms06ccrb8zybw2y045ajgs9l7jk-treesitter-parsers")
 
                 require("nvim-treesitter.configs").setup(opts)
             end,
-            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/nvim-treesitter",
+            ["dir"] = "/nix/store/8bx1xnvd173gghqaak7qyfr9ay7vxdw3-lazy-plugins/nvim-treesitter",
             ["lazy"] = false,
             ["name"] = "treesitter",
             ["opts"] = {
@@ -754,7 +800,7 @@ require("lazy").setup({
                     },
                 },
                 ["indent"] = { ["enable"] = true },
-                ["parser_install_dir"] = "/nix/store/7lrj56kr2nj7591m4kjiq03hq9kwabm9-treesitter-parsers",
+                ["parser_install_dir"] = "/nix/store/774ydms06ccrb8zybw2y045ajgs9l7jk-treesitter-parsers",
             },
         },
         {
@@ -762,7 +808,7 @@ require("lazy").setup({
             ["config"] = function(_, opts)
                 require("trim").setup(opts)
             end,
-            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/trim.nvim",
+            ["dir"] = "/nix/store/8bx1xnvd173gghqaak7qyfr9ay7vxdw3-lazy-plugins/trim.nvim",
             ["lazy"] = false,
             ["name"] = "trim",
         },
@@ -771,7 +817,7 @@ require("lazy").setup({
             ["config"] = function(_, opts)
                 require("trouble").setup(opts)
             end,
-            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/trouble.nvim",
+            ["dir"] = "/nix/store/8bx1xnvd173gghqaak7qyfr9ay7vxdw3-lazy-plugins/trouble.nvim",
             ["lazy"] = false,
             ["name"] = "trouble",
         },
@@ -783,12 +829,12 @@ require("lazy").setup({
             ["dependencies"] = {
                 {
                     "promise",
-                    ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/promise-async",
-                    ["lazy"] = false,
+                    ["dir"] = "/nix/store/8bx1xnvd173gghqaak7qyfr9ay7vxdw3-lazy-plugins/promise-async",
+                    ["lazy"] = true,
                     ["name"] = "promise",
                 },
             },
-            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/nvim-ufo",
+            ["dir"] = "/nix/store/8bx1xnvd173gghqaak7qyfr9ay7vxdw3-lazy-plugins/nvim-ufo",
             ["lazy"] = false,
             ["name"] = "ufo",
         },
@@ -797,18 +843,19 @@ require("lazy").setup({
             ["config"] = function(_, opts)
                 require("which-key").setup(opts)
             end,
-            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/which-key.nvim",
+            ["dir"] = "/nix/store/8bx1xnvd173gghqaak7qyfr9ay7vxdw3-lazy-plugins/which-key.nvim",
             ["lazy"] = false,
             ["name"] = "which-key",
             ["priority"] = 500,
         },
         {
             "yanky",
+            ["cmd"] = { "YankyClearHistory", "YankyRingHistory" },
             ["config"] = function(_, opts)
                 require("yanky").setup(opts)
             end,
-            ["dir"] = "/nix/store/8m92rbw7hfvgr0i4jvcmlpn1lb1chjq2-lazy-plugins/yanky.nvim",
-            ["lazy"] = false,
+            ["dir"] = "/nix/store/8bx1xnvd173gghqaak7qyfr9ay7vxdw3-lazy-plugins/yanky.nvim",
+            ["lazy"] = true,
             ["name"] = "yanky",
         },
     },
@@ -817,25 +864,25 @@ require("lazy").setup({
 -- Set up keybinds {{{
 do
     local __nixvim_binds = {
-        { ["action"] = "<cmd>w<CR>", ["key"] = "<C-s>", ["mode"] = "n", ["options"] = {
+        { ["action"] = "<CMD>w<CR>", ["key"] = "<C-s>", ["mode"] = "n", ["options"] = {
             ["desc"] = "Save current buffer",
         } },
-        { ["action"] = "<cmd>wa<CR>", ["key"] = "<C-S-s>", ["mode"] = "n", ["options"] = {
+        { ["action"] = "<CMD>wa<CR>", ["key"] = "<C-S-s>", ["mode"] = "n", ["options"] = {
             ["desc"] = "Save all buffers",
         } },
         { ["action"] = "<gv", ["key"] = "<", ["mode"] = "v", ["options"] = { ["desc"] = "Outdent" } },
         { ["action"] = ">gv", ["key"] = ">", ["mode"] = "v", ["options"] = { ["desc"] = "Indent" } },
         { ["action"] = "v<<Esc>", ["key"] = "<", ["mode"] = "n", ["options"] = { ["desc"] = "Outdent" } },
         { ["action"] = "v><Esc>", ["key"] = ">", ["mode"] = "n", ["options"] = { ["desc"] = "Indent" } },
-        { ["action"] = "<C-d>zz", ["key"] = "<C-d>", ["mode"] = "n", ["options"] = { ["desc"] = "Jump down" } },
-        { ["action"] = "<C-u>zz", ["key"] = "<C-u>", ["mode"] = "n", ["options"] = { ["desc"] = "Jump up" } },
-        { ["action"] = "nzzzv", ["key"] = "n", ["mode"] = "n", ["options"] = { ["desc"] = "Next match" } },
-        { ["action"] = "Nzzzv", ["key"] = "N", ["mode"] = "n", ["options"] = { ["desc"] = "Previous match" } },
+        { ["action"] = "<C-d>zz", ["key"] = "<C-d>", ["mode"] = "n", ["options"] = { ["desc"] = "Jump down (centered)" } },
+        { ["action"] = "<C-u>zz", ["key"] = "<C-u>", ["mode"] = "n", ["options"] = { ["desc"] = "Jump up (centered)" } },
+        { ["action"] = "nzzzv", ["key"] = "n", ["mode"] = "n", ["options"] = { ["desc"] = "Next match (centered)" } },
+        { ["action"] = "Nzzzv", ["key"] = "N", ["mode"] = "n", ["options"] = { ["desc"] = "Previous match (centered)" } },
         {
-            ["action"] = "<cmd>lua require('intellitab').indent()<CR>",
+            ["action"] = "<CMD>lua require('intellitab').indent()<CR>",
             ["key"] = "<Tab>",
             ["mode"] = "i",
-            ["options"] = { ["desc"] = "Indent" },
+            ["options"] = { ["desc"] = "Indent (IntelliTab)" },
         },
         { ["action"] = "<C-w>", ["key"] = "<C-BS>", ["mode"] = "i", ["options"] = { ["desc"] = "Delete previous word" } },
         { ["action"] = "<C-w>", ["key"] = "<M-BS>", ["mode"] = "i", ["options"] = { ["desc"] = "Delete previous word" } },
@@ -850,137 +897,143 @@ do
         } },
         { ["action"] = '"+y', ["key"] = "<C-S-c>", ["mode"] = "v", ["options"] = { ["desc"] = "Copy to clipboard" } },
         {
-            ["action"] = "<cmd>nohlsearch<CR>",
+            ["action"] = "<CMD>nohlsearch<CR>",
             ["key"] = "<C-h>",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Clear search highlights" },
         },
         {
-            ["action"] = "<cmd>lua vim.lsp.buf.hover()<CR>",
+            ["action"] = "<CMD>lua vim.lsp.buf.hover()<CR>",
             ["key"] = "K",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Show LSP hover" },
         },
-        { ["action"] = "<cmd>quitall<CR>", ["key"] = "<leader>qq", ["mode"] = "n", ["options"] = { ["desc"] = "Quit" } },
         {
-            ["action"] = "<cmd>quitall!<CR>",
-            ["key"] = "<leader>q!",
+            ["action"] = "<CMD>Telescope current_buffer_fuzzy_find<CR>",
+            ["key"] = "/",
             ["mode"] = "n",
-            ["options"] = { ["desc"] = "Forceful quit" },
+            ["options"] = { ["desc"] = "Find in current buffer" },
         },
-        { ["action"] = "<cmd>Lazy<CR>", ["key"] = "<leader>L", ["mode"] = "n", ["options"] = { ["desc"] = "Show Lazy" } },
+        { ["action"] = "<CMD>Lazy<CR>", ["key"] = "<leader>L", ["mode"] = "n", ["options"] = { ["desc"] = "Show Lazy" } },
         {
-            ["action"] = "<cmd>Telescope buffers<CR>",
+            ["action"] = "<CMD>Telescope buffers<CR>",
             ["key"] = "<leader><Space>",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Show open buffers" },
         },
         {
-            ["action"] = "<cmd>wa<CR>",
+            ["action"] = "<CMD>w<CR>",
+            ["key"] = "<leader>s",
+            ["mode"] = "n",
+            ["options"] = { ["desc"] = "Save current buffer" },
+        },
+        {
+            ["action"] = "<CMD>wa<CR>",
             ["key"] = "<leader>S",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Save all buffers" },
         },
         {
-            ["action"] = "<cmd>Telescope find_files<CR>",
+            ["action"] = "<CMD>Telescope find_files<CR>",
             ["key"] = "<leader>f",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Find file" },
         },
         {
-            ["action"] = "<cmd>Telescope vim_options<CR>",
+            ["action"] = "<CMD>Telescope vim_options<CR>",
             ["key"] = "<leader>o",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Show Vim options" },
         },
         {
-            ["action"] = "<cmd>Telescope undo<CR>",
+            ["action"] = "<CMD>Telescope undo<CR>",
             ["key"] = "<leader>u",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Show undo history" },
         },
         {
-            ["action"] = "<cmd>Telescope current_buffer_fuzzy_find<CR>",
+            ["action"] = "<CMD>Telescope live_grep<CR>",
             ["key"] = "<leader>/",
             ["mode"] = "n",
-            ["options"] = { ["desc"] = "Find in current buffer" },
+            ["options"] = { ["desc"] = "Find in working directory" },
         },
         {
-            ["action"] = "<cmd>Telescope notify<CR>",
+            ["action"] = "<CMD>Telescope notify<CR>",
             ["key"] = "<leader>n",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Show notify history" },
         },
         {
-            ["action"] = "<cmd>Telescope live_grep<CR>",
-            ["key"] = "<leader>s",
-            ["mode"] = "n",
-            ["options"] = { ["desc"] = "Find in working directory" },
-        },
-        {
-            ["action"] = "<cmd>Telescope resume<CR>",
+            ["action"] = "<CMD>Telescope resume<CR>",
             ["key"] = "<leader>r",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Show last telescope picker" },
         },
         {
-            ["action"] = "<cmd>Telescope keymaps<CR>",
+            ["action"] = "<CMD>Telescope keymaps<CR>",
             ["key"] = "<leader>?",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Show keymaps" },
         },
         {
-            ["action"] = "<cmd>Telescope commands<CR>",
+            ["action"] = "<CMD>Telescope commands<CR>",
             ["key"] = "<leader>:",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Execute command" },
         },
         {
-            ["action"] = "<cmd>Telescope marks<CR>",
+            ["action"] = "<CMD>Telescope marks<CR>",
             ["key"] = "<leader>M",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Show marks" },
         },
         {
-            ["action"] = "<cmd>Telescope jumplist<CR>",
+            ["action"] = "<CMD>Telescope jumplist<CR>",
             ["key"] = "<leader>J",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Show jumplist" },
         },
         {
-            ["action"] = "<cmd>Telescope man_pages<CR>",
+            ["action"] = "<CMD>Telescope man_pages<CR>",
             ["key"] = "<leader>m",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Show manpages" },
         },
         {
-            ["action"] = "<cmd>Telescope help_tags<CR>",
+            ["action"] = "<CMD>Telescope help_tags<CR>",
             ["key"] = "<leader>h",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Show help tags" },
         },
         { ["action"] = "+quit", ["key"] = "<leader>q", ["mode"] = "n" },
+        { ["action"] = "<CMD>quitall<CR>", ["key"] = "<leader>qq", ["mode"] = "n", ["options"] = { ["desc"] = "Quit" } },
+        {
+            ["action"] = "<CMD>quitall!<CR>",
+            ["key"] = "<leader>q!",
+            ["mode"] = "n",
+            ["options"] = { ["desc"] = "Quit forcefully" },
+        },
         { ["action"] = "+buffers", ["key"] = "<leader>b", ["mode"] = "n" },
         {
-            ["action"] = "<cmd>Telescope buffers<CR>",
+            ["action"] = "<CMD>Telescope buffers<CR>",
             ["key"] = "<leader>bb",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Show open buffers" },
         },
         {
-            ["action"] = "<cmd>bnext<CR>",
+            ["action"] = "<CMD>bnext<CR>",
             ["key"] = "<leader>bn",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Goto next buffer" },
         },
         {
-            ["action"] = "<cmd>bprevious<CR>",
+            ["action"] = "<CMD>bprevious<CR>",
             ["key"] = "<leader>bp",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Goto previous buffer" },
         },
         {
-            ["action"] = "<cmd>Bdelete<CR>",
+            ["action"] = "<CMD>Bdelete<CR>",
             ["key"] = "<leader>bd",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Close current buffer" },
@@ -998,6 +1051,7 @@ do
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Split window vertically" },
         },
+        { ["action"] = "<C-w>=", ["key"] = "<leader>w=", ["mode"] = "n", ["options"] = { ["desc"] = "Balance windows" } },
         {
             ["action"] = "<C-w>c",
             ["key"] = "<leader>wd",
@@ -1017,124 +1071,124 @@ do
         } },
         { ["action"] = "+toggle", ["key"] = "<leader>t", ["mode"] = "n" },
         {
-            ["action"] = "<cmd>CHADopen --nofocus<CR>",
+            ["action"] = "<CMD>Neotree action=show toggle=true<CR>",
             ["key"] = "<leader>tt",
             ["mode"] = "n",
-            ["options"] = { ["desc"] = "Toggle CHADtree" },
+            ["options"] = { ["desc"] = "Toggle NeoTree" },
         },
         {
-            ["action"] = "<cmd>Navbuddy<CR>",
+            ["action"] = "<CMD>Navbuddy<CR>",
             ["key"] = "<leader>tn",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Toggle NavBuddy" },
         },
         {
-            ["action"] = "<cmd>TroubleToggle focus=false<CR>",
+            ["action"] = "<CMD>TroubleToggle focus=false<CR>",
             ["key"] = "<leader>td",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Toggle Trouble" },
         },
         { ["action"] = "+git", ["key"] = "<leader>g", ["mode"] = "n" },
         {
-            ["action"] = "<cmd>LazyGit<CR>",
+            ["action"] = "<CMD>LazyGit<CR>",
             ["key"] = "<leader>gg",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Show LazyGit" },
         },
         {
-            ["action"] = "<cmd>GitMessenger<CR>",
+            ["action"] = "<CMD>GitMessenger<CR>",
             ["key"] = "<leader>gm",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Show GitMessenger" },
         },
         {
-            ["action"] = "<cmd>Telescope git_status<CR>",
+            ["action"] = "<CMD>Telescope git_status<CR>",
             ["key"] = "<leader>gs",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Show Git status" },
         },
         {
-            ["action"] = "<cmd>Telescope git_commits<CR>",
+            ["action"] = "<CMD>Telescope git_commits<CR>",
             ["key"] = "<leader>gc",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Show Git log" },
         },
         {
-            ["action"] = "<cmd>Telescope git_branches<CR>",
+            ["action"] = "<CMD>Telescope git_branches<CR>",
             ["key"] = "<leader>gb",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Show Git branches" },
         },
         {
-            ["action"] = "<cmd>Telescope git_bcommits<CR>",
+            ["action"] = "<CMD>Telescope git_bcommits<CR>",
             ["key"] = "<leader>gf",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Show Git log for current file" },
         },
         { ["action"] = "+lsp", ["key"] = "<leader>l", ["mode"] = "n" },
         {
-            ["action"] = "<cmd>Telescope lsp_references<CR>",
+            ["action"] = "<CMD>Telescope lsp_references<CR>",
             ["key"] = "<leader>lr",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Goto references" },
         },
         {
-            ["action"] = "<cmd>Telescope lsp_definitions<CR>",
+            ["action"] = "<CMD>Telescope lsp_definitions<CR>",
             ["key"] = "<leader>ld",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Goto definition" },
         },
         {
-            ["action"] = "<cmd>Telescope lsp_implementations<CR>",
+            ["action"] = "<CMD>Telescope lsp_implementations<CR>",
             ["key"] = "<leader>li",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Goto implementation" },
         },
         {
-            ["action"] = "<cmd>Telescope lsp_type_definitions<CR>",
+            ["action"] = "<CMD>Telescope lsp_type_definitions<CR>",
             ["key"] = "<leader>lt",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Goto type definition" },
         },
         {
-            ["action"] = "<cmd>Telescope lsp_incoming_calls<CR>",
+            ["action"] = "<CMD>Telescope lsp_incoming_calls<CR>",
             ["key"] = "<leader>lI",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Show incoming calls" },
         },
         {
-            ["action"] = "<cmd>Telescope lsp_outgoing_calls<CR>",
+            ["action"] = "<CMD>Telescope lsp_outgoing_calls<CR>",
             ["key"] = "<leader>lO",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Show outgoing calls" },
         },
         { ["action"] = "+code", ["key"] = "<leader>c", ["mode"] = "n" },
         {
-            ["action"] = "<cmd>lua require('conform').format()<CR>",
+            ["action"] = "<CMD>lua require('conform').format()<CR>",
             ["key"] = "<leader>cf",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Format current buffer" },
         },
         {
-            ["action"] = "<cmd>Telescope diagnostics<CR>",
+            ["action"] = "<CMD>Telescope diagnostics<CR>",
             ["key"] = "<leader>cd",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Show diagnostics" },
         },
         {
-            ["action"] = "<cmd>lua vim.lsp.buf.rename()<CR>",
+            ["action"] = "<CMD>lua vim.lsp.buf.rename()<CR>",
             ["key"] = "<leader>cr",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Rename LSP symbol" },
         },
         {
-            ["action"] = "<cmd>lua vim.lsp.buf.code_action()<CR>",
+            ["action"] = "<CMD>lua vim.lsp.buf.code_action()<CR>",
             ["key"] = "<leader>ca",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Show LSP code actions" },
         },
         {
-            ["action"] = "<cmd>lua vim.diagnostic.open_float()<CR>",
+            ["action"] = "<CMD>lua vim.diagnostic.open_float()<CR>",
             ["key"] = "<leader>cD",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Show LSP line diagnostics" },

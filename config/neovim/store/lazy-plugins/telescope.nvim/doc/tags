@@ -53,6 +53,9 @@ telescope.actions.history.History:new()	telescope.txt	/*telescope.actions.histor
 telescope.actions.history.History:reset()	telescope.txt	/*telescope.actions.history.History:reset()*
 telescope.actions.history.get_simple_history()	telescope.txt	/*telescope.actions.history.get_simple_history()*
 telescope.actions.history.new()	telescope.txt	/*telescope.actions.history.new()*
+telescope.actions.insert_original_cWORD()	telescope.txt	/*telescope.actions.insert_original_cWORD()*
+telescope.actions.insert_original_cfile()	telescope.txt	/*telescope.actions.insert_original_cfile()*
+telescope.actions.insert_original_cline()	telescope.txt	/*telescope.actions.insert_original_cline()*
 telescope.actions.insert_original_cword()	telescope.txt	/*telescope.actions.insert_original_cword()*
 telescope.actions.insert_symbol()	telescope.txt	/*telescope.actions.insert_symbol()*
 telescope.actions.insert_symbol_i()	telescope.txt	/*telescope.actions.insert_symbol_i()*

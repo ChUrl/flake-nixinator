@@ -1,8 +1,8 @@
-local cmp = require  'cmp'
+local cmp = require 'cmp'
 local NAME_REGEX = '\\%([^/\\\\:\\*?<>\'"`\\|]\\)'
 local PATH_REGEX = assert(vim.regex(
-                            ([[\%(\%(/PAT*[^/\\\\:\\*?<>\'"`\\| .~]\)\|\%(/\.\.\)\)*/\zePAT*$]]):gsub(
-                              'PAT', NAME_REGEX)))
+  ([[\%(\%(/PAT*[^/\\\\:\\*?<>\'"`\\| .~]\)\|\%(/\.\.\)\)*/\zePAT*$]]):gsub('PAT',
+    NAME_REGEX)))
 
 local source = {}
 
@@ -12,6 +12,7 @@ local constants = {max_lines = 20}
 ---@field public trailing_slash boolean
 ---@field public label_trailing_slash boolean
 ---@field public get_cwd fun(table): string
+---@field public show_hidden_files_by_default boolean
 
 ---@type cmp_path.Option
 local defaults = {
@@ -20,6 +21,7 @@ local defaults = {
   get_cwd = function(params)
     return vim.fn.expand(('#%d:p:h'):format(params.context.bufnr))
   end,
+  show_hidden_files_by_default = false,
 }
 
 source.new = function() return setmetatable({}, {__index = source}) end
@@ -36,8 +38,8 @@ source.complete = function(self, params, callback)
     return callback()
   end
 
-  local include_hidden = string.sub(params.context.cursor_before_line,
-                                    params.offset, params.offset) == '.'
+  local include_hidden = option.show_hidden_files_by_default or
+    string.sub(params.context.cursor_before_line, params.offset, params.offset) == '.'
   self:_candidates(dirname, include_hidden, option, function(err, candidates)
     if err then
       return callback()
@@ -66,7 +68,7 @@ source._dirname = function(self, params, option)
   end
 
   local dirname = string.gsub(string.sub(params.context.cursor_before_line,
-                                         s + 2), '%a*$', '') -- exclude '/'
+    s + 2), '%a*$', '')                                                  -- exclude '/'
   local prefix = string.sub(params.context.cursor_before_line, 1, s + 1) -- include '/'
 
   local buf_dirname = option.get_cwd(params)
@@ -95,14 +97,14 @@ source._dirname = function(self, params, option)
     accept = accept and not prefix:match('%a/$')
     -- Ignore URL scheme
     accept = accept and not prefix:match('%a+:/$') and
-               not prefix:match('%a+://$')
+      not prefix:match('%a+://$')
     -- Ignore HTML closing tags
     accept = accept and not prefix:match('</$')
     -- Ignore math calculation
     accept = accept and not prefix:match('[%d%)]%s*/$')
     -- Ignore / comment
     accept = accept and
-               (not prefix:match('^[%s/]*$') or not self:_is_slash_comment())
+      (not prefix:match('^[%s/]*$') or not self:_is_slash_comment())
     if accept then
       return vim.fn.resolve('/' .. dirname)
     end
@@ -117,82 +119,82 @@ source._candidates = function(_, dirname, include_hidden, option, callback)
   end
 
   local work
-  work = assert(vim.loop.new_work(function(_entries, _dirname,
-                                           label_trailing_slash, trailing_slash,
-                                           file_kind, folder_kind)
-    local items = {}
+  work = assert(vim.loop.new_work(
+    function(_entries, _dirname, _include_hidden,
+             label_trailing_slash, trailing_slash,
+             file_kind, folder_kind)
+      local items = {}
 
-    local function create_item(name, fs_type)
-      if not (include_hidden or string.sub(name, 1, 1) ~= '.') then
-        return
-      end
-
-      local path = _dirname .. '/' .. name
-      local stat = assert(vim.loop.fs_stat)(path)
-      local lstat = nil
-      if stat then
-        fs_type = stat.type
-      elseif fs_type == 'link' then
-        -- Broken symlink
-        lstat = assert(vim.loop.fs_lstat)(_dirname)
-        if not lstat then
+      local function create_item(name, fs_type)
+        if not (_include_hidden or string.sub(name, 1, 1) ~= '.') then
           return
         end
-      else
+
+        local path = _dirname .. '/' .. name
+        local stat = assert(vim.loop.fs_stat)(path)
+        local lstat = nil
+        if stat then
+          fs_type = stat.type
+        elseif fs_type == 'link' then
+          -- Broken symlink
+          lstat = assert(vim.loop.fs_lstat)(_dirname)
+          if not lstat then
+            return
+          end
+        else
+          return
+        end
+
+        local item = {
+          label = name,
+          filterText = name,
+          insertText = name,
+          kind = file_kind,
+          data = {path = path, type = fs_type, stat = stat, lstat = lstat},
+        }
+        if fs_type == 'directory' then
+          item.kind = folder_kind
+          if label_trailing_slash then
+            item.label = name .. '/'
+          else
+            item.label = name
+          end
+          item.insertText = name .. '/'
+          if not trailing_slash then
+            item.word = name
+          end
+        end
+
+        table.insert(items, item)
+      end
+
+      while true do
+        local name, fs_type, e = assert(vim.loop.fs_scandir_next)(_entries)
+        if e then
+          return fs_type, ""
+        end
+        if not name then
+          break
+        end
+        create_item(name, fs_type)
+      end
+
+      return nil, vim.json.encode(items)
+    end, function(worker_error, serialized_items)
+      if worker_error then
+        callback(err, nil)
         return
       end
-
-      local item = {
-        label = name,
-        filterText = name,
-        insertText = name,
-        kind = file_kind,
-        data = {path = path, type = fs_type, stat = stat, lstat = lstat},
-      }
-      if fs_type == 'directory' then
-        item.kind = folder_kind
-        if label_trailing_slash then
-          item.label = name .. '/'
-        else
-          item.label = name
-        end
-        item.insertText = name .. '/'
-        if not trailing_slash then
-          item.word = name
-        end
+      local read_ok, items = pcall(vim.json.decode, serialized_items, {luanil = {object = true, array = true}})
+      if not read_ok then
+        callback("Problem de-serializing file entries", nil)
       end
+      callback(nil, items)
+    end))
 
-      table.insert(items, item)
-    end
-
-    while true do
-      local name, fs_type, e = assert(vim.loop.fs_scandir_next)(_entries)
-      if e then
-        return fs_type, ""
-      end
-      if not name then
-        break
-      end
-      create_item(name, fs_type)
-    end
-
-    return nil, vim.json.encode(items)
-  end, function(worker_error, serialized_items)
-    if worker_error then
-      callback(err, nil)
-      return
-    end
-    local read_ok, items = pcall(vim.json.decode, serialized_items, { luanil = { object = true, array = true } })
-    if not read_ok then
-      callback("Problem de-serializing file entries", nil)
-    end
-    callback(nil, items)
-  end))
-
-  work:queue(entries, dirname, option.label_trailing_slash,
-             option.trailing_slash, cmp.lsp.CompletionItemKind.File,
-             cmp.lsp.CompletionItemKind.Folder)
-
+  work:queue(entries, dirname, include_hidden, option.label_trailing_slash,
+    option.trailing_slash, cmp.lsp.CompletionItemKind.File,
+    cmp.lsp.CompletionItemKind.Folder)
 end
 
 source._is_slash_comment = function(_)
@@ -211,6 +213,7 @@ source._validate_option = function(_, params)
     trailing_slash = {option.trailing_slash, 'boolean'},
     label_trailing_slash = {option.label_trailing_slash, 'boolean'},
     get_cwd = {option.get_cwd, 'function'},
+    show_hidden_files_by_default = {option.show_hidden_files_by_default, 'boolean'},
   })
   return option
 end

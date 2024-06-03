@@ -1,0 +1,10 @@
+#!/nix/store/306znyj77fv49kwnkpxmb0j2znqpa8bj-bash-5.2p26/bin/bash
+
+# Can be used as a pre-push hook
+# Just symlink this file to .git/hooks/pre-push
+
+echo "Running linter..."
+luacheck .
+
+echo "Checking formatting..."
+stylua --check .
