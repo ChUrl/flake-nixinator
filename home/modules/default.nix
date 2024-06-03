@@ -11,7 +11,6 @@
     ./helix
     ./hyprland
     ./kitty
-    ./lazyvim
     ./misc
     ./neovim
     ./nextcloud
