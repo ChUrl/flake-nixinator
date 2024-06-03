@@ -16,6 +16,7 @@ do
         ["cindent"] = true,
         ["cinkeys"] = "0{,0},0),0],:,!^F,o,O,e",
         ["completeopt"] = { "menuone", "noselect", "noinsert" },
+        ["confirm"] = true,
         ["cursorline"] = true,
         ["encoding"] = "utf-8",
         ["expandtab"] = true,
@@ -38,8 +39,10 @@ do
         ["relativenumber"] = true,
         ["ruler"] = true,
         ["scrolloff"] = 10,
+        ["sessionoptions"] = { "buffers", "curdir", "tabpages", "winsize", "help", "globals", "skiprtp", "folds" },
         ["shiftwidth"] = 4,
         ["showmode"] = false,
+        ["showtabline"] = 0,
         ["signcolumn"] = "yes",
         ["smartcase"] = true,
         ["smartindent"] = false,
@@ -52,6 +55,8 @@ do
         ["timeoutlen"] = 50,
         ["undodir"] = "/home/lab/smchurla/.vim/undo",
         ["undofile"] = true,
+        ["undolevels"] = 10000,
+        ["winblend"] = 30,
     }
 
     for k, v in pairs(nixvim_options) do
@@ -103,13 +108,16 @@ require("lazy").setup({
                 require("nvim-autopairs").setup(opts)
             end,
             ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/nvim-autopairs",
-            ["lazy"] = false,
+            ["event"] = { "InsertEnter" },
+            ["lazy"] = true,
             ["name"] = "autopairs",
+            ["opts"] = { ["check_ts"] = true },
         },
         {
             "bbye",
+            ["cmd"] = { "Bdelete", "Bwipeout" },
             ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/vim-bbye",
-            ["lazy"] = false,
+            ["lazy"] = true,
             ["name"] = "bbye",
         },
         {
@@ -118,7 +126,8 @@ require("lazy").setup({
                 require("better_escape").setup(opts)
             end,
             ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/better-escape.nvim",
-            ["lazy"] = false,
+            ["event"] = { "InsertEnter" },
+            ["lazy"] = true,
             ["name"] = "better-escape",
             ["opts"] = { ["mapping"] = { "jk" }, ["timeout"] = 200 },
         },
@@ -128,8 +137,9 @@ require("lazy").setup({
                 require("clangd_extensions").setup(opts)
             end,
             ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/clangd_extensions.nvim",
-            ["lazy"] = false,
+            ["lazy"] = true,
             ["name"] = "clangd-extensions",
+            ["opts"] = { ["inlay_hints"] = { ["inline"] = false } },
         },
         {
             "cmp",
@@ -183,7 +193,8 @@ require("lazy").setup({
                 },
             },
             ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/nvim-cmp",
-            ["lazy"] = false,
+            ["event"] = { "InsertEnter" },
+            ["lazy"] = true,
             ["name"] = "cmp",
             ["opts"] = function()
                 local cmp = require("cmp")
@@ -243,7 +254,7 @@ require("lazy").setup({
                             elseif has_words_before() then
                                 cmp.complete()
                             else
-                                fallback()
+                                fallback() -- This will call the intellitab <Tab> binding
                             end
                         end, { "i", "s" }),
                         ["<Up>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
@@ -257,7 +268,9 @@ require("lazy").setup({
                 require("colorizer").setup(opts)
             end,
             ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/nvim-colorizer.lua",
-            ["lazy"] = false,
+            ["enabled"] = false,
+            ["event"] = { "BufReadPost", "BufNewFile" },
+            ["lazy"] = true,
             ["name"] = "colorizer",
         },
         {
@@ -297,9 +310,17 @@ require("lazy").setup({
                 require("conform").setup(opts)
             end,
             ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/conform.nvim",
-            ["lazy"] = false,
+            ["event"] = { "BufReadPost", "BufNewFile" },
+            ["lazy"] = true,
             ["name"] = "conform",
             ["opts"] = {
+                ["format_on_save"] = function(bufnr)
+                    -- Disable with a global or buffer-local variable
+                    if vim.g.disable_autoformat then
+                        return
+                    end
+                    return { timeout_ms = 500, lsp_fallback = true }
+                end,
                 ["formatters_by_ft"] = {
                     ["c"] = { "clang-format" },
                     ["cpp"] = { "clang-format" },
@@ -323,18 +344,19 @@ require("lazy").setup({
                 require("flash").setup(opts)
             end,
             ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/flash.nvim",
-            ["lazy"] = true,
+            ["lazy"] = false,
             ["name"] = "flash",
         },
         {
             "gitmessenger",
+            ["cmd"] = { "GitMessenger" },
             ["config"] = function(_, opts)
                 for k, v in pairs(opts) do
                     vim.g[k] = v
                 end
             end,
             ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/git-messenger.vim",
-            ["lazy"] = false,
+            ["lazy"] = true,
             ["name"] = "gitmessenger",
             ["opts"] = {
                 ["git_messenger_floating_win_opts"] = { ["border"] = "rounded" },
@@ -347,7 +369,8 @@ require("lazy").setup({
                 require("gitsigns").setup(opts)
             end,
             ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/gitsigns.nvim",
-            ["lazy"] = false,
+            ["event"] = { "BufReadPost", "BufNewFile" },
+            ["lazy"] = true,
             ["name"] = "gitsigns",
             ["opts"] = { ["current_line_blame"] = false },
         },
@@ -363,7 +386,8 @@ require("lazy").setup({
                 require("illuminate").configure(opts)
             end,
             ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/vim-illuminate",
-            ["lazy"] = false,
+            ["event"] = { "BufreadPost", "BufNewFile" },
+            ["lazy"] = true,
             ["name"] = "illuminate",
             ["opts"] = {
                 ["filetypesDenylist"] = {
@@ -382,7 +406,8 @@ require("lazy").setup({
         {
             "intellitab",
             ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/intellitab.nvim",
-            ["lazy"] = false,
+            ["event"] = { "InsertEnter" },
+            ["lazy"] = true,
             ["name"] = "intellitab",
         },
         {
@@ -396,8 +421,17 @@ require("lazy").setup({
         },
         {
             "lazygit",
+            ["cmd"] = { "LazyGit", "LazyGitConfig", "LazyGitCurrentFile", "LazyGitFilter", "LazyGitFilterCurrentFile" },
+            ["dependencies"] = {
+                {
+                    "plenary",
+                    ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/plenary.nvim",
+                    ["lazy"] = true,
+                    ["name"] = "plenary",
+                },
+            },
             ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/lazygit.nvim",
-            ["lazy"] = false,
+            ["lazy"] = true,
             ["name"] = "lazygit",
         },
         {
@@ -410,28 +444,29 @@ require("lazy").setup({
                 end
             end,
             ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/nvim-lint",
-            ["lazy"] = false,
+            ["event"] = { "BufReadPost", "BufNewFile" },
+            ["lazy"] = true,
             ["name"] = "lint",
             ["opts"] = {
                 ["linters_by_ft"] = {
-                    ["c"] = { "clang-tidy" },
+                    ["c"] = { "clangtidy" },
                     ["clojure"] = { "clj-kondo" },
-                    ["cpp"] = { "clang-tidy" },
-                    ["h"] = { "clang-tidy" },
-                    ["hpp"] = { "clang-tidy" },
+                    ["cpp"] = { "clangtidy" },
+                    ["h"] = { "clangtidy" },
+                    ["hpp"] = { "clangtidy" },
                     ["java"] = { "checkstyle" },
                     ["javascript"] = { "eslint_d" },
                     ["lua"] = { "luacheck" },
                     ["markdown"] = { "vale" },
                     ["nix"] = { "statix" },
                     ["python"] = { "flake8" },
-                    ["rust"] = { "clippy" },
                     ["text"] = { "vale" },
                 },
             },
         },
         {
             "lspconfig",
+            ["cmd"] = { "LspInfo" },
             ["config"] = function(_, opts)
                 local __lspOnAttach = function(client, bufnr) end
 
@@ -448,7 +483,38 @@ require("lazy").setup({
                 }
 
                 for i, server in ipairs({
-                    { ["name"] = "clangd" },
+                    {
+                        ["extraOptions"] = {
+                            ["capabilities"] = { ["offsetEncoding"] = { "utf-16" } },
+                            ["cmd"] = {
+                                "clangd",
+                                "--background-index",
+                                "--clang-tidy",
+                                "--header-insertion=iwyu",
+                                "--completion-style=detailed",
+                                "--function-arg-placeholders",
+                                "--fallback-style=llvm",
+                            },
+                            ["init_options"] = {
+                                ["clangdFileStatus"] = true,
+                                ["completeUnimported"] = true,
+                                ["usePlaceholders"] = true,
+                            },
+                            ["root_dir"] = function(fname)
+                                return require("lspconfig.util").root_pattern(
+                                    "Makefile",
+                                    "CMakeLists.txt",
+                                    ".clang-format",
+                                    ".clang-tidy"
+                                )(fname) or require("lspconfig.util").root_pattern(
+                                    "compile_commands.json"
+                                )(fname) or require("lspconfig.util").find_git_ancestor(
+                                    fname
+                                )
+                            end,
+                        },
+                        ["name"] = "clangd",
+                    },
                     { ["name"] = "clojure_lsp" },
                     { ["name"] = "cmake" },
                     { ["name"] = "lua_ls" },
@@ -480,10 +546,17 @@ require("lazy").setup({
                     ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/neodev.nvim",
                     ["lazy"] = false,
                     ["name"] = "neodev",
+                    ["opts"] = {
+                        ["library"] = { ["enabled"] = true, ["plugins"] = true, ["runtime"] = true, ["types"] = true },
+                        ["lspconfig"] = true,
+                        ["pathStrict"] = true,
+                        ["setup_jsonls"] = false,
+                    },
                 },
             },
             ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/nvim-lspconfig",
-            ["lazy"] = false,
+            ["event"] = { "BufReadPost", "BufNewFile" },
+            ["lazy"] = true,
             ["name"] = "lspconfig",
         },
         {
@@ -532,12 +605,13 @@ require("lazy").setup({
         },
         {
             "navbuddy",
+            ["cmd"] = { "Navbuddy" },
             ["config"] = function(_, opts)
                 local actions = require("nvim-navbuddy.actions") -- ?
                 require("nvim-navbuddy").setup(opts)
             end,
             ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/nvim-navbuddy",
-            ["lazy"] = false,
+            ["lazy"] = true,
             ["name"] = "navbuddy",
             ["opts"] = { ["lsp"] = { ["auto_attach"] = true }, ["window"] = { ["border"] = "rounded" } },
         },
@@ -553,7 +627,7 @@ require("lazy").setup({
         },
         {
             "neo-tree",
-            ["cmd"] = "Neotree",
+            ["cmd"] = { "Neotree" },
             ["config"] = function(_, opts)
                 require("neo-tree").setup(opts)
             end,
@@ -585,15 +659,28 @@ require("lazy").setup({
             ["name"] = "neo-tree",
             ["opts"] = {
                 ["buffers"] = { ["follow_current_file"] = { ["enabled"] = true, ["leave_dirs_open"] = false } },
+                ["enable_diagnostics"] = false,
+                ["enable_git_status"] = true,
                 ["filesystem"] = { ["follow_current_file"] = { ["enabled"] = true, ["leave_dirs_open"] = false } },
+                ["open_files_do_not_replace_types"] = { "terminal", "trouble", "qf" },
+                ["popup_border_style"] = "rounded",
                 ["use_default_mappings"] = false,
                 ["window"] = {
                     ["mappings"] = {
                         ["/"] = "fuzzy_finder",
-                        ["<CR>"] = "toggle_node",
+                        ["<CR>"] = "open",
                         ["<Esc>"] = "cancel",
-                        ["<S-CR>"] = "open",
                         ["?"] = "show_help",
+                        ["R"] = "refresh",
+                        ["a"] = "add",
+                        ["c"] = "close_node",
+                        ["d"] = "delete",
+                        ["i"] = "show_file_details",
+                        ["p"] = "paste_from_clipboard",
+                        ["q"] = "close_window",
+                        ["r"] = "rename",
+                        ["x"] = "cut_to_clipboard",
+                        ["y"] = "copy_to_clipboard",
                     },
                 },
             },
@@ -683,7 +770,7 @@ require("lazy").setup({
         },
         {
             "telescope",
-            ["cmd"] = "Telescope",
+            ["cmd"] = { "Telescope" },
             ["config"] = function(_, opts)
                 local telescope = require("telescope")
                 telescope.setup(opts)
@@ -747,16 +834,18 @@ require("lazy").setup({
                 },
             },
             ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/todo-comments.nvim",
-            ["lazy"] = false,
+            ["event"] = { "BufReadPost", "BufNewFile" },
+            ["lazy"] = true,
             ["name"] = "todo-comments",
         },
         {
             "toggleterm",
+            ["cmd"] = { "ToggleTerm" },
             ["config"] = function(_, opts)
                 require("toggleterm").setup(opts)
             end,
             ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/toggleterm.nvim",
-            ["lazy"] = false,
+            ["lazy"] = true,
             ["name"] = "toggleterm",
             ["opts"] = {
                 ["auto_scroll"] = true,
@@ -775,6 +864,7 @@ require("lazy").setup({
         },
         {
             "treesitter",
+            ["cmd"] = { "TSModuleInfo" },
             ["config"] = function(_, opts)
                 -- Fix treesitter grammars/parsers on nix
                 vim.opt.runtimepath:append(
@@ -785,7 +875,8 @@ require("lazy").setup({
                 require("nvim-treesitter.configs").setup(opts)
             end,
             ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/nvim-treesitter",
-            ["lazy"] = false,
+            ["event"] = { "BufReadPost", "BufNewFile" },
+            ["lazy"] = true,
             ["name"] = "treesitter",
             ["opts"] = {
                 ["auto_install"] = false,
@@ -814,11 +905,12 @@ require("lazy").setup({
         },
         {
             "trouble",
+            ["cmd"] = { "Trouble", "TroubleToggle" },
             ["config"] = function(_, opts)
                 require("trouble").setup(opts)
             end,
             ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/trouble.nvim",
-            ["lazy"] = false,
+            ["lazy"] = true,
             ["name"] = "trouble",
         },
         {
@@ -864,26 +956,99 @@ require("lazy").setup({
 -- Set up keybinds {{{
 do
     local __nixvim_binds = {
-        { ["action"] = "<CMD>w<CR>", ["key"] = "<C-s>", ["mode"] = "n", ["options"] = {
+        {
+            ["action"] = "v:count == 0 ? 'gj' : 'j'",
+            ["key"] = "j",
+            ["mode"] = "n",
+            ["options"] = { ["desc"] = "Move cursor down", ["expr"] = true },
+        },
+        {
+            ["action"] = "v:count == 0 ? 'gj' : 'j'",
+            ["key"] = "<Down>",
+            ["mode"] = "n",
+            ["options"] = { ["desc"] = "Move cursor down", ["expr"] = true },
+        },
+        {
+            ["action"] = "v:count == 0 ? 'gk' : 'k'",
+            ["key"] = "k",
+            ["mode"] = "n",
+            ["options"] = { ["desc"] = "Move cursor up", ["expr"] = true },
+        },
+        {
+            ["action"] = "v:count == 0 ? 'gk' : 'k'",
+            ["key"] = "<Up>",
+            ["mode"] = "n",
+            ["options"] = { ["desc"] = "Move cursor up", ["expr"] = true },
+        },
+        {
+            ["action"] = "<cmd>vertical resize -2<cr>",
+            ["key"] = "<C-h>",
+            ["mode"] = "n",
+            ["options"] = { ["desc"] = "Decrease window width" },
+        },
+        {
+            ["action"] = "<cmd>vertical resize +2<cr>",
+            ["key"] = "<C-l>",
+            ["mode"] = "n",
+            ["options"] = { ["desc"] = "Increase window width" },
+        },
+        {
+            ["action"] = "<cmd>resize -2<cr>",
+            ["key"] = "<C-j>",
+            ["mode"] = "n",
+            ["options"] = { ["desc"] = "Decrease window height" },
+        },
+        {
+            ["action"] = "<cmd>resize +2<cr>",
+            ["key"] = "<C-k>",
+            ["mode"] = "n",
+            ["options"] = { ["desc"] = "Increase window height" },
+        },
+        { ["action"] = "<cmd>m .+1<cr>==", ["key"] = "<M-j>", ["mode"] = "n", ["options"] = {
+            ["desc"] = "Move line down",
+        } },
+        {
+            ["action"] = "<Esc><cmd>m .+1<cr>==gi",
+            ["key"] = "<M-j>",
+            ["mode"] = "i",
+            ["options"] = { ["desc"] = "Move line down" },
+        },
+        { ["action"] = ":m '>+1<cr>gv=gv", ["key"] = "<M-j>", ["mode"] = "v", ["options"] = {
+            ["desc"] = "Move line down",
+        } },
+        { ["action"] = "<cmd>m .-2<cr>==", ["key"] = "<M-k>", ["mode"] = "n", ["options"] = {
+            ["desc"] = "Move line up",
+        } },
+        {
+            ["action"] = "<Esc><cmd>m .-2<cr>==gi",
+            ["key"] = "<M-k>",
+            ["mode"] = "i",
+            ["options"] = { ["desc"] = "Move line up" },
+        },
+        { ["action"] = ":m '<-2<cr>gv=gv", ["key"] = "<M-k>", ["mode"] = "v", ["options"] = {
+            ["desc"] = "Move line up",
+        } },
+        { ["action"] = "<cmd>w<cr>", ["key"] = "<C-s>", ["mode"] = "n", ["options"] = {
             ["desc"] = "Save current buffer",
         } },
-        { ["action"] = "<CMD>wa<CR>", ["key"] = "<C-S-s>", ["mode"] = "n", ["options"] = {
+        { ["action"] = "<cmd>wa<cr>", ["key"] = "<C-S-s>", ["mode"] = "n", ["options"] = {
             ["desc"] = "Save all buffers",
         } },
+        { ["action"] = "<Esc>", ["key"] = ";", ["mode"] = "v", ["options"] = { ["desc"] = "Exit visual mode" } },
         { ["action"] = "<gv", ["key"] = "<", ["mode"] = "v", ["options"] = { ["desc"] = "Outdent" } },
-        { ["action"] = ">gv", ["key"] = ">", ["mode"] = "v", ["options"] = { ["desc"] = "Indent" } },
         { ["action"] = "v<<Esc>", ["key"] = "<", ["mode"] = "n", ["options"] = { ["desc"] = "Outdent" } },
+        { ["action"] = ">gv", ["key"] = ">", ["mode"] = "v", ["options"] = { ["desc"] = "Indent" } },
         { ["action"] = "v><Esc>", ["key"] = ">", ["mode"] = "n", ["options"] = { ["desc"] = "Indent" } },
-        { ["action"] = "<C-d>zz", ["key"] = "<C-d>", ["mode"] = "n", ["options"] = { ["desc"] = "Jump down (centered)" } },
-        { ["action"] = "<C-u>zz", ["key"] = "<C-u>", ["mode"] = "n", ["options"] = { ["desc"] = "Jump up (centered)" } },
-        { ["action"] = "nzzzv", ["key"] = "n", ["mode"] = "n", ["options"] = { ["desc"] = "Next match (centered)" } },
-        { ["action"] = "Nzzzv", ["key"] = "N", ["mode"] = "n", ["options"] = { ["desc"] = "Previous match (centered)" } },
         {
-            ["action"] = "<CMD>lua require('intellitab').indent()<CR>",
+            ["action"] = "<cmd>lua require('intellitab').indent()<cr>",
             ["key"] = "<Tab>",
             ["mode"] = "i",
             ["options"] = { ["desc"] = "Indent (IntelliTab)" },
         },
+        { ["action"] = "<C-d>zz", ["key"] = "<C-d>", ["mode"] = "n", ["options"] = { ["desc"] = "Jump down (centered)" } },
+        { ["action"] = "<C-u>zz", ["key"] = "<C-u>", ["mode"] = "n", ["options"] = { ["desc"] = "Jump up (centered)" } },
+        { ["action"] = "nzzzv", ["key"] = "n", ["mode"] = "n", ["options"] = { ["desc"] = "Next match (centered)" } },
+        { ["action"] = "Nzzzv", ["key"] = "N", ["mode"] = "n", ["options"] = { ["desc"] = "Previous match (centered)" } },
         { ["action"] = "<C-w>", ["key"] = "<C-BS>", ["mode"] = "i", ["options"] = { ["desc"] = "Delete previous word" } },
         { ["action"] = "<C-w>", ["key"] = "<M-BS>", ["mode"] = "i", ["options"] = { ["desc"] = "Delete previous word" } },
         {
@@ -897,148 +1062,160 @@ do
         } },
         { ["action"] = '"+y', ["key"] = "<C-S-c>", ["mode"] = "v", ["options"] = { ["desc"] = "Copy to clipboard" } },
         {
-            ["action"] = "<CMD>nohlsearch<CR>",
+            ["action"] = "<cmd>nohlsearch<cr>",
             ["key"] = "<C-h>",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Clear search highlights" },
         },
         {
-            ["action"] = "<CMD>lua vim.lsp.buf.hover()<CR>",
+            ["action"] = "<cmd>lua vim.lsp.buf.hover()<cr>",
             ["key"] = "K",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Show LSP hover" },
         },
         {
-            ["action"] = "<CMD>Telescope current_buffer_fuzzy_find<CR>",
+            ["action"] = "<cmd>Telescope current_buffer_fuzzy_find<cr>",
             ["key"] = "/",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Find in current buffer" },
         },
-        { ["action"] = "<CMD>Lazy<CR>", ["key"] = "<leader>L", ["mode"] = "n", ["options"] = { ["desc"] = "Show Lazy" } },
+        { ["action"] = "<cmd>Lazy<cr>", ["key"] = "<leader>L", ["mode"] = "n", ["options"] = { ["desc"] = "Show Lazy" } },
         {
-            ["action"] = "<CMD>Telescope buffers<CR>",
-            ["key"] = "<leader><Space>",
-            ["mode"] = "n",
-            ["options"] = { ["desc"] = "Show open buffers" },
-        },
-        {
-            ["action"] = "<CMD>w<CR>",
+            ["action"] = "<cmd>w<cr>",
             ["key"] = "<leader>s",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Save current buffer" },
         },
         {
-            ["action"] = "<CMD>wa<CR>",
+            ["action"] = "<cmd>wa<cr>",
             ["key"] = "<leader>S",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Save all buffers" },
         },
         {
-            ["action"] = "<CMD>Telescope find_files<CR>",
+            ["action"] = "<cmd>edit!<cr>",
+            ["key"] = "<leader>R",
+            ["mode"] = "n",
+            ["options"] = { ["desc"] = "Reload current buffer" },
+        },
+        {
+            ["action"] = "<cmd>Telescope buffers<cr>",
+            ["key"] = "<leader><Space>",
+            ["mode"] = "n",
+            ["options"] = { ["desc"] = "Show open buffers" },
+        },
+        {
+            ["action"] = "<cmd>Telescope find_files<cr>",
             ["key"] = "<leader>f",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Find file" },
         },
         {
-            ["action"] = "<CMD>Telescope vim_options<CR>",
+            ["action"] = "<cmd>Telescope vim_options<cr>",
             ["key"] = "<leader>o",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Show Vim options" },
         },
         {
-            ["action"] = "<CMD>Telescope undo<CR>",
+            ["action"] = "<cmd>Telescope undo<cr>",
             ["key"] = "<leader>u",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Show undo history" },
         },
         {
-            ["action"] = "<CMD>Telescope live_grep<CR>",
+            ["action"] = "<cmd>Telescope live_grep<cr>",
             ["key"] = "<leader>/",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Find in working directory" },
         },
         {
-            ["action"] = "<CMD>Telescope notify<CR>",
+            ["action"] = "<cmd>Telescope notify<cr>",
             ["key"] = "<leader>n",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Show notify history" },
         },
         {
-            ["action"] = "<CMD>Telescope resume<CR>",
+            ["action"] = "<cmd>Telescope resume<cr>",
             ["key"] = "<leader>r",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Show last telescope picker" },
         },
         {
-            ["action"] = "<CMD>Telescope keymaps<CR>",
+            ["action"] = "<cmd>Telescope keymaps<cr>",
             ["key"] = "<leader>?",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Show keymaps" },
         },
         {
-            ["action"] = "<CMD>Telescope commands<CR>",
+            ["action"] = "<cmd>Telescope commands<cr>",
             ["key"] = "<leader>:",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Execute command" },
         },
         {
-            ["action"] = "<CMD>Telescope marks<CR>",
+            ["action"] = "<cmd>Telescope marks<cr>",
             ["key"] = "<leader>M",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Show marks" },
         },
         {
-            ["action"] = "<CMD>Telescope jumplist<CR>",
+            ["action"] = "<cmd>Telescope jumplist<cr>",
             ["key"] = "<leader>J",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Show jumplist" },
         },
         {
-            ["action"] = "<CMD>Telescope man_pages<CR>",
+            ["action"] = "<cmd>Telescope man_pages<cr>",
             ["key"] = "<leader>m",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Show manpages" },
         },
         {
-            ["action"] = "<CMD>Telescope help_tags<CR>",
+            ["action"] = "<cmd>Telescope help_tags<cr>",
             ["key"] = "<leader>h",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Show help tags" },
         },
         { ["action"] = "+quit", ["key"] = "<leader>q", ["mode"] = "n" },
-        { ["action"] = "<CMD>quitall<CR>", ["key"] = "<leader>qq", ["mode"] = "n", ["options"] = { ["desc"] = "Quit" } },
+        { ["action"] = "<cmd>quitall<cr>", ["key"] = "<leader>qq", ["mode"] = "n", ["options"] = { ["desc"] = "Quit" } },
         {
-            ["action"] = "<CMD>quitall!<CR>",
+            ["action"] = "<cmd>quitall!<cr>",
             ["key"] = "<leader>q!",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Quit forcefully" },
         },
         { ["action"] = "+buffers", ["key"] = "<leader>b", ["mode"] = "n" },
         {
-            ["action"] = "<CMD>Telescope buffers<CR>",
+            ["action"] = "<cmd>Telescope buffers<cr>",
             ["key"] = "<leader>bb",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Show open buffers" },
         },
         {
-            ["action"] = "<CMD>bnext<CR>",
+            ["action"] = "<cmd>bnext<cr>",
             ["key"] = "<leader>bn",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Goto next buffer" },
         },
         {
-            ["action"] = "<CMD>bprevious<CR>",
+            ["action"] = "<cmd>bprevious<cr>",
             ["key"] = "<leader>bp",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Goto previous buffer" },
         },
         {
-            ["action"] = "<CMD>Bdelete<CR>",
+            ["action"] = "<cmd>Bdelete<cr>",
             ["key"] = "<leader>bd",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Close current buffer" },
         },
         { ["action"] = "+windows", ["key"] = "<leader>w", ["mode"] = "n" },
+        {
+            ["action"] = "<C-w>c",
+            ["key"] = "<leader>wd",
+            ["mode"] = "n",
+            ["options"] = { ["desc"] = "Close current window" },
+        },
         {
             ["action"] = "<C-w>s",
             ["key"] = "<leader>ws",
@@ -1052,12 +1229,6 @@ do
             ["options"] = { ["desc"] = "Split window vertically" },
         },
         { ["action"] = "<C-w>=", ["key"] = "<leader>w=", ["mode"] = "n", ["options"] = { ["desc"] = "Balance windows" } },
-        {
-            ["action"] = "<C-w>c",
-            ["key"] = "<leader>wd",
-            ["mode"] = "n",
-            ["options"] = { ["desc"] = "Close current window" },
-        },
         { ["action"] = "<C-w>h", ["key"] = "<leader>wh", ["mode"] = "n", ["options"] = { ["desc"] = "Goto left window" } },
         { ["action"] = "<C-w>l", ["key"] = "<leader>wl", ["mode"] = "n", ["options"] = {
             ["desc"] = "Goto right window",
@@ -1071,127 +1242,151 @@ do
         } },
         { ["action"] = "+toggle", ["key"] = "<leader>t", ["mode"] = "n" },
         {
-            ["action"] = "<CMD>Neotree action=show toggle=true<CR>",
+            ["action"] = "<cmd>Neotree action=show toggle=true<cr><C-w>=",
             ["key"] = "<leader>tt",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Toggle NeoTree" },
         },
         {
-            ["action"] = "<CMD>Navbuddy<CR>",
+            ["action"] = "<cmd>Navbuddy<cr>",
             ["key"] = "<leader>tn",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Toggle NavBuddy" },
         },
         {
-            ["action"] = "<CMD>TroubleToggle focus=false<CR>",
+            ["action"] = "<cmd>TroubleToggle focus=false<cr>",
             ["key"] = "<leader>td",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Toggle Trouble" },
         },
+        {
+            ["action"] = "<cmd>ToggleAutoformat<cr>",
+            ["key"] = "<leader>tf",
+            ["mode"] = "n",
+            ["options"] = { ["desc"] = "Toggle autoformat-on-save" },
+        },
+        {
+            ["action"] = "<cmd>ToggleInlineDiagnostics<cr>",
+            ["key"] = "<leader>tD",
+            ["mode"] = "n",
+            ["options"] = { ["desc"] = "Toggle inline diagnostics" },
+        },
+        {
+            ["action"] = "<cmd>:set wrap!<cr>",
+            ["key"] = "<leader>tw",
+            ["mode"] = "n",
+            ["options"] = { ["desc"] = "Toggle word-wrap" },
+        },
         { ["action"] = "+git", ["key"] = "<leader>g", ["mode"] = "n" },
         {
-            ["action"] = "<CMD>LazyGit<CR>",
+            ["action"] = "<cmd>LazyGit<cr>",
             ["key"] = "<leader>gg",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Show LazyGit" },
         },
         {
-            ["action"] = "<CMD>GitMessenger<CR>",
+            ["action"] = "<cmd>GitMessenger<cr>",
             ["key"] = "<leader>gm",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Show GitMessenger" },
         },
         {
-            ["action"] = "<CMD>Telescope git_status<CR>",
+            ["action"] = "<cmd>Telescope git_status<cr>",
             ["key"] = "<leader>gs",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Show Git status" },
         },
         {
-            ["action"] = "<CMD>Telescope git_commits<CR>",
+            ["action"] = "<cmd>Telescope git_commits<cr>",
             ["key"] = "<leader>gc",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Show Git log" },
         },
         {
-            ["action"] = "<CMD>Telescope git_branches<CR>",
+            ["action"] = "<cmd>Telescope git_branches<cr>",
             ["key"] = "<leader>gb",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Show Git branches" },
         },
         {
-            ["action"] = "<CMD>Telescope git_bcommits<CR>",
+            ["action"] = "<cmd>Telescope git_bcommits<cr>",
             ["key"] = "<leader>gf",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Show Git log for current file" },
         },
         { ["action"] = "+lsp", ["key"] = "<leader>l", ["mode"] = "n" },
         {
-            ["action"] = "<CMD>Telescope lsp_references<CR>",
+            ["action"] = "<cmd>Telescope lsp_references<cr>",
             ["key"] = "<leader>lr",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Goto references" },
         },
         {
-            ["action"] = "<CMD>Telescope lsp_definitions<CR>",
+            ["action"] = "<cmd>Telescope lsp_definitions<cr>",
             ["key"] = "<leader>ld",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Goto definition" },
         },
         {
-            ["action"] = "<CMD>Telescope lsp_implementations<CR>",
+            ["action"] = "<cmd>Telescope lsp_implementations<cr>",
             ["key"] = "<leader>li",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Goto implementation" },
         },
         {
-            ["action"] = "<CMD>Telescope lsp_type_definitions<CR>",
+            ["action"] = "<cmd>Telescope lsp_type_definitions<cr>",
             ["key"] = "<leader>lt",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Goto type definition" },
         },
         {
-            ["action"] = "<CMD>Telescope lsp_incoming_calls<CR>",
+            ["action"] = "<cmd>Telescope lsp_incoming_calls<cr>",
             ["key"] = "<leader>lI",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Show incoming calls" },
         },
         {
-            ["action"] = "<CMD>Telescope lsp_outgoing_calls<CR>",
+            ["action"] = "<cmd>Telescope lsp_outgoing_calls<cr>",
             ["key"] = "<leader>lO",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Show outgoing calls" },
         },
         { ["action"] = "+code", ["key"] = "<leader>c", ["mode"] = "n" },
         {
-            ["action"] = "<CMD>lua require('conform').format()<CR>",
+            ["action"] = "<cmd>lua require('conform').format()<cr>",
             ["key"] = "<leader>cf",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Format current buffer" },
         },
         {
-            ["action"] = "<CMD>Telescope diagnostics<CR>",
+            ["action"] = "<cmd>lua vim.diagnostic.open_float()<cr>",
             ["key"] = "<leader>cd",
+            ["mode"] = "n",
+            ["options"] = { ["desc"] = "Show LSP line diagnostics" },
+        },
+        {
+            ["action"] = "<cmd>Telescope diagnostics<cr>",
+            ["key"] = "<leader>cD",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Show diagnostics" },
         },
         {
-            ["action"] = "<CMD>lua vim.lsp.buf.rename()<CR>",
+            ["action"] = "<cmd>lua vim.lsp.buf.rename()<cr>",
             ["key"] = "<leader>cr",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Rename LSP symbol" },
         },
         {
-            ["action"] = "<CMD>lua vim.lsp.buf.code_action()<CR>",
+            ["action"] = "<cmd>lua vim.lsp.buf.code_action()<cr>",
             ["key"] = "<leader>ca",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Show LSP code actions" },
         },
         {
-            ["action"] = "<CMD>lua vim.diagnostic.open_float()<CR>",
-            ["key"] = "<leader>cD",
+            ["action"] = "<cmd>ClangdSwitchSourceHeader<cr>",
+            ["key"] = "<leader>ch",
             ["mode"] = "n",
-            ["options"] = { ["desc"] = "Show LSP line diagnostics" },
+            ["options"] = { ["desc"] = "Switch C/C++ source/header" },
         },
     }
     for i, map in ipairs(__nixvim_binds) do
@@ -1202,19 +1397,42 @@ end
 
 vim.filetype.add({ ["extension"] = { ["v"] = "vlang" } })
 
--- Hide inline diagnostics and show border
+-- Toggle inline diagnostics and show border
+vim.g.enable_inline_diagnostics = false
 vim.diagnostic.config({
-    virtual_text = false,
+    virtual_text = vim.g.enable_inline_diagnostics,
     float = { border = "rounded" },
+})
+vim.api.nvim_create_user_command("ToggleInlineDiagnostics", function()
+    vim.g.enable_inline_diagnostics = not vim.g.enable_inline_diagnostics
+    vim.diagnostic.config({ virtual_text = vim.g.enable_inline_diagnostics })
+    require("notify")((vim.g.enable_inline_diagnostics and "Enabled" or "Disabled") .. " inline diagnostics")
+end, {
+    desc = "Toggle inline diagnostics",
+})
+
+-- Toggle conform format_on_save
+vim.g.disable_autoformat = false
+vim.api.nvim_create_user_command("ToggleAutoformat", function()
+    vim.g.disable_autoformat = not vim.g.disable_autoformat
+    require("notify")((vim.g.disable_autoformat and "Disabled" or "Enabled") .. " autoformat-on-save")
+end, {
+    desc = "Toggle autoformat-on-save",
 })
 
 -- Allow navigating popupmenu completion with Up/Down
 vim.api.nvim_set_keymap("c", "<Down>", 'v:lua.get_wildmenu_key("<right>", "<down>")', { expr = true })
 vim.api.nvim_set_keymap("c", "<Up>", 'v:lua.get_wildmenu_key("<left>", "<up>")', { expr = true })
-
 function _G.get_wildmenu_key(key_wildmenu, key_regular)
     return vim.fn.wildmenumode() ~= 0 and key_wildmenu or key_regular
 end
+
+-- Check LSP server config
+vim.api.nvim_create_user_command("LspInspect", function()
+    require("notify")(vim.inspect(vim.lsp.get_active_clients()))
+end, {
+    desc = "Print LSP server configuration",
+})
 
 -- Set up autocommands {{
 do
@@ -1227,9 +1445,24 @@ do
         },
         {
             ["callback"] = function()
-                require("conform").format()
+                vim.highlight.on_yank()
             end,
-            ["event"] = { "BufWritePre" },
+            ["event"] = { "TextYankPost" },
+        },
+        {
+            ["callback"] = function()
+                local current_tab = vim.fn.tabpagenr()
+                vim.cmd("tabdo wincmd =")
+                vim.cmd("tabnext " .. current_tab)
+            end,
+            ["event"] = { "VimResized" },
+        },
+        {
+            ["callback"] = function()
+                vim.opt_local.conceallevel = 0
+            end,
+            ["event"] = "FileType",
+            ["pattern"] = { "json", "jsonc", "json5" },
         },
     }
 
