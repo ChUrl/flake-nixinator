@@ -25,8 +25,8 @@ with mylib.networking; {
     polkit.enable = true;
 
     systemd-networkd = {
+      inherit hostname;
       enable = true;
-      hostname = hostname;
 
       networks = {
         # Default wildcard ethernet network for all hosts
@@ -69,7 +69,7 @@ with mylib.networking; {
     # keep-derivations = true
 
     # Auto garbage-collect and optimize store
-    gc.automatic = true;
+    # gc.automatic = true; # NOTE: Disabled for "nh clean"
     gc.options = "--delete-older-than 5d";
     settings.auto-optimise-store = true;
     optimise.automatic = true;
@@ -90,10 +90,12 @@ with mylib.networking; {
     # plymouth.enable = true;
     loader = {
       timeout = 120;
-      systemd-boot.enable = true;
-      systemd-boot.configurationLimit = 5;
-      systemd-boot.editor = false;
-      systemd-boot.consoleMode = "max";
+      systemd-boot = {
+        enable = true;
+        configurationLimit = 5;
+        editor = false;
+        consoleMode = "max";
+      };
       efi.canTouchEfiVariables = true;
       efi.efiSysMountPoint = "/boot/efi";
     };
@@ -132,62 +134,33 @@ with mylib.networking; {
     ];
   };
 
-  documentation.enable = true;
-  documentation.man.enable = true;
-  documentation.dev.enable = true;
+  documentation = {
+    enable = true;
+    man.enable = true;
+    dev.enable = true;
+  };
 
   # Set your time zone.
   time.timeZone = "Europe/Berlin";
 
   # Select internationalisation properties.
-  i18n.defaultLocale = "en_US.UTF-8";
+  i18n = {
+    defaultLocale = "en_US.UTF-8";
 
-  i18n.extraLocaleSettings = {
-    LC_ADDRESS = "de_DE.UTF-8";
-    LC_IDENTIFICATION = "de_DE.UTF-8";
-    LC_MEASUREMENT = "de_DE.UTF-8";
-    LC_MONETARY = "de_DE.UTF-8";
-    LC_NAME = "de_DE.UTF-8";
-    LC_NUMERIC = "de_DE.UTF-8";
-    LC_PAPER = "de_DE.UTF-8";
-    LC_TELEPHONE = "de_DE.UTF-8";
-    LC_TIME = "de_DE.UTF-8";
-  };
+    extraLocaleSettings = {
+      LC_ADDRESS = "de_DE.UTF-8";
+      LC_IDENTIFICATION = "de_DE.UTF-8";
+      LC_MEASUREMENT = "de_DE.UTF-8";
+      LC_MONETARY = "de_DE.UTF-8";
+      LC_NAME = "de_DE.UTF-8";
+      LC_NUMERIC = "de_DE.UTF-8";
+      LC_PAPER = "de_DE.UTF-8";
+      LC_TELEPHONE = "de_DE.UTF-8";
+      LC_TIME = "de_DE.UTF-8";
+    };
 
-  # https://github.com/NixOS/nixpkgs/issues/179486
-  i18n.supportedLocales = ["en_US.UTF-8/UTF-8" "de_DE.UTF-8/UTF-8"];
-
-  # Enable the X11 windowing system.
-  services.xserver = {
-    enable = true;
-
-    # Startx replaces the displaymanager so default (lightdm) isn't used, start to shell
-    # Sadly using this with gnome-session doesn't really work
-    displayManager.startx.enable = true;
-
-    # Plasma
-    # TODO: Had problems with wayland last time, hopefully I get it to work now
-    # displayManager.sddm.enable = true;
-    # desktopManager.plasma5.enable = true;
-    # desktopManager.plasma5.runUsingSystemd = true;
-
-    # Gnome (Wayland)
-    # NOTE: Not a fan of the overly simplistic nature, also made problems with the audio devices...
-    # displayManager.gdm.enable = true;
-    # I had problems with gdm defaulting to X11, after I added this it stopped although I don't know if this was the sole reason
-    # displayManager.defaultSession = "gnome";
-    # displayManager.gdm.wayland = true; # This is actually the default
-    # desktopManager.gnome.enable = true;
-
-    wacom.enable = true;
-  };
-
-  # Enable touchpad support (enabled default in most desktopManager).
-  services.libinput.enable = true;
-
-  programs.hyprland = {
-    enable = true;
-    # enableNvidiaPatches = false; # NOTE: Enabled only in nixinator config
+    # https://github.com/NixOS/nixpkgs/issues/179486
+    supportedLocales = ["en_US.UTF-8/UTF-8" "de_DE.UTF-8/UTF-8"];
   };
 
   # XDG
@@ -256,20 +229,6 @@ with mylib.networking; {
     };
 
     addedAssociations = defaultApplications;
-  };
-
-  # Enable sound with pipewire.
-  sound.enable = false; # Alsa, seems to conflict with PipeWire
-  hardware.pulseaudio.enable = false; # Get off my lawn
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-    jack.enable = false; # TODO: Was needed for low latency but probably not anymore (?) as Bitwig supports Pipewire now
-
-    wireplumber.enable = true; # Probably the default
-    # media-session.enable = false; # Removed upstream
   };
 
   fonts = {
@@ -391,21 +350,66 @@ with mylib.networking; {
 
     fuse.userAllowOther = true; # Allow users to mount e.g. samba shares (cifs)
 
+    hyprland = {
+      enable = true;
+      # enableNvidiaPatches = false; # NOTE: Enabled only in nixinator config
+    };
+
+    nh = {
+      enable = true;
+      clean.enable = true;
+      clean.extraArgs = "--keep 3";
+      flake = "/home/christoph/NixFlake";
+    };
+
     # ausweisapp.openFirewall = true; # Directly set port in firewall
   };
 
+  sound.enable = false; # Alsa, seems to conflict with PipeWire
+  hardware.pulseaudio.enable = false; # Get off my lawn
+
   # List services that you want to enable:
   services = {
+    # Enable sound with pipewire.
+    pipewire = {
+      enable = true;
+      alsa.enable = true;
+      alsa.support32Bit = true;
+      pulse.enable = true;
+      jack.enable = false;
+
+      wireplumber.enable = true; # Probably the default
+      # media-session.enable = false; # Removed upstream
+    };
+
+    # Enable the X11 windowing system.
+    xserver = {
+      enable = true;
+
+      # Startx replaces the displaymanager so default (lightdm) isn't used, start to shell
+      # Sadly using this with gnome-session doesn't really work
+      displayManager.startx.enable = true;
+
+      wacom.enable = true;
+    };
+
+    # Enable touchpad support (enabled default in most desktopManager).
+    libinput.enable = true;
+
     # Enable CUPS to print documents.
-    printing.enable = true;
-    printing.drivers = with pkgs; [
-      # gutenprint
-      # gutenprintBin
-      # foomatic-db-ppds-withNonfreeDb
-      # dell-b1160w # TODO: Broken
-    ];
-    avahi.enable = true; # Network printers
-    avahi.nssmdns4 = true;
+    printing = {
+      enable = false;
+      drivers = with pkgs; [
+        gutenprint
+        gutenprintBin
+        foomatic-db-ppds-withNonfreeDb
+        dell-b1160w # TODO: Broken
+      ];
+    };
+    avahi = {
+      enable = false; # Network printers
+      nssmdns4 = true;
+    };
 
     # Enable the OpenSSH daemon.
     openssh.enable = true;
@@ -441,7 +445,6 @@ with mylib.networking; {
       ];
     };
 
-    # TODO: Find a way to organize this better as it's split from the Gnome module, Gnome system module?
     gnome.gnome-keyring.enable = true; # TODO: Is probably also needed for Plasma (some apps require it)
     # gnome.sushi.enable = true;
     # gnome.gnome-settings-daemon.enable = true;
