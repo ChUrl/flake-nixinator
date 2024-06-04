@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+# Copy init.lua
 INIT_PATH="$(readlink -f ~/.config/nvim/init.lua)"
 cp -f "$INIT_PATH" ./config.lua
 cp -f "$INIT_PATH" ./config_nix.lua
@@ -10,6 +11,7 @@ chmod +w ./config_nix.lua
 echo "Fixed permission for ./config.lua and ./config_nix.lua"
 echo ""
 
+# Copy all plugins
 rm -rf ./store/*
 echo "Cleared ./store/"
 
@@ -24,6 +26,7 @@ chmod -R +w ./store/*
 echo "Fixed permissions for ./store"
 echo ""
 
+# Fix plugin paths
 for IDENTIFIER in "treesitter-parsers" "lazy-plugins" "nvim-treesitter"
 do
     CURRENT_PATH=$(eza -1 ./store | grep $IDENTIFIER)
