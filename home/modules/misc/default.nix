@@ -6,6 +6,7 @@
   pkgs,
   ...
 }:
+# TODO: Remove this module, put protonmail into the email module
 with lib;
 with mylib.modules; let
   cfg = config.modules.misc;

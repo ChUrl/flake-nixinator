@@ -18,7 +18,7 @@ in {
 
       # Make our inputs available to the configuration.nix (for importing modules)
       # specialArgs are propagated to all modules
-      specialArgs = {inherit inputs hostname username mylib;};
+      specialArgs = {inherit inputs hostname username mylib system;};
 
       modules = builtins.concatLists [
         [

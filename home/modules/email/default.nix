@@ -1,7 +1,8 @@
 # Example: https://beb.ninja/post/email/
 # Example: https://sbr.pm/configurations/mails.html
+# TODO: Protonmail-bridge
+# TODO: Change to use thunderbird only
 # NOTE: The passwords must exist in kwallet
-# TODO: Emacs mail config
 {
   config,
   nixosConfig,
