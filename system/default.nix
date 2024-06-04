@@ -8,6 +8,7 @@
   mylib,
   config,
   pkgs,
+  system,
   ...
 }:
 with mylib.networking; {
@@ -317,6 +318,10 @@ with mylib.networking; {
     man-pages
     man-pages-posix
 
+    # Sets NIX_LD_LIBRARY_PATH and NIX_LD variables for nix-ld
+    # Start dynamically linked executable using "nix-alien-ld -- <Executable>"
+    inputs.nix-alien.packages.${system}.nix-alien
+
     # egl-wayland
   ];
 
@@ -342,18 +347,13 @@ with mylib.networking; {
     fish.enable = true;
     firejail.enable = true; # Use to run app in network namespace (e.g. through vpn)
     git.enable = true;
-    kdeconnect.enable = true; # Use this instead of HM for firewall setup
+    kdeconnect.enable = false; # Use this instead of HM for firewall setup
     neovim.enable = true;
     starship.enable = true;
     thefuck.enable = true;
     xwayland.enable = true;
-
-    fuse.userAllowOther = true; # Allow users to mount e.g. samba shares (cifs)
-
-    hyprland = {
-      enable = true;
-      # enableNvidiaPatches = false; # NOTE: Enabled only in nixinator config
-    };
+    nix-ld.enable = true; # Load dynamically linked executables
+    hyprland.enable = true;
 
     nh = {
       enable = true;
@@ -362,6 +362,7 @@ with mylib.networking; {
       flake = "/home/christoph/NixFlake";
     };
 
+    fuse.userAllowOther = true; # Allow users to mount e.g. samba shares (cifs)
     # ausweisapp.openFirewall = true; # Directly set port in firewall
   };
 

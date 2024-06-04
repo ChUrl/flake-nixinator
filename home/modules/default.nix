@@ -1,19 +1,19 @@
 {inputs, ...}: {
   imports = [
-    ./audio
+    # ./audio
     ./chromium
     ./emacs
     ./email
     ./firefox
     ./fish
-    ./flatpak
-    ./gaming
+    # ./flatpak
+    # ./gaming
     ./helix
     ./hyprland
     ./kitty
-    ./misc
+    # ./misc
     ./neovim
-    ./nextcloud
+    # ./nextcloud
     ./nnn
     ./ranger
     ./rofi
