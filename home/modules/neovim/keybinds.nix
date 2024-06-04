@@ -1,5 +1,6 @@
 {...}: let
   no-leader = [
+    # Cursor movement
     {
       mode = "n";
       key = "j";
@@ -29,6 +30,7 @@
       options.expr = true;
     }
 
+    # Window resize
     {
       mode = "n";
       key = "<C-h>";
@@ -54,6 +56,7 @@
       options.desc = "Increase window height";
     }
 
+    # Move lines
     {
       mode = "n";
       key = "<M-j>";
@@ -91,26 +94,21 @@
       options.desc = "Move line up";
     }
 
+    # Save buffers
     {
-      mode = "n";
+      mode = ["n" "i" "v"];
       key = "<C-s>";
       action = "<cmd>w<cr>";
       options.desc = "Save current buffer";
     }
     {
-      mode = "n";
+      mode = ["n" "i" "v"];
       key = "<C-S-s>";
       action = "<cmd>wa<cr>";
       options.desc = "Save all buffers";
     }
 
-    {
-      mode = "v";
-      key = ";";
-      action = "<Esc>";
-      options.desc = "Exit visual mode";
-    }
-
+    # Indentation
     {
       mode = "v";
       key = "<";
@@ -142,6 +140,7 @@
       options.desc = "Indent (IntelliTab)";
     }
 
+    # Centered jumping
     {
       mode = "n";
       key = "<C-d>";
@@ -167,6 +166,7 @@
       options.desc = "Previous match (centered)";
     }
 
+    # Delete word
     {
       mode = "i";
       key = "<C-BS>";
@@ -180,6 +180,7 @@
       options.desc = "Delete previous word"; # TODO: Breaks backspace <C-v><S-i> multiline cursor?
     }
 
+    # Clipboard
     {
       mode = "i";
       key = "<C-S-v>";
@@ -199,6 +200,21 @@
       options.desc = "Copy to clipboard";
     }
 
+    # Flash/Search
+    {
+      mode = "n";
+      key = "s"; # TODO: Key doesn't work
+      action = "<cmd>lua require('flash').jump()<cr>";
+      options.desc = "Flash jump";
+    }
+    {
+      mode = "n";
+      key = "S"; # TODO: Key doesn't work
+      action = "<cmd>lua require('flash').treesitter()<cr>";
+      options.desc = "Flash treesitter";
+    }
+
+    # Various
     {
       mode = "n";
       key = "<C-h>";
@@ -218,6 +234,13 @@
       key = "/";
       action = "<cmd>Telescope current_buffer_fuzzy_find<cr>";
       options.desc = "Find in current buffer";
+    }
+
+    {
+      mode = "v";
+      key = ";";
+      action = "<Esc>";
+      options.desc = "Exit visual mode";
     }
   ];
 
@@ -482,6 +505,13 @@
       key = "<leader>tf";
       action = "<cmd>ToggleAutoformat<cr>";
       options.desc = "Toggle autoformat-on-save";
+    }
+
+    {
+      mode = "n";
+      key = "<leader>tl";
+      action = "<cmd>ToggleAutoLint<cr>";
+      options.desc = "Toggle autolint-on-save";
     }
 
     {
