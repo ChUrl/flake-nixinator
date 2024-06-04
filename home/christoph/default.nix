@@ -114,12 +114,11 @@ rec {
       };
 
       autostart = {
-        immediate = [
-          "kitty"
-        ];
+        # immediate = [];
 
         delayed = [
           # "kdeconnect-indicator"
+          "kitty"
           "nextcloud --background"
           "keepassxc"
         ];
