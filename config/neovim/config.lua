@@ -263,17 +263,6 @@ require("lazy").setup({
             end,
         },
         {
-            "colorizer",
-            ["config"] = function(_, opts)
-                require("colorizer").setup(opts)
-            end,
-            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/nvim-colorizer.lua",
-            ["enabled"] = false,
-            ["event"] = { "BufReadPost", "BufNewFile" },
-            ["lazy"] = true,
-            ["name"] = "colorizer",
-        },
-        {
             "comment",
             ["config"] = function(_, opts)
                 require("Comment").setup(opts)
@@ -344,7 +333,8 @@ require("lazy").setup({
                 require("flash").setup(opts)
             end,
             ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/flash.nvim",
-            ["lazy"] = false,
+            ["keys"] = { "s", "S", "f", "F", "t", "T" },
+            ["lazy"] = true,
             ["name"] = "flash",
         },
         {
@@ -468,6 +458,9 @@ require("lazy").setup({
             "lspconfig",
             ["cmd"] = { "LspInfo" },
             ["config"] = function(_, opts)
+                -- Make LspInfo window border rounded
+                require("lspconfig.ui.windows").default_options.border = "rounded"
+
                 local __lspOnAttach = function(client, bufnr) end
 
                 local __lspCapabilities = function()
@@ -539,19 +532,13 @@ require("lazy").setup({
             end,
             ["dependencies"] = {
                 {
-                    "neodev",
+                    "lazydev",
                     ["config"] = function(_, opts)
-                        require("neodev").setup(opts)
+                        require("lazydev").setup(opts)
                     end,
-                    ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/neodev.nvim",
-                    ["lazy"] = false,
-                    ["name"] = "neodev",
-                    ["opts"] = {
-                        ["library"] = { ["enabled"] = true, ["plugins"] = true, ["runtime"] = true, ["types"] = true },
-                        ["lspconfig"] = true,
-                        ["pathStrict"] = true,
-                        ["setup_jsonls"] = false,
-                    },
+                    ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/vimplugin-nvim-lazydev",
+                    ["ft"] = { "lua" },
+                    ["name"] = "lazydev",
                 },
             },
             ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/nvim-lspconfig",
@@ -610,20 +597,45 @@ require("lazy").setup({
                 local actions = require("nvim-navbuddy.actions") -- ?
                 require("nvim-navbuddy").setup(opts)
             end,
+            ["dependencies"] = {
+                {
+                    "navic",
+                    ["config"] = function(_, opts)
+                        navic = require("nvim-navic")
+                        navic.setup(opts)
+
+                        -- Register navic with lualine's winbar (NOTE: using incline currently)
+                        -- TODO: The setup function should probably only be ran once
+                        -- require("lualine").setup({
+                        --   winbar = {
+                        --     lualine_c = {
+                        --       {
+                        --         function()
+                        --           return navic.get_location()
+                        --         end,
+                        --         cond = function()
+                        --           return navic.is_available()
+                        --         end
+                        --       }
+                        --     }
+                        --   }
+                        -- })
+                    end,
+                    ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/nvim-navic",
+                    ["lazy"] = true,
+                    ["name"] = "navic",
+                    ["opts"] = {
+                        ["click"] = true,
+                        ["depth_limit"] = 5,
+                        ["highlight"] = true,
+                        ["lsp"] = { ["auto_attach"] = true },
+                    },
+                },
+            },
             ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/nvim-navbuddy",
             ["lazy"] = true,
             ["name"] = "navbuddy",
             ["opts"] = { ["lsp"] = { ["auto_attach"] = true }, ["window"] = { ["border"] = "rounded" } },
-        },
-        {
-            "navic",
-            ["config"] = function(_, opts)
-                require("nvim-navic").setup(opts)
-            end,
-            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/nvim-navic",
-            ["lazy"] = false,
-            ["name"] = "navic",
-            ["opts"] = { ["click"] = true, ["highlight"] = true, ["lsp"] = { ["auto_attach"] = true } },
         },
         {
             "neo-tree",
@@ -1028,13 +1040,18 @@ do
         { ["action"] = ":m '<-2<cr>gv=gv", ["key"] = "<M-k>", ["mode"] = "v", ["options"] = {
             ["desc"] = "Move line up",
         } },
-        { ["action"] = "<cmd>w<cr>", ["key"] = "<C-s>", ["mode"] = "n", ["options"] = {
-            ["desc"] = "Save current buffer",
-        } },
-        { ["action"] = "<cmd>wa<cr>", ["key"] = "<C-S-s>", ["mode"] = "n", ["options"] = {
-            ["desc"] = "Save all buffers",
-        } },
-        { ["action"] = "<Esc>", ["key"] = ";", ["mode"] = "v", ["options"] = { ["desc"] = "Exit visual mode" } },
+        {
+            ["action"] = "<cmd>w<cr>",
+            ["key"] = "<C-s>",
+            ["mode"] = { "n", "i", "v" },
+            ["options"] = { ["desc"] = "Save current buffer" },
+        },
+        {
+            ["action"] = "<cmd>wa<cr>",
+            ["key"] = "<C-S-s>",
+            ["mode"] = { "n", "i", "v" },
+            ["options"] = { ["desc"] = "Save all buffers" },
+        },
         { ["action"] = "<gv", ["key"] = "<", ["mode"] = "v", ["options"] = { ["desc"] = "Outdent" } },
         { ["action"] = "v<<Esc>", ["key"] = "<", ["mode"] = "n", ["options"] = { ["desc"] = "Outdent" } },
         { ["action"] = ">gv", ["key"] = ">", ["mode"] = "v", ["options"] = { ["desc"] = "Indent" } },
@@ -1062,6 +1079,18 @@ do
         } },
         { ["action"] = '"+y', ["key"] = "<C-S-c>", ["mode"] = "v", ["options"] = { ["desc"] = "Copy to clipboard" } },
         {
+            ["action"] = "<cmd>lua require('flash').jump()<cr>",
+            ["key"] = "s",
+            ["mode"] = "n",
+            ["options"] = { ["desc"] = "Flash jump" },
+        },
+        {
+            ["action"] = "<cmd>lua require('flash').treesitter()<cr>",
+            ["key"] = "S",
+            ["mode"] = "n",
+            ["options"] = { ["desc"] = "Flash treesitter" },
+        },
+        {
             ["action"] = "<cmd>nohlsearch<cr>",
             ["key"] = "<C-h>",
             ["mode"] = "n",
@@ -1079,6 +1108,7 @@ do
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Find in current buffer" },
         },
+        { ["action"] = "<Esc>", ["key"] = ";", ["mode"] = "v", ["options"] = { ["desc"] = "Exit visual mode" } },
         { ["action"] = "<cmd>Lazy<cr>", ["key"] = "<leader>L", ["mode"] = "n", ["options"] = { ["desc"] = "Show Lazy" } },
         {
             ["action"] = "<cmd>w<cr>",
@@ -1266,6 +1296,12 @@ do
             ["options"] = { ["desc"] = "Toggle autoformat-on-save" },
         },
         {
+            ["action"] = "<cmd>ToggleAutoLint<cr>",
+            ["key"] = "<leader>tl",
+            ["mode"] = "n",
+            ["options"] = { ["desc"] = "Toggle autolint-on-save" },
+        },
+        {
             ["action"] = "<cmd>ToggleInlineDiagnostics<cr>",
             ["key"] = "<leader>tD",
             ["mode"] = "n",
@@ -1397,6 +1433,9 @@ end
 
 vim.filetype.add({ ["extension"] = { ["v"] = "vlang" } })
 
+-- Make Lazy window border rounded
+require("lazy.core.config").options.ui.border = "rounded"
+
 -- Toggle inline diagnostics and show border
 vim.g.enable_inline_diagnostics = false
 vim.diagnostic.config({
@@ -1434,12 +1473,27 @@ end, {
     desc = "Print LSP server configuration",
 })
 
+-- Toggle linting
+vim.g.disable_autolint = false
+vim.api.nvim_create_user_command("ToggleAutoLint", function()
+    vim.g.disable_autolint = not vim.g.disable_autolint
+    if vim.g.disable_autolint then
+        -- vim.diagnostic.reset(vim.api.nvim_get_current_buf())
+        vim.diagnostic.reset() -- Reset for all buffers
+    end
+    require("notify")((vim.g.disable_autolint and "Disabled" or "Enabled") .. " autolint-on-save")
+end, {
+    desc = "Toggle autolint-on-save",
+})
+
 -- Set up autocommands {{
 do
     local __nixvim_autocommands = {
         {
             ["callback"] = function()
-                require("lint").try_lint()
+                if not vim.g.disable_autolint then
+                    require("lint").try_lint()
+                end
             end,
             ["event"] = { "BufWritePost" },
         },
