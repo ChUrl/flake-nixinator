@@ -95,22 +95,23 @@ in {
       #   p.std2
       # ];
 
-      # TODO: Resize splits on window-resize
       autoCmd = [
         {
           event = ["BufWritePost"];
-          callback.__raw = "function() require('lint').try_lint() end";
+          callback.__raw = ''
+            function()
+              if not vim.g.disable_autolint then
+                require("lint").try_lint()
+              end
+            end
+          '';
         }
-        # Now setup directly in conform
-        # {
-        #   event = ["BufWritePre"];
-        #   callback.__raw = "function() require('conform').format() end";
-        # }
         {
           event = ["TextYankPost"];
           callback.__raw = "function() vim.highlight.on_yank() end";
         }
         {
+          # Resize splits when entire window is resized by wm
           event = ["VimResized"];
           callback.__raw = ''
             function()
@@ -374,11 +375,9 @@ in {
             '';
           };
 
-          # TODO: Only colorize html/css/scss/sass...
           colorizer = {
             name = "colorizer";
             pkg = pkgs.vimPlugins.nvim-colorizer-lua;
-            enabled = false;
             lazy = true;
             event = ["BufReadPost" "BufNewFile"];
             config = ''
@@ -471,11 +470,11 @@ in {
             };
           };
 
-          # TODO: Config
           flash = {
             name = "flash";
             pkg = pkgs.vimPlugins.flash-nvim;
-            lazy = false;
+            lazy = true;
+            keys = ["s" "S" "f" "F" "t" "T"];
             config = ''
               function(_, opts)
                 require("flash").setup(opts)
@@ -525,6 +524,50 @@ in {
             # Don't call setup!
           };
 
+          indent-blankline = {
+            name = "indent-blankline";
+            pkg = pkgs.vimPlugins.indent-blankline-nvim;
+            lazy = false;
+            config = ''
+              function(_, opts)
+                -- Regular setup
+                require("ibl").setup(opts)
+
+                -- Setup IBL with rainbow-delimiters
+                -- local highlight = {
+                --   "RainbowRed",
+                --   "RainbowYellow",
+                --   "RainbowBlue",
+                --   "RainbowOrange",
+                --   "RainbowGreen",
+                --   "RainbowViolet",
+                --   "RainbowCyan",
+                -- }
+                -- local hooks = require("ibl.hooks")
+
+                -- -- create the highlight groups in the highlight setup hook, so they are reset
+                -- -- every time the colorscheme changes
+                -- hooks.register(hooks.type.HIGHLIGHT_SETUP, function()
+                --   vim.api.nvim_set_hl(0, "RainbowRed", { fg = "#E06C75" })
+                --   vim.api.nvim_set_hl(0, "RainbowYellow", { fg = "#E5C07B" })
+                --   vim.api.nvim_set_hl(0, "RainbowBlue", { fg = "#61AFEF" })
+                --   vim.api.nvim_set_hl(0, "RainbowOrange", { fg = "#D19A66" })
+                --   vim.api.nvim_set_hl(0, "RainbowGreen", { fg = "#98C379" })
+                --   vim.api.nvim_set_hl(0, "RainbowViolet", { fg = "#C678DD" })
+                --   vim.api.nvim_set_hl(0, "RainbowCyan", { fg = "#56B6C2" })
+                -- end)
+
+                -- vim.g.rainbow_delimiters = { highlight = highlight }
+                -- opts.scope = {highlight = highlight}
+
+                -- Call setup function
+                -- require("ibl").setup(opts)
+
+                -- hooks.register(hooks.type.SCOPE_HIGHLIGHT, hooks.builtin.scope_highlight_from_extmark)
+              end
+            '';
+          };
+
           illuminate = {
             name = "illuminate";
             pkg = pkgs.vimPlugins.vim-illuminate;
@@ -547,6 +590,76 @@ in {
                 "Spectre"
                 "reason"
               ];
+            };
+          };
+
+          _navic = {
+            name = "navic";
+            pkg = pkgs.vimPlugins.nvim-navic;
+            lazy = true;
+            config = ''
+              function(_, opts)
+                navic = require("nvim-navic")
+                navic.setup(opts)
+
+                -- Register navic with lualine's winbar (NOTE: using incline currently)
+                -- TODO: The setup function should probably only be ran once
+                -- require("lualine").setup({
+                --   winbar = {
+                --     lualine_c = {
+                --       {
+                --         function()
+                --           return navic.get_location()
+                --         end,
+                --         cond = function()
+                --           return navic.is_available()
+                --         end
+                --       }
+                --     }
+                --   }
+                -- })
+              end
+            '';
+            opts = {
+              lsp.auto_attach = true;
+              click = true;
+              highlight = true;
+              depth_limit = 5;
+            };
+          };
+
+          incline = {
+            name = "incline";
+            pkg = let
+              nvim-incline = pkgs.vimUtils.buildVimPlugin {
+                name = "nvim-incline";
+                src = pkgs.fetchFromGitHub {
+                  owner = "b0o";
+                  repo = "incline.nvim";
+                  rev = "16fc9c073e3ea4175b66ad94375df6d73fc114c0";
+                  sha256 = "sha256-5DoIvIdAZV7ZgmQO2XmbM3G+nNn4tAumsShoN3rDGrs=";
+                };
+              };
+            in
+              nvim-incline;
+            dependencies = [_navic];
+            lazy = true;
+            event = ["BufReadPost" "BufNewFile"];
+            config = ''
+              function(_, opts)
+                require("incline").setup(opts)
+              end
+            '';
+            opts = {
+              window = {
+                padding = 0;
+                margin = {
+                  horizontal = 0;
+                  vertical = 0;
+                };
+              };
+
+              render.__raw = builtins.readFile ./inclineNavic.lua;
             };
           };
 
@@ -609,6 +722,35 @@ in {
             };
           };
 
+          # Newer alternative to neodev
+          _lazydev = {
+            name = "lazydev";
+            pkg = let
+              nvim-lazydev = pkgs.vimUtils.buildVimPlugin {
+                name = "nvim-lazydev";
+                src = pkgs.fetchFromGitHub {
+                  owner = "folke";
+                  repo = "lazydev.nvim";
+                  rev = "8146b3ad692ae7026fea1784fd5b13190d4f883c"; # v1.4
+                  sha256 = "sha256-JGRjwRDx2Gdp/EBwO2XmWRGOWmHDu0XAzLps+/RSpYk=";
+                };
+              };
+            in
+              nvim-lazydev;
+            ft = ["lua"];
+            config = ''
+              function(_, opts)
+                require("lazydev").setup(opts)
+              end
+            '';
+            # opts = {
+            #   library = [
+            #     "~/NixFlake/config/neovim/store"
+            #   ];
+            # };
+          };
+
+          # Predecessor of lazydev
           _neodev = {
             name = "neodev";
             pkg = pkgs.vimPlugins.neodev-nvim;
@@ -632,7 +774,7 @@ in {
             };
           };
 
-          # TODO: This entire thing is rough, maybe I should look for another way...
+          # NOTE: This entire thing is rough, maybe I should look for another way...
           lspconfig = {
             name = "lspconfig";
             pkg = pkgs.vimPlugins.nvim-lspconfig;
@@ -640,7 +782,8 @@ in {
             cmd = ["LspInfo"];
             event = ["BufReadPost" "BufNewFile"];
             dependencies = [
-              _neodev # Has to be setup before lspconfig
+              _lazydev
+              # _neodev # Has to be setup before lspconfig
             ];
             config = let
               servers = mylib.generators.toLuaObject [
@@ -692,6 +835,9 @@ in {
               ];
             in ''
               function(_, opts)
+                -- Make LspInfo window border rounded
+                require("lspconfig.ui.windows").default_options.border = "rounded"
+
                 local __lspOnAttach = function(client, bufnr) end
 
                 local __lspCapabilities = function()
@@ -791,6 +937,7 @@ in {
           navbuddy = {
             name = "navbuddy";
             pkg = pkgs.vimPlugins.nvim-navbuddy;
+            dependencies = [_navic];
             lazy = true;
             cmd = ["Navbuddy"];
             config = ''
@@ -805,24 +952,6 @@ in {
             };
           };
 
-          # TODO: Doesn't show up
-          navic = {
-            name = "navic";
-            pkg = pkgs.vimPlugins.nvim-navic;
-            lazy = false;
-            config = ''
-              function(_, opts)
-                require("nvim-navic").setup(opts)
-              end
-            '';
-            opts = {
-              lsp.auto_attach = true;
-              click = true;
-              highlight = true;
-            };
-          };
-
-          # TODO: Notification spam on filter (when searching for ignored/non-existing file)
           neo-tree = {
             name = "neo-tree";
             pkg = pkgs.vimPlugins.neo-tree-nvim;
@@ -1105,6 +1234,27 @@ in {
             };
           };
 
+          _treesitter-context = {
+            name = "treesitter-context";
+            pkg = pkgs.vimPlugins.nvim-treesitter-context;
+            lazy = true;
+            config = ''
+              function(_, opts)
+                require("treesitter-context").setup(opts)
+              end
+            '';
+            opts = {
+              max_lines = 3;
+              line_numbers = false;
+            };
+          };
+
+          _treesitter-refactor = {
+            name = "treesitter-refactor";
+            pkg = pkgs.vimPlugins.nvim-treesitter-refactor;
+            lazy = true;
+          };
+
           treesitter = let
             nvim-plugintree = pkgs.vimPlugins.nvim-treesitter.withAllGrammars;
             treesitter-parsers = pkgs.symlinkJoin {
@@ -1114,6 +1264,10 @@ in {
           in {
             name = "treesitter";
             pkg = pkgs.vimPlugins.nvim-treesitter;
+            dependencies = [
+              # _treesitter-context # Ugly
+              # _treesitter-refactor # Ugly
+            ];
             lazy = true;
             cmd = ["TSModuleInfo"];
             event = ["BufReadPost" "BufNewFile"];
@@ -1135,11 +1289,17 @@ in {
                 enable = true;
                 # disable = ["python" "yaml"]; # NOTE: Check how bad it is
               };
+
               highlight = {
                 enable = true;
                 # disable = ["yaml"];
                 additional_vim_regex_highlighting = false;
               };
+
+              # refactor = {
+              #   highlight_definitions.enable = true;
+              #   highlight_current_scope.enable = false; # Ugly
+              # };
 
               # TODO: Doesn't work
               incremental_selection = {
@@ -1176,6 +1336,28 @@ in {
                 require("trouble").setup(opts)
               end
             '';
+          };
+
+          twilight = {
+            name = "twilight";
+            pkg = pkgs.vimPlugins.twilight-nvim;
+            config = ''
+              function(_, opts)
+                require("twilight").setup(opts)
+              end
+            '';
+            opts = {
+              dimming.alpha = 0.75;
+              context = 15;
+              treesitter = true;
+              expand = [
+                "function"
+                "method"
+                "table"
+                "if_statement"
+              ];
+              # exclude = []; # Excluded filetypes
+            };
           };
 
           _promise = {
@@ -1250,17 +1432,19 @@ in {
           autopairs
           bbye
           better-escape
-          # chadtree
+          # chadtree # NOTE: Using neo-tree
           clangd-extensions
           cmp
-          colorizer
+          # colorizer # TODO: Only colorize html/css/scss/sass...
           comment
           conform
           flash
           gitmessenger
           gitsigns
           haskell-tools
+          # indent-blankline # NOTE: Too much noise
           illuminate
+          # incline # TODO: Bad styling
           intellitab
           lastplace
           lazygit
@@ -1269,7 +1453,6 @@ in {
           lualine
           luasnip
           navbuddy
-          navic
           neo-tree
           noice
           rainbow-delimiters
@@ -1282,6 +1465,7 @@ in {
           treesitter
           trim
           trouble
+          # twilight # NOTE: Don't like it
           ufo
           which-key
           yanky

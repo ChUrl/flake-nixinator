@@ -1,3 +1,6 @@
+-- Make Lazy window border rounded
+require("lazy.core.config").options.ui.border = "rounded"
+
 -- Toggle inline diagnostics and show border
 vim.g.enable_inline_diagnostics = false
 vim.diagnostic.config({
@@ -33,4 +36,17 @@ vim.api.nvim_create_user_command("LspInspect", function()
 	require("notify")(vim.inspect(vim.lsp.get_active_clients()))
 end, {
 	desc = "Print LSP server configuration",
+})
+
+-- Toggle linting
+vim.g.disable_autolint = false
+vim.api.nvim_create_user_command("ToggleAutoLint", function()
+	vim.g.disable_autolint = not vim.g.disable_autolint
+	if vim.g.disable_autolint then
+		-- vim.diagnostic.reset(vim.api.nvim_get_current_buf())
+		vim.diagnostic.reset() -- Reset for all buffers
+	end
+	require("notify")((vim.g.disable_autolint and "Disabled" or "Enabled") .. " autolint-on-save")
+end, {
+	desc = "Toggle autolint-on-save",
 })
