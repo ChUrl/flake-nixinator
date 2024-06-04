@@ -1,5 +1,6 @@
 # TODO: The keys to reset the workspaces need to depend on actual workspace config
 # TODO: Many of the text file generations can be made simpler with pipe and concatLines functions...
+# TODO: The border color does not fit the current theme
 {
   config,
   nixosConfig,
