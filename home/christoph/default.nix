@@ -15,6 +15,7 @@
 # This is a module
 # Because no imports/options/config is defined explicitly, everything is treated as config
 # { inputs, lib, ... }: { ... } gets turned into { inputs, lib, ... }: { config = { ... }; } implicitly
+# TODO: Add nixified.ai module
 rec {
   # Every module is a nix expression, specifically a function { inputs, lib, ... }: { ... }
   # Every module (/function) is called with the same arguments as this module (home.nix)
@@ -131,10 +132,13 @@ rec {
           "jetbrains-idea"
           "jetbrains-pycharm"
           "jetbrains-rustrover"
+          "jetbrains-rider"
           "code-url-handler"
         ];
         "3" = [
           "obsidian"
+          "unityhub"
+          "Unity"
         ];
         "4" = [
           "firefox"
@@ -172,6 +176,7 @@ rec {
         "jetbrains-idea"
         "jetbrains-pycharm"
         "jetbrains-rustrover"
+        "jetbrains-rider"
         "code-url-handler"
         "neovide"
       ];
@@ -179,35 +184,10 @@ rec {
 
     kitty.enable = true;
 
-    misc = {
-      enable = true;
-
-      keepass = {
-        enable = true;
-        autostart = false; # TODO: This option should use hyprland module
-      };
-
-      protonmail = {
-        enable = true;
-        autostart = false; # TODO: This option should use hyprland module
-      };
-    };
-
     neovim = {
       enable = true;
       alias = true;
       neovide = true;
-    };
-
-    # lazyvim = {
-    #   enable = true;
-    #   alias = true;
-    #   neovide = true;
-    # };
-
-    nextcloud = {
-      enable = true;
-      autostart = false; # TODO: This option should use hyprland module
     };
 
     nnn.enable = true;
@@ -230,51 +210,23 @@ rec {
     };
   };
 
-  manual.manpages.enable = true;
-  manual.html.enable = true;
+  manual = {
+    manpages.enable = true;
+    html.enable = false;
+  };
 
   # Make fonts installed through user packages available to applications
   # NOTE: I don't think I need this anymore as all fonts are installed through the system config but let's keep this just in case
   fonts.fontconfig.enable = true; # Also updates the font-cache
 
-  # Generate a list of installed user packages in ~/.local/share/current-user-packages
-  home.file.".local/share/current-user-packages".text = let
-    packages = builtins.map (p: "${p.name}") home.packages;
-    sortedUnique = builtins.sort builtins.lessThan (lib.unique packages);
-    formatted = builtins.concatStringsSep "\n" sortedUnique;
-  in
-    formatted;
-
-  home.file.".config/mpv" = {
-    recursive = true;
-    source = ../../config/mpv;
-  };
-
-  # TODO: Latex module
-  home.file."texmf/tex/latex/custom/christex.sty".source = ../../config/latex/christex.sty;
-  home.file."Notes/Obsidian/Chriphost/christex.sty".source = ../../config/latex/christex.sty; # For obsidian notes
-  home.file.".indentconfig.yaml".source = ../../config/latex/.indentconfig.yaml;
-  home.file.".indentsettings.yaml".source = ../../config/latex/.indentsettings.yaml;
-  # TODO: Use mkLink
-  # home.file."Notes/Obsidian/Chriphost/latex_snippets.json".source = ../../config/obsidian/latex_snippets.json;
-  home.file."Notes/Obsidian/Chriphost/.obsidian/snippets/latex_preview.css".source = ../../config/obsidian/css_snippets/latex_preview.css;
-
-  # TODO: If navi enabled
-  # TODO: Symlink this, so the config doesn't have to be rebuilt every time
-  home.file.".local/share/navi/cheats/christoph.cheat".source = ../../config/navi/christoph.cheat;
-
-  home.activation = {
-    linkObsidianLatexSnippets =
-      lib.hm.dag.entryAfter ["writeBoundary"]
-      (mylib.modules.mkLink "~/NixFlake/config/obsidian/latex_snippets.json" "~/Notes/Obsidian/Chriphost/latex_snippets.json");
-  };
-
-  xdg.mime.enable = true;
-  xdg.mimeApps = {
-    enable = true;
-    associations.added = nixosConfig.xdg.mime.addedAssociations;
-    associations.removed = nixosConfig.xdg.mime.removedAssociations;
-    inherit (nixosConfig.xdg.mime) defaultApplications; # Equal to "defaultApplications = nixosConfig.xdg.mime.defaultApplications"
+  xdg = {
+    mime.enable = true;
+    mimeApps = {
+      enable = true;
+      associations.added = nixosConfig.xdg.mime.addedAssociations;
+      associations.removed = nixosConfig.xdg.mime.removedAssociations;
+      inherit (nixosConfig.xdg.mime) defaultApplications; # Equal to "defaultApplications = nixosConfig.xdg.mime.defaultApplications"
+    };
   };
 
   home = {
@@ -306,146 +258,161 @@ rec {
       # WINEFSYNC = 1;
       # WINEPREFIX = "/home/christoph/.wine";
 
-      # NOTE: GTK_IM_MODULE, QT_IM_MODULE, XMODIFIERS are set by HomeManager fcitx5 module
+      # GTK_IM_MODULE, QT_IM_MODULE, XMODIFIERS are set by HomeManager fcitx5 module
     };
+
+    file = {
+      # Generate a list of installed user packages in ~/.local/share/current-user-packages
+      ".local/share/current-user-packages".text = let
+        packages = builtins.map (p: "${p.name}") home.packages;
+        sortedUnique = builtins.sort builtins.lessThan (lib.unique packages);
+        formatted = builtins.concatStringsSep "\n" sortedUnique;
+      in
+        formatted;
+
+      ".config/mpv" = {
+        recursive = true;
+        source = ../../config/mpv;
+      };
+
+      # TODO: Latex module
+      "texmf/tex/latex/custom/christex.sty".source = ../../config/latex/christex.sty;
+      "Notes/Obsidian/Chriphost/christex.sty".source = ../../config/latex/christex.sty; # For obsidian notes
+      ".indentconfig.yaml".source = ../../config/latex/.indentconfig.yaml;
+      ".indentsettings.yaml".source = ../../config/latex/.indentsettings.yaml;
+      # TODO: Use mkLink
+      # "Notes/Obsidian/Chriphost/latex_snippets.json".source = ../../config/obsidian/latex_snippets.json;
+      "Notes/Obsidian/Chriphost/.obsidian/snippets/latex_preview.css".source = ../../config/obsidian/css_snippets/latex_preview.css;
+
+      # TODO: If navi enabled
+      # TODO: Symlink this, so the config doesn't have to be rebuilt every time
+      ".local/share/navi/cheats/christoph.cheat".source = ../../config/navi/christoph.cheat;
+    };
+
+    activation = {
+      linkObsidianLatexSnippets =
+        lib.hm.dag.entryAfter ["writeBoundary"]
+        (mylib.modules.mkLink "~/NixFlake/config/obsidian/latex_snippets.json" "~/Notes/Obsidian/Chriphost/latex_snippets.json");
+    };
+
+    # TODO: Make a module for standard UNIX replacements
+    # Add stuff for your user as you see fit:
+    packages = with pkgs; [
+      # Shell utils
+      (ripgrep.override {withPCRE2 = true;}) # fast as fuck
+      gdu # Alternative to du-dust (I like it better)
+      duf # Disk usage analyzer (for all disk overview)
+      sd # sed alternative
+      fclones # duplicate file finder
+      tealdeer # very fast tldr (so readable man)
+      atool # Archive preview
+      ffmpegthumbnailer # Video thumbnails
+      mediainfo
+      tree # Folder preview
+      unrar
+      p7zip
+      unzip
+      progress
+      tokei # Text file statistics in a project
+      appimage-run
+      nvd # nix rebuild diff
+      file
+      # spotdl # TODO: Borked
+
+      # Hardware/Software info
+      pciutils # lspci
+      glxinfo # opengl info
+      wayland-utils # wayland-info
+      aha # ansi html adapter? TODO: Why did I install this?
+      clinfo # OpenCL info
+      vulkan-tools # vulkaninfo
+      libva-utils # vainfo
+      vdpauinfo
+      hwloc
+      lm_sensors
+      acpica-tools # Dump ACPI tables etc.
+
+      # Video/Image utils
+      ffmpeg_5-full # I love ffmpeg (v5, including ffplay)
+      ffmpeg-normalize
+      imagemagick # Convert image (magic)
+      ueberzugpp # Display images in terminal (alacritty)
+
+      # Document utils
+      # TODO: Latex module with individual packages or HomeManager
+      texlive.combined.scheme-full
+      poppler_utils # pdfunite
+      graphviz # generate graphs from code
+      plantuml
+      gnuplot # generate function plots
+      pdf2svg
+      pandoc # document converting madness
+      inkscape # for latex
+
+      # Networking
+      dig
+      tcpdump
+      traceroute
+      wireshark
+      gping # ping with graph
+      curlie # curl a'la httpie
+      wget # download that shit
+      dogdns # dns client
+      rsync # cp on steroids
+      rclone # Rsync for cloud
+      httpie # Cool http client
+      # suricata
+      cifs-utils # Mount samba shares
+      nfs-utils
+      sshfs
+      protonvpn-cli
+
+      # GUI apps
+      vlc
+      cool-retro-term
+      ventoy-full # Bootable USB for many ISOs
+      sqlitebrowser # To modify tables
+      dbeaver-bin # To import/export data + diagrams
+      hoppscotch # Test APIs
+      # decker # TODO: Build failure
+      signal-desktop
+      filezilla
+      anki
+      # octave # GNU matlab basically
+      font-manager
+      nextcloud-client
+      keepassxc
+      protonmail-bridge
+
+      # Office
+      wacomtablet # For xournalpp/krita
+      xournalpp # Write with a pen, like old people
+      # libreoffice-qt
+      hunspell # I cna't type
+      hunspellDicts.en_US
+      hunspellDicts.de_DE
+      obsidian # knowledge-base
+      # logseq # knowledge-base
+
+      # TODO: Module, I need to add python packages from multiple modules to the same interpreter
+      python312
+      jetbrains.clion
+      jetbrains.rust-rover
+      jetbrains.pycharm-professional
+      jetbrains.idea-ultimate
+
+      AusweisApp2
+
+      # Use NixCommunity binary cache
+      cachix
+
+      # Generate documentation
+      # modules-options-doc
+    ];
 
     # Do not change
     stateVersion = "22.05";
   };
-
-  # TODO: Split this more between laptop and desktop...
-  # TODO: Make a module for standard UNIX replacements
-  # Add stuff for your user as you see fit:
-  home.packages = with pkgs; [
-    # Shell utils
-    (ripgrep.override {withPCRE2 = true;}) # fast as fuck
-    gdu # Alternative to du-dust (I like it better)
-    duf # Disk usage analyzer (for all disk overview)
-    sd # sed alternative
-    fclones # duplicate file finder
-    tealdeer # very fast tldr (so readable man)
-    atool # Archive preview
-    ffmpegthumbnailer # Video thumbnails
-    mediainfo
-    tree # Folder preview
-    unrar
-    p7zip
-    unzip
-    progress
-    tokei # Text file statistics in a project
-    appimage-run
-    nvd # nix rebuild diff
-    file
-    # spotdl # TODO: Borked
-
-    # Hardware/Software info
-    pciutils # lspci
-    glxinfo # opengl info
-    wayland-utils # wayland-info
-    aha # ansi html adapter? TODO: Why did I install this?
-    clinfo # OpenCL info
-    vulkan-tools # vulkaninfo
-    libva-utils # vainfo
-    vdpauinfo
-    hwloc
-    lm_sensors
-    acpica-tools # Dump ACPI tables etc.
-
-    # Video/Image utils
-    ffmpeg_5-full # I love ffmpeg (v5, including ffplay)
-    ffmpeg-normalize
-    x265
-    imagemagick # Convert image (magic)
-    ueberzugpp # Display images in terminal (alacritty)
-
-    # Document utils
-    # TODO: Latex module with individual packages or HomeManager
-    texlive.combined.scheme-full
-    poppler_utils # pdfunite
-    graphviz # generate graphs from code
-    plantuml
-    gnuplot # generate function plots
-    pdf2svg
-    pandoc # document converting madness
-
-    # Networking
-    dig
-    tcpdump
-    traceroute
-    wireshark
-    gping # ping with graph
-    curlie # curl a'la httpie
-    wget # download that shit
-    dogdns # dns client
-    rsync # cp on steroids
-    rclone # Rsync for cloud
-    httpie # Cool http client
-    # suricata
-    cifs-utils # Mount samba shares
-    nfs-utils
-    sshfs
-    protonvpn-cli
-
-    # GUI apps
-    vlc
-    cool-retro-term
-    ventoy-full # Bootable USB for many ISOs
-    # spotify # Uses flatpak
-    sqlitebrowser # To modify tables
-    dbeaver-bin # To import/export data + diagrams
-    hoppscotch # Test APIs
-    # decker # TODO: Build failure
-    signal-desktop
-    filezilla
-    # calibre # Do I even read
-    # virt-manager
-    # gource # Visualize git commit log, completely useless
-    # anki-bin # Use anki-bin as anki is some versions behind NOTE: anki-bin doesn't support fcitx5 :(
-    anki
-    # inputs.nixos-conf-editor.packages."x86_64-linux".nixos-conf-editor
-    # octave # GNU matlab basically
-    # logisim-evolution # Digital circuit simulator
-    # digital # Digital circuit simulator
-    # okteta # hex editor
-    # kdiff3 # diff/patch tool
-    font-manager
-
-    # Office
-    # sioyek # Scientific pdf reader # HM program
-    xournalpp # Write with a pen, like old people
-    # libreoffice-qt
-    hunspell # I cna't type
-    hunspellDicts.en_US
-    hunspellDicts.de_DE
-    obsidian # knowledge-base
-    # logseq # knowledge-base
-
-    # TODO: Module, I need to add python packages from multiple modules to the same interpreter
-    python312
-    jetbrains.clion
-    jetbrains.rust-rover
-    jetbrains.pycharm-professional
-    jetbrains.idea-ultimate
-
-    # Media
-    wacomtablet
-    # blender
-    # godot_4
-    obs-studio
-    # vlc # Addition to mpv without any shaders etc
-    kdenlive
-    krita
-    inkscape
-    # handbrake
-    # makemkv
-    AusweisApp2
-
-    # Use NixCommunity binary cache
-    cachix
-
-    # Generate documentation
-    # modules-options-doc
-  ];
 
   # home.file.".options-doc".source = "${pkgs.modules-options-doc}";
 

@@ -70,10 +70,6 @@
     };
   };
 
-  programs.hyprland = {
-    # enableNvidiaPatches = true; # NOTE: Deprecated
-  };
-
   # Low latency audio
   # musnix = {
   #   enable = true;

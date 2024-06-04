@@ -1,5 +1,6 @@
 # Changed from https://github.com/nix-community/home-manager/blob/master/modules/services/nextcloud-client.nix
 # I use this instead of the HM module as the autostart wasn't working there
+# TODO: Remove this module
 # TODO: Check the HM module again if anything changed, as this has also stopped working
 #       Nextcloud immediately crashes on start, autostart isn't working either...
 {

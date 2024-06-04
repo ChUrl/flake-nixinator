@@ -1,5 +1,5 @@
 # Here goes the stuff that will only be enabled on the desktop
-{...}: {
+{pkgs, ...}: {
   imports = [
     ../../modules
   ];
@@ -48,53 +48,29 @@
         ];
       };
 
-      # audio = {
-      #   enable = false;
-
-      #   carla.enable = false;
-      #   bitwig.enable = true; # TODO: Check what happens when upgrade plan ends, do I need to pin the version then?
-      #   tenacity.enable = true;
-
-      #   faust.enable = true;
-      #   bottles.enable = false;
-      #   yabridge.enable = true;
-      #   yabridge.autoSync = true;
-
-      #   noisesuppression = {
-      #     noisetorch.enable = false;
-      #     noisetorch.autostart = false;
-      #     easyeffects.enable = false;
-      #     easyeffects.autostart = false;
-      #   };
-
-      #   cardinal.enable = true;
-      #   distrho.enable = true;
-      # };
-
-      # gaming = {
-      #   enable = false;
-
-      #   prism.enable = true;
-      #   bottles.enable = false;
-      #   cemu.enable = true;
-      #   # TODO: Webcord
-      #   # discordChromium.enable = false;
-      #   # discordElectron.enable = false; # This is the nixpkgs version, prefer the one from flatpak module
-      #   # dwarffortress.enable = false;
-
-      #   steam = {
-      #     enable = true;
-      #     gamescope = true;
-      #     adwaita = false;
-      #     protonup = true;
-      #   };
-      # };
-
+      # TODO: Also set the dunst monitor
       waybar.monitor = "HDMI-A-1";
     };
 
-    # home.packages = with pkgs; [
-    #   quartus-prime-lite # Intel FPGA design software
-    # ];
+    home.packages = with pkgs; [
+      # quartus-prime-lite # Intel FPGA design software
+
+      unityhub
+      jetbrains.rider
+      (with dotnetCorePackages;
+        combinePackages [
+          sdk_6_0_1xx
+          sdk_7_0_3xx
+          sdk_8_0_2xx
+        ]) # For Rider/Unity
+      mono # For Rider/Unity
+
+      blender
+      # godot_4
+      obs-studio
+      kdenlive
+      krita
+      # makemkv
+    ];
   };
 }

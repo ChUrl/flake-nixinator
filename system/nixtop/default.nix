@@ -27,10 +27,6 @@
 
   programs.light.enable = true;
 
-  programs.hyprland = {
-    # enableNvidiaPatches = false; # NOTE: Deprecated
-  };
-
   services.xserver = {
     # Configure keymap in X11
     xkb.layout = "de";

@@ -21,6 +21,7 @@
     devshell.url = "github:numtide/devshell";
     nixvim.url = "github:nix-community/nixvim";
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=v0.4.1";
+    nix-alien.url = "github:thiagokokada/nix-alien";
     # musnix.url = "github:musnix/musnix";
     # nixified-ai.url = "github:nixified-ai/flake";
     # nixos-conf-editor.url = "github:vlinkz/nixos-conf-editor";
