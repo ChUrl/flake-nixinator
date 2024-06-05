@@ -343,14 +343,144 @@ require("lazy").setup({
                     ["name"] = "web-devicons",
                 },
                 {
-                    "persistence",
+                    "persisted",
                     ["config"] = function(_, opts)
-                        require("persistence").setup(opts)
+                        require("persisted").setup(opts)
+
+                        require("telescope").load_extension("persisted")
                     end,
-                    ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/persistence.nvim",
+                    ["dependencies"] = {
+                        {
+                            "telescope",
+                            ["cmd"] = { "Telescope" },
+                            ["config"] = function(_, opts)
+                                local telescope = require("telescope")
+                                telescope.setup(opts)
+
+                                for i, extension in ipairs({ "undo", "ui-select", "fzf" }) do
+                                    telescope.load_extension(extension)
+                                end
+                            end,
+                            ["dependencies"] = {
+                                {
+                                    "plenary",
+                                    ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/plenary.nvim",
+                                    ["lazy"] = true,
+                                    ["name"] = "plenary",
+                                },
+                                {
+                                    "telescope-fzf-native",
+                                    ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/telescope-fzf-native.nvim",
+                                    ["lazy"] = true,
+                                    ["name"] = "telescope-fzf-native",
+                                },
+                                {
+                                    "telescope-undo",
+                                    ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/telescope-undo.nvim",
+                                    ["lazy"] = true,
+                                    ["name"] = "telescope-undo",
+                                },
+                                {
+                                    "telescope-ui-select",
+                                    ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/telescope-ui-select.nvim",
+                                    ["lazy"] = true,
+                                    ["name"] = "telescope-ui-select",
+                                },
+                            },
+                            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/telescope.nvim",
+                            ["lazy"] = true,
+                            ["name"] = "telescope",
+                            ["opts"] = {
+                                ["defaults"] = {
+                                    ["mappings"] = {
+                                        ["i"] = {
+                                            ["<Esc>"] = function(...)
+                                                return require("telescope.actions").close(...)
+                                            end,
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                    ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/persisted.nvim",
                     ["lazy"] = true,
-                    ["name"] = "persistence",
-                    ["opts"] = { ["options"] = vim.opt.sessionoptions:get() },
+                    ["name"] = "persisted",
+                    ["opts"] = {
+                        ["autoload"] = false,
+                        ["autosave"] = true,
+                        ["follow_cwd"] = true,
+                        ["silent"] = false,
+                        ["use_git_branch"] = false,
+                    },
+                },
+                {
+                    "project",
+                    ["config"] = function(_, opts)
+                        require("project_nvim").setup(opts)
+                    end,
+                    ["dependencies"] = {
+                        {
+                            "telescope",
+                            ["cmd"] = { "Telescope" },
+                            ["config"] = function(_, opts)
+                                local telescope = require("telescope")
+                                telescope.setup(opts)
+
+                                for i, extension in ipairs({ "undo", "ui-select", "fzf" }) do
+                                    telescope.load_extension(extension)
+                                end
+                            end,
+                            ["dependencies"] = {
+                                {
+                                    "plenary",
+                                    ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/plenary.nvim",
+                                    ["lazy"] = true,
+                                    ["name"] = "plenary",
+                                },
+                                {
+                                    "telescope-fzf-native",
+                                    ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/telescope-fzf-native.nvim",
+                                    ["lazy"] = true,
+                                    ["name"] = "telescope-fzf-native",
+                                },
+                                {
+                                    "telescope-undo",
+                                    ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/telescope-undo.nvim",
+                                    ["lazy"] = true,
+                                    ["name"] = "telescope-undo",
+                                },
+                                {
+                                    "telescope-ui-select",
+                                    ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/telescope-ui-select.nvim",
+                                    ["lazy"] = true,
+                                    ["name"] = "telescope-ui-select",
+                                },
+                            },
+                            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/telescope.nvim",
+                            ["lazy"] = true,
+                            ["name"] = "telescope",
+                            ["opts"] = {
+                                ["defaults"] = {
+                                    ["mappings"] = {
+                                        ["i"] = {
+                                            ["<Esc>"] = function(...)
+                                                return require("telescope.actions").close(...)
+                                            end,
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                    ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/project.nvim",
+                    ["lazy"] = true,
+                    ["name"] = "project",
+                    ["opts"] = {
+                        ["detection_methods"] = { "lsp", "pattern" },
+                        ["manual_mode"] = false,
+                        ["patterns"] = { ".git", "Makefile", "CMakeLists.txt", "flake.nix" },
+                    },
                 },
             },
             ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/dashboard-nvim",
@@ -359,16 +489,17 @@ require("lazy").setup({
             ["opts"] = {
                 ["config"] = {
                     ["center"] = {
-                        { ["action"] = "Telescope find_files", ["desc"] = " Find File", ["icon"] = " ", ["key"] = "f" },
-                        { ["action"] = "ene | startinsert", ["desc"] = " New File", ["icon"] = " ", ["key"] = "n" },
-                        { ["action"] = "Telescope oldfiles", ["desc"] = " Recent Files", ["icon"] = " ", ["key"] = "r" },
-                        { ["action"] = "Telescope live_grep", ["desc"] = " Find Text", ["icon"] = " ", ["key"] = "g" },
+                        { ["action"] = "Telescope projects", ["desc"] = " Open Project", ["icon"] = " ", ["key"] = "p" },
                         {
-                            ["action"] = "lua require('persistence').load()",
+                            ["action"] = "Telescope persisted",
                             ["desc"] = " Restore Session",
                             ["icon"] = " ",
                             ["key"] = "s",
                         },
+                        { ["action"] = "Telescope find_files", ["desc"] = " Find File", ["icon"] = " ", ["key"] = "f" },
+                        { ["action"] = "Telescope oldfiles", ["desc"] = " Recent Files", ["icon"] = " ", ["key"] = "r" },
+                        { ["action"] = "ene | startinsert", ["desc"] = " New File", ["icon"] = " ", ["key"] = "n" },
+                        { ["action"] = "Telescope live_grep", ["desc"] = " Find Text", ["icon"] = " ", ["key"] = "g" },
                         { ["action"] = "Lazy", ["desc"] = " Lazy", ["icon"] = "󰒲 ", ["key"] = "l" },
                         { ["action"] = "quitall", ["desc"] = " Quit", ["icon"] = " ", ["key"] = "q" },
                     },
@@ -384,6 +515,13 @@ require("lazy").setup({
                 ["shortcut_type"] = "number",
                 ["theme"] = "doom",
             },
+        },
+        {
+            "diffview",
+            ["cmd"] = { "DiffviewOpen" },
+            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/diffview.nvim",
+            ["lazy"] = true,
+            ["name"] = "diffview",
         },
         {
             "flash",
@@ -650,6 +788,18 @@ require("lazy").setup({
             ["name"] = "luasnip",
         },
         {
+            "narrow-region",
+            ["cmd"] = { "NR" },
+            ["config"] = function(_, opts)
+                vim.keymap.del("x", "<space>Nr")
+                vim.keymap.del("x", "<space>nr")
+                vim.keymap.del("n", "<space>nr")
+            end,
+            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/NrrwRgn",
+            ["lazy"] = true,
+            ["name"] = "narrow-region",
+        },
+        {
             "navbuddy",
             ["cmd"] = { "Navbuddy" },
             ["config"] = function(_, opts)
@@ -732,9 +882,15 @@ require("lazy").setup({
             ["name"] = "neo-tree",
             ["opts"] = {
                 ["buffers"] = { ["follow_current_file"] = { ["enabled"] = true, ["leave_dirs_open"] = false } },
+                ["default_component_configs"] = { ["container"] = { ["enable_character_fade"] = true } },
                 ["enable_diagnostics"] = false,
                 ["enable_git_status"] = true,
-                ["filesystem"] = { ["follow_current_file"] = { ["enabled"] = true, ["leave_dirs_open"] = false } },
+                ["filesystem"] = {
+                    ["bind_to_cwd"] = true,
+                    ["cwd_target"] = { ["sidebar"] = "global" },
+                    ["filtered_items"] = { ["visible"] = true },
+                    ["follow_current_file"] = { ["enabled"] = true, ["leave_dirs_open"] = false },
+                },
                 ["open_files_do_not_replace_types"] = { "terminal", "trouble", "qf" },
                 ["popup_border_style"] = "rounded",
                 ["use_default_mappings"] = false,
@@ -755,6 +911,7 @@ require("lazy").setup({
                         ["x"] = "cut_to_clipboard",
                         ["y"] = "copy_to_clipboard",
                     },
+                    ["position"] = "left",
                 },
             },
         },
@@ -910,6 +1067,18 @@ require("lazy").setup({
             ["event"] = { "BufReadPost", "BufNewFile" },
             ["lazy"] = true,
             ["name"] = "todo-comments",
+            ["opts"] = {
+                ["keywords"] = {
+                    ["FIX"] = { ["alt"] = { "FIXME", "BUG", "FIXIT", "ISSUE" }, ["color"] = "error", ["icon"] = " " },
+                    ["HACK"] = { ["color"] = "warning", ["icon"] = " " },
+                    ["NOTE"] = { ["alt"] = { "INFO" }, ["color"] = "hint", ["icon"] = " " },
+                    ["PERF"] = { ["alt"] = { "OPTIM", "PERFORMANCE", "OPTIMIZE" }, ["icon"] = " " },
+                    ["TEST"] = { ["alt"] = { "TESTING", "PASSED", "FAILED" }, ["color"] = "test", ["icon"] = "⏲ " },
+                    ["TODO"] = { ["color"] = "info", ["icon"] = " " },
+                    ["WARN"] = { ["alt"] = { "WARNING", "XXX" }, ["color"] = "warning", ["icon"] = " " },
+                },
+                ["signs"] = true,
+            },
         },
         {
             "toggleterm",
@@ -923,6 +1092,7 @@ require("lazy").setup({
             ["name"] = "toggleterm",
             ["opts"] = {
                 ["auto_scroll"] = true,
+                ["autochdir"] = true,
                 ["close_on_exit"] = true,
                 ["direction"] = "horizontal",
                 ["float_opts"] = { ["border"] = "curved", ["height"] = 20, ["width"] = 80, ["winblend"] = 0 },
@@ -1004,6 +1174,14 @@ require("lazy").setup({
             ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/nvim-ufo",
             ["lazy"] = false,
             ["name"] = "ufo",
+        },
+        {
+            "vimtex",
+            ["config"] = function(_, opts)
+                vim.g.vimtex_view_method = "zathura"
+            end,
+            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/vimtex",
+            ["name"] = "vimtex",
         },
         {
             "which-key",
@@ -1155,7 +1333,7 @@ do
         },
         {
             ["action"] = "<cmd>nohlsearch<cr>",
-            ["key"] = "<C-h>",
+            ["key"] = "<C-S-h>",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Clear search highlights" },
         },
@@ -1173,18 +1351,6 @@ do
         },
         { ["action"] = "<Esc>", ["key"] = ";", ["mode"] = "v", ["options"] = { ["desc"] = "Exit visual mode" } },
         { ["action"] = "<cmd>Lazy<cr>", ["key"] = "<leader>L", ["mode"] = "n", ["options"] = { ["desc"] = "Show Lazy" } },
-        {
-            ["action"] = "<cmd>w<cr>",
-            ["key"] = "<leader>s",
-            ["mode"] = "n",
-            ["options"] = { ["desc"] = "Save current buffer" },
-        },
-        {
-            ["action"] = "<cmd>wa<cr>",
-            ["key"] = "<leader>S",
-            ["mode"] = "n",
-            ["options"] = { ["desc"] = "Save all buffers" },
-        },
         {
             ["action"] = "<cmd>edit!<cr>",
             ["key"] = "<leader>R",
@@ -1204,6 +1370,18 @@ do
             ["options"] = { ["desc"] = "Find file" },
         },
         {
+            ["action"] = "<cmd>Telescope projects<cr>",
+            ["key"] = "<leader>p",
+            ["mode"] = "n",
+            ["options"] = { ["desc"] = "Open project" },
+        },
+        {
+            ["action"] = "<cmd>Telescope persisted<cr>",
+            ["key"] = "<leader>s",
+            ["mode"] = "n",
+            ["options"] = { ["desc"] = "Restore session" },
+        },
+        {
             ["action"] = "<cmd>Telescope vim_options<cr>",
             ["key"] = "<leader>o",
             ["mode"] = "n",
@@ -1221,9 +1399,10 @@ do
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Find in working directory" },
         },
+        { ["action"] = ":NR!<cr>", ["key"] = "<leader>n", ["mode"] = "v", ["options"] = { ["desc"] = "Narrow region" } },
         {
             ["action"] = "<cmd>Telescope notify<cr>",
-            ["key"] = "<leader>n",
+            ["key"] = "<leader>N",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Show notify history" },
         },
@@ -1268,6 +1447,12 @@ do
             ["key"] = "<leader>h",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Show help tags" },
+        },
+        {
+            ["action"] = "<cmd>TodoTelescope<cr>",
+            ["key"] = "<leader>T",
+            ["mode"] = "n",
+            ["options"] = { ["desc"] = "Show TODOs" },
         },
         { ["action"] = "+quit", ["key"] = "<leader>q", ["mode"] = "n" },
         { ["action"] = "<cmd>quitall<cr>", ["key"] = "<leader>qq", ["mode"] = "n", ["options"] = { ["desc"] = "Quit" } },
@@ -1347,10 +1532,16 @@ do
             ["options"] = { ["desc"] = "Toggle NavBuddy" },
         },
         {
-            ["action"] = "<cmd>TroubleToggle focus=false<cr>",
+            ["action"] = "<cmd>TroubleToggle workspace_diagnostics focus=false<cr>",
             ["key"] = "<leader>td",
             ["mode"] = "n",
-            ["options"] = { ["desc"] = "Toggle Trouble" },
+            ["options"] = { ["desc"] = "Toggle Trouble diagnostics" },
+        },
+        {
+            ["action"] = "<cmd>TroubleToggle todo focus=false<cr>",
+            ["key"] = "<leader>tT",
+            ["mode"] = "n",
+            ["options"] = { ["desc"] = "Toggle Trouble TODOs" },
         },
         {
             ["action"] = "<cmd>ToggleAutoformat<cr>",
@@ -1413,6 +1604,12 @@ do
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Show Git log for current file" },
         },
+        {
+            ["action"] = "<cmd>DiffviewOpen<cr>",
+            ["key"] = "<leader>gd",
+            ["mode"] = "n",
+            ["options"] = { ["desc"] = "Show Git diff for current worktree" },
+        },
         { ["action"] = "+lsp", ["key"] = "<leader>l", ["mode"] = "n" },
         {
             ["action"] = "<cmd>Telescope lsp_references<cr>",
@@ -1470,7 +1667,7 @@ do
             ["options"] = { ["desc"] = "Show diagnostics" },
         },
         {
-            ["action"] = "<cmd>lua vim.lsp.buf.rename()<cr>",
+            ["action"] = ":IncRename ",
             ["key"] = "<leader>cr",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Rename LSP symbol" },
