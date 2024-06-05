@@ -328,6 +328,64 @@ require("lazy").setup({
             },
         },
         {
+            "dashboard",
+            ["config"] = function(_, opts)
+                require("dashboard").setup(opts)
+            end,
+            ["dependencies"] = {
+                {
+                    "web-devicons",
+                    ["config"] = function(_, opts)
+                        require("nvim-web-devicons").setup(opts)
+                    end,
+                    ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/nvim-web-devicons",
+                    ["lazy"] = true,
+                    ["name"] = "web-devicons",
+                },
+                {
+                    "persistence",
+                    ["config"] = function(_, opts)
+                        require("persistence").setup(opts)
+                    end,
+                    ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/persistence.nvim",
+                    ["lazy"] = true,
+                    ["name"] = "persistence",
+                    ["opts"] = { ["options"] = vim.opt.sessionoptions:get() },
+                },
+            },
+            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/dashboard-nvim",
+            ["lazy"] = false,
+            ["name"] = "dashboard",
+            ["opts"] = {
+                ["config"] = {
+                    ["center"] = {
+                        { ["action"] = "Telescope find_files", ["desc"] = " Find File", ["icon"] = " ", ["key"] = "f" },
+                        { ["action"] = "ene | startinsert", ["desc"] = " New File", ["icon"] = " ", ["key"] = "n" },
+                        { ["action"] = "Telescope oldfiles", ["desc"] = " Recent Files", ["icon"] = " ", ["key"] = "r" },
+                        { ["action"] = "Telescope live_grep", ["desc"] = " Find Text", ["icon"] = " ", ["key"] = "g" },
+                        {
+                            ["action"] = "lua require('persistence').load()",
+                            ["desc"] = " Restore Session",
+                            ["icon"] = " ",
+                            ["key"] = "s",
+                        },
+                        { ["action"] = "Lazy", ["desc"] = " Lazy", ["icon"] = "󰒲 ", ["key"] = "l" },
+                        { ["action"] = "quitall", ["desc"] = " Quit", ["icon"] = " ", ["key"] = "q" },
+                    },
+                    ["footer"] = function()
+                        local stats = require("lazy").stats()
+                        local ms = (math.floor(stats.startuptime * 100 + 0.5) / 100)
+                        return {
+                            "⚡ Neovim loaded " .. stats.loaded .. "/" .. stats.count .. " plugins in " .. ms .. "ms",
+                        }
+                    end,
+                },
+                ["disable_move"] = true,
+                ["shortcut_type"] = "number",
+                ["theme"] = "doom",
+            },
+        },
+        {
             "flash",
             ["config"] = function(_, opts)
                 require("flash").setup(opts)
@@ -560,7 +618,8 @@ require("lazy").setup({
                 })
             end,
             ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/lualine.nvim",
-            ["lazy"] = false,
+            ["event"] = { "BufReadPost", "BufNewFile" },
+            ["lazy"] = true,
             ["name"] = "lualine",
             ["opts"] = {
                 ["extensions"] = { "fzf", "chadtree", "neo-tree", "toggleterm", "trouble" },
@@ -604,8 +663,10 @@ require("lazy").setup({
                         navic = require("nvim-navic")
                         navic.setup(opts)
 
-                        -- Register navic with lualine's winbar (NOTE: using incline currently)
-                        -- TODO: The setup function should probably only be ran once
+                        -- NOTE: Use incline, because the default winbar isn't floating and disappears
+                        --       when leavin the split, which makes the buffer jump
+                        -- Register navic with lualine's winbar
+                        -- TODO: The setup function should only be ran once
                         -- require("lualine").setup({
                         --   winbar = {
                         --     lualine_c = {
@@ -857,7 +918,7 @@ require("lazy").setup({
                 require("toggleterm").setup(opts)
             end,
             ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/toggleterm.nvim",
-            ["keys"] = { "C-/" },
+            ["keys"] = { "<C-/>" },
             ["lazy"] = true,
             ["name"] = "toggleterm",
             ["opts"] = {
@@ -869,7 +930,8 @@ require("lazy").setup({
                 ["insert_mappings"] = true,
                 ["open_mapping"] = [[<C-/>]],
                 ["persist_mode"] = true,
-                ["shade_terminals"] = true,
+                ["shade_terminals"] = false,
+                ["shading_factor"] = 30,
                 ["shell"] = "fish",
                 ["start_in_insert"] = true,
                 ["terminal_mappings"] = true,

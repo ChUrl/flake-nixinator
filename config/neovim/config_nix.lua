@@ -72,7 +72,7 @@ vim.cmd([[
 ]])
 require("lazy").setup({
     dev = {
-        path = "/nix/store/3c3iq1px7hriyhc3ihk3rl3nnvkrxa92-lazy-plugins",
+        path = "/nix/store/q1yhbib07zkkwjkj8m741506982vsgfc-lazy-plugins",
         patterns = { "." },
         fallback = false,
     },
@@ -87,7 +87,7 @@ require("lazy").setup({
     colorscheme catppuccin
   ]])
             end,
-            ["dir"] = "/nix/store/3c3iq1px7hriyhc3ihk3rl3nnvkrxa92-lazy-plugins/catppuccin-nvim",
+            ["dir"] = "/nix/store/q1yhbib07zkkwjkj8m741506982vsgfc-lazy-plugins/catppuccin-nvim",
             ["lazy"] = false,
             ["name"] = "catppuccin",
             ["opts"] = { ["background"] = { ["dark"] = "mocha", ["light"] = "latte" }, ["flavour"] = "mocha" },
@@ -98,7 +98,7 @@ require("lazy").setup({
             ["config"] = function(_, opts)
                 require("nvim-web-devicons").setup(opts)
             end,
-            ["dir"] = "/nix/store/3c3iq1px7hriyhc3ihk3rl3nnvkrxa92-lazy-plugins/nvim-web-devicons",
+            ["dir"] = "/nix/store/q1yhbib07zkkwjkj8m741506982vsgfc-lazy-plugins/nvim-web-devicons",
             ["lazy"] = true,
             ["name"] = "web-devicons",
         },
@@ -107,7 +107,7 @@ require("lazy").setup({
             ["config"] = function(_, opts)
                 require("nvim-autopairs").setup(opts)
             end,
-            ["dir"] = "/nix/store/3c3iq1px7hriyhc3ihk3rl3nnvkrxa92-lazy-plugins/nvim-autopairs",
+            ["dir"] = "/nix/store/q1yhbib07zkkwjkj8m741506982vsgfc-lazy-plugins/nvim-autopairs",
             ["event"] = { "InsertEnter" },
             ["lazy"] = true,
             ["name"] = "autopairs",
@@ -116,7 +116,7 @@ require("lazy").setup({
         {
             "bbye",
             ["cmd"] = { "Bdelete", "Bwipeout" },
-            ["dir"] = "/nix/store/3c3iq1px7hriyhc3ihk3rl3nnvkrxa92-lazy-plugins/vim-bbye",
+            ["dir"] = "/nix/store/q1yhbib07zkkwjkj8m741506982vsgfc-lazy-plugins/vim-bbye",
             ["lazy"] = true,
             ["name"] = "bbye",
         },
@@ -125,7 +125,7 @@ require("lazy").setup({
             ["config"] = function(_, opts)
                 require("better_escape").setup(opts)
             end,
-            ["dir"] = "/nix/store/3c3iq1px7hriyhc3ihk3rl3nnvkrxa92-lazy-plugins/better-escape.nvim",
+            ["dir"] = "/nix/store/q1yhbib07zkkwjkj8m741506982vsgfc-lazy-plugins/better-escape.nvim",
             ["event"] = { "InsertEnter" },
             ["lazy"] = true,
             ["name"] = "better-escape",
@@ -136,7 +136,7 @@ require("lazy").setup({
             ["config"] = function(_, opts)
                 require("clangd_extensions").setup(opts)
             end,
-            ["dir"] = "/nix/store/3c3iq1px7hriyhc3ihk3rl3nnvkrxa92-lazy-plugins/clangd_extensions.nvim",
+            ["dir"] = "/nix/store/q1yhbib07zkkwjkj8m741506982vsgfc-lazy-plugins/clangd_extensions.nvim",
             ["lazy"] = true,
             ["name"] = "clangd-extensions",
             ["opts"] = { ["inlay_hints"] = { ["inline"] = false } },
@@ -149,50 +149,50 @@ require("lazy").setup({
             ["dependencies"] = {
                 {
                     "cmp-async-path",
-                    ["dir"] = "/nix/store/3c3iq1px7hriyhc3ihk3rl3nnvkrxa92-lazy-plugins/cmp-async-path",
+                    ["dir"] = "/nix/store/q1yhbib07zkkwjkj8m741506982vsgfc-lazy-plugins/cmp-async-path",
                     ["lazy"] = true,
                     ["name"] = "cmp-async-path",
                 },
                 {
                     "cmp-buffer",
-                    ["dir"] = "/nix/store/3c3iq1px7hriyhc3ihk3rl3nnvkrxa92-lazy-plugins/cmp-buffer",
+                    ["dir"] = "/nix/store/q1yhbib07zkkwjkj8m741506982vsgfc-lazy-plugins/cmp-buffer",
                     ["enabled"] = false,
                     ["lazy"] = true,
                     ["name"] = "cmp-buffer",
                 },
                 {
                     "cmp-cmdline",
-                    ["dir"] = "/nix/store/3c3iq1px7hriyhc3ihk3rl3nnvkrxa92-lazy-plugins/cmp-cmdline",
+                    ["dir"] = "/nix/store/q1yhbib07zkkwjkj8m741506982vsgfc-lazy-plugins/cmp-cmdline",
                     ["enabled"] = false,
                     ["lazy"] = true,
                     ["name"] = "cmp-cmdline",
                 },
                 {
                     "cmp-emoji",
-                    ["dir"] = "/nix/store/3c3iq1px7hriyhc3ihk3rl3nnvkrxa92-lazy-plugins/cmp-emoji",
+                    ["dir"] = "/nix/store/q1yhbib07zkkwjkj8m741506982vsgfc-lazy-plugins/cmp-emoji",
                     ["lazy"] = true,
                     ["name"] = "cmp-emoji",
                 },
                 {
                     "cmp-nvim-lsp",
-                    ["dir"] = "/nix/store/3c3iq1px7hriyhc3ihk3rl3nnvkrxa92-lazy-plugins/cmp-nvim-lsp",
+                    ["dir"] = "/nix/store/q1yhbib07zkkwjkj8m741506982vsgfc-lazy-plugins/cmp-nvim-lsp",
                     ["lazy"] = true,
                     ["name"] = "cmp-nvim-lsp",
                 },
                 {
                     "cmp-nvim-lsp-signature-help",
-                    ["dir"] = "/nix/store/3c3iq1px7hriyhc3ihk3rl3nnvkrxa92-lazy-plugins/cmp-nvim-lsp-signature-help",
+                    ["dir"] = "/nix/store/q1yhbib07zkkwjkj8m741506982vsgfc-lazy-plugins/cmp-nvim-lsp-signature-help",
                     ["lazy"] = true,
                     ["name"] = "cmp-nvim-lsp-signature-help",
                 },
                 {
                     "cmp-luasnip",
-                    ["dir"] = "/nix/store/3c3iq1px7hriyhc3ihk3rl3nnvkrxa92-lazy-plugins/cmp_luasnip",
+                    ["dir"] = "/nix/store/q1yhbib07zkkwjkj8m741506982vsgfc-lazy-plugins/cmp_luasnip",
                     ["lazy"] = true,
                     ["name"] = "cmp-luasnip",
                 },
             },
-            ["dir"] = "/nix/store/3c3iq1px7hriyhc3ihk3rl3nnvkrxa92-lazy-plugins/nvim-cmp",
+            ["dir"] = "/nix/store/q1yhbib07zkkwjkj8m741506982vsgfc-lazy-plugins/nvim-cmp",
             ["event"] = { "InsertEnter" },
             ["lazy"] = true,
             ["name"] = "cmp",
@@ -276,12 +276,12 @@ require("lazy").setup({
 
                         require("ts_context_commentstring").setup(opts)
                     end,
-                    ["dir"] = "/nix/store/3c3iq1px7hriyhc3ihk3rl3nnvkrxa92-lazy-plugins/nvim-ts-context-commentstring",
+                    ["dir"] = "/nix/store/q1yhbib07zkkwjkj8m741506982vsgfc-lazy-plugins/nvim-ts-context-commentstring",
                     ["lazy"] = true,
                     ["name"] = "ts-context-commentstring",
                 },
             },
-            ["dir"] = "/nix/store/3c3iq1px7hriyhc3ihk3rl3nnvkrxa92-lazy-plugins/comment.nvim",
+            ["dir"] = "/nix/store/q1yhbib07zkkwjkj8m741506982vsgfc-lazy-plugins/comment.nvim",
             ["lazy"] = false,
             ["name"] = "comment",
             ["opts"] = {
@@ -298,7 +298,7 @@ require("lazy").setup({
             ["config"] = function(_, opts)
                 require("conform").setup(opts)
             end,
-            ["dir"] = "/nix/store/3c3iq1px7hriyhc3ihk3rl3nnvkrxa92-lazy-plugins/conform.nvim",
+            ["dir"] = "/nix/store/q1yhbib07zkkwjkj8m741506982vsgfc-lazy-plugins/conform.nvim",
             ["event"] = { "BufReadPost", "BufNewFile" },
             ["lazy"] = true,
             ["name"] = "conform",
@@ -328,11 +328,69 @@ require("lazy").setup({
             },
         },
         {
+            "dashboard",
+            ["config"] = function(_, opts)
+                require("dashboard").setup(opts)
+            end,
+            ["dependencies"] = {
+                {
+                    "web-devicons",
+                    ["config"] = function(_, opts)
+                        require("nvim-web-devicons").setup(opts)
+                    end,
+                    ["dir"] = "/nix/store/q1yhbib07zkkwjkj8m741506982vsgfc-lazy-plugins/nvim-web-devicons",
+                    ["lazy"] = true,
+                    ["name"] = "web-devicons",
+                },
+                {
+                    "persistence",
+                    ["config"] = function(_, opts)
+                        require("persistence").setup(opts)
+                    end,
+                    ["dir"] = "/nix/store/q1yhbib07zkkwjkj8m741506982vsgfc-lazy-plugins/persistence.nvim",
+                    ["lazy"] = true,
+                    ["name"] = "persistence",
+                    ["opts"] = { ["options"] = vim.opt.sessionoptions:get() },
+                },
+            },
+            ["dir"] = "/nix/store/q1yhbib07zkkwjkj8m741506982vsgfc-lazy-plugins/dashboard-nvim",
+            ["lazy"] = false,
+            ["name"] = "dashboard",
+            ["opts"] = {
+                ["config"] = {
+                    ["center"] = {
+                        { ["action"] = "Telescope find_files", ["desc"] = " Find File", ["icon"] = " ", ["key"] = "f" },
+                        { ["action"] = "ene | startinsert", ["desc"] = " New File", ["icon"] = " ", ["key"] = "n" },
+                        { ["action"] = "Telescope oldfiles", ["desc"] = " Recent Files", ["icon"] = " ", ["key"] = "r" },
+                        { ["action"] = "Telescope live_grep", ["desc"] = " Find Text", ["icon"] = " ", ["key"] = "g" },
+                        {
+                            ["action"] = "lua require('persistence').load()",
+                            ["desc"] = " Restore Session",
+                            ["icon"] = " ",
+                            ["key"] = "s",
+                        },
+                        { ["action"] = "Lazy", ["desc"] = " Lazy", ["icon"] = "󰒲 ", ["key"] = "l" },
+                        { ["action"] = "quitall", ["desc"] = " Quit", ["icon"] = " ", ["key"] = "q" },
+                    },
+                    ["footer"] = function()
+                        local stats = require("lazy").stats()
+                        local ms = (math.floor(stats.startuptime * 100 + 0.5) / 100)
+                        return {
+                            "⚡ Neovim loaded " .. stats.loaded .. "/" .. stats.count .. " plugins in " .. ms .. "ms",
+                        }
+                    end,
+                },
+                ["disable_move"] = true,
+                ["shortcut_type"] = "number",
+                ["theme"] = "doom",
+            },
+        },
+        {
             "flash",
             ["config"] = function(_, opts)
                 require("flash").setup(opts)
             end,
-            ["dir"] = "/nix/store/3c3iq1px7hriyhc3ihk3rl3nnvkrxa92-lazy-plugins/flash.nvim",
+            ["dir"] = "/nix/store/q1yhbib07zkkwjkj8m741506982vsgfc-lazy-plugins/flash.nvim",
             ["keys"] = { "s", "S", "f", "F", "t", "T" },
             ["lazy"] = true,
             ["name"] = "flash",
@@ -345,7 +403,7 @@ require("lazy").setup({
                     vim.g[k] = v
                 end
             end,
-            ["dir"] = "/nix/store/3c3iq1px7hriyhc3ihk3rl3nnvkrxa92-lazy-plugins/git-messenger.vim",
+            ["dir"] = "/nix/store/q1yhbib07zkkwjkj8m741506982vsgfc-lazy-plugins/git-messenger.vim",
             ["lazy"] = true,
             ["name"] = "gitmessenger",
             ["opts"] = {
@@ -358,7 +416,7 @@ require("lazy").setup({
             ["config"] = function(_, opts)
                 require("gitsigns").setup(opts)
             end,
-            ["dir"] = "/nix/store/3c3iq1px7hriyhc3ihk3rl3nnvkrxa92-lazy-plugins/gitsigns.nvim",
+            ["dir"] = "/nix/store/q1yhbib07zkkwjkj8m741506982vsgfc-lazy-plugins/gitsigns.nvim",
             ["event"] = { "BufReadPost", "BufNewFile" },
             ["lazy"] = true,
             ["name"] = "gitsigns",
@@ -366,7 +424,7 @@ require("lazy").setup({
         },
         {
             "haskell-tools",
-            ["dir"] = "/nix/store/3c3iq1px7hriyhc3ihk3rl3nnvkrxa92-lazy-plugins/haskell-tools.nvim",
+            ["dir"] = "/nix/store/q1yhbib07zkkwjkj8m741506982vsgfc-lazy-plugins/haskell-tools.nvim",
             ["lazy"] = false,
             ["name"] = "haskell-tools",
         },
@@ -375,7 +433,7 @@ require("lazy").setup({
             ["config"] = function(_, opts)
                 require("illuminate").configure(opts)
             end,
-            ["dir"] = "/nix/store/3c3iq1px7hriyhc3ihk3rl3nnvkrxa92-lazy-plugins/vim-illuminate",
+            ["dir"] = "/nix/store/q1yhbib07zkkwjkj8m741506982vsgfc-lazy-plugins/vim-illuminate",
             ["event"] = { "BufreadPost", "BufNewFile" },
             ["lazy"] = true,
             ["name"] = "illuminate",
@@ -395,7 +453,7 @@ require("lazy").setup({
         },
         {
             "intellitab",
-            ["dir"] = "/nix/store/3c3iq1px7hriyhc3ihk3rl3nnvkrxa92-lazy-plugins/intellitab.nvim",
+            ["dir"] = "/nix/store/q1yhbib07zkkwjkj8m741506982vsgfc-lazy-plugins/intellitab.nvim",
             ["event"] = { "InsertEnter" },
             ["lazy"] = true,
             ["name"] = "intellitab",
@@ -405,7 +463,7 @@ require("lazy").setup({
             ["config"] = function(_, opts)
                 require("nvim-lastplace").setup(opts)
             end,
-            ["dir"] = "/nix/store/3c3iq1px7hriyhc3ihk3rl3nnvkrxa92-lazy-plugins/nvim-lastplace",
+            ["dir"] = "/nix/store/q1yhbib07zkkwjkj8m741506982vsgfc-lazy-plugins/nvim-lastplace",
             ["lazy"] = false,
             ["name"] = "lastplace",
         },
@@ -415,12 +473,12 @@ require("lazy").setup({
             ["dependencies"] = {
                 {
                     "plenary",
-                    ["dir"] = "/nix/store/3c3iq1px7hriyhc3ihk3rl3nnvkrxa92-lazy-plugins/plenary.nvim",
+                    ["dir"] = "/nix/store/q1yhbib07zkkwjkj8m741506982vsgfc-lazy-plugins/plenary.nvim",
                     ["lazy"] = true,
                     ["name"] = "plenary",
                 },
             },
-            ["dir"] = "/nix/store/3c3iq1px7hriyhc3ihk3rl3nnvkrxa92-lazy-plugins/lazygit.nvim",
+            ["dir"] = "/nix/store/q1yhbib07zkkwjkj8m741506982vsgfc-lazy-plugins/lazygit.nvim",
             ["lazy"] = true,
             ["name"] = "lazygit",
         },
@@ -433,7 +491,7 @@ require("lazy").setup({
                     lint[k] = v
                 end
             end,
-            ["dir"] = "/nix/store/3c3iq1px7hriyhc3ihk3rl3nnvkrxa92-lazy-plugins/nvim-lint",
+            ["dir"] = "/nix/store/q1yhbib07zkkwjkj8m741506982vsgfc-lazy-plugins/nvim-lint",
             ["event"] = { "BufReadPost", "BufNewFile" },
             ["lazy"] = true,
             ["name"] = "lint",
@@ -536,12 +594,12 @@ require("lazy").setup({
                     ["config"] = function(_, opts)
                         require("lazydev").setup(opts)
                     end,
-                    ["dir"] = "/nix/store/3c3iq1px7hriyhc3ihk3rl3nnvkrxa92-lazy-plugins/vimplugin-nvim-lazydev",
+                    ["dir"] = "/nix/store/q1yhbib07zkkwjkj8m741506982vsgfc-lazy-plugins/vimplugin-nvim-lazydev",
                     ["ft"] = { "lua" },
                     ["name"] = "lazydev",
                 },
             },
-            ["dir"] = "/nix/store/3c3iq1px7hriyhc3ihk3rl3nnvkrxa92-lazy-plugins/nvim-lspconfig",
+            ["dir"] = "/nix/store/q1yhbib07zkkwjkj8m741506982vsgfc-lazy-plugins/nvim-lspconfig",
             ["event"] = { "BufReadPost", "BufNewFile" },
             ["lazy"] = true,
             ["name"] = "lspconfig",
@@ -559,8 +617,9 @@ require("lazy").setup({
                     unhide = false,
                 })
             end,
-            ["dir"] = "/nix/store/3c3iq1px7hriyhc3ihk3rl3nnvkrxa92-lazy-plugins/lualine.nvim",
-            ["lazy"] = false,
+            ["dir"] = "/nix/store/q1yhbib07zkkwjkj8m741506982vsgfc-lazy-plugins/lualine.nvim",
+            ["event"] = { "BufReadPost", "BufNewFile" },
+            ["lazy"] = true,
             ["name"] = "lualine",
             ["opts"] = {
                 ["extensions"] = { "fzf", "chadtree", "neo-tree", "toggleterm", "trouble" },
@@ -586,7 +645,7 @@ require("lazy").setup({
             ["config"] = function(_, opts)
                 require("luasnip").config.set_config(opts)
             end,
-            ["dir"] = "/nix/store/3c3iq1px7hriyhc3ihk3rl3nnvkrxa92-lazy-plugins/luasnip",
+            ["dir"] = "/nix/store/q1yhbib07zkkwjkj8m741506982vsgfc-lazy-plugins/luasnip",
             ["lazy"] = false,
             ["name"] = "luasnip",
         },
@@ -604,8 +663,10 @@ require("lazy").setup({
                         navic = require("nvim-navic")
                         navic.setup(opts)
 
-                        -- Register navic with lualine's winbar (NOTE: using incline currently)
-                        -- TODO: The setup function should probably only be ran once
+                        -- NOTE: Use incline, because the default winbar isn't floating and disappears
+                        --       when leavin the split, which makes the buffer jump
+                        -- Register navic with lualine's winbar
+                        -- TODO: The setup function should only be ran once
                         -- require("lualine").setup({
                         --   winbar = {
                         --     lualine_c = {
@@ -621,7 +682,7 @@ require("lazy").setup({
                         --   }
                         -- })
                     end,
-                    ["dir"] = "/nix/store/3c3iq1px7hriyhc3ihk3rl3nnvkrxa92-lazy-plugins/nvim-navic",
+                    ["dir"] = "/nix/store/q1yhbib07zkkwjkj8m741506982vsgfc-lazy-plugins/nvim-navic",
                     ["lazy"] = true,
                     ["name"] = "navic",
                     ["opts"] = {
@@ -632,7 +693,7 @@ require("lazy").setup({
                     },
                 },
             },
-            ["dir"] = "/nix/store/3c3iq1px7hriyhc3ihk3rl3nnvkrxa92-lazy-plugins/nvim-navbuddy",
+            ["dir"] = "/nix/store/q1yhbib07zkkwjkj8m741506982vsgfc-lazy-plugins/nvim-navbuddy",
             ["lazy"] = true,
             ["name"] = "navbuddy",
             ["opts"] = { ["lsp"] = { ["auto_attach"] = true }, ["window"] = { ["border"] = "rounded" } },
@@ -646,7 +707,7 @@ require("lazy").setup({
             ["dependencies"] = {
                 {
                     "plenary",
-                    ["dir"] = "/nix/store/3c3iq1px7hriyhc3ihk3rl3nnvkrxa92-lazy-plugins/plenary.nvim",
+                    ["dir"] = "/nix/store/q1yhbib07zkkwjkj8m741506982vsgfc-lazy-plugins/plenary.nvim",
                     ["lazy"] = true,
                     ["name"] = "plenary",
                 },
@@ -655,18 +716,18 @@ require("lazy").setup({
                     ["config"] = function(_, opts)
                         require("nvim-web-devicons").setup(opts)
                     end,
-                    ["dir"] = "/nix/store/3c3iq1px7hriyhc3ihk3rl3nnvkrxa92-lazy-plugins/nvim-web-devicons",
+                    ["dir"] = "/nix/store/q1yhbib07zkkwjkj8m741506982vsgfc-lazy-plugins/nvim-web-devicons",
                     ["lazy"] = true,
                     ["name"] = "web-devicons",
                 },
                 {
                     "nui",
-                    ["dir"] = "/nix/store/3c3iq1px7hriyhc3ihk3rl3nnvkrxa92-lazy-plugins/nui.nvim",
+                    ["dir"] = "/nix/store/q1yhbib07zkkwjkj8m741506982vsgfc-lazy-plugins/nui.nvim",
                     ["lazy"] = true,
                     ["name"] = "nui",
                 },
             },
-            ["dir"] = "/nix/store/3c3iq1px7hriyhc3ihk3rl3nnvkrxa92-lazy-plugins/neo-tree.nvim",
+            ["dir"] = "/nix/store/q1yhbib07zkkwjkj8m741506982vsgfc-lazy-plugins/neo-tree.nvim",
             ["lazy"] = true,
             ["name"] = "neo-tree",
             ["opts"] = {
@@ -709,18 +770,18 @@ require("lazy").setup({
                         vim.notify = require("notify")
                         require("notify").setup(opts)
                     end,
-                    ["dir"] = "/nix/store/3c3iq1px7hriyhc3ihk3rl3nnvkrxa92-lazy-plugins/nvim-notify",
+                    ["dir"] = "/nix/store/q1yhbib07zkkwjkj8m741506982vsgfc-lazy-plugins/nvim-notify",
                     ["lazy"] = true,
                     ["name"] = "notify",
                 },
                 {
                     "nui",
-                    ["dir"] = "/nix/store/3c3iq1px7hriyhc3ihk3rl3nnvkrxa92-lazy-plugins/nui.nvim",
+                    ["dir"] = "/nix/store/q1yhbib07zkkwjkj8m741506982vsgfc-lazy-plugins/nui.nvim",
                     ["lazy"] = true,
                     ["name"] = "nui",
                 },
             },
-            ["dir"] = "/nix/store/3c3iq1px7hriyhc3ihk3rl3nnvkrxa92-lazy-plugins/noice.nvim",
+            ["dir"] = "/nix/store/q1yhbib07zkkwjkj8m741506982vsgfc-lazy-plugins/noice.nvim",
             ["lazy"] = false,
             ["name"] = "noice",
             ["opts"] = {
@@ -758,25 +819,25 @@ require("lazy").setup({
         },
         {
             "rainbow-delimiters",
-            ["dir"] = "/nix/store/3c3iq1px7hriyhc3ihk3rl3nnvkrxa92-lazy-plugins/rainbow-delimiters.nvim",
+            ["dir"] = "/nix/store/q1yhbib07zkkwjkj8m741506982vsgfc-lazy-plugins/rainbow-delimiters.nvim",
             ["lazy"] = false,
             ["name"] = "rainbow-delimiters",
         },
         {
             "rustaceanvim",
-            ["dir"] = "/nix/store/3c3iq1px7hriyhc3ihk3rl3nnvkrxa92-lazy-plugins/rustaceanvim",
+            ["dir"] = "/nix/store/q1yhbib07zkkwjkj8m741506982vsgfc-lazy-plugins/rustaceanvim",
             ["lazy"] = false,
             ["name"] = "rustaceanvim",
         },
         {
             "sandwich",
-            ["dir"] = "/nix/store/3c3iq1px7hriyhc3ihk3rl3nnvkrxa92-lazy-plugins/vim-sandwich",
+            ["dir"] = "/nix/store/q1yhbib07zkkwjkj8m741506982vsgfc-lazy-plugins/vim-sandwich",
             ["lazy"] = false,
             ["name"] = "sandwich",
         },
         {
             "sleuth",
-            ["dir"] = "/nix/store/3c3iq1px7hriyhc3ihk3rl3nnvkrxa92-lazy-plugins/vim-sleuth",
+            ["dir"] = "/nix/store/q1yhbib07zkkwjkj8m741506982vsgfc-lazy-plugins/vim-sleuth",
             ["lazy"] = false,
             ["name"] = "sleuth",
         },
@@ -794,30 +855,30 @@ require("lazy").setup({
             ["dependencies"] = {
                 {
                     "plenary",
-                    ["dir"] = "/nix/store/3c3iq1px7hriyhc3ihk3rl3nnvkrxa92-lazy-plugins/plenary.nvim",
+                    ["dir"] = "/nix/store/q1yhbib07zkkwjkj8m741506982vsgfc-lazy-plugins/plenary.nvim",
                     ["lazy"] = true,
                     ["name"] = "plenary",
                 },
                 {
                     "telescope-fzf-native",
-                    ["dir"] = "/nix/store/3c3iq1px7hriyhc3ihk3rl3nnvkrxa92-lazy-plugins/telescope-fzf-native.nvim",
+                    ["dir"] = "/nix/store/q1yhbib07zkkwjkj8m741506982vsgfc-lazy-plugins/telescope-fzf-native.nvim",
                     ["lazy"] = true,
                     ["name"] = "telescope-fzf-native",
                 },
                 {
                     "telescope-undo",
-                    ["dir"] = "/nix/store/3c3iq1px7hriyhc3ihk3rl3nnvkrxa92-lazy-plugins/telescope-undo.nvim",
+                    ["dir"] = "/nix/store/q1yhbib07zkkwjkj8m741506982vsgfc-lazy-plugins/telescope-undo.nvim",
                     ["lazy"] = true,
                     ["name"] = "telescope-undo",
                 },
                 {
                     "telescope-ui-select",
-                    ["dir"] = "/nix/store/3c3iq1px7hriyhc3ihk3rl3nnvkrxa92-lazy-plugins/telescope-ui-select.nvim",
+                    ["dir"] = "/nix/store/q1yhbib07zkkwjkj8m741506982vsgfc-lazy-plugins/telescope-ui-select.nvim",
                     ["lazy"] = true,
                     ["name"] = "telescope-ui-select",
                 },
             },
-            ["dir"] = "/nix/store/3c3iq1px7hriyhc3ihk3rl3nnvkrxa92-lazy-plugins/telescope.nvim",
+            ["dir"] = "/nix/store/q1yhbib07zkkwjkj8m741506982vsgfc-lazy-plugins/telescope.nvim",
             ["lazy"] = true,
             ["name"] = "telescope",
             ["opts"] = {
@@ -840,12 +901,12 @@ require("lazy").setup({
             ["dependencies"] = {
                 {
                     "plenary",
-                    ["dir"] = "/nix/store/3c3iq1px7hriyhc3ihk3rl3nnvkrxa92-lazy-plugins/plenary.nvim",
+                    ["dir"] = "/nix/store/q1yhbib07zkkwjkj8m741506982vsgfc-lazy-plugins/plenary.nvim",
                     ["lazy"] = true,
                     ["name"] = "plenary",
                 },
             },
-            ["dir"] = "/nix/store/3c3iq1px7hriyhc3ihk3rl3nnvkrxa92-lazy-plugins/todo-comments.nvim",
+            ["dir"] = "/nix/store/q1yhbib07zkkwjkj8m741506982vsgfc-lazy-plugins/todo-comments.nvim",
             ["event"] = { "BufReadPost", "BufNewFile" },
             ["lazy"] = true,
             ["name"] = "todo-comments",
@@ -856,8 +917,8 @@ require("lazy").setup({
             ["config"] = function(_, opts)
                 require("toggleterm").setup(opts)
             end,
-            ["dir"] = "/nix/store/3c3iq1px7hriyhc3ihk3rl3nnvkrxa92-lazy-plugins/toggleterm.nvim",
-            ["keys"] = { "C-/" },
+            ["dir"] = "/nix/store/q1yhbib07zkkwjkj8m741506982vsgfc-lazy-plugins/toggleterm.nvim",
+            ["keys"] = { "<C-/>" },
             ["lazy"] = true,
             ["name"] = "toggleterm",
             ["opts"] = {
@@ -869,7 +930,8 @@ require("lazy").setup({
                 ["insert_mappings"] = true,
                 ["open_mapping"] = [[<C-/>]],
                 ["persist_mode"] = true,
-                ["shade_terminals"] = true,
+                ["shade_terminals"] = false,
+                ["shading_factor"] = 30,
                 ["shell"] = "fish",
                 ["start_in_insert"] = true,
                 ["terminal_mappings"] = true,
@@ -887,7 +949,7 @@ require("lazy").setup({
 
                 require("nvim-treesitter.configs").setup(opts)
             end,
-            ["dir"] = "/nix/store/3c3iq1px7hriyhc3ihk3rl3nnvkrxa92-lazy-plugins/nvim-treesitter",
+            ["dir"] = "/nix/store/q1yhbib07zkkwjkj8m741506982vsgfc-lazy-plugins/nvim-treesitter",
             ["event"] = { "BufReadPost", "BufNewFile" },
             ["lazy"] = true,
             ["name"] = "treesitter",
@@ -912,7 +974,7 @@ require("lazy").setup({
             ["config"] = function(_, opts)
                 require("trim").setup(opts)
             end,
-            ["dir"] = "/nix/store/3c3iq1px7hriyhc3ihk3rl3nnvkrxa92-lazy-plugins/trim.nvim",
+            ["dir"] = "/nix/store/q1yhbib07zkkwjkj8m741506982vsgfc-lazy-plugins/trim.nvim",
             ["lazy"] = false,
             ["name"] = "trim",
         },
@@ -922,7 +984,7 @@ require("lazy").setup({
             ["config"] = function(_, opts)
                 require("trouble").setup(opts)
             end,
-            ["dir"] = "/nix/store/3c3iq1px7hriyhc3ihk3rl3nnvkrxa92-lazy-plugins/trouble.nvim",
+            ["dir"] = "/nix/store/q1yhbib07zkkwjkj8m741506982vsgfc-lazy-plugins/trouble.nvim",
             ["lazy"] = true,
             ["name"] = "trouble",
         },
@@ -934,12 +996,12 @@ require("lazy").setup({
             ["dependencies"] = {
                 {
                     "promise",
-                    ["dir"] = "/nix/store/3c3iq1px7hriyhc3ihk3rl3nnvkrxa92-lazy-plugins/promise-async",
+                    ["dir"] = "/nix/store/q1yhbib07zkkwjkj8m741506982vsgfc-lazy-plugins/promise-async",
                     ["lazy"] = true,
                     ["name"] = "promise",
                 },
             },
-            ["dir"] = "/nix/store/3c3iq1px7hriyhc3ihk3rl3nnvkrxa92-lazy-plugins/nvim-ufo",
+            ["dir"] = "/nix/store/q1yhbib07zkkwjkj8m741506982vsgfc-lazy-plugins/nvim-ufo",
             ["lazy"] = false,
             ["name"] = "ufo",
         },
@@ -948,7 +1010,7 @@ require("lazy").setup({
             ["config"] = function(_, opts)
                 require("which-key").setup(opts)
             end,
-            ["dir"] = "/nix/store/3c3iq1px7hriyhc3ihk3rl3nnvkrxa92-lazy-plugins/which-key.nvim",
+            ["dir"] = "/nix/store/q1yhbib07zkkwjkj8m741506982vsgfc-lazy-plugins/which-key.nvim",
             ["lazy"] = false,
             ["name"] = "which-key",
             ["priority"] = 500,
@@ -959,7 +1021,7 @@ require("lazy").setup({
             ["config"] = function(_, opts)
                 require("yanky").setup(opts)
             end,
-            ["dir"] = "/nix/store/3c3iq1px7hriyhc3ihk3rl3nnvkrxa92-lazy-plugins/yanky.nvim",
+            ["dir"] = "/nix/store/q1yhbib07zkkwjkj8m741506982vsgfc-lazy-plugins/yanky.nvim",
             ["lazy"] = true,
             ["name"] = "yanky",
         },
