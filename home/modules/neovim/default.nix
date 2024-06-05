@@ -132,8 +132,6 @@ in {
       keymaps = import ./keybinds.nix {inherit lib mylib;};
 
       # TODO: Incremental LSP rename
-      # TODO: Dashboard
-      # TODO: Configure lazy-loading correctly with handlers
       plugins.lazy = {
         enable = true;
 
@@ -470,6 +468,95 @@ in {
             };
           };
 
+          _persistence = {
+            name = "persistence";
+            pkg = pkgs.vimPlugins.persistence-nvim;
+            lazy = true;
+            config = ''
+              function(_, opts)
+                require("persistence").setup(opts);
+              end
+            '';
+            opts = {
+              options.__raw = "vim.opt.sessionoptions:get()";
+            };
+          };
+
+          dashboard = {
+            name = "dashboard";
+            pkg = pkgs.vimPlugins.dashboard-nvim;
+            dependencies = [
+              _web-devicons
+              _persistence
+            ];
+            lazy = false;
+            config = ''
+              function(_, opts)
+                require("dashboard").setup(opts)
+              end
+            '';
+            opts = {
+              theme = "doom";
+              disable_move = true;
+              shortcut_type = "number";
+
+              config = {
+                center = [
+                  {
+                    action = "Telescope find_files";
+                    desc = " Find File";
+                    icon = " ";
+                    key = "f";
+                  }
+                  {
+                    action = "ene | startinsert";
+                    desc = " New File";
+                    icon = " ";
+                    key = "n";
+                  }
+                  {
+                    action = "Telescope oldfiles";
+                    desc = " Recent Files";
+                    icon = " ";
+                    key = "r";
+                  }
+                  {
+                    action = "Telescope live_grep";
+                    desc = " Find Text";
+                    icon = " ";
+                    key = "g";
+                  }
+                  {
+                    action = "lua require('persistence').load()";
+                    desc = " Restore Session";
+                    icon = " ";
+                    key = "s";
+                  }
+                  {
+                    action = "Lazy";
+                    desc = " Lazy";
+                    icon = "󰒲 ";
+                    key = "l";
+                  }
+                  {
+                    action = "quitall";
+                    desc = " Quit";
+                    icon = " ";
+                    key = "q";
+                  }
+                ];
+
+                footer.__raw = ''
+                  function()
+                    local stats = require("lazy").stats()
+                    local ms = (math.floor(stats.startuptime * 100 + 0.5) / 100)
+                    return { "⚡ Neovim loaded " .. stats.loaded .. "/" .. stats.count .. " plugins in " .. ms .. "ms" }
+                  end,
+                '';
+              };
+            };
+          };
+
           flash = {
             name = "flash";
             pkg = pkgs.vimPlugins.flash-nvim;
@@ -602,8 +689,10 @@ in {
                 navic = require("nvim-navic")
                 navic.setup(opts)
 
-                -- Register navic with lualine's winbar (NOTE: using incline currently)
-                -- TODO: The setup function should probably only be ran once
+                -- NOTE: Use incline, because the default winbar isn't floating and disappears
+                --       when leavin the split, which makes the buffer jump
+                -- Register navic with lualine's winbar
+                -- TODO: The setup function should only be ran once
                 -- require("lualine").setup({
                 --   winbar = {
                 --     lualine_c = {
@@ -873,7 +962,8 @@ in {
           lualine = {
             name = "lualine";
             pkg = pkgs.vimPlugins.lualine-nvim;
-            lazy = false;
+            lazy = true;
+            event = ["BufReadPost" "BufNewFile"];
             config = ''
               function(_, opts)
                 local lualine = require("lualine")
@@ -1217,7 +1307,8 @@ in {
             opts = {
               open_mapping.__raw = "[[<C-/>]]";
               hide_numbers = true;
-              shade_terminals = true;
+              shade_terminals = false;
+              shading_factor = 30; # Default is -30 to darken the terminal
               start_in_insert = true;
               terminal_mappings = true;
               persist_mode = true;
@@ -1439,6 +1530,7 @@ in {
           # colorizer # TODO: Only colorize html/css/scss/sass...
           comment
           conform
+          dashboard
           flash
           gitmessenger
           gitsigns
@@ -1478,12 +1570,6 @@ in {
       # TODO: Figure out how debugging from nvim works...
       # Debug-Adapter-Protocol
       # dap = {
-      #   enable = true;
-      # };
-
-      # TODO:
-      # Dashboard
-      # dashboard = {
       #   enable = true;
       # };
 
