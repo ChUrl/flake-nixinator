@@ -131,7 +131,6 @@ in {
       # TODO: Incremental selection
       keymaps = import ./keybinds.nix {inherit lib mylib;};
 
-      # TODO: Incremental LSP rename
       plugins.lazy = {
         enable = true;
 
@@ -214,7 +213,7 @@ in {
           #   };
           # };
 
-          # TODO: In LazyVim require("clang_extensions").setup(opts) is called where opts is the server definition from lspconfig...
+          # NOTE: In LazyVim require("clang_extensions").setup(opts) is called where opts is the server definition from lspconfig...
           clangd-extensions = {
             name = "clangd-extensions";
             pkg = pkgs.vimPlugins.clangd_extensions-nvim;
@@ -373,6 +372,7 @@ in {
             '';
           };
 
+          # TODO: Only colorize html/css/scss/sass/etc.
           colorizer = {
             name = "colorizer";
             pkg = pkgs.vimPlugins.nvim-colorizer-lua;
@@ -408,7 +408,7 @@ in {
             name = "comment";
             pkg = pkgs.vimPlugins.comment-nvim;
             lazy = false;
-            # keys = ["<C-c>" "<C-b>"]; # TODO: This list only works in normal mode
+            # keys = ["<C-c>" "<C-b>"]; # NOTE: This list only works in normal mode
             dependencies = [
               _ts-context-commentstring
             ];
@@ -1705,7 +1705,7 @@ in {
           # chadtree # NOTE: Using neo-tree
           clangd-extensions
           cmp
-          # colorizer # TODO: Only colorize html/css/scss/sass...
+          # colorizer
           comment
           conform
           dashboard
