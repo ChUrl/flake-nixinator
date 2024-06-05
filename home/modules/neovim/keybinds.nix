@@ -492,6 +492,13 @@
       action = "<C-w>p";
       options.desc = "Goto other window";
     }
+
+    {
+      mode = "n";
+      key = "<leader>wm";
+      action = "<cmd>WinShift<cr>";
+      options.desc = "Move window";
+    }
   ];
 
   leader-toggles = [
