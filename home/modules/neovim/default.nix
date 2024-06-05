@@ -1208,7 +1208,7 @@ in {
             pkg = pkgs.vimPlugins.toggleterm-nvim;
             lazy = true;
             cmd = ["ToggleTerm"];
-            keys = ["C-/"];
+            keys = ["<C-/>"];
             config = ''
               function(_, opts)
                 require("toggleterm").setup(opts)
