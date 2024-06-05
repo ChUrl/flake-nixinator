@@ -1208,13 +1208,14 @@ in {
             pkg = pkgs.vimPlugins.toggleterm-nvim;
             lazy = true;
             cmd = ["ToggleTerm"];
+            keys = ["C-/"];
             config = ''
               function(_, opts)
                 require("toggleterm").setup(opts)
               end
             '';
             opts = {
-              open_mapping = {__raw = "[[<C-/>]]";};
+              open_mapping.__raw = "[[<C-/>]]";
               hide_numbers = true;
               shade_terminals = true;
               start_in_insert = true;
