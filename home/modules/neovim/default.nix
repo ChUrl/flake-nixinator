@@ -486,37 +486,42 @@ in {
               autosave = true;
               autoload = false;
               follow_cwd = true;
-            };
-          };
-
-          _project = {
-            name = "project";
-            pkg = pkgs.vimPlugins.project-nvim;
-            dependencies = [telescope];
-            lazy = true;
-            config = ''
-              function(_, opts)
-                require("project_nvim").setup(opts)
-              end
-            '';
-            opts = {
-              manual_mode = false;
-
-              detection_methods = [
-                "lsp"
-                "pattern"
-              ];
-
-              # exclude_dirs = [];
-
-              patterns = [
-                ".git"
-                "Makefile"
-                "CMakeLists.txt"
-                "flake.nix"
+              ignored_dirs = [
+                "/"
+                "~/"
+                "~/Projects/"
               ];
             };
           };
+
+          # _project = {
+          #   name = "project";
+          #   pkg = pkgs.vimPlugins.project-nvim;
+          #   dependencies = [telescope];
+          #   lazy = true;
+          #   config = ''
+          #     function(_, opts)
+          #       require("project_nvim").setup(opts)
+          #     end
+          #   '';
+          #   opts = {
+          #     manual_mode = false;
+          #
+          #     detection_methods = [
+          #       "lsp"
+          #       "pattern"
+          #     ];
+          #
+          #     # exclude_dirs = [];
+          #
+          #     patterns = [
+          #       ".git"
+          #       "Makefile"
+          #       "CMakeLists.txt"
+          #       "flake.nix"
+          #     ];
+          #   };
+          # };
 
           dashboard = {
             name = "dashboard";
@@ -525,7 +530,7 @@ in {
               _web-devicons
               # _persistence
               _persisted
-              _project
+              # _project
             ];
             lazy = false;
             config = ''
@@ -540,12 +545,12 @@ in {
 
               config = {
                 center = [
-                  {
-                    action = "Telescope projects";
-                    desc = " Open Project";
-                    icon = " ";
-                    key = "p";
-                  }
+                  # {
+                  #   action = "Telescope projects";
+                  #   desc = " Open Project";
+                  #   icon = " ";
+                  #   key = "p";
+                  # }
                   {
                     action = "Telescope persisted";
                     desc = " Restore Session";
@@ -1293,7 +1298,49 @@ in {
             name = "rustaceanvim";
             pkg = pkgs.vimPlugins.rustaceanvim;
             lazy = false; # Recommended by author
+
             # Don't call setup!
+
+            # TODO: Configure this in depth
+            init = ''
+              function()
+                vim.g.rustaceanvim = {
+                  tools = {
+                    enable_clippy = true,
+                  },
+
+                  server = {
+                    default_settings = {
+                      ["rust-analyzer"] = {
+                        cargo = {
+                          allFeatures = true,
+                          -- features = "all",
+                          -- loadOutDirsFromCheck = true,
+                          -- runBuildScripts = true,
+                        },
+
+                        -- lint-nvim doesn't support clippy
+                        checkOnSave = {
+                          allFeatures = true,
+                          allTargets = true,
+                          command = "clippy",
+                          extraArgs = {
+                            "--",
+                            "--no-deps",
+                            "-Dclippy::pedantic",
+                            "-Dclippy::nursery",
+                            "-Dclippy::unwrap_used",
+                            "-Dclippy::enum_glob_use",
+                            "-Dclippy::complexity",
+                            "-Dclippy::perf",
+                          },
+                        },
+                      },
+                    },
+                  },
+                };
+              end
+            '';
           };
 
           sandwich = {
@@ -1673,6 +1720,32 @@ in {
             '';
           };
 
+          winshift = {
+            name = "winshift";
+            pkg = pkgs.vimPlugins.winshift-nvim;
+            lazy = true;
+            cmd = ["WinShift"];
+            config = ''
+              function(_, opts)
+                require("winshift").setup(opts)
+              end
+            '';
+            opts = {
+              highlight_moving_win = true;
+
+              keymaps = {
+                disable_defaults = true;
+
+                win_move_mode = {
+                  "h" = "left";
+                  "j" = "down";
+                  "k" = "up";
+                  "l" = "right";
+                };
+              };
+            };
+          };
+
           yanky = {
             name = "yanky"; # TODO: Bindings
             pkg = pkgs.vimPlugins.yanky-nvim;
@@ -1742,6 +1815,7 @@ in {
           ufo
           vimtex
           which-key
+          winshift
           yanky
         ];
       };
