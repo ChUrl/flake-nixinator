@@ -1,0 +1,11 @@
+:WinShift	winshift.txt	/*:WinShift*
+Win-Move-mode	winshift.txt	/*Win-Move-mode*
+winshift	winshift.txt	/*winshift*
+winshift-caveats	winshift.txt	/*winshift-caveats*
+winshift-commands	winshift.txt	/*winshift-commands*
+winshift-config	winshift.txt	/*winshift-config*
+winshift-usage	winshift.txt	/*winshift-usage*
+winshift.changelog	winshift_changelog.txt	/*winshift.changelog*
+winshift.changelog-11	winshift_changelog.txt	/*winshift.changelog-11*
+winshift.nvim	winshift.txt	/*winshift.nvim*
+winshift.txt	winshift.txt	/*winshift.txt*

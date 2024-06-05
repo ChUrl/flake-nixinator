@@ -410,76 +410,9 @@ require("lazy").setup({
                         ["autoload"] = false,
                         ["autosave"] = true,
                         ["follow_cwd"] = true,
+                        ["ignored_dirs"] = { "/", "~/", "~/Projects/" },
                         ["silent"] = false,
                         ["use_git_branch"] = false,
-                    },
-                },
-                {
-                    "project",
-                    ["config"] = function(_, opts)
-                        require("project_nvim").setup(opts)
-                    end,
-                    ["dependencies"] = {
-                        {
-                            "telescope",
-                            ["cmd"] = { "Telescope" },
-                            ["config"] = function(_, opts)
-                                local telescope = require("telescope")
-                                telescope.setup(opts)
-
-                                for i, extension in ipairs({ "undo", "ui-select", "fzf" }) do
-                                    telescope.load_extension(extension)
-                                end
-                            end,
-                            ["dependencies"] = {
-                                {
-                                    "plenary",
-                                    ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/plenary.nvim",
-                                    ["lazy"] = true,
-                                    ["name"] = "plenary",
-                                },
-                                {
-                                    "telescope-fzf-native",
-                                    ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/telescope-fzf-native.nvim",
-                                    ["lazy"] = true,
-                                    ["name"] = "telescope-fzf-native",
-                                },
-                                {
-                                    "telescope-undo",
-                                    ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/telescope-undo.nvim",
-                                    ["lazy"] = true,
-                                    ["name"] = "telescope-undo",
-                                },
-                                {
-                                    "telescope-ui-select",
-                                    ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/telescope-ui-select.nvim",
-                                    ["lazy"] = true,
-                                    ["name"] = "telescope-ui-select",
-                                },
-                            },
-                            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/telescope.nvim",
-                            ["lazy"] = true,
-                            ["name"] = "telescope",
-                            ["opts"] = {
-                                ["defaults"] = {
-                                    ["mappings"] = {
-                                        ["i"] = {
-                                            ["<Esc>"] = function(...)
-                                                return require("telescope.actions").close(...)
-                                            end,
-                                        },
-                                    },
-                                },
-                            },
-                        },
-                    },
-                    ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/project.nvim",
-                    ["lazy"] = true,
-                    ["name"] = "project",
-                    ["opts"] = {
-                        ["detection_methods"] = { "lsp", "pattern" },
-                        ["manual_mode"] = false,
-                        ["patterns"] = { ".git", "Makefile", "CMakeLists.txt", "flake.nix" },
                     },
                 },
             },
@@ -489,7 +422,6 @@ require("lazy").setup({
             ["opts"] = {
                 ["config"] = {
                     ["center"] = {
-                        { ["action"] = "Telescope projects", ["desc"] = " Open Project", ["icon"] = " ", ["key"] = "p" },
                         {
                             ["action"] = "Telescope persisted",
                             ["desc"] = " Restore Session",
@@ -983,6 +915,43 @@ require("lazy").setup({
         {
             "rustaceanvim",
             ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/rustaceanvim",
+            ["init"] = function()
+                vim.g.rustaceanvim = {
+                    tools = {
+                        enable_clippy = true,
+                    },
+
+                    server = {
+                        default_settings = {
+                            ["rust-analyzer"] = {
+                                cargo = {
+                                    allFeatures = true,
+                                    -- features = "all",
+                                    -- loadOutDirsFromCheck = true,
+                                    -- runBuildScripts = true,
+                                },
+
+                                -- lint-nvim doesn't support clippy
+                                checkOnSave = {
+                                    allFeatures = true,
+                                    allTargets = true,
+                                    command = "clippy",
+                                    extraArgs = {
+                                        "--",
+                                        "--no-deps",
+                                        "-Dclippy::pedantic",
+                                        "-Dclippy::nursery",
+                                        "-Dclippy::unwrap_used",
+                                        "-Dclippy::enum_glob_use",
+                                        "-Dclippy::complexity",
+                                        "-Dclippy::perf",
+                                    },
+                                },
+                            },
+                        },
+                    },
+                }
+            end,
             ["lazy"] = false,
             ["name"] = "rustaceanvim",
         },
@@ -1192,6 +1161,23 @@ require("lazy").setup({
             ["lazy"] = false,
             ["name"] = "which-key",
             ["priority"] = 500,
+        },
+        {
+            "winshift",
+            ["cmd"] = { "WinShift" },
+            ["config"] = function(_, opts)
+                require("winshift").setup(opts)
+            end,
+            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/winshift.nvim",
+            ["lazy"] = true,
+            ["name"] = "winshift",
+            ["opts"] = {
+                ["highlight_moving_win"] = true,
+                ["keymaps"] = {
+                    ["disable_defaults"] = true,
+                    ["win_move_mode"] = { ["h"] = "left", ["j"] = "down", ["k"] = "up", ["l"] = "right" },
+                },
+            },
         },
         {
             "yanky",
@@ -1518,6 +1504,12 @@ do
         { ["action"] = "<C-w>p", ["key"] = "<leader>ww", ["mode"] = "n", ["options"] = {
             ["desc"] = "Goto other window",
         } },
+        {
+            ["action"] = "<cmd>WinShift<cr>",
+            ["key"] = "<leader>wm",
+            ["mode"] = "n",
+            ["options"] = { ["desc"] = "Move window" },
+        },
         { ["action"] = "+toggle", ["key"] = "<leader>t", ["mode"] = "n" },
         {
             ["action"] = "<cmd>Neotree action=show toggle=true<cr><C-w>=",
