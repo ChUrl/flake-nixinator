@@ -203,13 +203,13 @@
     # Flash/Search
     {
       mode = "n";
-      key = "s"; # TODO: Key doesn't work
+      key = "s";
       action = "<cmd>lua require('flash').jump()<cr>";
       options.desc = "Flash jump";
     }
     {
       mode = "n";
-      key = "S"; # TODO: Key doesn't work
+      key = "S";
       action = "<cmd>lua require('flash').treesitter()<cr>";
       options.desc = "Flash treesitter";
     }
@@ -217,7 +217,7 @@
     # Various
     {
       mode = "n";
-      key = "<C-h>";
+      key = "<C-S-h>";
       action = "<cmd>nohlsearch<cr>";
       options.desc = "Clear search highlights";
     }
@@ -252,18 +252,19 @@
       options.desc = "Show Lazy";
     }
 
-    {
-      mode = "n";
-      key = "<leader>s";
-      action = "<cmd>w<cr>";
-      options.desc = "Save current buffer";
-    }
-    {
-      mode = "n";
-      key = "<leader>S";
-      action = "<cmd>wa<cr>";
-      options.desc = "Save all buffers";
-    }
+    # Already have <C-s> and <C-S-s>
+    # {
+    #   mode = "n";
+    #   key = "<leader>s";
+    #   action = "<cmd>w<cr>";
+    #   options.desc = "Save current buffer";
+    # }
+    # {
+    #   mode = "n";
+    #   key = "<leader>S";
+    #   action = "<cmd>wa<cr>";
+    #   options.desc = "Save all buffers";
+    # }
 
     {
       mode = "n";
@@ -286,6 +287,18 @@
     }
     {
       mode = "n";
+      key = "<leader>p";
+      action = "<cmd>Telescope projects<cr>";
+      options.desc = "Open project";
+    }
+    {
+      mode = "n";
+      key = "<leader>s";
+      action = "<cmd>Telescope persisted<cr>";
+      options.desc = "Restore session";
+    }
+    {
+      mode = "n";
       key = "<leader>o";
       action = "<cmd>Telescope vim_options<cr>";
       options.desc = "Show Vim options";
@@ -303,8 +316,14 @@
       options.desc = "Find in working directory";
     }
     {
-      mode = "n";
+      mode = "v";
       key = "<leader>n";
+      action = ":NR!<cr>";
+      options.desc = "Narrow region";
+    }
+    {
+      mode = "n";
+      key = "<leader>N";
       action = "<cmd>Telescope notify<cr>";
       options.desc = "Show notify history";
     }
@@ -349,6 +368,12 @@
       key = "<leader>h";
       action = "<cmd>Telescope help_tags<cr>";
       options.desc = "Show help tags";
+    }
+    {
+      mode = "n";
+      key = "<leader>T";
+      action = "<cmd>TodoTelescope<cr>";
+      options.desc = "Show TODOs";
     }
   ];
 
@@ -496,8 +521,14 @@
     {
       mode = "n";
       key = "<leader>td";
-      action = "<cmd>TroubleToggle focus=false<cr>";
-      options.desc = "Toggle Trouble";
+      action = "<cmd>TroubleToggle workspace_diagnostics focus=false<cr>";
+      options.desc = "Toggle Trouble diagnostics";
+    }
+    {
+      mode = "n";
+      key = "<leader>tT";
+      action = "<cmd>TroubleToggle todo focus=false<cr>";
+      options.desc = "Toggle Trouble TODOs";
     }
 
     {
@@ -572,6 +603,12 @@
       action = "<cmd>Telescope git_bcommits<cr>";
       options.desc = "Show Git log for current file";
     }
+    {
+      mode = "n";
+      key = "<leader>gd";
+      action = "<cmd>DiffviewOpen<cr>";
+      options.desc = "Show Git diff for current worktree";
+    }
   ];
 
   leader-lsp = [
@@ -644,10 +681,16 @@
       options.desc = "Show diagnostics";
     }
 
+    # {
+    #   mode = "n";
+    #   key = "<leader>cr";
+    #   action = "<cmd>lua vim.lsp.buf.rename()<cr>";
+    #   options.desc = "Rename LSP symbol";
+    # }
     {
       mode = "n";
       key = "<leader>cr";
-      action = "<cmd>lua vim.lsp.buf.rename()<cr>";
+      action = ":IncRename ";
       options.desc = "Rename LSP symbol";
     }
     {

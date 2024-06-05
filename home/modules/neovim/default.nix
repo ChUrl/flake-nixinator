@@ -468,17 +468,53 @@ in {
             };
           };
 
-          _persistence = {
-            name = "persistence";
-            pkg = pkgs.vimPlugins.persistence-nvim;
+          _persisted = {
+            name = "persisted";
+            pkg = pkgs.vimPlugins.persisted-nvim;
+            dependencies = [telescope];
             lazy = true;
             config = ''
               function(_, opts)
-                require("persistence").setup(opts);
+                require("persisted").setup(opts)
+
+                require("telescope").load_extension("persisted")
               end
             '';
             opts = {
-              options.__raw = "vim.opt.sessionoptions:get()";
+              silent = false;
+              use_git_branch = false;
+              autosave = true;
+              autoload = false;
+              follow_cwd = true;
+            };
+          };
+
+          _project = {
+            name = "project";
+            pkg = pkgs.vimPlugins.project-nvim;
+            dependencies = [telescope];
+            lazy = true;
+            config = ''
+              function(_, opts)
+                require("project_nvim").setup(opts)
+              end
+            '';
+            opts = {
+              manual_mode = false;
+
+              detection_methods = [
+                "lsp"
+                "pattern"
+              ];
+
+              # exclude_dirs = [];
+
+              patterns = [
+                ".git"
+                "Makefile"
+                "CMakeLists.txt"
+                "flake.nix"
+              ];
             };
           };
 
@@ -487,7 +523,9 @@ in {
             pkg = pkgs.vimPlugins.dashboard-nvim;
             dependencies = [
               _web-devicons
-              _persistence
+              # _persistence
+              _persisted
+              _project
             ];
             lazy = false;
             config = ''
@@ -503,16 +541,22 @@ in {
               config = {
                 center = [
                   {
+                    action = "Telescope projects";
+                    desc = " Open Project";
+                    icon = " ";
+                    key = "p";
+                  }
+                  {
+                    action = "Telescope persisted";
+                    desc = " Restore Session";
+                    icon = " ";
+                    key = "s";
+                  }
+                  {
                     action = "Telescope find_files";
                     desc = " Find File";
                     icon = " ";
                     key = "f";
-                  }
-                  {
-                    action = "ene | startinsert";
-                    desc = " New File";
-                    icon = " ";
-                    key = "n";
                   }
                   {
                     action = "Telescope oldfiles";
@@ -521,16 +565,16 @@ in {
                     key = "r";
                   }
                   {
+                    action = "ene | startinsert";
+                    desc = " New File";
+                    icon = " ";
+                    key = "n";
+                  }
+                  {
                     action = "Telescope live_grep";
                     desc = " Find Text";
                     icon = " ";
                     key = "g";
-                  }
-                  {
-                    action = "lua require('persistence').load()";
-                    desc = " Restore Session";
-                    icon = " ";
-                    key = "s";
                   }
                   {
                     action = "Lazy";
@@ -555,6 +599,13 @@ in {
                 '';
               };
             };
+          };
+
+          diffview = {
+            name = "diffview";
+            pkg = pkgs.vimPlugins.diffview-nvim;
+            lazy = true;
+            cmd = ["DiffviewOpen"];
           };
 
           flash = {
@@ -1012,7 +1063,7 @@ in {
             };
           };
 
-          # TODO: Snippet configs
+          # TODO: Snippet configs (e.g. LaTeX)
           luasnip = {
             name = "luasnip";
             pkg = pkgs.vimPlugins.luasnip;
@@ -1020,6 +1071,20 @@ in {
             config = ''
               function(_, opts)
                 require("luasnip").config.set_config(opts)
+              end
+            '';
+          };
+
+          narrow-region = {
+            name = "narrow-region";
+            pkg = pkgs.vimPlugins.NrrwRgn;
+            lazy = true;
+            cmd = ["NR"];
+            config = ''
+              function(_, opts)
+                vim.keymap.del("x", "<space>Nr")
+                vim.keymap.del("x", "<space>nr")
+                vim.keymap.del("n", "<space>nr")
               end
             '';
           };
@@ -1064,7 +1129,20 @@ in {
               enable_diagnostics = false;
               open_files_do_not_replace_types = ["terminal" "trouble" "qf"];
 
+              default_component_configs = {
+                container = {
+                  enable_character_fade = true;
+                };
+              };
+
               filesystem = {
+                bind_to_cwd = true;
+                cwd_target.sidebar = "global";
+
+                filtered_items = {
+                  visible = true;
+                };
+
                 follow_current_file = {
                   enabled = true;
                   leave_dirs_open = false;
@@ -1079,6 +1157,8 @@ in {
               };
 
               window = {
+                position = "left";
+
                 mappings = {
                   "<CR>" = "open";
                   "c" = "close_node";
@@ -1116,6 +1196,22 @@ in {
             pkg = pkgs.vimPlugins.nui-nvim;
             lazy = true;
           };
+
+          # TODO: Doesn't work
+          # _inc-rename = {
+          #   name = "inc-rename";
+          #   pkg = pkgs.vimPlugins.inc-rename-nvim;
+          #   lazy = false;
+          #   cmd = ["IncRename"];
+          #   config = ''
+          #     function(_, opts)
+          #       require("inc_rename").setup()
+          #     end
+          #   '';
+          #   opts = {
+          #     preview_empty_name = true;
+          #   };
+          # };
 
           noice = {
             name = "noice";
@@ -1225,6 +1321,7 @@ in {
             lazy = true;
           };
 
+          # TODO: Missing bat catppuccin theme
           _telescope-undo = {
             name = "telescope-undo";
             pkg = pkgs.vimPlugins.telescope-undo-nvim;
@@ -1277,7 +1374,9 @@ in {
             };
           };
 
-          # TODO: Also recognize @todo etc. variants
+          # TODO: Can't match @ for @todo etc.
+          #       https://github.com/folke/todo-comments.nvim/issues/213
+          #       https://github.com/folke/todo-comments.nvim/issues/56
           todo-comments = {
             name = "todo-comments";
             pkg = pkgs.vimPlugins.todo-comments-nvim;
@@ -1291,6 +1390,74 @@ in {
                 require("todo-comments").setup(opts)
               end
             '';
+            opts = {
+              signs = true;
+
+              keywords = {
+                FIX = {
+                  icon = " ";
+                  color = "error";
+                  alt = [
+                    "FIXME"
+                    "BUG"
+                    "FIXIT"
+                    "ISSUE"
+                    # "#@fix" "#@fixme" "#@bug" "#@fixit" "#@issue"
+                  ];
+                  # signs = false; # Configure signs for some keywords individually
+                };
+                TODO = {
+                  icon = " ";
+                  color = "info";
+                  alt = [
+                    # "#@todo"
+                  ];
+                };
+                HACK = {
+                  icon = " ";
+                  color = "warning";
+                  alt = [
+                    # "#@hack"
+                  ];
+                };
+                WARN = {
+                  icon = " ";
+                  color = "warning";
+                  alt = [
+                    "WARNING"
+                    "XXX"
+                    # "#@warn" "#@warning" "#@xxx"
+                  ];
+                };
+                PERF = {
+                  icon = " ";
+                  alt = [
+                    "OPTIM"
+                    "PERFORMANCE"
+                    "OPTIMIZE"
+                    # "#@perf" "#@optim" "#@performance" "#@optimize"
+                  ];
+                };
+                NOTE = {
+                  icon = " ";
+                  color = "hint";
+                  alt = [
+                    "INFO"
+                    # "#@note" "#@info"
+                  ];
+                };
+                TEST = {
+                  icon = "⏲ ";
+                  color = "test";
+                  alt = [
+                    "TESTING"
+                    "PASSED"
+                    "FAILED"
+                    # "#@test" "#@testing" "#@passed" "#@failed"
+                  ];
+                };
+              };
+            };
           };
 
           toggleterm = {
@@ -1306,6 +1473,7 @@ in {
             '';
             opts = {
               open_mapping.__raw = "[[<C-/>]]";
+              autochdir = true;
               hide_numbers = true;
               shade_terminals = false;
               shading_factor = 30; # Default is -30 to darken the terminal
@@ -1483,6 +1651,16 @@ in {
             '';
           };
 
+          vimtex = {
+            name = "vimtex";
+            pkg = pkgs.vimPlugins.vimtex;
+            config = ''
+              function(_, opts)
+                vim.g.vimtex_view_method = "zathura"
+              end
+            '';
+          };
+
           which-key = {
             name = "which-key";
             pkg = pkgs.vimPlugins.which-key-nvim;
@@ -1531,6 +1709,7 @@ in {
           comment
           conform
           dashboard
+          diffview
           flash
           gitmessenger
           gitsigns
@@ -1545,6 +1724,7 @@ in {
           lspconfig
           lualine
           luasnip
+          narrow-region
           navbuddy
           neo-tree
           noice
@@ -1560,65 +1740,11 @@ in {
           trouble
           # twilight # NOTE: Don't like it
           ufo
+          vimtex
           which-key
           yanky
         ];
       };
-
-      # NixVim plugins
-
-      # TODO: Figure out how debugging from nvim works...
-      # Debug-Adapter-Protocol
-      # dap = {
-      #   enable = true;
-      # };
-
-      # TODO: Figure out how diff-mode works...
-      # diffview = {
-      #   enable = true;
-      # };
-
-      # TODO: Incremental LSP rename (noice only does search/replace incrementally)
-      # inc-rename = {
-      #   enable = true;
-      # };
-
-      # TODO: Need enabled for conform fallback?
-      # lsp-format = {
-      #   enable = true;
-      # };
-
-      # TODO:
-      # Show marks in the gutter
-      # marks = {
-      #   enable = true;
-      # };
-
-      # TODO:
-      # Generate doc comments
-      # neogen = {
-      #   enable = true;
-      # };
-
-      # TODO:
-      # Interact with test frameworks
-      # neotest = {
-      #   enable = true;
-      # };
-
-      # TODO: Lua deps not found
-      # REST/HTTP client
-      # rest = {
-      #   enable = true;
-      # };
-
-      # TODO:
-      # LaTeX
-      # vimtex = {
-      #   enable = true;
-      #
-      #   texlivePackage = null; # Don't auto-install
-      # };
     };
   };
 }
