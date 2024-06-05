@@ -857,6 +857,7 @@ require("lazy").setup({
                 require("toggleterm").setup(opts)
             end,
             ["dir"] = "/nix/store/3c3iq1px7hriyhc3ihk3rl3nnvkrxa92-lazy-plugins/toggleterm.nvim",
+            ["keys"] = { "C-/" },
             ["lazy"] = true,
             ["name"] = "toggleterm",
             ["opts"] = {

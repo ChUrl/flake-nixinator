@@ -857,6 +857,7 @@ require("lazy").setup({
                 require("toggleterm").setup(opts)
             end,
             ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/toggleterm.nvim",
+            ["keys"] = { "C-/" },
             ["lazy"] = true,
             ["name"] = "toggleterm",
             ["opts"] = {
