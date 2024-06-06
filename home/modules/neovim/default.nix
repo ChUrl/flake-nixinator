@@ -129,58 +129,56 @@ in {
       ];
 
       # TODO: Incremental selection
-      keymaps = import ./keybinds.nix {inherit lib mylib;};
+      keymaps = import ./mappings.nix {inherit lib mylib;};
 
-      plugins.lazy = {
+      plugins.lazy = let
+        mkDefaultConfig = name: ''
+          function(_, opts)
+            require("${name}").setup(opts)
+          end
+        '';
+      in {
         enable = true;
 
         plugins = let
-          autopairs = {
-            name = "autopairs";
+          autopairs = rec {
+            name = "nvim-autopairs";
             pkg = pkgs.vimPlugins.nvim-autopairs;
             lazy = true;
             event = ["InsertEnter"];
-            config = ''
-              function(_, opts)
-                require("nvim-autopairs").setup(opts)
-              end
-            '';
+            config = mkDefaultConfig name;
             opts = {
               check_ts = true;
             };
           };
 
           bbye = {
-            name = "bbye";
+            name = "vim-bbye";
             pkg = pkgs.vimPlugins.vim-bbye;
             lazy = true;
             cmd = ["Bdelete" "Bwipeout"];
           };
 
-          better-escape = {
-            name = "better-escape";
+          better-escape = rec {
+            name = "better_escape";
             pkg = pkgs.vimPlugins.better-escape-nvim;
             lazy = true;
             event = ["InsertEnter"];
-            config = ''
-              function(_, opts)
-                require("better_escape").setup(opts)
-              end
-            '';
+            config = mkDefaultConfig name;
             opts = {
               mapping = ["jk"];
               timeout = 200; # In ms
             };
           };
 
-          catppuccin = {
+          catppuccin = rec {
             name = "catppuccin";
             pkg = pkgs.vimPlugins.catppuccin-nvim;
             lazy = false;
             priority = 1000;
             config = ''
               function(_, opts)
-                require("catppuccin").setup(opts)
+                require("${name}").setup(opts)
 
                 vim.cmd([[
                   let $BAT_THEME = "catppuccin"
@@ -197,32 +195,12 @@ in {
             };
           };
 
-          # chadtree = {
-          #   name = "chadtree";
-          #   pkg = pkgs.vimPlugins.chadtree;
-          #   lazy = false;
-          #   config = ''
-          #     function(_, opts)
-          #       vim.api.nvim_set_var("chadtree_settings", opts)
-          #     end
-          #   '';
-          #   opts = {
-          #     # theme.text_colour_set = "nerdtree_syntax_dark";
-          #     theme.text_colour_set = "nord";
-          #     xdg = true;
-          #   };
-          # };
-
           # NOTE: In LazyVim require("clang_extensions").setup(opts) is called where opts is the server definition from lspconfig...
-          clangd-extensions = {
-            name = "clangd-extensions";
+          clangd-extensions = rec {
+            name = "clangd_extensions";
             pkg = pkgs.vimPlugins.clangd_extensions-nvim;
             lazy = true;
-            config = ''
-              function(_, opts)
-                require("clangd_extensions").setup(opts)
-              end
-            '';
+            config = mkDefaultConfig name;
             opts = {
               inlay_hints = {
                 inline = false;
@@ -269,13 +247,13 @@ in {
           };
 
           _cmp-luasnip = {
-            name = "cmp-luasnip";
+            name = "cmp_luasnip";
             pkg = pkgs.vimPlugins.cmp_luasnip;
             lazy = true;
           };
 
           # TODO: Check additional completion backends
-          cmp = {
+          cmp = rec {
             name = "cmp";
             pkg = pkgs.vimPlugins.nvim-cmp;
             lazy = true;
@@ -289,20 +267,17 @@ in {
               _cmp-nvim-lsp-signature-help
               _cmp-luasnip
             ];
-            config = ''
-              function(_, opts)
-                require("cmp").setup(opts)
-              end
-            '';
+            config = mkDefaultConfig name;
             opts.__raw = let
               sources = mylib.generators.toLuaObject [
                 {name = "async_path";}
-                # {name = "buffer";}
-                # {name = "cmdline";}
                 {name = "emoji";}
                 {name = "nvim_lsp";}
                 {name = "nvim_lsp_signature_help";}
                 {name = "luasnip";}
+
+                # {name = "buffer";} # Too much noise
+                # {name = "cmdline";} # Using nui as cmdline completion backend
               ];
 
               mapping = mylib.generators.toLuaObject {
@@ -341,7 +316,7 @@ in {
               };
             in ''
               function()
-                local cmp = require("cmp")
+                local cmp = require("${name}")
                 local luasnip = require("luasnip")
 
                 local has_words_before = function()
@@ -373,50 +348,43 @@ in {
           };
 
           # TODO: Only colorize html/css/scss/sass/etc.
-          colorizer = {
-            name = "colorizer";
-            pkg = pkgs.vimPlugins.nvim-colorizer-lua;
-            lazy = true;
-            event = ["BufReadPost" "BufNewFile"];
-            config = ''
-              function(_, opts)
-                require("colorizer").setup(opts)
-              end
-            '';
-            opts = {
-              filtetypes = null;
-              user_default_options = null;
-              buftypes = null;
-            };
-          };
+          # colorizer = rec {
+          #   name = "colorizer";
+          #   pkg = pkgs.vimPlugins.nvim-colorizer-lua;
+          #   lazy = true;
+          #   event = ["BufReadPost" "BufNewFile"];
+          #   config = (mkDefaultConfig name);
+          #   opts = {
+          #     filtetypes = null;
+          #     user_default_options = null;
+          #     buftypes = null;
+          #   };
+          # };
 
-          _ts-context-commentstring = {
-            name = "ts-context-commentstring";
+          _ts-context-commentstring = rec {
+            name = "ts_context_commentstring";
             pkg = pkgs.vimPlugins.nvim-ts-context-commentstring;
             lazy = true;
-            config = ''
-              function(_, opts)
+            # NOTE: Init is run before the plugin loads, e.g. for legacy vim.g settings
+            init = ''
+              function()
                 -- Skip compatibility checks
                 vim.g.skip_ts_context_commentstring_module = true
-
-                require("ts_context_commentstring").setup(opts);
               end
             '';
+            # NOTE: Config is run after the plugin was loaded
+            config = mkDefaultConfig name;
           };
 
-          comment = {
-            name = "comment";
+          comment = rec {
+            name = "Comment";
             pkg = pkgs.vimPlugins.comment-nvim;
             lazy = false;
             # keys = ["<C-c>" "<C-b>"]; # NOTE: This list only works in normal mode
             dependencies = [
               _ts-context-commentstring
             ];
-            config = ''
-              function(_, opts)
-                require("Comment").setup(opts)
-              end
-            '';
+            config = mkDefaultConfig name;
             opts = {
               pre_hook = {__raw = "function() require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook() end";};
 
@@ -429,16 +397,12 @@ in {
             };
           };
 
-          conform = {
+          conform = rec {
             name = "conform";
             pkg = pkgs.vimPlugins.conform-nvim;
             lazy = true;
             event = ["BufReadPost" "BufNewFile"];
-            config = ''
-              function(_, opts)
-                require("conform").setup(opts)
-              end
-            '';
+            config = mkDefaultConfig name;
             opts = {
               formatters_by_ft = {
                 c = ["clang-format"];
@@ -473,6 +437,7 @@ in {
             pkg = pkgs.vimPlugins.persisted-nvim;
             dependencies = [telescope];
             lazy = true;
+            cmd = ["SessionSave" "SessionDelete" "Telescope persisted"];
             config = ''
               function(_, opts)
                 require("persisted").setup(opts)
@@ -483,7 +448,7 @@ in {
             opts = {
               silent = false;
               use_git_branch = false;
-              autosave = true;
+              autosave = false;
               autoload = false;
               follow_cwd = true;
               ignored_dirs = [
@@ -494,50 +459,21 @@ in {
             };
           };
 
-          # _project = {
-          #   name = "project";
-          #   pkg = pkgs.vimPlugins.project-nvim;
-          #   dependencies = [telescope];
-          #   lazy = true;
-          #   config = ''
-          #     function(_, opts)
-          #       require("project_nvim").setup(opts)
-          #     end
-          #   '';
-          #   opts = {
-          #     manual_mode = false;
-          #
-          #     detection_methods = [
-          #       "lsp"
-          #       "pattern"
-          #     ];
-          #
-          #     # exclude_dirs = [];
-          #
-          #     patterns = [
-          #       ".git"
-          #       "Makefile"
-          #       "CMakeLists.txt"
-          #       "flake.nix"
-          #     ];
-          #   };
-          # };
+          direnv = {
+            name = "direnv";
+            pkg = pkgs.vimPlugins.direnv-vim;
+            lazy = false;
+          };
 
-          dashboard = {
+          dashboard = rec {
             name = "dashboard";
             pkg = pkgs.vimPlugins.dashboard-nvim;
             dependencies = [
               _web-devicons
-              # _persistence
               _persisted
-              # _project
             ];
             lazy = false;
-            config = ''
-              function(_, opts)
-                require("dashboard").setup(opts)
-              end
-            '';
+            config = mkDefaultConfig name;
             opts = {
               theme = "doom";
               disable_move = true;
@@ -545,12 +481,6 @@ in {
 
               config = {
                 center = [
-                  # {
-                  #   action = "Telescope projects";
-                  #   desc = " Open Project";
-                  #   icon = " ";
-                  #   key = "p";
-                  # }
                   {
                     action = "Telescope persisted";
                     desc = " Restore Session";
@@ -613,16 +543,12 @@ in {
             cmd = ["DiffviewOpen"];
           };
 
-          flash = {
+          flash = rec {
             name = "flash";
             pkg = pkgs.vimPlugins.flash-nvim;
             lazy = true;
             keys = ["s" "S" "f" "F" "t" "T"];
-            config = ''
-              function(_, opts)
-                require("flash").setup(opts)
-              end
-            '';
+            config = mkDefaultConfig name;
           };
 
           gitmessenger = {
@@ -630,31 +556,28 @@ in {
             pkg = pkgs.vimPlugins.git-messenger-vim;
             lazy = true;
             cmd = ["GitMessenger"];
-            config = ''
-              function(_, opts)
-                for k, v in pairs(opts) do
+            init = let
+              mappings = mylib.generators.toLuaObject {
+                git_messenger_no_default_mappings = true;
+                git_messenger_floating_win_opts = {
+                  border = "rounded";
+                };
+              };
+            in ''
+              function()
+                for k, v in pairs(${mappings}) do
                   vim.g[k] = v
                 end
               end
             '';
-            opts = {
-              git_messenger_no_default_mappings = true;
-              git_messenger_floating_win_opts = {
-                border = "rounded";
-              };
-            };
           };
 
-          gitsigns = {
+          gitsigns = rec {
             name = "gitsigns";
             pkg = pkgs.vimPlugins.gitsigns-nvim;
             lazy = true;
             event = ["BufReadPost" "BufNewFile"];
-            config = ''
-              function(_, opts)
-                require("gitsigns").setup(opts)
-              end
-            '';
+            config = mkDefaultConfig name;
             opts = {
               current_line_blame = false;
             };
@@ -667,58 +590,58 @@ in {
             # Don't call setup!
           };
 
-          indent-blankline = {
-            name = "indent-blankline";
-            pkg = pkgs.vimPlugins.indent-blankline-nvim;
-            lazy = false;
-            config = ''
-              function(_, opts)
-                -- Regular setup
-                require("ibl").setup(opts)
+          # indent-blankline = {
+          #   name = "indent-blankline";
+          #   pkg = pkgs.vimPlugins.indent-blankline-nvim;
+          #   lazy = false;
+          #   config = ''
+          #     function(_, opts)
+          #       -- Regular setup
+          #       require("ibl").setup(opts)
+          #
+          #       -- Setup IBL with rainbow-delimiters
+          #       -- local highlight = {
+          #       --   "RainbowRed",
+          #       --   "RainbowYellow",
+          #       --   "RainbowBlue",
+          #       --   "RainbowOrange",
+          #       --   "RainbowGreen",
+          #       --   "RainbowViolet",
+          #       --   "RainbowCyan",
+          #       -- }
+          #       -- local hooks = require("ibl.hooks")
+          #
+          #       -- -- create the highlight groups in the highlight setup hook, so they are reset
+          #       -- -- every time the colorscheme changes
+          #       -- hooks.register(hooks.type.HIGHLIGHT_SETUP, function()
+          #       --   vim.api.nvim_set_hl(0, "RainbowRed", { fg = "#E06C75" })
+          #       --   vim.api.nvim_set_hl(0, "RainbowYellow", { fg = "#E5C07B" })
+          #       --   vim.api.nvim_set_hl(0, "RainbowBlue", { fg = "#61AFEF" })
+          #       --   vim.api.nvim_set_hl(0, "RainbowOrange", { fg = "#D19A66" })
+          #       --   vim.api.nvim_set_hl(0, "RainbowGreen", { fg = "#98C379" })
+          #       --   vim.api.nvim_set_hl(0, "RainbowViolet", { fg = "#C678DD" })
+          #       --   vim.api.nvim_set_hl(0, "RainbowCyan", { fg = "#56B6C2" })
+          #       -- end)
+          #
+          #       -- vim.g.rainbow_delimiters = { highlight = highlight }
+          #       -- opts.scope = {highlight = highlight}
+          #
+          #       -- Call setup function
+          #       -- require("ibl").setup(opts)
+          #
+          #       -- hooks.register(hooks.type.SCOPE_HIGHLIGHT, hooks.builtin.scope_highlight_from_extmark)
+          #     end
+          #   '';
+          # };
 
-                -- Setup IBL with rainbow-delimiters
-                -- local highlight = {
-                --   "RainbowRed",
-                --   "RainbowYellow",
-                --   "RainbowBlue",
-                --   "RainbowOrange",
-                --   "RainbowGreen",
-                --   "RainbowViolet",
-                --   "RainbowCyan",
-                -- }
-                -- local hooks = require("ibl.hooks")
-
-                -- -- create the highlight groups in the highlight setup hook, so they are reset
-                -- -- every time the colorscheme changes
-                -- hooks.register(hooks.type.HIGHLIGHT_SETUP, function()
-                --   vim.api.nvim_set_hl(0, "RainbowRed", { fg = "#E06C75" })
-                --   vim.api.nvim_set_hl(0, "RainbowYellow", { fg = "#E5C07B" })
-                --   vim.api.nvim_set_hl(0, "RainbowBlue", { fg = "#61AFEF" })
-                --   vim.api.nvim_set_hl(0, "RainbowOrange", { fg = "#D19A66" })
-                --   vim.api.nvim_set_hl(0, "RainbowGreen", { fg = "#98C379" })
-                --   vim.api.nvim_set_hl(0, "RainbowViolet", { fg = "#C678DD" })
-                --   vim.api.nvim_set_hl(0, "RainbowCyan", { fg = "#56B6C2" })
-                -- end)
-
-                -- vim.g.rainbow_delimiters = { highlight = highlight }
-                -- opts.scope = {highlight = highlight}
-
-                -- Call setup function
-                -- require("ibl").setup(opts)
-
-                -- hooks.register(hooks.type.SCOPE_HIGHLIGHT, hooks.builtin.scope_highlight_from_extmark)
-              end
-            '';
-          };
-
-          illuminate = {
+          illuminate = rec {
             name = "illuminate";
             pkg = pkgs.vimPlugins.vim-illuminate;
             lazy = true;
             event = ["BufreadPost" "BufNewFile"];
             config = ''
               function(_, opts)
-                require("illuminate").configure(opts)
+                require("${name}").configure(opts)
               end
             '';
             opts = {
@@ -773,40 +696,40 @@ in {
             };
           };
 
-          incline = {
-            name = "incline";
-            pkg = let
-              nvim-incline = pkgs.vimUtils.buildVimPlugin {
-                name = "nvim-incline";
-                src = pkgs.fetchFromGitHub {
-                  owner = "b0o";
-                  repo = "incline.nvim";
-                  rev = "16fc9c073e3ea4175b66ad94375df6d73fc114c0";
-                  sha256 = "sha256-5DoIvIdAZV7ZgmQO2XmbM3G+nNn4tAumsShoN3rDGrs=";
-                };
-              };
-            in
-              nvim-incline;
-            dependencies = [_navic];
-            lazy = true;
-            event = ["BufReadPost" "BufNewFile"];
-            config = ''
-              function(_, opts)
-                require("incline").setup(opts)
-              end
-            '';
-            opts = {
-              window = {
-                padding = 0;
-                margin = {
-                  horizontal = 0;
-                  vertical = 0;
-                };
-              };
-
-              render.__raw = builtins.readFile ./inclineNavic.lua;
-            };
-          };
+          # incline = {
+          #   name = "incline";
+          #   pkg = let
+          #     nvim-incline = pkgs.vimUtils.buildVimPlugin {
+          #       name = "nvim-incline";
+          #       src = pkgs.fetchFromGitHub {
+          #         owner = "b0o";
+          #         repo = "incline.nvim";
+          #         rev = "16fc9c073e3ea4175b66ad94375df6d73fc114c0";
+          #         sha256 = "sha256-5DoIvIdAZV7ZgmQO2XmbM3G+nNn4tAumsShoN3rDGrs=";
+          #       };
+          #     };
+          #   in
+          #     nvim-incline;
+          #   dependencies = [_navic];
+          #   lazy = true;
+          #   event = ["BufReadPost" "BufNewFile"];
+          #   config = ''
+          #     function(_, opts)
+          #       require("incline").setup(opts)
+          #     end
+          #   '';
+          #   opts = {
+          #     window = {
+          #       padding = 0;
+          #       margin = {
+          #         horizontal = 0;
+          #         vertical = 0;
+          #       };
+          #     };
+          #
+          #     render.__raw = builtins.readFile ./inclineNavic.lua;
+          #   };
+          # };
 
           intellitab = {
             name = "intellitab";
@@ -815,15 +738,11 @@ in {
             event = ["InsertEnter"];
           };
 
-          lastplace = {
-            name = "lastplace";
+          lastplace = rec {
+            name = "nvim-lastplace";
             pkg = pkgs.vimPlugins.nvim-lastplace;
             lazy = false;
-            config = ''
-              function(_, opts)
-                require("nvim-lastplace").setup(opts)
-              end
-            '';
+            config = mkDefaultConfig name;
           };
 
           lazygit = {
@@ -861,14 +780,14 @@ in {
                 markdown = ["vale"];
                 nix = ["statix"];
                 python = ["flake8"];
-                # rust = ["clippy"];
+                # rust = ["clippy"]; # Not supported, but integrated through rustaceanvim
                 text = ["vale"];
               };
             };
           };
 
           # Newer alternative to neodev
-          _lazydev = {
+          _lazydev = rec {
             name = "lazydev";
             pkg = let
               nvim-lazydev = pkgs.vimUtils.buildVimPlugin {
@@ -883,40 +802,12 @@ in {
             in
               nvim-lazydev;
             ft = ["lua"];
-            config = ''
-              function(_, opts)
-                require("lazydev").setup(opts)
-              end
-            '';
+            config = mkDefaultConfig name;
             # opts = {
             #   library = [
             #     "~/NixFlake/config/neovim/store"
             #   ];
             # };
-          };
-
-          # Predecessor of lazydev
-          _neodev = {
-            name = "neodev";
-            pkg = pkgs.vimPlugins.neodev-nvim;
-            lazy = false;
-            config = ''
-              function(_, opts)
-                require("neodev").setup(opts)
-              end
-            '';
-            opts = {
-              library = {
-                enabled = true;
-                runtime = true;
-                types = true;
-                plugins = true;
-              };
-
-              setup_jsonls = false;
-              lspconfig = true;
-              pathStrict = true;
-            };
           };
 
           # NOTE: This entire thing is rough, maybe I should look for another way...
@@ -926,10 +817,7 @@ in {
             lazy = true;
             cmd = ["LspInfo"];
             event = ["BufReadPost" "BufNewFile"];
-            dependencies = [
-              _lazydev
-              # _neodev # Has to be setup before lspconfig
-            ];
+            dependencies = [_lazydev];
             config = let
               servers = mylib.generators.toLuaObject [
                 {
@@ -974,8 +862,9 @@ in {
                 {name = "lua_ls";}
                 {name = "nil_ls";}
                 {name = "pyright";}
-                # {name = "rust_analyzer";} # Don't set up when using rustaceanvim
                 {name = "texlab";}
+
+                # {name = "rust_analyzer";} # Don't set up when using rustaceanvim
                 # {name = "hls";} # Don't set up when using haskell-tools
               ];
             in ''
@@ -1080,6 +969,7 @@ in {
             '';
           };
 
+          # TODO: Closing a narrow buffer leaves a permanent highlight
           narrow-region = {
             name = "narrow-region";
             pkg = pkgs.vimPlugins.NrrwRgn;
@@ -1112,7 +1002,7 @@ in {
             };
           };
 
-          neo-tree = {
+          neo-tree = rec {
             name = "neo-tree";
             pkg = pkgs.vimPlugins.neo-tree-nvim;
             dependencies = [
@@ -1122,11 +1012,7 @@ in {
             ];
             lazy = true;
             cmd = ["Neotree"];
-            config = ''
-              function(_, opts)
-                require("neo-tree").setup(opts)
-              end
-            '';
+            config = mkDefaultConfig name;
             opts = {
               use_default_mappings = false;
               popup_border_style = "rounded";
@@ -1145,7 +1031,7 @@ in {
                 cwd_target.sidebar = "global";
 
                 filtered_items = {
-                  visible = true;
+                  visible = false; # Toggle with "H"
                 };
 
                 follow_current_file = {
@@ -1176,6 +1062,9 @@ in {
                   "y" = "copy_to_clipboard";
                   "p" = "paste_from_clipboard";
                   "a" = "add";
+                  "." = "set_root";
+                  ">" = "navigate_up";
+                  "H" = "toggle_hidden";
                   "<Esc>" = "cancel";
                   "/" = "fuzzy_finder";
                   "?" = "show_help";
@@ -1190,8 +1079,10 @@ in {
             lazy = true;
             config = ''
               function(_, opts)
-                vim.notify = require("notify")
-                require("notify").setup(opts)
+                local notify = require("notify")
+
+                notify.setup(opts)
+                vim.notify = notify -- Vim uses notify by default
               end
             '';
           };
@@ -1218,7 +1109,7 @@ in {
           #   };
           # };
 
-          noice = {
+          noice = rec {
             name = "noice";
             pkg = pkgs.vimPlugins.noice-nvim;
             lazy = false;
@@ -1226,11 +1117,7 @@ in {
               _notify
               _nui
             ];
-            config = ''
-              function(_, opts)
-                require("noice").setup(opts)
-              end
-            '';
+            config = mkDefaultConfig name;
             opts = {
               presets = {
                 bottom_search = false;
@@ -1343,10 +1230,19 @@ in {
             '';
           };
 
+          # TODO: Disable default keymaps
           sandwich = {
             name = "sandwich";
             pkg = pkgs.vimPlugins.vim-sandwich;
             lazy = false;
+            init = ''
+              function()
+                -- Disable default keymaps
+                vim.g.sandwich_no_default_key_mappings = 1
+                vim.g.operator_sandwich_no_default_key_mappings = 1
+                vim.g.textobj_sandwich_no_default_key_mappings = 1
+              end
+            '';
           };
 
           # TODO: Indent doesn't follow prev line correctly, don't know if sleuth issue
@@ -1424,7 +1320,7 @@ in {
           # TODO: Can't match @ for @todo etc.
           #       https://github.com/folke/todo-comments.nvim/issues/213
           #       https://github.com/folke/todo-comments.nvim/issues/56
-          todo-comments = {
+          todo-comments = rec {
             name = "todo-comments";
             pkg = pkgs.vimPlugins.todo-comments-nvim;
             lazy = true;
@@ -1432,11 +1328,7 @@ in {
             dependencies = [
               _plenary
             ];
-            config = ''
-              function(_, opts)
-                require("todo-comments").setup(opts)
-              end
-            '';
+            config = mkDefaultConfig name;
             opts = {
               signs = true;
 
@@ -1507,17 +1399,14 @@ in {
             };
           };
 
-          toggleterm = {
+          # TODO: The shell colorscheme is unreadable
+          toggleterm = rec {
             name = "toggleterm";
             pkg = pkgs.vimPlugins.toggleterm-nvim;
             lazy = true;
             cmd = ["ToggleTerm"];
             keys = ["<C-/>"];
-            config = ''
-              function(_, opts)
-                require("toggleterm").setup(opts)
-              end
-            '';
+            config = mkDefaultConfig name;
             opts = {
               open_mapping.__raw = "[[<C-/>]]";
               autochdir = true;
@@ -1535,32 +1424,32 @@ in {
               float_opts = {
                 border = "curved"; # 'single' | 'double' | 'shadow' | 'curved'
                 width = 80;
-                height = 20;
+                height = 35;
                 winblend = 0;
               };
             };
           };
 
-          _treesitter-context = {
-            name = "treesitter-context";
-            pkg = pkgs.vimPlugins.nvim-treesitter-context;
-            lazy = true;
-            config = ''
-              function(_, opts)
-                require("treesitter-context").setup(opts)
-              end
-            '';
-            opts = {
-              max_lines = 3;
-              line_numbers = false;
-            };
-          };
+          # _treesitter-context = {
+          #   name = "treesitter-context";
+          #   pkg = pkgs.vimPlugins.nvim-treesitter-context;
+          #   lazy = true;
+          #   config = ''
+          #     function(_, opts)
+          #       require("treesitter-context").setup(opts)
+          #     end
+          #   '';
+          #   opts = {
+          #     max_lines = 3;
+          #     line_numbers = false;
+          #   };
+          # };
 
-          _treesitter-refactor = {
-            name = "treesitter-refactor";
-            pkg = pkgs.vimPlugins.nvim-treesitter-refactor;
-            lazy = true;
-          };
+          # _treesitter-refactor = {
+          #   name = "treesitter-refactor";
+          #   pkg = pkgs.vimPlugins.nvim-treesitter-refactor;
+          #   lazy = true;
+          # };
 
           treesitter = let
             nvim-plugintree = pkgs.vimPlugins.nvim-treesitter.withAllGrammars;
@@ -1578,12 +1467,15 @@ in {
             lazy = true;
             cmd = ["TSModuleInfo"];
             event = ["BufReadPost" "BufNewFile"];
-            config = ''
-              function(_, opts)
+            init = ''
+              function()
                 -- Fix treesitter grammars/parsers on nix
                 vim.opt.runtimepath:append("${nvim-plugintree}")
                 vim.opt.runtimepath:append("${treesitter-parsers}")
-
+              end
+            '';
+            config = ''
+              function(_, opts)
                 require("nvim-treesitter.configs").setup(opts)
               end
             '';
@@ -1621,51 +1513,39 @@ in {
             };
           };
 
-          trim = {
+          trim = rec {
             name = "trim";
             pkg = pkgs.vimPlugins.trim-nvim;
             lazy = false;
-            config = ''
-              function(_, opts)
-                require("trim").setup(opts)
-              end
-            '';
+            config = mkDefaultConfig name;
           };
 
           # TODO: Show in left pane (either neo-tree or trouble)
-          trouble = {
+          trouble = rec {
             name = "trouble";
             pkg = pkgs.vimPlugins.trouble-nvim;
             lazy = true;
             cmd = ["Trouble" "TroubleToggle"];
-            config = ''
-              function(_, opts)
-                require("trouble").setup(opts)
-              end
-            '';
+            config = mkDefaultConfig name;
           };
 
-          twilight = {
-            name = "twilight";
-            pkg = pkgs.vimPlugins.twilight-nvim;
-            config = ''
-              function(_, opts)
-                require("twilight").setup(opts)
-              end
-            '';
-            opts = {
-              dimming.alpha = 0.75;
-              context = 15;
-              treesitter = true;
-              expand = [
-                "function"
-                "method"
-                "table"
-                "if_statement"
-              ];
-              # exclude = []; # Excluded filetypes
-            };
-          };
+          # twilight = rec {
+          #   name = "twilight";
+          #   pkg = pkgs.vimPlugins.twilight-nvim;
+          #   config = (mkDefaultConfig name);
+          #   opts = {
+          #     dimming.alpha = 0.75;
+          #     context = 15;
+          #     treesitter = true;
+          #     expand = [
+          #       "function"
+          #       "method"
+          #       "table"
+          #       "if_statement"
+          #     ];
+          #     # exclude = []; # Excluded filetypes
+          #   };
+          # };
 
           _promise = {
             name = "promise";
@@ -1673,63 +1553,47 @@ in {
             lazy = true;
           };
 
-          ufo = {
+          ufo = rec {
             name = "ufo";
             pkg = pkgs.vimPlugins.nvim-ufo;
             lazy = false;
             dependencies = [
               _promise
             ];
-            config = ''
-              function(_, opts)
-                require("ufo").setup(opts)
-              end
-            '';
+            config = mkDefaultConfig name;
           };
 
-          _web-devicons = {
-            name = "web-devicons";
+          _web-devicons = rec {
+            name = "nvim-web-devicons";
             pkg = pkgs.vimPlugins.nvim-web-devicons;
             lazy = true;
-            config = ''
-              function(_, opts)
-                require("nvim-web-devicons").setup(opts)
-              end
-            '';
+            config = mkDefaultConfig name;
           };
 
           vimtex = {
             name = "vimtex";
             pkg = pkgs.vimPlugins.vimtex;
-            config = ''
-              function(_, opts)
+            init = ''
+              function()
                 vim.g.vimtex_view_method = "zathura"
               end
             '';
           };
 
-          which-key = {
+          which-key = rec {
             name = "which-key";
             pkg = pkgs.vimPlugins.which-key-nvim;
             lazy = false;
             priority = 500;
-            config = ''
-              function(_, opts)
-                require("which-key").setup(opts)
-              end
-            '';
+            config = mkDefaultConfig name;
           };
 
-          winshift = {
+          winshift = rec {
             name = "winshift";
             pkg = pkgs.vimPlugins.winshift-nvim;
             lazy = true;
             cmd = ["WinShift"];
-            config = ''
-              function(_, opts)
-                require("winshift").setup(opts)
-              end
-            '';
+            config = mkDefaultConfig name;
             opts = {
               highlight_moving_win = true;
 
@@ -1746,7 +1610,7 @@ in {
             };
           };
 
-          yanky = {
+          yanky = rec {
             name = "yanky"; # TODO: Bindings
             pkg = pkgs.vimPlugins.yanky-nvim;
             lazy = true;
@@ -1754,11 +1618,7 @@ in {
               "YankyClearHistory"
               "YankyRingHistory"
             ];
-            config = ''
-              function(_, opts)
-                require("yanky").setup(opts)
-              end
-            '';
+            config = mkDefaultConfig name;
           };
         in [
           #
@@ -1783,6 +1643,7 @@ in {
           conform
           dashboard
           diffview
+          direnv
           flash
           gitmessenger
           gitsigns
