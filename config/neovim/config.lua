@@ -94,51 +94,51 @@ require("lazy").setup({
             ["priority"] = 1000,
         },
         {
-            "web-devicons",
+            "nvim-web-devicons",
             ["config"] = function(_, opts)
                 require("nvim-web-devicons").setup(opts)
             end,
             ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/nvim-web-devicons",
             ["lazy"] = true,
-            ["name"] = "web-devicons",
+            ["name"] = "nvim-web-devicons",
         },
         {
-            "autopairs",
+            "nvim-autopairs",
             ["config"] = function(_, opts)
                 require("nvim-autopairs").setup(opts)
             end,
             ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/nvim-autopairs",
             ["event"] = { "InsertEnter" },
             ["lazy"] = true,
-            ["name"] = "autopairs",
+            ["name"] = "nvim-autopairs",
             ["opts"] = { ["check_ts"] = true },
         },
         {
-            "bbye",
+            "vim-bbye",
             ["cmd"] = { "Bdelete", "Bwipeout" },
             ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/vim-bbye",
             ["lazy"] = true,
-            ["name"] = "bbye",
+            ["name"] = "vim-bbye",
         },
         {
-            "better-escape",
+            "better_escape",
             ["config"] = function(_, opts)
                 require("better_escape").setup(opts)
             end,
             ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/better-escape.nvim",
             ["event"] = { "InsertEnter" },
             ["lazy"] = true,
-            ["name"] = "better-escape",
+            ["name"] = "better_escape",
             ["opts"] = { ["mapping"] = { "jk" }, ["timeout"] = 200 },
         },
         {
-            "clangd-extensions",
+            "clangd_extensions",
             ["config"] = function(_, opts)
                 require("clangd_extensions").setup(opts)
             end,
             ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/clangd_extensions.nvim",
             ["lazy"] = true,
-            ["name"] = "clangd-extensions",
+            ["name"] = "clangd_extensions",
             ["opts"] = { ["inlay_hints"] = { ["inline"] = false } },
         },
         {
@@ -186,10 +186,10 @@ require("lazy").setup({
                     ["name"] = "cmp-nvim-lsp-signature-help",
                 },
                 {
-                    "cmp-luasnip",
+                    "cmp_luasnip",
                     ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/cmp_luasnip",
                     ["lazy"] = true,
-                    ["name"] = "cmp-luasnip",
+                    ["name"] = "cmp_luasnip",
                 },
             },
             ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/nvim-cmp",
@@ -263,27 +263,28 @@ require("lazy").setup({
             end,
         },
         {
-            "comment",
+            "Comment",
             ["config"] = function(_, opts)
                 require("Comment").setup(opts)
             end,
             ["dependencies"] = {
                 {
-                    "ts-context-commentstring",
+                    "ts_context_commentstring",
                     ["config"] = function(_, opts)
-                        -- Skip compatibility checks
-                        vim.g.skip_ts_context_commentstring_module = true
-
                         require("ts_context_commentstring").setup(opts)
                     end,
                     ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/nvim-ts-context-commentstring",
+                    ["init"] = function()
+                        -- Skip compatibility checks
+                        vim.g.skip_ts_context_commentstring_module = true
+                    end,
                     ["lazy"] = true,
-                    ["name"] = "ts-context-commentstring",
+                    ["name"] = "ts_context_commentstring",
                 },
             },
             ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/comment.nvim",
             ["lazy"] = false,
-            ["name"] = "comment",
+            ["name"] = "Comment",
             ["opts"] = {
                 ["mappings"] = { ["basic"] = true, ["extra"] = false },
                 ["opleader"] = { ["block"] = "<C-b>", ["line"] = "<C-c>" },
@@ -334,16 +335,17 @@ require("lazy").setup({
             end,
             ["dependencies"] = {
                 {
-                    "web-devicons",
+                    "nvim-web-devicons",
                     ["config"] = function(_, opts)
                         require("nvim-web-devicons").setup(opts)
                     end,
                     ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/nvim-web-devicons",
                     ["lazy"] = true,
-                    ["name"] = "web-devicons",
+                    ["name"] = "nvim-web-devicons",
                 },
                 {
                     "persisted",
+                    ["cmd"] = { "SessionSave", "SessionDelete", "Telescope persisted" },
                     ["config"] = function(_, opts)
                         require("persisted").setup(opts)
 
@@ -408,7 +410,7 @@ require("lazy").setup({
                     ["name"] = "persisted",
                     ["opts"] = {
                         ["autoload"] = false,
-                        ["autosave"] = true,
+                        ["autosave"] = false,
                         ["follow_cwd"] = true,
                         ["ignored_dirs"] = { "/", "~/", "~/Projects/" },
                         ["silent"] = false,
@@ -456,6 +458,12 @@ require("lazy").setup({
             ["name"] = "diffview",
         },
         {
+            "direnv",
+            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/direnv.vim",
+            ["lazy"] = false,
+            ["name"] = "direnv",
+        },
+        {
             "flash",
             ["config"] = function(_, opts)
                 require("flash").setup(opts)
@@ -468,18 +476,17 @@ require("lazy").setup({
         {
             "gitmessenger",
             ["cmd"] = { "GitMessenger" },
-            ["config"] = function(_, opts)
-                for k, v in pairs(opts) do
+            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/git-messenger.vim",
+            ["init"] = function()
+                for k, v in pairs({
+                    ["git_messenger_floating_win_opts"] = { ["border"] = "rounded" },
+                    ["git_messenger_no_default_mappings"] = true,
+                }) do
                     vim.g[k] = v
                 end
             end,
-            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/git-messenger.vim",
             ["lazy"] = true,
             ["name"] = "gitmessenger",
-            ["opts"] = {
-                ["git_messenger_floating_win_opts"] = { ["border"] = "rounded" },
-                ["git_messenger_no_default_mappings"] = true,
-            },
         },
         {
             "gitsigns",
@@ -529,13 +536,13 @@ require("lazy").setup({
             ["name"] = "intellitab",
         },
         {
-            "lastplace",
+            "nvim-lastplace",
             ["config"] = function(_, opts)
                 require("nvim-lastplace").setup(opts)
             end,
             ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/nvim-lastplace",
             ["lazy"] = false,
-            ["name"] = "lastplace",
+            ["name"] = "nvim-lastplace",
         },
         {
             "lazygit",
@@ -794,13 +801,13 @@ require("lazy").setup({
                     ["name"] = "plenary",
                 },
                 {
-                    "web-devicons",
+                    "nvim-web-devicons",
                     ["config"] = function(_, opts)
                         require("nvim-web-devicons").setup(opts)
                     end,
                     ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/nvim-web-devicons",
                     ["lazy"] = true,
-                    ["name"] = "web-devicons",
+                    ["name"] = "nvim-web-devicons",
                 },
                 {
                     "nui",
@@ -820,7 +827,7 @@ require("lazy").setup({
                 ["filesystem"] = {
                     ["bind_to_cwd"] = true,
                     ["cwd_target"] = { ["sidebar"] = "global" },
-                    ["filtered_items"] = { ["visible"] = true },
+                    ["filtered_items"] = { ["visible"] = false },
                     ["follow_current_file"] = { ["enabled"] = true, ["leave_dirs_open"] = false },
                 },
                 ["open_files_do_not_replace_types"] = { "terminal", "trouble", "qf" },
@@ -828,10 +835,13 @@ require("lazy").setup({
                 ["use_default_mappings"] = false,
                 ["window"] = {
                     ["mappings"] = {
+                        ["."] = "set_root",
                         ["/"] = "fuzzy_finder",
                         ["<CR>"] = "open",
                         ["<Esc>"] = "cancel",
+                        [">"] = "navigate_up",
                         ["?"] = "show_help",
+                        ["H"] = "toggle_hidden",
                         ["R"] = "refresh",
                         ["a"] = "add",
                         ["c"] = "close_node",
@@ -856,8 +866,10 @@ require("lazy").setup({
                 {
                     "notify",
                     ["config"] = function(_, opts)
-                        vim.notify = require("notify")
-                        require("notify").setup(opts)
+                        local notify = require("notify")
+
+                        notify.setup(opts)
+                        vim.notify = notify -- Vim uses notify by default
                     end,
                     ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/nvim-notify",
                     ["lazy"] = true,
@@ -958,6 +970,12 @@ require("lazy").setup({
         {
             "sandwich",
             ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/vim-sandwich",
+            ["init"] = function()
+                -- Disable default keymaps
+                vim.g.sandwich_no_default_key_mappings = 1
+                vim.g.operator_sandwich_no_default_key_mappings = 1
+                vim.g.textobj_sandwich_no_default_key_mappings = 1
+            end,
             ["lazy"] = false,
             ["name"] = "sandwich",
         },
@@ -1064,7 +1082,7 @@ require("lazy").setup({
                 ["autochdir"] = true,
                 ["close_on_exit"] = true,
                 ["direction"] = "horizontal",
-                ["float_opts"] = { ["border"] = "curved", ["height"] = 20, ["width"] = 80, ["winblend"] = 0 },
+                ["float_opts"] = { ["border"] = "curved", ["height"] = 35, ["width"] = 80, ["winblend"] = 0 },
                 ["hide_numbers"] = true,
                 ["insert_mappings"] = true,
                 ["open_mapping"] = [[<C-/>]],
@@ -1080,16 +1098,17 @@ require("lazy").setup({
             "treesitter",
             ["cmd"] = { "TSModuleInfo" },
             ["config"] = function(_, opts)
+                require("nvim-treesitter.configs").setup(opts)
+            end,
+            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/nvim-treesitter",
+            ["event"] = { "BufReadPost", "BufNewFile" },
+            ["init"] = function()
                 -- Fix treesitter grammars/parsers on nix
                 vim.opt.runtimepath:append(
                     "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/nvim-treesitter"
                 )
                 vim.opt.runtimepath:append("/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/treesitter-parsers")
-
-                require("nvim-treesitter.configs").setup(opts)
             end,
-            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/nvim-treesitter",
-            ["event"] = { "BufReadPost", "BufNewFile" },
             ["lazy"] = true,
             ["name"] = "treesitter",
             ["opts"] = {
@@ -1146,10 +1165,10 @@ require("lazy").setup({
         },
         {
             "vimtex",
-            ["config"] = function(_, opts)
+            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/vimtex",
+            ["init"] = function()
                 vim.g.vimtex_view_method = "zathura"
             end,
-            ["dir"] = "/home/lab/smchurla/Downloads/flake-nixinator/config/neovim/store/lazy-plugins/vimtex",
             ["name"] = "vimtex",
         },
         {
@@ -1362,12 +1381,6 @@ do
             ["options"] = { ["desc"] = "Open project" },
         },
         {
-            ["action"] = "<cmd>Telescope persisted<cr>",
-            ["key"] = "<leader>s",
-            ["mode"] = "n",
-            ["options"] = { ["desc"] = "Restore session" },
-        },
-        {
             ["action"] = "<cmd>Telescope vim_options<cr>",
             ["key"] = "<leader>o",
             ["mode"] = "n",
@@ -1447,6 +1460,25 @@ do
             ["key"] = "<leader>q!",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Quit forcefully" },
+        },
+        { ["action"] = "+session", ["key"] = "<leader>s", ["mode"] = "n" },
+        {
+            ["action"] = "<cmd>Telescope persisted<cr>",
+            ["key"] = "<leader>sl",
+            ["mode"] = "n",
+            ["options"] = { ["desc"] = "Restore session" },
+        },
+        {
+            ["action"] = "<cmd>SessionSave<cr>",
+            ["key"] = "<leader>ss",
+            ["mode"] = "n",
+            ["options"] = { ["desc"] = "Save session" },
+        },
+        {
+            ["action"] = "<cmd>SessionDelete<cr>",
+            ["key"] = "<leader>sd",
+            ["mode"] = "n",
+            ["options"] = { ["desc"] = "Delete current session" },
         },
         { ["action"] = "+buffers", ["key"] = "<leader>b", ["mode"] = "n" },
         {
@@ -1659,7 +1691,7 @@ do
             ["options"] = { ["desc"] = "Show diagnostics" },
         },
         {
-            ["action"] = ":IncRename ",
+            ["action"] = "<cmd>lua vim.lsp.buf.rename()<cr>",
             ["key"] = "<leader>cr",
             ["mode"] = "n",
             ["options"] = { ["desc"] = "Rename LSP symbol" },
