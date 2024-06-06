@@ -293,12 +293,6 @@
     }
     {
       mode = "n";
-      key = "<leader>s";
-      action = "<cmd>Telescope persisted<cr>";
-      options.desc = "Restore session";
-    }
-    {
-      mode = "n";
       key = "<leader>o";
       action = "<cmd>Telescope vim_options<cr>";
       options.desc = "Show Vim options";
@@ -394,6 +388,32 @@
       key = "<leader>q!";
       action = "<cmd>quitall!<cr>";
       options.desc = "Quit forcefully";
+    }
+  ];
+
+  leader-session = [
+    {
+      mode = "n";
+      key = "<leader>s";
+      action = "+session";
+    }
+    {
+      mode = "n";
+      key = "<leader>sl";
+      action = "<cmd>Telescope persisted<cr>";
+      options.desc = "Restore session";
+    }
+    {
+      mode = "n";
+      key = "<leader>ss";
+      action = "<cmd>SessionSave<cr>";
+      options.desc = "Save session";
+    }
+    {
+      mode = "n";
+      key = "<leader>sd";
+      action = "<cmd>SessionDelete<cr>";
+      options.desc = "Delete current session";
     }
   ];
 
@@ -688,18 +708,18 @@
       options.desc = "Show diagnostics";
     }
 
-    # {
-    #   mode = "n";
-    #   key = "<leader>cr";
-    #   action = "<cmd>lua vim.lsp.buf.rename()<cr>";
-    #   options.desc = "Rename LSP symbol";
-    # }
     {
       mode = "n";
       key = "<leader>cr";
-      action = ":IncRename ";
+      action = "<cmd>lua vim.lsp.buf.rename()<cr>";
       options.desc = "Rename LSP symbol";
     }
+    # {
+    #   mode = "n";
+    #   key = "<leader>cr";
+    #   action = ":IncRename ";
+    #   options.desc = "Rename LSP symbol";
+    # }
     {
       mode = "n";
       key = "<leader>ca";
