@@ -738,6 +738,7 @@ in
     no-leader
     leader
     leader-quit
+    leader-session
     leader-buffers
     leader-windows
     leader-toggles
