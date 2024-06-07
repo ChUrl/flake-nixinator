@@ -402,6 +402,17 @@ rec {
 
       AusweisApp2
 
+      # Games
+      # NOTE: Does not run with wayland
+      # (retroarch.override {
+      #   cores = with libretro; [
+      #     desmume
+      #     melonds
+      #   ];
+      # })
+      # melonDS # NOTE: Doesn't work - No QT platform plugin for wayland
+      desmume
+
       # Use NixCommunity binary cache
       cachix
 
