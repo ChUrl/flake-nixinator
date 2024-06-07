@@ -73,8 +73,8 @@
     cpu.amd.updateMicrocode = true;
 
     nvidia = {
-      # package = config.boot.kernelPackages.nvidiaPackages.stable;
-      package = config.boot.kernelPackages.nvidiaPackages.beta;
+      package = config.boot.kernelPackages.nvidiaPackages.stable;
+      # package = config.boot.kernelPackages.nvidiaPackages.beta; # NOTE: Beta, might (?) prevent discord screen-share
 
       modesetting.enable = true; # Not officially supported by NVidia but needed for wayland
       open = false; # TODO: Build failure on 2024-18-01
