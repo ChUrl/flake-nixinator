@@ -432,6 +432,7 @@ in {
             };
           };
 
+          # TODO: Don't autosave, but if a session exists, update it (using should_autosave)
           _persisted = {
             name = "persisted";
             pkg = pkgs.vimPlugins.persisted-nvim;
@@ -1194,6 +1195,9 @@ in {
                 vim.g.rustaceanvim = {
                   tools = {
                     enable_clippy = true,
+                    float_win_config = {
+                      border = "rounded",
+                    },
                   },
 
                   server = {
