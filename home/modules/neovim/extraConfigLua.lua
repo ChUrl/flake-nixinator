@@ -9,7 +9,7 @@ vim.diagnostic.config({
 })
 vim.api.nvim_create_user_command("ToggleInlineDiagnostics", function()
 	vim.g.enable_inline_diagnostics = not vim.g.enable_inline_diagnostics
-	vim.diagnostic.config({ virtual_text = vim.g.enable_inline_diagnostics })
+	vim.diagnostic.config({ virtual_text = vim.g.enable_inline_diagnostics, float = { border = "rounded" } })
 	require("notify")((vim.g.enable_inline_diagnostics and "Enabled" or "Disabled") .. " inline diagnostics")
 end, {
 	desc = "Toggle inline diagnostics",
