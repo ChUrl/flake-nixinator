@@ -162,11 +162,11 @@ in {
 
               "gfx.x11-egl.force-enabled" = true;
               "layers.acceleration.force-enabled" = true;
-              "media.av1.enabled" = true;
+              # "media.av1.enabled" = true;
               "media.ffmpeg.vaapi.enabled" = true;
               "media.hardware-video-decoding.force-enabled" = true;
-              "media.rdd-ffmpeg.enabled" = true; # Default value
-              "widget.dmabuf.force-enabled" = true;
+              # "media.rdd-ffmpeg.enabled" = true; # Default value
+              # "widget.dmabuf.force-enabled" = true;
 
               # "widget.wayland-dmabuf-vaapi.enabled" = true; # Does not exist?
             })
