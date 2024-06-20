@@ -55,6 +55,12 @@
     home.packages = with pkgs; [
       # quartus-prime-lite # Intel FPGA design software
 
+      # Don't want heavy IDE's on the laptop
+      jetbrains.clion
+      jetbrains.rust-rover
+      jetbrains.pycharm-professional
+      jetbrains.idea-ultimate
+
       unityhub
       jetbrains.rider
       (with dotnetCorePackages;
