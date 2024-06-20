@@ -390,15 +390,11 @@ rec {
       hunspell # I cna't type
       hunspellDicts.en_US
       hunspellDicts.de_DE
-      obsidian # knowledge-base
+      # obsidian # knowledge-base # NOTE: Use flatpak
       # logseq # knowledge-base
 
       # TODO: Module, I need to add python packages from multiple modules to the same interpreter
       python312
-      jetbrains.clion
-      jetbrains.rust-rover
-      jetbrains.pycharm-professional
-      jetbrains.idea-ultimate
 
       AusweisApp2
 
@@ -792,6 +788,7 @@ rec {
         "com.discordapp.Discord"
         "com.spotify.Client"
         "com.google.Chrome"
+        "md.obsidian.Obsidian"
       ];
 
       uninstallUnmanaged = true;
@@ -803,9 +800,8 @@ rec {
 
       overrides = {
         global = {
-          # NOTE: Makes discord crash
           # Force Wayland by default
-          # Context.sockets = ["wayland" "!x11" "!fallback-x11"];
+          # Context.sockets = ["wayland" "!x11" "!fallback-x11"]; # NOTE: Makes discord crash
 
           Context.filesystems = ["/nix/store:ro"];
 
