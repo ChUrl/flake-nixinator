@@ -80,6 +80,9 @@ with mylib.networking; {
     # as nix shell nixpkgs#name) consistent with your flake inputs.
     # (Registry contains flakes)
     registry = lib.mapAttrs' (n: v: lib.nameValuePair n {flake = v;}) inputs;
+
+    # Set NIX_PATH to find nixpgks
+    nixPath = ["nixpkgs=${inputs.nixpkgs.outPath}" "home-manager=${inputs.home-manager.outPath}"];
   };
 
   # Bootloader/Kernel stuff
