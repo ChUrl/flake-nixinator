@@ -38,6 +38,7 @@ in {
             haskell-language-server
             lua-language-server
             nil
+            nixd
             pyright
             rust-analyzer
             texlab
@@ -862,6 +863,21 @@ in {
                 {name = "cmake";}
                 {name = "lua_ls";}
                 {name = "nil_ls";}
+                {
+                  name = "nixd";
+                  # TODO: Figure out how to structure this attrset
+                  extraOptions = {
+                    nixd = {
+                      diagnostic = {
+                        suppress = [
+                          "sema-escaping-with"
+                          "var-bind-to-this"
+                          "escaping-this-with"
+                        ];
+                      };
+                    };
+                  };
+                }
                 {name = "pyright";}
                 {name = "texlab";}
 
