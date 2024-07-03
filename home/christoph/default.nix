@@ -138,10 +138,10 @@ rec {
           "obsidian"
           "unityhub"
           "Unity"
+          "chromium-browser"
         ];
         "4" = [
           "firefox"
-          "chromium-browser"
           "Google-chrome"
         ];
         "7" = [
@@ -152,6 +152,7 @@ rec {
         ];
         "9" = [
           "discord"
+          "vesktop"
         ];
       };
 
@@ -169,6 +170,8 @@ rec {
         "kitty"
         "Alacritty"
         "discord"
+        "signal"
+        "vesktop"
         "Spotify"
         "obsidian"
         "jetbrains-clion"
@@ -365,6 +368,7 @@ rec {
       nfs-utils
       sshfs
       protonvpn-cli
+      # protonvpn-gui # NOTE: Doesn't work
 
       # GUI apps
       vlc
@@ -382,6 +386,8 @@ rec {
       nextcloud-client
       keepassxc
       protonmail-bridge
+      thunderbird # TODO: Email module
+      # xwaylandvideobridge # NOTE: Doesn't work
 
       # Office
       wacomtablet # For xournalpp/krita
@@ -789,6 +795,7 @@ rec {
         "com.spotify.Client"
         "com.google.Chrome"
         "md.obsidian.Obsidian"
+        "dev.vencord.Vesktop"
       ];
 
       uninstallUnmanaged = true;
