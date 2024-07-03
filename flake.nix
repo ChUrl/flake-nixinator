@@ -20,6 +20,7 @@
     nur.url = "github:nix-community/NUR";
     devshell.url = "github:numtide/devshell";
     nixvim.url = "github:nix-community/nixvim";
+    nixvim.inputs.nixpkgs.follows = "nixpkgs";
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=v0.4.1";
     nix-alien.url = "github:thiagokokada/nix-alien";
     # musnix.url = "github:musnix/musnix";
