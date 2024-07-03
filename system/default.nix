@@ -311,6 +311,7 @@ with mylib.networking; {
     # iPhone tethering + mounting
     libimobiledevice
     ifuse
+    usbmuxd
 
     mprocs # run multiple processes in single terminal window, screen alternative
     parted # partition manager
