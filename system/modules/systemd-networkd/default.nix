@@ -88,6 +88,7 @@ in {
       };
 
       # Open Ports
+      nftables.enable = true;
       firewall = {
         enable = true;
         # networking.firewall.checkReversePath = "loose";
