@@ -38,6 +38,18 @@
         # "10-ether-1G" = mylib.networking.mkStaticSystemdNetwork {...};
       };
 
+      allowedTCPPorts = [
+        # AvaTalk ports
+        7777
+        12777
+      ];
+
+      allowedUDPPorts = [
+        # AvaTalk ports
+        7777
+        12777
+      ];
+
       wireguard-tunnels = {
         wg0-de-115 =
           mylib.networking.mkWireguardService
