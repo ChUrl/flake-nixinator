@@ -82,12 +82,12 @@
     };
 
     # video.hidpi.enable = lib.mkDefault true; # No longer has any effect
-    opengl = {
+    graphics = {
       enable = true;
 
       # Vulkan
       # driSupport = true; # NOTE: Deprecated
-      driSupport32Bit = true;
+      enable32Bit = true;
 
       # AMD: https://nixos.wiki/wiki/AMD_GPU
       extraPackages = with pkgs; [
