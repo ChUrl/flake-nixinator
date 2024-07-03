@@ -205,7 +205,7 @@ rec {
       theme = "Foggy-Lake";
     };
 
-    vscode.enable = true;
+    vscode.enable = false; # TODO: Had broken package ms-vscode-cpptools
 
     waybar = {
       enable = true;
@@ -641,18 +641,20 @@ rec {
     # Realtime Motion Interpolation: https://gist.github.com/phiresky/4bfcfbbd05b3c2ed8645
     mpv = {
       enable = true;
-      # NOTE: wrapMpv explained here: https://github.com/NixOS/nixpkgs/blob/nixos-unstable/pkgs/applications/video/mpv/wrapper.nix#L84
+
+      # TODO: wrapMpv was removed
+      # Explained here: https://github.com/NixOS/nixpkgs/blob/nixos-unstable/pkgs/applications/video/mpv/wrapper.nix#L84
       #       wrapMpv gets two args: the mpv derivation and some options
       #       Possible overrides for derivation: https://github.com/NixOS/nixpkgs/blob/nixos-unstable/pkgs/applications/video/mpv/default.nix#L222
-      package = pkgs.wrapMpv (pkgs.mpv-unwrapped.override {vapoursynthSupport = true;}) {
-        youtubeSupport = true;
-        extraMakeWrapperArgs = [
-          "--prefix"
-          "LD_LIBRARY_PATH"
-          ":"
-          "${pkgs.vapoursynth-mvtools}/lib"
-        ];
-      };
+      # package = pkgs.wrapMpv (pkgs.mpv-unwrapped.override {vapoursynthSupport = true;}) {
+      #   youtubeSupport = true;
+      #   extraMakeWrapperArgs = [
+      #     "--prefix"
+      #     "LD_LIBRARY_PATH"
+      #     ":"
+      #     "${pkgs.vapoursynth-mvtools}/lib"
+      #   ];
+      # };
     };
 
     # Interactive Cheatsheets

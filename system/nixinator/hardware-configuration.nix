@@ -86,7 +86,7 @@
       enable = true;
 
       # Vulkan
-      driSupport = true;
+      # driSupport = true; # NOTE: Deprecated
       driSupport32Bit = true;
 
       # AMD: https://nixos.wiki/wiki/AMD_GPU
