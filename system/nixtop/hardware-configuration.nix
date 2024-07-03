@@ -47,7 +47,7 @@
 
     opengl = {
       enable = true;
-      driSupport = true;
+      # driSupport = true; # NOTE: Deprecated
       extraPackages = with pkgs; [
         intel-media-driver
         vaapiIntel
