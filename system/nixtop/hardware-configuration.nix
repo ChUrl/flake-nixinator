@@ -45,7 +45,7 @@
     enableRedistributableFirmware = true;
     cpu.intel.updateMicrocode = true;
 
-    opengl = {
+    graphics = {
       enable = true;
       # driSupport = true; # NOTE: Deprecated
       extraPackages = with pkgs; [
