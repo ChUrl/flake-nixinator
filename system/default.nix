@@ -87,7 +87,8 @@ with mylib.networking; {
 
   # Bootloader/Kernel stuff
   boot = {
-    kernelPackages = pkgs.linuxPackages_zen;
+    kernelPackages = pkgs.linuxPackages_latest;
+    # kernelPackages = pkgs.linuxPackages_zen; # NOTE: Only set for nixinator
     # kernelPackages = pkgs.linuxPackages_latest; # The package set that includes the kernel and modules
     kernelParams = ["mitigations=off"]; # I don't care about security regarding spectre/meltdown
 
