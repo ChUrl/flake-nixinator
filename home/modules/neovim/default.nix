@@ -123,9 +123,29 @@ in {
           '';
         }
         {
-          event = "FileType";
+          event = ["FileType"];
           pattern = ["json" "jsonc" "json5"]; # Disable conceal for these filetypes
           callback.__raw = "function() vim.opt_local.conceallevel = 0 end";
+        }
+        {
+          event = ["FileType"];
+          pattern = ["Java" "java"];
+          callback.__raw = ''
+            function()
+              local workspace = vim.fs.dirname(vim.fs.find({'gradlew', '.git', 'mvnw'}, { upward = true })[1])
+
+              local opts = {
+                root_dir = workspace,
+                cmd = {
+                  "jdtls",
+                  "-data",
+                  "/home/christoph/.local/share/eclipse/" .. vim.fn.fnamemodify(workspace, ":p:h:t"),
+                },
+              }
+
+              require('jdtls').start_or_attach(opts)
+            end
+          '';
         }
       ];
 
@@ -740,6 +760,29 @@ in {
             event = ["InsertEnter"];
           };
 
+          jdtls = {
+            name = "jdtls";
+            pkg = pkgs.vimPlugins.nvim-jdtls;
+            lazy = false; # Is only ever loaded in Java buffers anyway
+            # NOTE: The below stuff is configured in the AutoCMD
+            # ft = ["Java" "java"];
+            # config = ''
+            #   function(_, opts)
+            #     require('jdtls').start_or_attach(opts)
+            #   end
+            # '';
+            # opts = {
+            #   cmd.__raw = ''
+            #     {
+            #       "jdtls",
+            #       "-data",
+            #       "/home/christoph/.local/share/eclipse/" .. vim.fn.fnamemodify(root_dir, ":p:h:t"),
+            #     }
+            #   '';
+            #   root_dir.__raw = "vim.fs.dirname(vim.fs.find({'gradlew', '.git', 'mvnw'}, { upward = true })[1])";
+            # };
+          };
+
           lastplace = rec {
             name = "nvim-lastplace";
             pkg = pkgs.vimPlugins.nvim-lastplace;
@@ -881,6 +924,7 @@ in {
                 {name = "pyright";}
                 {name = "texlab";}
 
+                # {name = "jdtls";} # Don't set up when using nvim-jdtls
                 # {name = "rust_analyzer";} # Don't set up when using rustaceanvim
                 # {name = "hls";} # Don't set up when using haskell-tools
               ];
@@ -1672,6 +1716,7 @@ in {
           illuminate
           # incline # TODO: Bad styling
           intellitab
+          jdtls
           lastplace
           lazygit
           lint
