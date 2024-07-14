@@ -153,6 +153,7 @@ in {
             msusenet = "sudo mount.nfs4 192.168.86.20:/mnt/WD\\ Blue\\ Stripe\\ 2T/Usenet /media/Stash-Usenet";
             mspicture = "sudo mount.nfs4 192.168.86.20:/mnt/WD\\ Blue\\ Stripe\\ 2T/Picture /media/Stash-Picture";
             msvideo = "sudo mount.nfs4 192.168.86.20:/mnt/WD\\ Blue\\ Stripe\\ 2T/Video /media/Stash-Video";
+            msclips = "sudo mount.nfs4 192.168.86.20:/mnt/WD\\ Blue\\ Stripe\\ 2T/Clips /media/Stash-Clips";
             mmovie = "sudo mount.nfs4 192.168.86.20:/mnt/SG\\ Exos\\ Mirror\\ 18TB/Movie /media/Movie";
             mshow = "sudo mount.nfs4 192.168.86.20:/mnt/SG\\ Exos\\ Mirror\\ 18TB/Show /media/Show";
             mmusic = "sudo mount.nfs4 192.168.86.20:/mnt/SG\\ Exos\\ Mirror\\ 18TB/Music /media/Music";
