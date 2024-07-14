@@ -128,6 +128,7 @@ Other dedicated linters that are built-in are:
 | [Flake8][13]                           | `flake8`               |
 | [flawfinder][35]                       | `flawfinder`           |
 | [gdlint (gdtoolkit)][gdlint]           | `gdlint`               |
+| [GHDL][ghdl]                           | `ghdl`                 |
 | [gitlint][gitlint]                     | `gitlint`              |
 | [glslc][glslc]                         | `glslc`                |
 | [Golangci-lint][16]                    | `golangcilint`         |
@@ -165,6 +166,7 @@ Other dedicated linters that are built-in are:
 | [ponyc][ponyc]                         | `pony`                 |
 | [prisma-lint][prisma-lint]             | `prisma-lint`          |
 | [proselint][proselint]                 | `proselint`            |
+| [protolint][protolint]                 | `protolint`            |
 | [psalm][psalm]                         | `psalm`                |
 | [puppet-lint][puppet-lint]             | `puppet-lint`          |
 | [pycodestyle][pcs-docs]                | `pycodestyle`          |
@@ -449,6 +451,7 @@ busted tests/
 [yamllint]: https://github.com/adrienverge/yamllint
 [cpplint]: https://github.com/cpplint/cpplint
 [proselint]: https://github.com/amperser/proselint
+[protolint]: https://github.com/yoheimuta/protolint
 [cmakelint]: https://github.com/cmake-lint/cmake-lint
 [rstcheck]: https://github.com/myint/rstcheck
 [rstlint]: https://github.com/twolfson/restructuredtext-lint
@@ -461,6 +464,7 @@ busted tests/
 [psalm]: https://psalm.dev/
 [lacheck]: https://www.ctan.org/tex-archive/support/lacheck
 [credo]: https://github.com/rrrene/credo
+[ghdl]: https://github.com/ghdl/ghdl
 [glslc]: https://github.com/google/shaderc
 [rubocop]: https://github.com/rubocop/rubocop
 [dxc]: https://github.com/microsoft/DirectXShaderCompiler

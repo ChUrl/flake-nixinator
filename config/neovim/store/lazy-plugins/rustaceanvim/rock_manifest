@@ -1,7 +1,7 @@
 rock_manifest = {
    doc = {
       ["mason.txt"] = "858adffa88b1649b91187f49f191e376",
-      ["rustaceanvim.txt"] = "a9fa5fd997f2e2c099d2bf715cf4d5e9"
+      ["rustaceanvim.txt"] = "015b5fced4394fb911e73ba609c2b00c"
    },
    ftplugin = {
       ["rust.lua"] = "b225026e3590a6741373922fbae423e5",
@@ -11,7 +11,7 @@ rock_manifest = {
    lua = {
       rustaceanvim = {
          ["cached_commands.lua"] = "6e23c8231f44a3edc76be54766fca334",
-         ["cargo.lua"] = "43ba56ed4ba112dd22cac598e7b248df",
+         ["cargo.lua"] = "f2a24f708ff861b7aa914407c67a5c0e",
          commands = {
             ["code_action_group.lua"] = "55bf0c83a007e5d64924eafe2e2a96eb",
             ["crate_graph.lua"] = "30d01abc92dff63ace83a5d1697d2073",
@@ -21,7 +21,7 @@ rock_manifest = {
             ["external_docs.lua"] = "1d2fa5d88ea197ad9976c23b0ff70763",
             ["fly_check.lua"] = "3f7b89700bd8f98fd5ab0ec02cce1cdd",
             ["hover_range.lua"] = "68828cfd0c465bbe0915996795ff7b92",
-            ["init.lua"] = "6d7415da1c6e12b7b7914ab4e0339fae",
+            ["init.lua"] = "0f99af7dabcd1ad961de545363e0f658",
             ["join_lines.lua"] = "f31a68f1ddac01b926d58ccd249bc03d",
             ["move_item.lua"] = "f05118ba148e66c1e92882141e68343f",
             ["open_cargo_toml.lua"] = "2368251db4ce52659693acc8eee15b74",
@@ -37,12 +37,12 @@ rock_manifest = {
          ["compat.lua"] = "fedaef1aeaceaf086116ed62b423d0a3",
          config = {
             ["check.lua"] = "55ddc99999546e6951cd2641cc997af2",
-            ["init.lua"] = "a583a64ac0023a551c16a92f61ff063d",
+            ["init.lua"] = "4f8a4eb148571862d1439263f18c7cee",
             ["internal.lua"] = "854115363fcfc13e65098150b873a8ff",
             ["json.lua"] = "a8c7caf443ad9ce1193726aec053cc8d",
-            ["server.lua"] = "d642a65f31cb4f12b812840c1171821f"
+            ["server.lua"] = "a58c53c1333c5d050d97cf3e2bf82d99"
          },
-         ["dap.lua"] = "757ecf822f6c30ebf9e462f7009ce99a",
+         ["dap.lua"] = "e39cbe01d5d7c03d585e7448d24ceab7",
          executors = {
             ["background.lua"] = "ae1c76a5c2f73e9c58456f580b7552b7",
             ["init.lua"] = "a443891fc3b974db6787502179d85c19",
@@ -56,7 +56,7 @@ rock_manifest = {
          ["health.lua"] = "126952700269c9ab976f29f59604c5da",
          ["hover_actions.lua"] = "d0842822fa99c55b4cc5a65eae968ff2",
          ["init.lua"] = "a48de2e7e937208adc6781a5ea35ec88",
-         ["lsp.lua"] = "c36e5b79bb7fb41a9781d70421f7a55c",
+         ["lsp.lua"] = "5e8af804d16be73193df6067141bdf9f",
          neotest = {
             ["init.lua"] = "ec54c5df5002742877ec6c925b273b2d",
             ["trans.lua"] = "1f79320bca0c81d91673543dd7ad4984"
@@ -74,5 +74,5 @@ rock_manifest = {
          ["ui.lua"] = "185cbb4ef9b15b4feb6699fcbd5d4435"
       }
    },
-   ["rustaceanvim-4.22.8-1.rockspec"] = "1d483e8dffa0275323da043a1e8c9cf3"
+   ["rustaceanvim-4.25.1-1.rockspec"] = "fc780a2aa2e2df3fdb088697523f426f"
 }

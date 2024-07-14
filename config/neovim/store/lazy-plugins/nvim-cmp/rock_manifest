@@ -65,7 +65,7 @@ rock_manifest = {
          view = {
             ["custom_entries_view.lua"] = "7011cd4c8a63f645c1e8bab3ca30d293",
             ["docs_view.lua"] = "527e58b879a27b67382048808b1c599b",
-            ["ghost_text_view.lua"] = "7cc83940d6b631caf1e9643faf647a0a",
+            ["ghost_text_view.lua"] = "0447ab52f6f0d315fac966aae10fbf92",
             ["native_entries_view.lua"] = "fbf5f842464ee3e399f3c7825bb2604b",
             ["wildmenu_entries_view.lua"] = "002776dbd93c238824d042a1a1ef41b6"
          },

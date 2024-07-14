@@ -3,7 +3,7 @@ rock_manifest = {
       nui = {
          input = {
             ["README.md"] = "832b4732e882a065c23f02536578b0cf",
-            ["init.lua"] = "802d2ababa19c92bbb20a63a06351e82"
+            ["init.lua"] = "215f8b587a68e5dffa0fdc0278b7a9a6"
          },
          layout = {
             ["README.md"] = "cdd351f847db0d9e63ebceb0ada39115",

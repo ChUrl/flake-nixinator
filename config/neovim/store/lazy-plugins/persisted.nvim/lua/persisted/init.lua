@@ -203,21 +203,31 @@ end
 function M.load(opt, dir)
   opt = opt or {}
   dir = dir or session_dir()
-  local branch = get_branchname()
 
-  local session = opt.session or (opt.last and get_last() or get_current(dir))
-
-  local session_exists = vim.fn.filereadable(session) ~= 0
+  local branch
+  local session
+  if opt.session then
+    session = opt.session
+    local session_data = utils.make_session_data(session)
+    branch = session_data and session_data.branch or ""
+    if not branch then
+      vim.notify(string.format("[Persisted.nvim]: Invalid session file %s", session), vim.log.levels.WARN)
+    end
+  else
+    branch = get_branchname()
+    session = opt.last and get_last() or get_current(dir)
+  end
 
   if session then
-    if session_exists then
-      vim.g.persisting_session = config.options.follow_cwd and nil or session
+    if vim.fn.filereadable(session) ~= 0 then
+      vim.g.persisting_session = not config.options.follow_cwd and session or nil
       utils.load_session(session, config.options.silent)
     elseif type(config.options.on_autoload_no_session) == "function" then
       config.options.on_autoload_no_session()
     end
   end
 
+  dir = session_dir()
   if config.options.autosave and (allow_dir(dir) and not ignore_dir(dir)) and not ignore_branch(branch) then
     M.start()
   end

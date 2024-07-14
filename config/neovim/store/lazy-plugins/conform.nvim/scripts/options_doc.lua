@@ -25,14 +25,14 @@ require("conform").setup({
   -- This can also be a function that returns the table.
   format_on_save = {
     -- I recommend these options. See :help conform.format for details.
-    lsp_fallback = true,
+    lsp_format = "fallback",
     timeout_ms = 500,
   },
   -- If this is set, Conform will run the formatter asynchronously after save.
   -- It will pass the table to conform.format().
   -- This can also be a function that returns the table.
   format_after_save = {
-    lsp_fallback = true,
+    lsp_format = "fallback",
   },
   -- Set the log level. Use `:ConformInfo` to see the location of the log file.
   log_level = vim.log.levels.ERROR,
@@ -73,9 +73,13 @@ require("conform").setup({
       },
       -- Set to false to disable merging the config with the base definition
       inherit = true,
+      -- When inherit = true, add these additional arguments to the beginning of the command.
       -- When inherit = true, add these additional arguments to the command.
       -- This can also be a function, like args
       prepend_args = { "--use-tabs" },
+      -- When inherit = true, add these additional arguments to the end of the command.
+      -- This can also be a function, like args
+      append_args = { "--trailing-comma" },
     },
     -- These can also be a function that returns the formatter
     other_formatter = function(bufnr)

@@ -217,6 +217,14 @@ function M._diff(a, b)
   return false
 end
 
+function M.is_search()
+  local cmdline = require("noice.ui.cmdline")
+  local c = cmdline.active
+  if c and (c.state.firstc == "/" or c.state.firstc == "?") then
+    return true
+  end
+end
+
 ---@param opts? {blocking:boolean, mode:boolean, input:boolean, redraw:boolean}
 function M.is_blocking(opts)
   opts = vim.tbl_deep_extend("force", {

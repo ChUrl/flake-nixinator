@@ -366,6 +366,7 @@ We are looking for maintainers to add more parsers and to write query files for 
 - [x] [Tree-Sitter query language](https://github.com/nvim-treesitter/tree-sitter-query) (maintained by @steelsojka)
 - [x] [r](https://github.com/r-lib/tree-sitter-r) (maintained by @echasnovski)
 - [ ] [racket](https://github.com/6cdh/tree-sitter-racket)
+- [x] [ralph](https://github.com/alephium/tree-sitter-ralph) (maintained by @tdroxler)
 - [x] [rasi](https://github.com/Fymyte/tree-sitter-rasi) (maintained by @Fymyte)
 - [x] [rbs](https://github.com/joker1007/tree-sitter-rbs) (maintained by @joker1007)
 - [x] [re2c](https://github.com/amaanq/tree-sitter-re2c) (maintained by @amaanq)
@@ -375,7 +376,7 @@ We are looking for maintainers to add more parsers and to write query files for 
 - [x] [pip requirements](https://github.com/ObserverOfTime/tree-sitter-requirements) (maintained by @ObserverOfTime)
 - [x] [rnoweb](https://github.com/bamonroe/tree-sitter-rnoweb) (maintained by @bamonroe)
 - [x] [robot](https://github.com/Hubro/tree-sitter-robot) (maintained by @Hubro)
-- [x] [roc](https://github.com/nat-418/tree-sitter-roc) (maintained by @nat-418)
+- [x] [roc](https://github.com/faldor20/tree-sitter-roc) (maintained by @nat-418)
 - [x] [ron](https://github.com/amaanq/tree-sitter-ron) (maintained by @amaanq)
 - [x] [rst](https://github.com/stsewd/tree-sitter-rst) (maintained by @stsewd)
 - [x] [ruby](https://github.com/tree-sitter/tree-sitter-ruby) (maintained by @TravonteD)
@@ -547,11 +548,13 @@ If you want to install the parsers to a custom directory you can specify this
 directory with `parser_install_dir` option in that is passed to `setup`.
 `nvim-treesitter` will then install the parser files into this directory.
 
-This directory must be writeable and must be explicitly added to the
+This directory must be writeable and must be explicitly prepended to the
 `runtimepath`. For example:
 
 ```lua
-  vim.opt.runtimepath:append("/some/path/to/store/parsers")
+  -- It MUST be at the beginning of runtimepath. Otherwise the parsers from Neovim itself
+  -- is loaded that may not be compatible with the queries from the 'nvim-treesitter' plugin.
+  vim.opt.runtimepath:prepend("/some/path/to/store/parsers")
 
   require'nvim-treesitter.configs'.setup {
     parser_install_dir = "/some/path/to/store/parsers",

@@ -24,6 +24,7 @@ M.events = {
 
 ---@type NoiceCmdline?
 M.active = nil
+M.real_cursor = vim.api.nvim__redraw ~= nil
 
 ---@alias NoiceCmdlineFormatter fun(cmdline: NoiceCmdline): {icon?:string, offset?:number, view?:NoiceViewOptions}
 
@@ -37,6 +38,7 @@ M.active = nil
 ---@field block table
 
 ---@class CmdlineFormat
+---@field name string
 ---@field kind string
 ---@field pattern? string|string[]
 ---@field view string
@@ -112,19 +114,28 @@ end
 function Cmdline:format(message, text_only)
   local format = self:get_format()
   message.fix_cr = false
+  message.title = nil
 
-  if format.icon then
+  local use_input = self.state.prompt ~= ""
+    and format.view == "cmdline_input"
+    and #self.state.prompt <= 60
+    and not self.state.prompt:find("\n")
+
+  if format.icon and (format.name ~= "input" or use_input) then
     message:append(NoiceText.virtual_text(format.icon, format.icon_hl_group))
     message:append(" ")
   end
 
   if not text_only then
-    message.kind = format.kind
+    message.kind = format.name
   end
 
-  -- FIXME: prompt
   if self.state.prompt ~= "" then
-    message:append(self.state.prompt, "NoiceCmdlinePrompt")
+    if use_input then
+      message.title = " " .. self.state.prompt:gsub("%s*:%s*$", "") .. " "
+    else
+      message:append(self.state.prompt, "NoiceCmdlinePrompt")
+    end
   end
 
   if not format.conceal then
@@ -142,6 +153,7 @@ function Cmdline:format(message, text_only)
   if not text_only then
     local cursor = NoiceText.cursor(-self:length() + self.state.pos)
     cursor.on_render = M.on_render
+    cursor.enabled = not M.real_cursor
     message:append(cursor)
   end
 end
@@ -211,9 +223,34 @@ end
 ---@class CmdlinePosition
 ---@field win number Window containing the cmdline
 ---@field buf number Buffer containing the cmdline
+---@field cursor number
 ---@field bufpos {row:number, col:number} (1-0)-indexed position of the cmdline in the buffer
 ---@field screenpos {row:number, col:number} (1-0)-indexed screen position of the cmdline
 M.position = nil
+
+function M.fix_cursor()
+  if not M.position then
+    return
+  end
+  local win = M.position.win
+  local cursor = M.position.cursor
+  if vim.api.nvim_win_is_valid(win) then
+    local height = vim.api.nvim_buf_line_count(M.position.buf)
+    vim.api.nvim_win_set_cursor(win, { height, cursor })
+    vim.api.nvim_win_call(win, function()
+      local width = vim.api.nvim_win_get_width(win)
+      local leftcol = math.max(cursor - width + 1, 0)
+      vim.fn.winrestview({ leftcol = leftcol })
+    end)
+    if M.real_cursor then
+      vim.cmd.redrawstatus()
+      vim.api.nvim__redraw({
+        cursor = true,
+        win = win,
+      })
+    end
+  end
+end
 
 ---@param buf number
 ---@param line number
@@ -227,19 +264,10 @@ function M.on_render(_, buf, line, byte)
     local cmdline_start = byte - (M.last():length() - M.last().offset)
 
     local cursor = byte - M.last():length() + M.last().state.pos
-    vim.schedule(function()
-      if vim.api.nvim_win_is_valid(win) then
-        vim.api.nvim_win_set_cursor(win, { 1, cursor })
-        vim.api.nvim_win_call(win, function()
-          local width = vim.api.nvim_win_get_width(win)
-          local leftcol = math.max(cursor - width + 1, 0)
-          vim.fn.winrestview({ leftcol = leftcol })
-        end)
-      end
-    end)
 
     local pos = vim.fn.screenpos(win, line, cmdline_start)
     M.position = {
+      cursor = cursor,
       buf = buf,
       win = win,
       bufpos = {
@@ -251,6 +279,7 @@ function M.on_render(_, buf, line, byte)
         col = pos.col - 1,
       },
     }
+    pcall(M.fix_cursor)
   end
 end
 
@@ -265,11 +294,15 @@ function M.update()
 
   if cmdline then
     cmdline:format(M.message)
-    Hacks.hide_cursor()
+    if not M.real_cursor then
+      Hacks.hide_cursor()
+    end
     Manager.add(M.message)
   else
     Manager.remove(M.message)
-    Hacks.show_cursor()
+    if not M.real_cursor then
+      Hacks.show_cursor()
+    end
   end
 end
 

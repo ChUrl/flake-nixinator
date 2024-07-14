@@ -1,3 +1,4 @@
+---@diagnostic disable: missing-fields
 local require = require("noice.util.lazy")
 
 local Routes = require("noice.config.routes")
@@ -27,7 +28,7 @@ function M.defaults()
         lua = { pattern = { "^:%s*lua%s+", "^:%s*lua%s*=%s*", "^:%s*=%s*" }, icon = "", lang = "lua" },
         help = { pattern = "^:%s*he?l?p?%s+", icon = "" },
         calculator = { pattern = "^=", icon = "", lang = "vimnormal" },
-        input = {}, -- Used by input()
+        input = { view = "cmdline_input", icon = "󰥻 " }, -- Used by input()
         -- lua = false, -- to disable a format, set to `false`
       },
     },
@@ -185,12 +186,6 @@ function M.defaults()
     },
     health = {
       checker = true, -- Disable if you don't want health checks to run
-    },
-    smart_move = {
-      -- noice tries to move out of the way of existing floating windows.
-      enabled = true, -- you can disable this behaviour here
-      -- add any filetypes here, that shouldn't trigger smart move.
-      excluded_filetypes = { "cmp_menu", "cmp_docs", "notify" },
     },
     ---@type NoicePresets
     presets = {

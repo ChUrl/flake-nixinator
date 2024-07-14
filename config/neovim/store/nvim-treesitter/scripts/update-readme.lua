@@ -1,4 +1,4 @@
-#!/nix/store/php4qidg2bxzmm79vpri025bqi0fa889-coreutils-9.5/bin/env -S  -l
+#!/nix/store/i7qhgc0bs725qw3wdanznfkdna4z2ns2-coreutils-9.5/bin/env -S  -l
 
 ---@class Parser
 ---@field name string

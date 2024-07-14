@@ -16,6 +16,7 @@ rb-delimiters-intro	rainbow-delimiters.txt	/*rb-delimiters-intro*
 rb-delimiters-logging	rainbow-delimiters.txt	/*rb-delimiters-logging*
 rb-delimiters-query	rainbow-delimiters.txt	/*rb-delimiters-query*
 rb-delimiters-reading	rainbow-delimiters.txt	/*rb-delimiters-reading*
+rb-delimiters-recipes	rainbow-delimiters.txt	/*rb-delimiters-recipes*
 rb-delimiters-setup	rainbow-delimiters.txt	/*rb-delimiters-setup*
 rb-delimiters-strategy	rainbow-delimiters.txt	/*rb-delimiters-strategy*
 rb-delimiters.disable	rainbow-delimiters.txt	/*rb-delimiters.disable*

@@ -327,35 +327,6 @@ function Repo:update_abbrev_head()
   self.abbrev_head = M.get_repo_info(self.toplevel).abbrev_head
 end
 
---- @private
---- @param dir string
---- @param gitdir? string
---- @param toplevel? string
-function Repo:try_yadm(dir, gitdir, toplevel)
-  if not config.yadm.enable or self.gitdir then
-    return
-  end
-
-  local home = os.getenv('HOME')
-
-  if not home or not vim.startswith(dir, home) then
-    return
-  end
-
-  if #git_command({ 'ls-files', dir }, { command = 'yadm' }) == 0 then
-    return
-  end
-
-  M.get_repo_info(dir, 'yadm', gitdir, toplevel)
-  local yadm_info = M.get_repo_info(dir, 'yadm', gitdir, toplevel)
-  for k, v in
-    pairs(yadm_info --[[@as table<string,any>]])
-  do
-    ---@diagnostic disable-next-line:no-unknown
-    self[k] = v
-  end
-end
-
 --- @async
 --- @param dir string
 --- @param gitdir? string
@@ -372,8 +343,6 @@ function Repo.new(dir, gitdir, toplevel)
     ---@diagnostic disable-next-line:no-unknown
     self[k] = v
   end
-
-  self:try_yadm(dir, gitdir, toplevel)
 
   return self
 end
@@ -424,11 +393,15 @@ end
 --- @field object_name? string
 --- @field has_conflicts? true
 
+function Obj:from_tree()
+  return self.revision and not vim.startswith(self.revision, ':')
+end
+
 --- @param file? string
 --- @param silent? boolean
 --- @return Gitsigns.FileInfo
 function Obj:file_info(file, silent)
-  if self.revision and not vim.startswith(self.revision, ':') then
+  if self:from_tree() then
     return self:file_info_tree(file, silent)
   else
     return self:file_info_index(file, silent)
@@ -436,12 +409,16 @@ function Obj:file_info(file, silent)
 end
 
 --- @private
+--- Get information about files in the index and the working tree
 --- @param file? string
 --- @param silent? boolean
 --- @return Gitsigns.FileInfo
 function Obj:file_info_index(file, silent)
   local has_eol = check_version({ 2, 9 })
 
+  -- --others + --exclude-standard means ignored files won't return info, but
+  -- untracked files will. Unlike file_info_tree which won't return untracked
+  -- files.
   local cmd = {
     '-c',
     'core.quotepath=off',
@@ -499,6 +476,7 @@ function Obj:file_info_index(file, silent)
 end
 
 --- @private
+--- Get information about files in a certain revision
 --- @param file? string
 --- @param silent? boolean
 --- @return Gitsigns.FileInfo
@@ -615,7 +593,7 @@ local NOT_COMMITTED = {
 
 --- @param file string
 --- @return Gitsigns.CommitInfo
-function M.not_commited(file)
+function M.not_committed(file)
   local time = os.time()
   return {
     sha = string.rep('0', 40),
@@ -649,7 +627,7 @@ function Obj:run_blame(lines, lnum, opts)
     -- As we support attaching to untracked files we need to return something if
     -- the file isn't isn't tracked in git.
     -- If abbrev_head is empty, then assume the repo has no commits
-    local commit = M.not_commited(self.file)
+    local commit = M.not_committed(self.file)
     for i in ipairs(lines) do
       ret[i] = {
         orig_lnum = 0,

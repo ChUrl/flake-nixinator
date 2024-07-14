@@ -225,6 +225,13 @@ M.defaults = {
       cursorline = false,
     },
   },
+  cmdline_input = {
+    view = "cmdline_popup",
+    border = {
+      style = "rounded",
+      padding = { 0, 1 },
+    },
+  },
   confirm = {
     backend = "popup",
     relative = "editor",

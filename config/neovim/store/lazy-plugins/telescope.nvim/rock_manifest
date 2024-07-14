@@ -22,7 +22,7 @@ rock_manifest = {
    },
    doc = {
       ["secret.txt"] = "59f2d5cd8b01a044b4e7f598244869ec",
-      ["telescope.txt"] = "7216a8bf6e20d1fffcd8a31b127219c7",
+      ["telescope.txt"] = "0ef99d0fd83b8717fc995c7e76a2d0bc",
       ["telescope_changelog.txt"] = "5c807cb49d45799276be85c33693c08f"
    },
    ftplugin = {
@@ -38,7 +38,7 @@ rock_manifest = {
          actions = {
             ["generate.lua"] = "b627dbab3b7d2a572779707529331a5f",
             ["history.lua"] = "6b34c6a357dfad0762f099c1ba3b426f",
-            ["init.lua"] = "40eb8512d6b1f07e26043e3489dcf94d",
+            ["init.lua"] = "0a2a147f8fb9d292c8c90e1f21cda381",
             ["layout.lua"] = "91470edb5dd37a3025e141d5cc6691bd",
             ["mt.lua"] = "9c22e387921dbfbd56afdf3fed7b84af",
             ["set.lua"] = "e0b8491c7e789e09c032e650d8c858ef",
@@ -54,9 +54,9 @@ rock_manifest = {
             ["__diagnostics.lua"] = "debd53606d5dee06bb2031026c7c3145",
             ["__files.lua"] = "d2c0373381ef70771adae4b6e9bb03ce",
             ["__git.lua"] = "a40e030790285c1e8706d181f0b4a831",
-            ["__internal.lua"] = "89209cb8f9d22b8b6712243182f06c66",
-            ["__lsp.lua"] = "03e5d78027aa37c04280151029744063",
-            ["init.lua"] = "0e0188ef0f37c07387270ea8594c0f2e"
+            ["__internal.lua"] = "e2ecc5ba5be0f1b350af08f23a376143",
+            ["__lsp.lua"] = "0132a391de4b723ab7ea2122260d265d",
+            ["init.lua"] = "5ff2da685744ce59d0466159a54bb4f9"
          },
          ["command.lua"] = "66d2dea0d60e1a27bfff18e55b1afb4c",
          config = {
@@ -83,12 +83,12 @@ rock_manifest = {
             ["entry_display.lua"] = "27c74c2c4812244722444ebafbccd1ae",
             ["highlights.lua"] = "2a1497c924141b85e57b106d0d8ec0ed",
             ["layout.lua"] = "cdcf7f2019df1a715b233c4deae252e9",
-            ["layout_strategies.lua"] = "c11e7ff0f07d4c5e8f860bd2c4116e27",
+            ["layout_strategies.lua"] = "92c09ce299e9b01ddc971f14b7ae7d91",
             ["multi.lua"] = "7822c69f5e6e537d7ad1d46c01097069",
             ["scroller.lua"] = "54fc7267917bf9f9076a632293a73cd5",
             ["window.lua"] = "fc74d7849a1381643289a65678e14aa3"
          },
-         ["pickers.lua"] = "2dd384f602a65ad2df4ac75ffc77bcfa",
+         ["pickers.lua"] = "199781a5a14055e8681333043b013279",
          previewers = {
             ["buffer_previewer.lua"] = "544d3e3417a9c496277f3a8118141007",
             ["init.lua"] = "fa1745a8bef70d35f713d3c4b3c70257",
@@ -104,7 +104,7 @@ rock_manifest = {
             ["runner.lua"] = "1201b1158848fc7e6a581f258776a977"
          },
          ["themes.lua"] = "02e18c91826ee7834ffedc9378cbc9b9",
-         ["utils.lua"] = "fe4d526b4086bc9e2f28b7c716eea000"
+         ["utils.lua"] = "beed6a421e27ed8be0a2d49b3de470e4"
       },
       tests = {
          automated = {

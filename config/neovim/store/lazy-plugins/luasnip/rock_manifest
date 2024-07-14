@@ -1,6 +1,6 @@
 rock_manifest = {
    doc = {
-      ["luasnip.txt"] = "5014cf9a2bb7c7360fd34a1a02356207"
+      ["luasnip.txt"] = "7e261d38c2e7f702be9f26b7b6bc2358"
    },
    ftplugin = {
       ["snippets.vim"] = "ecd77fcf256c792985acf12ea7603322"

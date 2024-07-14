@@ -1,5 +1,77 @@
 # Changelog
 
+## [4.2.2](https://github.com/folke/noice.nvim/compare/v4.2.1...v4.2.2) (2024-06-16)
+
+
+### Bug Fixes
+
+* **hover:** ignore invalid markup. Fixes [#819](https://github.com/folke/noice.nvim/issues/819) ([59e633f](https://github.com/folke/noice.nvim/commit/59e633ff95be85cf65ac5dc5ece2a89c2b6c403d))
+* **msg:** clear existing confirm messages. Fixes [#302](https://github.com/folke/noice.nvim/issues/302) ([d3d8329](https://github.com/folke/noice.nvim/commit/d3d83292c15cb8a72e1e421ddf5a0aac7812cb9c))
+
+## [4.2.1](https://github.com/folke/noice.nvim/compare/v4.2.0...v4.2.1) (2024-06-15)
+
+
+### Bug Fixes
+
+* **cmdline:** only use cmdline_input for short prompts without newline. Fixes [#856](https://github.com/folke/noice.nvim/issues/856) ([d46c4ba](https://github.com/folke/noice.nvim/commit/d46c4ba67670037bc67af843b95314749caeebf8))
+
+## [4.2.0](https://github.com/folke/noice.nvim/compare/v4.1.0...v4.2.0) (2024-06-13)
+
+
+### Features
+
+* **cmdline:** icon for cmdline input ([d21d1d6](https://github.com/folke/noice.nvim/commit/d21d1d633762fe51efb6521ddd19942d40911c12))
+* **cmdline:** use cmdline prompt as title. Noice is now great for vim.ui.input out of the box ([4c1efad](https://github.com/folke/noice.nvim/commit/4c1efadccc5d4568e3abf0afdd3ee0c5c27b4be9))
+
+
+### Bug Fixes
+
+* **cmdline_input:** put in same position as cmdline_popup ([e55ce94](https://github.com/folke/noice.nvim/commit/e55ce94a1e4b1b5388e11965072e0cde129604bd))
+* **cmdline:** allow overriding title hl ([a5aa639](https://github.com/folke/noice.nvim/commit/a5aa639fb802391293585fca81ac10ecacc5e646))
+* **cmdline:** do fix_cursor **after** calculating cmdline position ([ba79352](https://github.com/folke/noice.nvim/commit/ba79352af1527283682fe7b7b049e6c7967cd037))
+* **cmdline:** reset title when needed ([edd14df](https://github.com/folke/noice.nvim/commit/edd14df3515b106202fd0def749c3f1206c3bd8c))
+* **fzf:** message id ([a9fa1a2](https://github.com/folke/noice.nvim/commit/a9fa1a2ace124fcb752e356b3c52e962c3dcb8b8))
+* **nui:** redo layout when border changes ([0327de8](https://github.com/folke/noice.nvim/commit/0327de8b300d81f778b77f9178dec6ba41a0a4af))
+
+## [4.1.0](https://github.com/folke/noice.nvim/compare/v4.0.1...v4.1.0) (2024-06-12)
+
+
+### Features
+
+* added integrations for fzf-lua ([1605be3](https://github.com/folke/noice.nvim/commit/1605be38bdaa94bc6891e7d310585a9cb16b9dcb))
+
+
+### Bug Fixes
+
+* **cmdline:** make sure search always uses correct view. Fixes [#841](https://github.com/folke/noice.nvim/issues/841) ([6a8a6de](https://github.com/folke/noice.nvim/commit/6a8a6de79223ac15d8ff5477358e343ae6a6ee51))
+* **cmdline:** separate cmdline input view ([07e8f9c](https://github.com/folke/noice.nvim/commit/07e8f9c7dfb01405f8b1173f1d3939b41753779d))
+* **fzf:** use --with-nth and skip message id in the display ([ac01164](https://github.com/folke/noice.nvim/commit/ac0116435e53c586a23302650dca73862a251108))
+
+## [4.0.1](https://github.com/folke/noice.nvim/compare/v4.0.0...v4.0.1) (2024-06-04)
+
+
+### Bug Fixes
+
+* **cmdline:** use real cursors on Neovim &gt;= 0.10 ([5b5fa91](https://github.com/folke/noice.nvim/commit/5b5fa91be6848583cbf824c69e67e26acf609ada))
+* disable noice on VimLeavePre so that the user can see exit errors ([31ec80c](https://github.com/folke/noice.nvim/commit/31ec80c99ee699ea4e90248c2e87e5a669be5e93))
+* fixup ([cfd7aa4](https://github.com/folke/noice.nvim/commit/cfd7aa4617024a9bd4f6409463c73f91a7f411b8))
+* fixup ([2bf0429](https://github.com/folke/noice.nvim/commit/2bf04290b32dc5b1a002a4888c95147bb91ec6f2))
+* reduce flickering when searching. See [#679](https://github.com/folke/noice.nvim/issues/679) ([4e1f9f1](https://github.com/folke/noice.nvim/commit/4e1f9f198226aea5b82a6df75e9913b49796cdda))
+* remove smart_move ([b6ae820](https://github.com/folke/noice.nvim/commit/b6ae820190dd166d6ebae408d65f2551e37c7bf2))
+* search IS blocking, but shouldnt trigger redraw. Fixes [#345](https://github.com/folke/noice.nvim/issues/345) ([b3f08e6](https://github.com/folke/noice.nvim/commit/b3f08e6cf0fd30847f299cc94707563920fd2139))
+
+## [4.0.0](https://github.com/folke/noice.nvim/compare/v3.0.2...v4.0.0) (2024-05-29)
+
+
+### ⚠ BREAKING CHANGES
+
+* remove cmdpreview hack for nigytly since it's no longer needed there. Update your Nightlies!!
+
+### Bug Fixes
+
+* **markdown:** ignore empty completion documentation tables ([#820](https://github.com/folke/noice.nvim/issues/820)) ([f119045](https://github.com/folke/noice.nvim/commit/f119045f38792ad5311e5f9be7a879e4c1a95fe0))
+* remove cmdpreview hack for nigytly since it's no longer needed there. Update your Nightlies!! ([49caf99](https://github.com/folke/noice.nvim/commit/49caf99d6253a43bf55ea055f7fba6c4eb78be20))
+
 ## [3.0.2](https://github.com/folke/noice.nvim/compare/v3.0.1...v3.0.2) (2024-05-22)
 
 

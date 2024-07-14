@@ -67,15 +67,15 @@ end
 -- at a time.
 local BLAME_THRESHOLD_LEN = 1000000
 
---- @private
---- @param lnum integer
+--- @async
+--- @param lnum? integer
 --- @param opts Gitsigns.BlameOpts
 --- @return table<integer,Gitsigns.BlameInfo?>?
 function CacheEntry:run_blame(lnum, opts)
   local bufnr = self.bufnr
   local blame_cache --- @type table<integer,Gitsigns.BlameInfo?>?
   repeat
-    local buftext = util.buf_lines(bufnr)
+    local buftext = util.buf_lines(bufnr, true)
     local tick = vim.b[bufnr].changedtick
     local lnum0 = #buftext > BLAME_THRESHOLD_LEN and lnum or nil
     -- TODO(lewis6991): Cancel blame on changedtick
@@ -97,7 +97,7 @@ local function get_blame_nc(file, lnum)
   return {
     orig_lnum = 0,
     final_lnum = lnum,
-    commit = Git.not_commited(file),
+    commit = Git.not_committed(file),
     filename = file,
   }
 end

@@ -29,7 +29,6 @@ function server.load_rust_analyzer_settings(project_root, opts)
   then
     ---@diagnostic disable-next-line: inject-field
     default_settings['rust-analyzer'].check = {
-      allFeatures = true,
       command = 'clippy',
       extraArgs = { '--no-deps' },
     }
@@ -148,7 +147,7 @@ function server.create_client_capabilities()
     }
   end)
   return vim.tbl_deep_extend(
-    'keep',
+    'force',
     rs_capabilities,
     cmp_capabilities,
     selection_range_capabilities,

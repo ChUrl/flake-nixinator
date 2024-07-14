@@ -8,14 +8,14 @@ rock_manifest = {
       ["haskell.lua"] = "4f72e96d3601fed58fd4a24e9633172d",
       ["lhaskell.lua"] = "4f72e96d3601fed58fd4a24e9633172d"
    },
-   ["haskell-tools.nvim-3.1.8-1.rockspec"] = "653d0f8f3d848afa2ac2e8d64e470886",
+   ["haskell-tools.nvim-3.1.10-1.rockspec"] = "18d77dcfb4eabe4ff073dfcdf377925d",
    lua = {
       ["haskell-tools"] = {
          ["compat.lua"] = "1457323a47d791e5ff2393871a112357",
          config = {
             ["check.lua"] = "4c6c96c3b51efe53b54c8bc4f14d93d6",
             ["init.lua"] = "e1f6bc006747eb79f131b527acb83b1f",
-            ["internal.lua"] = "373f754423a5786afbfcdea048d74bc7"
+            ["internal.lua"] = "471dfa798228e41621483c89212a7544"
          },
          dap = {
             ["init.lua"] = "007e49a6c0a33047d9dc3cc0c76474e7",

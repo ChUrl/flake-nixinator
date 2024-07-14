@@ -3,21 +3,22 @@ local require = require("noice.util.lazy")
 local View = require("noice.view")
 local Util = require("noice.util")
 local Scrollbar = require("noice.view.scrollbar")
-local Config = require("noice.config")
+
+local uv = vim.uv or vim.loop
 
 ---@class NuiView: NoiceView
 ---@field _nui? NuiPopup|NuiSplit
 ---@field _loading? boolean
 ---@field super NoiceView
 ---@field _hider fun()
----@field _timeout_timer vim.loop.Timer
+---@field _timeout_timer uv_timer_t
 ---@field _scroll NoiceScrollbar
 ---@diagnostic disable-next-line: undefined-field
 local NuiView = View:extend("NuiView")
 
 function NuiView:init(opts)
   NuiView.super.init(self, opts)
-  self._timer = vim.loop.new_timer()
+  self._timer = uv.new_timer()
 end
 
 function NuiView:autohide()
@@ -47,7 +48,19 @@ function NuiView:update_options()
     },
   }, self._opts, self:get_layout())
 
+  local title = {} ---@type string[]
+  for _, m in ipairs(self._messages) do
+    if m.title then
+      title[#title + 1] = m.title
+    end
+  end
+
   self._opts = Util.nui.normalize(self._opts)
+  if #title > 0 then
+    self._opts.border = self._opts.border or {}
+    self._opts.border.text = self._opts.border.text or {}
+    self._opts.border.text.top = table.concat(title, " | ")
+  end
   if self._opts.anchor == "auto" then
     if self._opts.type == "popup" and self._opts.size then
       local width = self._opts.size.width
@@ -66,55 +79,6 @@ function NuiView:update_options()
     else
       self._opts.anchor = "NW"
     end
-  end
-end
-
--- Check if other floating windows are overlapping and move out of the way
-function NuiView:smart_move()
-  if not Config.options.smart_move.enabled then
-    return
-  end
-  if not (self._opts.type == "popup" and self._opts.relative and self._opts.relative.type == "editor") then
-    return
-  end
-  if not (self._nui.winid and vim.api.nvim_win_is_valid(self._nui.winid)) then
-    return
-  end
-  if not (self._nui.border.winid and vim.api.nvim_win_is_valid(self._nui.border.winid)) then
-    return
-  end
-
-  local nui_win = self._nui.border._.type == "complex" and self._nui.border.winid or self._nui.winid
-
-  local wins = vim.tbl_filter(function(win)
-    local ft = vim.bo[vim.api.nvim_win_get_buf(win)].filetype
-    return win ~= self._nui.winid
-      and ft ~= "noice"
-      and not vim.tbl_contains(Config.options.smart_move.excluded_filetypes, ft)
-      and not (self._nui.border and self._nui.border.winid == win)
-      and vim.api.nvim_win_is_valid(win)
-      and vim.api.nvim_win_get_config(win).relative == "editor"
-      and Util.nui.overlap(nui_win, win) > 0.3
-  end, vim.api.nvim_list_wins())
-
-  if #wins > 0 then
-    -- local info = vim.tbl_map(function(win)
-    --   local buf = vim.api.nvim_win_get_buf(win)
-    --   return {
-    --     win = win,
-    --     buftype = vim.bo[buf].buftype,
-    --     ft = vim.bo[buf].filetype,
-    --     syntax = vim.bo[buf].syntax,
-    --     text = table.concat(vim.api.nvim_buf_get_lines(buf, 0, -1, false), "\n"),
-    --     name = vim.api.nvim_buf_get_name(buf),
-    --     -- config = vim.api.nvim_win_get_config(win),
-    --     area = Util.nui.overlap(nui_win, win),
-    --   }
-    -- end, wins)
-    -- dumpp(info)
-    local layout = self:get_layout()
-    layout.position.row = 2
-    self._nui:update_layout(layout)
   end
 end
 
@@ -323,7 +287,6 @@ function NuiView:show()
   if not self._visible then
     self:set_win_options(self._nui.winid)
     self:update_layout()
-    self:smart_move()
   end
 
   if self._scroll then

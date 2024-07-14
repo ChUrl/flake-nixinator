@@ -20,9 +20,13 @@ function M.setup()
       local hl_group_border = "CmdlinePopupBorder" .. kind_cc
       Highlights.add(hl_group_border, "NoiceCmdlinePopupBorder")
 
+      local hl_group_title = "CmdlinePopupTitle" .. kind_cc
+      Highlights.add(hl_group_title, "Noice" .. hl_group_border)
+
       format = vim.tbl_deep_extend("force", {
+        name = name,
         conceal = format.conceal ~= false,
-        kind = kind,
+        kind = name,
         icon_hl_group = "Noice" .. hl_group_icon,
         view = Config.options.cmdline.view,
         lang = format.lang or format.ft,
@@ -36,6 +40,7 @@ function M.setup()
           win_options = {
             winhighlight = {
               FloatBorder = "Noice" .. hl_group_border,
+              FloatTitle = "Noice" .. hl_group_title,
             },
           },
         },
@@ -45,7 +50,7 @@ function M.setup()
       table.insert(Config.options.routes, {
         view = format.view,
         opts = format.opts,
-        filter = { event = "cmdline", kind = format.kind },
+        filter = { event = "cmdline", kind = name },
       })
     end
   end

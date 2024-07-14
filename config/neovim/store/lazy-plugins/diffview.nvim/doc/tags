@@ -35,7 +35,11 @@ diffview-actions-refresh_files	diffview.txt	/*diffview-actions-refresh_files*
 diffview-actions-restore_entry	diffview.txt	/*diffview-actions-restore_entry*
 diffview-actions-scroll_view	diffview.txt	/*diffview-actions-scroll_view*
 diffview-actions-select_entry	diffview.txt	/*diffview-actions-select_entry*
+diffview-actions-select_first_entry	diffview.txt	/*diffview-actions-select_first_entry*
+diffview-actions-select_last_entry	diffview.txt	/*diffview-actions-select_last_entry*
+diffview-actions-select_next_commit	diffview.txt	/*diffview-actions-select_next_commit*
 diffview-actions-select_next_entry	diffview.txt	/*diffview-actions-select_next_entry*
+diffview-actions-select_prev_commit	diffview.txt	/*diffview-actions-select_prev_commit*
 diffview-actions-select_prev_entry	diffview.txt	/*diffview-actions-select_prev_entry*
 diffview-actions-stage_all	diffview.txt	/*diffview-actions-stage_all*
 diffview-actions-toggle_files	diffview.txt	/*diffview-actions-toggle_files*
