@@ -188,7 +188,8 @@ in {
             event = ["InsertEnter"];
             config = mkDefaultConfig name;
             opts = {
-              mapping = ["jk"];
+              # mapping = ["jk"]; # NOTE: Deprecated
+              default_mappings = true;
               timeout = 200; # In ms
             };
           };
@@ -1646,12 +1647,24 @@ in {
             '';
           };
 
+          _mini = {
+            name = "mini";
+            pkg = pkgs.vimPlugins.mini-nvim;
+            lazy = true;
+          };
+
           which-key = rec {
             name = "which-key";
             pkg = pkgs.vimPlugins.which-key-nvim;
             lazy = false;
+            dependencies = [
+              _mini
+            ];
             priority = 500;
             config = mkDefaultConfig name;
+            opts = {
+              preset = "modern";
+            };
           };
 
           winshift = rec {
