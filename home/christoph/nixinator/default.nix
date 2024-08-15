@@ -61,15 +61,15 @@
       jetbrains.pycharm-professional
       jetbrains.idea-ultimate
 
-      unityhub
-      jetbrains.rider
-      (with dotnetCorePackages;
-        combinePackages [
-          sdk_6_0_1xx
-          sdk_7_0_3xx
-          sdk_8_0_2xx
-        ]) # For Rider/Unity
-      mono # For Rider/Unity
+      # unityhub
+      # jetbrains.rider
+      # (with dotnetCorePackages;
+      #   combinePackages [
+      #     sdk_6_0_1xx
+      #     sdk_7_0_3xx
+      #     sdk_8_0_2xx
+      #   ]) # For Rider/Unity
+      # mono # For Rider/Unity
 
       blender
       # godot_4
