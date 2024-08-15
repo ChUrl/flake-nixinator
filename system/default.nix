@@ -371,7 +371,7 @@ with mylib.networking; {
     # ausweisapp.openFirewall = true; # Directly set port in firewall
   };
 
-  sound.enable = false; # Alsa, seems to conflict with PipeWire
+  # sound.enable = false; # Alsa, seems to conflict with PipeWire # NOTE: Deprecated
   hardware.pulseaudio.enable = false; # Get off my lawn
 
   # List services that you want to enable:
@@ -385,7 +385,7 @@ with mylib.networking; {
       jack.enable = false;
 
       wireplumber.enable = true; # Probably the default
-      # media-session.enable = false; # Removed upstream
+      # media-session.enable = false; # NOTE: Deprecated
     };
 
     # Enable the X11 windowing system.
