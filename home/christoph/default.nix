@@ -335,10 +335,10 @@ rec {
       acpica-tools # Dump ACPI tables etc.
 
       # Video/Image utils
-      ffmpeg_5-full # I love ffmpeg (v5, including ffplay)
+      ffmpeg_7-full # I love ffmpeg (including ffplay)
       ffmpeg-normalize
       imagemagick # Convert image (magic)
-      ueberzugpp # Display images in terminal (alacritty)
+      # ueberzugpp # Display images in terminal (alacritty) # TODO: Build failure
 
       # Document utils
       # TODO: Latex module with individual packages or HomeManager
@@ -606,7 +606,7 @@ rec {
     git = {
       enable = true;
       lfs.enable = true;
-      delta.enable = true;
+      delta.enable = false; # TODO: Build failure
 
       userEmail = "christoph.urlacher@protonmail.com";
       userName = "Christoph Urlacher";
