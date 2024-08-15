@@ -1663,7 +1663,7 @@ in {
             priority = 500;
             config = mkDefaultConfig name;
             opts = {
-              preset = "modern";
+              preset = "helix"; # or "modern"
             };
           };
 
