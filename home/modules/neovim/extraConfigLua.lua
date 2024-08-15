@@ -1,5 +1,6 @@
 -- Make Lazy window border rounded
 require("lazy.core.config").options.ui.border = "rounded"
+require("lazy.core.config").options.rocks.enabled = false
 
 -- Toggle inline diagnostics and show border
 vim.g.enable_inline_diagnostics = false
