@@ -42,6 +42,7 @@ in {
             pyright
             rust-analyzer
             texlab
+            ltex-ls
 
             # Linters
             checkstyle # java
@@ -906,6 +907,7 @@ in {
                 {name = "cmake";}
                 {name = "lua_ls";}
                 {name = "nil_ls";}
+                {name = "ltex";}
                 {
                   name = "nixd";
                   # TODO: Figure out how to structure this attrset
