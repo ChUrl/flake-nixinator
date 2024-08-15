@@ -626,7 +626,7 @@
     }
     {
       mode = "n";
-      key = "<leader>gc";
+      key = "<leader>gl";
       action = "<cmd>Telescope git_commits<cr>";
       options.desc = "Show Git log";
     }
