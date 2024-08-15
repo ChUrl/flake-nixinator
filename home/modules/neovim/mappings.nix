@@ -548,14 +548,20 @@
     {
       mode = "n";
       key = "<leader>td";
-      action = "<cmd>TroubleToggle workspace_diagnostics focus=false<cr>";
+      action = "<cmd>Trouble diagnostics toggle focus=false win.position=bottom<cr>";
       options.desc = "Toggle Trouble diagnostics";
     }
     {
       mode = "n";
       key = "<leader>tT";
-      action = "<cmd>TroubleToggle todo focus=false<cr>";
+      action = "<cmd>Trouble todo toggle focus=false win.position=right<cr>";
       options.desc = "Toggle Trouble TODOs";
+    }
+    {
+      mode = "n";
+      key = "<leader>ts";
+      action = "<cmd>Trouble symbols toggle focus=false win.position=right<cr>";
+      options.desc = "Toggle Trouble symbols";
     }
 
     {
@@ -584,6 +590,12 @@
       key = "<leader>tw";
       action = "<cmd>:set wrap!<cr>";
       options.desc = "Toggle word-wrap";
+    }
+    {
+      mode = "n";
+      key = "<leader>tv";
+      action = "<cmd>VimtexTocToggle<cr>";
+      options.desc = "Toggle Vimtex ToC";
     }
   ];
 
