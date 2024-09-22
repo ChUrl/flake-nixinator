@@ -388,6 +388,7 @@ rec {
       protonmail-bridge
       thunderbird # TODO: Email module
       # xwaylandvideobridge # NOTE: Doesn't work
+      AusweisApp2
 
       # Office
       wacomtablet # For xournalpp/krita
@@ -401,19 +402,6 @@ rec {
 
       # TODO: Module, I need to add python packages from multiple modules to the same interpreter
       python312
-
-      AusweisApp2
-
-      # Games
-      # NOTE: Does not run with wayland
-      # (retroarch.override {
-      #   cores = with libretro; [
-      #     desmume
-      #     melonds
-      #   ];
-      # })
-      # melonDS # NOTE: Doesn't work - No QT platform plugin for wayland
-      desmume
 
       # Use NixCommunity binary cache
       cachix
@@ -825,6 +813,11 @@ rec {
       };
     };
   };
+
+  # Fix Discord rich presence for Flatpak
+  systemd.user.tmpfiles.rules = [
+    "L %t/discord-ipc-0 - - - - app/com.discordapp.Discord/discord-ipc-0"
+  ];
 
   # Nicely reload system units when changing configs
   systemd.user.startServices = "sd-switch";
