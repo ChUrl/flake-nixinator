@@ -287,7 +287,7 @@ in {
               _cmp-cmdline
               _cmp-emoji
               _cmp-nvim-lsp
-              _cmp-nvim-lsp-signature-help
+              # _cmp-nvim-lsp-signature-help
               _cmp-luasnip
             ];
             config = mkDefaultConfig name;
@@ -296,9 +296,9 @@ in {
                 {name = "async_path";}
                 {name = "emoji";}
                 {name = "nvim_lsp";}
-                {name = "nvim_lsp_signature_help";}
                 {name = "luasnip";}
 
+                # {name = "nvim_lsp_signature_help";}
                 # {name = "buffer";} # Too much noise
                 # {name = "cmdline";} # Using nui as cmdline completion backend
               ];
@@ -420,6 +420,7 @@ in {
             };
           };
 
+          # Code formatting
           conform = rec {
             name = "conform";
             pkg = pkgs.vimPlugins.conform-nvim;
@@ -1184,7 +1185,7 @@ in {
             config = mkDefaultConfig name;
             opts = {
               presets = {
-                bottom_search = false;
+                bottom_search = true;
                 command_palette = true;
                 long_message_to_split = true;
                 inc_rename = true;
@@ -1744,19 +1745,19 @@ in {
           noice
           rainbow-delimiters
           rustaceanvim
-          sandwich
-          sleuth
+          sandwich # Manipulate pairs
+          sleuth # Heuristically set indent depth
           telescope
-          todo-comments
+          todo-comments # Highlight TODOs
           toggleterm
           treesitter
-          trim
-          trouble
+          trim # Trim whitespace
+          trouble # Diagnostics window
           # twilight # NOTE: Don't like it
-          ufo
+          ufo # Code folding
           vimtex
           which-key
-          winshift
+          winshift # Move windows around
           yanky
         ];
       };
