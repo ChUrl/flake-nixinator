@@ -104,6 +104,8 @@ in {
         # xfce.thunar
         # xfce.tumbler # Thunar thumbnails
         libsForQt5.polkit-kde-agent
+        libsForQt5.qtwayland
+        kdePackages.qtwayland
       ];
 
       sessionVariables = {
