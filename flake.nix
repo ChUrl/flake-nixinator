@@ -11,32 +11,31 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     hardware.url = "github:nixos/nixos-hardware";
 
-    # Home manager
+    # Home Manager
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
-    # Other Flakes
-    emacs-overlay.url = "github:nix-community/emacs-overlay";
-    nur.url = "github:nix-community/NUR";
-    devshell.url = "github:numtide/devshell";
+    # Other
     nixvim.url = "github:nix-community/nixvim";
     nixvim.inputs.nixpkgs.follows = "nixpkgs";
+    emacs-overlay.url = "github:nix-community/emacs-overlay";
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=v0.4.1";
     nix-alien.url = "github:thiagokokada/nix-alien";
+    devshell.url = "github:numtide/devshell";
+    nur.url = "github:nix-community/NUR"; # Nix User Repository
+    firefox-gnome-theme.url = "github:rafaelmardojai/firefox-gnome-theme";
+    firefox-gnome-theme.flake = false;
+
+    # Disabled
+    # adwaita-for-steam.url = "github:tkashkin/Adwaita-for-Steam";
+    # adwaita-for-steam.flake = false;
+    # plasma-manager.url = "github:pjones/plasma-manager";
+    # plasma-manager.inputs.nixpkgs.follows = "nixpkgs";
+    # plasma-manager.inputs.home-manager.follows = "home-manager";
     # musnix.url = "github:musnix/musnix";
     # nixified-ai.url = "github:nixified-ai/flake";
     # nixos-conf-editor.url = "github:vlinkz/nixos-conf-editor";
     # nix-matlab.url = "gitlab:doronbehar/nix-matlab";
-
-    # plasma-manager.url = "github:pjones/plasma-manager";
-    # plasma-manager.inputs.nixpkgs.follows = "nixpkgs";
-    # plasma-manager.inputs.home-manager.follows = "home-manager";
-
-    firefox-gnome-theme.url = "github:rafaelmardojai/firefox-gnome-theme";
-    firefox-gnome-theme.flake = false;
-
-    # adwaita-for-steam.url = "github:tkashkin/Adwaita-for-Steam";
-    # adwaita-for-steam.flake = false;
   };
 
   # Outputs is a function that takes the inputs as arguments.
