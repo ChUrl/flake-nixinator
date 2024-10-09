@@ -1240,6 +1240,16 @@ in {
             };
           };
 
+          oil = rec {
+            name = "oil";
+            pkg = pkgs.vimPlugins.oil-nvim;
+            lazy = false;
+            config = mkDefaultConfig name;
+            opts = {
+              default_file_explorer = true;
+            };
+          };
+
           rainbow-delimiters = {
             name = "rainbow-delimiters";
             pkg = pkgs.vimPlugins.rainbow-delimiters-nvim;
@@ -1492,7 +1502,7 @@ in {
               float_opts = {
                 border = "curved"; # 'single' | 'double' | 'shadow' | 'curved'
                 width = 80;
-                height = 35;
+                height = 45;
                 winblend = 0;
               };
             };
@@ -1648,6 +1658,11 @@ in {
             '';
           };
 
+          wakatime = {
+            name = "wakatime";
+            pkg = pkgs.vimPlugins.vim-wakatime;
+          };
+
           _mini = {
             name = "mini";
             pkg = pkgs.vimPlugins.mini-nvim;
@@ -1743,6 +1758,7 @@ in {
           navbuddy
           neo-tree
           noice
+          oil
           rainbow-delimiters
           rustaceanvim
           sandwich # Manipulate pairs
@@ -1756,6 +1772,7 @@ in {
           # twilight # NOTE: Don't like it
           ufo # Code folding
           vimtex
+          wakatime
           which-key
           winshift # Move windows around
           yanky
