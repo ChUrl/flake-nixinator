@@ -828,6 +828,7 @@ in {
                 markdown = ["vale"];
                 nix = ["statix"];
                 python = ["flake8"];
+                tex = ["chktex"];
                 # rust = ["clippy"]; # Not supported, but integrated through rustaceanvim
                 text = ["vale"];
               };
@@ -1654,6 +1655,14 @@ in {
             init = ''
               function()
                 vim.g.vimtex_view_method = "zathura"
+                vim.g.vimtex_compiler_latexmk = {
+                  options = {
+                    "-shell-escape",
+                    "-file-line-error",
+                    "-synctex=1",
+                    "-interaction=nonstopmode",
+                  },
+                }
               end
             '';
           };
