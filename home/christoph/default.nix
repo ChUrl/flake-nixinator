@@ -64,7 +64,7 @@ rec {
     firefox = {
       enable = true;
       wayland = true;
-      vaapi = true; # NOTE: Crashes AMDGPU driver fairly often (don't know why exactly)
+      vaapi = true;
       disableTabBar = true;
       defaultBookmarks = true;
       gnomeTheme = true;
