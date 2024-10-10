@@ -6,7 +6,9 @@
     };
 
     disableMappings = [
-      # I only use f and F together with flash.nvim and s and S with sneak
+      # I only use f/F with flash
+      "s"
+      "S"
       "t"
       "T"
     ];
