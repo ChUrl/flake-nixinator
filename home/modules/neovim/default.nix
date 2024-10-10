@@ -784,6 +784,19 @@ in {
                 for k, v in pairs(opts) do
                   lint[k] = v
                 end
+
+                local chktex = lint.linters.chktex
+                chktex.args = {
+                  '-v0',
+                  '-I0',
+                  '-n3', -- Enclose previous parenthesis with {}
+                  -- '-n8', -- Wrong length of dash may have been used
+                  -- '-n24', -- Delete this space to maintain correct page references
+                  '-s',
+                  ':',
+                  '-f',
+                  '%l%b%c%b%d%b%k%b%n%b%m%b%b%b'
+                }
               end
             '';
             opts = {
