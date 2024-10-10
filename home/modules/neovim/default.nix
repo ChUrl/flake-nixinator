@@ -99,6 +99,8 @@ in {
 
       globals = {
         mapleader = " ";
+
+        # TODO: Set this differntly and actually move local keybindings to this, e.g. for LaTeX
         mallocalleader = " ";
       };
 
@@ -979,7 +981,6 @@ in {
             };
           };
 
-          # TODO: Snippet configs (e.g. LaTeX)
           luasnip = {
             name = "luasnip";
             pkg = pkgs.vimPlugins.luasnip;
@@ -1694,7 +1695,7 @@ in {
           haskell-tools # Haskell integration
           illuminate # Highlight usages of word under cursor
 
-          # incline # Statuslines for each window # TODO: Bad styling
+          # incline # Statuslines for each window # TODO: Cool but bad styling
 
           intellitab # Indent to the correct level on blanklines
           jdtls # Eclipse JDT language server integration for Java
@@ -1704,7 +1705,7 @@ in {
           lspconfig # Language server configurations for different languages
           lualine # Status line
 
-          luasnip # Snippets # TODO: No snippets yet, figure out how to add them. Maybe use luasnip from nixvim
+          luasnip # Snippets # TODO: How to add snippets, maybe use luasnip from nixvim directly?
 
           markview # Markdown support
           # narrow-region # Open a buffer restricted to the selection
