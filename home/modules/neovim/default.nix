@@ -70,14 +70,32 @@ in {
       file.".config/vale/.vale.ini".source = ./vale_config.ini;
     };
 
-    # TODO: Read the LazyVim config for further ideas
     programs.nixvim = {
       enable = true;
       defaultEditor = true;
-      enableMan = false;
+      enableMan = false; # Nixvim man pages
       luaLoader.enable = true; # NOTE: Experimental
       viAlias = cfg.alias;
       vimAlias = cfg.alias;
+
+      colorschemes.catppuccin = {
+        enable = true;
+        settings = {
+          flavour = "mocha"; # latte, frappe, macchiato, mocha
+          background = {
+            light = "latte";
+            dark = "mocha";
+          };
+        };
+      };
+
+      performance.byteCompileLua = {
+        enable = true;
+        configs = true;
+        initLua = true;
+        nvimRuntime = true;
+        plugins = true;
+      };
 
       globals = {
         mapleader = " ";
@@ -89,13 +107,7 @@ in {
       extraConfigLua = builtins.readFile ./extraConfigLua.lua;
 
       # extraLuaPackages = with pkgs.lua51Packages; [];
-
-      # extraPython3Packages = p: [
-      #   # For CHADtree
-      #   p.pyyaml
-      #   p.pynvim-pp
-      #   p.std2
-      # ];
+      # extraPython3Packages = p: [];
 
       autoCmd = [
         {
@@ -150,7 +162,6 @@ in {
         }
       ];
 
-      # TODO: Incremental selection
       keymaps = import ./mappings.nix {inherit lib mylib;};
 
       plugins.lazy = let
@@ -191,30 +202,6 @@ in {
               # mapping = ["jk"]; # NOTE: Deprecated
               default_mappings = true;
               timeout = 200; # In ms
-            };
-          };
-
-          catppuccin = rec {
-            name = "catppuccin";
-            pkg = pkgs.vimPlugins.catppuccin-nvim;
-            lazy = false;
-            priority = 1000;
-            config = ''
-              function(_, opts)
-                require("${name}").setup(opts)
-
-                vim.cmd([[
-                  let $BAT_THEME = "catppuccin"
-                  colorscheme catppuccin
-                ]])
-              end
-            '';
-            opts = {
-              flavour = "mocha"; # latte, frappe, macchiato, mocha
-              background = {
-                light = "latte";
-                dark = "mocha";
-              };
             };
           };
 
@@ -263,11 +250,11 @@ in {
             lazy = true;
           };
 
-          _cmp-nvim-lsp-signature-help = {
-            name = "cmp-nvim-lsp-signature-help";
-            pkg = pkgs.vimPlugins.cmp-nvim-lsp-signature-help;
-            lazy = true;
-          };
+          # _cmp-nvim-lsp-signature-help = {
+          #   name = "cmp-nvim-lsp-signature-help";
+          #   pkg = pkgs.vimPlugins.cmp-nvim-lsp-signature-help;
+          #   lazy = true;
+          # };
 
           _cmp-luasnip = {
             name = "cmp_luasnip";
@@ -275,7 +262,6 @@ in {
             lazy = true;
           };
 
-          # TODO: Check additional completion backends
           cmp = rec {
             name = "cmp";
             pkg = pkgs.vimPlugins.nvim-cmp;
@@ -298,7 +284,7 @@ in {
                 {name = "nvim_lsp";}
                 {name = "luasnip";}
 
-                # {name = "nvim_lsp_signature_help";}
+                # {name = "nvim_lsp_signature_help";} # Already provided by something else (noice?)
                 # {name = "buffer";} # Too much noise
                 # {name = "cmdline";} # Using nui as cmdline completion backend
               ];
@@ -311,15 +297,25 @@ in {
                 "<C-Up>".__raw = "cmp.mapping.scroll_docs(-4)";
                 "<C-Down>".__raw = "cmp.mapping.scroll_docs(4)";
                 "<C-Space>".__raw = "cmp.mapping.complete({})";
-                "<CR>".__raw = "cmp.mapping.confirm({ select = true })";
+                "<CR>".__raw = ''
+                  cmp.mapping(function(fallback)
+                    if cmp.visible() then
+                      if luasnip.expandable() then
+                        luasnip.expand()
+                      else
+                        cmp.confirm({select = true})
+                      end
+                    else
+                      fallback()
+                    end
+                  end)
+                '';
                 "<Tab>".__raw = ''
                   cmp.mapping(function(fallback)
                     if cmp.visible() then
                       cmp.select_next_item()
-                    elseif require("luasnip").expand_or_jumpable() then
-                      require("luasnip").expand_or_jump()
-                    elseif has_words_before() then
-                      cmp.complete()
+                    elseif luasnip.locally_jumpable(1) then
+                      luasnip.jump(1)
                     else
                       fallback() -- This will call the intellitab <Tab> binding
                     end
@@ -329,7 +325,7 @@ in {
                   cmp.mapping(function(fallback)
                     if cmp.visible() then
                       cmp.select_prev_item()
-                    elseif luasnip.jumpable(-1) then
+                    elseif luasnip.locally_jumpable(-1) then
                       luasnip.jump(-1)
                     else
                       fallback()
@@ -370,7 +366,6 @@ in {
             '';
           };
 
-          # TODO: Only colorize html/css/scss/sass/etc.
           # colorizer = rec {
           #   name = "colorizer";
           #   pkg = pkgs.vimPlugins.nvim-colorizer-lua;
@@ -494,7 +489,7 @@ in {
             name = "dashboard";
             pkg = pkgs.vimPlugins.dashboard-nvim;
             dependencies = [
-              _web-devicons
+              web-devicons
               _persisted
             ];
             lazy = false;
@@ -523,6 +518,12 @@ in {
                     desc = " Recent Files";
                     icon = " ";
                     key = "r";
+                  }
+                  {
+                    action = "ObsidianSearch";
+                    desc = " Obsidian Note";
+                    icon = " ";
+                    key = "o";
                   }
                   {
                     action = "ene | startinsert";
@@ -572,7 +573,7 @@ in {
             name = "flash";
             pkg = pkgs.vimPlugins.flash-nvim;
             lazy = true;
-            keys = ["s" "S" "f" "F" "t" "T"];
+            keys = ["f" "F"];
             config = mkDefaultConfig name;
           };
 
@@ -614,50 +615,6 @@ in {
             lazy = false; # Recommended by author
             # Don't call setup!
           };
-
-          # indent-blankline = {
-          #   name = "indent-blankline";
-          #   pkg = pkgs.vimPlugins.indent-blankline-nvim;
-          #   lazy = false;
-          #   config = ''
-          #     function(_, opts)
-          #       -- Regular setup
-          #       require("ibl").setup(opts)
-          #
-          #       -- Setup IBL with rainbow-delimiters
-          #       -- local highlight = {
-          #       --   "RainbowRed",
-          #       --   "RainbowYellow",
-          #       --   "RainbowBlue",
-          #       --   "RainbowOrange",
-          #       --   "RainbowGreen",
-          #       --   "RainbowViolet",
-          #       --   "RainbowCyan",
-          #       -- }
-          #       -- local hooks = require("ibl.hooks")
-          #
-          #       -- -- create the highlight groups in the highlight setup hook, so they are reset
-          #       -- -- every time the colorscheme changes
-          #       -- hooks.register(hooks.type.HIGHLIGHT_SETUP, function()
-          #       --   vim.api.nvim_set_hl(0, "RainbowRed", { fg = "#E06C75" })
-          #       --   vim.api.nvim_set_hl(0, "RainbowYellow", { fg = "#E5C07B" })
-          #       --   vim.api.nvim_set_hl(0, "RainbowBlue", { fg = "#61AFEF" })
-          #       --   vim.api.nvim_set_hl(0, "RainbowOrange", { fg = "#D19A66" })
-          #       --   vim.api.nvim_set_hl(0, "RainbowGreen", { fg = "#98C379" })
-          #       --   vim.api.nvim_set_hl(0, "RainbowViolet", { fg = "#C678DD" })
-          #       --   vim.api.nvim_set_hl(0, "RainbowCyan", { fg = "#56B6C2" })
-          #       -- end)
-          #
-          #       -- vim.g.rainbow_delimiters = { highlight = highlight }
-          #       -- opts.scope = {highlight = highlight}
-          #
-          #       -- Call setup function
-          #       -- require("ibl").setup(opts)
-          #
-          #       -- hooks.register(hooks.type.SCOPE_HIGHLIGHT, hooks.builtin.scope_highlight_from_extmark)
-          #     end
-          #   '';
-          # };
 
           illuminate = rec {
             name = "illuminate";
@@ -758,7 +715,16 @@ in {
 
           intellitab = {
             name = "intellitab";
-            pkg = pkgs.vimPlugins.intellitab-nvim;
+            # pkg = pkgs.vimPlugins.intellitab-nvim; # Prints at each indent :(
+            pkg = pkgs.vimUtils.buildVimPlugin {
+              name = "intellitab-nvim";
+              src = pkgs.fetchFromGitHub {
+                owner = "ChUrl";
+                repo = "intellitab.nvim";
+                rev = "6d644b7d92198477f2920d0c3b3b22dad470ef10"; # Disable print
+                sha256 = "sha256-MwBcsYpyrjoXa7nxcwaci3h0NIWyMoF1NyYfEbFzo0E=";
+              };
+            };
             lazy = true;
             event = ["InsertEnter"];
           };
@@ -838,18 +804,8 @@ in {
           # Newer alternative to neodev
           _lazydev = rec {
             name = "lazydev";
-            pkg = let
-              nvim-lazydev = pkgs.vimUtils.buildVimPlugin {
-                name = "nvim-lazydev";
-                src = pkgs.fetchFromGitHub {
-                  owner = "folke";
-                  repo = "lazydev.nvim";
-                  rev = "8146b3ad692ae7026fea1784fd5b13190d4f883c"; # v1.4
-                  sha256 = "sha256-JGRjwRDx2Gdp/EBwO2XmWRGOWmHDu0XAzLps+/RSpYk=";
-                };
-              };
-            in
-              nvim-lazydev;
+            pkg = pkgs.vimPlugins.lazydev-nvim;
+            lazy = true;
             ft = ["lua"];
             config = mkDefaultConfig name;
             # opts = {
@@ -989,12 +945,12 @@ in {
               end
             '';
             opts = {
-              extensions = ["fzf" "chadtree" "neo-tree" "toggleterm" "trouble"];
+              extensions = ["fzf" "neo-tree" "toggleterm" "trouble"];
 
               options = {
                 always_divide_middle = true;
                 globalstatus = true;
-                ignore_focus = ["neo-tree" "chadtree"];
+                ignore_focus = ["neo-tree"];
                 section_separators = {
                   left = "";
                   right = "";
@@ -1035,20 +991,30 @@ in {
             '';
           };
 
-          # TODO: Closing a narrow buffer leaves a permanent highlight
-          narrow-region = {
-            name = "narrow-region";
-            pkg = pkgs.vimPlugins.NrrwRgn;
+          markview = {
+            name = "markview";
+            pkg = pkgs.vimPlugins.markview-nvim;
             lazy = true;
-            cmd = ["NR"];
-            config = ''
-              function(_, opts)
-                vim.keymap.del("x", "<space>Nr")
-                vim.keymap.del("x", "<space>nr")
-                vim.keymap.del("n", "<space>nr")
-              end
-            '';
+            ft = ["markdown"];
+            dependencies = [
+              treesitter
+              web-devicons
+            ];
           };
+
+          # narrow-region = {
+          #   name = "narrow-region";
+          #   pkg = pkgs.vimPlugins.NrrwRgn;
+          #   lazy = true;
+          #   cmd = ["NR"];
+          #   config = ''
+          #     function(_, opts)
+          #       vim.keymap.del("x", "<space>Nr")
+          #       vim.keymap.del("x", "<space>nr")
+          #       vim.keymap.del("n", "<space>nr")
+          #     end
+          #   '';
+          # };
 
           navbuddy = {
             name = "navbuddy";
@@ -1073,7 +1039,7 @@ in {
             pkg = pkgs.vimPlugins.neo-tree-nvim;
             dependencies = [
               _plenary
-              _web-devicons
+              web-devicons
               _nui
             ];
             lazy = true;
@@ -1186,7 +1152,7 @@ in {
             config = mkDefaultConfig name;
             opts = {
               presets = {
-                bottom_search = true;
+                bottom_search = false;
                 command_palette = true;
                 long_message_to_split = true;
                 inc_rename = true;
@@ -1236,6 +1202,26 @@ in {
                     kind = "search_count";
                   };
                   opts = {skip = true;};
+                }
+              ];
+            };
+          };
+
+          obsidian = rec {
+            name = "obsidian";
+            pkg = pkgs.vimPlugins.obsidian-nvim;
+            lazy = true;
+            cmd = ["ObsidianSearch" "ObsidianNew"];
+            ft = ["markdown"];
+            dependencies = [
+              _plenary
+            ];
+            config = mkDefaultConfig name;
+            opts = {
+              workspaces = [
+                {
+                  name = "Chriphost";
+                  path = "~/Notes/Obsidian/Chriphost";
                 }
               ];
             };
@@ -1309,25 +1295,15 @@ in {
             '';
           };
 
-          # TODO: Disable default keymaps
-          sandwich = {
-            name = "sandwich";
-            pkg = pkgs.vimPlugins.vim-sandwich;
-            lazy = false;
-            init = ''
-              function()
-                -- Disable default keymaps
-                vim.g.sandwich_no_default_key_mappings = 1
-                vim.g.operator_sandwich_no_default_key_mappings = 1
-                vim.g.textobj_sandwich_no_default_key_mappings = 1
-              end
-            '';
-          };
-
-          # TODO: Indent doesn't follow prev line correctly, don't know if sleuth issue
           sleuth = {
             name = "sleuth";
             pkg = pkgs.vimPlugins.vim-sleuth;
+            lazy = false;
+          };
+
+          sneak = {
+            name = "sneak";
+            pkg = pkgs.vimPlugins.vim-sneak;
             lazy = false;
           };
 
@@ -1343,7 +1319,6 @@ in {
             lazy = true;
           };
 
-          # TODO: Missing bat catppuccin theme
           _telescope-undo = {
             name = "telescope-undo";
             pkg = pkgs.vimPlugins.telescope-undo-nvim;
@@ -1356,7 +1331,6 @@ in {
             lazy = true;
           };
 
-          # TODO: Check additional telescope backends
           telescope = {
             name = "telescope";
             pkg = pkgs.vimPlugins.telescope-nvim;
@@ -1396,9 +1370,6 @@ in {
             };
           };
 
-          # TODO: Can't match @ for @todo etc.
-          #       https://github.com/folke/todo-comments.nvim/issues/213
-          #       https://github.com/folke/todo-comments.nvim/issues/56
           todo-comments = rec {
             name = "todo-comments";
             pkg = pkgs.vimPlugins.todo-comments-nvim;
@@ -1420,7 +1391,6 @@ in {
                     "BUG"
                     "FIXIT"
                     "ISSUE"
-                    # "#@fix" "#@fixme" "#@bug" "#@fixit" "#@issue"
                   ];
                   # signs = false; # Configure signs for some keywords individually
                 };
@@ -1428,14 +1398,12 @@ in {
                   icon = " ";
                   color = "info";
                   alt = [
-                    # "#@todo"
                   ];
                 };
                 HACK = {
                   icon = " ";
                   color = "warning";
                   alt = [
-                    # "#@hack"
                   ];
                 };
                 WARN = {
@@ -1444,7 +1412,6 @@ in {
                   alt = [
                     "WARNING"
                     "XXX"
-                    # "#@warn" "#@warning" "#@xxx"
                   ];
                 };
                 PERF = {
@@ -1453,7 +1420,6 @@ in {
                     "OPTIM"
                     "PERFORMANCE"
                     "OPTIMIZE"
-                    # "#@perf" "#@optim" "#@performance" "#@optimize"
                   ];
                 };
                 NOTE = {
@@ -1461,7 +1427,6 @@ in {
                   color = "hint";
                   alt = [
                     "INFO"
-                    # "#@note" "#@info"
                   ];
                 };
                 TEST = {
@@ -1471,14 +1436,12 @@ in {
                     "TESTING"
                     "PASSED"
                     "FAILED"
-                    # "#@test" "#@testing" "#@passed" "#@failed"
                   ];
                 };
               };
             };
           };
 
-          # TODO: The shell colorscheme is unreadable
           toggleterm = rec {
             name = "toggleterm";
             pkg = pkgs.vimPlugins.toggleterm-nvim;
@@ -1579,9 +1542,8 @@ in {
               #   highlight_current_scope.enable = false; # Ugly
               # };
 
-              # TODO: Doesn't work
               incremental_selection = {
-                enable = true;
+                enable = false;
                 keymaps = {
                   "init_selection" = "gnn";
                   "node_decremental" = "grm";
@@ -1599,7 +1561,6 @@ in {
             config = mkDefaultConfig name;
           };
 
-          # TODO: Show in left pane (either neo-tree or trouble)
           trouble = rec {
             name = "trouble";
             pkg = pkgs.vimPlugins.trouble-nvim;
@@ -1607,24 +1568,6 @@ in {
             cmd = ["Trouble" "TroubleToggle"];
             config = mkDefaultConfig name;
           };
-
-          # twilight = rec {
-          #   name = "twilight";
-          #   pkg = pkgs.vimPlugins.twilight-nvim;
-          #   config = (mkDefaultConfig name);
-          #   opts = {
-          #     dimming.alpha = 0.75;
-          #     context = 15;
-          #     treesitter = true;
-          #     expand = [
-          #       "function"
-          #       "method"
-          #       "table"
-          #       "if_statement"
-          #     ];
-          #     # exclude = []; # Excluded filetypes
-          #   };
-          # };
 
           _promise = {
             name = "promise";
@@ -1642,13 +1585,6 @@ in {
             config = mkDefaultConfig name;
           };
 
-          _web-devicons = rec {
-            name = "nvim-web-devicons";
-            pkg = pkgs.vimPlugins.nvim-web-devicons;
-            lazy = true;
-            config = mkDefaultConfig name;
-          };
-
           vimtex = {
             name = "vimtex";
             pkg = pkgs.vimPlugins.vimtex;
@@ -1662,6 +1598,8 @@ in {
                     "-synctex=1",
                     "-interaction=nonstopmode",
                   },
+                  aux_dir = ".aux",
+                  out_dir = ".out",
                 }
               end
             '';
@@ -1670,6 +1608,13 @@ in {
           wakatime = {
             name = "wakatime";
             pkg = pkgs.vimPlugins.vim-wakatime;
+          };
+
+          web-devicons = rec {
+            name = "nvim-web-devicons";
+            pkg = pkgs.vimPlugins.nvim-web-devicons;
+            lazy = true;
+            config = mkDefaultConfig name;
           };
 
           _mini = {
@@ -1705,17 +1650,17 @@ in {
                 disable_defaults = true;
 
                 win_move_mode = {
-                  "h" = "left";
-                  "j" = "down";
-                  "k" = "up";
-                  "l" = "right";
+                  h = "left";
+                  j = "down";
+                  k = "up";
+                  l = "right";
                 };
               };
             };
           };
 
           yanky = rec {
-            name = "yanky"; # TODO: Bindings
+            name = "yanky";
             pkg = pkgs.vimPlugins.yanky-nvim;
             lazy = true;
             cmd = [
@@ -1725,66 +1670,66 @@ in {
             config = mkDefaultConfig name;
           };
         in [
-          #
-          # Theme
-          #
-
-          catppuccin
-          _web-devicons
-
-          #
-          # Plugins
-          #
-
-          autopairs
-          bbye
-          better-escape
-          # chadtree # NOTE: Using neo-tree
+          autopairs # Automatic closing brackets/parens
+          bbye # Delete buffer without closing the window or split
+          better-escape # Escape to normal mode using "jk"
           clangd-extensions
-          cmp
-          # colorizer
-          comment
-          conform
-          dashboard
-          diffview
-          direnv
-          flash
-          gitmessenger
-          gitsigns
-          haskell-tools
-          # indent-blankline # NOTE: Too much noise
-          illuminate
-          # incline # TODO: Bad styling
-          intellitab
-          jdtls
-          lastplace
-          lazygit
-          lint
-          lspconfig
-          lualine
-          luasnip
-          narrow-region
-          navbuddy
-          neo-tree
-          noice
-          oil
-          rainbow-delimiters
-          rustaceanvim
-          sandwich # Manipulate pairs
+
+          # blink-cmp # Auto completion popups # TODO: Try this instead of cmp
+
+          cmp # Auto completion popups
+
+          # colorizer # Colorize color strings # TODO: Only colorize html/css/scss/sass/js
+
+          comment # Toggle line- or block-comments
+          conform # Auto formatting on save
+          dashboard # Dashboard when starting nvim
+
+          diffview # Git diff # TODO: Check the keybindings
+
+          direnv # Automatically load local environments
+          flash # Highlight f/F search results
+          gitmessenger # Show last git commit for the current line
+          gitsigns # Show git line additions/deletions/changes in the gutter
+          haskell-tools # Haskell integration
+          illuminate # Highlight usages of word under cursor
+
+          # incline # Statuslines for each window # TODO: Bad styling
+
+          intellitab # Indent to the correct level on blanklines
+          jdtls # Eclipse JDT language server integration for Java
+          lastplace # Reopen a file at the last editing position
+          lazygit # Git frontend
+          lint # Lint documents on save
+          lspconfig # Language server configurations for different languages
+          lualine # Status line
+
+          luasnip # Snippets # TODO: No snippets yet, figure out how to add them. Maybe use luasnip from nixvim
+
+          markview # Markdown support
+          # narrow-region # Open a buffer restricted to the selection
+          navbuddy # Structural file view
+          neo-tree # File tree sidebar
+          noice # Modern UI overhaul, e.g. floating cmdline
+          obsidian # Integration with Obsidian.md
+          oil # File manager
+          rainbow-delimiters # Bracket/Paren colorization
+          rustaceanvim # Rust integration
           sleuth # Heuristically set indent depth
-          telescope
+          sneak # Like f/F but for two characters
+          telescope # Option picker frontend
           todo-comments # Highlight TODOs
-          toggleterm
-          treesitter
+          toggleterm # Integrated terminal
+          treesitter # AST based syntax highlighting + indentation
           trim # Trim whitespace
           trouble # Diagnostics window
-          # twilight # NOTE: Don't like it
           ufo # Code folding
-          vimtex
-          wakatime
-          which-key
+          vimtex # LaTeX support
+          wakatime # Time tracking
+          web-devicons
+          which-key # Live keybinding help
           winshift # Move windows around
-          yanky
+          yanky # Clipboard history
         ];
       };
     };

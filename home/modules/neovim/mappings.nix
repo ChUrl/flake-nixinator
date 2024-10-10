@@ -1,4 +1,18 @@
 {...}: let
+  disabled-mappings = let
+    mkDisabledMapping = mapping: {
+      key = mapping;
+      action = "<Nop>";
+    };
+
+    disableMappings = [
+      # I only use f and F together with flash.nvim and s and S with sneak
+      "t"
+      "T"
+    ];
+  in
+    builtins.map mkDisabledMapping disableMappings;
+
   no-leader = [
     # Cursor movement
     {
@@ -199,20 +213,18 @@
       action = "\"+y";
       options.desc = "Copy";
     }
-
-    # Flash/Search
-    # {
-    #   mode = "n";
-    #   key = "s";
-    #   action = "<cmd>lua require('flash').jump()<cr>";
-    #   options.desc = "Flash jump";
-    # }
-    # {
-    #   mode = "n";
-    #   key = "S";
-    #   action = "<cmd>lua require('flash').treesitter()<cr>";
-    #   options.desc = "Flash Treesitter";
-    # }
+    {
+      mode = "n";
+      key = "<C-p>";
+      action = "<cmd>YankyRingHistory<cr>";
+      options.desc = "Paste (Yanky)";
+    }
+    {
+      mode = "n";
+      key = "<C-S-p>";
+      action = "<cmd>YankyClearHistory<cr>";
+      options.desc = "Clear Yanky History";
+    }
 
     # Various
     {
@@ -221,27 +233,18 @@
       action = "<cmd>nohlsearch<cr>";
       options.desc = "Clear Search Highlights";
     }
-
     {
       mode = "n";
       key = "K";
       action = "<cmd>lua vim.lsp.buf.hover()<cr>";
       options.desc = "LSP Hover";
     }
-
     {
       mode = "n";
       key = "/";
       action = "<cmd>Telescope current_buffer_fuzzy_find<cr>";
       options.desc = "Grep Buffer";
     }
-
-    # {
-    #   mode = "v";
-    #   key = ";";
-    #   action = "<Esc>";
-    #   options.desc = "Exit visual mode";
-    # }
   ];
 
   leader = [
@@ -250,32 +253,6 @@
       key = "<leader>L";
       action = "<cmd>Lazy<cr>";
       options.desc = "Lazy";
-    }
-    # Already have <C-s> and <C-S-s>
-    # {
-    #   mode = "n";
-    #   key = "<leader>s";
-    #   action = "<cmd>w<cr>";
-    #   options.desc = "Save current buffer";
-    # }
-    # {
-    #   mode = "n";
-    #   key = "<leader>S";
-    #   action = "<cmd>wa<cr>";
-    #   options.desc = "Save all buffers";
-    # }
-    {
-      mode = "n";
-      key = "<leader>R";
-      action = "<cmd>edit!<cr>";
-      options.desc = "Reload Buffer";
-    }
-
-    {
-      mode = "n";
-      key = "<leader><Space>";
-      action = "<cmd>Telescope buffers<cr>";
-      options.desc = "List Buffers";
     }
     {
       mode = "n";
@@ -336,6 +313,12 @@
       key = "<leader>/";
       action = "<cmd>Telescope live_grep<cr>";
       options.desc = "Grep Directory";
+    }
+    {
+      mode = "n";
+      key = "<leader>o";
+      action = "<cmd>ObsidianSearch<cr>";
+      options.desc = "Obsidian Note";
     }
   ];
 
@@ -426,8 +409,20 @@
     {
       mode = "n";
       key = "<leader>bb";
-      action = "<cmd>Telescope buffers sort_mru=true<cr>"; # There is also sort_lastused=true
+      action = "<cmd>Telescope buffers sort_lastused=true<cr>"; # There is also sort_mru=true
       options.desc = "List Buffers";
+    }
+    {
+      mode = "n";
+      key = "<leader><Space>";
+      action = "<cmd>Telescope buffers sort_lastused=true<cr>";
+      options.desc = "List Buffers";
+    }
+    {
+      mode = "n";
+      key = "<leader>R";
+      action = "<cmd>edit!<cr>";
+      options.desc = "Reload Buffer";
     }
     {
       mode = "n";
@@ -539,12 +534,6 @@
       action = "<cmd>Oil<cr>";
       options.desc = "Oil";
     }
-    # {
-    #   mode = "n";
-    #   key = "<leader>tt";
-    #   action = "<cmd>CHADopen --nofocus<cr>";
-    #   options.desc = "Toggle CHADtree";
-    # }
     {
       mode = "n";
       key = "<leader>tn";
@@ -751,6 +740,8 @@
   ];
 in
   builtins.concatLists [
+    disabled-mappings
+
     no-leader
     leader
     leader-help
