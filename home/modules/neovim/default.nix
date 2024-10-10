@@ -913,7 +913,13 @@ in {
                 -- Make LspInfo window border rounded
                 require("lspconfig.ui.windows").default_options.border = "rounded"
 
-                local __lspOnAttach = function(client, bufnr) end
+                local __lspOnAttach = function(client, bufnr)
+                  -- NOTE: The ltex-extra package needs to be loaded in ltex's onAttach.
+                  --       I don't know how to do this more declaratively with the current structure.
+                  if client.name == "ltex" then
+                    require("ltex_extra").setup({})
+                  end
+                end
 
                 local __lspCapabilities = function()
                   capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -1015,7 +1021,10 @@ in {
             lazy = true;
             ft = ["markdown" "tex"];
             dependencies = [lspconfig];
-            config = mkDefaultConfig name;
+            config = ''
+              -- Do nothing, as we call require("ltex_extra") in ltex's onAttach
+              function(_, opts) end
+            '';
           };
 
           markview = {
