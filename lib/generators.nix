@@ -46,4 +46,17 @@
     else if (args == null)
     then "nil"
     else "";
+
+  toLuaKeymap = args: let
+    removeDeprecatedMapAttrs = v: builtins.removeAttrs v ["lua"];
+  in ''
+    -- Set up keybinds using mylib.generators.toLuaKeymap {{{
+    do
+      local __nixvim_binds = ${toLuaObject (map removeDeprecatedMapAttrs args)}
+      for i, map in ipairs(__nixvim_binds) do
+        vim.keymap.set(map.mode, map.key, map.action, map.options)
+      end
+    end
+    -- }}}
+  '';
 }

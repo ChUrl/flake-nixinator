@@ -2,6 +2,9 @@
 require("lazy.core.config").options.ui.border = "rounded"
 require("lazy.core.config").options.rocks.enabled = false
 
+-- Default filetype to tex instead of plaintex
+vim.g.tex_flavor = "latex"
+
 -- Toggle inline diagnostics and show border
 vim.g.enable_inline_diagnostics = false
 vim.diagnostic.config({

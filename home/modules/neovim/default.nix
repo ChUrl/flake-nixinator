@@ -99,14 +99,17 @@ in {
 
       globals = {
         mapleader = " ";
-
-        # TODO: Set this differntly and actually move local keybindings to this, e.g. for LaTeX
-        mallocalleader = " ";
+        maplocalleader = ",";
       };
 
       opts = import ./vim_opts.nix {inherit lib mylib;};
       extraConfigLuaPost = builtins.readFile ./extraConfigLuaPost.lua;
       extraConfigLua = builtins.readFile ./extraConfigLua.lua;
+
+      extraFiles = {
+        # For this its probably important to set the default filetype to tex (see extraConfigLua)
+        "ftplugin/tex.lua".text = mylib.generators.toLuaKeymap (import ./mappings_latex.nix {});
+      };
 
       # extraLuaPackages = with pkgs.lua51Packages; [];
       # extraPython3Packages = p: [];
@@ -1585,6 +1588,7 @@ in {
             pkg = pkgs.vimPlugins.vimtex;
             init = ''
               function()
+                vim.g.vimtex_mappings_enabled = false
                 vim.g.vimtex_view_method = "zathura"
                 vim.g.vimtex_compiler_latexmk = {
                   options = {
