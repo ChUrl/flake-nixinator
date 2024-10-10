@@ -1,6 +1,8 @@
 {...}: let
+  # TODO: Doesn't work reliably. I think they are rebound by plugins after? Try setting in extraConfigLuaPost...
   disabled-mappings = let
     mkDisabledMapping = mapping: {
+      mode = ["n" "v"];
       key = mapping;
       action = "<Nop>";
     };
@@ -11,6 +13,14 @@
       "S"
       "t"
       "T"
+
+      # Use flash to repeat f/F instead of ;/,
+      # ;/, are now free for localleader and exiting visual mode like helix
+      ","
+      ";"
+
+      # Use Telescope on "/", I don't want backwards search
+      "?"
     ];
   in
     builtins.map mkDisabledMapping disableMappings;
@@ -246,6 +256,12 @@
       key = "/";
       action = "<cmd>Telescope current_buffer_fuzzy_find<cr>";
       options.desc = "Grep Buffer";
+    }
+    {
+      mode = "v";
+      key = ";";
+      action = "<Esc>";
+      options.desc = "Exit Visual Mode";
     }
   ];
 
@@ -588,12 +604,12 @@
       action = "<cmd>:set wrap!<cr>";
       options.desc = "Word Wrapping";
     }
-    {
-      mode = "n";
-      key = "<leader>tv";
-      action = "<cmd>VimtexTocToggle<cr>";
-      options.desc = "VimTex ToC";
-    }
+    # {
+    #   mode = "n";
+    #   key = "<leader>tv";
+    #   action = "<cmd>VimtexTocToggle<cr>";
+    #   options.desc = "VimTex ToC";
+    # }
   ];
 
   leader-git = [
@@ -679,19 +695,32 @@
       action = "<cmd>lua vim.lsp.buf.rename()<cr>";
       options.desc = "Rename Symbol";
     }
-    {
-      mode = "n";
-      key = "<leader>ca";
-      action = "<cmd>lua vim.lsp.buf.code_action()<cr>";
-      options.desc = "Code Actions";
-    }
     # {
     #   mode = "n";
     #   key = "<leader>cr";
     #   action = ":IncRename ";
     #   options.desc = "Rename LSP symbol";
     # }
+    {
+      mode = "n";
+      key = "<leader>ca";
+      action = "<cmd>lua vim.lsp.buf.code_action()<cr>";
+      options.desc = "Code Actions";
+    }
+    {
+      mode = "n";
+      key = "<leader>cI";
+      action = "<cmd>Telescope lsp_incoming_calls<cr>";
+      options.desc = "Incoming Calls";
+    }
+    {
+      mode = "n";
+      key = "<leader>cO";
+      action = "<cmd>Telescope lsp_outgoing_calls<cr>";
+      options.desc = "Outgoing Calls";
+    }
 
+    # GoTo
     {
       mode = "n";
       key = "<leader>cg";
@@ -729,22 +758,37 @@
     }
     {
       mode = "n";
-      key = "<leader>cI";
-      action = "<cmd>Telescope lsp_incoming_calls<cr>";
-      options.desc = "Incoming Calls";
+      key = "<leader>cge";
+      action = "<cmd>lua vim.diagnostic.goto_next()<cr>";
+      options.desc = "Next Error";
     }
     {
       mode = "n";
-      key = "<leader>cO";
-      action = "<cmd>Telescope lsp_outgoing_calls<cr>";
-      options.desc = "Outgoing Calls";
+      key = "<C-e>";
+      action = "<cmd>lua vim.diagnostic.goto_next()<cr>";
+      options.desc = "Next Error";
     }
+    {
+      mode = "n";
+      key = "<leader>cgE";
+      action = "<cmd>lua vim.diagnostic.goto_prev()<cr>";
+      options.desc = "Previous Error";
+    }
+    {
+      mode = "n";
+      key = "<C-S-e>";
+      action = "<cmd>lua vim.diagnostic.goto_prev()<cr>";
+      options.desc = "Previous Error";
+    }
+  ];
+
+  localleader-latex = [
   ];
 in
   builtins.concatLists [
     disabled-mappings
-
     no-leader
+
     leader
     leader-help
     leader-quit
@@ -754,4 +798,6 @@ in
     leader-toggles
     leader-git
     leader-code
+
+    localleader-latex
   ]
