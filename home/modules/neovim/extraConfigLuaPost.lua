@@ -18,7 +18,7 @@ if g.neovide then
 	-- g.neovide_theme = "light"
 
 	-- Neovide Fonts
-	o.guifont = "JetBrainsMono Nerd Font:h13:Medium"
+	o.guifont = "JetBrainsMono Nerd Font Mono:h12:Medium"
 else
 	-- require("notify").notify("Not running in NeoVide")
 end
