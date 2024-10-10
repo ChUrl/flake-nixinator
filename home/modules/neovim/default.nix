@@ -108,7 +108,8 @@ in {
 
       extraFiles = {
         # For this its probably important to set the default filetype to tex (see extraConfigLua)
-        "ftplugin/tex.lua".text = mylib.generators.toLuaKeymap (import ./mappings_latex.nix {});
+        "ftplugin/tex/mappings.lua".text = mylib.generators.toLuaKeymap (import ./mappings_latex.nix {});
+        "ftplugin/markdown/mappings.lua".text = mylib.generators.toLuaKeymap (import ./mappings_markdown.nix {});
       };
 
       # extraLuaPackages = with pkgs.lua51Packages; [];
@@ -833,7 +834,7 @@ in {
             # };
           };
 
-          # NOTE: This entire thing is rough, maybe I should look for another way...
+          # NOTE: This entire thing is rough, I should rewrite...
           lspconfig = {
             name = "lspconfig";
             pkg = pkgs.vimPlugins.nvim-lspconfig;
@@ -1006,6 +1007,15 @@ in {
                 require("luasnip").config.set_config(opts)
               end
             '';
+          };
+
+          ltex-extra = rec {
+            name = "ltex_extra";
+            pkg = pkgs.vimPlugins.ltex_extra-nvim;
+            lazy = true;
+            ft = ["markdown" "tex"];
+            dependencies = [lspconfig];
+            config = mkDefaultConfig name;
           };
 
           markview = {
@@ -1718,6 +1728,7 @@ in {
 
           luasnip # Snippets # TODO: How to add snippets, maybe use luasnip from nixvim directly?
 
+          ltex-extra # Additional ltex lsp support, e.g. for add-to-dictionary action
           markview # Markdown support
           # narrow-region # Open a buffer restricted to the selection
           navbuddy # Structural file view
