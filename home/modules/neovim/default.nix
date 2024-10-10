@@ -1302,12 +1302,6 @@ in {
             lazy = false;
           };
 
-          sneak = {
-            name = "sneak";
-            pkg = pkgs.vimPlugins.vim-sneak;
-            lazy = false;
-          };
-
           _plenary = {
             name = "plenary"; # For telescope
             pkg = pkgs.vimPlugins.plenary-nvim;
@@ -1717,7 +1711,6 @@ in {
           rainbow-delimiters # Bracket/Paren colorization
           rustaceanvim # Rust integration
           sleuth # Heuristically set indent depth
-          sneak # Like f/F but for two characters
           telescope # Option picker frontend
           todo-comments # Highlight TODOs
           toggleterm # Integrated terminal
