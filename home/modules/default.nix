@@ -19,6 +19,7 @@
     ./fish
     ./hyprland
     ./kitty
+    ./latex
     ./neovim
     ./nnn
     ./rofi
