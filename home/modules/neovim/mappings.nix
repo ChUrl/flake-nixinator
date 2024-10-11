@@ -258,14 +258,32 @@
       options.desc = "Grep Buffer";
     }
     {
+      mode = "n";
+      key = ";";
+      action = "%";
+      options.desc = "Matching ()[]<>";
+    }
+    {
       mode = "v";
       key = ";";
       action = "<Esc>";
       options.desc = "Exit Visual Mode";
     }
+    {
+      mode = "v";
+      key = "?";
+      action = "<cmd>Telescope grep_string<cr>";
+      options.desc = "Find Selection";
+    }
   ];
 
   leader = [
+    {
+      mode = "n";
+      key = "<leader>l";
+      action = "<cmd>Telescope oldfiles<cr>";
+      options.desc = "Last Files";
+    }
     {
       mode = "n";
       key = "<leader>L";
@@ -295,6 +313,12 @@
       key = "<leader>r";
       action = "<cmd>Telescope resume<cr>";
       options.desc = "Last Telescope Picker";
+    }
+    {
+      mode = "n";
+      key = "<leader>;";
+      action = "<cmd>Telescope command_history<cr>";
+      options.desc = "Last Commands";
     }
     {
       mode = "n";
@@ -425,15 +449,16 @@
       action = "+buffers";
     }
     {
+      # See :h telescope.builtin.buffers() for sorting opts
       mode = "n";
       key = "<leader>bb";
-      action = "<cmd>Telescope buffers sort_lastused=true<cr>"; # There is also sort_mru=true
+      action = "<cmd>Telescope buffers ignore_current_buffer=false sort_mru=true<cr>";
       options.desc = "List Buffers";
     }
     {
       mode = "n";
       key = "<leader><Space>";
-      action = "<cmd>Telescope buffers sort_lastused=true<cr>";
+      action = "<cmd>Telescope buffers ignore_current_buffer=false sort_mru=true<cr>";
       options.desc = "List Buffers";
     }
     {
@@ -702,6 +727,7 @@
     #   options.desc = "Rename LSP symbol";
     # }
     {
+      # NOTE: There is also Telescope quickfix
       mode = "n";
       key = "<leader>ca";
       action = "<cmd>lua vim.lsp.buf.code_action()<cr>";
