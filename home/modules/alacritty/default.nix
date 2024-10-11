@@ -1,0 +1,137 @@
+{
+  config,
+  lib,
+  mylib,
+  ...
+}:
+with mylib.modules; let
+  cfg = config.modules.alacritty;
+in {
+  options.modules.alacritty = import ./options.nix {inherit lib mylib;};
+
+  config = mkIf cfg.enable {
+    programs.alacritty = {
+      enable = false;
+
+      settings = {
+        window = {
+          padding = {
+            x = 10;
+            y = 10;
+          };
+
+          font = {
+            normal = "JetBrainsMono Nerd Font Mono";
+            size = 12;
+          };
+        };
+
+        env = {
+          TERM = "xterm-256color";
+        };
+
+        colors = {
+          # Default colors
+          primary = {
+            background = "#EFF1F5"; # base
+            foreground = "#4C4F69"; # text
+            # Bright and dim foreground colors
+            dim_foreground = "#4C4F69"; # text
+            bright_foreground = "#4C4F69"; # text
+          };
+
+          # Cursor colors
+          cursor = {
+            text = "#EFF1F5"; # base
+            cursor = "#DC8A78"; # rosewater
+          };
+          vi_mode_cursor = {
+            text = "#EFF1F5"; # base
+            cursor = "#7287FD"; # lavender
+          };
+
+          # Search colors
+          search = {
+            matches = {
+              foreground = "#EFF1F5"; # base
+              background = "#6C6F85"; # subtext0
+            };
+            focused_match = {
+              foreground = "#EFF1F5"; # base
+              background = "#40A02B"; # green
+            };
+            footer_bar = {
+              foreground = "#EFF1F5"; # base
+              background = "#6C6F85"; # subtext0
+            };
+          };
+
+          # Keyboard regex hints
+          hints = {
+            start = {
+              foreground = "#EFF1F5"; # base
+              background = "#DF8E1D"; # yellow
+            };
+            end = {
+              foreground = "#EFF1F5"; # base
+              background = "#6C6F85"; # subtext0
+            };
+          };
+
+          # Selection colors
+          selection = {
+            text = "#EFF1F5"; # base
+            background = "#DC8A78"; # rosewater
+          };
+
+          # Normal colors
+          normal = {
+            black = "#5C5F77"; # subtext1
+            red = "#D20F39"; # red
+            green = "#40A02B"; # green
+            yellow = "#DF8E1D"; # yellow
+            blue = "#1E66F5"; # blue
+            magenta = "#EA76CB"; # pink
+            cyan = "#179299"; # teal
+            white = "#ACB0BE"; # surface2
+          };
+
+          # Bright colors
+          bright = {
+            black = "#6C6F85"; # subtext0
+            red = "#D20F39"; # red
+            green = "#40A02B"; # green
+            yellow = "#DF8E1D"; # yellow
+            blue = "#1E66F5"; # blue
+            magenta = "#EA76CB"; # pink
+            cyan = "#179299"; # teal
+            white = "#BCC0CC"; # surface1
+          };
+
+          # Dim colors
+          dim = {
+            black = "#5C5F77"; # subtext1
+            red = "#D20F39"; # red
+            green = "#40A02B"; # green
+            yellow = "#DF8E1D"; # yellow
+            blue = "#1E66F5"; # blue
+            magenta = "#EA76CB"; # pink
+            cyan = "#179299"; # teal
+            white = "#ACB0BE"; # surface2
+          };
+
+          indexed_colors = [
+            {
+              index = 16;
+              color = "#FE640B";
+            }
+            {
+              index = 17;
+              color = "#DC8A78";
+            }
+          ];
+        };
+      };
+    };
+  };
+}

@@ -1,6 +1,7 @@
 {inputs, ...}: {
   imports = [
     # Obsolete modules are kept in this folder for reference.
+    # ./alacritty
     # ./audio
     # ./emacs
     # ./email
@@ -22,6 +23,7 @@
     ./nnn
     ./rofi
     ./waybar
+    ./zathura
 
     # HM modules imported from the flake inputs
     inputs.nix-flatpak.homeManagerModules.nix-flatpak
