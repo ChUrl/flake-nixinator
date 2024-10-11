@@ -1,4 +1,3 @@
-# The curly braces denote a set of keys and values.
 {
   description = "ChUrl's very bad and basic Nix config using Flakes";
 
@@ -15,9 +14,11 @@
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
-    # Other
+    # NeoVim
     nixvim.url = "github:nix-community/nixvim";
     nixvim.inputs.nixpkgs.follows = "nixpkgs";
+
+    # Other
     emacs-overlay.url = "github:nix-community/emacs-overlay";
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=v0.4.1";
     nix-alien.url = "github:thiagokokada/nix-alien";
@@ -39,79 +40,80 @@
   };
 
   # Outputs is a function that takes the inputs as arguments.
-  # To handle extra arguments we use the inputs@ pattern.
-  # It gives a name to the ... ellipses.
-  outputs = inputs @ {
+  # To handle extra arguments we use the @ inputs pattern.
+  # It gives the name "inputs" to the ... ellipses.
+  outputs = {
     nixpkgs,
-    # home-manager,
-    # hyprland,
     ...
-  }:
-  # With let you can define local variables
-  let
+  } @ inputs: let
     system = "x86_64-linux";
 
-    # I don't know how to extend the nixpkgs.lib directly so just propagate mylib to the config modules as argument
-    mylib = import ./lib {
-      inherit inputs pkgs;
-      inherit (nixpkgs) lib; # Equal to "lib = nixpkgs.lib;"
-    };
+    # TODO: Use those to generate configs
+    hostnames = ["nixinator" "nixtop"];
+    usernames = ["christoph"];
 
     # Set overlays + unfree globally
     pkgs = import nixpkgs {
       inherit system;
 
-      config.allowUnfree = true;
-
-      # NOTE: Obsidian 1.5.3 depends on an unsupported Electron version. As long as Obsidian isn't updated, allow this version.
-      config.permittedInsecurePackages = pkgs.lib.optional (pkgs.obsidian.version == "1.5.3") "electron-25.9.0";
-
-      # NOTE: Probably shouldn't enable CUDA globally, but in the environment flakes where it is needed?
-      #       Would it even work here? Since the flake imports its own nixpkgs...
-      # config.cudaSupport = true;
+      # config.allowUnfree = true;
+      config.allowUnfreePredicate = pkg: true;
 
       overlays = [
         inputs.devshell.overlays.default
         inputs.nur.overlay
         inputs.emacs-overlay.overlay
-        # inputs.hyprpaper.overlays.default
-        # inputs.hyprpicker.overlays.default
 
         # All my own overlays
-        (import ./overlays {inherit nixpkgs inputs mylib;})
+        (import ./overlays {inherit nixpkgs inputs;})
       ];
     };
-    # The rec expression turns a basic set into a set where self-referencing is possible.
-    # It is a shorthand for recursive and allows to use the values defined in this set from its own scope.
+
+    # I don't know how to extend the nixpkgs.lib directly so just propagate mylib to the config modules as argument
+    mylib = import ./lib {
+      inherit inputs pkgs;
+
+      # Equal to "lib = nixpkgs.lib;". This is required, because mylib also uses the nixpkgs lib.
+      inherit (nixpkgs) lib;
+    };
   in {
     # Local shell for NixFlake directory
     devShells."${system}".default = import ./shell.nix {inherit pkgs;};
 
-    # System configurations + HomeManager module
-    # Accessible via 'nixos-rebuild'
+    # We give each configuration a name (the hostname) to choose a configuration when rebuilding.
+    # This makes it easy to add different configurations (e.g. for a laptop).
+    # Usage: sudo nixos-rebuild switch --flake .#nixinator
+    # Usage: sudo nixos-rebuild switch --flake .#nixtop
     nixosConfigurations = {
-      # We give our configuration a name (the hostname) to choose a configuration when rebuilding.
-      # This makes it easy to add different configurations (e.g. for a laptop).
-      # Usage: sudo nixos-rebuild switch --flake .#nixinator
-      nixinator = mylib.nixos.mkNixosConfig {
+      # TODO: This should probably run using mapAttrs over the hostnames list...
+      nixinator = mylib.nixos.mkNixosSystemConfig {
         inherit system mylib;
-
         hostname = "nixinator";
-        username = "christoph";
-
-        extraModules = [
-        ];
+        extraModules = [];
       };
-
-      # Usage: sudo nixos-rebuild switch --flake .#nixtop
-      nixtop = mylib.nixos.mkNixosConfig {
+      nixtop = mylib.nixos.mkNixosSystemConfig {
         inherit system mylib;
-
         hostname = "nixtop";
-        username = "christoph";
+        extraModules = [];
+      };
+    };
 
-        extraModules = [
-        ];
+    # The home configuration can be rebuilt separately:
+    # Usage: home-manager switch --flake .#christoph@nixinator
+    # Usage: home-manager switch --flake .#christoph@nixtop
+    homeConfigurations = {
+      # TODO: This should probably run using mapAttrs and cartesianProduct over the hostnames and usernames lists...
+      "christoph@nixinator" = mylib.nixos.mkNixosHomeConfig {
+        inherit system mylib;
+        username = "christoph";
+        hostname = "nixinator";
+        extraModules = [];
+      };
+      "christoph@nixtop" = mylib.nixos.mkNixosHomeConfig {
+        inherit system mylib;
+        username = "christoph";
+        hostname = "nixtop";
+        extraModules = [];
       };
     };
   };

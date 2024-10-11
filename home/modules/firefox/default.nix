@@ -1,11 +1,10 @@
 # TODO: https://github.com/nix-community/home-manager/commit/69d19b9839638fc487b370e0600a03577a559081
 {
-  inputs,
   config,
-  nixosConfig,
   lib,
   mylib,
   pkgs,
+  hostname,
   ...
 }:
 with lib;
@@ -24,7 +23,8 @@ in {
           # libvdpau
         ])
 
-        (optionals cfg.gnomeTheme [firefox-gnome-theme])
+        # TODO: Derivation borked on standalone HM
+        # (optionals cfg.gnomeTheme [firefox-gnome-theme])
       ];
 
     home.sessionVariables = mkMerge [
@@ -99,9 +99,10 @@ in {
           id = 0; # 0 is default profile
 
           userChrome = concatStringsSep "\n" [
-            (optionalString cfg.gnomeTheme ''
-              @import "${pkgs.firefox-gnome-theme}/share/firefox-gnome-theme/gnome-theme.css";
-            '')
+            # TODO: Borked after standalone HM
+            # (optionalString cfg.gnomeTheme ''
+            #   @import "${pkgs.firefox-gnome-theme}/share/firefox-gnome-theme/gnome-theme.css";
+            # '')
 
             (optionalString cfg.disableTabBar ''
               #TabsToolbar { display: none; }
@@ -252,7 +253,8 @@ in {
               "geo.provider.network.url" = "https://location.services.mozilla.com/v1/geolocate?key=%MOZILLA_API_KEY%";
               "geo.provider.use_gpsd" = false;
 
-              "identity.fxaccounts.account.device.name" = nixosConfig.networking.hostName;
+              "identity.fxaccounts.account.device.name" = hostname;
+
 
               "media.hardwaremediakeys.enabled" = false; # Do not interfere with spotify
               "media.videocontrols.picture-in-picture.video-toggle.enabled" = true;

@@ -3,14 +3,12 @@
   pkgs,
   lib,
   ...
-}: let
-  inherit (inputs) home-manager;
-in {
-  mkNixosConfig = {
-    system ? "x86_64-linux",
+}: {
+  mkNixosConfigWithHomeManagerModule = {
+    system,
     mylib,
     hostname,
-    username ? "christoph",
+    username,
     extraModules ? [],
   }:
     lib.nixosSystem {
@@ -36,7 +34,7 @@ in {
         # but I failed because nix stopped autoinjecting the required arguments and I didn't
         # know how to handle that...
         [
-          home-manager.nixosModules.home-manager
+          inputs.home-manager.nixosModules.home-manager
           {
             # extraSpecialArgs are propagated to all hm config modules
             home-manager.extraSpecialArgs = {inherit inputs hostname username mylib;};
@@ -51,6 +49,54 @@ in {
             home-manager.users.${username}.imports = [../home/${username}];
           }
         ]
+      ];
+    };
+
+  mkNixosSystemConfig = {
+    system,
+    mylib,
+    hostname,
+    extraModules ? [],
+  }:
+    lib.nixosSystem {
+      inherit system;
+
+      # Make our inputs available to the configuration.nix (for importing modules)
+      # specialArgs are propagated to all modules
+      specialArgs = {inherit inputs hostname mylib system;};
+
+      modules = builtins.concatLists [
+        [
+          # Replace the pkgs to include overlays/unfree
+          {nixpkgs.pkgs = pkgs;}
+
+          # Main config file for all configs/hosts
+          ../system
+        ]
+
+        extraModules
+      ];
+    };
+
+  mkNixosHomeConfig = {
+    system,
+    mylib,
+    username,
+    hostname,
+    extraModules ? [],
+  }:
+    inputs.home-manager.lib.homeManagerConfiguration {
+      inherit pkgs;
+
+      # Make this stuff available to the hm modules
+      extraSpecialArgs = {inherit inputs system mylib username hostname;};
+
+      modules = builtins.concatLists [
+        [
+          ../home/${username}
+        ]
+
+        extraModules
       ];
     };
 }

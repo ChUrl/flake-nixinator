@@ -8,14 +8,12 @@
   lib,
   mylib,
   config,
-  nixosConfig,
   pkgs,
   ...
 }:
 # This is a module
 # Because no imports/options/config is defined explicitly, everything is treated as config
 # { inputs, lib, ... }: { ... } gets turned into { inputs, lib, ... }: { config = { ... }; } implicitly
-# TODO: Add nixified.ai module
 rec {
   # Every module is a nix expression, specifically a function { inputs, lib, ... }: { ... }
   # Every module (/function) is called with the same arguments as this module (home.nix)
@@ -26,9 +24,6 @@ rec {
     ./${hostname}
 
     ../modules
-
-    # inputs.nixvim.homeManagerModules.nixvim
-    # inputs.hyprland.homeManagerModules.default
   ];
 
   modules = {
@@ -71,21 +66,6 @@ rec {
     };
 
     fish.enable = true;
-
-    # flatpak = {
-    #   enable = false;
-    #   autoUpdate = true;
-    #   autoPrune = true;
-    #   fontFix = true; # TODO: This doesn't work reliably...
-    #   iconFix = false;
-
-    #   flatseal.enable = true;
-    #   discord.enable = true;
-    #   spotify.enable = true;
-    #   bottles.enable = false;
-    #   obsidian.enable = false; # Extremely low graph draw performance?
-    #   jabref.enable = false;
-    # };
 
     helix.enable = false;
 
@@ -221,15 +201,16 @@ rec {
   # NOTE: I don't think I need this anymore as all fonts are installed through the system config but let's keep this just in case
   fonts.fontconfig.enable = true; # Also updates the font-cache
 
-  xdg = {
-    mime.enable = true;
-    mimeApps = {
-      enable = true;
-      associations.added = nixosConfig.xdg.mime.addedAssociations;
-      associations.removed = nixosConfig.xdg.mime.removedAssociations;
-      inherit (nixosConfig.xdg.mime) defaultApplications; # Equal to "defaultApplications = nixosConfig.xdg.mime.defaultApplications"
-    };
-  };
+  # TODO: Borked after standalone HM
+  # xdg = {
+  #   mime.enable = true;
+  #   mimeApps = {
+  #     enable = true;
+  #     associations.added = nixosConfig.xdg.mime.addedAssociations;
+  #     associations.removed = nixosConfig.xdg.mime.removedAssociations;
+  #     inherit (nixosConfig.xdg.mime) defaultApplications; # Equal to "defaultApplications = nixosConfig.xdg.mime.defaultApplications"
+  #   };
+  # };
 
   home = {
     inherit username; # Inherited from flake.nix
@@ -338,7 +319,6 @@ rec {
       ffmpeg_7-full # I love ffmpeg (including ffplay)
       ffmpeg-normalize
       imagemagick # Convert image (magic)
-      # ueberzugpp # Display images in terminal (alacritty) # TODO: Build failure
 
       # Document utils
       # TODO: Latex module with individual packages or HomeManager
@@ -363,12 +343,10 @@ rec {
       rsync # cp on steroids
       rclone # Rsync for cloud
       httpie # Cool http client
-      # suricata
       cifs-utils # Mount samba shares
       nfs-utils
       sshfs
       protonvpn-cli
-      # protonvpn-gui # NOTE: Doesn't work
 
       # GUI apps
       vlc
@@ -377,28 +355,23 @@ rec {
       sqlitebrowser # To modify tables
       dbeaver-bin # To import/export data + diagrams
       hoppscotch # Test APIs
-      # decker # TODO: Build failure
       signal-desktop
       filezilla
       anki
-      # octave # GNU matlab basically
       font-manager
       nextcloud-client
       keepassxc
       protonmail-bridge
       thunderbird # TODO: Email module
-      # xwaylandvideobridge # NOTE: Doesn't work
       AusweisApp2
+      # decker # TODO: Build failure
 
       # Office
       wacomtablet # For xournalpp/krita
       xournalpp # Write with a pen, like old people
-      # libreoffice-qt
       hunspell # I cna't type
       hunspellDicts.en_US
       hunspellDicts.de_DE
-      # obsidian # knowledge-base # NOTE: Use flatpak
-      # logseq # knowledge-base
 
       # TODO: Module, I need to add python packages from multiple modules to the same interpreter
       python312
@@ -589,7 +562,7 @@ rec {
       enableFishIntegration = config.modules.fish.enable;
     };
 
-    gallery-dl.enable = false; # TODO: Alternative to cyberdrop-dl?
+    gallery-dl.enable = false;
 
     git = {
       enable = true;
