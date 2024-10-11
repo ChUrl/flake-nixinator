@@ -283,6 +283,7 @@ rec {
       gnuplot # generate function plots
       pdf2svg # extract vector graphics from pdf
       pandoc # document converting madness
+      # decker # TODO: Build failure
 
       # Networking
       dig # Make DNS requests
@@ -300,20 +301,13 @@ rec {
       sshfs # Mount remote directories via SSH
 
       # GUI apps
-      # vlc
-      # cool-retro-term
       ventoy-full # Bootable USB for many ISOs
-      sqlitebrowser # To modify tables
-      # dbeaver-bin # To import/export data + diagrams
-      # hoppscotch # Test APIs
       signal-desktop
-      # filezilla
       anki
       font-manager # Previews fonts, but doesn't set them
       nextcloud-client
       keepassxc
       AusweisApp2
-      # decker # TODO: Build failure
       protonmail-bridge # TODO: Enable on startup, email module
       thunderbird # TODO: Email module
 
@@ -436,28 +430,6 @@ rec {
     nushell.enable = false;
     ssh.enable = true;
 
-    starship = let
-      flavour = "latte"; # One of `latte`, `frappe`, `macchiato`, or `mocha`
-    in {
-      enable = true;
-      enableFishIntegration = config.modules.fish.enable;
-      settings =
-        {
-          # Other config here
-          format = "$all"; # Remove this line to disable the default prompt format
-          palette = "catppuccin_${flavour}";
-        }
-        // builtins.fromTOML (builtins.readFile
-          (pkgs.fetchFromGitHub
-            {
-              owner = "catppuccin";
-              repo = "starship";
-              rev = "3e3e54410c3189053f4da7a7043261361a1ed1bc";
-              sha256 = "sha256-soEBVlq3ULeiZFAdQYMRFuswIIhI9bclIU8WXjxd7oY=";
-            }
-            + /palettes/${flavour}.toml));
-    };
-
     tmux = {
       enable = false;
 
@@ -529,8 +501,8 @@ rec {
     };
   };
 
-  # Fix Discord rich presence for Flatpak
   systemd.user.tmpfiles.rules = [
+    # Fix Discord rich presence for Flatpak
     "L %t/discord-ipc-0 - - - - app/com.discordapp.Discord/discord-ipc-0"
   ];
 
