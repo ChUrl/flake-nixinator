@@ -112,6 +112,9 @@ in {
         # For this its probably important to set the default filetype to tex (see extraConfigLua)
         "ftplugin/tex/mappings.lua".text = mylib.generators.toLuaKeymap (import ./mappings_latex.nix {});
         "ftplugin/markdown/mappings.lua".text = mylib.generators.toLuaKeymap (import ./mappings_markdown.nix {});
+
+        # Luasnip searches the luasnippets folder in the runtimepath
+        "luasnippets/tex.lua".text = builtins.readFile ./snippets_latex.lua;
       };
 
       # extraLuaPackages = with pkgs.lua51Packages; [];
@@ -1052,8 +1055,15 @@ in {
             config = ''
               function(_, opts)
                 require("luasnip").config.set_config(opts)
+
+                -- Load snippets. Because we don't set "path", the nvim runtimepath is searched.
+                -- Snippet files are added through nixvim's extraFiles (see at the top).
+                require("luasnip.loaders.from_lua").lazy_load({})
               end
             '';
+            opts = {
+              enable_autosnippets = false;
+            };
           };
 
           ltex-extra = {
@@ -1779,9 +1789,7 @@ in {
           lint # Lint documents on save
           lspconfig # Language server configurations for different languages
           lualine # Status line
-
-          luasnip # Snippets # TODO: How to add snippets, maybe use luasnip from nixvim directly?
-
+          luasnip # Snippets
           ltex-extra # Additional ltex lsp support, e.g. for add-to-dictionary action
 
           markview # Markdown support # TODO: Disable in help buffers + confiure a bit more
