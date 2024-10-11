@@ -10,22 +10,27 @@
   config,
   pkgs,
   ...
-}:
-# This is a module
-# Because no imports/options/config is defined explicitly, everything is treated as config
-# { inputs, lib, ... }: { ... } gets turned into { inputs, lib, ... }: { config = { ... }; } implicitly
+} @ inputs:
+# This is a HM module.
+# Because no imports/options/config is defined explicitly, everything is treated as config:
+# { inputs, lib, ... }: { ... } gets turned into { inputs, lib, ... }: { config = { ... }; } implicitly.
 rec {
-  # Every module is a nix expression, specifically a function { inputs, lib, ... }: { ... }
-  # Every module (/function) is called with the same arguments as this module (home.nix)
+  # Every module is a nix expression, specifically a function { inputs, lib, ... }: { ... }.
+  # Every module (/function) is called with the same arguments as this module.
   # Arguments with matching names are "plugged in" into the right slots,
-  # the case of different arity is handled by always providing ellipses (...) in module definitions
+  # the case of different arity is handled by always providing ellipses (...) in module definitions.
   imports = [
-    # Import the host-specific user-config
+    # Import the host-specific HM config.
+    # It will be merged with the main config (like all different modules).
+    # Settings regarding a specific host (e.g. desktop or laptop)
+    # should only be made in the host-specific config.
     ./${hostname}
 
+    # Import all of my custom HM modules.
     ../modules
   ];
 
+  # Enable and configure my custom HM modules.
   modules = {
     chromium = {
       enable = true;
@@ -157,6 +162,8 @@ rec {
     waybar = {
       enable = true;
     };
+
+    zathura.enable = true;
   };
 
   manual = {
@@ -168,24 +175,23 @@ rec {
   # NOTE: I don't think I need this anymore as all fonts are installed through the system config but let's keep this just in case
   fonts.fontconfig.enable = true; # Also updates the font-cache
 
-  # TODO: Borked after standalone HM
-  # xdg = {
-  #   mime.enable = true;
-  #   mimeApps = {
-  #     enable = true;
-  #     associations.added = nixosConfig.xdg.mime.addedAssociations;
-  #     associations.removed = nixosConfig.xdg.mime.removedAssociations;
-  #     inherit (nixosConfig.xdg.mime) defaultApplications; # Equal to "defaultApplications = nixosConfig.xdg.mime.defaultApplications"
-  #   };
-  # };
+  # This only works when HM is installed as a system module,
+  # as nixosConfig won't be available otherwise
+  xdg = {
+    mime.enable = true;
+    mimeApps = {
+      enable = true;
+      associations.added = nixosConfig.xdg.mime.addedAssociations;
+      associations.removed = nixosConfig.xdg.mime.removedAssociations;
+      inherit (nixosConfig.xdg.mime) defaultApplications; # Equal to "defaultApplications = nixosConfig.xdg.mime.defaultApplications"
+    };
+  };
 
   home = {
     inherit username; # Inherited from flake.nix
 
     homeDirectory = "/home/${home.username}";
     enableNixpkgsReleaseCheck = true;
-
-    # TODO: There are many more home.* options
 
     # Environment variables
     sessionVariables = {
@@ -203,14 +209,10 @@ rec {
       NIXOS_OZONE_WL = "1";
       SDL_VIDEODRIVER = "wayland";
 
-      # Don't use system wine, use bottles
-      # WINEESYNC = 1;
-      # WINEFSYNC = 1;
-      # WINEPREFIX = "/home/christoph/.wine";
-
       # GTK_IM_MODULE, QT_IM_MODULE, XMODIFIERS are set by HomeManager fcitx5 module
     };
 
+    # Files to generate in the home directory are specified here.
     file = {
       # Generate a list of installed user packages in ~/.local/share/current-user-packages
       ".local/share/current-user-packages".text = let
@@ -220,34 +222,37 @@ rec {
       in
         formatted;
 
+      # TODO: If mpv enabled
       ".config/mpv" = {
         recursive = true;
         source = ../../config/mpv;
       };
 
       # TODO: Latex module
-      "texmf/tex/latex/custom/christex.sty".source = ../../config/latex/christex.sty;
-      "Notes/Obsidian/Chriphost/christex.sty".source = ../../config/latex/christex.sty; # For obsidian notes
+      # "texmf/tex/latex/custom/christex.sty".source = ../../config/latex/christex.sty;
+      # "Notes/Obsidian/Chriphost/christex.sty".source = ../../config/latex/christex.sty; # For obsidian notes
       ".indentconfig.yaml".source = ../../config/latex/.indentconfig.yaml;
       ".indentsettings.yaml".source = ../../config/latex/.indentsettings.yaml;
-      # TODO: Use mkLink
-      # "Notes/Obsidian/Chriphost/latex_snippets.json".source = ../../config/obsidian/latex_snippets.json;
+      "Notes/Obsidian/Chriphost/latex_snippets.json".source = ../../config/obsidian/latex_snippets.json; # TODO: Symlink
       "Notes/Obsidian/Chriphost/.obsidian/snippets/latex_preview.css".source = ../../config/obsidian/css_snippets/latex_preview.css;
 
       # TODO: If navi enabled
-      # TODO: Symlink this, so the config doesn't have to be rebuilt every time
-      ".local/share/navi/cheats/christoph.cheat".source = ../../config/navi/christoph.cheat;
+      ".local/share/navi/cheats/christoph.cheat".source = ../../config/navi/christoph.cheat; # TODO :Symlink
     };
 
+    # Here, custom scripts can be run when activating a HM generation.
+    # If those scripts contain side-effects, like creating files,
+    # they must be placed after the "writeBoundary" node in the execution graph.
     activation = {
-      linkObsidianLatexSnippets =
-        lib.hm.dag.entryAfter ["writeBoundary"]
-        (mylib.modules.mkLink "~/NixFlake/config/obsidian/latex_snippets.json" "~/Notes/Obsidian/Chriphost/latex_snippets.json");
+      # Example with side-effects:
+      # linkObsidianLatexSnippets =
+      #   lib.hm.dag.entryAfter ["writeBoundary"]
+      #   (mylib.modules.mkLink "~/NixFlake/config/obsidian/latex_snippets.json" "~/Notes/Obsidian/Chriphost/latex_snippets.json");
     };
 
-    # TODO: Make a module for standard UNIX replacements
     # Add stuff for your user as you see fit:
     packages = with pkgs; [
+      # TODO: Make a module for standard UNIX replacements
       # Shell utils
       (ripgrep.override {withPCRE2 = true;}) # fast as fuck
       gdu # Alternative to du-dust (I like it better)
@@ -257,52 +262,48 @@ rec {
       tealdeer # very fast tldr (so readable man)
       atool # Archive preview
       ffmpegthumbnailer # Video thumbnails
-      mediainfo
+      mediainfo # Media meta information
+      file # File meta information
       tree # Folder preview
-      unrar
-      p7zip
-      unzip
-      progress
+      unrar # Cooler WinRar
+      p7zip # Zip stuff
+      unzip # Unzip stuff
+      progress # Find coreutils processes and show their progress
       tokei # Text file statistics in a project
-      appimage-run
       nvd # nix rebuild diff
-      file
-      # spotdl # TODO: Borked
 
       # Hardware/Software info
       pciutils # lspci
       glxinfo # opengl info
       wayland-utils # wayland-info
-      aha # ansi html adapter? TODO: Why did I install this?
       clinfo # OpenCL info
       vulkan-tools # vulkaninfo
       libva-utils # vainfo
-      vdpauinfo
-      hwloc
-      lm_sensors
+      vdpauinfo # Video-Decode and Presentation API for Unix info
+      hwloc # Generate CPU topology diagram
+      lm_sensors # Readout hardware sensors
       acpica-tools # Dump ACPI tables etc.
 
       # Video/Image utils
       ffmpeg_7-full # I love ffmpeg (including ffplay)
-      ffmpeg-normalize
+      ffmpeg-normalize # Normalize audio
       imagemagick # Convert image (magic)
 
       # Document utils
       # TODO: Latex module with individual packages or HomeManager
-      texlive.combined.scheme-full
+      texliveFull
       poppler_utils # pdfunite
       graphviz # generate graphs from code
-      plantuml
+      plantuml # generate diagrams
       gnuplot # generate function plots
-      pdf2svg
+      pdf2svg # extract vector graphics from pdf
       pandoc # document converting madness
       inkscape # for latex
 
       # Networking
-      dig
-      tcpdump
-      traceroute
-      wireshark
+      dig # Make DNS requests
+      tcpdump # Listen in on TCP traffic
+      traceroute # "Follow" a packet
       gping # ping with graph
       curlie # curl a'la httpie
       wget # download that shit
@@ -311,27 +312,26 @@ rec {
       rclone # Rsync for cloud
       httpie # Cool http client
       cifs-utils # Mount samba shares
-      nfs-utils
-      sshfs
-      protonvpn-cli
+      nfs-utils # Mount NFS shares
+      sshfs # Mount remote directories via SSH
 
       # GUI apps
-      vlc
-      cool-retro-term
+      # vlc
+      # cool-retro-term
       ventoy-full # Bootable USB for many ISOs
       sqlitebrowser # To modify tables
-      dbeaver-bin # To import/export data + diagrams
-      hoppscotch # Test APIs
+      # dbeaver-bin # To import/export data + diagrams
+      # hoppscotch # Test APIs
       signal-desktop
-      filezilla
+      # filezilla
       anki
-      font-manager
+      font-manager # Previews fonts, but doesn't set them
       nextcloud-client
       keepassxc
-      protonmail-bridge
-      thunderbird # TODO: Email module
       AusweisApp2
       # decker # TODO: Build failure
+      protonmail-bridge # TODO: Enable on startup, email module
+      thunderbird # TODO: Email module
 
       # Office
       wacomtablet # For xournalpp/krita
@@ -350,7 +350,8 @@ rec {
       # modules-options-doc
     ];
 
-    # Do not change
+    # Do not change.
+    # This marks the version when NixOS was installed for backwards-compatibility.
     stateVersion = "22.05";
   };
 
@@ -358,131 +359,9 @@ rec {
 
   # Packages with extra options managed by HomeManager natively
   programs = {
+    # The home-manager management tool.
+    # Will only be enabled if HM is installed standalone.
     home-manager.enable = true;
-
-    alacritty = {
-      enable = false;
-
-      settings = {
-        window = {
-          padding = {
-            x = 10;
-            y = 10;
-          };
-
-          font = {
-            normal = "JetBrainsMono Nerd Font Mono";
-            size = 12;
-          };
-        };
-
-        env = {
-          TERM = "xterm-256color";
-        };
-
-        colors = {
-          # Default colors
-          primary = {
-            background = "#EFF1F5"; # base
-            foreground = "#4C4F69"; # text
-            # Bright and dim foreground colors
-            dim_foreground = "#4C4F69"; # text
-            bright_foreground = "#4C4F69"; # text
-          };
-
-          # Cursor colors
-          cursor = {
-            text = "#EFF1F5"; # base
-            cursor = "#DC8A78"; # rosewater
-          };
-          vi_mode_cursor = {
-            text = "#EFF1F5"; # base
-            cursor = "#7287FD"; # lavender
-          };
-
-          # Search colors
-          search = {
-            matches = {
-              foreground = "#EFF1F5"; # base
-              background = "#6C6F85"; # subtext0
-            };
-            focused_match = {
-              foreground = "#EFF1F5"; # base
-              background = "#40A02B"; # green
-            };
-            footer_bar = {
-              foreground = "#EFF1F5"; # base
-              background = "#6C6F85"; # subtext0
-            };
-          };
-
-          # Keyboard regex hints
-          hints = {
-            start = {
-              foreground = "#EFF1F5"; # base
-              background = "#DF8E1D"; # yellow
-            };
-            end = {
-              foreground = "#EFF1F5"; # base
-              background = "#6C6F85"; # subtext0
-            };
-          };
-
-          # Selection colors
-          selection = {
-            text = "#EFF1F5"; # base
-            background = "#DC8A78"; # rosewater
-          };
-
-          # Normal colors
-          normal = {
-            black = "#5C5F77"; # subtext1
-            red = "#D20F39"; # red
-            green = "#40A02B"; # green
-            yellow = "#DF8E1D"; # yellow
-            blue = "#1E66F5"; # blue
-            magenta = "#EA76CB"; # pink
-            cyan = "#179299"; # teal
-            white = "#ACB0BE"; # surface2
-          };
-
-          # Bright colors
-          bright = {
-            black = "#6C6F85"; # subtext0
-            red = "#D20F39"; # red
-            green = "#40A02B"; # green
-            yellow = "#DF8E1D"; # yellow
-            blue = "#1E66F5"; # blue
-            magenta = "#EA76CB"; # pink
-            cyan = "#179299"; # teal
-            white = "#BCC0CC"; # surface1
-          };
-
-          # Dim colors
-          dim = {
-            black = "#5C5F77"; # subtext1
-            red = "#D20F39"; # red
-            green = "#40A02B"; # green
-            yellow = "#DF8E1D"; # yellow
-            blue = "#1E66F5"; # blue
-            magenta = "#EA76CB"; # pink
-            cyan = "#179299"; # teal
-            white = "#ACB0BE"; # surface2
-          };
-
-          indexed_colors = [
-            {
-              index = 16;
-              color = "#FE640B";
-            }
-            {
-              index = 17;
-              color = "#DC8A78";
-            }
-          ];
-        };
-      };
-    };
 
     bat = {
       enable = true;
@@ -516,20 +395,13 @@ rec {
       enableFishIntegration = config.modules.fish.enable;
     };
 
-    fastfetch = {
-      enable = true;
-    };
-
-    fd = {
-      enable = true;
-    };
+    fastfetch.enable = true;
+    fd.enable = true;
 
     fzf = {
       enable = true;
       enableFishIntegration = config.modules.fish.enable;
     };
-
-    gallery-dl.enable = false;
 
     git = {
       enable = true;
@@ -566,29 +438,11 @@ rec {
       };
     };
 
-    # Realtime Motion Interpolation: https://gist.github.com/phiresky/4bfcfbbd05b3c2ed8645
-    mpv = {
-      enable = true;
+    mpv.enable = true;
 
-      # TODO: wrapMpv was removed
-      # Explained here: https://github.com/NixOS/nixpkgs/blob/nixos-unstable/pkgs/applications/video/mpv/wrapper.nix#L84
-      #       wrapMpv gets two args: the mpv derivation and some options
-      #       Possible overrides for derivation: https://github.com/NixOS/nixpkgs/blob/nixos-unstable/pkgs/applications/video/mpv/default.nix#L222
-      # package = pkgs.wrapMpv (pkgs.mpv-unwrapped.override {vapoursynthSupport = true;}) {
-      #   youtubeSupport = true;
-      #   extraMakeWrapperArgs = [
-      #     "--prefix"
-      #     "LD_LIBRARY_PATH"
-      #     ":"
-      #     "${pkgs.vapoursynth-mvtools}/lib"
-      #   ];
-      # };
-    };
-
-    # Interactive Cheatsheets
     navi = {
       enable = true;
-      enableFishIntegration = config.modules.fish.enable; # Type something "remove first line" and hit Ctrl-G to launch navi on that prompt
+      enableFishIntegration = config.modules.fish.enable;
     };
 
     nix-index = {
@@ -596,23 +450,7 @@ rec {
       enableFishIntegration = config.modules.fish.enable;
     };
 
-    nushell = {
-      enable = false;
-    };
-
-    # Git status replacement with file selection by number
-    scmpuff = {
-      enable = false;
-      enableFishIntegration = true;
-    };
-
-    # Scientific pdf reader
-    sioyek = {
-      enable = false; # Disabled for now, as it crashes sometimes?
-      # bindings = {};
-      # config = {};
-    };
-
+    nushell.enable = false;
     ssh.enable = true;
 
     starship = let
@@ -638,7 +476,7 @@ rec {
     };
 
     tmux = {
-      enable = true;
+      enable = false;
 
       clock24 = true;
       escapeTime = 0; # Delay after pressing escape
@@ -661,53 +499,7 @@ rec {
       '';
     };
 
-    # TODO: Check HM module options
     yt-dlp.enable = true;
-
-    zathura = {
-      enable = true;
-
-      options = {
-        # Catppuccin Latte
-        default-fg = "#4C4F69";
-        default-bg = "#EFF1F5";
-
-        completion-bg = "#CCD0DA";
-        completion-fg = "#4C4F69";
-        completion-highlight-bg = "#575268";
-        completion-highlight-fg = "#4C4F69";
-        completion-group-bg = "#CCD0DA";
-        completion-group-fg = "#1E66F5";
-
-        statusbar-fg = "#4C4F69";
-        statusbar-bg = "#CCD0DA";
-
-        notification-bg = "#CCD0DA";
-        notification-fg = "#4C4F69";
-        notification-error-bg = "#CCD0DA";
-        notification-error-fg = "#D20F39";
-        notification-warning-bg = "#CCD0DA";
-        notification-warning-fg = "#FAE3B0";
-
-        inputbar-fg = "#4C4F69";
-        inputbar-bg = "#CCD0DA";
-
-        recolor-lightcolor = "#EFF1F5";
-        recolor-darkcolor = "#4C4F69";
-
-        index-fg = "#4C4F69";
-        index-bg = "#EFF1F5";
-        index-active-fg = "#4C4F69";
-        index-active-bg = "#CCD0DA";
-
-        render-loading-bg = "#EFF1F5";
-        render-loading-fg = "#4C4F69";
-
-        highlight-color = "#575268";
-        highlight-fg = "#EA76CB";
-        highlight-active-color = "#EA76CB";
-      };
-    };
 
     zoxide = {
       enable = true;
