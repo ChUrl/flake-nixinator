@@ -16,6 +16,7 @@
   winblend = 30; # Floating popup transparency
   sessionoptions = ["buffers" "curdir" "tabpages" "winsize" "help" "globals" "skiprtp" "folds"];
   showtabline = 0; # Disable tabline
+  conceallevel = 2;
 
   # Cursor
   ruler = true; # Show cursor position in status line
