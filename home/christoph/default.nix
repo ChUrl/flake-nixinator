@@ -32,30 +32,6 @@ rec {
       google = false;
     };
 
-    # emacs = {
-    #   enable = false;
-    #   pgtkNativeComp = false;
-    #   nativeComp = false;
-    #   nixpkgs = true;
-
-    #   doom.enable = true;
-    #   doom.autoSync = true;
-    #   doom.autoUpgrade = false; # Very volatile as the upgrade fails sometimes with bleeding edge emacs
-    # };
-
-    # TODO: Only sync protonmail using its bridge
-    email = {
-      enable = false;
-      autosync = true;
-      imapnotify = false;
-
-      # Use kmail as viewer for stuff synced by mbsync
-      kmail = {
-        enable = false;
-        autostart = true;
-      };
-    };
-
     firefox = {
       enable = true;
       wayland = true;
@@ -66,8 +42,6 @@ rec {
     };
 
     fish.enable = true;
-
-    helix.enable = false;
 
     hyprland = {
       enable = true;
@@ -174,18 +148,11 @@ rec {
 
     nnn.enable = true;
 
-    # ranger = {
-    #   enable = false;
-    #   preview = true;
-    # };
-
     rofi = {
       enable = true;
       # theme = "Three-Bears";
       theme = "Foggy-Lake";
     };
-
-    vscode.enable = false; # TODO: Had broken package ms-vscode-cpptools
 
     waybar = {
       enable = true;

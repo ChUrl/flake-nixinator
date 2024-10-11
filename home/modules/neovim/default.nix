@@ -15,6 +15,9 @@ in {
 
   config = mkIf cfg.enable {
     home = {
+      file.".config/neovide/config.toml".source = ./neovide_config.ini;
+      file.".config/vale/.vale.ini".source = ./vale_config.ini;
+
       sessionVariables = {
         EDITOR = "nvim";
         VISUAL = "nvim";
@@ -67,9 +70,6 @@ in {
             stylua
           ]
         ];
-
-      file.".config/neovide/config.toml".source = ./neovide_config.ini;
-      file.".config/vale/.vale.ini".source = ./vale_config.ini;
     };
 
     programs.nixvim = {
@@ -108,6 +108,7 @@ in {
       extraConfigLuaPost = builtins.readFile ./extraConfigLuaPost.lua;
       extraConfigLua = builtins.readFile ./extraConfigLua.lua;
 
+      # Those files will be added to the nvim runtimpath
       extraFiles = {
         # For this its probably important to set the default filetype to tex (see extraConfigLua)
         "ftplugin/tex/mappings.lua".text = mylib.generators.toLuaKeymap (import ./mappings_latex.nix {});
@@ -907,7 +908,6 @@ in {
                 {name = "clojure_lsp";}
                 {name = "cmake";}
                 {name = "lua_ls";}
-                # {name = "nil_ls";} # TODO: To use together with nixd, its hover functionality needs to be disabled to not conflict
                 {
                   name = "ltex";
                   extraOptions.settings = {
@@ -916,9 +916,9 @@ in {
                     };
                   };
                 }
+                # {name = "nil_ls";} # Conflicts with nixd's hover
                 {
                   name = "nixd";
-                  # TODO: Figure out how to structure this attrset
                   extraOptions.settings = {
                     nixd = {
                       nixpkgs = {
@@ -931,9 +931,10 @@ in {
                         nixos = {
                           expr = "(builtins.getFlake \"/home/${username}/NixFlake\").nixosConfigurations.${hostname}.options";
                         };
-                        home_manager = {
-                          expr = "(builtins.getFlake \"/home/${username}/NixFlake\").homeConfigurations.\"${username}@${hostname}\".options";
-                        };
+                        # When using HM as a NixOS module, nixd's HM option completion doesn't work.
+                        # home_manager = {
+                        #   expr = "(builtins.getFlake \"/home/${username}/NixFlake\").homeConfigurations.\"${username}@${hostname}\".options";
+                        # };
                       };
                       diagnostic = {
                         suppress = [

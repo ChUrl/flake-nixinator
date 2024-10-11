@@ -16,7 +16,7 @@
 
       # Make our inputs available to the configuration.nix (for importing modules)
       # specialArgs are propagated to all modules
-      specialArgs = {inherit inputs hostname username mylib system;};
+      specialArgs = {inherit inputs hostname mylib system username;};
 
       modules = builtins.concatLists [
         [
@@ -29,10 +29,7 @@
 
         extraModules
 
-        # I included the home config statically like this as I am the only user.
-        # I would have liked to make it more flexible (for multiple users on the same host)
-        # but I failed because nix stopped autoinjecting the required arguments and I didn't
-        # know how to handle that...
+        # HM is installed as a system module
         [
           inputs.home-manager.nixosModules.home-manager
           {
@@ -88,7 +85,7 @@
     inputs.home-manager.lib.homeManagerConfiguration {
       inherit pkgs;
 
-      # Make this stuff available to the hm modules
+      # HM propagates these to every module
       extraSpecialArgs = {inherit inputs system mylib username hostname;};
 
       modules = builtins.concatLists [
