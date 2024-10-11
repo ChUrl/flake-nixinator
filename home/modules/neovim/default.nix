@@ -1,4 +1,6 @@
 {
+  username,
+  hostname,
   config,
   lib,
   mylib,
@@ -884,13 +886,34 @@ in {
                 {name = "clojure_lsp";}
                 {name = "cmake";}
                 {name = "lua_ls";}
-                {name = "nil_ls";}
-                {name = "ltex";}
+                # {name = "nil_ls";} # TODO: To use together with nixd, its hover functionality needs to be disabled to not conflict
+                {
+                  name = "ltex";
+                  extraOptions.settings = {
+                    ltex = {
+                      checkFrequency = "save";
+                    };
+                  };
+                }
                 {
                   name = "nixd";
                   # TODO: Figure out how to structure this attrset
-                  extraOptions = {
+                  extraOptions.settings = {
                     nixd = {
+                      nixpkgs = {
+                        expr = "import <nixpkgs> { }";
+                      };
+                      formatting = {
+                        command = ["alejandra"];
+                      };
+                      options = {
+                        nixos = {
+                          expr = "(builtins.getFlake \"/home/${username}/NixFlake\").nixosConfigurations.${hostname}.options";
+                        };
+                        home_manager = {
+                          expr = "(builtins.getFlake \"/home/${username}/NixFlake\").homeConfigurations.\"${username}@${hostname}\".options";
+                        };
+                      };
                       diagnostic = {
                         suppress = [
                           "sema-escaping-with"
@@ -1015,7 +1038,7 @@ in {
             '';
           };
 
-          ltex-extra = rec {
+          ltex-extra = {
             name = "ltex_extra";
             pkg = pkgs.vimPlugins.ltex_extra-nvim;
             lazy = true;
