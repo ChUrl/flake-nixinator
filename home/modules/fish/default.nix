@@ -1,6 +1,5 @@
 {
   config,
-  nixosConfig,
   lib,
   mylib,
   pkgs,
@@ -89,7 +88,7 @@ in {
       };
 
       plugins = [
-        # oh-my-fish plugins are stored in their own repositories, which
+        # Oh-my-fish plugins are stored in their own repositories, which
         # makes them simple to import into home-manager.
         # NOTE: Currently, HM ignores theme plugins
         # {
@@ -111,18 +110,21 @@ in {
       shellAbbrs = let
         # Only add " | bat" if bat is installed
         batify = command: command + (optionalString config.programs.bat.enable " | bat");
+
         # Same as above but with args for bat
         batifyWithArgs = command: args: command + (optionalString config.programs.bat.enable (" | bat " + args));
 
-        # NOTE: These can be used for my config.modules and for HM config.programs, as both of these add the package to home.packages
+        # These can be used for my config.modules and for HM config.programs,
+        # as both of these add the package to home.packages
         hasHomePackage = package: (contains config.home.packages package);
+
         # Only add fish abbr if package is installed
         abbrify = package: abbr: (optionalAttrs (hasHomePackage package) abbr);
       in
         mkMerge [
-          # Default abbrs, always available
+          # Abbrs that are always available are defined here.
           {
-            # Shell basic
+            # Shell basics
             c = "clear";
             q = "exit";
 
@@ -130,7 +132,7 @@ in {
             h = batifyWithArgs "history" "-l fish"; # -l fish sets syntax highlighting to fish
             listabbrs = batifyWithArgs "abbr" "-l fish";
 
-            # tools
+            # Tools
             cd = "z"; # zoxide for quickjump to previously visited locations
             b = "z -"; # jump to previous dir
             mkdir = "mkdir -p"; # also create parents (-p)
@@ -141,7 +143,7 @@ in {
             np = "nnncd -a -P p";
             ssh = "kitty +kitten ssh";
 
-            # systemd
+            # Systemd
             failed = "systemctl --failed";
             errors = "journalctl -p 3 -xb";
             kernelerrors = "journalctl -p 3 -xb -k";
@@ -149,7 +151,6 @@ in {
             useruniterrors = "journalctl -xb --user-unit=";
 
             # NFS shares
-            # TODO: Make a rofi menu out of this? Maybe general purpose menu? Or menu for all abbrs?
             msusenet = "sudo mount.nfs4 192.168.86.20:/mnt/WD\\ Blue\\ Stripe\\ 2T/Usenet /media/Stash-Usenet";
             mspicture = "sudo mount.nfs4 192.168.86.20:/mnt/WD\\ Blue\\ Stripe\\ 2T/Picture /media/Stash-Picture";
             msvideo = "sudo mount.nfs4 192.168.86.20:/mnt/WD\\ Blue\\ Stripe\\ 2T/Video /media/Stash-Video";
@@ -159,28 +160,34 @@ in {
             mmusic = "sudo mount.nfs4 192.168.86.20:/mnt/SG\\ Exos\\ Mirror\\ 18TB/Music /media/Music";
             musenet = "sudo mount.nfs4 192.168.86.20:/mnt/SG\\ Exos\\ Mirror\\ 18TB/Usenet /media/Usenet";
 
-            # disassemble
+            # Disassemble
             disassemble = "objdump -d -S -M intel";
           }
 
           # Abbrs only available if package is installed
           (abbrify pkgs.btop {top = "btop";})
+
           (abbrify pkgs.duf {
             df = "duf";
             disksummary = "duf";
           })
+
           (abbrify pkgs.eza {
             ls = "eza --color=always --group-directories-first -F --git --icons=always"; # color-ls
             lsl = "eza --color=always --group-directories-first -F -l --git --icons=always --octal-permissions";
             lsa = "eza --color=always --group-directories-first -F -l -a --git --icons=always --octal-permissions";
             tre = "eza --color=always --group-directories-first -F -T -L 2 ---icons=always";
           })
+
           (abbrify pkgs.fd {find = "fd";})
+
           (abbrify pkgs.fzf {fuzzy = "fzf --preview 'bat --color=always --style=numbers --line-range=:500 {}'";})
+
           (abbrify pkgs.gdu {
             du = "gdu";
             storageanalysis = "gdu";
           })
+
           (abbrify pkgs.git {
             gs = "git status";
             gcm = "git commit -m";
@@ -188,29 +195,20 @@ in {
             glg = "git log --graph --decorate --oneline";
             gcl = "git clone";
           })
+
           (abbrify pkgs.gping {ping = "gping";})
+
           (abbrify pkgs.lazygit {lg = "lazygit";})
-          # (abbrify pkgs.navi {n = "navi";})
-          (abbrify pkgs.notmuch {
-            mailrefresh = "notmuch new";
-            mailsearch = "notmuch search";
-          })
-          (abbrify pkgs.protonvpn-cli {
-            vpnon = "protonvpn-cli c -f";
-            vpnat = "protonvpn-cli c --cc at";
-            vpnch = "protonvpn-cli c --cc ch";
-            vpnlu = "protonvpn-cli c --cc lu";
-            vpnus = "protonvpn-cli c --cc us";
-            vpnhk = "protonvpn-cli c --cc hk";
-            vpnkr = "protonvpn-cli c --cc kr";
-            vpnoff = "protonvpn-cli d";
-          })
+
           (abbrify pkgs.ranger {r = "ranger --choosedir=$HOME/.rangerdir; set LASTDIR (cat $HOME/.rangerdir); cd $LASTDIR";})
+
           (abbrify pkgs.rsync {
-            # cp = "rsync -ahv --inplace --partial --info=progress2";
+            copy = "rsync -ahv --inplace --partial --info=progress2";
             rsync = "rsync -ahv --inplace --partial --info=progress2";
           })
+
           (abbrify pkgs.sd {sed = "sd";})
+
           (abbrify pkgs.yt-dlp {
             mp4 = "yt-dlp -f 'bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4] / bv*+ba/b' --recode-video mp4"; # the -f options are yt-dlp defaults
             mp3 = "yt-dlp -f 'ba' --extract-audio --audio-format mp3";

@@ -7,10 +7,11 @@
   username,
   lib,
   mylib,
+  nixosConfig,
   config,
   pkgs,
   ...
-} @ inputs:
+}:
 # This is a HM module.
 # Because no imports/options/config is defined explicitly, everything is treated as config:
 # { inputs, lib, ... }: { ... } gets turned into { inputs, lib, ... }: { config = { ... }; } implicitly.
@@ -144,6 +145,7 @@ rec {
     };
 
     kitty.enable = true;
+    latex.enable = true;
 
     neovim = {
       enable = true;
@@ -171,12 +173,12 @@ rec {
     html.enable = false;
   };
 
-  # Make fonts installed through user packages available to applications
-  # NOTE: I don't think I need this anymore as all fonts are installed through the system config but let's keep this just in case
-  fonts.fontconfig.enable = true; # Also updates the font-cache
+  # Make fonts installed through user packages available to applications.
+  # Also updates the font-cache.
+  fonts.fontconfig.enable = true;
 
   # This only works when HM is installed as a system module,
-  # as nixosConfig won't be available otherwise
+  # as nixosConfig won't be available otherwise.
   xdg = {
     mime.enable = true;
     mimeApps = {
@@ -222,20 +224,6 @@ rec {
       in
         formatted;
 
-      # TODO: If mpv enabled
-      ".config/mpv" = {
-        recursive = true;
-        source = ../../config/mpv;
-      };
-
-      # TODO: Latex module
-      # "texmf/tex/latex/custom/christex.sty".source = ../../config/latex/christex.sty;
-      # "Notes/Obsidian/Chriphost/christex.sty".source = ../../config/latex/christex.sty; # For obsidian notes
-      ".indentconfig.yaml".source = ../../config/latex/.indentconfig.yaml;
-      ".indentsettings.yaml".source = ../../config/latex/.indentsettings.yaml;
-      "Notes/Obsidian/Chriphost/latex_snippets.json".source = ../../config/obsidian/latex_snippets.json; # TODO: Symlink
-      "Notes/Obsidian/Chriphost/.obsidian/snippets/latex_preview.css".source = ../../config/obsidian/css_snippets/latex_preview.css;
-
       # TODO: If navi enabled
       ".local/share/navi/cheats/christoph.cheat".source = ../../config/navi/christoph.cheat; # TODO :Symlink
     };
@@ -252,7 +240,6 @@ rec {
 
     # Add stuff for your user as you see fit:
     packages = with pkgs; [
-      # TODO: Make a module for standard UNIX replacements
       # Shell utils
       (ripgrep.override {withPCRE2 = true;}) # fast as fuck
       gdu # Alternative to du-dust (I like it better)
@@ -290,15 +277,12 @@ rec {
       imagemagick # Convert image (magic)
 
       # Document utils
-      # TODO: Latex module with individual packages or HomeManager
-      texliveFull
       poppler_utils # pdfunite
       graphviz # generate graphs from code
       plantuml # generate diagrams
       gnuplot # generate function plots
       pdf2svg # extract vector graphics from pdf
       pandoc # document converting madness
-      inkscape # for latex
 
       # Networking
       dig # Make DNS requests
@@ -406,7 +390,6 @@ rec {
     git = {
       enable = true;
       lfs.enable = true;
-      delta.enable = false; # TODO: Build failure
 
       userEmail = "christoph.urlacher@protonmail.com";
       userName = "Christoph Urlacher";
