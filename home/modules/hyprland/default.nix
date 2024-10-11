@@ -3,7 +3,6 @@
 # TODO: The border color does not fit the current theme
 {
   config,
-  nixosConfig,
   lib,
   mylib,
   pkgs,
@@ -14,12 +13,13 @@ in {
   options.modules.hyprland = import ./options.nix {inherit lib mylib;};
 
   config = lib.mkIf cfg.enable {
-    assertions = [
-      {
-        assertion = nixosConfig.programs.hyprland.enable;
-        message = "Can't enable Hyprland module with Hyprland disabled!";
-      }
-    ];
+    # TODO: Can't get the nixosConfig from standalone HM...
+    # assertions = [
+    #   {
+    #     assertion = (import <nixpkgs/nixos> {}).config.programs.hyprland.enable;
+    #     message = "Can't enable Hyprland module with Hyprland disabled!";
+    #   }
+    # ];
 
     gtk = {
       enable = true;
