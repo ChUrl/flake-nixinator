@@ -1,10 +1,9 @@
 {
-  description = "ChUrl's very bad and basic Nix config using Flakes";
+  description = "ChUrl's NixOS config using Flakes";
 
   # This config is a Flake.
-  # It needs inputs that are passed as arguments to the output.
-  # These are the dependencies of the Flake.
-  # The git revisions get locked in flake.lock to make the outputs deterministic.
+  # It depends on "inputs" that are passed as arguments to the "outputs" function.
+  # The inputs' git revisions get locked in the flake.lock file, making the outputs deterministic.
   inputs = {
     # Nixpkgs
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
@@ -14,51 +13,42 @@
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
-    # NeoVim
+    # NeoVim <3
     nixvim.url = "github:nix-community/nixvim";
     nixvim.inputs.nixpkgs.follows = "nixpkgs";
 
+    # Nix User Repository (e.g. Firefox addons)
+    nur.url = "github:nix-community/NUR";
+
     # Other
-    emacs-overlay.url = "github:nix-community/emacs-overlay";
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=v0.4.1";
     nix-alien.url = "github:thiagokokada/nix-alien";
-    devshell.url = "github:numtide/devshell";
-    nur.url = "github:nix-community/NUR"; # Nix User Repository
-    firefox-gnome-theme.url = "github:rafaelmardojai/firefox-gnome-theme";
-    firefox-gnome-theme.flake = false;
+    emacs-overlay.url = "github:nix-community/emacs-overlay";
 
-    # Disabled
-    # adwaita-for-steam.url = "github:tkashkin/Adwaita-for-Steam";
-    # adwaita-for-steam.flake = false;
-    # plasma-manager.url = "github:pjones/plasma-manager";
-    # plasma-manager.inputs.nixpkgs.follows = "nixpkgs";
-    # plasma-manager.inputs.home-manager.follows = "home-manager";
-    # musnix.url = "github:musnix/musnix";
-    # nixified-ai.url = "github:nixified-ai/flake";
-    # nixos-conf-editor.url = "github:vlinkz/nixos-conf-editor";
-    # nix-matlab.url = "gitlab:doronbehar/nix-matlab";
+    # TODO: Move away from devshell, as it breaks e.g. C++/Rust library propagation
+    #       and doesn't provide any benefits for me
+    devshell.url = "github:numtide/devshell";
   };
 
   # Outputs is a function that takes the inputs as arguments.
   # To handle extra arguments we use the @ inputs pattern.
   # It gives the name "inputs" to the ... ellipses.
-  outputs = {
-    nixpkgs,
-    ...
-  } @ inputs: let
+  outputs = {nixpkgs, ...} @ inputs: let
+    # Our configuration is buildable on the following system/platform.
+    # Configs can support more than a single system simultaneously,
+    # e.g. NixOS (linux) and MacOS (darwin) or Arm.
     system = "x86_64-linux";
 
-    # TODO: Use those to generate configs
-    hostnames = ["nixinator" "nixtop"];
-    usernames = ["christoph"];
-
-    # Set overlays + unfree globally
+    # We configure our global packages here.
+    # Usually, "nixpkgs.legacyPackages.${system}" is used (and more efficient),
+    # but because we want to change the nixpkgs configuration, we have to re-import it.
     pkgs = import nixpkgs {
       inherit system;
 
-      # config.allowUnfree = true;
+      config.allowUnfree = true;
       config.allowUnfreePredicate = pkg: true;
 
+      # Overlays define changes in the nixpkgs package set.
       overlays = [
         inputs.devshell.overlays.default
         inputs.nur.overlay
@@ -69,52 +59,80 @@
       ];
     };
 
-    # I don't know how to extend the nixpkgs.lib directly so just propagate mylib to the config modules as argument
+    # My own library functions are imported here.
+    # They are made available to the system and HM configs by inheriting mylib.
     mylib = import ./lib {
+      # Equal to "inputs = inputs;" and "pkgs = pkgs;".
+      # The right values come from the outer scope, because the names match
+      # in the inner and outer scope, we can use "inherit" instead.
+      # This is required because the lib/ module expects those as arguments.
       inherit inputs pkgs;
 
-      # Equal to "lib = nixpkgs.lib;". This is required, because mylib also uses the nixpkgs lib.
+      # Equal to "lib = nixpkgs.lib;".
+      # This is required because mylib also uses the default nixpkgs lib.
       inherit (nixpkgs) lib;
     };
   in {
     # Local shell for NixFlake directory
     devShells."${system}".default = import ./shell.nix {inherit pkgs;};
 
-    # We give each configuration a name (the hostname) to choose a configuration when rebuilding.
+    # We give each configuration a (host)name to choose a configuration when rebuilding.
     # This makes it easy to add different configurations (e.g. for a laptop).
     # Usage: sudo nixos-rebuild switch --flake .#nixinator
     # Usage: sudo nixos-rebuild switch --flake .#nixtop
     nixosConfigurations = {
-      # TODO: This should probably run using mapAttrs over the hostnames list...
-      nixinator = mylib.nixos.mkNixosSystemConfig {
+      # These configurations include HM as a NixOS module. This has a few benefits:
+      # - The system config is available from within the HM config,
+      #   passed as nixosConfig input to each HM module
+      # - This seems to be required for opt-in persistence
+      # - The HM config can be rebuilt separately from the system,
+      #   without generating a new boot entry
+      # Downsides:
+      # - The nixd HM options completion doesn't seem to work
+      # - The system needs to be rebuilt with every HM config change
+      nixinator = mylib.nixos.mkNixosConfigWithHomeManagerModule {
         inherit system mylib;
         hostname = "nixinator";
+        username = "christoph";
         extraModules = [];
       };
-      nixtop = mylib.nixos.mkNixosSystemConfig {
+      nixtop = mylib.nixos.mkNixosConfigWithHomeManagerModule {
         inherit system mylib;
         hostname = "nixtop";
+        username = "christoph";
         extraModules = [];
       };
+
+      # These configurations don't include HM.
+      # When using those, HM has to be installed separately in homeConfigurations.
+      # nixinator = mylib.nixos.mkNixosSystemConfig {
+      #   inherit system mylib;
+      #   hostname = "nixinator";
+      #   extraModules = [];
+      # };
+      # nixtop = mylib.nixos.mkNixosSystemConfig {
+      #   inherit system mylib;
+      #   hostname = "nixtop";
+      #   extraModules = [];
+      # };
     };
 
     # The home configuration can be rebuilt separately:
     # Usage: home-manager switch --flake .#christoph@nixinator
     # Usage: home-manager switch --flake .#christoph@nixtop
-    homeConfigurations = {
-      # TODO: This should probably run using mapAttrs and cartesianProduct over the hostnames and usernames lists...
-      "christoph@nixinator" = mylib.nixos.mkNixosHomeConfig {
-        inherit system mylib;
-        username = "christoph";
-        hostname = "nixinator";
-        extraModules = [];
-      };
-      "christoph@nixtop" = mylib.nixos.mkNixosHomeConfig {
-        inherit system mylib;
-        username = "christoph";
-        hostname = "nixtop";
-        extraModules = [];
-      };
-    };
+    # homeConfigurations = {
+    #   "christoph@nixinator" = mylib.nixos.mkNixosHomeConfig {
+    #     inherit system mylib;
+    #     username = "christoph";
+    #     hostname = "nixinator";
+    #     extraModules = [];
+    #   };
+    #   "christoph@nixtop" = mylib.nixos.mkNixosHomeConfig {
+    #     inherit system mylib;
+    #     username = "christoph";
+    #     hostname = "nixtop";
+    #     extraModules = [];
+    #   };
+    # };
   };
 }

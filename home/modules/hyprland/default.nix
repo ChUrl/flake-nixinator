@@ -7,19 +7,20 @@
   mylib,
   pkgs,
   ...
-}: let
+} @ inputs: let
   cfg = config.modules.hyprland;
 in {
   options.modules.hyprland = import ./options.nix {inherit lib mylib;};
 
   config = lib.mkIf cfg.enable {
-    # TODO: Can't get the nixosConfig from standalone HM...
-    # assertions = [
-    #   {
-    #     assertion = (import <nixpkgs/nixos> {}).config.programs.hyprland.enable;
-    #     message = "Can't enable Hyprland module with Hyprland disabled!";
-    #   }
-    # ];
+    assertions = [
+      {
+        # This assertion is not possible if HM is used standalone,
+        # because nixosConfig won't be available.
+        assertion = inputs.nixosConfig.programs.hyprland.enable;
+        message = "Can't enable Hyprland module with Hyprland disabled!";
+      }
+    ];
 
     gtk = {
       enable = true;

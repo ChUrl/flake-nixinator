@@ -1,25 +1,29 @@
 {inputs, ...}: {
   imports = [
+    # Obsolete modules are kept in this folder for reference.
     # ./audio
+    # ./emacs
+    # ./email
+    # ./flatpak
+    # ./helix
+    # ./gaming
+    # ./misc
+    # ./nextcloud
+    # ./ranger
+    # ./vscode
+
+    # My own HM modules
     ./chromium
-    ./emacs
-    ./email
     ./firefox
     ./fish
-    # ./flatpak
-    # ./gaming
-    ./helix
     ./hyprland
     ./kitty
-    # ./misc
     ./neovim
-    # ./nextcloud
     ./nnn
-    ./ranger
     ./rofi
-    ./vscode
     ./waybar
 
+    # HM modules imported from the flake inputs
     inputs.nix-flatpak.homeManagerModules.nix-flatpak
     inputs.nixvim.homeManagerModules.nixvim
   ];
