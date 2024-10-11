@@ -119,6 +119,7 @@ in {
 
       autoCmd = [
         {
+          desc = "Lint the file if autolint is enabled";
           event = ["BufWritePost"];
           callback.__raw = ''
             function()
@@ -129,11 +130,12 @@ in {
           '';
         }
         {
+          desc = "Highlight yanked regions";
           event = ["TextYankPost"];
           callback.__raw = "function() vim.highlight.on_yank() end";
         }
         {
-          # Resize splits when entire window is resized by wm
+          desc = "Resize splits when Neovim is resized by the WM";
           event = ["VimResized"];
           callback.__raw = ''
             function()
@@ -144,11 +146,13 @@ in {
           '';
         }
         {
+          desc = "Disable conceal in JSON files";
           event = ["FileType"];
           pattern = ["json" "jsonc" "json5"]; # Disable conceal for these filetypes
           callback.__raw = "function() vim.opt_local.conceallevel = 0 end";
         }
         {
+          desc = "Attach JDTLS to Java files";
           event = ["FileType"];
           pattern = ["Java" "java"];
           callback.__raw = ''
@@ -165,6 +169,20 @@ in {
               }
 
               require('jdtls').start_or_attach(opts)
+            end
+          '';
+        }
+        {
+          desc = "Enable line wrapping in telescope preview";
+          event = ["User"];
+          pattern = ["TelescopePreviewerLoaded"];
+          callback.__raw = ''
+            function(args)
+              if args.data.bufname:match("*.csv") then
+                vim.wo.wrap = false
+              else
+                vim.wo.wrap = true
+              end
             end
           '';
         }
@@ -1414,6 +1432,10 @@ in {
             '';
             opts = {
               defaults = {
+                wrap_results = false; # Do wrapping in the preview instead, see autoCmd
+                preview = {
+                  treesitter = true;
+                };
                 mappings = {
                   i = {
                     "<Esc>" = {__raw = ''function(...) return require("telescope.actions").close(...) end'';};
@@ -1761,7 +1783,9 @@ in {
           luasnip # Snippets # TODO: How to add snippets, maybe use luasnip from nixvim directly?
 
           ltex-extra # Additional ltex lsp support, e.g. for add-to-dictionary action
-          markview # Markdown support
+
+          markview # Markdown support # TODO: Disable in help buffers + confiure a bit more
+
           # narrow-region # Open a buffer restricted to the selection
           navbuddy # Structural file view
           neo-tree # File tree sidebar
