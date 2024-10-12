@@ -89,6 +89,12 @@ with mylib.modules; {
     '';
   };
 
+  transparent-opacity = mkOption {
+    type = types.str;
+    description = "The opacity transparent windows should have.";
+    example = "0.8";
+  };
+
   floating = mkOption {
     type = types.listOf types.attrs;
     description = "What programs are floating down here?";

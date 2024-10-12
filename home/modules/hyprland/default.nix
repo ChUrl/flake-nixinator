@@ -11,6 +11,114 @@
   ...
 }: let
   cfg = config.modules.hyprland;
+
+  # This function is mapped to the "cfg.monitors" attrSet.
+  # For each key-value entry in "cfg.monitors",
+  # the key will be assigned to "name" and the value to "conf".
+  mkMonitor = name: conf: "${name}, ${toString conf.width}x${toString conf.height}@${toString conf.rate}, ${toString conf.x}x${toString conf.y}, ${toString conf.scale}";
+
+  mkWorkspace = monitor: workspace: "${toString workspace}, monitor:${toString monitor}";
+  mkWorkspaces = monitor: workspace-list: map (mkWorkspace monitor) workspace-list;
+
+  mkWorkspaceRule = workspace: class: "workspace ${workspace}, class:^(${class})$";
+  mkWorkspaceRules = workspace: class-list: builtins.map (mkWorkspaceRule workspace) class-list;
+
+  mkFloatingRule = attrs:
+    "float"
+    + (lib.optionalString (builtins.hasAttr "class" attrs) ", class:^(${attrs.class})$")
+    + (lib.optionalString (builtins.hasAttr "title" attrs) ", title:^(${attrs.title})$");
+
+  mkTranslucentRule = class: "opacity ${cfg.transparent-opacity} ${cfg.transparent-opacity}, class:^(${class})$";
+
+  mkBind = key: action: "${key}, ${action}";
+  mkBinds = key: actions: builtins.map (mkBind key) actions;
+
+  mkWallpaper = monitor: "${monitor}, ${config.home.homeDirectory}/NixFlake/wallpapers/${cfg.theme}.png";
+
+  mkDelayedStart = str: "hyprctl dispatch exec \"sleep 5s && ${str}\"";
+  delayed-exec = builtins.map mkDelayedStart cfg.autostart.delayed;
+  mkExec = prog: "${prog}";
+
+  always-bind = {
+    # Hyprland control
+    "$mainMod, Q" = ["killactive"];
+    "$mainMod, V" = ["togglefloating"];
+    "$mainMod, F" = ["fullscreen"];
+    "$mainMod, C" = ["exec, clipman pick --tool=rofi"];
+    "$mainMod, G" = ["togglegroup"];
+    "ALT, tab" = ["changegroupactive"];
+    "$mainMod, tab" = ["workspace, previous"];
+
+    # Move focus with mainMod + arrow keys
+    "$mainMod, h" = ["movefocus, l"];
+    "$mainMod, l" = ["movefocus, r"];
+    "$mainMod, k" = ["movefocus, u"];
+    "$mainMod, j" = ["movefocus, d"];
+
+    # Swap windows
+    "$mainMod CTRL, h" = ["movewindow, l"];
+    "$mainMod CTRL, l" = ["movewindow, r"];
+    "$mainMod CTRL, k" = ["movewindow, u"];
+    "$mainMod CTRL, d" = ["movewindow, d"];
+
+    # Rofi
+    "$mainMod, D" = ["exec, ~/NixFlake/config/rofi/menus/systemd-podman.fish"];
+    "$mainMod, O" = ["exec, ~/NixFlake/config/rofi/menus/lectures.fish"];
+    "$mainMod, M" = ["exec, ~/NixFlake/config/rofi/menus/keybinds.fish"];
+    "$mainMod, U" = ["exec, ~/NixFlake/config/rofi/menus/vpn.fish"];
+
+    # TODO: Somehow write this more compact?
+    "$mainMod, 1" = ["workspace, 1"];
+    "$mainMod, 2" = ["workspace, 2"];
+    "$mainMod, 3" = ["workspace, 3"];
+    "$mainMod, 4" = ["workspace, 4"];
+    "$mainMod, 5" = ["workspace, 5"];
+    "$mainMod, 6" = ["workspace, 6"];
+    "$mainMod, 7" = ["workspace, 7"];
+    "$mainMod, 8" = ["workspace, 8"];
+    "$mainMod, 9" = ["workspace, 9"];
+    "$mainMod, 0" = ["workspace, 10"];
+
+    "$mainMod SHIFT, 1" = ["movetoworkspace, 1"];
+    "$mainMod SHIFT, 2" = ["movetoworkspace, 2"];
+    "$mainMod SHIFT, 3" = ["movetoworkspace, 3"];
+    "$mainMod SHIFT, 4" = ["movetoworkspace, 4"];
+    "$mainMod SHIFT, 5" = ["movetoworkspace, 5"];
+    "$mainMod SHIFT, 6" = ["movetoworkspace, 6"];
+    "$mainMod SHIFT, 7" = ["movetoworkspace, 7"];
+    "$mainMod SHIFT, 8" = ["movetoworkspace, 8"];
+    "$mainMod SHIFT, 9" = ["movetoworkspace, 9"];
+    "$mainMod SHIFT, 0" = ["movetoworkspace, 10"];
+
+    "CTRL ALT, R" = [
+      "moveworkspacetomonitor, 1 HDMI-A-1"
+      "moveworkspacetomonitor, 2 HDMI-A-1"
+      "moveworkspacetomonitor, 3 HDMI-A-1"
+      "moveworkspacetomonitor, 4 HDMI-A-1"
+      "moveworkspacetomonitor, 5 HDMI-A-1"
+      "moveworkspacetomonitor, 6 HDMI-A-1"
+      "moveworkspacetomonitor, 7 HDMI-A-1"
+      "moveworkspacetomonitor, 8 HDMI-A-1"
+      "moveworkspacetomonitor, 9 HDMI-A-1"
+      "moveworkspacetomonitor, 10 DP-1"
+    ];
+  };
+
+  always-bindm = {
+    "$mainMod, mouse:272" = ["movewindow"];
+    "$mainMod, mouse:273" = ["resizewindow"];
+  };
+
+  always-exec = [
+    "dunst" # Notifications
+    "wl-paste -t text --watch clipman store --no-persist"
+    "wl-paste -p -t text --watch clipman store -P --histpath=\"~/.local/share/clipman-primary.json\""
+    "hyprctl setcursor Bibata-Modern-Classic 16"
+
+    # Provide a polkit authentication UI.
+    # This is used for example when running systemd commands without root.
+    "${pkgs.kdePackages.polkit-kde-agent-1}/libexec/polkit-kde-authentication-agent-1"
+  ];
 in {
   options.modules.hyprland = import ./options.nix {inherit lib mylib;};
 
@@ -30,6 +138,34 @@ in {
       iconTheme.name = "Papirus";
     };
 
+    home = {
+      pointerCursor = {
+        gtk.enable = true;
+        x11.enable = true;
+        package = pkgs.bibata-cursors;
+        name = "Bibata-Modern-Classic";
+        size = 16;
+      };
+
+      packages = with pkgs; [
+        hyprpaper # Wallpaper setter
+        hyprpicker # Color picker
+
+        wl-clipboard
+        clipman # Clipboard manager (wl-paste)
+        libnotify
+        inotifyTools # Includes inotifywait
+
+        ncpamixer # Audio control
+        slurp # Region selector for screensharing
+        grim # Grab images from compositor
+
+        # Deps for Qt5 and Qt6 apps (e.g., Nextcloud)
+        libsForQt5.qtwayland
+        kdePackages.qtwayland
+      ];
+    };
+
     programs = {
       imv = {
         enable = true;
@@ -39,7 +175,161 @@ in {
       };
     };
 
+    wayland.windowManager.hyprland = {
+      enable = true;
+      systemd.enable = true; # Imports some variables into dbus
+      xwayland.enable = true;
+
+      settings = {
+        "$mainMod" = "${cfg.keybindings.main-mod}";
+
+        general = {
+          gaps_in = 5;
+          gaps_out = 20;
+          border_size = 2;
+
+          "col.active_border" = "rgba(94E2D5FF)";
+          "col.inactive_border" = "rgba(B4BEFEFF)";
+        };
+
+        group = {
+          groupbar = {
+            render_titles = false;
+            font_size = 10;
+            gradients = false;
+          };
+
+          "col.border_active" = "rgba(94E2D5FF)";
+          "col.border_inactive" = "rgba(B4BEFEFF)";
+        };
+
+        input = {
+          kb_layout = "${cfg.kb-layout}";
+          kb_variant = "${cfg.kb-variant}";
+          kb_model = "pc104";
+          # kb_options =
+          # kb_rules =
+
+          follow_mouse = true;
+
+          touchpad = {
+            natural_scroll = "no";
+          };
+
+          sensitivity = 0; # -1.0 - 1.0, 0 means no modification.
+        };
+
+        monitor = lib.pipe cfg.monitors [
+          (builtins.mapAttrs mkMonitor)
+          builtins.attrValues
+        ];
+
+        workspace = lib.pipe cfg.workspaces [
+          (builtins.mapAttrs mkWorkspaces)
+          builtins.attrValues
+          builtins.concatLists
+        ];
+
+        bind = lib.pipe (lib.mergeAttrs cfg.keybindings.bindings always-bind) [
+          (builtins.mapAttrs mkBinds)
+          builtins.attrValues
+          builtins.concatLists
+        ];
+
+        bindm = lib.pipe always-bindm [
+          (builtins.mapAttrs mkBinds)
+          builtins.attrValues
+          builtins.concatLists
+        ];
+
+        exec-once = lib.pipe (always-exec ++ cfg.autostart.immediate ++ delayed-exec) [
+          (builtins.map mkExec)
+        ];
+
+        windowrulev2 =
+          lib.pipe cfg.workspacerules [
+            (builtins.mapAttrs mkWorkspaceRules)
+            builtins.attrValues
+            builtins.concatLists
+          ]
+          ++ lib.pipe cfg.floating [
+            (builtins.map mkFloatingRule)
+          ]
+          ++ lib.pipe cfg.transparent [
+            (builtins.map mkTranslucentRule)
+          ];
+
+        dwindle = {
+          pseudotile = true;
+          preserve_split = true;
+        };
+
+        master = {
+          new_status = "master";
+        };
+
+        gestures = {
+          workspace_swipe = false;
+        };
+
+        misc = {
+          # Say no to the anime girl
+          force_default_wallpaper = 0;
+        };
+
+        # Because those are not windows, but layouts,
+        # we have to blur them explicitly
+        layerrule = [
+          "blur,rofi"
+          "blur,waybar"
+        ];
+
+        decoration = {
+          rounding = 5;
+          drop_shadow = false;
+          shadow_range = 4;
+          shadow_render_power = 3;
+          "col.shadow" = "rgba(1A1A1AEE)";
+
+          blur = {
+            enabled = true;
+            size = 10;
+            passes = 3;
+            new_optimizations = true;
+            ignore_opacity = true;
+            xray = true;
+          };
+        };
+
+        animations = {
+          enabled = true;
+          bezier = "myBezier, 0.05, 0.9, 0.1, 1.05";
+          animation = [
+            "windows, 1, 7, myBezier"
+            "windowsOut, 1, 7, default,popin 80%"
+            "border, 1, 10, default"
+            "borderangle, 1, 8, default"
+            "fade, 1, 7, default"
+            "workspaces, 1, 6, default"
+          ];
+        };
+      };
+    };
+
     services = {
+      hyprpaper = {
+        enable = true;
+
+        settings = {
+          preload = "~/NixFlake/wallpapers/${cfg.theme}.png";
+
+          wallpaper = lib.pipe cfg.monitors [
+            builtins.attrNames
+            (builtins.map mkWallpaper)
+          ];
+        };
+      };
+
       # Notification service
       dunst = {
         enable = true;
@@ -74,196 +364,6 @@ in {
             frame_color = "#FE640B";
           };
         };
-      };
-    };
-
-    home = {
-      pointerCursor = {
-        gtk.enable = true;
-        x11.enable = true;
-        package = pkgs.bibata-cursors;
-        name = "Bibata-Modern-Classic";
-        size = 16;
-      };
-
-      packages = with pkgs; [
-        hyprpaper # Wallpaper setter
-        hyprpicker # Color picker
-
-        wl-clipboard
-        clipman # Clipboard manager (wl-paste)
-        libnotify
-        inotifyTools # inotifywait etc.
-
-        moc # Audio player
-        ncpamixer # ncurses pavucontrol
-        slurp # Region selector for screensharing
-        grim # Grab images from compositor
-
-        # xfce.thunar
-        # xfce.tumbler # Thunar thumbnails
-        libsForQt5.polkit-kde-agent
-        libsForQt5.qtwayland
-        kdePackages.qtwayland
-      ];
-
-      sessionVariables = {
-      };
-
-      #
-      # Generate many individual config files from the options
-      #
-
-      file = {
-        # Link the main Hyprland configuration file.
-        # This file imports all the other generated files.
-        # TODO: Generate this, so only existing files are imported.
-        ".config/hypr/hyprland.conf".source = ../../../config/hyprland/hyprland.conf;
-
-        # Provide a polkit authentication UI.
-        # This is used for example when running systemd commands without root.
-        ".config/hypr/polkit.conf".text = ''
-          exec-once = ${pkgs.kdePackages.polkit-kde-agent-1}/libexec/polkit-kde-authentication-agent-1
-        '';
-
-        # Configure different monitors.
-        ".config/hypr/monitors.conf".text = let
-          # This function is mapped to the "cfg.monitors" attrSet.
-          # For each key-value entry in "cfg.monitors",
-          # the key will be assigned to "name" and the value to "conf".
-          mkMonitor = name: conf: "monitor = ${name}, ${toString conf.width}x${toString conf.height}@${toString conf.rate}, ${toString conf.x}x${toString conf.y}, ${toString conf.scale}";
-        in
-          lib.pipe cfg.monitors [
-            (builtins.mapAttrs mkMonitor)
-            builtins.attrValues
-            (builtins.concatStringsSep "\n")
-          ];
-
-        # Configure how workspaces are mapped to monitors.
-        ".config/hypr/workspaces.conf".text = let
-          mkWorkspace = monitor: workspace: "workspace = ${toString workspace}, monitor:${toString monitor}";
-          mkWorkspaces = monitor: workspace-list: map (mkWorkspace monitor) workspace-list;
-        in
-          lib.pipe cfg.workspaces [
-            (builtins.mapAttrs mkWorkspaces)
-            builtins.attrValues
-            builtins.concatLists
-            (builtins.concatStringsSep "\n")
-          ];
-
-        # Keybindings
-        ".config/hypr/keybindings.conf".text = let
-          always-bind = {
-            # Hyprland control
-            "$mainMod, Q" = ["killactive"];
-            "$mainMod, V" = ["togglefloating"];
-            "$mainMod, F" = ["fullscreen"];
-            "$mainMod, C" = ["exec, clipman pick --tool=rofi"];
-            "$mainMod, G" = ["togglegroup"];
-            "ALT, tab" = ["changegroupactive"];
-          };
-
-          mkBind = key: action: "bind = ${key}, ${action}";
-          mkBinds = key: actions: builtins.map (mkBind key) actions;
-          binds = lib.pipe (lib.mergeAttrs cfg.keybindings.bindings always-bind) [
-            (builtins.mapAttrs mkBinds)
-            builtins.attrValues
-            builtins.concatLists
-            (builtins.concatStringsSep "\n")
-          ];
-        in ''
-          $mainMod = ${cfg.keybindings.main-mod}
-          ${binds}
-        '';
-
-        # Autostart applications
-        ".config/hypr/autostart.conf".text = let
-          # Stuff that is not negotiable
-          always-exec = [
-            "dunst" # Notifications
-            "hyprpaper"
-            "wl-paste -t text --watch clipman store --no-persist"
-            "wl-paste -p -t text --watch clipman store -P --histpath=\"~/.local/share/clipman-primary.json\""
-            "hyprctl setcursor Bibata-Modern-Classic 16"
-          ];
-
-          # NOTE: The sleep is a hack for tray icons, they need to be launched after waybar
-          sleepTime = 5;
-          mkDelayedStart = str: "hyprctl dispatch exec \"sleep ${builtins.toString sleepTime}s && ${str}\"";
-          delayed-exec = builtins.map mkDelayedStart cfg.autostart.delayed;
-
-          mkExec = prog: "exec-once = ${prog}";
-        in
-          lib.pipe (always-exec ++ cfg.autostart.immediate ++ delayed-exec) [
-            (builtins.map mkExec)
-            (builtins.concatStringsSep "\n")
-          ];
-
-        # Assign windows to workspaces
-        ".config/hypr/workspacerules.conf".text = let
-          mkWorkspaceRule = workspace: class: "windowrulev2 = workspace ${workspace}, class:^(${class})$";
-          mkWorkspaceRules = workspace: class-list: builtins.map (mkWorkspaceRule workspace) class-list;
-        in
-          lib.pipe cfg.workspacerules [
-            (builtins.mapAttrs mkWorkspaceRules)
-            builtins.attrValues
-            builtins.concatLists
-            (builtins.concatStringsSep "\n")
-          ];
-
-        # Make windows float
-        ".config/hypr/floatingrules.conf".text = let
-          mkFloatingRule = attrs:
-            "windowrulev2 = float"
-            + (lib.optionalString (builtins.hasAttr "class" attrs) ", class:^(${attrs.class})$")
-            + (lib.optionalString (builtins.hasAttr "title" attrs) ", title:^(${attrs.title})$");
-        in
-          lib.pipe cfg.floating [
-            (builtins.map mkFloatingRule)
-            (builtins.concatStringsSep "\n")
-          ];
-
-        # Make windows translucent
-        ".config/hypr/translucentrules.conf".text = let
-          opacity = 0.8;
-          mkTranslucentRule = class: "windowrulev2 = opacity ${toString opacity} ${toString opacity}, class:^(${class})$";
-        in
-          lib.pipe cfg.transparent [
-            (builtins.map mkTranslucentRule)
-            (builtins.concatStringsSep "\n")
-          ];
-
-        # Set wallpaper for each configured monitor
-        ".config/hypr/hyprpaper.conf".text = let
-          mkWallpaper = monitor: "wallpaper = ${monitor}, ${config.home.homeDirectory}/NixFlake/wallpapers/${cfg.theme}.png";
-          wallpapers = lib.pipe cfg.monitors [
-            builtins.attrNames
-            (builtins.map mkWallpaper)
-            (builtins.concatStringsSep "\n")
-          ];
-        in ''
-          preload = ~/NixFlake/wallpapers/${cfg.theme}.png
-          ${wallpapers}
-        '';
-
-        # Keyboard layout
-        ".config/hypr/input.conf".text = ''
-          input {
-              kb_layout = ${cfg.kb-layout}
-              kb_variant = ${cfg.kb-variant}
-              kb_model = pc104
-              kb_options =
-              kb_rules =
-
-              follow_mouse = 1
-
-              touchpad {
-                  natural_scroll = no
-              }
-
-              sensitivity = 0 # -1.0 - 1.0, 0 means no modification.
-          }
-        '';
       };
     };
   };
