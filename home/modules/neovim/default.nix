@@ -740,41 +740,6 @@ in {
             };
           };
 
-          # incline = {
-          #   name = "incline";
-          #   pkg = let
-          #     nvim-incline = pkgs.vimUtils.buildVimPlugin {
-          #       name = "nvim-incline";
-          #       src = pkgs.fetchFromGitHub {
-          #         owner = "b0o";
-          #         repo = "incline.nvim";
-          #         rev = "16fc9c073e3ea4175b66ad94375df6d73fc114c0";
-          #         sha256 = "sha256-5DoIvIdAZV7ZgmQO2XmbM3G+nNn4tAumsShoN3rDGrs=";
-          #       };
-          #     };
-          #   in
-          #     nvim-incline;
-          #   dependencies = [_navic];
-          #   lazy = true;
-          #   event = ["BufReadPost" "BufNewFile"];
-          #   config = ''
-          #     function(_, opts)
-          #       require("incline").setup(opts)
-          #     end
-          #   '';
-          #   opts = {
-          #     window = {
-          #       padding = 0;
-          #       margin = {
-          #         horizontal = 0;
-          #         vertical = 0;
-          #       };
-          #     };
-          #
-          #     render.__raw = builtins.readFile ./inclineNavic.lua;
-          #   };
-          # };
-
           intellitab = {
             name = "intellitab";
             # pkg = pkgs.vimPlugins.intellitab-nvim; # Prints at each indent :(
@@ -795,23 +760,8 @@ in {
             name = "jdtls";
             pkg = pkgs.vimPlugins.nvim-jdtls;
             lazy = false; # Is only ever loaded in Java buffers anyway
-            # NOTE: The below stuff is configured in the AutoCMD
-            # ft = ["Java" "java"];
-            # config = ''
-            #   function(_, opts)
-            #     require('jdtls').start_or_attach(opts)
-            #   end
-            # '';
-            # opts = {
-            #   cmd.__raw = ''
-            #     {
-            #       "jdtls",
-            #       "-data",
-            #       "/home/christoph/.local/share/eclipse/" .. vim.fn.fnamemodify(root_dir, ":p:h:t"),
-            #     }
-            #   '';
-            #   root_dir.__raw = "vim.fs.dirname(vim.fs.find({'gradlew', '.git', 'mvnw'}, { upward = true })[1])";
-            # };
+
+            # Additional configuration is done in autoCmd
           };
 
           lastplace = rec {
@@ -1110,11 +1060,10 @@ in {
                       "diagnostics",
                       on_click = function() vim.cmd("Trouble diagnostics toggle") end,
                     },
-                    -- Using incline for this instead
-                    -- {
-                    --   "filename",
-                    --   path = 1,
-                    -- },
+                    {
+                      "filename",
+                      path = 1,
+                    },
                   }
                 '';
                 lualine_c.__raw = ''{}''; # Use __raw: Nixvim does nothing with "[]", so the default config would be used
@@ -1182,20 +1131,6 @@ in {
               web-devicons
             ];
           };
-
-          # narrow-region = {
-          #   name = "narrow-region";
-          #   pkg = pkgs.vimPlugins.NrrwRgn;
-          #   lazy = true;
-          #   cmd = ["NR"];
-          #   config = ''
-          #     function(_, opts)
-          #       vim.keymap.del("x", "<space>Nr")
-          #       vim.keymap.del("x", "<space>nr")
-          #       vim.keymap.del("n", "<space>nr")
-          #     end
-          #   '';
-          # };
 
           navbuddy = {
             name = "navbuddy";
@@ -1295,9 +1230,14 @@ in {
                 local notify = require("notify")
 
                 notify.setup(opts)
-                vim.notify = notify -- Vim uses notify by default
+                vim.notify = notify -- Make vim use notify by default
               end
             '';
+            opts = {
+              render = "wrapped-compact";
+              max_width = 45; # In columns
+              top_down = true;
+            };
           };
 
           _nui = {
@@ -1964,9 +1904,6 @@ in {
           gitsigns # Show git line additions/deletions/changes in the gutter
           haskell-tools # Haskell integration
           illuminate # Highlight usages of word under cursor
-
-          # incline # Statuslines for each window # TODO: Cool but bad styling
-
           intellitab # Indent to the correct level on blanklines
           jdtls # Eclipse JDT language server integration for Java
           lastplace # Reopen a file at the last editing position
@@ -1979,7 +1916,6 @@ in {
 
           markview # Markdown support # TODO: Disable in help buffers (?) + confiure a bit more
 
-          # narrow-region # Open a buffer restricted to the selection
           navbuddy # Structural file view
           neo-tree # File tree sidebar
           noice # Modern UI overhaul, e.g. floating cmdline
