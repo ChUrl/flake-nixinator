@@ -126,6 +126,8 @@ rec {
         }
       ];
 
+      transparent-opacity = "0.8";
+
       transparent = [
         "kitty"
         "Alacritty"
