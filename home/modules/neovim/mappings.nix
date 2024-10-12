@@ -586,6 +586,12 @@
     {
       mode = "n";
       key = "<leader>td";
+      action = "<cmd>ToggleInlineDiagnostics<cr>";
+      options.desc = "Inline Diagnostics";
+    }
+    {
+      mode = "n";
+      key = "<leader>tD";
       action = "<cmd>Trouble diagnostics toggle focus=false win.position=bottom<cr>";
       options.desc = "Trouble Diagnostics";
     }
@@ -608,33 +614,18 @@
       action = "<cmd>ToggleAutoformat<cr>";
       options.desc = "Format on Save";
     }
-
     {
       mode = "n";
       key = "<leader>tl";
       action = "<cmd>ToggleAutoLint<cr>";
       options.desc = "Lint on Save";
     }
-
-    {
-      mode = "n";
-      key = "<leader>tD";
-      action = "<cmd>ToggleInlineDiagnostics<cr>";
-      options.desc = "Inline Diagnostics";
-    }
-
     {
       mode = "n";
       key = "<leader>tw";
       action = "<cmd>:set wrap!<cr>";
       options.desc = "Word Wrapping";
     }
-    # {
-    #   mode = "n";
-    #   key = "<leader>tv";
-    #   action = "<cmd>VimtexTocToggle<cr>";
-    #   options.desc = "VimTex ToC";
-    # }
   ];
 
   leader-git = [
