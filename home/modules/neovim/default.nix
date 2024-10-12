@@ -189,7 +189,6 @@ in {
           pattern = ["TelescopePreviewerLoaded"];
           callback.__raw = ''
             function(args)
-              print(vim.inspect(args))
               if args.data.bufname:match("*.csv") then
                 vim.wo.wrap = false
               else
@@ -267,6 +266,13 @@ in {
             };
           };
 
+          cellular-automaton = {
+            name = "cellular-automaton";
+            pkg = pkgs.vimPlugins.cellular-automaton-nvim;
+            lazy = true;
+            cmd = ["CellularAutomaton"];
+          };
+
           # NOTE: In LazyVim require("clang_extensions").setup(opts) is called where opts is the server definition from lspconfig...
           clangd-extensions = rec {
             name = "clangd_extensions";
@@ -324,6 +330,12 @@ in {
             lazy = true;
           };
 
+          _lspkind = {
+            name = "lspkind";
+            pkg = pkgs.vimPlugins.lspkind-nvim;
+            lazy = true;
+          };
+
           cmp = rec {
             name = "cmp";
             pkg = pkgs.vimPlugins.nvim-cmp;
@@ -337,6 +349,7 @@ in {
               _cmp-nvim-lsp
               # _cmp-nvim-lsp-signature-help
               _cmp-luasnip
+              _lspkind # Type symbols in completion
             ];
             config = mkDefaultConfig name;
             opts.__raw = let
@@ -399,6 +412,7 @@ in {
               function()
                 local cmp = require("${name}")
                 local luasnip = require("luasnip")
+                local lspkind = require("lspkind")
 
                 local has_words_before = function()
                   unpack = unpack or table.unpack
@@ -420,6 +434,20 @@ in {
                     documentation = cmp.config.window.bordered(),
                     -- completion.border = "rounded",
                     -- documentation.border = "rounded",
+                  },
+
+                  formatting = {
+                    format = lspkind.cmp_format({
+                      mode = "symbol", -- Show only symbol annotations
+                      maxwidth = 50,
+                      ellipsis_char = "...",
+                      show_labelDetails = true, -- show labelDetails in menu. Disabled by default
+
+                      -- The function below will be called before any actual modifications from lspkind
+                      before = function (entry, vim_item)
+                        return vim_item
+                      end
+                    })
                   },
 
                   mapping = cmp.mapping.preset.insert(${mapping}),
@@ -779,6 +807,26 @@ in {
             cmd = ["LazyGit" "LazyGitConfig" "LazyGitCurrentFile" "LazyGitFilter" "LazyGitFilterCurrentFile"];
           };
 
+          # leetcode = rec {
+          #   name = "leetcode";
+          #   pkg = pkgs.vimUtils.buildVimPlugin {
+          #     name = "leetcode";
+          #     src = pkgs.fetchFromGitHub {
+          #       owner = "kawre";
+          #       repo = "leetcode.nvim";
+          #       rev = "02fb2c855658ad6b60e43671f6b040c812181a1d";
+          #       sha256 = "sha256-YoFRd9Uf+Yv4YM6/l7MVLMjfRqhroSS3RCmZvNowIAo=";
+          #     };
+          #   };
+          #   lazy = true;
+          #   cmd = ["Leet"];
+          #   dependencies = [_notify _nui _plenary telescope treesitter web-devicons];
+          #   config = mkDefaultConfig name;
+          #   opts = {
+          #     lang = "python";
+          #   };
+          # };
+
           lint = {
             name = "lint";
             pkg = pkgs.vimPlugins.nvim-lint;
@@ -1094,7 +1142,8 @@ in {
           luasnip = {
             name = "luasnip";
             pkg = pkgs.vimPlugins.luasnip;
-            lazy = false;
+            lazy = true;
+            event = ["InsertEnter"];
             config = ''
               function(_, opts)
                 require("luasnip").config.set_config(opts)
@@ -1218,6 +1267,17 @@ in {
                   "?" = "show_help";
                 };
               };
+            };
+          };
+
+          neogen = rec {
+            name = "neogen";
+            pkg = pkgs.vimPlugins.neogen;
+            lazy = true;
+            cmd = ["Neogen"];
+            config = mkDefaultConfig name;
+            opts = {
+              snippet_engine = "luasnip";
             };
           };
 
@@ -1787,7 +1847,8 @@ in {
           ufo = rec {
             name = "ufo";
             pkg = pkgs.vimPlugins.nvim-ufo;
-            lazy = false;
+            lazy = true;
+            event = ["BufReadPost" "BufNewFile"];
             dependencies = [
               _promise
             ];
@@ -1818,6 +1879,8 @@ in {
           wakatime = {
             name = "wakatime";
             pkg = pkgs.vimPlugins.vim-wakatime;
+            lazy = true;
+            event = ["BufReadPost" "BufNewFile"];
           };
 
           web-devicons = rec {
@@ -1884,6 +1947,7 @@ in {
           bbye # Delete buffer without closing the window or split
           better-escape # Escape to normal mode using "jk"
           catppuccin # Colortheme (also add this here to access palettes)
+          cellular-automaton # Procrastinate better by watching animations
           clangd-extensions
 
           # blink-cmp # Auto completion popups # TODO: Try this instead of cmp
@@ -1908,6 +1972,7 @@ in {
           jdtls # Eclipse JDT language server integration for Java
           lastplace # Reopen a file at the last editing position
           lazygit # Git frontend
+          # leetcode # Solve leetcode problems
           lint # Lint documents on save
           lspconfig # Language server configurations for different languages
           lualine # Status line
@@ -1918,6 +1983,7 @@ in {
 
           navbuddy # Structural file view
           neo-tree # File tree sidebar
+          neogen # Generate doc comments
           noice # Modern UI overhaul, e.g. floating cmdline
           obsidian # Integration with Obsidian.md
           oil # File manager

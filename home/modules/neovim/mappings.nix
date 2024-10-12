@@ -747,6 +747,12 @@
       action = "<cmd>Telescope lsp_outgoing_calls<cr>";
       options.desc = "Outgoing Calls";
     }
+    {
+      mode = "n";
+      key = "<leader>cC";
+      action = "<cmd>Neogen<cr>";
+      options.desc = "Generate Doc Comment";
+    }
 
     # GoTo
     {
