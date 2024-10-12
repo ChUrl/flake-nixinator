@@ -1076,7 +1076,7 @@ in {
                 end)()
               '';
             in {
-              extensions = ["fzf" "neo-tree" "toggleterm" "trouble"];
+              extensions = ["fzf" "lazy" "neo-tree" "oil" "quickfix" "toggleterm" "trouble"];
 
               options = {
                 theme.__raw = bubbles;
@@ -1094,16 +1094,33 @@ in {
               };
 
               sections = {
-                # lualine_a = ["mode"];
-                # lualine_a.__raw = ''{ { "mode", separator = { left = "" }, right_padding = 2, } }'';
+                # These often use mixed lists/attrSets, so we have to use __raw alot
                 lualine_a.__raw = ''{ { "mode", separator = {}, } }'';
-                lualine_b.__raw = ''{ "branch", "diff", "diagnostics", { "filename", path = 1, } }'';
+                lualine_b.__raw = ''
+                  {
+                    {
+                      "branch",
+                      on_click = function() vim.cmd("LazyGit") end,
+                    },
+                    {
+                      "diff",
+                      on_click = function() vim.cmd("DiffviewOpen") end,
+                    },
+                    {
+                      "diagnostics",
+                      on_click = function() vim.cmd("Trouble diagnostics toggle") end,
+                    },
+                    -- Using incline for this instead
+                    -- {
+                    --   "filename",
+                    --   path = 1,
+                    -- },
+                  }
+                '';
                 lualine_c.__raw = ''{}''; # Use __raw: Nixvim does nothing with "[]", so the default config would be used
 
                 lualine_x.__raw = ''{}'';
                 lualine_y = ["filetype" "encoding" "fileformat"];
-                # lualine_z = ["location"];
-                # lualine_z.__raw = ''{ { "location", separator = { right = "" }, left_padding = 2, } }'';
                 lualine_z.__raw = ''{ { "location", separator = {}, } }'';
               };
 
