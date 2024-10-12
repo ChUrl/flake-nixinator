@@ -197,13 +197,13 @@
       mode = "i";
       key = "<C-BS>";
       action = "<C-w>";
-      options.desc = "Delete Previous Word"; # TODO: Breaks backspace <C-v><S-i> multiline cursor?
+      options.desc = "Delete Previous Word"; # TODO: Breaks backspace in <C-v><S-i> although i binding?
     }
     {
       mode = "i";
       key = "<M-BS>";
       action = "<C-w>";
-      options.desc = "Delete Previous Word"; # TODO: Breaks backspace <C-v><S-i> multiline cursor?
+      options.desc = "Delete Previous Word"; # TODO: Breaks backspace in <C-v><S-i> although i binding?
     }
 
     # Clipboard
@@ -258,6 +258,12 @@
       options.desc = "Grep Buffer";
     }
     {
+      mode = "v";
+      key = "?";
+      action = "<cmd>Telescope grep_string<cr>";
+      options.desc = "Find Selection";
+    }
+    {
       mode = "n";
       key = ";";
       action = "%";
@@ -268,12 +274,6 @@
       key = ";";
       action = "<Esc>";
       options.desc = "Exit Visual Mode";
-    }
-    {
-      mode = "v";
-      key = "?";
-      action = "<cmd>Telescope grep_string<cr>";
-      options.desc = "Find Selection";
     }
   ];
 
@@ -362,6 +362,12 @@
       action = "<cmd>ObsidianSearch<cr>";
       options.desc = "Obsidian Note";
     }
+    {
+      mode = "n";
+      key = "<leader>Q";
+      action = "<cmd>cexpr []<cr>";
+      options.desc = "Clear Quickfix List";
+    }
   ];
 
   leader-help = [
@@ -449,17 +455,22 @@
       action = "+buffers";
     }
     {
-      # See :h telescope.builtin.buffers() for sorting opts
       mode = "n";
       key = "<leader>bb";
-      action = "<cmd>Telescope buffers ignore_current_buffer=false sort_mru=true<cr>";
+      action = "<cmd>Telescope buffers<cr>";
       options.desc = "List Buffers";
     }
     {
       mode = "n";
       key = "<leader><Space>";
-      action = "<cmd>Telescope buffers ignore_current_buffer=false sort_mru=true<cr>";
+      action = "<cmd>Telescope buffers<cr>";
       options.desc = "List Buffers";
+    }
+    {
+      mode = "n";
+      key = "<leader><C-Space>";
+      action = "<cmd>Telescope telescope-tabs list_tabs<cr>";
+      options.desc = "List Tabpages";
     }
     {
       mode = "n";
