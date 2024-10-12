@@ -1,17 +1,6 @@
 {inputs, ...}: {
   imports = [
-    # Obsolete modules are kept in this folder for reference.
-    # ./alacritty
-    # ./audio
-    # ./emacs
-    # ./email
-    # ./flatpak
-    # ./helix
-    # ./gaming
-    # ./misc
-    # ./nextcloud
-    # ./ranger
-    # ./vscode
+    # Obsolete modules are kept in "1_deprecated" for reference.
 
     # My own HM modules
     ./chromium
