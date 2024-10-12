@@ -5,6 +5,6 @@
 }:
 with lib;
 with mylib.modules; {
-  enable = mkEnableOpt "Nextcloud Client";
-  autostart = mkBoolOpt false "Autostart the Nextcloud client (systemd)";
+  enable = mkEnableOption "Nextcloud Client";
+  autostart = mkBoolOption false "Autostart the Nextcloud client (systemd)";
 }

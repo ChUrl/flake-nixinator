@@ -2,7 +2,6 @@
 #       VPN and Container modules should use this rofi module to enable their menus then
 {
   config,
-  nixosConfig,
   lib,
   mylib,
   pkgs,
@@ -34,14 +33,9 @@ in {
       };
     };
 
-    home.activation = {
-      # NOTE: Keep the rofi config symlinked, to allow easy changes with hotreload
-      linkRofiConfig =
-        lib.hm.dag.entryAfter ["writeBoundary"]
-        (mylib.modules.mkLink "~/NixFlake/config/rofi/rofi.rasi" "~/.config/rofi/config.rasi");
-      linkRofiColors =
-        lib.hm.dag.entryAfter ["writeBoundary"]
-        (mylib.modules.mkLink "~/NixFlake/config/rofi/colors/${cfg.theme}.rasi" "~/.config/rofi/colors.rasi");
+    home.file = {
+      ".config/rofi/config.rasi".source = ../../../config/rofi/rofi.rasi;
+      ".config/rofi/colors.rasi".source = ../../../config/rofi/colors/${cfg.theme}.rasi;
     };
   };
 }

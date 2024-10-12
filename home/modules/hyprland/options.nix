@@ -5,7 +5,7 @@
 }:
 with lib;
 with mylib.modules; {
-  enable = mkEnableOpt "Hyprland Window Manager + Compositor";
+  enable = mkEnableOption "Hyprland Window Manager + Compositor";
 
   kb-layout = mkOption {
     type = types.str;

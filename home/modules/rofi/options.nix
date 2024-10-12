@@ -5,7 +5,7 @@
 }:
 with lib;
 with mylib.modules; {
-  enable = mkEnableOpt "Rofi";
+  enable = mkEnableOption "Rofi";
 
   theme = mkOption {
     type = types.str;

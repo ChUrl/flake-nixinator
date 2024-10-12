@@ -5,6 +5,6 @@
 }:
 with lib;
 with mylib.modules; {
-  enable = mkEnableOpt "Ranger";
-  preview = mkBoolOpt false "Enable Ranger image preview";
+  enable = mkEnableOption "Ranger";
+  preview = mkBoolOption false "Enable Ranger image preview";
 }

@@ -14,36 +14,40 @@
     lib.nixosSystem {
       inherit system;
 
-      # Make our inputs available to the configuration.nix (for importing modules)
-      # specialArgs are propagated to all modules
+      # Values in "specialArgs" are propagated to all system modules.
       specialArgs = {inherit inputs hostname mylib system username;};
 
       modules = builtins.concatLists [
         [
-          # Replace the pkgs to include overlays/unfree
+          # Replace the default "pkgs" with my configured version
+          # to allow installation of unfree software and my own overlays.
           {nixpkgs.pkgs = pkgs;}
 
-          # Main config file for all configs/hosts
+          # Import the toplevel system configuration module.
           ../system
         ]
 
         extraModules
 
-        # HM is installed as a system module
+        # HM is installed as a system module when using mkNixosConfigWithHomeManagerModule.
         [
           inputs.home-manager.nixosModules.home-manager
           {
-            # extraSpecialArgs are propagated to all hm config modules
-            home-manager.extraSpecialArgs = {inherit inputs hostname username mylib;};
+            home-manager = {
+              # Values in "extraSpecialArgs" are propagated to all HM modules.
+              extraSpecialArgs = {inherit inputs hostname username mylib;};
 
-            # Use systems pkgs, disables nixpkgs.* options in home.nix
-            home-manager.useGlobalPkgs = true;
+              # Use the "pkgs" from the system configuration.
+              # This disables "nixpkgs.*" options in HM modules.
+              useGlobalPkgs = true;
 
-            # Enable installing packages through users.christoph.packages to /etc/profiles instead of ~/.nix-profile
-            home-manager.useUserPackages = true;
+              # Packages in "users.${username}.packages" will be installed
+              # to /etc/profiles instead of ~/.nix-profile.
+              useUserPackages = true;
 
-            # User specific config file
-            home-manager.users.${username}.imports = [../home/${username}];
+              # Import the user-specific HM toplevel module.
+              users.${username}.imports = [../home/${username}];
+            };
           }
         ]
       ];
@@ -58,16 +62,16 @@
     lib.nixosSystem {
       inherit system;
 
-      # Make our inputs available to the configuration.nix (for importing modules)
-      # specialArgs are propagated to all modules
+      # Values in "specialArgs" are propagated to all system modules.
       specialArgs = {inherit inputs hostname mylib system;};
 
       modules = builtins.concatLists [
         [
-          # Replace the pkgs to include overlays/unfree
+          # Replace the default "pkgs" with my configured version
+          # to allow installation of unfree software and my own overlays.
           {nixpkgs.pkgs = pkgs;}
 
-          # Main config file for all configs/hosts
+          # Import the toplevel system configuration module.
           ../system
         ]
 
@@ -85,11 +89,12 @@
     inputs.home-manager.lib.homeManagerConfiguration {
       inherit pkgs;
 
-      # HM propagates these to every module
+      # Values in "extraSpecialArgs" are propagated to all HM modules.
       extraSpecialArgs = {inherit inputs system mylib username hostname;};
 
       modules = builtins.concatLists [
         [
+          # Import the user-specific HM toplevel module.
           ../home/${username}
         ]
 

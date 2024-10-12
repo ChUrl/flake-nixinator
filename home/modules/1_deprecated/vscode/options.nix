@@ -5,5 +5,5 @@
 }:
 with lib;
 with mylib.modules; {
-  enable = mkEnableOpt "Visual Studio Code";
+  enable = mkEnableOption "Visual Studio Code";
 }

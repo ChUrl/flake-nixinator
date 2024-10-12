@@ -5,5 +5,5 @@
 }:
 with lib;
 with mylib.modules; {
-  enable = mkEnableOpt "Helix Editor";
+  enable = mkEnableOption "Helix Editor";
 }

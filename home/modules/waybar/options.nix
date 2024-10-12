@@ -5,7 +5,7 @@
 }:
 with lib;
 with mylib.modules; {
-  enable = mkEnableOpt "Waybar";
+  enable = mkEnableOption "Waybar";
 
   monitor = mkOption {
     type = types.str;

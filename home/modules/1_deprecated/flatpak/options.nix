@@ -5,22 +5,22 @@
 }:
 with lib;
 with mylib.modules; {
-  enable = mkEnableOpt "Flatpak module";
-  fontFix = mkBoolOpt true "Link fonts to ~/.local/share/fonts so flatpak apps can find them";
-  iconFix = mkBoolOpt true "Link icons to ~/.local/share/icons so flatpak apps can find them";
-  autoUpdate = mkBoolOpt false "Update flatpak apps on nixos-rebuild";
-  autoPrune = mkBoolOpt false "Remove unused packages on nixos-rebuild";
+  enable = mkEnableOption "Flatpak module";
+  fontFix = mkBoolOption true "Link fonts to ~/.local/share/fonts so flatpak apps can find them";
+  iconFix = mkBoolOption true "Link icons to ~/.local/share/icons so flatpak apps can find them";
+  autoUpdate = mkBoolOption false "Update flatpak apps on nixos-rebuild";
+  autoPrune = mkBoolOption false "Remove unused packages on nixos-rebuild";
 
   # TODO: Add library function to make this easier
   # TODO: The flatpak name should be included and a list of all enabled apps should be available
   # TODO: Do this for strings + packages
-  discord.enable = mkEnableOpt "Discord";
-  spotify.enable = mkEnableOpt "Spotify";
-  flatseal.enable = mkEnableOpt "Flatseal";
-  bottles.enable = mkEnableOpt "Bottles";
-  obsidian.enable = mkEnableOpt "Obsidian";
-  jabref.enable = mkEnableOpt "Jabref";
-  # xwaylandvideobridge = mkEnableOpt "XWayland Video Bridge"; # TODO
+  discord.enable = mkEnableOption "Discord";
+  spotify.enable = mkEnableOption "Spotify";
+  flatseal.enable = mkEnableOption "Flatseal";
+  bottles.enable = mkEnableOption "Bottles";
+  obsidian.enable = mkEnableOption "Obsidian";
+  jabref.enable = mkEnableOption "Jabref";
+  # xwaylandvideobridge = mkEnableOption "XWayland Video Bridge"; # TODO
 
   # TODO: Can I use extraInstall = { "com.valve.Steam" = true/false; } and pass the module option as value?
   # This is mainly used by other modules to allow them to use flatpak packages

@@ -5,6 +5,6 @@
 }:
 with lib;
 with mylib.modules; {
-  enable = mkEnableOpt "Chromium";
-  google = mkEnableOpt "Google Chrome";
+  enable = mkEnableOption "Chromium";
+  google = mkEnableOption "Google Chrome";
 }

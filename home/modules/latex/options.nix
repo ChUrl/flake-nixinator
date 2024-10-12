@@ -5,5 +5,5 @@
 }:
 with lib;
 with mylib.modules; {
-  enable = mkEnableOpt "Enable LaTeX";
+  enable = mkEnableOption "Enable LaTeX";
 }

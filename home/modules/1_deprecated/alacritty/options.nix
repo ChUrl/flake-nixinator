@@ -5,5 +5,5 @@
 }:
 with lib;
 with mylib.modules; {
-  enable = mkEnableOpt "Enable Alacritty";
+  enable = mkEnableOption "Enable Alacritty";
 }
