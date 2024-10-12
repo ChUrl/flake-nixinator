@@ -94,7 +94,7 @@ in {
       performance.byteCompileLua = {
         enable = true;
         configs = true;
-        initLua = true;
+        initLua = false; # When debugging init.lua turn this off
         nvimRuntime = true;
         plugins = true;
       };
@@ -133,11 +133,13 @@ in {
             end
           '';
         }
+
         {
           desc = "Highlight yanked regions";
           event = ["TextYankPost"];
           callback.__raw = "function() vim.highlight.on_yank() end";
         }
+
         {
           desc = "Resize splits when Neovim is resized by the WM";
           event = ["VimResized"];
@@ -149,12 +151,14 @@ in {
             end
           '';
         }
+
         {
           desc = "Disable conceal in JSON files";
           event = ["FileType"];
           pattern = ["json" "jsonc" "json5"]; # Disable conceal for these filetypes
           callback.__raw = "function() vim.opt_local.conceallevel = 0 end";
         }
+
         {
           desc = "Attach JDTLS to Java files";
           event = ["FileType"];
@@ -176,12 +180,16 @@ in {
             end
           '';
         }
+
         {
+          # TODO: This breaks if the preview buffer does not refer to a file,
+          #       e.g. when showing previous notifications
           desc = "Enable line wrapping in telescope preview";
           event = ["User"];
           pattern = ["TelescopePreviewerLoaded"];
           callback.__raw = ''
             function(args)
+              print(vim.inspect(args))
               if args.data.bufname:match("*.csv") then
                 vim.wo.wrap = false
               else
@@ -232,6 +240,30 @@ in {
               # mapping = ["jk"]; # NOTE: Deprecated
               default_mappings = true;
               timeout = 200; # In ms
+            };
+          };
+
+          catppuccin = {
+            name = "catppuccin";
+            pkg = pkgs.vimPlugins.catppuccin-nvim;
+            lazy = false;
+            priority = 1000;
+            config = ''
+              function(_, opts)
+                require("catppuccin").setup(opts)
+
+                vim.cmd([[
+                  let $BAT_THEME = "catppuccin"
+                  colorscheme catppuccin
+                ]])
+              end
+            '';
+            opts = {
+              flavour = "mocha"; # latte, frappe, macchiato, mocha
+              background = {
+                light = "latte";
+                dark = "mocha";
+              };
             };
           };
 
@@ -1014,10 +1046,40 @@ in {
                 })
               end
             '';
-            opts = {
+            opts = let
+              bubbles = ''
+                (function()
+                  -- Wrap this in an immediately invoked function and require catppuccin
+                  -- because we need "colors" in the scope.
+                  -- For this, the catppuccin plugin must be installed,
+                  -- just setting the neovim colorscheme isn't enough.
+                  local colors = require("catppuccin.palettes").get_palette("mocha")
+
+                  -- Use :lua print(vim.inspect(require("catppuccin.palettes").get_palette("mocha"))) to list colors
+                  return {
+                    normal = {
+                      a = { fg = colors.base, bg = colors.lavender },
+                      b = { fg = colors.text, bg = colors.crust },
+                      c = { fg = colors.text },
+                    },
+
+                    insert = { a = { fg = colors.base, bg = colors.blue } },
+                    visual = { a = { fg = colors.base, bg = colors.teal } },
+                    replace = { a = { fg = colors.base, bg = colors.red } },
+
+                    inactive = {
+                      a = { fg = colors.text, bg = colors.base },
+                      b = { fg = colors.text, bg = colors.base },
+                      c = { fg = colors.text },
+                    },
+                  }
+                end)()
+              '';
+            in {
               extensions = ["fzf" "neo-tree" "toggleterm" "trouble"];
 
               options = {
+                theme.__raw = bubbles;
                 always_divide_middle = true;
                 globalstatus = true;
                 ignore_focus = ["neo-tree"];
@@ -1025,7 +1087,6 @@ in {
                   left = "";
                   right = "";
                 };
-
                 component_separators = {
                   left = "";
                   right = "";
@@ -1033,18 +1094,33 @@ in {
               };
 
               sections = {
-                lualine_a = ["mode"];
-                lualine_b = ["branch" "diff" "diagnostics"];
-                lualine_c.__raw = "{{ 'filename', path = 1, }}";
+                # lualine_a = ["mode"];
+                # lualine_a.__raw = ''{ { "mode", separator = { left = "" }, right_padding = 2, } }'';
+                lualine_a.__raw = ''{ { "mode", separator = {}, } }'';
+                lualine_b.__raw = ''{ "branch", "diff", "diagnostics", { "filename", path = 1, } }'';
+                lualine_c.__raw = ''{}''; # Use __raw: Nixvim does nothing with "[]", so the default config would be used
 
-                lualine_x = ["filetype" "encoding" "fileformat"];
-                lualine_y = ["progress" "searchcount" "selectioncount"];
+                lualine_x.__raw = ''{}'';
+                lualine_y = ["filetype" "encoding" "fileformat"];
+                # lualine_z = ["location"];
+                # lualine_z.__raw = ''{ { "location", separator = { right = "" }, left_padding = 2, } }'';
+                lualine_z.__raw = ''{ { "location", separator = {}, } }'';
+              };
+
+              inactive_sections = {
+                lualine_a = [];
+                lualine_b = ["filename"];
+                lualine_c = [];
+                lualine_x = [];
+                lualine_y = [];
                 lualine_z = ["location"];
               };
 
+              # Using tabby for this
               # tabline = {
-              #   lualine_a = ["buffers"];
-              #   lualine_z = ["tabs"];
+              #   lualine_a = ["hostname"];
+              #   lualine_b = ["tabs"]; # buffers
+              #   lualine_x = ["windows"];
               # };
             };
           };
@@ -1325,6 +1401,12 @@ in {
             };
           };
 
+          quickfix-reflector = {
+            name = "quickfix-reflector";
+            pkg = pkgs.vimPlugins.quickfix-reflector-vim;
+            lazy = false;
+          };
+
           rainbow-delimiters = {
             name = "rainbow-delimiters";
             pkg = pkgs.vimPlugins.rainbow-delimiters-nvim;
@@ -1338,7 +1420,6 @@ in {
 
             # Don't call setup!
 
-            # TODO: Configure this in depth
             init = ''
               function()
                 vim.g.rustaceanvim = {
@@ -1383,10 +1464,70 @@ in {
             '';
           };
 
+          scope = rec {
+            name = "scope";
+            pkg = pkgs.vimPlugins.scope-nvim;
+            lazy = false;
+            config = mkDefaultConfig name;
+          };
+
           sleuth = {
             name = "sleuth";
             pkg = pkgs.vimPlugins.vim-sleuth;
             lazy = false;
+          };
+
+          tabby = rec {
+            name = "tabby";
+            pkg = pkgs.vimPlugins.tabby-nvim;
+            lazy = true;
+            event = ["BufReadPost" "BufNewFile"];
+            dependencies = [web-devicons];
+            config = mkDefaultConfig name;
+            opts = {
+              line.__raw = ''
+                function(line)
+                  local colors = require("catppuccin.palettes").get_palette("mocha")
+
+                  local base = { fg = colors.base, bg = colors.base }
+                  local crust = { fg = colors.crust, bg = colors.crust }
+                  local text = { fg = colors.text, bg = colors.crust }
+                  local lavender = { fg = colors.lavender, bg = colors.lavender }
+
+                  local numtabs = vim.call("tabpagenr", "$")
+
+                  return {
+                    -- Head
+                    {
+                        { " NEOVIM ", hl = { fg = colors.base, bg = colors.lavender } },
+
+                        -- The separator gets a foreground and background fill (each have fg + bg).
+                        -- line.sep("", lavender, lavender),
+                    },
+
+                    -- Tabs
+                    line.tabs().foreach(function(tab)
+                      -- Switch out the start separator instead of the ending one because the last separator is different
+                      local hl = tab.is_current() and { fg = colors.lavender, bg = colors.crust, style = "bold" } or text
+                      local sep_start = tab.number() == 1 and "" or ""
+                      local sep_end = tab.number() == numtabs and "" or ""
+
+                      return {
+                        line.sep(sep_start, lavender, crust),
+                        tab.number(),
+                        tab.name(),
+                        line.sep(sep_end, crust, base),
+                        hl = hl,
+                        margin = " ",
+                      }
+                    end),
+
+                    -- Background
+                    hl = base,
+                  }
+                end
+              '';
+            };
           };
 
           _plenary = {
@@ -1398,6 +1539,20 @@ in {
           _telescope-fzf-native = {
             name = "telescope-fzf-native";
             pkg = pkgs.vimPlugins.telescope-fzf-native-nvim;
+            lazy = true;
+          };
+
+          _telescope-tabs = {
+            name = "telescope-tabs";
+            pkg = pkgs.vimUtils.buildVimPlugin {
+              name = "telescope-tabs";
+              src = pkgs.fetchFromGitHub {
+                owner = "LukasPietzschmann";
+                repo = "telescope-tabs";
+                rev = "0a678eefcb71ebe5cb0876aa71dd2e2583d27fd3";
+                sha256 = "sha256-IvxZVHPtApnzUXIQzklT2C2kAxgtAkBUq3GNxwgPdPY=";
+              };
+            };
             lazy = true;
           };
 
@@ -1421,6 +1576,7 @@ in {
             dependencies = [
               _plenary
               _telescope-fzf-native
+              _telescope-tabs
               _telescope-undo
               _telescope-ui-select
             ];
@@ -1429,7 +1585,7 @@ in {
                 "undo"
                 "ui-select"
                 "fzf"
-                # "lazygit"
+                "telescope-tabs"
               ];
             in ''
               function(_, opts)
@@ -1449,8 +1605,18 @@ in {
                 };
                 mappings = {
                   i = {
+                    # TODO: This mappings throws an error.
+                    #       Doesn't matter if defined as function or like "<C-h"> = "which_key";.
+                    "<C-h>" = {__raw = ''function(...) return require("telescope.actions").which_key(...) end'';};
                     "<Esc>" = {__raw = ''function(...) return require("telescope.actions").close(...) end'';};
                   };
+                };
+              };
+              pickers = {
+                buffers = {
+                  # See :h telescope.builtin.buffers() for opts
+                  ignore_current_buffer = true;
+                  sort_mru = true;
                 };
               };
             };
@@ -1760,6 +1926,7 @@ in {
           autopairs # Automatic closing brackets/parens
           bbye # Delete buffer without closing the window or split
           better-escape # Escape to normal mode using "jk"
+          catppuccin # Colortheme (also add this here to access palettes)
           clangd-extensions
 
           # blink-cmp # Auto completion popups # TODO: Try this instead of cmp
@@ -1793,7 +1960,7 @@ in {
           luasnip # Snippets
           ltex-extra # Additional ltex lsp support, e.g. for add-to-dictionary action
 
-          markview # Markdown support # TODO: Disable in help buffers + confiure a bit more
+          markview # Markdown support # TODO: Disable in help buffers (?) + confiure a bit more
 
           # narrow-region # Open a buffer restricted to the selection
           navbuddy # Structural file view
@@ -1801,9 +1968,12 @@ in {
           noice # Modern UI overhaul, e.g. floating cmdline
           obsidian # Integration with Obsidian.md
           oil # File manager
+          quickfix-reflector # Make the quickfix list editable and saveable to apply changes
           rainbow-delimiters # Bracket/Paren colorization
           rustaceanvim # Rust integration
+          scope # Buffers scoped to tabpages
           sleuth # Heuristically set indent depth
+          tabby # Nicer tabline (only showing tabpages)
           telescope # Option picker frontend
           todo-comments # Highlight TODOs
           toggleterm # Integrated terminal

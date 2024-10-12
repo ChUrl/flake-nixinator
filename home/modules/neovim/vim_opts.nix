@@ -1,8 +1,4 @@
-{
-  lib,
-  mylib,
-  ...
-}: {
+_: {
   showmode = false; # Status line already shows this
   backspace = ["indent" "eol" "start"];
   termguicolors = true; # Required by multiple plugins
@@ -14,8 +10,8 @@
   formatexpr = "v:lua.require('conform').formatexpr()";
   laststatus = 3; # Global statusline
   winblend = 30; # Floating popup transparency
-  sessionoptions = ["buffers" "curdir" "tabpages" "winsize" "help" "globals" "skiprtp" "folds"];
-  showtabline = 0; # Disable tabline
+  sessionoptions = ["buffers" "curdir" "folds" "globals" "help" "skiprtp" "tabpages" "winsize"]; # What should be saved when creating a session
+  showtabline = 2; # Disable tabline with 0, show for > 1 with 1, always show with 2
   conceallevel = 2;
 
   # Cursor
