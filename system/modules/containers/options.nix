@@ -9,35 +9,35 @@
 }:
 with lib;
 with mylib.modules; {
-  enable = mkEnableOpt "Enable OCI Containers";
+  enable = mkEnableOption "Enable OCI Containers";
 
   homeassistant = {
-    enable = mkEnableOpt "Enable HomeAssistant Container";
+    enable = mkEnableOption "Enable HomeAssistant Container";
   };
   stablediffusion = {
-    enable = mkEnableOpt "Enable StableDiffusion Container with Automatic1111 WebUI";
+    enable = mkEnableOption "Enable StableDiffusion Container with Automatic1111 WebUI";
   };
   jellyfin = {
-    enable = mkEnableOpt "Enable Jellyfin Container";
+    enable = mkEnableOption "Enable Jellyfin Container";
   };
   fileflows = {
-    enable = mkEnableOpt "Enable FileFlows Container";
+    enable = mkEnableOption "Enable FileFlows Container";
   };
   sonarr = {
-    enable = mkEnableOpt "Enable Sonarr Container";
+    enable = mkEnableOption "Enable Sonarr Container";
   };
   radarr = {
-    enable = mkEnableOpt "Enable Radarr Container";
+    enable = mkEnableOption "Enable Radarr Container";
   };
   hydra = {
-    enable = mkEnableOpt "Enable Hydra Container";
+    enable = mkEnableOption "Enable Hydra Container";
   };
   sabnzbd = {
-    enable = mkEnableOpt "Enable SabNzbd Container";
+    enable = mkEnableOption "Enable SabNzbd Container";
   };
 
   rofiIntegration = {
-    enable = mkEnableOpt "Enable Rofi Menu for Container Servicing";
+    enable = mkEnableOption "Enable Rofi Menu for Container Servicing";
     hotkey = mkOption {
       type = types.str;
       example = ''

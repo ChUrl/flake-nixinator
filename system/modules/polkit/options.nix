@@ -5,7 +5,7 @@
 }:
 with lib;
 with mylib.modules; {
-  enable = mkEnableOpt "Polkit";
+  enable = mkEnableOption "Polkit";
 
   allowed-system-services = mkOption {
     type = types.listOf types.str;

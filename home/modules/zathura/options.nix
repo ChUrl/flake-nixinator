@@ -5,5 +5,5 @@
 }:
 with lib;
 with mylib.modules; {
-  enable = mkEnableOpt "Enable Zathura";
+  enable = mkEnableOption "Enable Zathura";
 }

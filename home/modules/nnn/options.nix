@@ -5,5 +5,5 @@
 }:
 with lib;
 with mylib.modules; {
-  enable = mkEnableOpt "NNN File Manager";
+  enable = mkEnableOption "NNN File Manager";
 }

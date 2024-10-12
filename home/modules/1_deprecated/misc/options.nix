@@ -5,15 +5,15 @@
 }:
 with lib;
 with mylib.modules; {
-  enable = mkEnableOpt "Misc module";
+  enable = mkEnableOption "Misc module";
 
   keepass = {
-    enable = mkEnableOpt "KeePassXC";
-    autostart = mkBoolOpt false "Autostart KeePassXC";
+    enable = mkEnableOption "KeePassXC";
+    autostart = mkBoolOption false "Autostart KeePassXC";
   };
 
   protonmail = {
-    enable = mkEnableOpt "ProtonMail";
-    autostart = mkBoolOpt false "Autostart ProtonMail Bridge";
+    enable = mkEnableOption "ProtonMail";
+    autostart = mkBoolOption false "Autostart ProtonMail Bridge";
   };
 }

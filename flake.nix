@@ -46,6 +46,9 @@
       inherit system;
 
       config.allowUnfree = true;
+
+      # Alternative to setting config.allowUnfree.
+      # I read somewhere that this is more suitable when running HM standalone.
       config.allowUnfreePredicate = pkg: true;
 
       # Overlays define changes in the nixpkgs package set.

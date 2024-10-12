@@ -5,7 +5,7 @@
 }:
 with lib;
 with mylib.modules; {
-  enable = mkEnableOpt "Systemd Network Configuration";
+  enable = mkEnableOption "Systemd Network Configuration";
 
   hostname = mkOption {
     type = types.str;

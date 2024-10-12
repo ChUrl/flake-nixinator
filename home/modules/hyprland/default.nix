@@ -1,5 +1,6 @@
+# TODO: Use the home-manager module instead of generating my own scuffed config files
+#
 # TODO: The keys to reset the workspaces need to depend on actual workspace config
-# TODO: Many of the text file generations can be made simpler with pipe and concatLines functions...
 # TODO: The border color does not fit the current theme
 {
   config,
@@ -39,7 +40,6 @@ in {
     };
 
     services = {
-      # TODO: Make a module out of this
       # Notification service
       dunst = {
         enable = true;
@@ -78,14 +78,11 @@ in {
     };
 
     home = {
-      # TODO: catppuccin-cursors
       pointerCursor = {
         gtk.enable = true;
         x11.enable = true;
         package = pkgs.bibata-cursors;
         name = "Bibata-Modern-Classic";
-        # package = pkgs.catppuccin-cursors.latteMauve;
-        # name = "Catppuccin-Latte-Mauve-Cursors";
         size = 16;
       };
 
@@ -118,13 +115,22 @@ in {
       #
 
       file = {
-        # Polkit
+        # Link the main Hyprland configuration file.
+        # This file imports all the other generated files.
+        # TODO: Generate this, so only existing files are imported.
+        ".config/hypr/hyprland.conf".source = ../../../config/hyprland/hyprland.conf;
+
+        # Provide a polkit authentication UI.
+        # This is used for example when running systemd commands without root.
         ".config/hypr/polkit.conf".text = ''
-          exec-once = ${pkgs.libsForQt5.polkit-kde-agent}/libexec/polkit-kde-authentication-agent-1
+          exec-once = ${pkgs.kdePackages.polkit-kde-agent-1}/libexec/polkit-kde-authentication-agent-1
         '';
 
-        # Monitors for different systems
+        # Configure different monitors.
         ".config/hypr/monitors.conf".text = let
+          # This function is mapped to the "cfg.monitors" attrSet.
+          # For each key-value entry in "cfg.monitors",
+          # the key will be assigned to "name" and the value to "conf".
           mkMonitor = name: conf: "monitor = ${name}, ${toString conf.width}x${toString conf.height}@${toString conf.rate}, ${toString conf.x}x${toString conf.y}, ${toString conf.scale}";
         in
           lib.pipe cfg.monitors [
@@ -133,7 +139,7 @@ in {
             (builtins.concatStringsSep "\n")
           ];
 
-        # Bind workspaces to monitors
+        # Configure how workspaces are mapped to monitors.
         ".config/hypr/workspaces.conf".text = let
           mkWorkspace = monitor: workspace: "workspace = ${toString workspace}, monitor:${toString monitor}";
           mkWorkspaces = monitor: workspace-list: map (mkWorkspace monitor) workspace-list;
@@ -258,14 +264,6 @@ in {
               sensitivity = 0 # -1.0 - 1.0, 0 means no modification.
           }
         '';
-      };
-
-      activation = {
-        # TODO: Don't symlink at all, why not just tell Hyprland where the config is? Much easier
-        # NOTE: Keep the hyprland config symlinked, to allow easy changes with hotreload
-        linkHyprlandConfig =
-          lib.hm.dag.entryAfter ["writeBoundary"]
-          (mylib.modules.mkLink "~/NixFlake/config/hyprland/hyprland.conf" "~/.config/hypr/hyprland.conf");
       };
     };
   };

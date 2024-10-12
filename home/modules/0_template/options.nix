@@ -5,5 +5,5 @@
 }:
 with lib;
 with mylib.modules; {
-  enable = mkEnableOpt "TEMPLATE";
+  enable = mkEnableOption "TEMPLATE";
 }

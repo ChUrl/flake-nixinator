@@ -5,19 +5,19 @@
 }:
 with lib;
 with mylib.modules; {
-  enable = mkEnableOpt "Gaming module";
+  enable = mkEnableOption "Gaming module";
 
-  # discordElectron.enable = mkEnableOpt "Discord (Electron) (nixpkgs)";
-  # discordChromium.enable = mkEnableOpt "Discord (Chromium)";
-  prism.enable = mkEnableOpt "PrismLauncher for Minecraft (flatpak)";
-  bottles.enable = mkEnableOpt "Bottles (flatpak)";
-  # dwarffortress.enable = mkEnableOpt "Dwarf Fortress";
-  cemu.enable = mkEnableOpt "Cemu (nixpkgs)";
+  # discordElectron.enable = mkEnableOption "Discord (Electron) (nixpkgs)";
+  # discordChromium.enable = mkEnableOption "Discord (Chromium)";
+  prism.enable = mkEnableOption "PrismLauncher for Minecraft (flatpak)";
+  bottles.enable = mkEnableOption "Bottles (flatpak)";
+  # dwarffortress.enable = mkEnableOption "Dwarf Fortress";
+  cemu.enable = mkEnableOption "Cemu (nixpkgs)";
 
   steam = {
-    enable = mkEnableOpt "Steam (flatpak)";
-    gamescope = mkBoolOpt false "Enable the gamescope micro compositor (flatpak)";
-    adwaita = mkBoolOpt false "Enable the adwaita-for-steam skin";
-    protonup = mkBoolOpt false "Enable ProtonUP-QT";
+    enable = mkEnableOption "Steam (flatpak)";
+    gamescope = mkBoolOption false "Enable the gamescope micro compositor (flatpak)";
+    adwaita = mkBoolOption false "Enable the adwaita-for-steam skin";
+    protonup = mkBoolOption false "Enable ProtonUP-QT";
   };
 }
