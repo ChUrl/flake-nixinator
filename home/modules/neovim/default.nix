@@ -1296,7 +1296,7 @@ in {
             opts = {
               render = "wrapped-compact";
               max_width = 45; # In columns
-              top_down = true;
+              top_down = false;
             };
           };
 
