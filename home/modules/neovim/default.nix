@@ -1306,22 +1306,6 @@ in {
             lazy = true;
           };
 
-          # TODO: Doesn't work
-          # _inc-rename = {
-          #   name = "inc-rename";
-          #   pkg = pkgs.vimPlugins.inc-rename-nvim;
-          #   lazy = false;
-          #   cmd = ["IncRename"];
-          #   config = ''
-          #     function(_, opts)
-          #       require("inc_rename").setup()
-          #     end
-          #   '';
-          #   opts = {
-          #     preview_empty_name = true;
-          #   };
-          # };
-
           noice = rec {
             name = "noice";
             pkg = pkgs.vimPlugins.noice-nvim;
@@ -1415,6 +1399,18 @@ in {
             config = mkDefaultConfig name;
             opts = {
               default_file_explorer = true;
+            };
+          };
+
+          presence = rec {
+            name = "presence";
+            pkg = pkgs.vimPlugins.presence-nvim;
+            lazy = true;
+            event = ["BufReadPost" "BufNewFile"];
+            config = mkDefaultConfig name;
+            opts = {
+              auto_update = true;
+              show_time = false;
             };
           };
 
@@ -1987,6 +1983,7 @@ in {
           noice # Modern UI overhaul, e.g. floating cmdline
           obsidian # Integration with Obsidian.md
           oil # File manager
+          presence # Discord rich presence
           quickfix-reflector # Make the quickfix list editable and saveable to apply changes
           rainbow-delimiters # Bracket/Paren colorization
           rustaceanvim # Rust integration
