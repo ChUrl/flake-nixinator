@@ -1739,6 +1739,25 @@ in {
                 height = 45;
                 winblend = 0;
               };
+
+              # Hack to make toggleterm respect neotree:
+              # Open + close neotree once toggleterm is opened.
+              # Toggleterm will "glitch" when opening, also neotree will scroll downwards.
+              # on_open.__raw = ''
+              #   function(...)
+              #     local name = vim.fn.bufname("neo-tree")
+              #     local winnr = vim.fn.bufwinnr(name)
+              #
+              #     if winnr ~= -1 then
+              #       vim.defer_fn(function()
+              #         local cmd = string.format("Neotree toggle")
+              #         vim.cmd(cmd)
+              #         vim.cmd(cmd)
+              #         vim.cmd("wincmd p")
+              #       end, 100)
+              #     end
+              #   end
+              # '';
             };
           };
 
