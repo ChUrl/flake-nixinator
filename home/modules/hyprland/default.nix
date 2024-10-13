@@ -129,12 +129,16 @@ in {
   options.modules.hyprland = import ./options.nix {inherit lib mylib;};
 
   config = lib.mkIf cfg.enable {
+    # Some assertion is not possible if HM is used standalone,
+    # because nixosConfig won't be available.
     assertions = [
       {
-        # This assertion is not possible if HM is used standalone,
-        # because nixosConfig won't be available.
         assertion = nixosConfig.programs.hyprland.enable;
         message = "Can't enable Hyprland module with Hyprland disabled!";
+      }
+      {
+        assertion = builtins.hasAttr "hyprlock" nixosConfig.security.pam.services;
+        message = "Can't enable Hyprland module without Hyprlock PAM service!";
       }
     ];
 
@@ -172,7 +176,8 @@ in {
       ];
 
       file = {
-        ".config/hypr/keybindings.info".text = lib.pipe (lib.mergeAttrs cfg.keybindings.bindings always-bind) [
+        ".config/hypr/keybindings.info".text = lib.pipe (cfg.keybindings.bindings
+          // always-bind) [
           (builtins.mapAttrs mkBindsHelp)
           builtins.attrValues
           builtins.concatLists
@@ -188,6 +193,119 @@ in {
           options.background = "ffffff";
         };
       };
+
+      hyprlock = {
+        enable = true;
+
+        settings = {
+          general = {
+            disable_loading_bar = true;
+            grace = 0;
+            hide_cursor = true;
+            no_fade_in = false;
+          };
+
+          background = [
+            {
+              path = "~/NixFlake/wallpapers/${cfg.theme}.png";
+              blur_passes = 3;
+              blur_size = 8;
+            }
+          ];
+
+          input-field = [
+            {
+              size = "200, 50";
+              position = "0, -80";
+              monitor = "";
+              dots_center = true;
+              fade_on_empty = false;
+              font_color = "rgb(1E1E2E)";
+              inner_color = "rgb(B4BEFE)";
+              outer_color = "rgb(1E1E2E)";
+              outline_thickness = 5;
+              placeholder_text = "Password...";
+              shadow_passes = 2;
+            }
+          ];
+        };
+      };
+    };
+
+    services = {
+      hyprpaper = {
+        enable = true;
+
+        settings = {
+          preload = "~/NixFlake/wallpapers/${cfg.theme}.png";
+
+          wallpaper = lib.pipe cfg.monitors [
+            builtins.attrNames
+            (builtins.map mkWallpaper)
+          ];
+        };
+      };
+
+      hypridle = {
+        enable = true;
+
+        settings = {
+          general = {
+            # DPMS - Display Powermanagement Signaling. "On" means the monitor is on.
+            after_sleep_cmd = "hyprctl dispatch dpms on";
+            ignore_dbus_inhibit = false;
+            lock_cmd = "hyprlock";
+          };
+
+          listener = [
+            {
+              timeout = 900;
+              on-timeout = "hyprlock";
+            }
+            {
+              timeout = 1200;
+              on-timeout = "hyprctl dispatch dpms off";
+              on-resume = "hyprctl dispatch dpms on";
+            }
+          ];
+        };
+      };
+
+      # Notification service
+      dunst = {
+        enable = true;
+
+        iconTheme.package = pkgs.papirus-icon-theme;
+        iconTheme.name = "Papirus";
+
+        settings = {
+          global = {
+            monitor = 1;
+            font = "JetBrains Nerd Font Mono 11";
+            offset = "20x20";
+            frame_color = "#1E66F5";
+            frame_width = 2;
+            corner_radius = 5;
+            separator_color = "frame";
+          };
+
+          urgency_low = {
+            background = "#EFF1F5";
+            foreground = "#4C4F69";
+          };
+
+          urgency_normal = {
+            background = "#EFF1F5";
+            foreground = "#4C4F69";
+          };
+
+          urgency_critical = {
+            background = "#EFF1F5";
+            foreground = "#4C4F69";
+            frame_color = "#FE640B";
+          };
+        };
+      };
     };
 
     wayland.windowManager.hyprland = {
@@ -200,11 +318,11 @@ in {
 
         general = {
           gaps_in = 5;
-          gaps_out = 20;
+          gaps_out = 10;
           border_size = 2;
 
-          "col.active_border" = "rgba(94E2D5FF)";
-          "col.inactive_border" = "rgba(B4BEFEFF)";
+          "col.active_border" = "rgb(B4BEFE)";
+          "col.inactive_border" = "rgba(B4BEFE77)";
         };
 
         group = {
@@ -214,8 +332,8 @@ in {
             gradients = false;
           };
 
-          "col.border_active" = "rgba(94E2D5FF)";
-          "col.border_inactive" = "rgba(B4BEFEFF)";
+          "col.border_active" = "rgb(B4BEFE)";
+          "col.border_inactive" = "rgba(B4BEFEAA)";
         };
 
         input = {
@@ -245,7 +363,8 @@ in {
           builtins.concatLists
         ];
 
-        bind = lib.pipe (lib.mergeAttrs cfg.keybindings.bindings always-bind) [
+        bind = lib.pipe (cfg.keybindings.bindings
+          // always-bind) [
           (builtins.mapAttrs mkBinds)
           builtins.attrValues
           builtins.concatLists
@@ -327,57 +446,6 @@ in {
             "fade, 1, 7, default"
             "workspaces, 1, 6, default"
           ];
-        };
-      };
-    };
-
-    services = {
-      hyprpaper = {
-        enable = true;
-
-        settings = {
-          preload = "~/NixFlake/wallpapers/${cfg.theme}.png";
-
-          wallpaper = lib.pipe cfg.monitors [
-            builtins.attrNames
-            (builtins.map mkWallpaper)
-          ];
-        };
-      };
-
-      # Notification service
-      dunst = {
-        enable = true;
-
-        iconTheme.package = pkgs.papirus-icon-theme;
-        iconTheme.name = "Papirus";
-
-        settings = {
-          global = {
-            monitor = 1;
-            font = "JetBrains Nerd Font Mono 11";
-            offset = "20x20";
-            frame_color = "#1E66F5";
-            frame_width = 2;
-            corner_radius = 5;
-            separator_color = "frame";
-          };
-
-          urgency_low = {
-            background = "#EFF1F5";
-            foreground = "#4C4F69";
-          };
-
-          urgency_normal = {
-            background = "#EFF1F5";
-            foreground = "#4C4F69";
-          };
-
-          urgency_critical = {
-            background = "#EFF1F5";
-            foreground = "#4C4F69";
-            frame_color = "#FE640B";
-          };
         };
       };
     };
