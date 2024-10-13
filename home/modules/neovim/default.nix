@@ -35,19 +35,21 @@ in {
             lua51Packages.xml2lua # For rest
             lua51Packages.mimetypes # For rest
             lua51Packages.jsregexp # For tree-sitter
+            nodejs
 
             # Language servers
             clang-tools_18
             clojure-lsp
             cmake-language-server
             haskell-language-server
+            ltex-ls
             lua-language-server
             nil
             nixd
             pyright
             rust-analyzer
             texlab
-            ltex-ls
+            typescript
 
             # Linters
             checkstyle # java
@@ -1858,6 +1860,15 @@ in {
             config = mkDefaultConfig name;
           };
 
+          typescript-tools = rec {
+            name = "typescript-tools";
+            pkg = pkgs.vimPlugins.typescript-tools-nvim;
+            lazy = true;
+            ft = ["javascript" "typescript"];
+            dependencies = [_plenary lspconfig];
+            config = mkDefaultConfig name;
+          };
+
           _promise = {
             name = "promise";
             pkg = pkgs.vimPlugins.promise-async;
@@ -2020,6 +2031,7 @@ in {
           treesitter # AST based syntax highlighting + indentation
           trim # Trim whitespace
           trouble # Diagnostics window
+          typescript-tools # Typescript tsserver LSP
           ufo # Code folding
           vimtex # LaTeX support
           wakatime # Time tracking
