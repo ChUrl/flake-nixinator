@@ -9,7 +9,6 @@ with lib;
 with mylib.modules; let
   cfg = config.modules.waybar;
   color = config.modules.color;
-  hyprcfg = config.modules.hyprland;
 in {
   options.modules.waybar = import ./options.nix {inherit lib mylib;};
 
