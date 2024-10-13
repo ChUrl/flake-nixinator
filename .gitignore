@@ -8,3 +8,5 @@
 result
 
 config/neovim/store
+home/modules/ags/config/types
+home/modules/ags/config/tsconfig.json

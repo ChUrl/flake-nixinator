@@ -33,6 +33,8 @@ rec {
 
   # Enable and configure my custom HM modules.
   modules = {
+    ags.enable = true;
+
     chromium = {
       enable = true;
       google = false;
@@ -170,10 +172,7 @@ rec {
       theme = "Foggy-Lake";
     };
 
-    waybar = {
-      enable = true;
-    };
-
+    waybar.enable = false;
     zathura.enable = true;
   };
 
