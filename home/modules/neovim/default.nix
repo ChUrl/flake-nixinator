@@ -518,15 +518,20 @@ in {
                 h = ["clang-format"];
                 cpp = ["clang-format"];
                 hpp = ["clang-format"];
-                css = [["prettierd" "prettier"]];
-                html = [["prettierd" "prettier"]];
+                css = ["prettierd" "prettier"];
+                html = ["prettierd" "prettier"];
                 java = ["google-java-format"];
-                javascript = [["prettierd" "prettier"]];
+                javascript = ["prettierd" "prettier"];
                 lua = ["stylua"];
-                markdown = [["prettierd" "prettier"]];
+                markdown = ["prettierd" "prettier"];
                 nix = ["alejandra"];
                 python = ["black"];
                 rust = ["rustfmt"];
+              };
+
+              default_format_opts = {
+                lsp_format = "fallback";
+                stop_after_first = true;
               };
 
               format_on_save.__raw = ''
@@ -535,7 +540,7 @@ in {
                   if vim.g.disable_autoformat then
                     return
                   end
-                  return { timeout_ms = 500, lsp_fallback = true }
+                  return { timeout_ms = 500, lsp_format = "fallback", }
                 end
               '';
             };
