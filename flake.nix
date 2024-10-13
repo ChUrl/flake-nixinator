@@ -20,6 +20,9 @@
     # Nix User Repository (e.g. Firefox addons)
     nur.url = "github:nix-community/NUR";
 
+    # Ags for widgets (this was a terrible idea)
+    ags.url = "github:Aylur/ags";
+
     # Other
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=v0.4.1";
     nix-alien.url = "github:thiagokokada/nix-alien";
