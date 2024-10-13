@@ -38,6 +38,12 @@ rec {
       google = false;
     };
 
+    color = {
+      enable = true; # You can't disable this
+      lightScheme = "catppuccin-latte";
+      darkScheme = "catppuccin-mocha";
+    };
+
     firefox = {
       enable = true;
       wayland = true;
