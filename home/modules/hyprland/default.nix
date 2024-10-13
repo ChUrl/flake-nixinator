@@ -11,6 +11,7 @@
   ...
 }: let
   cfg = config.modules.hyprland;
+  color = config.modules.color;
 
   # This function is mapped to the "cfg.monitors" attrSet.
   # For each key-value entry in "cfg.monitors",
@@ -190,7 +191,13 @@ in {
       imv = {
         enable = true;
         settings = {
-          options.background = "ffffff";
+          options = {
+            background = "${color.dark.text}";
+            overlay = true;
+            overlay_font = "${color.font}:12";
+            overlay_text_color = "${color.dark.text}";
+            overlay_background_color = "${color.dark.base}";
+          };
         };
       };
 
@@ -224,11 +231,12 @@ in {
               monitor = "";
               dots_center = true;
               fade_on_empty = false;
-              font_color = "rgb(1E1E2E)";
-              inner_color = "rgb(B4BEFE)";
-              outer_color = "rgb(B4BEFE)";
+              font_color = "rgb(${color.dark.base})";
+              font_family = "${color.font}";
+              inner_color = "rgb(${color.dark.lavender})";
+              outer_color = "rgb(${color.dark.base})";
               outline_thickness = 2;
-              placeholder_text = "<span foreground='\#\#1E1E2E'>Password...</span>";
+              placeholder_text = "<span foreground='\#\#${color.dark.base}'>Password...</span>";
               shadow_passes = 0;
               rounding = 5;
               halign = "center";
@@ -242,9 +250,9 @@ in {
               position = "0, 300";
               monitor = "";
               text = ''cmd[update:1000] date -I'';
-              color = "rgba(242, 243, 244, 0.75)";
+              color = "rgba(${color.dark.text}AA)";
               font_size = 22;
-              # font_family = "JetBrains Mono";
+              font_family = "${color.font}";
               halign = "center";
               valign = "center";
             }
@@ -254,9 +262,9 @@ in {
               position = "0, 200";
               monitor = "";
               text = ''cmd[update:1000] date +"%-H:%M"'';
-              color = "rgba(242, 243, 244, 0.75)";
+              color = "rgba(${color.dark.text}AA)";
               font_size = 95;
-              # font_family = "JetBrains Mono Extrabold";
+              font_family = "${color.font} Extrabold";
               halign = "center";
               valign = "center";
             }
@@ -317,28 +325,25 @@ in {
         settings = {
           global = {
             monitor = 1;
-            font = "JetBrains Nerd Font Mono 11";
+            font = "${color.font} 11";
             offset = "20x20";
-            frame_color = "#1E66F5";
+            background = "#${color.light.base}";
+            foreground = "#${color.light.text}";
             frame_width = 2;
             corner_radius = 5;
             separator_color = "frame";
           };
 
           urgency_low = {
-            background = "#EFF1F5";
-            foreground = "#4C4F69";
+            frame_color = "#${color.light.green}";
           };
 
           urgency_normal = {
-            background = "#EFF1F5";
-            foreground = "#4C4F69";
+            frame_color = "#${color.light.yellow}";
           };
 
           urgency_critical = {
-            background = "#EFF1F5";
-            foreground = "#4C4F69";
-            frame_color = "#FE640B";
+            frame_color = "#${color.light.red}";
           };
         };
       };
@@ -357,8 +362,8 @@ in {
           gaps_out = 10;
           border_size = 2;
 
-          "col.active_border" = "rgb(B4BEFE)";
-          "col.inactive_border" = "rgba(B4BEFE77)";
+          "col.active_border" = "rgb(${color.dark.lavender})";
+          "col.inactive_border" = "rgba(${color.dark.base}AA)";
         };
 
         group = {
@@ -368,8 +373,8 @@ in {
             gradients = false;
           };
 
-          "col.border_active" = "rgb(B4BEFE)";
-          "col.border_inactive" = "rgba(B4BEFEAA)";
+          "col.border_active" = "rgb(${color.dark.lavender})";
+          "col.border_inactive" = "rgba(${color.dark.base}AA)";
         };
 
         input = {
@@ -457,9 +462,6 @@ in {
         decoration = {
           rounding = 5;
           drop_shadow = false;
-          shadow_range = 4;
-          shadow_render_power = 3;
-          "col.shadow" = "rgba(1A1A1AEE)";
 
           blur = {
             enabled = true;
