@@ -72,11 +72,11 @@ in {
         macos_titlebar_color = "system";
 
         # Tab bar colors
-        active_tab_foreground = "#${color.light.base}";
-        active_tab_background = "#${color.light.mauve}";
-        inactive_tab_foreground = "#${color.light.text}";
-        inactive_tab_background = "#${color.light.overlay0}";
-        tab_bar_background = "#${color.light.surface1}";
+        active_tab_foreground = "#${color.dark.base}";
+        active_tab_background = "#${color.dark.lavender}";
+        inactive_tab_foreground = "#${color.dark.text}";
+        inactive_tab_background = "#${color.dark.crust}";
+        tab_bar_background = "#${color.light.base}";
 
         # Color for marks (marked text in the terminal)
         mark1_foreground = "#${color.light.base}";
