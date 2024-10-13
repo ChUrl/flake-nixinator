@@ -318,6 +318,7 @@ in {
       };
 
       # Notification service
+      # TODO: Allow setting the dunst monitor
       dunst = {
         enable = true;
 

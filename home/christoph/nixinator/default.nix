@@ -48,7 +48,6 @@
         ];
       };
 
-      # TODO: Also set the dunst monitor
       waybar.monitor = "HDMI-A-1";
     };
 
