@@ -70,12 +70,11 @@ rec {
           "$mainMod, T" = ["exec, kitty"];
           "$mainMod, E" = ["exec, kitty"];
           "$mainMod, N" = ["exec, neovide"];
-          # "$mainMod, T" = ["exec, alacritty -o font.size=12 -e tmux"];
-          # "$mainMod, E" = ["exec, alacritty -o font.size=12 -e tmux"];
 
-          "$mainMod, P" = ["exec, hyprpicker -a"];
+          "$mainMod, P" = ["exec, hyprpicker -autocopy -format=hex"];
           "$mainMod, S" = ["exec, grim -g \"$(slurp)\""];
           "$mainMod CTRL, S" = ["exec, grim -g \"$(slurp)\" - | wl-copy"];
+          "$mainMod SHIFT, S" = ["exec, grim -g \"$(slurp)\" - | wl-copy"];
 
           ", XF86AudioRaiseVolume" = ["exec, wpctl set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 5%+"];
           ", XF86AudioLowerVolume" = ["exec, wpctl set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 5%-"];
