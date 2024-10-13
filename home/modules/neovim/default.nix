@@ -98,7 +98,7 @@ in {
       performance.byteCompileLua = {
         enable = true;
         configs = true;
-        initLua = false; # When debugging init.lua turn this off
+        initLua = true; # When debugging init.lua turn this off
         nvimRuntime = true;
         plugins = true;
       };
