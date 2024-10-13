@@ -31,10 +31,9 @@ in {
           modules-right = ["pulseaudio" "network" "cpu" "memory" "temperature" "clock" "tray"];
 
           "custom/launcher" = {
-            format = "<span font='FontAwesome'></span> ";
+            format = "<span font='${color.font}'></span> ";
             interval = "once";
             on-click = "rofi -drun-show-actions -show drun";
-            tooltip-format = "<tt>Tux Alhamdulillah<tt>";
           };
 
           "hyprland/workspaces" = {
@@ -47,33 +46,33 @@ in {
           };
 
           "pulseaudio" = {
-            format = "<span font='FontAwesome'></span> {volume}%";
-            format-muted = "<span font='FontAwesome'></span> ";
+            format = "<span font='${color.font}'></span> {volume}%";
+            format-muted = "<span font='${color.font}'></span> ";
             on-click = "kitty ncpamixer -t o";
           };
 
           "network" = {
-            format = "<span font='FontAwesome'></span> {ipaddr}";
-            format-disconnected = "<span font='FontAwesome'></span> ";
+            format = "<span font='${color.font}'></span> {ipaddr}";
+            format-disconnected = "<span font='${color.font}'></span> ";
             interface = "enp8s0";
             tooltip-format = "{ifname} via {gwaddr}";
           };
 
           cpu = {
-            format = "<span font='FontAwesome'></span> {load}%";
+            format = "<span font='${color.font}'></span> {load}%";
           };
 
           memory = {
-            format = "<span font='FontAwesome'></span> {percentage}%";
+            format = "<span font='${color.font}'></span> {percentage}%";
           };
 
           temperature = {
-            format = "<span font='FontAwesome'></span> {temperatureC}°C";
+            format = "<span font='${color.font}'></span> {temperatureC}°C";
             thermal-zone = 3;
           };
 
           clock = {
-            format = "<span font='FontAwesome'></span> {:%H:%M}";
+            format = "<span font='${color.font}'></span> {:%H:%M}";
             timezone = "Europe/Berlin";
             tooltip-format = "<tt><small>{calendar}</small></tt>";
           };
