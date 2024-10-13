@@ -328,7 +328,7 @@ in {
           global = {
             monitor = 1;
             font = "${color.font} 11";
-            offset = "20x20";
+            offset = "10x10";
             background = "#${color.light.base}";
             foreground = "#${color.light.text}";
             frame_width = 2;
