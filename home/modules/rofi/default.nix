@@ -28,7 +28,6 @@ in {
         };
     in {
       bindings = {
-        "$mainMod, A" = ["exec, rofi -drun-show-actions -show drun"];
         "$mainMod, escape" = ["exec, \"${power-menu}\""];
       };
     };

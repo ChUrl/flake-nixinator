@@ -35,10 +35,11 @@
   mkBinds = key: actions: builtins.map (mkBind key) actions;
 
   # These functions are used to generate the keybindings.info file for Rofi
-  mkBindHelpKey = key: ''${builtins.replaceStrings ["$mainMod " ", "] ["${cfg.keybindings.main-mod}-" "-"] key}'';
+  fixupNoMod = key: ''${builtins.replaceStrings ["<-"] ["<"] key}'';
+  mkBindHelpKey = key: ''${builtins.replaceStrings ["$mainMod" " " ","] ["${cfg.keybindings.main-mod}" "-" ""] key}'';
   mkBindHelpAction = action: ''${builtins.replaceStrings [","] [""] action}'';
   mkBindHelp = key: action: "<${mkBindHelpKey key}>: ${mkBindHelpAction action}";
-  mkBindsHelp = key: actions: builtins.map (mkBindHelp key) actions;
+  mkBindsHelp = key: actions: builtins.map fixupNoMod (builtins.map (mkBindHelp key) actions);
 
   mkWallpaper = monitor: "${monitor}, ${config.home.homeDirectory}/NixFlake/wallpapers/${cfg.theme}.png";
 
@@ -48,6 +49,7 @@
 
   always-bind = {
     # Hyprland control
+    "$mainMod, A" = ["exec, rofi -drun-show-actions -show drun"];
     "$mainMod, Q" = ["killactive"];
     "$mainMod, V" = ["togglefloating"];
     "$mainMod, F" = ["fullscreen"];
