@@ -371,9 +371,13 @@ in {
 
         group = {
           groupbar = {
+            enabled = true;
             render_titles = false;
             font_size = 10;
             gradients = false;
+
+            "col.active" = "rgb(${color.dark.lavender})";
+            "col.inactive" = "rgba(${color.dark.base}AA)";
           };
 
           "col.border_active" = "rgb(${color.dark.lavender})";
@@ -452,7 +456,11 @@ in {
 
         misc = {
           # Say no to the anime girl
+          disable_hyprland_logo = true;
           force_default_wallpaper = 0;
+
+          disable_splash_rendering = true;
+          font_family = "${color.font}";
         };
 
         # Because those are not windows, but layouts,
