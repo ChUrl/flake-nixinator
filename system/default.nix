@@ -398,7 +398,6 @@ with mylib.networking; {
       enable = true;
 
       # Startx replaces the displaymanager so default (lightdm) isn't used, start to shell
-      # Sadly using this with gnome-session doesn't really work
       displayManager.startx.enable = true;
 
       wacom.enable = true;
