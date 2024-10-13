@@ -1,3 +1,3 @@
 #!/usr/bin/env fish
 
-grep -E "^bind =" ~/NixFlake/config/hyprland/hyprland.conf | sd "bind = " "" | rofi -dmenu -p " keys " -i
+cat ~/.config/hypr/keybindings.info | rofi -dmenu -p " keys " -i
