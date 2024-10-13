@@ -46,15 +46,6 @@ with mylib.networking; {
     };
   };
 
-  # NOTE: This should be handled by my local DNS
-  # networking.hosts = {
-  #   "192.168.86.50" = ["nixinator"];
-  #   "192.168.86.4" = ["proxmox"];
-  #   "192.168.86.20" = ["truenas"];
-  #   "192.168.86.5" = ["opnsense"];
-  #   "192.168.86.25" = ["servenix"];
-  # };
-
   # Enable flakes
   nix = {
     package = pkgs.nixVersions.stable;
@@ -64,18 +55,12 @@ with mylib.networking; {
 
     settings.trusted-users = ["root" "christoph"];
 
-    # Keep nix-shell from garbage collection for direnv (keep-outputs + keep-derivations)
-    # NOTE: nix-direnv use nix or use flake should do this automatically
-    # keep-outputs = true
-    # keep-derivations = true
-
     # Auto garbage-collect and optimize store
     # gc.automatic = true; # NOTE: Disabled for "nh clean"
     gc.options = "--delete-older-than 5d";
     settings.auto-optimise-store = true;
     optimise.automatic = true;
 
-    # TODO: I do not understand this
     # This will add your inputs as registries, making operations with them (such
     # as nix shell nixpkgs#name) consistent with your flake inputs.
     # (Registry contains flakes)
@@ -88,9 +73,7 @@ with mylib.networking; {
   # Bootloader/Kernel stuff
   boot = {
     kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
-    # kernelPackages = pkgs.linuxPackages_zen; # NOTE: Only set for nixinator
-    # kernelPackages = pkgs.linuxPackages_latest; # The package set that includes the kernel and modules
-    kernelParams = ["mitigations=off"]; # I don't care about security regarding spectre/meltdown
+    kernelParams = ["mitigations=off"]; # I don't care
 
     # plymouth.enable = true;
     loader = {
@@ -118,23 +101,13 @@ with mylib.networking; {
       hyprlock = {};
     };
 
-    # TODO: Replace with polkit
     sudo.enable = true;
     sudo.extraRules = [
       {
         users = ["christoph"];
         commands = [
-          # Launch gamemode without password because it is annoying
-          # {
-          #   command = "/etc/profiles/per-user/christoph/bin/gamemoderun";
-          #   options = [ "SETENV" "NOPASSWD" ];
-          # }
-          # {
-          #   command = "${pkgs.gamemode}/libexec/cpugovctl";
-          #   options = [ "SETENV" "NOPASSWD" ];
-          # }
-
-          # We allow running flatpak without password so flatpaks can be installed from the hm config (needs sudo)
+          # We allow running flatpak without password
+          # so flatpaks can be installed from the hm config
           {
             command = "/run/current-system/sw/bin/flatpak";
             options = ["SETENV" "NOPASSWD"];
@@ -198,7 +171,7 @@ with mylib.networking; {
       textEditor = "neovide.desktop"; # Helix.desktop
       videoPlayer = "mpv.desktop";
       imageViewer = "imv.desktop";
-      audioPlayer = "vlc.desktop"; # mov.desktop
+      audioPlayer = "mpv.desktop"; # mov.desktop
     in {
       "inode/directory" = "nnn.desktop";
 
@@ -245,8 +218,9 @@ with mylib.networking; {
     enableDefaultPackages = true; # Some default fonts for unicode coverage
     fontDir.enable = true; # Puts fonts to /run/current-system/sw/share/X11/fonts
 
-    # Font packages go here
-    # NOTE: Don't do this with HomeManager as I need the fonts in the fontdir for flatpak apps
+    # Font packages go here.
+    # They are installed system-wide so they land in fontdir,
+    # this is required for flatpak to find them.
     packages = with pkgs; [
       # Monospace fonts
       (nerdfonts.override {
@@ -262,8 +236,6 @@ with mylib.networking; {
       lxgw-wenkai
     ];
 
-    # TODO: Check if this works
-    # TODO: Conflicts with kde?
     fontconfig = {
       enable = true;
       antialias = true;
@@ -296,7 +268,8 @@ with mylib.networking; {
       "lp"
       "libvirtd"
     ];
-    shell = pkgs.fish; # TODO: Is this needed if programs.fish.enable = true?
+    shell = pkgs.fish;
+
     # We do this with HomeManager
     # packages = with pkgs; [];
   };
@@ -335,25 +308,12 @@ with mylib.networking; {
     # egl-wayland
   ];
 
-  # NOTE: Gnome
-  # TODO: Identify all the crap
-  # Remove these packages that come by default with GNOME
-  # environment.gnome.excludePackages = with pkgs.gnome; [
-  #   # epiphany # gnome webbrowser, could be good with new version
-  #   gnome-maps
-  #   gnome-contacts
-  # ];
-
-  # NOTE: Plasma
-  # TODO: Identify all the crap
-  # environment.plasma5.excludePackages = with pkgs.libsForQt5; [
-  # ];
-
-  # It is preferred to use the module (if it exists) over environment.systemPackages, as some extra configs are applied.
-  # I would prefer to use HomeManager for some of these but the modules don't exist (yet)
+  # It is preferred to use the module (if it exists) over environment.systemPackages,
+  # as some extra configs are applied.
+  # I would prefer to use HomeManager for some of these but the modules don't exist (yet).
   programs = {
     adb.enable = true;
-    dconf.enable = true; # NOTE: Also needed for Plasma Wayland (GTK theming)
+    dconf.enable = true;
     fish.enable = true;
     firejail.enable = true; # Use to run app in network namespace (e.g. through vpn)
     git.enable = true;
@@ -376,7 +336,6 @@ with mylib.networking; {
     # ausweisapp.openFirewall = true; # Directly set port in firewall
   };
 
-  # sound.enable = false; # Alsa, seems to conflict with PipeWire # NOTE: Deprecated
   hardware.pulseaudio.enable = false; # Get off my lawn
 
   # List services that you want to enable:
@@ -388,9 +347,7 @@ with mylib.networking; {
       alsa.support32Bit = true;
       pulse.enable = true;
       jack.enable = false;
-
-      wireplumber.enable = true; # Probably the default
-      # media-session.enable = false; # NOTE: Deprecated
+      wireplumber.enable = true;
     };
 
     # Enable the X11 windowing system.
@@ -416,6 +373,7 @@ with mylib.networking; {
         dell-b1160w # TODO: Broken
       ];
     };
+
     avahi = {
       enable = false; # Network printers
       nssmdns4 = true;
@@ -441,13 +399,6 @@ with mylib.networking; {
       enable = true;
       package = lib.mkForce pkgs.gnome3.gvfs;
     };
-    # packagekit.enable = true; # KDE Discover/Gnome Software
-
-    # samba = {
-    #   package = pkgs.samba4Full;
-    #   enable = true;
-    #   openFirewall = true;
-    # };
 
     udev = {
       packages = with pkgs; [
@@ -455,10 +406,7 @@ with mylib.networking; {
       ];
     };
 
-    gnome.gnome-keyring.enable = true; # TODO: Is probably also needed for Plasma (some apps require it)
-    # gnome.sushi.enable = true;
-    # gnome.gnome-settings-daemon.enable = true;
-    # gnome.gnome-online-accounts.enable = true; # Probably Gnome enables this
+    gnome.gnome-keyring.enable = true; # Some apps require this
   };
 
   virtualisation = {
@@ -484,13 +432,9 @@ with mylib.networking; {
 
     oci-containers.backend = "podman"; # "docker" or "podman"
     libvirtd.enable = true;
-
-    # Follow steps from https://nixos.wiki/wiki/WayDroid
-    # waydroid.enable = true;
-    # lxd.enable = true;
   };
 
-  # NOTE: Current system was installed on 22.05, do not change
+  # The current system was installed on 22.05, do not change.
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
   # on your system were taken. It‘s perfectly fine and recommended to leave
