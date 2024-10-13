@@ -55,6 +55,7 @@
     "$mainMod, F" = ["fullscreen"];
     "$mainMod, C" = ["exec, clipman pick --tool=rofi"];
     "$mainMod, G" = ["togglegroup"];
+    "$mainMod, L" = ["exec, loginctl lock-session"];
     "ALT, tab" = ["changegroupactive"];
     "$mainMod, tab" = ["workspace, previous"];
 
