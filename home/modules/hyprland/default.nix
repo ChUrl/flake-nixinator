@@ -33,6 +33,12 @@
   mkBind = key: action: "${key}, ${action}";
   mkBinds = key: actions: builtins.map (mkBind key) actions;
 
+  # These functions are used to generate the keybindings.info file for Rofi
+  mkBindHelpKey = key: ''${builtins.replaceStrings ["$mainMod " ", "] ["${cfg.keybindings.main-mod}-" "-"] key}'';
+  mkBindHelpAction = action: ''${builtins.replaceStrings [","] [""] action}'';
+  mkBindHelp = key: action: "<${mkBindHelpKey key}>: ${mkBindHelpAction action}";
+  mkBindsHelp = key: actions: builtins.map (mkBindHelp key) actions;
+
   mkWallpaper = monitor: "${monitor}, ${config.home.homeDirectory}/NixFlake/wallpapers/${cfg.theme}.png";
 
   mkDelayedStart = str: "hyprctl dispatch exec \"sleep 5s && ${str}\"";
@@ -164,6 +170,15 @@ in {
         libsForQt5.qtwayland
         kdePackages.qtwayland
       ];
+
+      file = {
+        ".config/hypr/keybindings.info".text = lib.pipe (lib.mergeAttrs cfg.keybindings.bindings always-bind) [
+          (builtins.mapAttrs mkBindsHelp)
+          builtins.attrValues
+          builtins.concatLists
+          (builtins.concatStringsSep "\n")
+        ];
+      };
     };
 
     programs = {
