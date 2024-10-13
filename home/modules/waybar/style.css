@@ -1,4 +1,3 @@
-/*TODO: Set this through nixos module programatically*/
 /*@import url("colors/three-bears.css");*/
 @import url("colors/foggy-lake.css");
 
@@ -8,7 +7,7 @@ window#waybar {
   font-family: JetBrainsMono Nerd Font Mono;
   font-weight: bold;
   color: @base;
-  background-color: rgba(239,241,245,0.6);
+  background-color: rgba(239, 241, 245, 0.6);
 }
 
 /*Square Widgets*/
@@ -46,14 +45,36 @@ window#waybar {
 }
 
 /*Colors*/
-#custom-launcher { background-color: @flamingo; }
-#user { background-color: @pink; }
-#window { background-color: @mauve; }
-#workspaces button { background-color: @red; }
-#pulseaudio { background-color: @maroon; }
-#network { background-color: @peach; }
-#cpu { background-color: @yellow; }
-#memory { background-color: @green; }
-#temperature { background-color: @teal; }
-#clock { background-color: @sky; }
-#tray { background-color: @sapphire; }
+#custom-launcher {
+  background-color: @flamingo;
+}
+#user {
+  background-color: @pink;
+}
+#window {
+  background-color: @mauve;
+}
+#workspaces button {
+  background-color: @red;
+}
+#pulseaudio {
+  background-color: @maroon;
+}
+#network {
+  background-color: @peach;
+}
+#cpu {
+  background-color: @yellow;
+}
+#memory {
+  background-color: @green;
+}
+#temperature {
+  background-color: @teal;
+}
+#clock {
+  background-color: @sky;
+}
+#tray {
+  background-color: @sapphire;
+}

@@ -62,6 +62,7 @@ with mylib.modules; {
           "kitty"
         ]
       '';
+      default = [];
     };
 
     delayed = mkOption {
