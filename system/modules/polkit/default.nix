@@ -1,9 +1,8 @@
 {
   config,
-  nixosConfig,
   lib,
   mylib,
-  pkgs,
+  username,
   ...
 }:
 with lib;
@@ -15,9 +14,8 @@ in {
   config = mkIf cfg.enable {
     security.polkit.enable = true;
 
-    # TODO: Don't hardcode subject.user == "christoph"
     security.polkit.extraConfig = let
-      # Stuff that is non-negotiable
+      # Stuff that should always get a rule
       always-predicates = [];
 
       mkServicePredicate = service: "action.lookup(\"unit\") == \"${service}\"";
@@ -27,7 +25,7 @@ in {
       ];
     in ''
       polkit.addRule(function(action, subject) {
-          if (action.id == "org.freedesktop.systemd1.manage-units" && subject.user == "christoph" && (
+          if (action.id == "org.freedesktop.systemd1.manage-units" && subject.user == "${username}" && (
               ${predicates}
           )) {
               return polkit.Result.YES;
