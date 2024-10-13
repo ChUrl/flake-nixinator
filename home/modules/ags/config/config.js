@@ -197,6 +197,8 @@ function Bar(monitor = 0) {
 }
 
 App.config({
-  style: "./style.css",
+  style: "/home/christoph/.config/ags/style.css",
   windows: [Bar(0)],
 });
+
+export {};
