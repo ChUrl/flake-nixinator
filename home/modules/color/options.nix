@@ -40,6 +40,13 @@ in
       default = "catppuccin-mocha";
     };
 
+    font = mkOption {
+      type = types.str;
+      description = "The font to use";
+      example = "JetBrainsMono Nerd Font Mono";
+      default = "JetBrainsMono Nerd Font Mono";
+    };
+
     keys = mkOption {
       type = types.listOf types.str;
       description = "The names of all possible colors";
