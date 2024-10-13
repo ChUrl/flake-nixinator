@@ -8,6 +8,7 @@
 with lib;
 with mylib.modules; let
   cfg = config.modules.waybar;
+  color = config.modules.color;
   hyprcfg = config.modules.hyprland;
 in {
   options.modules.waybar = import ./options.nix {inherit lib mylib;};
@@ -32,7 +33,8 @@ in {
           "custom/launcher" = {
             format = "<span font='FontAwesome'></span> ";
             interval = "once";
-            tooltip = false;
+            on-click = "rofi -drun-show-actions -show drun";
+            tooltip-format = "<tt>Tux Alhamdulillah<tt>";
           };
 
           "hyprland/workspaces" = {
@@ -84,86 +86,86 @@ in {
         };
       };
 
-      style =
-        (builtins.readFile ./colors/${hyprcfg.theme}.css)
-        + ''
-          /*Order is Top-Right-Bottom-Left for combined properties*/
-          window#waybar {
-            font-family: JetBrainsMono Nerd Font Mono;
-            font-weight: bold;
-            color: @base;
-            background-color: rgba(239, 241, 245, 0.6);
-          }
+      style = ''
+        /*Order is Top-Right-Bottom-Left for combined properties*/
+        window#waybar {
+          font-family: ${color.font};
+          font-weight: bold;
+          color: #${color.light.base};
 
-          /*Square Widgets*/
-          #custom-launcher,
-          #workspaces button,
-          #tray {
-            padding: 0px 10px 0px 10px;
-            margin: 5px 5px 5px 5px;
-            border-radius: 6px;
-            color: @base;
-          }
+          /*Can't use color.light.base here because waybar doesn't support rrggbbaa*/
+          background-color: rgba(239, 241, 245, 0.5);
+        }
 
-          #workspaces button:hover {
-            color: @pink;
-          }
+        /*Square Widgets*/
+        #custom-launcher,
+        #workspaces button,
+        #tray {
+          padding: 0px 10px 0px 10px;
+          margin: 5px 5px 5px 5px;
+          border-radius: 6px;
+          color: #${color.light.base};
+        }
 
-          /*Tux Icon*/
-          #custom-launcher {
-            font-size: 18px;
-            padding-right: 0px;
-          }
+        #workspaces button:hover {
+          color: #${color.light.pink};
+        }
 
-          /*Rectangle Widgets*/
-          #user,
-          #window,
-          #pulseaudio,
-          #network,
-          #cpu,
-          #memory,
-          #temperature,
-          #clock {
-            padding: 0px 10px 0px 10px;
-            margin: 8px 5px 8px 5px;
-            border-radius: 6px;
-          }
+        /*Tux Icon*/
+        #custom-launcher {
+          font-size: 18px;
+          padding-right: 0px;
+        }
 
-          /*Colors*/
-          #custom-launcher {
-            background-color: @flamingo;
-          }
-          #user {
-            background-color: @pink;
-          }
-          #window {
-            background-color: @mauve;
-          }
-          #workspaces button {
-            background-color: @red;
-          }
-          #pulseaudio {
-            background-color: @maroon;
-          }
-          #network {
-            background-color: @peach;
-          }
-          #cpu {
-            background-color: @yellow;
-          }
-          #memory {
-            background-color: @green;
-          }
-          #temperature {
-            background-color: @teal;
-          }
-          #clock {
-            background-color: @sky;
-          }
-          #tray {
-            background-color: @sapphire;
-          }
-        '';
+        /*Rectangle Widgets*/
+        #user,
+        #window,
+        #pulseaudio,
+        #network,
+        #cpu,
+        #memory,
+        #temperature,
+        #clock {
+          padding: 0px 10px 0px 10px;
+          margin: 8px 5px 8px 5px;
+          border-radius: 6px;
+        }
+
+        /*Colors*/
+        #custom-launcher {
+          background-color: #${color.light.flamingo};
+        }
+        #user {
+          background-color: #${color.light.pink};
+        }
+        #window {
+          background-color: #${color.light.mauve};
+        }
+        #workspaces button {
+          background-color: #${color.light.red};
+        }
+        #pulseaudio {
+          background-color: #${color.light.maroon};
+        }
+        #network {
+          background-color: #${color.light.peach};
+        }
+        #cpu {
+          background-color: #${color.light.yellow};
+        }
+        #memory {
+          background-color: #${color.light.green};
+        }
+        #temperature {
+          background-color: #${color.light.teal};
+        }
+        #clock {
+          background-color: #${color.light.sky};
+        }
+        #tray {
+          background-color: #${color.light.sapphire};
+        }
+      '';
     };
   };
 }
