@@ -200,32 +200,65 @@ in {
         settings = {
           general = {
             disable_loading_bar = true;
-            grace = 0;
+            grace = 0; # Immediately lock
             hide_cursor = true;
             no_fade_in = false;
           };
+
+          # The widgets start here.
 
           background = [
             {
               path = "~/NixFlake/wallpapers/${cfg.theme}.png";
               blur_passes = 3;
-              blur_size = 8;
+              blur_size = 10;
+              monitor = "";
             }
           ];
 
           input-field = [
+            # Password input
             {
               size = "200, 50";
-              position = "0, -80";
+              position = "0, 0";
               monitor = "";
               dots_center = true;
               fade_on_empty = false;
               font_color = "rgb(1E1E2E)";
               inner_color = "rgb(B4BEFE)";
-              outer_color = "rgb(1E1E2E)";
-              outline_thickness = 5;
-              placeholder_text = "Password...";
-              shadow_passes = 2;
+              outer_color = "rgb(B4BEFE)";
+              outline_thickness = 2;
+              placeholder_text = "<span foreground='\#\#1E1E2E'>Password...</span>";
+              shadow_passes = 0;
+              rounding = 5;
+              halign = "center";
+              valign = "center";
+            }
+          ];
+
+          label = [
+            # Date
+            {
+              position = "0, 300";
+              monitor = "";
+              text = ''cmd[update:1000] date -I'';
+              color = "rgba(242, 243, 244, 0.75)";
+              font_size = 22;
+              # font_family = "JetBrains Mono";
+              halign = "center";
+              valign = "center";
+            }
+
+            # Time
+            {
+              position = "0, 200";
+              monitor = "";
+              text = ''cmd[update:1000] date +"%-H:%M"'';
+              color = "rgba(242, 243, 244, 0.75)";
+              font_size = 95;
+              # font_family = "JetBrains Mono Extrabold";
+              halign = "center";
+              valign = "center";
             }
           ];
         };
@@ -237,8 +270,11 @@ in {
         enable = true;
 
         settings = {
-          preload = "~/NixFlake/wallpapers/${cfg.theme}.png";
+          ipc = "on";
+          splash = false;
+          splash_offset = 2.0;
 
+          preload = "~/NixFlake/wallpapers/${cfg.theme}.png";
           wallpaper = lib.pipe cfg.monitors [
             builtins.attrNames
             (builtins.map mkWallpaper)
@@ -340,8 +376,8 @@ in {
           kb_layout = "${cfg.kb-layout}";
           kb_variant = "${cfg.kb-variant}";
           kb_model = "pc104";
-          # kb_options =
-          # kb_rules =
+          kb_options = "";
+          kb_rules = "";
 
           follow_mouse = true;
 
