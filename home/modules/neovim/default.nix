@@ -10,6 +10,7 @@
 with lib;
 with mylib.modules; let
   cfg = config.modules.neovim;
+  color = config.modules.color;
 in {
   options.modules.neovim = import ./options.nix {inherit lib mylib;};
 
@@ -82,16 +83,17 @@ in {
       viAlias = cfg.alias;
       vimAlias = cfg.alias;
 
-      colorschemes.catppuccin = {
-        enable = true;
-        settings = {
-          flavour = "mocha"; # latte, frappe, macchiato, mocha
-          background = {
-            light = "latte";
-            dark = "mocha";
-          };
-        };
-      };
+      # Configured using plugin
+      # colorschemes.catppuccin = {
+      #   enable = true;
+      #   settings = {
+      #     flavour = "mocha"; # latte, frappe, macchiato, mocha
+      #     background = {
+      #       light = "latte";
+      #       dark = "mocha";
+      #     };
+      #   };
+      # };
 
       performance.byteCompileLua = {
         enable = true;
@@ -264,6 +266,52 @@ in {
               background = {
                 light = "latte";
                 dark = "mocha";
+              };
+              default_integrations = false;
+              integrations = {
+                cmp = true;
+                dashboard = true;
+                diffview = true;
+                flash = true;
+                gitsigns = true;
+                mini.enabled = true;
+                neotree = true;
+                noice = true;
+                native_lsp = {
+                  enabled = true;
+                  virtual_text = {
+                    errors = ["italic"];
+                    hints = ["italic"];
+                    warnings = ["italic"];
+                    information = ["italic"];
+                    ok = ["italic"];
+                  };
+                  underlines = {
+                    errors = ["underline"];
+                    hints = ["underline"];
+                    warnings = ["underline"];
+                    information = ["underline"];
+                    ok = ["underline"];
+                  };
+                  inlay_hints = {
+                    background = true;
+                  };
+                };
+                navic = {
+                  enabled = true;
+                  # custom_bg = "crust";
+                };
+                notify = true;
+                treesitter = true;
+                ufo = true;
+                rainbow_delimiters = true;
+                telescope.enabled = true;
+                lsp_trouble = true;
+                illuminate = {
+                  enabled = true;
+                  lsp = true;
+                };
+                which_key = true;
               };
             };
           };
@@ -1053,37 +1101,50 @@ in {
             '';
             opts = let
               bubbles = ''
-                (function()
-                  -- Wrap this in an immediately invoked function and require catppuccin
-                  -- because we need "colors" in the scope.
-                  -- For this, the catppuccin plugin must be installed,
-                  -- just setting the neovim colorscheme isn't enough.
-                  local colors = require("catppuccin.palettes").get_palette("mocha")
+                {
+                  normal = {
+                    a = { fg = "#${color.dark.base}", bg = "#${color.dark.lavender}", gui = "bold" },
+                    b = { fg = "#${color.dark.text}", bg = "#${color.dark.crust}" },
+                    c = { fg = "#${color.dark.text}", bg = "NONE" },
+                  },
 
-                  -- Use :lua print(vim.inspect(require("catppuccin.palettes").get_palette("mocha"))) to list colors
-                  return {
-                    normal = {
-                      a = { fg = colors.base, bg = colors.lavender },
-                      b = { fg = colors.text, bg = colors.crust },
-                      c = { fg = colors.text },
-                    },
+                  insert = {
+                    a = { fg = "#${color.dark.base}", bg = "#${color.dark.green}", gui = "bold" },
+                    b = { fg = "#${color.dark.green}", bg = "#${color.dark.crust}" },
+                  },
 
-                    insert = { a = { fg = colors.base, bg = colors.blue } },
-                    visual = { a = { fg = colors.base, bg = colors.teal } },
-                    replace = { a = { fg = colors.base, bg = colors.red } },
+                  visual = {
+                    a = { fg = "#${color.dark.base}", bg = "#${color.dark.mauve}", gui = "bold" },
+                    b = { fg = "#${color.dark.mauve}", bg = "#${color.dark.crust}" },
+                  },
 
-                    inactive = {
-                      a = { fg = colors.text, bg = colors.base },
-                      b = { fg = colors.text, bg = colors.base },
-                      c = { fg = colors.text },
-                    },
-                  }
-                end)()
+                  replace = {
+                    a = { fg = "#${color.dark.base}", bg = "#${color.dark.red}", gui = "bold" },
+                    b = { fg = "#${color.dark.red}", bg = "#${color.dark.crust}" },
+                  },
+
+                  -- terminal = {
+                  --   a = { fg = "#${color.dark.base}", bg = "#${color.dark.green}", gui = "bold" },
+                  --   b = { fg = "#${color.dark.green}", bg = "#${color.dark.crust}" },
+                  -- },
+
+                  command = {
+                    a = { fg = "#${color.dark.base}", bg = "#${color.dark.peach}", gui = "bold" },
+                    b = { fg = "#${color.dark.peach}", bg = "#${color.dark.crust}" },
+                  },
+
+                  inactive = {
+                    a = { fg = "#${color.dark.text}", bg = "#${color.dark.base}" },
+                    b = { fg = "#${color.dark.text}", bg = "#${color.dark.base}" },
+                    c = { fg = "#${color.dark.text}", bg = "NONE" },
+                  },
+                }
               '';
             in {
               extensions = ["fzf" "lazy" "neo-tree" "oil" "quickfix" "toggleterm" "trouble"];
 
               options = {
+                # theme = "catppuccin";
                 theme.__raw = bubbles;
                 always_divide_middle = true;
                 globalstatus = true;
@@ -1507,19 +1568,17 @@ in {
             opts = {
               line.__raw = ''
                 function(line)
-                  local colors = require("catppuccin.palettes").get_palette("mocha")
-
-                  local base = { fg = colors.base, bg = colors.base }
-                  local crust = { fg = colors.crust, bg = colors.crust }
-                  local text = { fg = colors.text, bg = colors.crust }
-                  local lavender = { fg = colors.lavender, bg = colors.lavender }
+                  local base = { fg = "#${color.dark.base}", bg = "#${color.dark.base}" }
+                  local crust = { fg = "#${color.dark.crust}", bg = "#${color.dark.crust}" }
+                  local text = { fg = "#${color.dark.text}", bg = "#${color.dark.crust}" }
+                  local lavender = { fg = "#${color.dark.lavender}", bg = "#${color.dark.lavender}" }
 
                   local numtabs = vim.call("tabpagenr", "$")
 
                   return {
                     -- Head
                     {
-                        { " NEOVIM ", hl = { fg = colors.base, bg = colors.lavender } },
+                        { " NEOVIM ", hl = { fg = "#${color.dark.base}", bg = "#${color.dark.lavender}" } },
 
                         -- The separator gets a foreground and background fill (each have fg + bg).
                         -- line.sep("", lavender, lavender),
@@ -1528,7 +1587,7 @@ in {
                     -- Tabs
                     line.tabs().foreach(function(tab)
                       -- Switch out the start separator instead of the ending one because the last separator is different
-                      local hl = tab.is_current() and { fg = colors.lavender, bg = colors.crust, style = "bold" } or text
+                      local hl = tab.is_current() and { fg = "#${color.dark.lavender}", bg = "#${color.dark.crust}", style = "bold" } or text
                       local sep_start = tab.number() == 1 and "" or ""
                       local sep_end = tab.number() == numtabs and "" or ""
 
