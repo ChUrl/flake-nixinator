@@ -342,7 +342,7 @@ in {
           };
 
           urgency_normal = {
-            frame_color = "#${color.light.yellow}";
+            frame_color = "#${color.light.green}";
           };
 
           urgency_critical = {
