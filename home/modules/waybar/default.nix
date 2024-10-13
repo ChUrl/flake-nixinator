@@ -84,7 +84,86 @@ in {
         };
       };
 
-      style = "@import url('colors/${hyprcfg.theme}.css')" + builtins.readFile ./style.css;
+      style =
+        (builtins.readFile ./colors/${hyprcfg.theme}.css)
+        + ''
+          /*Order is Top-Right-Bottom-Left for combined properties*/
+          window#waybar {
+            font-family: JetBrainsMono Nerd Font Mono;
+            font-weight: bold;
+            color: @base;
+            background-color: rgba(239, 241, 245, 0.6);
+          }
+
+          /*Square Widgets*/
+          #custom-launcher,
+          #workspaces button,
+          #tray {
+            padding: 0px 10px 0px 10px;
+            margin: 5px 5px 5px 5px;
+            border-radius: 6px;
+            color: @base;
+          }
+
+          #workspaces button:hover {
+            color: @pink;
+          }
+
+          /*Tux Icon*/
+          #custom-launcher {
+            font-size: 18px;
+            padding-right: 0px;
+          }
+
+          /*Rectangle Widgets*/
+          #user,
+          #window,
+          #pulseaudio,
+          #network,
+          #cpu,
+          #memory,
+          #temperature,
+          #clock {
+            padding: 0px 10px 0px 10px;
+            margin: 8px 5px 8px 5px;
+            border-radius: 6px;
+          }
+
+          /*Colors*/
+          #custom-launcher {
+            background-color: @flamingo;
+          }
+          #user {
+            background-color: @pink;
+          }
+          #window {
+            background-color: @mauve;
+          }
+          #workspaces button {
+            background-color: @red;
+          }
+          #pulseaudio {
+            background-color: @maroon;
+          }
+          #network {
+            background-color: @peach;
+          }
+          #cpu {
+            background-color: @yellow;
+          }
+          #memory {
+            background-color: @green;
+          }
+          #temperature {
+            background-color: @teal;
+          }
+          #clock {
+            background-color: @sky;
+          }
+          #tray {
+            background-color: @sapphire;
+          }
+        '';
     };
   };
 }
