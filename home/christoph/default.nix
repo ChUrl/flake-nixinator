@@ -42,6 +42,7 @@ rec {
       enable = true; # You can't disable this
       lightScheme = "catppuccin-latte";
       darkScheme = "catppuccin-mocha";
+      font = "JetBrainsMono Nerd Font Mono";
     };
 
     firefox = {
