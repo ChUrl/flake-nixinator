@@ -4,6 +4,7 @@
 
     # My own HM modules
     ./chromium
+    ./color
     ./firefox
     ./fish
     ./hyprland
