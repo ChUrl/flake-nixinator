@@ -113,6 +113,11 @@ with mylib.networking; {
     protectKernelImage = true;
     rtkit.enable = true;
 
+    pam.services = {
+      # Allow Hyprlock to unlock the system
+      hyprlock = {};
+    };
+
     # TODO: Replace with polkit
     sudo.enable = true;
     sudo.extraRules = [

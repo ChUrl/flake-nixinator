@@ -2,11 +2,9 @@
 # TODO: Need to set permissions through polkit module
 # TODO: Setup Wireless (IWD/Networkd?)
 {
-  inputs,
   config,
   lib,
   mylib,
-  pkgs,
   ...
 }:
 with lib;
