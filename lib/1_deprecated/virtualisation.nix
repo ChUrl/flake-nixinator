@@ -26,16 +26,19 @@
         "--dns=${netdns}"
       ]);
   in
-    lib.mergeAttrs extraConfig {
+    extraConfig
+    // {
       image = image;
       autoStart = autoStart;
       ports = ports ++ expanded-id-ports;
       volumes = vols;
-      environment = lib.mergeAttrs env {
-        PUID = "1000";
-        PGID = "1000";
-        TZ = "Europe/Berlin";
-      };
+      environment =
+        env
+        // {
+          PUID = "1000";
+          PGID = "1000";
+          TZ = "Europe/Berlin";
+        };
       extraOptions = opts ++ additional-opts;
     };
 
@@ -43,11 +46,12 @@
   # Example: podman-stablediffusion = mkOciUserService config.systemd.services.podman-stablediffusion;
   # NOTE: This doesn't work, since the cidfile is located in /run, which is not writable for regular users...
   mkOciUserService = attrs:
-    lib.mergeAttrs (lib.attrsets.filterAttrs (n: v:
+    (lib.attrsets.filterAttrs (n: v:
       !((n == "confinement")
         || (n == "runner")
         || (n == "environment")))
-    attrs) {
+    attrs)
+    // {
       startLimitIntervalSec = 1;
       startLimitBurst = 5;
     };

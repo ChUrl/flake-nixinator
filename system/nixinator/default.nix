@@ -6,25 +6,11 @@
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
-    ../modules
 
-    # inputs.musnix.nixosModules.musnix
+    ../modules
   ];
 
   modules = {
-    containers = {
-      enable = true;
-
-      homeassistant.enable = false;
-      stablediffusion.enable = true;
-      jellyfin.enable = false;
-      fileflows.enable = false;
-      sonarr.enable = false;
-      radarr.enable = false;
-      hydra.enable = false;
-      sabnzbd.enable = false;
-    };
-
     systemd-networkd = {
       networks = {
         # This should override the default network 50-ether
@@ -38,17 +24,9 @@
         # "10-ether-1G" = mylib.networking.mkStaticSystemdNetwork {...};
       };
 
-      allowedTCPPorts = [
-        # AvaTalk ports
-        7777
-        12777
-      ];
+      allowedTCPPorts = [];
 
-      allowedUDPPorts = [
-        # AvaTalk ports
-        7777
-        12777
-      ];
+      allowedUDPPorts = [];
 
       wireguard-tunnels = {
         wg0-de-115 =
@@ -82,12 +60,6 @@
     };
   };
 
-  # Low latency audio
-  # musnix = {
-  #   enable = true;
-  #   # musnix.soundcardPciId = ;
-  # };
-
   boot = {
     kernelPackages = pkgs.linuxPackages_zen;
   };
@@ -98,12 +70,10 @@
     xkb.variant = "altgr-intl";
 
     videoDrivers = ["nvidia"]; # NVIDIA
-    # videoDrivers = ["amdgpu"];
   };
 
-  # NOTE: This has been relocated here from the default config, because it forces en-US keyboard layout.
-  #       The laptop needs de-DE...
-  # Chinese Input
+  # This has been relocated here from the default config,
+  # because it forces en-US keyboard layout.
   i18n.inputMethod = {
     enable = true;
     type = "fcitx5";
