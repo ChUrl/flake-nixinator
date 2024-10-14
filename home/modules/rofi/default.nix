@@ -118,7 +118,7 @@ in {
           margin = 0;
           background-color = mkLiteral "@trans";
           text-color = mkLiteral "@text";
-          border-radius = 3;
+          # border-radius = 3;
         };
 
         "element-icon" = {
