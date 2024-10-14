@@ -40,6 +40,7 @@ in {
         "*" = {
           bg = mkLiteral "rgba(${color.rgbString.light.base}, 0.3)";
           hl = mkLiteral "#${color.dark.lavender}";
+          hl-pink = mkLiteral "#${color.dark.pink}";
           text = mkLiteral "#${color.dark.base}";
           trans = mkLiteral "rgba(0, 0, 0, 0)";
         };
@@ -52,7 +53,6 @@ in {
         "window" = {
           height = 480;
           width = 700;
-          # border-style = mkLiteral "solid";
           border = mkLiteral "2 solid 2 solid 2 solid 2 solid";
           border-radius = 6;
           border-color = mkLiteral "@hl";
@@ -85,7 +85,7 @@ in {
         };
 
         "prompt" = {
-          background-color = mkLiteral "@hl";
+          background-color = mkLiteral "@hl-pink";
           padding = 6;
           text-color = mkLiteral "@text";
           border-radius = 3;
@@ -99,7 +99,7 @@ in {
           background-color = mkLiteral "@trans";
           border = mkLiteral "2 solid 2 solid 2 solid 2 solid";
           border-radius = 3;
-          border-color = mkLiteral "@hl";
+          border-color = mkLiteral "@hl-pink";
         };
 
         "listview" = {
@@ -110,7 +110,7 @@ in {
           background-color = mkLiteral "@trans";
           border = mkLiteral "2 solid 2 solid 2 solid 2 solid";
           border-radius = 3;
-          border-color = mkLiteral "@hl";
+          border-color = mkLiteral "@hl-pink";
         };
 
         "element" = {
@@ -126,7 +126,7 @@ in {
         };
 
         "element selected" = {
-          background-color = mkLiteral "@hl";
+          background-color = mkLiteral "@hl-pink";
           text-color = mkLiteral "@text";
         };
       };
