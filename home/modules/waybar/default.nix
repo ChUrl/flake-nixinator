@@ -101,17 +101,19 @@ in {
         }
 
         /*Colors*/
-        #custom-launcher   {background-color: #${color.dark.lavender};}
-        #user              {background-color: #${color.dark.pink};}
-        #window            {background-color: #${color.dark.mauve};}
-        #workspaces button {background-color: #${color.dark.lavender};}
-        #pulseaudio        {background-color: #${color.dark.maroon};}
-        #network           {background-color: #${color.dark.peach};}
-        #cpu               {background-color: #${color.dark.yellow};}
-        #memory            {background-color: #${color.dark.green};}
-        #temperature       {background-color: #${color.dark.teal};}
-        #clock             {background-color: #${color.dark.sky};}
-        #tray              {background-color: #${color.dark.lavender};}
+        #custom-launcher          {background-color: #${color.dark.lavender};}
+        #user                     {background-color: #${color.dark.pink};}
+        #window                   {background-color: #${color.dark.mauve};}
+        #workspaces button        {background-color: #${color.dark.lavender};}
+        #workspaces button.active {background-color: #${color.dark.sapphire};}
+        #pulseaudio               {background-color: #${color.dark.maroon};}
+        #network                  {background-color: #${color.dark.peach};}
+        #cpu                      {background-color: #${color.dark.yellow};}
+        #memory                   {background-color: #${color.dark.green};}
+        #temperature              {background-color: #${color.dark.teal};}
+        #clock                    {background-color: #${color.dark.sky};}
+        #tray                     {background-color: #${color.dark.lavender};}
+
 
         /*Square Widgets*/
         #custom-launcher,
@@ -119,7 +121,6 @@ in {
         #tray {
           padding: 0px 10px 0px 10px;
           border-radius: 6px;
-          color: #${color.light.base};
         }
 
         /*Rectangle Widgets*/
@@ -146,15 +147,10 @@ in {
           font-size: 26px;
           padding-right: 10px;
           margin: 0px 5px 0px 0px;
-          color: #${color.light.text};
         }
 
         #workspaces button {
           margin: 0px 5px 0px 5px;
-        }
-
-        #workspaces button:hover {
-          color: #${color.light.pink};
         }
 
         #tray {
