@@ -71,13 +71,7 @@
     "$mainMod CTRL, k" = ["movewindow, u"];
     "$mainMod CTRL, d" = ["movewindow, d"];
 
-    # Rofi
-    "$mainMod, D" = ["exec, ~/NixFlake/config/rofi/menus/systemd-podman.fish"];
-    "$mainMod, O" = ["exec, ~/NixFlake/config/rofi/menus/lectures.fish"];
-    "$mainMod, M" = ["exec, ~/NixFlake/config/rofi/menus/keybinds.fish"];
-    "$mainMod, U" = ["exec, ~/NixFlake/config/rofi/menus/vpn.fish"];
-
-    # TODO: Somehow write this more compact?
+    # TODO: Somehow write this more compact? Try to use workspace 0 instead of 10...
     "$mainMod, 1" = ["workspace, 1"];
     "$mainMod, 2" = ["workspace, 2"];
     "$mainMod, 3" = ["workspace, 3"];
@@ -468,6 +462,9 @@ in {
         # we have to blur them explicitly
         layerrule = [
           "blur,rofi"
+          "ignorealpha 0.001,rofi"
+          # "dimaround,rofi"
+
           "blur,waybar"
         ];
 
