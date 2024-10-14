@@ -1578,7 +1578,7 @@ in {
                   return {
                     -- Head
                     {
-                        { " NEOVIM ", hl = { fg = "#${color.dark.base}", bg = "#${color.dark.lavender}" } },
+                        { " NEOVIM ", hl = { fg = "#${color.dark.base}", bg = "#${color.dark.lavender}", style = "bold" } },
 
                         -- The separator gets a foreground and background fill (each have fg + bg).
                         -- line.sep("", lavender, lavender),
