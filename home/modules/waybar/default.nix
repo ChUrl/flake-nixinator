@@ -97,7 +97,7 @@ in {
           border-color: #${color.dark.lavender};
 
           /*Can't use color.light.base here because waybar doesn't support rrggbbaa :(*/
-          background-color: rgba(239, 241, 245, 0.3);
+          background-color: rgba(${color.rgbString.light.base}, 0.3);
         }
 
         /*Colors*/
