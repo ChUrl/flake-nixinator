@@ -42,8 +42,7 @@ in {
       in {
         "*" = {
           bg = mkLiteral "rgba(239, 241, 245, 0.3)";
-          hl-lavender = mkLiteral "#${color.dark.lavender}";
-          hl-pink = mkLiteral "#${color.dark.pink}";
+          hl = mkLiteral "#${color.dark.lavender}";
           text = mkLiteral "#${color.dark.base}";
           trans = mkLiteral "rgba(255, 255, 255, 0)";
         };
@@ -59,7 +58,7 @@ in {
           # border-style = mkLiteral "solid";
           border = mkLiteral "2 solid 2 solid 2 solid 2 solid";
           border-radius = 6;
-          border-color = mkLiteral "@hl-lavender";
+          border-color = mkLiteral "@hl";
           background-color = mkLiteral "@bg";
         };
 
@@ -89,7 +88,7 @@ in {
         };
 
         "prompt" = {
-          background-color = mkLiteral "@hl-pink";
+          background-color = mkLiteral "@hl";
           padding = 6;
           text-color = mkLiteral "@text";
           border-radius = 3;
@@ -103,7 +102,7 @@ in {
           background-color = mkLiteral "@trans";
           border = mkLiteral "2 solid 2 solid 2 solid 2 solid";
           border-radius = 3;
-          border-color = mkLiteral "@hl-pink";
+          border-color = mkLiteral "@hl";
         };
 
         "listview" = {
@@ -114,7 +113,7 @@ in {
           background-color = mkLiteral "@trans";
           border = mkLiteral "2 solid 2 solid 2 solid 2 solid";
           border-radius = 3;
-          border-color = mkLiteral "@hl-pink";
+          border-color = mkLiteral "@hl";
         };
 
         "element" = {
@@ -130,7 +129,7 @@ in {
         };
 
         "element selected" = {
-          background-color = mkLiteral "@hl-pink";
+          background-color = mkLiteral "@hl";
           text-color = mkLiteral "@text";
         };
       };
@@ -143,6 +142,7 @@ in {
         {
           "Poweroff" = "poweroff";
           "Reboot" = "reboot";
+          "Lock" = "loginctl lock-session";
           "Reload Hyprland" = "hyprctl reload";
           "Exit Hyprland" = "hyprctl dispatch exit";
         };
