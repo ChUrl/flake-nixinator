@@ -4,7 +4,7 @@
   mylib,
   ...
 }: let
-  inherit (config.modules) zathura;
+  inherit (config.modules) zathura color;
 in {
   options.modules.zathura = import ./options.nix {inherit lib mylib;};
 
@@ -12,47 +12,56 @@ in {
     programs.zathura = {
       enable = true;
 
-      # TODO: Set database backend
-      # TODO: Use color module
-      options = {
-        # Catppuccin Latte
-        default-fg = "#4C4F69";
-        default-bg = "#EFF1F5";
+      options = rec {
+        n-completion-items = 10;
+        font = "${color.font} 11";
+        guioptions = "s"; # s - statusbar, c - command line
+        database = "sqlite";
+        adjust-open = "best-fit";
+        recolor-keephue = true;
+        statusbar-basename = true;
+        statusbar-home-tilde = true;
+        window-title-basename = statusbar-basename;
+        window-title-home-tilde = statusbar-home-tilde;
 
-        completion-bg = "#CCD0DA";
-        completion-fg = "#4C4F69";
-        completion-highlight-bg = "#575268";
-        completion-highlight-fg = "#4C4F69";
-        completion-group-bg = "#CCD0DA";
-        completion-group-fg = "#1E66F5";
+        # Colorscheme
+        default-bg = "#${color.light.base}";
+        default-fg = "#${color.light.text}";
 
-        statusbar-fg = "#4C4F69";
-        statusbar-bg = "#CCD0DA";
+        highlight-color = "rgba(${color.rgbString.dark.lavender}, 0.5)";
+        highlight-fg = "rgba(${color.rgbString.dark.green}, 0.5)";
+        highlight-active-color = "rgba(${color.rgbString.dark.pink}, 0.5)";
 
-        notification-bg = "#CCD0DA";
-        notification-fg = "#4C4F69";
-        notification-error-bg = "#CCD0DA";
-        notification-error-fg = "#D20F39";
-        notification-warning-bg = "#CCD0DA";
-        notification-warning-fg = "#FAE3B0";
+        statusbar-bg = "#${color.dark.lavender}";
+        statusbar-fg = default-fg;
 
-        inputbar-fg = "#4C4F69";
-        inputbar-bg = "#CCD0DA";
+        inputbar-bg = statusbar-bg;
+        inputbar-fg = statusbar-fg;
 
-        recolor-lightcolor = "#EFF1F5";
-        recolor-darkcolor = "#4C4F69";
+        completion-bg = "#${color.light.surface0}";
+        completion-fg = default-fg;
+        completion-highlight-bg = statusbar-bg;
+        completion-highlight-fg = completion-fg;
+        completion-group-bg = completion-bg;
+        completion-group-fg = completion-fg;
 
-        index-fg = "#4C4F69";
-        index-bg = "#EFF1F5";
-        index-active-fg = "#4C4F69";
-        index-active-bg = "#CCD0DA";
+        notification-bg = completion-bg;
+        notification-fg = default-fg;
+        notification-warning-bg = notification-bg;
+        notification-warning-fg = "#${color.light.peach}";
+        notification-error-bg = notification-bg;
+        notification-error-fg = "#${color.light.red}";
 
-        render-loading-bg = "#EFF1F5";
-        render-loading-fg = "#4C4F69";
+        recolor-lightcolor = default-bg;
+        recolor-darkcolor = default-fg;
 
-        highlight-color = "#575268";
-        highlight-fg = "#EA76CB";
-        highlight-active-color = "#EA76CB";
+        index-bg = default-bg;
+        index-fg = default-fg;
+        index-active-bg = completion-highlight-bg;
+        index-active-fg = completion-highlight-fg;
+
+        render-loading-bg = default-bg;
+        render-loading-fg = default-fg;
       };
     };
   };
