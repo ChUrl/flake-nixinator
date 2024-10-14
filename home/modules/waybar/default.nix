@@ -85,7 +85,7 @@ in {
       style = ''
         /*Order is Top-Right-Bottom-Left for combined properties*/
         * {
-          color: #${color.light.text};
+          color: #${color.dark.base};
           font-family: ${color.font};
           font-weight: bold;
         }
