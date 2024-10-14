@@ -15,14 +15,14 @@ in {
     home.packages = with pkgs;
       builtins.concatLists [
         # TODO: I don't think vaapi works yet
-        (optionals cfg.vaapi [
+        (lib.optionals firefox.vaapi [
           # NOTE: I put these into hardware.opengl.extrapackages, don't know if they belong there...
           # libva
           # libvdpau
         ])
 
         # TODO: Derivation borked on standalone HM
-        # (optionals cfg.gnomeTheme [firefox-gnome-theme])
+        # (lib.optionals firefox.gnomeTheme [firefox-gnome-theme])
       ];
 
     home.sessionVariables = lib.mkMerge [

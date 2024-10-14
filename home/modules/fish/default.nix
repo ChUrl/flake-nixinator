@@ -114,7 +114,7 @@ in {
 
         # These can be used for my config.modules and for HM config.programs,
         # as both of these add the package to home.packages
-        hasHomePackage = package: (mylib.contains config.home.packages package);
+        hasHomePackage = package: (mylib.modules.contains config.home.packages package);
 
         # Only add fish abbr if package is installed
         abbrify = package: abbr: (lib.optionalAttrs (hasHomePackage package) abbr);
