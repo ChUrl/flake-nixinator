@@ -34,17 +34,14 @@ in {
         sidebar-mode = false;
       };
 
-      # bg-col: rgba(239, 241, 245, 60%);
       theme = let
         inherit (config.lib.formats.rasi) mkLiteral;
-
-        mkColor = color: mkLiteral "#{color}";
       in {
         "*" = {
-          bg = mkLiteral "rgba(239, 241, 245, 0.3)";
+          bg = mkLiteral "rgba(${color.rgbString.light.base}, 0.3)";
           hl = mkLiteral "#${color.dark.lavender}";
           text = mkLiteral "#${color.dark.base}";
-          trans = mkLiteral "rgba(255, 255, 255, 0)";
+          trans = mkLiteral "rgba(0, 0, 0, 0)";
         };
 
         "element-text,element-icon,mode-switcher" = {
