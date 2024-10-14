@@ -53,15 +53,17 @@ in {
       # This module sets its own options
       # to the values specified in a colorscheme file.
       modules.color = {
-        light = lib.pipe colorKeys [
-          (builtins.map (mkColorAssignment lightDefs))
-          lib.mergeAttrsList
-        ];
+        hex = {
+          light = lib.pipe colorKeys [
+            (builtins.map (mkColorAssignment lightDefs))
+            lib.mergeAttrsList
+          ];
 
-        dark = lib.pipe colorKeys [
-          (builtins.map (mkColorAssignment darkDefs))
-          lib.mergeAttrsList
-        ];
+          dark = lib.pipe colorKeys [
+            (builtins.map (mkColorAssignment darkDefs))
+            lib.mergeAttrsList
+          ];
+        };
 
         rgb = {
           light = lib.pipe colorKeys [

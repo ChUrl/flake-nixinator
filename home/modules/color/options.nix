@@ -29,29 +29,26 @@ with mylib.modules; {
     default = "JetBrainsMono Nerd Font Mono";
   };
 
+  # Internal-only options
+
   keys = mkOption {
     type = types.listOf types.str;
     description = "The names of all possible colors";
     default = colorKeys;
   };
 
-  light = mkOption {
+  hex = mkOption {
     type = types.attrs;
-    description = "Colors belonging to the selected light scheme";
-  };
-
-  dark = mkOption {
-    type = types.attrs;
-    description = "Colors belonging to the selected dark scheme";
+    description = "Colors in \"RRGGBB\" hexadecimal format";
   };
 
   rgbString = mkOption {
     type = types.attrs;
-    description = "Colors belonging to the selected light scheme in 'RR,GG,BB' format";
+    description = "Colors in \"RR,GG,BB\" decimal format";
   };
 
   rgb = mkOption {
     type = types.attrs;
-    description = "Colors belonging to the selected light scheme in '[RR GG BB]' format";
+    description = "Colors in [RR GG BB] decimal format";
   };
 }

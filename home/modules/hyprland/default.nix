@@ -188,11 +188,11 @@ in {
         enable = true;
         settings = {
           options = {
-            background = "${color.dark.text}";
+            background = "${color.hex.dark.text}";
             overlay = true;
             overlay_font = "${color.font}:12";
-            overlay_text_color = "${color.dark.text}";
-            overlay_background_color = "${color.dark.base}";
+            overlay_text_color = "${color.hex.dark.text}";
+            overlay_background_color = "${color.hex.dark.base}";
           };
         };
       };
@@ -227,12 +227,12 @@ in {
               monitor = "";
               dots_center = true;
               fade_on_empty = false;
-              font_color = "rgb(${color.dark.base})";
+              font_color = "rgb(${color.hex.dark.base})";
               font_family = "${color.font}";
-              inner_color = "rgb(${color.dark.lavender})";
-              outer_color = "rgb(${color.dark.base})";
+              inner_color = "rgb(${color.hex.dark.lavender})";
+              outer_color = "rgb(${color.hex.dark.base})";
               outline_thickness = 2;
-              placeholder_text = "<span foreground='\#\#${color.dark.base}'>Password...</span>";
+              placeholder_text = "<span foreground='\#\#${color.hex.dark.base}'>Password...</span>";
               shadow_passes = 0;
               rounding = 5;
               halign = "center";
@@ -246,7 +246,7 @@ in {
               position = "0, 300";
               monitor = "";
               text = ''cmd[update:1000] date -I'';
-              color = "rgba(${color.dark.text}AA)";
+              color = "rgba(${color.hex.dark.text}AA)";
               font_size = 22;
               font_family = "${color.font}";
               halign = "center";
@@ -258,7 +258,7 @@ in {
               position = "0, 200";
               monitor = "";
               text = ''cmd[update:1000] date +"%-H:%M"'';
-              color = "rgba(${color.dark.text}AA)";
+              color = "rgba(${color.hex.dark.text}AA)";
               font_size = 95;
               font_family = "${color.font} Extrabold";
               halign = "center";
@@ -323,23 +323,23 @@ in {
             monitor = waybar.monitor;
             font = "${color.font} 11";
             offset = "10x10";
-            background = "#${color.light.base}";
-            foreground = "#${color.light.text}";
+            background = "#${color.hex.light.base}";
+            foreground = "#${color.hex.light.text}";
             frame_width = 2;
             corner_radius = 5;
             separator_color = "frame";
           };
 
           urgency_low = {
-            frame_color = "#${color.light.green}";
+            frame_color = "#${color.hex.light.green}";
           };
 
           urgency_normal = {
-            frame_color = "#${color.light.green}";
+            frame_color = "#${color.hex.light.green}";
           };
 
           urgency_critical = {
-            frame_color = "#${color.light.red}";
+            frame_color = "#${color.hex.light.red}";
           };
         };
       };
@@ -358,8 +358,8 @@ in {
           gaps_out = 10;
           border_size = 2;
 
-          "col.active_border" = "rgb(${color.dark.lavender})";
-          "col.inactive_border" = "rgba(${color.dark.base}AA)";
+          "col.active_border" = "rgb(${color.hex.dark.lavender})";
+          "col.inactive_border" = "rgba(${color.hex.dark.base}AA)";
         };
 
         group = {
@@ -369,12 +369,12 @@ in {
             font_size = 10;
             gradients = false;
 
-            "col.active" = "rgb(${color.dark.lavender})";
-            "col.inactive" = "rgba(${color.dark.base}AA)";
+            "col.active" = "rgb(${color.hex.dark.lavender})";
+            "col.inactive" = "rgba(${color.hex.dark.base}AA)";
           };
 
-          "col.border_active" = "rgb(${color.dark.lavender})";
-          "col.border_inactive" = "rgba(${color.dark.base}AA)";
+          "col.border_active" = "rgb(${color.hex.dark.lavender})";
+          "col.border_inactive" = "rgba(${color.hex.dark.base}AA)";
         };
 
         input = {

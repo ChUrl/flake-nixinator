@@ -39,9 +39,9 @@ in {
       in {
         "*" = {
           bg = mkLiteral "rgba(${color.rgbString.light.base}, 0.3)";
-          hl = mkLiteral "#${color.dark.lavender}";
-          hl-pink = mkLiteral "#${color.dark.pink}";
-          text = mkLiteral "#${color.dark.base}";
+          hl = mkLiteral "#${color.hex.dark.lavender}";
+          hl-pink = mkLiteral "#${color.hex.dark.pink}";
+          text = mkLiteral "#${color.hex.dark.base}";
           trans = mkLiteral "rgba(0, 0, 0, 0)";
         };
 
