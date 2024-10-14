@@ -2,17 +2,13 @@
   config,
   lib,
   mylib,
-  pkgs,
   ...
-}:
-with lib;
-with mylib.modules; let
-  cfg = config.modules.waybar;
-  color = config.modules.color;
+}: let
+  inherit (config.modules) color waybar;
 in {
   options.modules.waybar = import ./options.nix {inherit lib mylib;};
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf waybar.enable {
     programs.waybar = {
       enable = true;
       systemd.enable = true;
@@ -21,16 +17,18 @@ in {
         mainBar = {
           layer = "top";
           position = "top";
-          height = 40;
-          spacing = 4;
-          output = ["${cfg.monitor}"];
+          height = 36;
+          spacing = 0;
+          margin = "10px 10px 0px 10px";
+          fixed-center = true;
+          output = ["${waybar.monitor}"];
 
           modules-left = ["custom/launcher" "user" "hyprland/window"];
           modules-center = ["hyprland/workspaces"];
           modules-right = ["pulseaudio" "network" "cpu" "memory" "temperature" "clock" "tray"];
 
           "custom/launcher" = {
-            format = "<span font='${color.font}'></span> ";
+            format = "<span></span>";
             interval = "once";
             on-click = "rofi -drun-show-actions -show drun";
           };
@@ -45,33 +43,33 @@ in {
           };
 
           "pulseaudio" = {
-            format = "<span font='${color.font}'></span> {volume}%";
-            format-muted = "<span font='${color.font}'></span> ";
+            format = "<span></span> {volume}%";
+            format-muted = "<span></span> ";
             on-click = "kitty ncpamixer -t o";
           };
 
           "network" = {
-            format = "<span font='${color.font}'></span> {ipaddr}";
-            format-disconnected = "<span font='${color.font}'></span> ";
+            format = "<span></span> {ipaddr}";
+            format-disconnected = "<span></span> ";
             interface = "enp8s0";
             tooltip-format = "{ifname} via {gwaddr}";
           };
 
           cpu = {
-            format = "<span font='${color.font}'></span> {load}%";
+            format = "<span></span> {load}%";
           };
 
           memory = {
-            format = "<span font='${color.font}'></span> {percentage}%";
+            format = "<span></span> {percentage}%";
           };
 
           temperature = {
-            format = "<span font='${color.font}'></span> {temperatureC}°C";
+            format = "<span></span> {temperatureC}°C";
             thermal-zone = 3;
           };
 
           clock = {
-            format = "<span font='${color.font}'></span> {:%H:%M}";
+            format = "<span></span> {:%H:%M}";
             timezone = "Europe/Berlin";
             tooltip-format = "<tt><small>{calendar}</small></tt>";
           };
@@ -86,33 +84,42 @@ in {
 
       style = ''
         /*Order is Top-Right-Bottom-Left for combined properties*/
-        window#waybar {
+        * {
+          color: #${color.light.text};
           font-family: ${color.font};
           font-weight: bold;
-          color: #${color.light.base};
-
-          /*Can't use color.light.base here because waybar doesn't support rrggbbaa*/
-          background-color: rgba(239, 241, 245, 0.5);
         }
+
+        window#waybar {
+          border-style: solid;
+          border-width: 2px;
+          border-radius: 6px;
+          border-color: #${color.dark.lavender};
+
+          /*Can't use color.light.base here because waybar doesn't support rrggbbaa :(*/
+          background-color: rgba(239, 241, 245, 0.3);
+        }
+
+        /*Colors*/
+        #custom-launcher   {background-color: #${color.dark.lavender};}
+        #user              {background-color: #${color.dark.pink};}
+        #window            {background-color: #${color.dark.mauve};}
+        #workspaces button {background-color: #${color.dark.lavender};}
+        #pulseaudio        {background-color: #${color.dark.maroon};}
+        #network           {background-color: #${color.dark.peach};}
+        #cpu               {background-color: #${color.dark.yellow};}
+        #memory            {background-color: #${color.dark.green};}
+        #temperature       {background-color: #${color.dark.teal};}
+        #clock             {background-color: #${color.dark.sky};}
+        #tray              {background-color: #${color.dark.lavender};}
 
         /*Square Widgets*/
         #custom-launcher,
         #workspaces button,
         #tray {
           padding: 0px 10px 0px 10px;
-          margin: 5px 5px 5px 5px;
           border-radius: 6px;
           color: #${color.light.base};
-        }
-
-        #workspaces button:hover {
-          color: #${color.light.pink};
-        }
-
-        /*Tux Icon*/
-        #custom-launcher {
-          font-size: 18px;
-          padding-right: 0px;
         }
 
         /*Rectangle Widgets*/
@@ -129,39 +136,29 @@ in {
           border-radius: 6px;
         }
 
-        /*Colors*/
+        /*make window module transparent when no windows present*/
+        window#waybar.empty #window {
+            background-color: transparent;
+        }
+
+        /*Tux Icon*/
         #custom-launcher {
-          background-color: #${color.light.flamingo};
+          font-size: 26px;
+          padding-right: 10px;
+          margin: 0px 5px 0px 0px;
+          color: #${color.light.text};
         }
-        #user {
-          background-color: #${color.light.pink};
-        }
-        #window {
-          background-color: #${color.light.mauve};
-        }
+
         #workspaces button {
-          background-color: #${color.light.red};
+          margin: 0px 5px 0px 5px;
         }
-        #pulseaudio {
-          background-color: #${color.light.maroon};
+
+        #workspaces button:hover {
+          color: #${color.light.pink};
         }
-        #network {
-          background-color: #${color.light.peach};
-        }
-        #cpu {
-          background-color: #${color.light.yellow};
-        }
-        #memory {
-          background-color: #${color.light.green};
-        }
-        #temperature {
-          background-color: #${color.light.teal};
-        }
-        #clock {
-          background-color: #${color.light.sky};
-        }
+
         #tray {
-          background-color: #${color.light.sapphire};
+          margin: 0px 0px 0px 5px;
         }
       '';
     };
