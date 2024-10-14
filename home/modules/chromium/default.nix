@@ -12,7 +12,7 @@ in {
   config = lib.mkIf chromium.enable {
     home.packages = with pkgs;
       builtins.concatLists [
-        (optionals cfg.google [
+        (lib.optionals chromium.google [
           google-chrome # Trash, but required for decker pdf export
 
           # Required for some flatpak compatibility

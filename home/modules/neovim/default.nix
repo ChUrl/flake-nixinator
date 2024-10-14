@@ -23,7 +23,7 @@ in {
 
       packages = with pkgs;
         builtins.concatLists [
-          (optionals cfg.neovide [neovide])
+          (lib.optionals neovim.neovide [neovide])
 
           [
             (pkgs.ripgrep.override {withPCRE2 = true;})
