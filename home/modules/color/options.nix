@@ -1,7 +1,6 @@
 {
   lib,
   mylib,
-  colorKeys,
   ...
 }:
 with lib;
@@ -29,13 +28,7 @@ with mylib.modules; {
     default = "JetBrainsMono Nerd Font Mono";
   };
 
-  # Internal-only options
-
-  keys = mkOption {
-    type = types.listOf types.str;
-    description = "The names of all possible colors";
-    default = colorKeys;
-  };
+  # These options will be populated automatically.
 
   hex = mkOption {
     type = types.attrs;
