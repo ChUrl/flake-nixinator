@@ -1,4 +1,6 @@
 {
+  inputs,
+  system,
   username,
   hostname,
   config,
@@ -95,7 +97,7 @@ in {
       performance.byteCompileLua = {
         enable = true;
         configs = true;
-        initLua = true; # When debugging init.lua turn this off
+        initLua = false; # When debugging init.lua turn this off
         nvimRuntime = true;
         plugins = true;
       };
@@ -119,10 +121,50 @@ in {
         "luasnippets/tex.lua".text = builtins.readFile ./snippets_latex.lua;
       };
 
+      highlight = {
+        # Manually define blink.cmp highlight groups until catpuccin supports it.
+        BlinkCmpMenu = {
+          bg = "#${color.hex.dark.base}";
+        };
+        BlinkCmpMenuBorder = {
+          bg = "#${color.hex.dark.base}";
+          fg = "#${color.hex.dark.blue}";
+        };
+        BlinkCmpMenuSelection = {
+          bg = "#${color.hex.dark.blue}";
+          fg = "#${color.hex.dark.crust}";
+          bold = true;
+        };
+        BlinkCmpLabel = {
+          bg = "#${color.hex.dark.base}";
+          fg = "#${color.hex.dark.text}";
+          bold = false;
+        };
+      };
+
       # extraLuaPackages = with pkgs.lua51Packages; [];
       # extraPython3Packages = p: [];
 
       autoCmd = [
+        # TODO: This only works if neotree has been opened before...
+        # {
+        #   desc = "Refresh neotree when closing lazygit";
+        #   event = ["BufLeave"];
+        #   pattern = ["*lazygit*"];
+        #   callback.__raw = ''
+        #     function()
+        #       local manager = require("neo-tree.sources.manager")
+        #       local renderer = require("neo-tree.ui.renderer")
+        #       local state = manager.get_state("filesystem")
+        #       local window_exists = renderer.window_exists(state)
+
+        #       if window_exists then
+        #         require("neo-tree.sources.filesystem.commands").refresh(state)
+        #       end
+        #     end
+        #   '';
+        # }
+
         {
           desc = "Lint the file if autolint is enabled";
           event = ["BufWritePost"];
@@ -239,7 +281,7 @@ in {
             event = ["InsertEnter"];
             config = mkDefaultConfig name;
             opts = {
-              # mapping = ["jk"]; # NOTE: Deprecated
+              # mapping = ["jk"]; # Deprecated but still the default
               default_mappings = true;
               timeout = 200; # In ms
             };
@@ -266,9 +308,9 @@ in {
                 light = "latte";
                 dark = "mocha";
               };
-              default_integrations = false;
+              # https://github.com/catppuccin/nvim/tree/main?tab=readme-ov-file#integrations
+              default_integrations = true;
               integrations = {
-                cmp = true;
                 dashboard = true;
                 diffview = true;
                 flash = true;
@@ -335,174 +377,68 @@ in {
             };
           };
 
-          _cmp-async-path = {
-            name = "cmp-async-path";
-            pkg = pkgs.vimPlugins.cmp-async-path;
-            lazy = true;
-          };
-
-          _cmp-buffer = {
-            name = "cmp-buffer";
-            pkg = pkgs.vimPlugins.cmp-buffer;
-            lazy = true;
-            enabled = false; # Spams the completion window
-          };
-
-          _cmp-cmdline = {
-            name = "cmp-cmdline";
-            pkg = pkgs.vimPlugins.cmp-cmdline;
-            lazy = true;
-            enabled = false; # Using nui as : completion backend, not cmp
-          };
-
-          _cmp-emoji = {
-            name = "cmp-emoji";
-            pkg = pkgs.vimPlugins.cmp-emoji;
-            lazy = true;
-          };
-
-          _cmp-nvim-lsp = {
-            name = "cmp-nvim-lsp";
-            pkg = pkgs.vimPlugins.cmp-nvim-lsp;
-            lazy = true;
-          };
-
-          # _cmp-nvim-lsp-signature-help = {
-          #   name = "cmp-nvim-lsp-signature-help";
-          #   pkg = pkgs.vimPlugins.cmp-nvim-lsp-signature-help;
-          #   lazy = true;
-          # };
-
-          _cmp-luasnip = {
-            name = "cmp_luasnip";
-            pkg = pkgs.vimPlugins.cmp_luasnip;
-            lazy = true;
-          };
-
-          _lspkind = {
-            name = "lspkind";
-            pkg = pkgs.vimPlugins.lspkind-nvim;
-            lazy = true;
-          };
-
-          cmp = rec {
-            name = "cmp";
-            pkg = pkgs.vimPlugins.nvim-cmp;
+          # TODO: Does not work with luasnips yet :(
+          # TODO: Check if plugin landed in repos
+          blink-cmp = rec {
+            name = "blink.cmp";
+            pkg = inputs.blink-cmp.packages.${system}.default;
             lazy = true;
             event = ["InsertEnter"];
-            dependencies = [
-              _cmp-async-path
-              _cmp-buffer
-              _cmp-cmdline
-              _cmp-emoji
-              _cmp-nvim-lsp
-              # _cmp-nvim-lsp-signature-help
-              _cmp-luasnip
-              _lspkind # Type symbols in completion
-            ];
             config = mkDefaultConfig name;
-            opts.__raw = let
-              sources = mylib.generators.toLuaObject [
-                {name = "async_path";}
-                {name = "emoji";}
-                {name = "nvim_lsp";}
-                {name = "luasnip";}
+            opts = {
+              sources = {
+                providers.__raw = ''
+                  {
+                    { 'blink.cmp.sources.lsp', name = 'LSP' },
+                    { 'blink.cmp.sources.path', name = 'Path', score_offset = 3 },
+                    { 'blink.cmp.sources.snippets', name = 'Snippets', score_offset = -3 },
 
-                # {name = "nvim_lsp_signature_help";} # Already provided by something else (noice?)
-                # {name = "buffer";} # Too much noise
-                # {name = "cmdline";} # Using nui as cmdline completion backend
-              ];
-
-              mapping = mylib.generators.toLuaObject {
-                "<Down>".__raw = "cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select })";
-                "<Up>".__raw = "cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select })";
-                "<C-e>".__raw = "cmp.mapping.abort()";
-                "<Esc>".__raw = "cmp.mapping.abort()";
-                "<C-Up>".__raw = "cmp.mapping.scroll_docs(-4)";
-                "<C-Down>".__raw = "cmp.mapping.scroll_docs(4)";
-                "<C-Space>".__raw = "cmp.mapping.complete({})";
-                "<CR>".__raw = ''
-                  cmp.mapping(function(fallback)
-                    if cmp.visible() then
-                      if luasnip.expandable() then
-                        luasnip.expand()
-                      else
-                        cmp.confirm({select = true})
-                      end
-                    else
-                      fallback()
-                    end
-                  end)
-                '';
-                "<Tab>".__raw = ''
-                  cmp.mapping(function(fallback)
-                    if cmp.visible() then
-                      cmp.select_next_item()
-                    elseif luasnip.locally_jumpable(1) then
-                      luasnip.jump(1)
-                    else
-                      fallback() -- This will call the intellitab <Tab> binding
-                    end
-                  end, { "i", "s" })
-                '';
-                "<S-Tab>".__raw = ''
-                  cmp.mapping(function(fallback)
-                    if cmp.visible() then
-                      cmp.select_prev_item()
-                    elseif luasnip.locally_jumpable(-1) then
-                      luasnip.jump(-1)
-                    else
-                      fallback()
-                    end
-                  end, { "i", "s" })
+                    -- Disable the buffer completion because I don't like it
+                    -- { 'blink.cmp.sources.buffer', name = 'Buffer', fallback_for = { 'LSP' } },
+                  }
                 '';
               };
-            in ''
-              function()
-                local cmp = require("${name}")
-                local luasnip = require("luasnip")
-                local lspkind = require("lspkind")
+              keymap = {
+                show = "<C-space>";
+                hide = "<C-e>";
+                accept = "<cr>";
+                select_prev = ["<Up>" "<C-p>"];
+                select_next = ["<Down>" "<C-n>"];
 
-                local has_words_before = function()
-                  unpack = unpack or table.unpack
-                  local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-                  return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
-                end
+                show_documentation = "<C-space>";
+                hide_documentation = "<C-space>";
+                scroll_documentation_up = "<C-b>";
+                scroll_documentation_down = "<C-f>";
 
-                return {
-                  sources = cmp.config.sources(${sources}),
-
-                  snippet = {
-                    expand = function(args)
-                      require("luasnip").lsp_expand(args.body)
-                    end,
-                  },
-
-                  window = {
-                    completion = cmp.config.window.bordered(),
-                    documentation = cmp.config.window.bordered(),
-                    -- completion.border = "rounded",
-                    -- documentation.border = "rounded",
-                  },
-
-                  formatting = {
-                    format = lspkind.cmp_format({
-                      mode = "symbol", -- Show only symbol annotations
-                      maxwidth = 50,
-                      ellipsis_char = "...",
-                      show_labelDetails = true, -- show labelDetails in menu. Disabled by default
-
-                      -- The function below will be called before any actual modifications from lspkind
-                      before = function (entry, vim_item)
-                        return vim_item
-                      end
-                    })
-                  },
-
-                  mapping = cmp.mapping.preset.insert(${mapping}),
-                }
-              end
-            '';
+                snippet_forward = "<Tab>";
+                snippet_backward = "<S-Tab>";
+              };
+              nerd_font_variant = "mono";
+              windows = {
+                autocomplete = {
+                  border = "rounded";
+                  draw = "reversed";
+                };
+                documentation = {
+                  border = "rounded";
+                  auto_show = true;
+                  auto_show_delay_ms = 250;
+                };
+                signature_help = {
+                  border = "rounded";
+                };
+              };
+              accept = {
+                auto_brackets = {
+                  enabled = true;
+                };
+              };
+              trigger = {
+                signature_help = {
+                  enabled = true;
+                };
+              };
+            };
           };
 
           # colorizer = rec {
@@ -1052,7 +988,8 @@ in {
 
                 local __lspCapabilities = function()
                   capabilities = vim.lsp.protocol.make_client_capabilities()
-                  capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
+                  -- I don't remember where this came from, but without cmp it makes no sense
+                  -- capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
                   return capabilities
                 end
 
@@ -1387,12 +1324,17 @@ in {
                 bottom_search = false;
                 command_palette = true;
                 long_message_to_split = true;
-                inc_rename = true;
+                inc_rename = true; # TODO: Doesn't work as I expect (not for LSP rename)
                 lsp_doc_border = true;
               };
 
               lsp = {
+                progress.enabled = true;
+                hover.enabled = true;
+                signature.enabled = false; # Use blink for this
+                message.enabled = true;
                 documentation = {
+                  view = "hover";
                   opts = {
                     lang = "markdown";
                     replace = true;
@@ -1404,7 +1346,6 @@ in {
                       conceallevel = 3;
                     };
                   };
-                  view = "hover";
                 };
 
                 override = {
@@ -2037,18 +1978,21 @@ in {
           better-escape # Escape to normal mode using "jk"
           catppuccin # Colortheme (also add this here to access palettes)
           cellular-automaton # Procrastinate better by watching animations
-          clangd-extensions
-
-          # blink-cmp # Auto completion popups # TODO: Try this instead of cmp
-
-          cmp # Auto completion popups
+          clangd-extensions # Improved clang LSP support
+          blink-cmp # Fast as fuck auto completion
 
           # colorizer # Colorize color strings # TODO: Only colorize html/css/scss/sass/js
 
           comment # Toggle line- or block-comments
           conform # Auto formatting on save
+
+          # dadbod # Database interface # TODO:
+          # dadbod-ui # Dadbod UI # TODO:
+
           dashboard # Dashboard when starting nvim
 
+          # dap # Debug adapter protocol # TODO:
+          # dap-ui # Debugger UI # TODO:
           diffview # Git diff # TODO: Check the keybindings
 
           direnv # Automatically load local environments
@@ -2076,6 +2020,9 @@ in {
           noice # Modern UI overhaul, e.g. floating cmdline
           obsidian # Integration with Obsidian.md
           oil # File manager
+
+          # overseer # Run tasks from within neovim (e.g. cargo) # TODO:
+
           presence # Discord rich presence
           quickfix-reflector # Make the quickfix list editable and saveable to apply changes
           rainbow-delimiters # Bracket/Paren colorization
@@ -2093,7 +2040,7 @@ in {
           ufo # Code folding
           vimtex # LaTeX support
           wakatime # Time tracking
-          web-devicons
+          web-devicons # Icons for many plugins
           which-key # Live keybinding help
           winshift # Move windows around
           yanky # Clipboard history

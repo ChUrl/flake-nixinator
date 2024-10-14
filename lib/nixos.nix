@@ -35,7 +35,7 @@
           {
             home-manager = {
               # Values in "extraSpecialArgs" are propagated to all HM modules.
-              extraSpecialArgs = {inherit inputs hostname username mylib;};
+              extraSpecialArgs = {inherit inputs system hostname username mylib;};
 
               # Use the "pkgs" from the system configuration.
               # This disables "nixpkgs.*" options in HM modules.

@@ -16,6 +16,7 @@
     # NeoVim <3
     nixvim.url = "github:nix-community/nixvim";
     nixvim.inputs.nixpkgs.follows = "nixpkgs";
+    blink-cmp.url = "github:saghen/blink.cmp";
 
     # Nix User Repository (e.g. Firefox addons)
     nur.url = "github:nix-community/NUR";
