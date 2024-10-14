@@ -4,16 +4,12 @@
   lib,
   mylib,
   ...
-}:
-with lib;
-with mylib.modules; let
-  cfg = config.modules.kitty;
-  color = config.modules.color;
-  # cfgnv = config.modules.neovim;
+}: let
+  inherit (config.modules) kitty color;
 in {
   options.modules.kitty = import ./options.nix {inherit lib mylib;};
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf kitty.enable {
     programs.kitty = {
       enable = true;
       shellIntegration.enableFishIntegration = true;

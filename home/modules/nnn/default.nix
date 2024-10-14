@@ -1,19 +1,16 @@
 # TODO: Expose some settings
 {
   config,
-  nixosConfig,
   lib,
   mylib,
   pkgs,
   ...
-}:
-with lib;
-with mylib.modules; let
-  cfg = config.modules.nnn;
+}: let
+  inherit (config.modules) nnn;
 in {
   options.modules.nnn = import ./options.nix {inherit lib mylib;};
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf nnn.enable {
     home.sessionVariables = {
       # NNN_TERMINAL = "alacritty";
       # NNN_FIFO = "/tmp/nnn.fifo"; # For nnn preview

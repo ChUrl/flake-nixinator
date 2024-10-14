@@ -3,17 +3,17 @@
   lib,
   mylib,
   ...
-}:
-with lib;
-with mylib.modules; let
-  cfg = config.modules.zathura;
+}: let
+  inherit (config.modules) zathura;
 in {
   options.modules.zathura = import ./options.nix {inherit lib mylib;};
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf zathura.enable {
     programs.zathura = {
       enable = true;
 
+      # TODO: Set database backend
+      # TODO: Use color module
       options = {
         # Catppuccin Latte
         default-fg = "#4C4F69";
