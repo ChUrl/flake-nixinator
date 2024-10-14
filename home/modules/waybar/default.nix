@@ -105,7 +105,7 @@ in {
         #user                     {background-color: #${color.dark.pink};}
         #window                   {background-color: #${color.dark.mauve};}
         #workspaces button        {background-color: #${color.dark.lavender};}
-        #workspaces button.active {background-color: #${color.dark.sapphire};}
+        #workspaces button.active {background-color: #${color.dark.pink};}
         #pulseaudio               {background-color: #${color.dark.maroon};}
         #network                  {background-color: #${color.dark.peach};}
         #cpu                      {background-color: #${color.dark.yellow};}
