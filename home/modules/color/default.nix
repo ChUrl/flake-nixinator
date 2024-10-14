@@ -3,10 +3,8 @@
   lib,
   mylib,
   ...
-}:
-with lib;
-with mylib.modules; let
-  cfg = config.modules.color;
+}: let
+  inherit (config.modules) color;
 
   # Options and assignments will be generated from those keys
   colorKeys = [
@@ -44,13 +42,13 @@ in {
   options.modules.color = import ./options.nix {inherit lib mylib colorKeys;};
 
   config = let
-    lightDefs = import ./${cfg.lightScheme}.nix;
-    darkDefs = import ./${cfg.darkScheme}.nix;
+    lightDefs = import ./schemes/${color.lightScheme}.nix;
+    darkDefs = import ./schemes/${color.darkScheme}.nix;
 
     mkLightColorAssignment = key: {${key} = lightDefs.${key};};
     mkDarkColorAssignment = key: {${key} = darkDefs.${key};};
   in
-    mkIf cfg.enable {
+    lib.mkIf color.enable {
       # This module sets its own options
       # to the values specified in a colorscheme file.
       modules.color.light = lib.pipe colorKeys [
