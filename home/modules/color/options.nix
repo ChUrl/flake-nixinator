@@ -62,4 +62,14 @@ in
       type = types.attrs;
       description = "Colors belonging to the selected dark scheme";
     };
+
+    rgbString = mkOption {
+      type = types.attrs;
+      description = "Colors belonging to the selected light scheme in 'RR,GG,BB' format";
+    };
+
+    rgb = mkOption {
+      type = types.attrs;
+      description = "Colors belonging to the selected light scheme in '[RR GG BB]' format";
+    };
   }
