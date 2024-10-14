@@ -6,14 +6,12 @@
   pkgs,
   hostname,
   ...
-}:
-with lib;
-with mylib.modules; let
-  cfg = config.modules.firefox;
+}: let
+  inherit (config.modules) firefox;
 in {
   options.modules.firefox = import ./options.nix {inherit lib mylib;};
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf firefox.enable {
     home.packages = with pkgs;
       builtins.concatLists [
         # TODO: I don't think vaapi works yet
@@ -27,18 +25,18 @@ in {
         # (optionals cfg.gnomeTheme [firefox-gnome-theme])
       ];
 
-    home.sessionVariables = mkMerge [
+    home.sessionVariables = lib.mkMerge [
       {
         MOZ_USE_XINPUT2 = 1;
       }
 
-      (optionalAttrs cfg.wayland {
+      (lib.optionalAttrs firefox.wayland {
         MOZ_ENABLE_WAYLAND = 1;
         EGL_PLATFORM = "wayland";
         # XDG_CURRENT_DESKTOP = "Hyprland"; # TODO: Or "sway"? # Already set by hyprland
       })
 
-      (optionalAttrs cfg.vaapi {
+      (lib.optionalAttrs firefox.vaapi {
         # LIBVA_DRIVER_NAME = "radeonsi"; # "nvidia" for Nvidia card
         # LIBVA_DRIVER_NAME = "nvidia"; # Specified in hardware-configuration
         MOZ_DISABLE_RDD_SANDBOX = 1;
@@ -72,7 +70,7 @@ in {
         #       not strictly necessary
         extraPolicies = {
           # TODO: Make library function to allow easy bookmark creation and add my default bookmarks/folders
-          Bookmarks = optionalAttrs cfg.defaultBookmarks {};
+          Bookmarks = lib.optionalAttrs firefox.defaultBookmarks {};
           CaptivePortal = false;
           DisableFirefoxAccounts = true;
           DisableFirefoxStudies = true;
@@ -98,13 +96,13 @@ in {
         default = {
           id = 0; # 0 is default profile
 
-          userChrome = concatStringsSep "\n" [
+          userChrome = lib.concatStringsSep "\n" [
             # TODO: Borked after standalone HM
             # (optionalString cfg.gnomeTheme ''
             #   @import "${pkgs.firefox-gnome-theme}/share/firefox-gnome-theme/gnome-theme.css";
             # '')
 
-            (optionalString cfg.disableTabBar ''
+            (lib.optionalString firefox.disableTabBar ''
               #TabsToolbar { display: none; }
             '')
           ];
@@ -153,8 +151,8 @@ in {
             youtube-shorts-block
           ];
 
-          settings = mkMerge [
-            (optionalAttrs cfg.vaapi {
+          settings = lib.mkMerge [
+            (lib.optionalAttrs firefox.vaapi {
               # Firefox wayland hardware video acceleration
               # https://github.com/elFarto/nvidia-vaapi-driver/#firefox=
               # TODO: Disable and check if it works by default
@@ -255,7 +253,6 @@ in {
 
               "identity.fxaccounts.account.device.name" = hostname;
 
-
               "media.hardwaremediakeys.enabled" = false; # Do not interfere with spotify
               "media.videocontrols.picture-in-picture.video-toggle.enabled" = true;
 
@@ -278,7 +275,7 @@ in {
 
               "toolkit.coverage.opt-out" = true;
               "toolkit.coverage.endpoint.base" = "";
-              "toolkit.legacyUserProfileCustomizations.stylesheets" = cfg.gnomeTheme || cfg.disableTabBar;
+              "toolkit.legacyUserProfileCustomizations.stylesheets" = firefox.gnomeTheme || firefox.disableTabBar;
               "toolkit.telemetry.unified" = false;
               "toolkit.telemetry.enabled" = false;
               "toolkit.telemetry.server" = "data:,";

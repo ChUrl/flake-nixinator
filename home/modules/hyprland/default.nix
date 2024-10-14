@@ -10,8 +10,7 @@
   nixosConfig,
   ...
 }: let
-  cfg = config.modules.hyprland;
-  color = config.modules.color;
+  inherit (config.modules) hyprland color;
 
   # This function is mapped to the "cfg.monitors" attrSet.
   # For each key-value entry in "cfg.monitors",
@@ -29,22 +28,22 @@
     + (lib.optionalString (builtins.hasAttr "class" attrs) ", class:^(${attrs.class})$")
     + (lib.optionalString (builtins.hasAttr "title" attrs) ", title:^(${attrs.title})$");
 
-  mkTranslucentRule = class: "opacity ${cfg.transparent-opacity} ${cfg.transparent-opacity}, class:^(${class})$";
+  mkTranslucentRule = class: "opacity ${hyprland.transparent-opacity} ${hyprland.transparent-opacity}, class:^(${class})$";
 
   mkBind = key: action: "${key}, ${action}";
   mkBinds = key: actions: builtins.map (mkBind key) actions;
 
   # These functions are used to generate the keybindings.info file for Rofi
   fixupNoMod = key: ''${builtins.replaceStrings ["<-"] ["<"] key}'';
-  mkBindHelpKey = key: ''${builtins.replaceStrings ["$mainMod" " " ","] ["${cfg.keybindings.main-mod}" "-" ""] key}'';
+  mkBindHelpKey = key: ''${builtins.replaceStrings ["$mainMod" " " ","] ["${hyprland.keybindings.main-mod}" "-" ""] key}'';
   mkBindHelpAction = action: ''${builtins.replaceStrings [","] [""] action}'';
   mkBindHelp = key: action: "<${mkBindHelpKey key}>: ${mkBindHelpAction action}";
   mkBindsHelp = key: actions: builtins.map fixupNoMod (builtins.map (mkBindHelp key) actions);
 
-  mkWallpaper = monitor: "${monitor}, ${config.home.homeDirectory}/NixFlake/wallpapers/${cfg.theme}.png";
+  mkWallpaper = monitor: "${monitor}, ${config.home.homeDirectory}/NixFlake/wallpapers/${hyprland.theme}.png";
 
   mkDelayedStart = str: "hyprctl dispatch exec \"sleep 5s && ${str}\"";
-  delayed-exec = builtins.map mkDelayedStart cfg.autostart.delayed;
+  delayed-exec = builtins.map mkDelayedStart hyprland.autostart.delayed;
   mkExec = prog: "${prog}";
 
   always-bind = {
@@ -126,7 +125,7 @@
 in {
   options.modules.hyprland = import ./options.nix {inherit lib mylib;};
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf hyprland.enable {
     # Some assertion is not possible if HM is used standalone,
     # because nixosConfig won't be available.
     assertions = [
@@ -174,7 +173,7 @@ in {
       ];
 
       file = {
-        ".config/hypr/keybindings.info".text = lib.pipe (cfg.keybindings.bindings
+        ".config/hypr/keybindings.info".text = lib.pipe (hyprland.keybindings.bindings
           // always-bind) [
           (builtins.mapAttrs mkBindsHelp)
           builtins.attrValues
@@ -213,7 +212,7 @@ in {
 
           background = [
             {
-              path = "~/NixFlake/wallpapers/${cfg.theme}.png";
+              path = "~/NixFlake/wallpapers/${hyprland.theme}.png";
               blur_passes = 3;
               blur_size = 10;
               monitor = "";
@@ -279,8 +278,8 @@ in {
           splash = false;
           splash_offset = 2.0;
 
-          preload = "~/NixFlake/wallpapers/${cfg.theme}.png";
-          wallpaper = lib.pipe cfg.monitors [
+          preload = "~/NixFlake/wallpapers/${hyprland.theme}.png";
+          wallpaper = lib.pipe hyprland.monitors [
             builtins.attrNames
             (builtins.map mkWallpaper)
           ];
@@ -353,7 +352,7 @@ in {
       xwayland.enable = true;
 
       settings = {
-        "$mainMod" = "${cfg.keybindings.main-mod}";
+        "$mainMod" = "${hyprland.keybindings.main-mod}";
 
         general = {
           gaps_in = 5;
@@ -380,8 +379,8 @@ in {
         };
 
         input = {
-          kb_layout = "${cfg.kb-layout}";
-          kb_variant = "${cfg.kb-variant}";
+          kb_layout = "${hyprland.kb-layout}";
+          kb_variant = "${hyprland.kb-variant}";
           kb_model = "pc104";
           kb_options = "";
           kb_rules = "";
@@ -395,18 +394,18 @@ in {
           sensitivity = 0; # -1.0 - 1.0, 0 means no modification.
         };
 
-        monitor = lib.pipe cfg.monitors [
+        monitor = lib.pipe hyprland.monitors [
           (builtins.mapAttrs mkMonitor)
           builtins.attrValues
         ];
 
-        workspace = lib.pipe cfg.workspaces [
+        workspace = lib.pipe hyprland.workspaces [
           (builtins.mapAttrs mkWorkspaces)
           builtins.attrValues
           builtins.concatLists
         ];
 
-        bind = lib.pipe (cfg.keybindings.bindings
+        bind = lib.pipe (hyprland.keybindings.bindings
           // always-bind) [
           (builtins.mapAttrs mkBinds)
           builtins.attrValues
@@ -419,20 +418,20 @@ in {
           builtins.concatLists
         ];
 
-        exec-once = lib.pipe (always-exec ++ cfg.autostart.immediate ++ delayed-exec) [
+        exec-once = lib.pipe (always-exec ++ hyprland.autostart.immediate ++ delayed-exec) [
           (builtins.map mkExec)
         ];
 
         windowrulev2 =
-          lib.pipe cfg.workspacerules [
+          lib.pipe hyprland.workspacerules [
             (builtins.mapAttrs mkWorkspaceRules)
             builtins.attrValues
             builtins.concatLists
           ]
-          ++ lib.pipe cfg.floating [
+          ++ lib.pipe hyprland.floating [
             (builtins.map mkFloatingRule)
           ]
-          ++ lib.pipe cfg.transparent [
+          ++ lib.pipe hyprland.transparent [
             (builtins.map mkTranslucentRule)
           ];
 

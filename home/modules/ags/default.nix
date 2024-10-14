@@ -4,14 +4,12 @@
   mylib,
   pkgs,
   ...
-}:
-with lib;
-with mylib.modules; let
-  cfg = config.modules.ags;
+}: let
+  inherit (config.modules) ags;
 in {
   options.modules.ags = import ./options.nix {inherit lib mylib;};
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf ags.enable {
     programs.ags = {
       enable = true;
       systemd.enable = true;

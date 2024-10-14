@@ -1,19 +1,15 @@
-# TODO: Expose some settings
 {
   config,
-  nixosConfig,
   lib,
   mylib,
   pkgs,
   ...
-}:
-with lib;
-with mylib.modules; let
-  cfg = config.modules.chromium;
+}: let
+  inherit (config.modules) chromium;
 in {
   options.modules.chromium = import ./options.nix {inherit lib mylib;};
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf chromium.enable {
     home.packages = with pkgs;
       builtins.concatLists [
         (optionals cfg.google [

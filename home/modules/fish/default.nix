@@ -4,14 +4,12 @@
   mylib,
   pkgs,
   ...
-}:
-with lib;
-with mylib.modules; let
-  cfg = config.modules.fish;
+}: let
+  inherit (config.modules) fish;
 in {
   options.modules.fish = import ./options.nix {inherit lib mylib;};
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf fish.enable {
     home.file.".config/fish/themes/catppuccin-latte.theme".text = ''
       # name: 'Catppuccin Latte'
       # url: 'https://github.com/catppuccin/fish'
@@ -109,19 +107,19 @@ in {
 
       shellAbbrs = let
         # Only add " | bat" if bat is installed
-        batify = command: command + (optionalString config.programs.bat.enable " | bat");
+        batify = command: command + (lib.optionalString config.programs.bat.enable " | bat");
 
         # Same as above but with args for bat
-        batifyWithArgs = command: args: command + (optionalString config.programs.bat.enable (" | bat " + args));
+        batifyWithArgs = command: args: command + (lib.optionalString config.programs.bat.enable (" | bat " + args));
 
         # These can be used for my config.modules and for HM config.programs,
         # as both of these add the package to home.packages
-        hasHomePackage = package: (contains config.home.packages package);
+        hasHomePackage = package: (mylib.contains config.home.packages package);
 
         # Only add fish abbr if package is installed
-        abbrify = package: abbr: (optionalAttrs (hasHomePackage package) abbr);
+        abbrify = package: abbr: (lib.optionalAttrs (hasHomePackage package) abbr);
       in
-        mkMerge [
+        lib.mkMerge [
           # Abbrs that are always available are defined here.
           {
             # Shell basics

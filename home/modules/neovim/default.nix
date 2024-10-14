@@ -6,15 +6,12 @@
   mylib,
   pkgs,
   ...
-}:
-with lib;
-with mylib.modules; let
-  cfg = config.modules.neovim;
-  color = config.modules.color;
+}: let
+  inherit (config.modules) neovim color;
 in {
   options.modules.neovim = import ./options.nix {inherit lib mylib;};
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf neovim.enable {
     home = {
       file.".config/neovide/config.toml".source = ./neovide_config.ini;
       file.".config/vale/.vale.ini".source = ./vale_config.ini;
@@ -80,8 +77,8 @@ in {
       defaultEditor = true;
       enableMan = false; # Nixvim man pages
       luaLoader.enable = true; # NOTE: Experimental
-      viAlias = cfg.alias;
-      vimAlias = cfg.alias;
+      viAlias = neovim.alias;
+      vimAlias = neovim.alias;
 
       # Configured using plugin
       # colorschemes.catppuccin = {

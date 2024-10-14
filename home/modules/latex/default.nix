@@ -4,14 +4,12 @@
   mylib,
   pkgs,
   ...
-}:
-with lib;
-with mylib.modules; let
-  cfg = config.modules.latex;
+}: let
+  inherit (config.modules) latex;
 in {
   options.modules.latex = import ./options.nix {inherit lib mylib;};
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf latex.enable {
     home = {
       packages = with pkgs; [
         texliveFull
