@@ -5,45 +5,15 @@
   ...
 }: let
   inherit (config.modules) color;
-
-  # Options and assignments will be generated from those keys
-  colorKeys = [
-    # Colors
-    "rosewater"
-    "flamingo"
-    "pink"
-    "mauve"
-    "red"
-    "maroon"
-    "peach"
-    "yellow"
-    "green"
-    "teal"
-    "sky"
-    "sapphire"
-    "blue"
-    "lavender"
-
-    # 50 shades of gray
-    "text"
-    "subtext1"
-    "subtext0"
-    "overlay2"
-    "overlay1"
-    "overlay0"
-    "surface2"
-    "surface1"
-    "surface0"
-    "base"
-    "mantle"
-    "crust"
-  ];
 in {
-  options.modules.color = import ./options.nix {inherit lib mylib colorKeys;};
+  options.modules.color = import ./options.nix {inherit lib mylib;};
 
   config = let
     lightDefs = import ./schemes/${color.lightScheme}.nix;
     darkDefs = import ./schemes/${color.darkScheme}.nix;
+
+    # Assignments will be generated from those keys
+    colorKeys = builtins.attrNames lightDefs;
 
     mkColorAssignment = defs: key: {${key} = defs.${key};};
     mkRgbColorAssignment = defs: key: {${key} = mylib.color.hexToRGB defs.${key};};
