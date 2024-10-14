@@ -12,4 +12,6 @@ if test -z $DECK
     exit
 end
 
+# TODO: $LECTURE and $DECK seem fine, but nothing opens:
+#       error: Could not determine file type.
 xdg-open ~/Notes/TU/$LECTURE/Lecture/$DECK
