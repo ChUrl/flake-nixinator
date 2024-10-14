@@ -278,95 +278,150 @@
   ];
 
   leader = [
-    {
-      mode = "n";
-      key = "<leader>l";
-      action = "<cmd>Telescope oldfiles<cr>";
-      options.desc = "Last Files";
-    }
-    {
-      mode = "n";
-      key = "<leader>L";
-      action = "<cmd>Lazy<cr>";
-      options.desc = "Lazy";
-    }
-    {
-      mode = "n";
-      key = "<leader>f";
-      action = "<cmd>Telescope find_files<cr>";
-      options.desc = "Find File";
-    }
     # {
-    #   mode = "v";
-    #   key = "<leader>n";
-    #   action = ":NR!<cr>";
-    #   options.desc = "Narrow region";
+    #   mode = "n";
+    #   key = "<leader>L";
+    #   action = "<cmd>Lazy<cr>";
+    #   options.desc = "Lazy Packages";
     # }
+    {
+      mode = "n";
+      key = "<leader>n";
+      action = "<cmd>Neotree action=show toggle=true<cr><C-w>=";
+      options.desc = "Toggle NeoTree";
+    }
+    {
+      mode = "n";
+      key = "<leader>o";
+      action = "<cmd>Oil<cr>";
+      options.desc = "Toggle Oil";
+    }
     {
       mode = "n";
       key = "<leader>N";
       action = "<cmd>Telescope notify<cr>";
-      options.desc = "Notication History";
+      options.desc = "Telescope Notify";
     }
     {
       mode = "n";
       key = "<leader>r";
       action = "<cmd>Telescope resume<cr>";
-      options.desc = "Last Telescope Picker";
+      options.desc = "Last Telescope";
     }
-    {
-      mode = "n";
-      key = "<leader>;";
-      action = "<cmd>Telescope command_history<cr>";
-      options.desc = "Last Commands";
-    }
+    # {
+    #   mode = "n";
+    #   key = "<leader>;";
+    #   action = "<cmd>Telescope command_history<cr>";
+    #   options.desc = "Last Commands";
+    # }
     {
       mode = "n";
       key = "<leader>:";
       action = "<cmd>Telescope commands<cr>";
-      options.desc = "Find Command";
+      options.desc = "Telescope Command";
     }
     # {
     #   mode = "n";
     #   key = "<leader>M";
     #   action = "<cmd>Telescope marks<cr>";
-    #   options.desc = "Show marks";
+    #   options.desc = "Telescope Marks";
     # }
     # {
     #   mode = "n";
     #   key = "<leader>J";
     #   action = "<cmd>Telescope jumplist<cr>";
-    #   options.desc = "Show jumplist";
+    #   options.desc = "Telescope Jumps";
     # }
     {
       mode = "n";
-      key = "<leader>T";
+      key = "<leader>d";
       action = "<cmd>TodoTelescope<cr>";
       options.desc = "List TODOs";
     }
     {
       mode = "n";
-      key = "<leader>u";
-      action = "<cmd>Telescope undo<cr>";
-      options.desc = "Undo History";
+      key = "<leader>D";
+      action = "<cmd>Trouble todo toggle focus=false win.position=right<cr>";
+      options.desc = "Toggle TODOs";
     }
     {
       mode = "n";
       key = "<leader>/";
       action = "<cmd>Telescope live_grep<cr>";
-      options.desc = "Grep Directory";
+      options.desc = "Find in Project";
     }
     {
       mode = "n";
-      key = "<leader>o";
+      key = "<leader>Q";
+      action = "<cmd>Telescope quickfixhistory<cr>";
+      options.desc = "Quickfix History";
+    }
+    # {
+    #   mode = "n";
+    #   key = "<leader>Q";
+    #   action = "<cmd>cexpr []<cr>";
+    #   options.desc = "Clear Quickfix List";
+    # }
+    {
+      mode = "n";
+      key = "<leader>W";
+      action = "<cmd>:set wrap!<cr>";
+      options.desc = "Toggle Word Wrap";
+    }
+  ];
+
+  leader-file = [
+    {
+      mode = "n";
+      key = "<leader>f";
+      action = "+file";
+    }
+    {
+      mode = "n";
+      key = "<leader>ff";
+      action = "<cmd>Telescope find_files<cr>";
+      options.desc = "Find File";
+    }
+    {
+      mode = "n";
+      key = "<leader>fl";
+      action = "<cmd>Telescope oldfiles<cr>";
+      options.desc = "Last Files";
+    }
+    {
+      mode = "n";
+      key = "<leader>fo";
       action = "<cmd>ObsidianSearch<cr>";
       options.desc = "Obsidian Note";
     }
     {
       mode = "n";
-      key = "<leader>Q";
-      action = "<cmd>cexpr []<cr>";
-      options.desc = "Clear Quickfix List";
+      key = "<leader>fr";
+      action = "<cmd>edit!<cr>";
+      options.desc = "Reload File";
+    }
+    {
+      mode = "n";
+      key = "<leader>fu";
+      action = "<cmd>Telescope undo<cr>";
+      options.desc = "Telescope Undo";
+    }
+    {
+      mode = "n";
+      key = "<leader>fN";
+      action = "<cmd>enew<cr>";
+      options.desc = "New File";
+    }
+    {
+      mode = "n";
+      key = "<leader>fs";
+      action.__raw = ''
+        function()
+          local filename = vim.fn.input("Enter Filename: ")
+          vim.cmd("write "..filename)
+        end
+      '';
+      options.desc = "Save File";
     }
   ];
 
@@ -380,25 +435,25 @@
       mode = "n";
       key = "<leader>hv";
       action = "<cmd>Telescope vim_options<cr>";
-      options.desc = "Vim Options";
+      options.desc = "Telescope Vimopts";
     }
     {
       mode = "n";
       key = "<leader>hk";
       action = "<cmd>Telescope keymaps<cr>";
-      options.desc = "Keymaps";
+      options.desc = "Telescope Keys";
     }
     {
       mode = "n";
       key = "<leader>hm";
       action = "<cmd>Telescope man_pages<cr>";
-      options.desc = "Manpages";
+      options.desc = "Telescope Manpages";
     }
     {
       mode = "n";
       key = "<leader>hh";
       action = "<cmd>Telescope help_tags<cr>";
-      options.desc = "Vim Help";
+      options.desc = "Telescope Helptags";
     }
   ];
 
@@ -416,7 +471,7 @@
     }
     {
       mode = "n";
-      key = "<leader>q!";
+      key = "<leader>qQ";
       action = "<cmd>quitall!<cr>";
       options.desc = "Force Quit";
     }
@@ -432,19 +487,19 @@
       mode = "n";
       key = "<leader>sl";
       action = "<cmd>Telescope persisted<cr>";
-      options.desc = "Restore";
+      options.desc = "Restore Session";
     }
     {
       mode = "n";
       key = "<leader>ss";
       action = "<cmd>SessionSave<cr>";
-      options.desc = "Save";
+      options.desc = "Save Session";
     }
     {
       mode = "n";
       key = "<leader>sd";
       action = "<cmd>SessionDelete<cr>";
-      options.desc = "Delete";
+      options.desc = "Delete Session";
     }
   ];
 
@@ -452,7 +507,7 @@
     {
       mode = "n";
       key = "<leader>b";
-      action = "+buffers";
+      action = "+buffer";
     }
     {
       mode = "n";
@@ -468,18 +523,6 @@
     }
     {
       mode = "n";
-      key = "<leader><C-Space>";
-      action = "<cmd>Telescope telescope-tabs list_tabs<cr>";
-      options.desc = "List Tabpages";
-    }
-    {
-      mode = "n";
-      key = "<leader>R";
-      action = "<cmd>edit!<cr>";
-      options.desc = "Reload Buffer";
-    }
-    {
-      mode = "n";
       key = "<leader>bn";
       action = "<cmd>bnext<cr>";
       options.desc = "Next Buffer";
@@ -492,9 +535,65 @@
     }
     {
       mode = "n";
+      key = "<leader>bN";
+      action = "<cmd>enew<cr>";
+      options.desc = "New Buffer";
+    }
+    {
+      mode = "n";
       key = "<leader>bd";
       action = "<cmd>Bdelete<cr>";
       options.desc = "Close Buffer";
+    }
+    {
+      mode = "n";
+      key = "<leader>bD";
+      action = "<cmd>Bdelete!<cr>";
+      options.desc = "Force Close Buffer";
+    }
+  ];
+
+  leader-tabs = [
+    {
+      mode = "n";
+      key = "<leader>t";
+      action = "+tab";
+    }
+    {
+      mode = "n";
+      key = "<leader>tt";
+      action = "<cmd>Telescope telescope-tabs list_tabs<cr>";
+      options.desc = "List Tabpages";
+    }
+    {
+      mode = "n";
+      key = "<leader><C-Space>";
+      action = "<cmd>Telescope telescope-tabs list_tabs<cr>";
+      options.desc = "List Tabpages";
+    }
+    {
+      mode = "n";
+      key = "<leader>tn";
+      action = "<cmd>tabnext<cr>";
+      options.desc = "Next Tabpage";
+    }
+    {
+      mode = "n";
+      key = "<leader>tp";
+      action = "<cmd>tabprevious<cr>";
+      options.desc = "Previous Tabpage";
+    }
+    {
+      mode = "n";
+      key = "<leader>tN";
+      action = "<cmd>tabnew<cr>";
+      options.desc = "New Tabpage";
+    }
+    {
+      mode = "n";
+      key = "<leader>td";
+      action = "<cmd>tabclose<cr>";
+      options.desc = "Close Tabpage";
     }
   ];
 
@@ -502,16 +601,14 @@
     {
       mode = "n";
       key = "<leader>w";
-      action = "+windows";
+      action = "+window";
     }
-
     {
       mode = "n";
       key = "<leader>wd";
       action = "<C-w>c";
       options.desc = "Close Window";
     }
-
     {
       mode = "n";
       key = "<leader>ws";
@@ -570,75 +667,6 @@
     }
   ];
 
-  leader-toggles = [
-    {
-      mode = "n";
-      key = "<leader>t";
-      action = "+toggle";
-    }
-    {
-      mode = "n";
-      key = "<leader>tt";
-      action = "<cmd>Neotree action=show toggle=true<cr><C-w>=";
-      options.desc = "NeoTree";
-    }
-    {
-      mode = "n";
-      key = "<leader>to";
-      action = "<cmd>Oil<cr>";
-      options.desc = "Oil";
-    }
-    {
-      mode = "n";
-      key = "<leader>tn";
-      action = "<cmd>Navbuddy<cr>";
-      options.desc = "NavBuddy";
-    }
-    {
-      mode = "n";
-      key = "<leader>td";
-      action = "<cmd>ToggleInlineDiagnostics<cr>";
-      options.desc = "Inline Diagnostics";
-    }
-    {
-      mode = "n";
-      key = "<leader>tD";
-      action = "<cmd>Trouble diagnostics toggle focus=false win.position=bottom<cr>";
-      options.desc = "Trouble Diagnostics";
-    }
-    {
-      mode = "n";
-      key = "<leader>tT";
-      action = "<cmd>Trouble todo toggle focus=false win.position=right<cr>";
-      options.desc = "Trouble TODOs";
-    }
-    {
-      mode = "n";
-      key = "<leader>ts";
-      action = "<cmd>Trouble symbols toggle focus=false win.position=right<cr>";
-      options.desc = "Trouble Symbols";
-    }
-
-    {
-      mode = "n";
-      key = "<leader>tf";
-      action = "<cmd>ToggleAutoformat<cr>";
-      options.desc = "Format on Save";
-    }
-    {
-      mode = "n";
-      key = "<leader>tl";
-      action = "<cmd>ToggleAutoLint<cr>";
-      options.desc = "Lint on Save";
-    }
-    {
-      mode = "n";
-      key = "<leader>tw";
-      action = "<cmd>:set wrap!<cr>";
-      options.desc = "Word Wrapping";
-    }
-  ];
-
   leader-git = [
     {
       mode = "n";
@@ -662,31 +690,31 @@
       mode = "n";
       key = "<leader>gs";
       action = "<cmd>Telescope git_status<cr>";
-      options.desc = "Status";
+      options.desc = "Git Status";
     }
     {
       mode = "n";
       key = "<leader>gl";
       action = "<cmd>Telescope git_commits<cr>";
-      options.desc = "Log";
+      options.desc = "Git Log";
     }
     {
       mode = "n";
       key = "<leader>gb";
       action = "<cmd>Telescope git_branches<cr>";
-      options.desc = "Branches";
+      options.desc = "Git Branches";
     }
     {
       mode = "n";
       key = "<leader>gf";
       action = "<cmd>Telescope git_bcommits<cr>";
-      options.desc = "File History";
+      options.desc = "Git File History";
     }
     {
       mode = "n";
       key = "<leader>gd";
       action = "<cmd>DiffviewOpen<cr>";
-      options.desc = "DiffView";
+      options.desc = "Git DiffView";
     }
   ];
 
@@ -722,14 +750,7 @@
       action = "<cmd>lua vim.lsp.buf.rename()<cr>";
       options.desc = "Rename Symbol";
     }
-    # {
-    #   mode = "n";
-    #   key = "<leader>cr";
-    #   action = ":IncRename ";
-    #   options.desc = "Rename LSP symbol";
-    # }
     {
-      # NOTE: There is also Telescope quickfix
       mode = "n";
       key = "<leader>ca";
       action = "<cmd>lua vim.lsp.buf.code_action()<cr>";
@@ -739,19 +760,62 @@
       mode = "n";
       key = "<leader>cI";
       action = "<cmd>Telescope lsp_incoming_calls<cr>";
-      options.desc = "Incoming Calls";
+      options.desc = "LSP Incoming Calls";
     }
     {
       mode = "n";
       key = "<leader>cO";
       action = "<cmd>Telescope lsp_outgoing_calls<cr>";
-      options.desc = "Outgoing Calls";
+      options.desc = "LSP Outgoing Calls";
     }
     {
       mode = "n";
       key = "<leader>cC";
       action = "<cmd>Neogen<cr>";
       options.desc = "Generate Doc Comment";
+    }
+
+    # Toggles
+    {
+      mode = "n";
+      key = "<leader>ct";
+      action = "+toggle";
+    }
+    {
+      mode = "n";
+      key = "<leader>ctn";
+      action = "<cmd>Navbuddy<cr>";
+      options.desc = "NavBuddy";
+    }
+    {
+      mode = "n";
+      key = "<leader>ctd";
+      action = "<cmd>ToggleInlineDiagnostics<cr>";
+      options.desc = "Inline Diagnostics";
+    }
+    {
+      mode = "n";
+      key = "<leader>ctD";
+      action = "<cmd>Trouble diagnostics toggle focus=false win.position=bottom<cr>";
+      options.desc = "Trouble Diagnostics";
+    }
+    {
+      mode = "n";
+      key = "<leader>cts";
+      action = "<cmd>Trouble symbols toggle focus=false win.position=right<cr>";
+      options.desc = "Trouble Symbols";
+    }
+    {
+      mode = "n";
+      key = "<leader>ctf";
+      action = "<cmd>ToggleAutoformat<cr>";
+      options.desc = "Format on Save";
+    }
+    {
+      mode = "n";
+      key = "<leader>ctl";
+      action = "<cmd>ToggleAutoLint<cr>";
+      options.desc = "Lint on Save";
     }
 
     # GoTo
@@ -770,49 +834,73 @@
       mode = "n";
       key = "<leader>cgr";
       action = "<cmd>Telescope lsp_references<cr>";
-      options.desc = "Symbol References";
+      options.desc = "LSP References";
     }
     {
       mode = "n";
       key = "<leader>cgd";
       action = "<cmd>Telescope lsp_definitions<cr>";
-      options.desc = "Symbol Definition";
+      options.desc = "LSP Definition";
     }
     {
       mode = "n";
       key = "<leader>cgi";
       action = "<cmd>Telescope lsp_implementations<cr>";
-      options.desc = "Symbol Implementation";
+      options.desc = "LSP Implementation";
     }
     {
       mode = "n";
       key = "<leader>cgt";
       action = "<cmd>Telescope lsp_type_definitions<cr>";
-      options.desc = "Type Definition";
+      options.desc = "LSP Type Definition";
     }
     {
       mode = "n";
       key = "<leader>cge";
       action = "<cmd>lua vim.diagnostic.goto_next()<cr>";
-      options.desc = "Next Error";
+      options.desc = "Next Diagnostic";
     }
     {
       mode = "n";
       key = "<C-e>";
       action = "<cmd>lua vim.diagnostic.goto_next()<cr>";
-      options.desc = "Next Error";
+      options.desc = "Next Diagnostic";
     }
     {
       mode = "n";
       key = "<leader>cgE";
       action = "<cmd>lua vim.diagnostic.goto_prev()<cr>";
-      options.desc = "Previous Error";
+      options.desc = "Previous Diagnostic";
     }
     {
       mode = "n";
       key = "<C-S-e>";
       action = "<cmd>lua vim.diagnostic.goto_prev()<cr>";
-      options.desc = "Previous Error";
+      options.desc = "Previous Diagnostic";
+    }
+    {
+      mode = "n";
+      key = "<C-q>";
+      action = "<cmd>cnext<cr>";
+      options.desc = "Next Quickfix Item";
+    }
+    {
+      mode = "n";
+      key = "<leader>cgq";
+      action = "<cmd>cnext<cr>";
+      options.desc = "Next Quickfix Item";
+    }
+    {
+      mode = "n";
+      key = "<C-S-q>";
+      action = "<cmd>cprevious<cr>";
+      options.desc = "Previous Quickfix Item";
+    }
+    {
+      mode = "n";
+      key = "<leader>cgQ";
+      action = "<cmd>cprevious<cr>";
+      options.desc = "Previous Quickfix Item";
     }
   ];
 
@@ -824,12 +912,13 @@ in
     no-leader
 
     leader
+    leader-file
     leader-help
     leader-quit
     leader-session
     leader-buffers
+    leader-tabs
     leader-windows
-    leader-toggles
     leader-git
     leader-code
 
