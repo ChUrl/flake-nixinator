@@ -1102,40 +1102,40 @@ in {
               bubbles = ''
                 {
                   normal = {
-                    a = { fg = "#${color.dark.base}", bg = "#${color.dark.lavender}", gui = "bold" },
-                    b = { fg = "#${color.dark.text}", bg = "#${color.dark.crust}" },
-                    c = { fg = "#${color.dark.text}", bg = "NONE" },
+                    a = { fg = "#${color.hex.dark.base}", bg = "#${color.hex.dark.lavender}", gui = "bold" },
+                    b = { fg = "#${color.hex.dark.text}", bg = "#${color.hex.dark.crust}" },
+                    c = { fg = "#${color.hex.dark.text}", bg = "NONE" },
                   },
 
                   insert = {
-                    a = { fg = "#${color.dark.base}", bg = "#${color.dark.green}", gui = "bold" },
-                    b = { fg = "#${color.dark.green}", bg = "#${color.dark.crust}" },
+                    a = { fg = "#${color.hex.dark.base}", bg = "#${color.hex.dark.green}", gui = "bold" },
+                    b = { fg = "#${color.hex.dark.green}", bg = "#${color.hex.dark.crust}" },
                   },
 
                   visual = {
-                    a = { fg = "#${color.dark.base}", bg = "#${color.dark.mauve}", gui = "bold" },
-                    b = { fg = "#${color.dark.mauve}", bg = "#${color.dark.crust}" },
+                    a = { fg = "#${color.hex.dark.base}", bg = "#${color.hex.dark.mauve}", gui = "bold" },
+                    b = { fg = "#${color.hex.dark.mauve}", bg = "#${color.hex.dark.crust}" },
                   },
 
                   replace = {
-                    a = { fg = "#${color.dark.base}", bg = "#${color.dark.red}", gui = "bold" },
-                    b = { fg = "#${color.dark.red}", bg = "#${color.dark.crust}" },
+                    a = { fg = "#${color.hex.dark.base}", bg = "#${color.hex.dark.red}", gui = "bold" },
+                    b = { fg = "#${color.hex.dark.red}", bg = "#${color.hex.dark.crust}" },
                   },
 
                   -- terminal = {
-                  --   a = { fg = "#${color.dark.base}", bg = "#${color.dark.green}", gui = "bold" },
-                  --   b = { fg = "#${color.dark.green}", bg = "#${color.dark.crust}" },
+                  --   a = { fg = "#${color.hex.dark.base}", bg = "#${color.hex.dark.green}", gui = "bold" },
+                  --   b = { fg = "#${color.hex.dark.green}", bg = "#${color.hex.dark.crust}" },
                   -- },
 
                   command = {
-                    a = { fg = "#${color.dark.base}", bg = "#${color.dark.peach}", gui = "bold" },
-                    b = { fg = "#${color.dark.peach}", bg = "#${color.dark.crust}" },
+                    a = { fg = "#${color.hex.dark.base}", bg = "#${color.hex.dark.peach}", gui = "bold" },
+                    b = { fg = "#${color.hex.dark.peach}", bg = "#${color.hex.dark.crust}" },
                   },
 
                   inactive = {
-                    a = { fg = "#${color.dark.text}", bg = "#${color.dark.base}" },
-                    b = { fg = "#${color.dark.text}", bg = "#${color.dark.base}" },
-                    c = { fg = "#${color.dark.text}", bg = "NONE" },
+                    a = { fg = "#${color.hex.dark.text}", bg = "#${color.hex.dark.base}" },
+                    b = { fg = "#${color.hex.dark.text}", bg = "#${color.hex.dark.base}" },
+                    c = { fg = "#${color.hex.dark.text}", bg = "NONE" },
                   },
                 }
               '';
@@ -1567,17 +1567,17 @@ in {
             opts = {
               line.__raw = ''
                 function(line)
-                  local base = { fg = "#${color.dark.base}", bg = "#${color.dark.base}" }
-                  local crust = { fg = "#${color.dark.crust}", bg = "#${color.dark.crust}" }
-                  local text = { fg = "#${color.dark.text}", bg = "#${color.dark.crust}" }
-                  local lavender = { fg = "#${color.dark.lavender}", bg = "#${color.dark.lavender}" }
+                  local base = { fg = "#${color.hex.dark.base}", bg = "#${color.hex.dark.base}" }
+                  local crust = { fg = "#${color.hex.dark.crust}", bg = "#${color.hex.dark.crust}" }
+                  local text = { fg = "#${color.hex.dark.text}", bg = "#${color.hex.dark.crust}" }
+                  local lavender = { fg = "#${color.hex.dark.lavender}", bg = "#${color.hex.dark.lavender}" }
 
                   local numtabs = vim.call("tabpagenr", "$")
 
                   return {
                     -- Head
                     {
-                        { " NEOVIM ", hl = { fg = "#${color.dark.base}", bg = "#${color.dark.lavender}", style = "bold" } },
+                        { " NEOVIM ", hl = { fg = "#${color.hex.dark.base}", bg = "#${color.hex.dark.lavender}", style = "bold" } },
 
                         -- The separator gets a foreground and background fill (each have fg + bg).
                         -- line.sep("", lavender, lavender),
@@ -1586,7 +1586,7 @@ in {
                     -- Tabs
                     line.tabs().foreach(function(tab)
                       -- Switch out the start separator instead of the ending one because the last separator is different
-                      local hl = tab.is_current() and { fg = "#${color.dark.lavender}", bg = "#${color.dark.crust}", style = "bold" } or text
+                      local hl = tab.is_current() and { fg = "#${color.hex.dark.lavender}", bg = "#${color.hex.dark.crust}", style = "bold" } or text
                       local sep_start = tab.number() == 1 and "" or ""
                       local sep_end = tab.number() == numtabs and "" or ""
 

@@ -85,7 +85,7 @@ in {
       style = ''
         /*Order is Top-Right-Bottom-Left for combined properties*/
         * {
-          color: #${color.dark.base};
+          color: #${color.hex.dark.base};
           font-family: ${color.font};
           font-weight: bold;
         }
@@ -94,25 +94,23 @@ in {
           border-style: solid;
           border-width: 2px;
           border-radius: 6px;
-          border-color: #${color.dark.lavender};
-
-          /*Can't use color.light.base here because waybar doesn't support rrggbbaa :(*/
+          border-color: #${color.hex.dark.lavender};
           background-color: rgba(${color.rgbString.light.base}, 0.3);
         }
 
         /*Colors*/
-        #custom-launcher          {background-color: #${color.dark.lavender};}
-        #user                     {background-color: #${color.dark.pink};}
-        #window                   {background-color: #${color.dark.mauve};}
-        #workspaces button        {background-color: #${color.dark.lavender};}
-        #workspaces button.active {background-color: #${color.dark.pink};}
-        #pulseaudio               {background-color: #${color.dark.maroon};}
-        #network                  {background-color: #${color.dark.peach};}
-        #cpu                      {background-color: #${color.dark.yellow};}
-        #memory                   {background-color: #${color.dark.green};}
-        #temperature              {background-color: #${color.dark.teal};}
-        #clock                    {background-color: #${color.dark.sky};}
-        #tray                     {background-color: #${color.dark.lavender};}
+        #custom-launcher          {background-color: #${color.hex.dark.lavender};}
+        #user                     {background-color: #${color.hex.dark.pink};}
+        #window                   {background-color: #${color.hex.dark.mauve};}
+        #workspaces button        {background-color: #${color.hex.dark.lavender};}
+        #workspaces button.active {background-color: #${color.hex.dark.pink};}
+        #pulseaudio               {background-color: #${color.hex.dark.maroon};}
+        #network                  {background-color: #${color.hex.dark.peach};}
+        #cpu                      {background-color: #${color.hex.dark.yellow};}
+        #memory                   {background-color: #${color.hex.dark.green};}
+        #temperature              {background-color: #${color.hex.dark.teal};}
+        #clock                    {background-color: #${color.hex.dark.sky};}
+        #tray                     {background-color: #${color.hex.dark.lavender};}
 
 
         /*Square Widgets*/

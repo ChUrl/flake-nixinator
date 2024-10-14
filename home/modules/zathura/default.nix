@@ -25,20 +25,20 @@ in {
         window-title-home-tilde = statusbar-home-tilde;
 
         # Colorscheme
-        default-bg = "#${color.light.base}";
-        default-fg = "#${color.light.text}";
+        default-bg = "#${color.hex.light.base}";
+        default-fg = "#${color.hex.light.text}";
 
         highlight-color = "rgba(${color.rgbString.dark.lavender}, 0.5)";
         highlight-fg = "rgba(${color.rgbString.dark.green}, 0.5)";
         highlight-active-color = "rgba(${color.rgbString.dark.pink}, 0.5)";
 
-        statusbar-bg = "#${color.dark.lavender}";
+        statusbar-bg = "#${color.hex.dark.lavender}";
         statusbar-fg = default-fg;
 
         inputbar-bg = statusbar-bg;
         inputbar-fg = statusbar-fg;
 
-        completion-bg = "#${color.light.surface0}";
+        completion-bg = "#${color.hex.light.surface0}";
         completion-fg = default-fg;
         completion-highlight-bg = statusbar-bg;
         completion-highlight-fg = completion-fg;
@@ -48,9 +48,9 @@ in {
         notification-bg = completion-bg;
         notification-fg = default-fg;
         notification-warning-bg = notification-bg;
-        notification-warning-fg = "#${color.light.peach}";
+        notification-warning-fg = "#${color.hex.light.peach}";
         notification-error-bg = notification-bg;
-        notification-error-fg = "#${color.light.red}";
+        notification-error-fg = "#${color.hex.light.red}";
 
         recolor-lightcolor = default-bg;
         recolor-darkcolor = default-fg;
