@@ -10,7 +10,7 @@
   nixosConfig,
   ...
 }: let
-  inherit (config.modules) hyprland color;
+  inherit (config.modules) hyprland color waybar;
 
   # This function is mapped to the "cfg.monitors" attrSet.
   # For each key-value entry in "cfg.monitors",
@@ -312,7 +312,6 @@ in {
       };
 
       # Notification service
-      # TODO: Allow setting the dunst monitor
       dunst = {
         enable = true;
 
@@ -321,7 +320,7 @@ in {
 
         settings = {
           global = {
-            monitor = 1;
+            monitor = waybar.monitor;
             font = "${color.font} 11";
             offset = "10x10";
             background = "#${color.light.base}";
