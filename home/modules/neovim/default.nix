@@ -182,22 +182,24 @@ in {
           '';
         }
 
-        {
-          # TODO: This breaks if the preview buffer does not refer to a file,
-          #       e.g. when showing previous notifications
-          desc = "Enable line wrapping in telescope preview";
-          event = ["User"];
-          pattern = ["TelescopePreviewerLoaded"];
-          callback.__raw = ''
-            function(args)
-              if args.data.bufname:match("*.csv") then
-                vim.wo.wrap = false
-              else
-                vim.wo.wrap = true
-              end
-            end
-          '';
-        }
+        # This breaks if the preview buffer does not refer to a file, e.g. when showing previous notifications
+        # {
+        #   desc = "Enable line wrapping in telescope preview";
+        #   event = ["User"];
+        #   pattern = ["TelescopePreviewerLoaded"];
+        #   callback.__raw = ''
+        #     -- The callback arg is of this format:
+        #     -- {
+        #     --   title: string, # preview window title
+        #     --   filetype: string,
+        #     --   bufname: string,
+        #     -- }
+
+        #     function(args)
+        #       vim.wo.wrap = true
+        #     end
+        #   '';
+        # }
       ];
 
       keymaps = import ./mappings.nix {inherit lib mylib;};
