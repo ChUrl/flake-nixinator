@@ -317,6 +317,7 @@ rec {
       AusweisApp2
       protonmail-bridge # TODO: Enable on startup, email module
       thunderbird # TODO: Email module
+      # parsec-bin
 
       # Office
       wacomtablet # For xournalpp/krita
@@ -479,6 +480,7 @@ rec {
         "com.spotify.Client"
         "com.google.Chrome"
         "md.obsidian.Obsidian"
+        # "com.parsecgaming.parsec"
         "dev.vencord.Vesktop"
       ];
 

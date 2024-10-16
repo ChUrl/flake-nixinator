@@ -163,8 +163,9 @@ with mylib.networking; {
     enable = true;
 
     removedAssociations = {
-      "application/pdf" = "chromium-browser.desktop";
-      "text/plain" = "code.desktop";
+      "application/pdf" = ["chromium-browser.desktop"];
+      "text/plain" = ["code.desktop"];
+      "text/html" = ["com.google.Chrome.desktop"];
     };
 
     defaultApplications = let
@@ -172,13 +173,25 @@ with mylib.networking; {
       videoPlayer = "mpv.desktop";
       imageViewer = "imv.desktop";
       audioPlayer = "mpv.desktop"; # mov.desktop
+      pdfViewer = "org.pwmt.zathura.desktop";
+      webBrowser = "firefox.desktop";
+      fileBrowser = "nnn.desktop";
     in {
-      "inode/directory" = "nnn.desktop";
+      "text/html" = "${webBrowser}";
 
-      "application/pdf" = "org.pwmt.zathura.desktop";
+      "inode/directory" = "${fileBrowser}";
+
+      "application/pdf" = "${pdfViewer}";
+
       "application/x-sh" = "${textEditor}";
       "application/xhtml+xml" = "${textEditor}";
       "application/xml" = "${textEditor}";
+      "text/plain" = "${textEditor}";
+      "text/css" = "${textEditor}";
+      "text/csv" = "${textEditor}";
+      "text/javascript" = "${textEditor}";
+      "text/json" = "${textEditor}";
+      "text/xml" = "${textEditor}";
 
       "image/bmp" = "${imageViewer}";
       "image/jpeg" = "${imageViewer}";
@@ -196,13 +209,6 @@ with mylib.networking; {
       "video/x-matroska" = "${videoPlayer}";
       "video/x-msvideo" = "${videoPlayer}";
       "video/x-ms-wmv" = "${videoPlayer}";
-
-      "text/css" = "${textEditor}";
-      "text/csv" = "${textEditor}";
-      "text/javascript" = "${textEditor}";
-      "text/json" = "${textEditor}";
-      "text/plain" = "${textEditor}";
-      "text/xml" = "${textEditor}";
 
       "audio/mpeg" = "${audioPlayer}";
       "audio/ogg" = "${audioPlayer}";
