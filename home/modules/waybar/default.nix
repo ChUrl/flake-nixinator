@@ -83,7 +83,7 @@ in {
       };
 
       style = ''
-        /*Order is Top-Right-Bottom-Left for combined properties*/
+        /* Order is Top-Right-Bottom-Left for combined properties */
         * {
           color: #${color.hex.dark.base};
           font-family: ${color.font};
@@ -98,7 +98,16 @@ in {
           background-color: rgba(${color.rgbString.light.base}, 0.3);
         }
 
-        /*Colors*/
+        tooltip {
+          border-style: solid;
+          border-width: 2px;
+          border-radius: 6px;
+          border-color: #${color.hex.dark.lavender};
+          background-color: rgba(${color.rgbString.light.base}, 0.7);
+          font-weight: normal;
+        }
+
+        /* Background colors */
         #custom-launcher          {background-color: #${color.hex.dark.lavender};}
         #user                     {background-color: #${color.hex.dark.pink};}
         #window                   {background-color: #${color.hex.dark.mauve};}
@@ -112,8 +121,7 @@ in {
         #clock                    {background-color: #${color.hex.dark.sky};}
         #tray                     {background-color: #${color.hex.dark.lavender};}
 
-
-        /*Square Widgets*/
+        /* Square Widgets */
         #custom-launcher,
         #workspaces button,
         #tray {
@@ -121,7 +129,7 @@ in {
           border-radius: 6px;
         }
 
-        /*Rectangle Widgets*/
+        /* Rectangle Widgets */
         #user,
         #window,
         #pulseaudio,
@@ -135,12 +143,14 @@ in {
           border-radius: 6px;
         }
 
-        /*make window module transparent when no windows present*/
+        /* Make window module transparent when no windows present */
         window#waybar.empty #window {
             background-color: transparent;
         }
 
-        /*Tux Icon*/
+        /* Alignment of left/right/center elements */
+
+        /* Tux Icon */
         #custom-launcher {
           font-size: 26px;
           padding-right: 10px;
