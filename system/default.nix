@@ -163,59 +163,41 @@ with mylib.networking; {
     enable = true;
 
     removedAssociations = {
-      "application/pdf" = ["chromium-browser.desktop"];
-      "text/plain" = ["code.desktop"];
-      "text/html" = ["com.google.Chrome.desktop"];
+      "application/pdf" = ["chromium-browser.desktop" "com.google.Chrome.desktop" "firefox.desktop"];
+      "text/plain" = ["firefox.desktop" "code.desktop"];
+      "text/html" = ["chromium-browser.desktop" "com.google.Chrome.desktop"];
+      "application/xhtml+xml" = ["chromium-browser.desktop" "com.google.Chrome.desktop"];
     };
 
     defaultApplications = let
       textEditor = "neovide.desktop"; # Helix.desktop
-      videoPlayer = "mpv.desktop";
+      fileBrowser = "nnn.desktop";
+      webBrowser = "firefox.desktop";
+      pdfViewer = "org.pwmt.zathura.desktop";
       imageViewer = "imv.desktop";
       audioPlayer = "mpv.desktop"; # mov.desktop
-      pdfViewer = "org.pwmt.zathura.desktop";
-      webBrowser = "firefox.desktop";
-      fileBrowser = "nnn.desktop";
-    in {
-      "text/html" = "${webBrowser}";
+      videoPlayer = "mpv.desktop";
 
-      "inode/directory" = "${fileBrowser}";
+      textMimeTypes = ["text/css" "text/csv" "text/javascript" "application/json" "application/ld+json" "application/x-sh" "text/plain" "application/xml" "text/xml"];
+      fileBrowserMimeTypes = ["inode/directory"];
+      webBrowserMimeTypes = ["text/html" "application/xhtml+xml"];
+      pdfMimeTypes = ["application/pdf"];
+      imageMimeTypes = ["image/apng" "image/avif" "image/bmp" "image/gif" "image/jpeg" "image/png" "image/svg+xml" "image/tiff" "image/webp"];
+      audioMimeTypes = ["audio/aac" "audio/mpeg" "audio/ogg" "audio/opus" "audio/wav" "audio/webm" "audio/3gpp" "audio/3gpp2"];
+      videoMimeTypes = ["video/x-msvideo" "video/mp4" "video/mpeg" "video/ogg" "video/mp2t" "video/webm" "video/3gpp" "video/3gpp2"];
 
-      "application/pdf" = "${pdfViewer}";
-
-      "application/x-sh" = "${textEditor}";
-      "application/xhtml+xml" = "${textEditor}";
-      "application/xml" = "${textEditor}";
-      "text/plain" = "${textEditor}";
-      "text/css" = "${textEditor}";
-      "text/csv" = "${textEditor}";
-      "text/javascript" = "${textEditor}";
-      "text/json" = "${textEditor}";
-      "text/xml" = "${textEditor}";
-
-      "image/bmp" = "${imageViewer}";
-      "image/jpeg" = "${imageViewer}";
-      "image/png" = "${imageViewer}";
-      "image/svg+xml" = "${imageViewer}";
-      "image/tiff" = "${imageViewer}";
-      "image/webp" = "${imageViewer}";
-
-      "video/mp2t" = "${videoPlayer}";
-      "video/mp4" = "${videoPlayer}";
-      "video/mpeg" = "${videoPlayer}";
-      "video/ogg" = "${videoPlayer}";
-      "video/quicktime" = "${videoPlayer}";
-      "video/webm" = "${videoPlayer}";
-      "video/x-matroska" = "${videoPlayer}";
-      "video/x-msvideo" = "${videoPlayer}";
-      "video/x-ms-wmv" = "${videoPlayer}";
-
-      "audio/mpeg" = "${audioPlayer}";
-      "audio/ogg" = "${audioPlayer}";
-      "audio/opus" = "${audioPlayer}";
-      "audio/wav" = "${audioPlayer}";
-      "audio/webm" = "${audioPlayer}";
-    };
+      mkAssociation = app: type: {${type} = app;};
+      mkAssociations = app: types: lib.mergeAttrsList (builtins.map (mkAssociation app) types);
+    in
+      lib.mergeAttrsList [
+        (mkAssociations textEditor textMimeTypes)
+        (mkAssociations fileBrowser fileBrowserMimeTypes)
+        (mkAssociations webBrowser webBrowserMimeTypes)
+        (mkAssociations pdfViewer pdfMimeTypes)
+        (mkAssociations imageViewer imageMimeTypes)
+        (mkAssociations audioPlayer audioMimeTypes)
+        (mkAssociations videoPlayer videoMimeTypes)
+      ];
 
     addedAssociations = defaultApplications;
   };
