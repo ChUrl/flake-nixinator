@@ -122,24 +122,24 @@ in {
       };
 
       highlight = {
-        # Manually define blink.cmp highlight groups until catpuccin supports it.
-        BlinkCmpMenu = {
-          bg = "#${color.hex.dark.base}";
-        };
-        BlinkCmpMenuBorder = {
-          bg = "#${color.hex.dark.base}";
-          fg = "#${color.hex.dark.blue}";
-        };
-        BlinkCmpMenuSelection = {
-          bg = "#${color.hex.dark.blue}";
-          fg = "#${color.hex.dark.crust}";
-          bold = true;
-        };
-        BlinkCmpLabel = {
-          bg = "#${color.hex.dark.base}";
-          fg = "#${color.hex.dark.text}";
-          bold = false;
-        };
+        # Manually define blink.cmp highlight groups until catpuccin supports it. Update: Catpuccin supports it now.
+        # BlinkCmpMenu = {
+        #   bg = "#${color.hex.dark.base}";
+        # };
+        # BlinkCmpMenuBorder = {
+        #   bg = "#${color.hex.dark.base}";
+        #   fg = "#${color.hex.dark.blue}";
+        # };
+        # BlinkCmpMenuSelection = {
+        #   bg = "#${color.hex.dark.blue}";
+        #   fg = "#${color.hex.dark.crust}";
+        #   bold = true;
+        # };
+        # BlinkCmpLabel = {
+        #   bg = "#${color.hex.dark.base}";
+        #   fg = "#${color.hex.dark.text}";
+        #   bold = false;
+        # };
       };
 
       # extraLuaPackages = with pkgs.lua51Packages; [];
@@ -311,6 +311,7 @@ in {
               # https://github.com/catppuccin/nvim/tree/main?tab=readme-ov-file#integrations
               default_integrations = true;
               integrations = {
+                blink_cmp = true;
                 dashboard = true;
                 diffview = true;
                 flash = true;
@@ -377,27 +378,15 @@ in {
             };
           };
 
-          # TODO: Does not work with luasnips yet :(
-          # TODO: Check if plugin landed in repos
           blink-cmp = rec {
             name = "blink.cmp";
-            pkg = inputs.blink-cmp.packages.${system}.default;
+            # pkg = inputs.blink-cmp.packages.${system}.default;
+            pkg = pkgs.vimPlugins.blink-cmp;
             lazy = true;
             event = ["InsertEnter"];
             config = mkDefaultConfig name;
-            opts = {
-              sources = {
-                providers.__raw = ''
-                  {
-                    { 'blink.cmp.sources.lsp', name = 'LSP' },
-                    { 'blink.cmp.sources.path', name = 'Path', score_offset = 3 },
-                    { 'blink.cmp.sources.snippets', name = 'Snippets', score_offset = -3 },
 
-                    -- Disable the buffer completion because I don't like it
-                    -- { 'blink.cmp.sources.buffer', name = 'Buffer', fallback_for = { 'LSP' } },
-                  }
-                '';
-              };
+            opts = {
               keymap = {
                 show = "<C-space>";
                 hide = "<C-e>";
@@ -413,7 +402,32 @@ in {
                 snippet_forward = "<Tab>";
                 snippet_backward = "<S-Tab>";
               };
-              nerd_font_variant = "mono";
+
+              accept = {
+                expand_snippet = "require('luasnip').lsp_expand";
+                auto_brackets = {
+                  enabled = true;
+                };
+              };
+
+              trigger = {
+                signature_help = {
+                  enabled = true;
+                };
+              };
+
+              fuzzy = {
+                use_typo_resistance = true;
+                use_frequency = true;
+                use_proximity = true;
+              };
+
+              sources = {
+                completion = {
+                  enabled_providers = ["lsp" "path" "snippets"]; # No "buffer"
+                };
+              };
+
               windows = {
                 autocomplete = {
                   border = "rounded";
@@ -427,17 +441,12 @@ in {
                 signature_help = {
                   border = "rounded";
                 };
-              };
-              accept = {
-                auto_brackets = {
+                ghost_text = {
                   enabled = true;
                 };
               };
-              trigger = {
-                signature_help = {
-                  enabled = true;
-                };
-              };
+
+              nerd_font_variant = "mono";
             };
           };
 
