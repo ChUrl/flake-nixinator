@@ -468,7 +468,10 @@ in {
 
         decoration = {
           rounding = 5;
-          drop_shadow = false;
+
+          shadow = {
+            enabled = false;
+          };
 
           blur = {
             enabled = true;
