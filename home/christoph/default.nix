@@ -218,6 +218,9 @@ rec {
       NIXOS_OZONE_WL = "1";
       SDL_VIDEODRIVER = "wayland";
 
+      # Run SSH_ASKPASS as GUI, not TTY for Obsidian git
+      SSH_ASKPASS_REQUIRE = "prefer";
+
       # GTK_IM_MODULE, QT_IM_MODULE, XMODIFIERS are set by HomeManager fcitx5 module
     };
 
@@ -436,7 +439,7 @@ rec {
     };
 
     nushell.enable = false;
-    ssh.enable = true;
+    ssh.enable = false; # NOTE: Do NOT generate .ssh/config using HM, as it will have invalid permissions!
 
     tmux = {
       enable = false;
