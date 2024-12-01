@@ -87,32 +87,32 @@
   };
 
   mkNetworkNamespace = name: ''
-    ${pkgs.iproute}/bin/ip netns add ${name} # Create the Namespace
-    ${pkgs.iproute}/bin/ip -n ${name} link set lo up # Enable the Loopback device
+    ${pkgs.iproute2}/bin/ip netns add ${name} # Create the Namespace
+    ${pkgs.iproute2}/bin/ip -n ${name} link set lo up # Enable the Loopback device
   '';
 
   killNetworkNamespace = name: ''
-    ${pkgs.iproute}/bin/ip netns del ${name} # Delete the Namespace
+    ${pkgs.iproute2}/bin/ip netns del ${name} # Delete the Namespace
   '';
 
   # VPN stuff
   mkWireguardService = let
     # NOTE: The interface and netns have the same name, so it's a bit confusing
     mkWireguardTunnel = name: privatekey: publickey: endpoint: ''
-      ${pkgs.iproute}/bin/ip link add ${name} type wireguard
-      ${pkgs.iproute}/bin/ip link set ${name} netns ${name}
-      ${pkgs.iproute}/bin/ip netns exec ${name} ${pkgs.wireguard-tools}/bin/wg set ${name} \
+      ${pkgs.iproute2}/bin/ip link add ${name} type wireguard
+      ${pkgs.iproute2}/bin/ip link set ${name} netns ${name}
+      ${pkgs.iproute2}/bin/ip netns exec ${name} ${pkgs.wireguard-tools}/bin/wg set ${name} \
         private-key /home/christoph/.secrets/wireguard/${privatekey} \
         peer ${publickey} \
         allowed-ips 0.0.0.0/0 \
         endpoint ${endpoint}:51820
-      ${pkgs.iproute}/bin/ip -n ${name} addr add 10.2.0.2/32 dev ${name}
-      ${pkgs.iproute}/bin/ip -n ${name} link set ${name} up
-      ${pkgs.iproute}/bin/ip -n ${name} route add default dev ${name}
+      ${pkgs.iproute2}/bin/ip -n ${name} addr add 10.2.0.2/32 dev ${name}
+      ${pkgs.iproute2}/bin/ip -n ${name} link set ${name} up
+      ${pkgs.iproute2}/bin/ip -n ${name} route add default dev ${name}
     '';
 
     killWireguardTunnel = name: ''
-      ${pkgs.iproute}/bin/ip -n ${name} link del ${name}
+      ${pkgs.iproute2}/bin/ip -n ${name} link del ${name}
     '';
   in
     name: privatekey: publickey: endpoint: {
