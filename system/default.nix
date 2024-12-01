@@ -151,8 +151,10 @@ with mylib.networking; {
     enable = true;
     wlr.enable = false; # I think hyprland has its own portal automatically enabled...
     extraPortals = with pkgs; [
-      xdg-desktop-portal-kde
-      xdg-desktop-portal-gtk
+      # TODO: Needed?
+      # xdg-desktop-portal-kde
+      # xdg-desktop-portal-gtk
+
       # xdg-desktop-portal-hyprland # Already enabled by hyprland system module
       # xdg-desktop-portal-termfilechooser # Filepicker using nnn
     ];
@@ -211,11 +213,7 @@ with mylib.networking; {
     # this is required for flatpak to find them.
     packages = with pkgs; [
       # Monospace fonts
-      (nerdfonts.override {
-        fonts = [
-          "JetBrainsMono"
-        ];
-      })
+      nerd-fonts.jetbrains-mono
 
       # Sans/Serif fonts
       noto-fonts
@@ -320,6 +318,12 @@ with mylib.networking; {
       flake = "/home/christoph/NixFlake";
     };
 
+    ssh = {
+      startAgent = true;
+      # enableAskPassword = true;
+      # askPassword = lib.mkForce "${pkgs.kdePackages.ksshaskpass}/bin/ksshaskpass";
+    };
+
     fuse.userAllowOther = true; # Allow users to mount e.g. samba shares (cifs)
     # ausweisapp.openFirewall = true; # Directly set port in firewall
   };
@@ -382,12 +386,7 @@ with mylib.networking; {
     fwupd.enable = true; # Device firmware (I don't think I have any supported devices)
     # locate.enable = true; # Periodically update index
     ntp.enable = true; # Clock sync
-    gvfs = {
-      # Network shares
-      enable = true;
-      package = lib.mkForce pkgs.gnome3.gvfs;
-    };
-
+    gvfs.enable = false; # Network shares TODO: Only gnome? Needed?
     udev = {
       packages = with pkgs; [
         usb-blaster-udev-rules # For Intel Quartus
