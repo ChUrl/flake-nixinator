@@ -58,7 +58,7 @@
       # Overlays define changes in the nixpkgs package set.
       overlays = [
         inputs.devshell.overlays.default
-        inputs.nur.overlay
+        inputs.nur.overlays.default
         inputs.emacs-overlay.overlay
 
         # All my own overlays
