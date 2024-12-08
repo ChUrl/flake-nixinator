@@ -46,7 +46,7 @@ in {
             lua-language-server
             nil
             nixd
-            pyright
+            basedpyright
             rust-analyzer
             texlab
             typescript
@@ -387,21 +387,33 @@ in {
             config = mkDefaultConfig name;
 
             opts = {
-              keymap = {
-                preset = "enter";
-              };
+              keymap.preset = "enter";
 
-              accept = {
-                expand_snippet = "require('luasnip').lsp_expand";
-                auto_brackets = {
-                  enabled = true;
-                };
-              };
+              # NOTE: This config is for version 0.62
 
-              trigger = {
-                signature_help = {
-                  enabled = true;
-                };
+              # highlight.use_nvim_cmp_as_default = true;
+              # nerd_font_variant = "mono";
+              # sources.completion.enabled_providers = ["lsp" "path" "snippets"]; # No "buffer"
+              # accept.auto_brackets.enabled = true;
+              # trigger.signature_help.enabled = true;
+              # fuzzy = {
+              #   use_typo_resistance = true;
+              #   use_frequency = true;
+              #   use_proximity = true;
+              # };
+              # windows = {
+              #   autocomplete.border = "rounded";
+              #   documentation.border = "rounded";
+              #   documentation.auto_show = true;
+              #   signature_help.border = "rounded";
+              #   ghost_text.enabled = true;
+              # };
+
+              # NOTE: This config is for versions > 0.62
+
+              appearance = {
+                use_nvim_cmp_as_default = true;
+                nerd_font_variant = "mono";
               };
 
               fuzzy = {
@@ -416,25 +428,37 @@ in {
                 };
               };
 
-              windows = {
-                autocomplete = {
-                  border = "rounded";
-                  draw = "reversed";
+              completion = {
+                accept = {
+                  auto_brackets = {
+                    enabled = true;
+                  };
                 };
-                documentation = {
+
+                menu = {
+                  enabled = true;
                   border = "rounded";
+                };
+
+                documentation = {
                   auto_show = true;
                   auto_show_delay_ms = 250;
+                  window = {
+                    border = "rounded";
+                  };
                 };
-                signature_help = {
-                  border = "rounded";
-                };
+
                 ghost_text = {
-                  enabled = true;
+                  enabled = false;
                 };
               };
 
-              nerd_font_variant = "mono";
+              signature = {
+                enabled = true;
+                window = {
+                  border = "rounded";
+                };
+              };
             };
           };
 
@@ -963,7 +987,7 @@ in {
                     };
                   };
                 }
-                {name = "pyright";}
+                {name = "basedpyright";}
                 {name = "texlab";}
 
                 # {name = "jdtls";} # Don't set up when using nvim-jdtls
@@ -985,8 +1009,13 @@ in {
 
                 local __lspCapabilities = function()
                   capabilities = vim.lsp.protocol.make_client_capabilities()
+
                   -- I don't remember where this came from, but without cmp it makes no sense
                   -- capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
+
+                  -- get_lsp_capabilities merges with the existing capabilities
+                  capabilities = require("blink.cmp").get_lsp_capabilities(capabilities)
+
                   return capabilities
                 end
 
