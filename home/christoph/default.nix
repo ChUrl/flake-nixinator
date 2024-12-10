@@ -95,12 +95,14 @@ rec {
       workspacerules = {
         "2" = [
           "neovide"
-          "jetbrains-clion"
-          "jetbrains-idea"
-          "jetbrains-pycharm"
-          "jetbrains-rustrover"
-          "jetbrains-rider"
           "code-url-handler"
+          # NOTE: Fixing Jetbrains IDEs to a workspace prevents them from being on any other :(
+          # "jetbrains-clion"
+          # "jetbrains-idea"
+          # "jetbrains-pycharm"
+          # "jetbrains-rustrover"
+          # "jetbrains-rider"
+          # "jetbrains-webstorm"
         ];
         "3" = [
           "obsidian"
@@ -149,6 +151,7 @@ rec {
         "jetbrains-pycharm"
         "jetbrains-rustrover"
         "jetbrains-rider"
+        "jetbrains-webstorm"
         "code-url-handler"
         "neovide"
       ];
@@ -477,14 +480,30 @@ rec {
     # kdeconnect.enable = true; # Note: This does not setup the firewall at all
 
     flatpak = {
+      # FlatHub stable is only added by default if no custom remotes are specified
+      remotes = [
+        {
+          name = "flathub";
+          location = "https://flathub.org/repo/flathub.flatpakrepo";
+        }
+        {
+          name = "flathub-beta";
+          location = "https://flathub.org/beta-repo/flathub-beta.flatpakrepo";
+        }
+      ];
+
       packages = [
         "com.github.tchx84.Flatseal"
-        "com.discordapp.Discord"
+
         "com.spotify.Client"
-        "com.google.Chrome"
         "md.obsidian.Obsidian"
+
+        "com.discordapp.DiscordCanary"
+        # "com.discordapp.Discord"
+        # "dev.vencord.Vesktop"
+
+        # "com.google.Chrome"
         # "com.parsecgaming.parsec"
-        "dev.vencord.Vesktop"
       ];
 
       uninstallUnmanaged = true;
@@ -497,7 +516,7 @@ rec {
       overrides = {
         global = {
           # Force Wayland by default
-          # Context.sockets = ["wayland" "!x11" "!fallback-x11"]; # NOTE: Makes discord crash
+          Context.sockets = ["wayland" "!x11" "!fallback-x11"]; # NOTE: Makes discord crash
 
           Context.filesystems = ["/nix/store:ro"];
 
