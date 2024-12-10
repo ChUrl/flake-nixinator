@@ -59,6 +59,7 @@
       jetbrains.rust-rover
       jetbrains.pycharm-professional
       jetbrains.idea-ultimate
+      jetbrains.webstorm
 
       # unityhub
       # jetbrains.rider
