@@ -35,7 +35,7 @@ in {
             lua51Packages.xml2lua # For rest
             lua51Packages.mimetypes # For rest
             lua51Packages.jsregexp # For tree-sitter
-            nodejs
+            nodejs_latest
 
             # Language servers
             clang-tools_18
@@ -48,8 +48,11 @@ in {
             nixd
             basedpyright
             rust-analyzer
+            svelte-language-server
+            tailwindcss-language-server
             texlab
             typescript
+            vscode-langservers-extracted
 
             # Linters
             checkstyle # java
@@ -68,6 +71,7 @@ in {
             html-tidy
             jq # json
             prettierd # html/css/js
+            # nodePackages_latest.prettier # html/css/js/ts
             rustfmt
             stylua
           ]
@@ -524,14 +528,16 @@ in {
                 h = ["clang-format"];
                 cpp = ["clang-format"];
                 hpp = ["clang-format"];
-                css = ["prettierd" "prettier"];
-                html = ["prettierd" "prettier"];
+                css = ["prettier" "prettierd"];
+                html = ["prettier" "prettierd"];
                 java = ["google-java-format"];
-                javascript = ["prettierd" "prettier"];
+                javascript = ["prettier" "prettierd"];
                 lua = ["stylua"];
-                markdown = ["prettierd" "prettier"];
+                markdown = ["prettier" "prettierd"];
                 nix = ["alejandra"];
                 python = ["black"];
+                svelte = ["prettier" "prettierd"];
+                typescript = ["prettier" "prettierd"];
                 rust = ["rustfmt"];
               };
 
@@ -909,6 +915,7 @@ in {
             dependencies = [_lazydev];
             config = let
               servers = mylib.generators.toLuaObject [
+                {name = "basedpyright";}
                 {
                   name = "clangd";
                   extraOptions = {
@@ -948,12 +955,15 @@ in {
                 }
                 {name = "clojure_lsp";}
                 {name = "cmake";}
+                {name = "cssls";}
+                {name = "html";}
                 {name = "lua_ls";}
                 {
                   name = "ltex";
                   extraOptions.settings = {
                     ltex = {
                       checkFrequency = "save";
+                      enabled = ["markdown" "org" "tex" "latex" "plaintext"];
                     };
                   };
                 }
@@ -987,7 +997,8 @@ in {
                     };
                   };
                 }
-                {name = "basedpyright";}
+                {name = "svelte";}
+                {name = "tailwindcss";}
                 {name = "texlab";}
 
                 # {name = "jdtls";} # Don't set up when using nvim-jdtls
@@ -1000,14 +1011,29 @@ in {
                 require("lspconfig.ui.windows").default_options.border = "rounded"
 
                 local __lspOnAttach = function(client, bufnr)
+
                   -- NOTE: The ltex-extra package needs to be loaded in ltex's onAttach.
                   --       I don't know how to do this more declaratively with the current structure.
                   if client.name == "ltex" then
                     require("ltex_extra").setup({})
                   end
+
+                  -- NOTE: The svelte-lsp apparently has a bug and doesn't watch files correctly
+                  if client.name == "svelte" then
+                    vim.api.nvim_create_autocmd("BufWritePost", {
+                      pattern = { "*.js", "*.ts" },
+                      group = vim.api.nvim_create_augroup("svelte_ondidchangetsorjsfile", { clear = true }),
+                      callback = function(ctx)
+                        -- Here use ctx.match instead of ctx.file
+                        client.notify("$/onDidChangeTsOrJsFile", { uri = ctx.match })
+                      end,
+                    })
+                  end
+
                 end
 
                 local __lspCapabilities = function()
+
                   capabilities = vim.lsp.protocol.make_client_capabilities()
 
                   -- I don't remember where this came from, but without cmp it makes no sense
@@ -1017,6 +1043,7 @@ in {
                   capabilities = require("blink.cmp").get_lsp_capabilities(capabilities)
 
                   return capabilities
+
                 end
 
                 local __setup = {
