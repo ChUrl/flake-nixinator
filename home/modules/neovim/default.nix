@@ -70,8 +70,8 @@ in {
             google-java-format
             html-tidy
             jq # json
-            prettierd # html/css/js
-            # nodePackages_latest.prettier # html/css/js/ts
+            # prettierd # Use prettier instead because of plugins
+            # nodePackages_latest.prettier # Use local install as plugins change per project
             rustfmt
             stylua
           ]
@@ -528,16 +528,16 @@ in {
                 h = ["clang-format"];
                 cpp = ["clang-format"];
                 hpp = ["clang-format"];
-                css = ["prettier" "prettierd"];
-                html = ["prettier" "prettierd"];
+                css = ["prettier"]; # "prettierd"
+                html = ["prettier"]; # "prettierd"
                 java = ["google-java-format"];
-                javascript = ["prettier" "prettierd"];
+                javascript = ["prettier"]; # "prettierd"
                 lua = ["stylua"];
-                markdown = ["prettier" "prettierd"];
+                markdown = ["prettier"]; # "prettierd"
                 nix = ["alejandra"];
                 python = ["black"];
-                svelte = ["prettier" "prettierd"];
-                typescript = ["prettier" "prettierd"];
+                svelte = ["prettier"]; # "prettierd"
+                typescript = ["prettier"]; # "prettierd"
                 rust = ["rustfmt"];
               };
 
@@ -546,7 +546,8 @@ in {
                 stop_after_first = true;
               };
 
-              format_on_save.__raw = ''
+              # format_on_save formats synchronously, format_after_save asynchronously
+              format_after_save.__raw = ''
                 function(bufnr)
                   -- Disable with a global or buffer-local variable
                   if vim.g.disable_autoformat then
@@ -555,6 +556,8 @@ in {
                   return { timeout_ms = 500, lsp_format = "fallback", }
                 end
               '';
+
+              log_level.__raw = ''vim.log.levels.DEBUG'';
             };
           };
 
