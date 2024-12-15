@@ -42,7 +42,7 @@ in {
             clojure-lsp
             cmake-language-server
             haskell-language-server
-            ltex-ls
+            # ltex-ls # Terribly slow
             lua-language-server
             nil
             nixd
@@ -393,28 +393,6 @@ in {
             opts = {
               keymap.preset = "enter";
 
-              # NOTE: This config is for version 0.62
-
-              # highlight.use_nvim_cmp_as_default = true;
-              # nerd_font_variant = "mono";
-              # sources.completion.enabled_providers = ["lsp" "path" "snippets"]; # No "buffer"
-              # accept.auto_brackets.enabled = true;
-              # trigger.signature_help.enabled = true;
-              # fuzzy = {
-              #   use_typo_resistance = true;
-              #   use_frequency = true;
-              #   use_proximity = true;
-              # };
-              # windows = {
-              #   autocomplete.border = "rounded";
-              #   documentation.border = "rounded";
-              #   documentation.auto_show = true;
-              #   signature_help.border = "rounded";
-              #   ghost_text.enabled = true;
-              # };
-
-              # NOTE: This config is for versions > 0.62
-
               appearance = {
                 use_nvim_cmp_as_default = true;
                 nerd_font_variant = "mono";
@@ -435,7 +413,7 @@ in {
               completion = {
                 accept = {
                   auto_brackets = {
-                    enabled = true;
+                    enabled = false;
                   };
                 };
 
@@ -528,16 +506,16 @@ in {
                 h = ["clang-format"];
                 cpp = ["clang-format"];
                 hpp = ["clang-format"];
-                css = ["prettier"]; # "prettierd"
-                html = ["prettier"]; # "prettierd"
+                css = ["prettierd" "prettier"];
+                html = ["prettierd" "prettier"];
                 java = ["google-java-format"];
-                javascript = ["prettier"]; # "prettierd"
+                javascript = ["prettierd" "prettier"];
                 lua = ["stylua"];
-                markdown = ["prettier"]; # "prettierd"
+                markdown = ["prettierd" "prettier"];
                 nix = ["alejandra"];
                 python = ["black"];
-                svelte = ["prettier"]; # "prettierd"
-                typescript = ["prettier"]; # "prettierd"
+                svelte = ["prettierd" "prettier"];
+                typescript = ["prettierd" "prettier"];
                 rust = ["rustfmt"];
               };
 
@@ -553,7 +531,7 @@ in {
                   if vim.g.disable_autoformat then
                     return
                   end
-                  return { timeout_ms = 500, lsp_format = "fallback", }
+                  return { timeout_ms = 500, lsp_format = "fallback", stop_after_first = true, }
                 end
               '';
 
@@ -1915,11 +1893,18 @@ in {
             config = mkDefaultConfig name;
           };
 
+          ts-autotag = rec {
+            name = "nvim-ts-autotag";
+            pkg = pkgs.vimPlugins.nvim-ts-autotag;
+            lazy = false;
+            config = mkDefaultConfig name;
+          };
+
           typescript-tools = rec {
             name = "typescript-tools";
             pkg = pkgs.vimPlugins.typescript-tools-nvim;
             lazy = true;
-            ft = ["javascript" "typescript"];
+            ft = ["javascript" "typescript" "svelte" "html"];
             dependencies = [_plenary lspconfig];
             config = mkDefaultConfig name;
           };
@@ -2029,7 +2014,8 @@ in {
             config = mkDefaultConfig name;
           };
         in [
-          autopairs # Automatic closing brackets/parens
+          autopairs # Automatic closing brackets/parens # NOTE: For now replaced by blink
+
           bbye # Delete buffer without closing the window or split
           better-escape # Escape to normal mode using "jk"
           catppuccin # Colortheme (also add this here to access palettes)
@@ -2057,7 +2043,9 @@ in {
           gitsigns # Show git line additions/deletions/changes in the gutter
           haskell-tools # Haskell integration
           illuminate # Highlight usages of word under cursor
-          intellitab # Indent to the correct level on blanklines
+
+          intellitab # Indent to the correct level on blanklines # TODO: Behaves bit fishy sometimes
+
           jdtls # Eclipse JDT language server integration for Java
           lastplace # Reopen a file at the last editing position
           lazygit # Git frontend
@@ -2084,7 +2072,9 @@ in {
           rainbow-delimiters # Bracket/Paren colorization
           rustaceanvim # Rust integration
           scope # Buffers scoped to tabpages
-          sleuth # Heuristically set indent depth
+
+          sleuth # Heuristically set indent depth # TODO: See intellitab
+
           tabby # Nicer tabline (only showing tabpages)
           telescope # Option picker frontend
           todo-comments # Highlight TODOs
@@ -2092,6 +2082,7 @@ in {
           treesitter # AST based syntax highlighting + indentation
           trim # Trim whitespace
           trouble # Diagnostics window
+          ts-autotag # Automatic html tag insertion/updating
           typescript-tools # Typescript tsserver LSP
           ufo # Code folding
           vimtex # LaTeX support
