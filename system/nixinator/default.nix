@@ -28,12 +28,16 @@
         # 7777 # AvaTalk
         # 12777 # AvaTalk
         # 31431 # Parsec
+        5173 # SvelteKit
+        8090 # PocketBase
       ];
 
       allowedUDPPorts = [
         # 7777 # AvaTalk
         # 12777 # AvaTalk
         # 31431 # Parsec
+        5173 # SvelteKit
+        8090 # PocketBase
       ];
 
       wireguard-tunnels = {
