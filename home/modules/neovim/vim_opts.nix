@@ -50,10 +50,10 @@ _: {
   grepformat = "%f:%l:%c:%m";
 
   # Indentation
-  autoindent = false; # Use previous line indentation level - Might mess up comment indentation
-  smartindent = false; # Like autoindent but recognizes some C syntax - Might mess up comment indentation
-  cindent = true;
-  cinkeys = "0{,0},0),0],:,!^F,o,O,e"; # Fix comment (#) indentation and intellitab (somehow)
+  autoindent = true; # Use previous line indentation level - Might mess up comment indentation
+  smartindent = true; # Like autoindent but recognizes some C syntax - Might mess up comment indentation
+  cindent = false;
+  # cinkeys = "0{,0},0),0],:,!^F,o,O,e"; # Fix comment (#) indentation and intellitab (somehow)
   smarttab = true;
   expandtab = true;
   shiftwidth = 4;
