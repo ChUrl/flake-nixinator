@@ -20,6 +20,8 @@ in {
       };
 
       keybindings = {
+        "kitty_mod" = "ctrl+shift";
+        "kitty_mod+enter" = "launch --cwd=current";
         "kitty_mod+j" = "next_window";
         "kitty_mod+k" = "previous_window";
         "kitty_mod+l" = "next_layout";
