@@ -655,8 +655,8 @@
     {
       mode = "n";
       key = "<leader>ww";
-      action = "<C-w>p";
-      options.desc = "Goto Other Window";
+      action = "<cmd>lua vim.api.nvim_set_current_win(require('window-picker').pick_window())<cr>";
+      options.desc = "Jump to Window";
     }
 
     {

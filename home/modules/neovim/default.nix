@@ -1981,6 +1981,30 @@ in {
             };
           };
 
+          window-picker = rec {
+            name = "window-picker";
+            pkg = pkgs.vimPlugins.nvim-window-picker;
+            lazy = true;
+            event = ["VeryLazy"];
+            config = mkDefaultConfig name;
+            opts = {
+              hint = "floating-big-letter";
+              show_prompt = false;
+
+              filter_rules = {
+                autoselect_one = false;
+                include_current_win = false;
+
+                bo = {
+                  # Ignored filetypes
+                  filetype = ["NvimTree" "neo-tree" "notify" "TelescopePrompt" "noice"];
+                  # Ignored buffer types
+                  buftype = ["terminal" "quickfix"];
+                };
+              };
+            };
+          };
+
           winshift = rec {
             name = "winshift";
             pkg = pkgs.vimPlugins.winshift-nvim;
@@ -2089,6 +2113,7 @@ in {
           wakatime # Time tracking
           web-devicons # Icons for many plugins
           which-key # Live keybinding help
+          window-picker # Jump to window without multiple <leader-hjkl>
           winshift # Move windows around
           yanky # Clipboard history
         ];
