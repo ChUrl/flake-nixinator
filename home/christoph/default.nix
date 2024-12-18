@@ -498,6 +498,7 @@ rec {
         "com.spotify.Client"
         "md.obsidian.Obsidian"
 
+        # NOTE: Also change discord-ipc-0 below
         "com.discordapp.DiscordCanary"
         # "com.discordapp.Discord"
         # "dev.vencord.Vesktop"
@@ -534,7 +535,7 @@ rec {
 
   systemd.user.tmpfiles.rules = [
     # Fix Discord rich presence for Flatpak
-    "L %t/discord-ipc-0 - - - - app/com.discordapp.Discord/discord-ipc-0"
+    "L %t/discord-ipc-0 - - - - app/com.discordapp.DiscordCanary/discord-ipc-0"
   ];
 
   # Nicely reload system units when changing configs
