@@ -71,7 +71,7 @@ rec {
           "$mainMod, E" = ["exec, kitty"];
           "$mainMod, N" = ["exec, neovide"];
 
-          "$mainMod, P" = ["exec, hyprpicker -autocopy -format=hex"];
+          "$mainMod, P" = ["exec, hyprpicker --autocopy --format=hex"];
           "$mainMod, S" = ["exec, grim -g \"$(slurp)\""];
           "$mainMod CTRL, S" = ["exec, grim -g \"$(slurp)\" - | wl-copy"];
           "$mainMod SHIFT, S" = ["exec, grim -g \"$(slurp)\" - | wl-copy"];
