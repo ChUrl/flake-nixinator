@@ -328,8 +328,6 @@ with mylib.networking; {
     # ausweisapp.openFirewall = true; # Directly set port in firewall
   };
 
-  hardware.pulseaudio.enable = false; # Get off my lawn
-
   # List services that you want to enable:
   services = {
     # Enable sound with pipewire.
@@ -341,6 +339,7 @@ with mylib.networking; {
       jack.enable = false;
       wireplumber.enable = true;
     };
+    pulseaudio.enable = false; # Get off my lawn
 
     # Enable the X11 windowing system.
     xserver = {
