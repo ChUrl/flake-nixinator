@@ -278,12 +278,12 @@
   ];
 
   leader = [
-    # {
-    #   mode = "n";
-    #   key = "<leader>L";
-    #   action = "<cmd>Lazy<cr>";
-    #   options.desc = "Lazy Packages";
-    # }
+    {
+      mode = "n";
+      key = "<leader>L";
+      action = "<cmd>Lazy<cr>";
+      options.desc = "Lazy Packages";
+    }
     {
       mode = "n";
       key = "<leader>n";
@@ -320,12 +320,12 @@
       action = "<cmd>Telescope commands<cr>";
       options.desc = "Telescope Command";
     }
-    # {
-    #   mode = "n";
-    #   key = "<leader>M";
-    #   action = "<cmd>Telescope marks<cr>";
-    #   options.desc = "Telescope Marks";
-    # }
+    {
+      mode = "n";
+      key = "<leader>M";
+      action = "<cmd>Telescope marks<cr>";
+      options.desc = "Telescope Marks";
+    }
     # {
     #   mode = "n";
     #   key = "<leader>J";
