@@ -42,7 +42,7 @@ in {
             clojure-lsp
             cmake-language-server
             haskell-language-server
-            # ltex-ls # Terribly slow
+            ltex-ls # TODO: Only enable on-demand
             lua-language-server
             nil
             nixd
@@ -393,39 +393,31 @@ in {
             opts = {
               keymap.preset = "enter";
 
-              appearance = {
-                use_nvim_cmp_as_default = true;
-                nerd_font_variant = "mono";
-              };
-
-              fuzzy = {
-                use_typo_resistance = true;
-                use_frequency = true;
-                use_proximity = true;
-              };
-
-              sources = {
-                completion = {
-                  enabled_providers = ["lsp" "path" "snippets"]; # No "buffer"
-                };
-              };
-
               completion = {
+                keyword = {
+                  range = "full"; # Fuzzy match on text before and after the cursor
+                };
+
                 accept = {
                   auto_brackets = {
-                    enabled = false;
+                    enabled = true; # Insert brackets for functions
                   };
                 };
 
                 menu = {
                   enabled = true;
+                  auto_show = true;
+                  scrollbar = true;
                   border = "rounded";
                 };
 
                 documentation = {
                   auto_show = true;
                   auto_show_delay_ms = 250;
+                  treesitter_highlighting = true;
+
                   window = {
+                    scrollbar = true;
                     border = "rounded";
                   };
                 };
@@ -440,6 +432,21 @@ in {
                 window = {
                   border = "rounded";
                 };
+              };
+
+              fuzzy = {
+                use_typo_resistance = true;
+                use_frecency = true;
+                use_proximity = true;
+              };
+
+              sources = {
+                default = ["lsp" "path" "snippets"]; # No "buffer"
+              };
+
+              appearance = {
+                use_nvim_cmp_as_default = true;
+                nerd_font_variant = "mono";
               };
             };
           };
@@ -693,7 +700,12 @@ in {
             event = ["BufReadPost" "BufNewFile"];
             config = mkDefaultConfig name;
             opts = {
-              current_line_blame = false;
+              numhl = false;
+              linehl = false;
+              current_line_blame = true;
+              current_line_blame_opts = {
+                delay = 50;
+              };
             };
           };
 
@@ -768,16 +780,17 @@ in {
 
           intellitab = {
             name = "intellitab";
-            # pkg = pkgs.vimPlugins.intellitab-nvim; # Prints at each indent :(
-            pkg = pkgs.vimUtils.buildVimPlugin {
-              name = "intellitab-nvim";
-              src = pkgs.fetchFromGitHub {
-                owner = "ChUrl";
-                repo = "intellitab.nvim";
-                rev = "6d644b7d92198477f2920d0c3b3b22dad470ef10"; # Disable print
-                sha256 = "sha256-MwBcsYpyrjoXa7nxcwaci3h0NIWyMoF1NyYfEbFzo0E=";
-              };
-            };
+            pkg = pkgs.vimPlugins.intellitab-nvim; # Prints at each indent :(
+            # TODO: Build broken
+            # pkg = pkgs.vimUtils.buildVimPlugin {
+            #   name = "intellitab-nvim";
+            #   src = pkgs.fetchFromGitHub {
+            #     owner = "ChUrl";
+            #     repo = "intellitab.nvim";
+            #     rev = "6d644b7d92198477f2920d0c3b3b22dad470ef10"; # Disable print
+            #     sha256 = "sha256-MwBcsYpyrjoXa7nxcwaci3h0NIWyMoF1NyYfEbFzo0E=";
+            #   };
+            # };
             lazy = true;
             event = ["InsertEnter"];
           };
@@ -1332,7 +1345,7 @@ in {
               end
             '';
             opts = {
-              render = "wrapped-compact";
+              render = "default";
               max_width = 45; # In columns
               top_down = false;
             };
@@ -1595,19 +1608,20 @@ in {
             lazy = true;
           };
 
-          _telescope-tabs = {
-            name = "telescope-tabs";
-            pkg = pkgs.vimUtils.buildVimPlugin {
-              name = "telescope-tabs";
-              src = pkgs.fetchFromGitHub {
-                owner = "LukasPietzschmann";
-                repo = "telescope-tabs";
-                rev = "0a678eefcb71ebe5cb0876aa71dd2e2583d27fd3";
-                sha256 = "sha256-IvxZVHPtApnzUXIQzklT2C2kAxgtAkBUq3GNxwgPdPY=";
-              };
-            };
-            lazy = true;
-          };
+          # TODO: Build broken
+          # _telescope-tabs = {
+          #   name = "telescope-tabs";
+          #   pkg = pkgs.vimUtils.buildVimPlugin {
+          #     name = "telescope-tabs";
+          #     src = pkgs.fetchFromGitHub {
+          #       owner = "LukasPietzschmann";
+          #       repo = "telescope-tabs";
+          #       rev = "0a678eefcb71ebe5cb0876aa71dd2e2583d27fd3";
+          #       sha256 = "sha256-IvxZVHPtApnzUXIQzklT2C2kAxgtAkBUq3GNxwgPdPY=";
+          #     };
+          #   };
+          #   lazy = true;
+          # };
 
           _telescope-undo = {
             name = "telescope-undo";
@@ -1629,7 +1643,7 @@ in {
             dependencies = [
               _plenary
               _telescope-fzf-native
-              _telescope-tabs
+              # _telescope-tabs
               _telescope-undo
               _telescope-ui-select
             ];
@@ -1638,7 +1652,7 @@ in {
                 "undo"
                 "ui-select"
                 "fzf"
-                "telescope-tabs"
+                # "telescope-tabs"
               ];
             in ''
               function(_, opts)
