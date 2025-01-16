@@ -324,6 +324,7 @@ rec {
       protonmail-bridge # TODO: Enable on startup, email module
       thunderbird # TODO: Email module
       # parsec-bin
+      obsidian
 
       # Office
       wacomtablet # For xournalpp/krita
@@ -496,7 +497,7 @@ rec {
         "com.github.tchx84.Flatseal"
 
         "com.spotify.Client"
-        "md.obsidian.Obsidian"
+        # "md.obsidian.Obsidian" # NOTE: Installed via package
 
         # NOTE: Also change discord-ipc-0 below
         "com.discordapp.DiscordCanary"
