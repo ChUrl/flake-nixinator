@@ -442,6 +442,7 @@ in {
 
               sources = {
                 default = ["lsp" "path" "snippets"]; # No "buffer"
+                cmdline.__raw = ''{}''; # Disable cmdline completion (done by noice)
               };
 
               appearance = {
