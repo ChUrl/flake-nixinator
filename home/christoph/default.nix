@@ -509,6 +509,7 @@ rec {
       ];
 
       uninstallUnmanaged = true;
+      # uninstallUnused = true; # TODO: Available since 0.6.0
 
       update.auto = {
         enable = true;
