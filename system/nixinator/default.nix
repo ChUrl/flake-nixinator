@@ -48,6 +48,13 @@
           "9+CorlxrTsQR7qjIOVKsEkk8Z7UUS5WT3R1ccF7a0ic="
           "194.126.177.14";
 
+        wg0-de-205 =
+          mylib.networking.mkWireguardService
+          "wg0-de-205"
+          "proton-de-205.key"
+          "MOLPnnM2MSq7s7KqAgpm+AWpmzFAtuE46qBFHeLg5Tk="
+          "217.138.216.130";
+
         wg0-lu-16 =
           mylib.networking.mkWireguardService
           "wg0-lu-16"
