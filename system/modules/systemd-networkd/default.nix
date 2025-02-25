@@ -1,5 +1,3 @@
-# TODO: Generate file with VPN names for rofi
-# TODO: Need to set permissions through polkit module
 # TODO: Setup Wireless (IWD/Networkd?)
 {
   config,
