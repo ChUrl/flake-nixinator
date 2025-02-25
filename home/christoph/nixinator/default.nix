@@ -60,6 +60,7 @@
       jetbrains.pycharm-professional
       jetbrains.idea-ultimate
       jetbrains.webstorm
+      code-cursor # why not
 
       # unityhub
       # jetbrains.rider
