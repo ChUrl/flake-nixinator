@@ -50,6 +50,7 @@ in {
             rust-analyzer
             svelte-language-server
             tailwindcss-language-server
+            tex-fmt
             texlab
             typescript
             vscode-langservers-extracted
@@ -518,6 +519,7 @@ in {
                 html = ["prettierd" "prettier"];
                 java = ["google-java-format"];
                 javascript = ["prettierd" "prettier"];
+                latex = ["tex-fmt"];
                 lua = ["stylua"];
                 markdown = ["prettierd" "prettier"];
                 nix = ["alejandra"];
