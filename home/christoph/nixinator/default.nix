@@ -75,7 +75,7 @@
       blender
       # godot_4
       obs-studio
-      kdenlive
+      kdePackages.kdenlive
       krita
       # makemkv
     ];
