@@ -436,14 +436,20 @@ in {
               };
 
               fuzzy = {
-                use_typo_resistance = true;
                 use_frecency = true;
                 use_proximity = true;
               };
 
               sources = {
                 default = ["lsp" "path" "snippets"]; # No "buffer"
-                cmdline.__raw = ''{}''; # Disable cmdline completion (done by noice)
+              };
+
+              cmdline = {
+                enabled = false;
+              };
+
+              term = {
+                enabled = false;
               };
 
               appearance = {
@@ -1860,6 +1866,18 @@ in {
             config = ''
               function(_, opts)
                 require("nvim-treesitter.configs").setup(opts)
+
+                -- GLSL filetypes
+                vim.filetype.add {
+                  extension = {
+                    vert = "vert",
+                    frag = "frag",
+                  },
+                }
+
+                -- Tell treesitter that those filetypes are GLSL
+                vim.treesitter.language.register("glsl", "vert")
+                vim.treesitter.language.register("glsl", "frag")
               end
             '';
             opts = {
