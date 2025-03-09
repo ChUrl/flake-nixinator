@@ -292,6 +292,7 @@ rec {
       # Document utils
       poppler_utils # pdfunite
       graphviz # generate graphs from code
+      d2 # generate diagrams from code
       plantuml # generate diagrams
       gnuplot # generate function plots
       pdf2svg # extract vector graphics from pdf
