@@ -25,6 +25,7 @@ in {
         ".indentsettings.yaml".source = ../../../config/latex/.indentsettings.yaml;
 
         # TODO: These don't belong into a latex module
+        "Notes/Obsidian/Chriphost/.vimrc".source = ../../../config/obsidian/.vimrc;
         "Notes/Obsidian/Chriphost/latex_snippets.json".source = ../../../config/obsidian/latex_snippets.json; # TODO: Symlink
         "Notes/Obsidian/Chriphost/.obsidian/snippets/latex_preview.css".source = ../../../config/obsidian/css_snippets/latex_preview.css;
         "Notes/Obsidian/Chriphost/.obsidian/snippets/center_image.css".source = ../../../config/obsidian/css_snippets/center_image.css;
