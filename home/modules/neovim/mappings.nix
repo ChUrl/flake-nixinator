@@ -13,6 +13,8 @@
       "S"
       "t"
       "T"
+      "H"
+      "L"
 
       # Use flash to repeat f/F instead of ;/,
       # ;/, are now free for localleader and exiting visual mode like helix
@@ -54,6 +56,18 @@
       action = "v:count == 0 ? 'gk' : 'k'";
       options.desc = "Move Cursor Up";
       options.expr = true;
+    }
+    {
+      mode = "n";
+      key = "H";
+      action = "^";
+      options.desc = "Move Cursor to Line Start";
+    }
+    {
+      mode = "n";
+      key = "L";
+      action = "$";
+      options.desc = "Move Cursor to Line End";
     }
 
     # Window resize
