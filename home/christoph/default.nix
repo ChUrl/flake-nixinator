@@ -32,6 +32,11 @@ rec {
   ];
 
   # Enable and configure my custom HM modules.
+  paths = {
+    enable = true; # You can't disable this
+    nixflake = "${config.home.homeDirectory}/NixFlake";
+    dotfiles = "${config.home.homeDirectory}/NixFlake/config";
+  };
   modules = {
     ags.enable = false; # TODO: Configure
 
@@ -238,7 +243,7 @@ rec {
         formatted;
 
       # TODO: If navi enabled
-      ".local/share/navi/cheats/christoph.cheat".source = ../../config/navi/christoph.cheat; # TODO :Symlink
+      ".local/share/navi/cheats/christoph.cheat".source = config.lib.file.mkOutOfStoreSymlink "${config.paths.dotfiles}/navi/christoph.cheat";
     };
 
     # Here, custom scripts can be run when activating a HM generation.
