@@ -1,6 +1,8 @@
-; TODO: More ffmpeg, yt-dlp
+; ===========================
+; NIXOS
+; ===========================
 
-% nixos, nixos-rebuild
+% nixos, nixos-rebuild, flake
 # Rebuild a flake system derivation
 sudo nixos-rebuild <type> --flake .#<flake>
 $ type: echo -e "switch\nbuild\nboot"
@@ -10,99 +12,97 @@ $ flake: echo -e "nixinator\nnixtop"
 # Find out why a package is included in the closure when building the system derivation
 nix why-depends /run/current-system nixpkgs#<package>
 
-; TODO: Autocomplete executable, list everything in path
 % nixos, nix-store, storepath, link
 # Find the storepath of an executable in the users path
 readlink -f $(which <executable>)
+$ executable: bash -c "compgen -c"
 
-; TODO: Autocomplete executable, list everything in path
 % nixos, nix-store, storepath, libraries
 # Find the wanted dynamic libraries of an executable in the users path
 ldd $(readlink -f $(which <executable>))
+$ executable: bash -c "compgen -c"
+
+; ===========================
+; SHELL
+; ===========================
 
 % shell, process
 # Launch a detached process with suppressed output
-<command> &>/dev/null &
-
-; TODO: Filter out directories from input autocomplete (if there are no directories basic grep doesn't work, always needs a pattern)
-% ffmpeg, slowmo
-# Create a slow motion version of a video with interpolated/blended frames
-ffmpeg -i "<input>" -filter:v "minterpolate='mi_mode=mci:mc_mode=aobmc:vsbmc=1:fps=<doublefps>',setpts=2*PTS" output.mp4
-$ input: eza -1
-
-% ffmpeg, cropdetect
-# Detect black bar dimensions automatically by looking at the first 10 frames
-ffmpeg -i "<input>" -vframes 10 -vf cropdetect -f null -
-$ input: eza -1
-
-% ffmpeg, cropdetect, preview
-# Preview video with applied crop settings
-ffplay -vf crop=<width>:<height>:<x>:<y> "<input>"
-$ input: eza -1
-
-% ffmpeg, cropdetect, render
-# Re-encode the video with applied crop settings
-ffmpeg -i "<input>" -vf crop=<width>:<height>:<x>:<y> -c:a copy output.mp4
-$ input: eza -1
-
-% ffmpeg, video compression, h265, render, reencode
-# Reencode and compress the video using the h265 codec
-ffmpeg -i "<input>" -vcodec libx265 -crf <quality> "out_<input>"
-$ input: eza -1
-$ quality: echo -e "24\n25\n26\n27\n28\n29\n30\n"
-
-; TODO: Setting the default values like this makes them the only possible values
-% ffmpeg, video compression, h256, render, reencode
-# Reencode and compress multiple videos using the h265 codec
-fish -c "for name in <files>; ffmpeg -i '$name' -vcodec libx265 -crf <quality> 'out_$name'; end"
-$ files: echo "(eza -1 | grep \".mp4\")"
-$ quality: echo "28"
-
-% qemu, cpu
-# Find out what features are supported by different qemu CPUs
-qemu-system-<arch> -cpu help
-
-; https://github.com/flathub/com.discordapp.Discord/wiki/Rich-Precense-(discord-rpc)
-% discord, flatpak, rich-presence
-# Enable rich presence for flatpak Discord
-ln -sf $XDG_RUNTIME_DIR/{app/com.discordapp.Discord,}/discord-ipc-0
-
-% find
-# Find files under a certain size in the current directory
-find . -type f -name "<glob>" -size -<size>
-
-% objdump, disassemble
-# Disassemble an object file
-objdump -d -S -M intel "<file>" | bat -l nasm
-$ file: eza -1
-
-% pdftocairo, pdf, svg
-# Extract svg figure from pdf page
-pdftocairo -f <page> -l <page> -svg "<input>" "<output>"
-$ input: eza -1
+<command> &>/dev/null &; disown
 
 % yes, head, file
 # Generate a large text file
 yes "The quick brown fox jumps over the lazy dog" | head -c <size> > <output>
 
-% hotspot, create_ap, wifi, wihotspot
-# Open a WiFi Hotspot using "wihotspot"
-sudo create_ap wlp5s0 enp0s31f6 Potshot ThisIsMyPotshot --daemon --hidden
-
-% hotspot, create_ap, wifi, wihotspot
-# List running Hotspots
-sudo create_ap --list-running
-
-% hotspot, create_ap, wifi, wihotspot
-# List connected devices
-watch -d -c -n 0.5 sudo create_ap --list-clients <SSID>
-$ SSID: sudo create_ap --list-running | sd '.+\((.+)\)' '$1'
-
-% hotspot, create_ap, wifi, wihotspot
-# Stop a running hotspot
-sudo create_ap --stop <SSID>
-$ SSID: sudo create_ap --list-running | sd '.+\((.+)\)' '$1'
-
 % fish, for, loop
 # For-loop in fish shell
 for o in <objects>; <action>; end
+
+% find
+# Find files under a certain size in the current directory
+find . -type f -name "<glob>" -size -<size>
+
+; ===========================
+; CODING
+; ===========================
+
+% objdump, disassemble
+# Disassemble an object file
+objdump -d -S -M intel "<file>" | bat -l nasm
+$ file: eza -f -1
+
+; ===========================
+; DOCUMENTS
+; ===========================
+
+% pdftocairo, pdf, svg
+# Extract svg figure from pdf page
+pdftocairo -f <page> -l <page> -svg "<input>" "<output>"
+$ input: eza -f -1
+
+; ===========================
+; YT-DLP
+; ===========================
+
+% yt-dlp, mp4
+# Download mp4 video in best quality
+yt-dlp -f 'bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4] / bv*+ba/b' --recode-video mp4 "<url>"
+
+% yt-dlp, mp3
+# Download mp3 video in best quality
+yt-dlp -f 'ba' --extract-audio --audio-format mp3 "<url>"
+
+; ===========================
+; FFMPEG
+; ===========================
+
+% ffmpeg, slowmo
+# Create a slow motion version of a video with interpolated/blended frames
+ffmpeg -i "<input>" -filter:v "minterpolate='mi_mode=mci:mc_mode=aobmc:vsbmc=1:fps=<doublefps>',setpts=2*PTS" output.mp4
+$ input: eza -f -1
+
+% ffmpeg, cropdetect
+# Detect black bar dimensions automatically by looking at the first 10 frames
+ffmpeg -i "<input>" -vframes 10 -vf cropdetect -f null -
+$ input: eza -f -1
+
+% ffmpeg, cropdetect, preview
+# Preview video with applied crop settings
+ffplay -vf crop=<width>:<height>:<x>:<y> "<input>"
+$ input: eza -f -1
+
+% ffmpeg, cropdetect, render
+# Re-encode the video with applied crop settings
+ffmpeg -i "<input>" -vf crop=<width>:<height>:<x>:<y> -c:a copy output.mp4
+$ input: eza -f -1
+
+% ffmpeg, video compression, h265, render, reencode
+# Reencode and compress the video using the h265 codec
+ffmpeg -i "<input>" -vcodec libx265 -crf <quality> "out_<input>"
+$ input: eza -f -1
+$ quality: echo -e "24\n25\n26\n27\n28\n29\n30\n"
+
+% ffmpeg, video compression, h256, render, reencode
+# Reencode and compress multiple videos using the h265 codec
+fish -c "for name in <files>; ffmpeg -i '$name' -vcodec libx265 -crf <quality> 'out_$name'; end"
+$ quality: echo -e "24\n25\n26\n27\n28\n29\n30\n"
