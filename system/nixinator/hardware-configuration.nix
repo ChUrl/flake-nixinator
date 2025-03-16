@@ -54,8 +54,10 @@
   # (the default) this is the recommended approach. When using systemd-networkd it's
   # still possible to use this option, but it's recommended to use it in conjunction
   # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
+
   networking.useDHCP = lib.mkDefault false; # NOTE: Set to false bc systemd-networkd
-  networking.enableIPv6 = false;
+  networking.enableIPv6 = lib.mkDefault false; # NOTE: Could be overwritten by systemd-networkd
+
   # networking.interfaces.enp0s31f6.useDHCP = lib.mkDefault true;
   # networking.interfaces.enp4s0u2.useDHCP = lib.mkDefault true;
   # networking.interfaces.wlp3s0.useDHCP = lib.mkDefault true;
