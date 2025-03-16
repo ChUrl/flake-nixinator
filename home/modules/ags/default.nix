@@ -19,7 +19,7 @@ in {
 
     home.file = {
       # NOTE: Keep this symlinked as long as I'm configuring
-      ".config/ags".source = config.lib.file.mkOutOfStoreSymlink "/home/christoph/NixFlake/home/modules/ags/config";
+      ".config/ags".source = config.lib.file.mkOutOfStoreSymlink "${config.paths.nixflake}/home/modules/ags/config";
 
       # LSP typechecking support (use ags --init)
       # ".config/ags/types".source = config.lib.file.mkOutOfStoreSymlink "${pkgs.ags}/share/com.github.Aylur.ags/types";
