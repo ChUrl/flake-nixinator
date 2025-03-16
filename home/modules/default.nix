@@ -13,6 +13,7 @@
     ./latex
     ./neovim
     ./nnn
+    ./paths
     ./rofi
     ./waybar
     ./zathura
