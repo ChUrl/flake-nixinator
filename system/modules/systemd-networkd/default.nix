@@ -68,7 +68,7 @@ in {
     networking = {
       # Gets inherited from flake in nixos mylib and passed through the module option
       hostName = cfg.hostname; # Define your hostname.
-      enableIPv6 = false;
+      enableIPv6 = true;
 
       # Disable a lot of stuff not needed for systemd-networkd
       networkmanager.enable = false;
