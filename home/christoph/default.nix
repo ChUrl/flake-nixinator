@@ -37,6 +37,7 @@ rec {
     nixflake = "${config.home.homeDirectory}/NixFlake";
     dotfiles = "${config.home.homeDirectory}/NixFlake/config";
   };
+
   modules = {
     ags.enable = false; # TODO: Configure
 
@@ -473,6 +474,90 @@ rec {
         set -g default-terminal "xterm-256color"
         set-option -ga terminal-overrides ",xterm-256color:Tc"
       '';
+    };
+
+    # TODO: Currently depends on nnn module. Create yazi module mirroring nnn module (deps etc.)
+    yazi = let
+      yazi-plugins = pkgs.fetchFromGitHub {
+        owner = "yazi-rs";
+        repo = "plugins";
+        rev = "5186af7984aa8cb0550358aefe751201d7a6b5a8"; # NOTE: Refresh after system updates depending on the yazi version
+        hash = "sha256-Cw5iMljJJkxOzAGjWGIlCa7gnItvBln60laFMf6PSPM=";
+      };
+
+      yazi-starship = pkgs.fetchFromGitHub {
+        owner = "Rolv-Apneseth";
+        repo = "starship.yazi";
+        rev = "6c639b474aabb17f5fecce18a4c97bf90b016512";
+        sha256 = "sha256-bhLUziCDnF4QDCyysRn7Az35RAy8ibZIVUzoPgyEO1A=";
+      };
+    in {
+      enable = true;
+      enableFishIntegration = true;
+      shellWrapperName = "y";
+
+      settings = {
+        manager = {
+          show_hidden = false;
+        };
+
+        preview = {
+          max_width = 1000;
+          max_height = 1000;
+        };
+
+        plugin.prepend_fetchers = [
+          {
+            id = "git";
+            name = "*";
+            run = "git";
+          }
+          {
+            id = "git";
+            name = "*/";
+            run = "git";
+          }
+        ];
+      };
+
+      plugins = {
+        full-border = "${yazi-plugins}/full-border.yazi";
+        starship = "${yazi-starship}";
+        git = "${yazi-plugins}/git.yazi";
+        mount = "${yazi-plugins}/mount.yazi";
+        chmod = "${yazi-plugins}/chmod.yazi";
+        # toggle-pane = "${yazi-plugins}/toggle-pane.yazi";
+      };
+
+      initLua = ''
+        require("full-border"):setup()
+        require("starship"):setup()
+        require("git"):setup()
+      '';
+
+      keymap = {
+        input.prepend_keymap = [
+          {
+            # Don't exit vi mode on <Esc>, but close the input
+            on = "<Esc>";
+            run = "close";
+            desc = "Cancel input";
+          }
+        ];
+
+        manager.prepend_keymap = [
+          {
+            on = "M";
+            run = "plugin mount";
+            desc = "Manage device mounts";
+          }
+          {
+            on = ["C"];
+            run = "plugin chmod";
+            desc = "Chmod on selected files";
+          }
+        ];
+      };
     };
 
     yt-dlp.enable = true;
