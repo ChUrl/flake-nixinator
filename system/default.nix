@@ -306,7 +306,7 @@ with mylib.networking; {
     kdeconnect.enable = false; # Use this instead of HM for firewall setup
     neovim.enable = true;
     starship.enable = true;
-    thefuck.enable = true;
+    # pay-respects.enable = true; # The new fuck
     xwayland.enable = true;
     nix-ld.enable = true; # Load dynamically linked executables
     hyprland.enable = true;
