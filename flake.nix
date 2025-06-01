@@ -25,7 +25,7 @@
     ags.url = "github:Aylur/ags";
 
     # Other
-    nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=v0.4.1";
+    nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
     nix-alien.url = "github:thiagokokada/nix-alien";
     emacs-overlay.url = "github:nix-community/emacs-overlay";
 
