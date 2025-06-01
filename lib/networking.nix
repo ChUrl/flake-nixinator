@@ -39,12 +39,11 @@
 
   mkStaticSystemdNetwork = {
     interface,
-    ip,
-    router,
-    nameserver,
+    ips,
+    routers,
+    nameservers,
     routable,
   }: {
-    # name = "enp0s31f6"; # Network interface name?
     enable = true;
 
     # See man systemd.link, man systemd.netdev, man systemd.network
@@ -54,26 +53,20 @@
     };
 
     # Static IP + DNS + Gateway
-    address = ip;
-    gateway = router;
-    dns = nameserver;
-
-    # routes = [
-    # {
-    # routeConfig.Gateway = (lib.head router);
-    # }
-    # ];
+    address = ips;
+    gateway = routers;
+    dns = nameservers;
+    routes = builtins.map (r: {Gateway = r;}) routers;
 
     # See man systemd.network
     networkConfig = {
       # This corresponds to the [NETWORK] section
       DHCP = "no";
 
-      # TODO: What does this all do?
-      # IPv6AcceptRA = true;
-      # MulticastDNS = "yes"; # Needed?
-      # LLMNR = "no"; # Needed?
-      # LinkLocalAddressing = "no"; # Needed?
+      # IPv6AcceptRA = "no";
+      # MulticastDNS = "no";
+      # LLMNR = "no";
+      # LinkLocalAddressing = "ipv6";
     };
 
     linkConfig = {
