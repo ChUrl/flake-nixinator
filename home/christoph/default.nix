@@ -321,7 +321,6 @@ rec {
       sshfs # Mount remote directories via SSH
 
       # GUI apps
-      ventoy-full # Bootable USB for many ISOs
       signal-desktop
       anki
       font-manager # Previews fonts, but doesn't set them
@@ -481,15 +480,15 @@ rec {
       yazi-plugins = pkgs.fetchFromGitHub {
         owner = "yazi-rs";
         repo = "plugins";
-        rev = "5186af7984aa8cb0550358aefe751201d7a6b5a8"; # NOTE: Refresh after system updates depending on the yazi version
-        hash = "sha256-Cw5iMljJJkxOzAGjWGIlCa7gnItvBln60laFMf6PSPM=";
+        rev = "63f9650e522336e0010261dcd0ffb0bf114cf912"; # NOTE: Refresh after system updates depending on the yazi version
+        hash = "sha256-ZCLJ6BjMAj64/zM606qxnmzl2la4dvO/F5QFicBEYfU=";
       };
 
       yazi-starship = pkgs.fetchFromGitHub {
         owner = "Rolv-Apneseth";
         repo = "starship.yazi";
-        rev = "6c639b474aabb17f5fecce18a4c97bf90b016512";
-        sha256 = "sha256-bhLUziCDnF4QDCyysRn7Az35RAy8ibZIVUzoPgyEO1A=";
+        rev = "6a0f3f788971b155cbc7cec47f6f11aebbc148c9";
+        sha256 = "sha256-q1G0Y4JAuAv8+zckImzbRvozVn489qiYVGFQbdCxC98=";
       };
     in {
       enable = true;
@@ -573,7 +572,7 @@ rec {
 
     flatpak = {
       # FlatHub stable is only added by default if no custom remotes are specified
-      remotes = [
+      remotes = lib.mkOptionDefault [
         {
           name = "flathub";
           location = "https://flathub.org/repo/flathub.flatpakrepo";
@@ -588,19 +587,18 @@ rec {
         "com.github.tchx84.Flatseal"
 
         "com.spotify.Client"
-        # "md.obsidian.Obsidian" # NOTE: Installed via package
 
         # NOTE: Also change discord-ipc-0 below
-        "com.discordapp.DiscordCanary"
-        # "com.discordapp.Discord"
+        "com.discordapp.Discord"
+        # "com.discordapp.DiscordCanary"
         # "dev.vencord.Vesktop"
 
         # "com.google.Chrome"
-        # "com.parsecgaming.parsec"
+        # "md.obsidian.Obsidian" # NOTE: Installed via package
       ];
 
       uninstallUnmanaged = true;
-      # uninstallUnused = true; # TODO: Available since 0.6.0
+      uninstallUnused = true; # TODO: Available since 0.6.0
 
       update.auto = {
         enable = true;
@@ -628,7 +626,8 @@ rec {
 
   systemd.user.tmpfiles.rules = [
     # Fix Discord rich presence for Flatpak
-    "L %t/discord-ipc-0 - - - - app/com.discordapp.DiscordCanary/discord-ipc-0"
+    "L %t/discord-ipc-0 - - - - app/com.discordapp.Discord/discord-ipc-0"
+    # "L %t/discord-ipc-0 - - - - app/com.discordapp.DiscordCanary/discord-ipc-0"
   ];
 
   # Nicely reload system units when changing configs

@@ -194,7 +194,7 @@ in {
             gcl = "git clone";
           })
 
-          (abbrify pkgs.gping {ping = "gping";})
+          # (abbrify pkgs.gping {ping = "gping";})
 
           (abbrify pkgs.lazygit {lg = "lazygit";})
 
