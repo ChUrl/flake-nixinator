@@ -1,5 +1,10 @@
 # Here goes the stuff that will only be enabled on the desktop
-{pkgs, ...}: {
+{
+  pkgs,
+  nixosConfig,
+  config,
+  ...
+}: {
   imports = [
     ../../modules
   ];
@@ -60,24 +65,63 @@
       jetbrains.pycharm-professional
       jetbrains.idea-ultimate
       jetbrains.webstorm
-      code-cursor # why not
 
-      # unityhub
-      # jetbrains.rider
-      # (with dotnetCorePackages;
-      #   combinePackages [
-      #     sdk_6_0_1xx
-      #     sdk_7_0_3xx
-      #     sdk_8_0_2xx
-      #   ]) # For Rider/Unity
-      # mono # For Rider/Unity
+      unityhub
+      jetbrains.rider
+      (with dotnetCorePackages;
+        combinePackages [
+          # sdk_6_0_1xx # Is EOL
+          # sdk_7_0_3xx # Is EOL
+          sdk_8_0_3xx
+          sdk_9_0_3xx
+        ]) # For Rider/Unity
+      mono # For Rider/Unity
 
       blender
       # godot_4
       obs-studio
       kdePackages.kdenlive
       krita
-      # makemkv
+      makemkv
+
+      steam-devices-udev-rules
     ];
+
+    services = {
+      flatpak = {
+        packages = [
+          "com.valvesoftware.Steam"
+          "org.freedesktop.Platform.VulkanLayer.gamescope"
+          "org.freedesktop.Platform.VulkanLayer.MangoHud"
+          "net.davidotek.pupgui2"
+          "org.prismlauncher.PrismLauncher"
+          "com.usebottles.bottles"
+          "io.github.lawstorant.boxflat"
+        ];
+
+        overrides = {
+          "com.valvesoftware.Steam".Context = {
+            filesystems = [
+              "${config.home.homeDirectory}/Games"
+              "/var/lib/flatpak/runtime/com.valvesoftware.Steam.CompatibilityTool.Proton-GE"
+            ];
+          };
+
+          "net.davidotek.pupgui2".Context = {
+            filesystems = [
+              "${config.home.homeDirectory}/.var/app/com.valvesoftware.Steam"
+              "${config.home.homeDirectory}/Games"
+            ];
+          };
+
+          "com.usebottles.bottles".Context = {
+            filesystems = [
+              "${config.home.homeDirectory}/.var/app/com.valvesoftware.Steam"
+              "${config.home.homeDirectory}/Games"
+            ];
+          };
+        };
+      };
+    };
   };
 }
