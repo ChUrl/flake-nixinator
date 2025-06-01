@@ -16,16 +16,16 @@
         # This should override the default network 50-ether
         "10-ether-2_5G" = mylib.networking.mkStaticSystemdNetwork {
           interface = "enp8s0";
-          ip = ["192.168.86.50/24" "fd00::32/120"];
-          router = ["192.168.86.5" "fd00::5"];
-          nameserver = ["192.168.86.26" "fd00::1a"];
+          ips = ["192.168.86.50/24" "fd00::32/120"];
+          routers = ["192.168.86.5" "fd00::5"];
+          nameservers = ["192.168.86.26" "fd00::1a"];
           routable = true;
         };
         "10-ether-1G" = mylib.networking.mkStaticSystemdNetwork {
           interface = "enp5s0";
-          ip = ["192.168.86.50/24" "fd00::32/120"];
-          router = ["192.168.86.5" "fd00::5"];
-          nameserver = ["192.168.86.26" "fd00::1a"];
+          ips = ["192.168.86.50/24" "fd00::32/120"];
+          routers = ["192.168.86.5" "fd00::5"];
+          nameservers = ["192.168.86.26" "fd00::1a"];
           routable = false;
         };
         # "10-ether-1G" = mylib.networking.mkStaticSystemdNetwork {...};
@@ -96,6 +96,12 @@
     xkb.variant = "altgr-intl";
 
     videoDrivers = ["nvidia"]; # NVIDIA
+  };
+
+  programs = {
+    gamemode = {
+      enable = true;
+    };
   };
 
   # This has been relocated here from the default config,
