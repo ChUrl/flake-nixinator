@@ -31,15 +31,32 @@
     ];
   };
 
-  fileSystems."/" = {
-    device = "/dev/disk/by-uuid/68bd46a0-e95c-4764-a006-44bd9975a6c2";
-    fsType = "ext4";
-    options = ["noatime" "nodiratime" "discard"];
-  };
+  fileSystems = {
+    "/" = {
+      device = "/dev/disk/by-uuid/68bd46a0-e95c-4764-a006-44bd9975a6c2";
+      fsType = "ext4";
+      options = ["noatime" "nodiratime" "discard"];
+    };
 
-  fileSystems."/boot/efi" = {
-    device = "/dev/disk/by-uuid/36A9-3D74";
-    fsType = "vfat";
+    "/boot/efi" = {
+      device = "/dev/disk/by-uuid/36A9-3D74";
+      fsType = "vfat";
+    };
+
+    "/home/christoph/Movies" = {
+      device = "192.168.86.20:/mnt/SG Exos Mirror 18TB/Movie";
+      fsType = "nfs";
+    };
+
+    "/home/christoph/Shows" = {
+      device = "192.168.86.20:/mnt/SG Exos Mirror 18TB/Show";
+      fsType = "nfs";
+    };
+
+    "/home/christoph/Music" = {
+      device = "192.168.86.20:/mnt/SG Exos Mirror 18TB/Music";
+      fsType = "nfs";
+    };
   };
 
   swapDevices = lib.mkForce [
