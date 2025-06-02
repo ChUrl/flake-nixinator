@@ -319,6 +319,8 @@ rec {
       cifs-utils # Mount samba shares
       nfs-utils # Mount NFS shares
       sshfs # Mount remote directories via SSH
+      protonvpn-cli_2 # TODO: Not compatible with systemd-networkd?
+      protonmail-bridge # TODO: Enable on startup, email module
 
       # GUI apps
       signal-desktop
@@ -327,10 +329,9 @@ rec {
       nextcloud-client
       keepassxc
       AusweisApp2
-      protonmail-bridge # TODO: Enable on startup, email module
       thunderbird # TODO: Email module
-      # parsec-bin
       obsidian
+      helvum
 
       # Office
       wacomtablet # For xournalpp/krita
@@ -436,7 +437,12 @@ rec {
       };
     };
 
-    mpv.enable = true;
+    mpv = {
+      enable = true;
+      config = {
+        gpu-context = "wayland";
+      };
+    };
 
     navi = {
       enable = true;
@@ -496,7 +502,7 @@ rec {
       shellWrapperName = "y";
 
       settings = {
-        manager = {
+        mgr = {
           show_hidden = false;
         };
 
@@ -544,7 +550,7 @@ rec {
           }
         ];
 
-        manager.prepend_keymap = [
+        mgr.prepend_keymap = [
           {
             on = "M";
             run = "plugin mount";
