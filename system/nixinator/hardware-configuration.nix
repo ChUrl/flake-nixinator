@@ -134,6 +134,7 @@
   # environment.variables.AMD_VULKAN_ICD = "RADV"; # Choose mesa driver by default
   environment.variables = {
     GBM_BACKEND = "nvidia-drm";
+    __GLX_VENDOR_LIBRARY_NAME = "nvidia";
 
     # https://github.com/elFarto/nvidia-vaapi-driver?tab=readme-ov-file#environment-variables
     LIBVA_DRIVER_NAME = "nvidia";
