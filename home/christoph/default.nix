@@ -88,7 +88,11 @@ rec {
       };
 
       autostart = {
-        # immediate = [];
+        immediate = [
+          # "dbus-update-activation-environment DISPLAY"
+          # "dbus-update-activation-environment WAYLAND_DISPLAY"
+          # "dbus-update-activation-environment XDG_CURRENT_DESKTOP"
+        ];
 
         delayed = [
           # "kdeconnect-indicator"
@@ -604,7 +608,7 @@ rec {
       ];
 
       uninstallUnmanaged = true;
-      uninstallUnused = true; # TODO: Available since 0.6.0
+      uninstallUnused = true;
 
       update.auto = {
         enable = true;
@@ -614,7 +618,7 @@ rec {
       overrides = {
         global = {
           # Force Wayland by default
-          Context.sockets = ["wayland" "!x11" "!fallback-x11"]; # NOTE: Makes discord crash
+          # Context.sockets = ["wayland" "!x11" "!fallback-x11"]; # NOTE: Makes discord + steam crash
 
           Context.filesystems = ["/nix/store:ro"];
 
