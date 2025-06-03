@@ -35,12 +35,18 @@
     "/" = {
       device = "/dev/disk/by-uuid/68bd46a0-e95c-4764-a006-44bd9975a6c2";
       fsType = "ext4";
-      options = ["noatime" "nodiratime" "discard"];
+      options = ["defaults" "rw" "relatime"];
     };
 
     "/boot/efi" = {
       device = "/dev/disk/by-uuid/36A9-3D74";
       fsType = "vfat";
+    };
+
+    "/home/christoph/Games" = {
+      device = "/dev/disk/by-uuid/e57c1831-09d7-4046-9c62-086d3596f825";
+      fsType = "ext4";
+      options = ["defaults" "rw" "relatime"];
     };
 
     "/home/christoph/Movies" = {
