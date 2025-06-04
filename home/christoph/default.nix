@@ -103,7 +103,8 @@ rec {
         "2" = [
           "neovide"
           "code-url-handler"
-          # NOTE: Fixing Jetbrains IDEs to a workspace prevents them from being on any other :(
+
+          # NOTE: Pinning Jetbrains IDEs to a workspace prevents them from being on any other :(
           # "jetbrains-clion"
           # "jetbrains-idea"
           # "jetbrains-pycharm"
@@ -113,13 +114,21 @@ rec {
         ];
         "3" = [
           "obsidian"
+
           "unityhub"
           "Unity"
-          "chromium-browser"
         ];
         "4" = [
           "firefox"
           "Google-chrome"
+          "chromium-browser"
+        ];
+        "5" = [
+          "steam"
+        ];
+        "6" = [
+          # Should match all steam games
+          "steam_app_(.+)"
         ];
         "7" = [
           "signal"
@@ -161,6 +170,7 @@ rec {
         "jetbrains-webstorm"
         "code-url-handler"
         "neovide"
+        "steam"
       ];
     };
 
