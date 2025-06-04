@@ -98,12 +98,6 @@
     videoDrivers = ["nvidia"]; # NVIDIA
   };
 
-  programs = {
-    gamemode = {
-      enable = true;
-    };
-  };
-
   # This has been relocated here from the default config,
   # because it forces en-US keyboard layout.
   i18n.inputMethod = {
