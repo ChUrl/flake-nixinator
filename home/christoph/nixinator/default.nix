@@ -87,14 +87,18 @@
       steam-devices-udev-rules
     ];
 
+    home.file.".var/app/com.valvesoftware.Steam/config/MangoHud/MangoHud.conf".source = config.lib.file.mkOutOfStoreSymlink "${config.paths.dotfiles}/mangohud/MangoHud.conf";
+
     services = {
       flatpak = {
         packages = [
           "com.valvesoftware.Steam"
           "com.valvesoftware.Steam.Utility.steamtinkerlaunch"
+          "net.davidotek.pupgui2"
+
           "org.freedesktop.Platform.VulkanLayer.gamescope/x86_64/24.08"
           "org.freedesktop.Platform.VulkanLayer.MangoHud/x86_64/24.08"
-          "net.davidotek.pupgui2"
+
           "org.prismlauncher.PrismLauncher"
           "com.usebottles.bottles"
           "io.github.lawstorant.boxflat"
