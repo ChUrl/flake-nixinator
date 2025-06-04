@@ -89,9 +89,6 @@ rec {
 
       autostart = {
         immediate = [
-          # "dbus-update-activation-environment DISPLAY"
-          # "dbus-update-activation-environment WAYLAND_DISPLAY"
-          # "dbus-update-activation-environment XDG_CURRENT_DESKTOP"
         ];
 
         delayed = [

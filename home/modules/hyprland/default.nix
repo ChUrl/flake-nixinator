@@ -118,6 +118,9 @@
     "wl-paste -p -t text --watch clipman store -P --histpath=\"~/.local/share/clipman-primary.json\""
     "hyprctl setcursor Bibata-Modern-Classic 16"
 
+    # NOTE: Hack because Hyprland doesn't set the xwayland/x11 keymap correctly
+    "setxkbmap -layout ${hyprland.kb-layout} -variant ${hyprland.kb-variant} -model pc104"
+
     # Provide a polkit authentication UI.
     # This is used for example when running systemd commands without root.
     "${pkgs.kdePackages.polkit-kde-agent-1}/libexec/polkit-kde-authentication-agent-1"
