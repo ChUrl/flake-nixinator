@@ -424,7 +424,7 @@ in {
           (builtins.map mkExec)
         ];
 
-        windowrulev2 =
+        windowrule =
           lib.pipe hyprland.workspacerules [
             (builtins.mapAttrs mkWorkspaceRules)
             builtins.attrValues
