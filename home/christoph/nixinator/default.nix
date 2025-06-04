@@ -91,6 +91,7 @@
       flatpak = {
         packages = [
           "com.valvesoftware.Steam"
+          "com.valvesoftware.Steam.Utility.steamtinkerlaunch"
           "org.freedesktop.Platform.VulkanLayer.gamescope/x86_64/24.08"
           "org.freedesktop.Platform.VulkanLayer.MangoHud/x86_64/24.08"
           "net.davidotek.pupgui2"
