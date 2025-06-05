@@ -288,6 +288,7 @@ rec {
       progress # Find coreutils processes and show their progress
       tokei # Text file statistics in a project
       nvd # nix rebuild diff
+      ripdrag # drag & drop from terminal
 
       # Hardware/Software info
       pciutils # lspci
