@@ -87,7 +87,8 @@
       steam-devices-udev-rules
     ];
 
-    home.file.".var/app/com.valvesoftware.Steam/config/MangoHud/MangoHud.conf".source = config.lib.file.mkOutOfStoreSymlink "${config.paths.dotfiles}/mangohud/MangoHud.conf";
+    # home.file.".var/app/com.valvesoftware.Steam/config/MangoHud/MangoHud.conf".source = config.lib.file.mkOutOfStoreSymlink "${config.paths.dotfiles}/mangohud/MangoHud.conf";
+    home.file.".var/app/com.valvesoftware.Steam/config/MangoHud/MangoHud.conf".source = ../../../config/mangohud/MangoHud.conf;
 
     services = {
       flatpak = {
@@ -108,6 +109,8 @@
           "com.valvesoftware.Steam".Context = {
             filesystems = [
               "${config.home.homeDirectory}/Games"
+
+              # This is Proton-GE installed from flatpak. ProtonUpQT doesn't require it.
               "/var/lib/flatpak/runtime/com.valvesoftware.Steam.CompatibilityTool.Proton-GE"
             ];
           };
