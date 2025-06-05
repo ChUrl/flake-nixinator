@@ -18,7 +18,7 @@
     initrd.kernelModules = ["nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm"]; # NVIDIA
     # initrd.kernelModules = ["amdgpu"]; # Initrd modules are always loaded, e.g. when they are required to mount the rootfs
     # kernelModules = ["kvm-intel" "iwlwifi"];
-    kernelModules = ["kvm-amd"];
+    kernelModules = ["kvm-amd" "sg"]; # sg is for blu ray drive
 
     # extraModprobeConfig = ''
     #   options iwlwifi 11n_disable=1 wd_disable=0
