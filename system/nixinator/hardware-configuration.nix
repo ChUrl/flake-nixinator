@@ -52,16 +52,19 @@
     "/home/christoph/Movies" = {
       device = "192.168.86.20:/mnt/SG Exos Mirror 18TB/Movie";
       fsType = "nfs";
+      options = ["defaults" "rw" "relatime" "_netdev" "bg"];
     };
 
     "/home/christoph/Shows" = {
       device = "192.168.86.20:/mnt/SG Exos Mirror 18TB/Show";
       fsType = "nfs";
+      options = ["defaults" "rw" "relatime" "_netdev" "bg"];
     };
 
     "/home/christoph/Music" = {
       device = "192.168.86.20:/mnt/SG Exos Mirror 18TB/Music";
       fsType = "nfs";
+      options = ["defaults" "rw" "relatime" "_netdev" "bg"];
     };
   };
 
