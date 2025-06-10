@@ -66,13 +66,18 @@ in {
       mkIf (!cfg.useNetworkManager) {text = names;};
 
     # Allow to enable/disable tunnels without root password
-    modules.polkit.allowed-system-services = let
+    modules.polkit.allowedSystemServices = let
       vpn-services = lib.pipe cfg.wireguard-tunnels [
         attrNames
         (map (v: "${v}.service"))
       ];
     in
       mkIf (!cfg.useNetworkManager) vpn-services;
+
+    modules.polkit.allowedActions = mkIf cfg.useNetworkManager [
+      # NOTE: List permissions by running "nmcli general permissions"
+      "org.freedesktop.NetworkManager.settings.modify.system"
+    ];
 
     # General Networking Settings
     networking = {
