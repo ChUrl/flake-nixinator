@@ -2,6 +2,7 @@
 #       VPN and Container modules should use this rofi module to enable their menus then
 {
   config,
+  nixosConfig,
   lib,
   mylib,
   pkgs,
@@ -146,16 +147,18 @@ in {
 
       vpn-menu = pkgs.writeScript "rofi-menu-vpn" (builtins.readFile ./menus/vpn.fish);
       keybinds-menu = pkgs.writeScript "rofi-menu-keybinds" (builtins.readFile ./menus/keybinds.fish);
-
-      # TODO: Expand on that
       lectures-menu = pkgs.writeScript "rofi-menu-lectures" (builtins.readFile ./menus/lectures.fish);
     in {
-      bindings = {
-        "$mainMod, escape" = ["exec, \"${power-menu}\""];
-        "$mainMod, O" = ["exec, \"${lectures-menu}\""];
-        "$mainMod, M" = ["exec, \"${keybinds-menu}\""];
-        "$mainMod, U" = ["exec, \"${vpn-menu}\""];
-      };
+      bindings = lib.mergeAttrsList [
+        {
+          "$mainMod, escape" = ["exec, \"${power-menu}\""];
+          "$mainMod, M" = ["exec, \"${keybinds-menu}\""];
+          # "$mainMod, O" = ["exec, \"${lectures-menu}\""]; # TODO: Broken, expand on that
+        }
+        (lib.optionalAttrs (!nixosConfig.modules.network.useNetworkManager) {
+          "$mainMod, U" = ["exec, \"${vpn-menu}\""];
+        })
+      ];
     };
   };
 }
