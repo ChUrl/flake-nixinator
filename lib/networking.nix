@@ -79,6 +79,29 @@
     };
   };
 
+  # TODO: What other config options are there?
+  mkStaticNetworkManagerProfile = {
+    id,
+    interface,
+    ip,
+    router,
+    nameserver,
+    autoconnect,
+  }: {
+    connection = {
+      inherit id autoconnect;
+      type = "ethernet";
+      interface-name = interface;
+    };
+
+    ipv4 = {
+      method = "manual";
+      addresses = ip;
+      gateway = router;
+      dns = nameserver;
+    };
+  };
+
   mkNetworkNamespace = name: ''
     ${pkgs.iproute2}/bin/ip netns add ${name} # Create the Namespace
     ${pkgs.iproute2}/bin/ip -n ${name} link set lo up # Enable the Loopback device
