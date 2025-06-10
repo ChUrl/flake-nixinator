@@ -6,7 +6,7 @@
   ];
 
   modules = {
-    systemd-networkd = {
+    network = {
       wireguard-tunnels = {
         wg0-de-74 =
           mylib.networking.mkWireguardService

@@ -25,7 +25,7 @@ with mylib.networking; {
   modules = {
     polkit.enable = true;
 
-    systemd-networkd = {
+    network = {
       inherit hostname;
       enable = true;
 

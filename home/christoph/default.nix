@@ -331,6 +331,9 @@ rec {
       cifs-utils # Mount samba shares
       nfs-utils # Mount NFS shares
       sshfs # Mount remote directories via SSH
+
+      protonvpn-gui
+      protonmail-bridge-gui
       protonvpn-cli_2 # TODO: Not compatible with systemd-networkd?
       protonmail-bridge # TODO: Enable on startup, email module
 
