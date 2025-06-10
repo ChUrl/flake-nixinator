@@ -54,7 +54,7 @@ in {
     };
 
     # Allow start/stop containers without root password
-    modules.polkit.allowed-system-services = let
+    modules.polkit.allowedSystemServices = let
       container-services = lib.pipe virtualisation.oci-containers.containers [
         builtins.attrNames
         (builtins.filter (c: cfg.${c}.enable))
