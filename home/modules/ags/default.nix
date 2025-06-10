@@ -1,4 +1,5 @@
 {
+  inputs,
   config,
   lib,
   mylib,
@@ -12,14 +13,21 @@ in {
   config = lib.mkIf ags.enable {
     programs.ags = {
       enable = true;
-      systemd.enable = true;
+      systemd.enable = false; # TODO: Enable once configured
 
-      # configDir = ./config;
+      # AGS libs go here
+      extraPackages = [];
+
+      # This should symlink
+      configDir = ./config;
     };
+
+    # The ags module doesn't expose the "astal" cli tool
+    home.packages = [inputs.ags.packages.${pkgs.system}.io];
 
     home.file = {
       # NOTE: Keep this symlinked as long as I'm configuring
-      ".config/ags".source = config.lib.file.mkOutOfStoreSymlink "${config.paths.nixflake}/home/modules/ags/config";
+      # ".config/ags".source = config.lib.file.mkOutOfStoreSymlink "${config.paths.nixflake}/home/modules/ags/config";
 
       # LSP typechecking support (use ags --init)
       # ".config/ags/types".source = config.lib.file.mkOutOfStoreSymlink "${pkgs.ags}/share/com.github.Aylur.ags/types";
