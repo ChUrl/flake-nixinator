@@ -39,7 +39,7 @@ rec {
   };
 
   modules = {
-    ags.enable = false; # TODO: Configure
+    ags.enable = true; # TODO: Configure
 
     chromium = {
       enable = true;
