@@ -12,6 +12,7 @@
 
   modules = {
     network = {
+      # Systemd-networkd configs
       networks = {
         # This should override the default network 50-ether
         "10-ether-2_5G" = mylib.networking.mkStaticSystemdNetwork {
@@ -29,6 +30,26 @@
           routable = false;
         };
         # "10-ether-1G" = mylib.networking.mkStaticSystemdNetwork {...};
+      };
+
+      # NetworkManager profiles
+      profiles = {
+        "10-ether-2_5G" = mylib.networking.mkStaticNetworkManagerProfile {
+          id = "Wired 2.5G";
+          interface = "enp8s0";
+          ip = "192.168.86.50/24";
+          router = "192.168.86.5";
+          nameserver = "192.168.86.26";
+          autoconnect = true;
+        };
+        "10-ether-1G" = mylib.networking.mkStaticNetworkManagerProfile {
+          id = "Wired 1G";
+          interface = "enp5s0";
+          ip = "192.168.86.50/24";
+          router = "192.168.86.5";
+          nameserver = "192.168.86.26";
+          autoconnect = false;
+        };
       };
 
       allowedTCPPorts = [

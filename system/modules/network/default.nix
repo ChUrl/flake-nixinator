@@ -16,9 +16,18 @@ in {
     services.resolved.enable = true;
     services.resolved.llmnr = "false";
 
+    # Use the programs.nm-applet instead
+    # environment.systemPackages = with pkgs;
+    #   builtins.concatLists [
+    #     []
+    #     (lib.optionals cfg.useNetworkManager [networkmanagerapplet]) # This is started by hyprland if enabled
+    #   ];
+
+    programs.nm-applet.enable = cfg.useNetworkManager;
+
     # Main Networks
     systemd.network = {
-      enable = true;
+      enable = !cfg.useNetworkManager;
       wait-online.timeout = 10;
 
       # Don't wait for all networks to be configured, as e.g. wg0 will only be upon manual activation
@@ -36,7 +45,7 @@ in {
     };
 
     # Wireguard VPNs
-    systemd.services = cfg.wireguard-tunnels;
+    systemd.services = mkIf (!cfg.useNetworkManager) cfg.wireguard-tunnels;
 
     # NOTE: I can connect to TU Dortmund directly
     # TODO: Use config with netns, like with wireguard
@@ -50,11 +59,11 @@ in {
 
     # TODO: Rewrite with lib.pipe
     # Generate list of vpns for rofi menu
-    environment.etc."rofi-vpns".text = let
+    environment.etc."rofi-vpns" = let
       names-list = attrNames cfg.wireguard-tunnels;
       names = concatStringsSep "\n" names-list;
     in
-      names;
+      mkIf (!cfg.useNetworkManager) {text = names;};
 
     # Allow to enable/disable tunnels without root password
     modules.polkit.allowed-system-services = let
@@ -63,7 +72,7 @@ in {
         (map (v: "${v}.service"))
       ];
     in
-      vpn-services;
+      mkIf (!cfg.useNetworkManager) vpn-services;
 
     # General Networking Settings
     networking = {
@@ -73,7 +82,8 @@ in {
 
       # Disable a lot of stuff not needed for systemd-networkd
       networkmanager = {
-        enable = true;
+        enable = cfg.useNetworkManager;
+        ensureProfiles.profiles = cfg.profiles;
 
         insertNameservers = [
           "192.168.86.26"
@@ -89,10 +99,9 @@ in {
       useNetworkd = false; # Only use this if the configuration can't be written in systemd.network completely. It translates some of the networking... options to systemd
       # resolvconf.enable = true;
 
-      # TODO
       wireless = {
         enable = false; # Enables wireless support via wpa_supplicant.
-        iwd.enable = false; # Use iwd instead of NetworkManager
+        iwd.enable = true; # Use iwd instead of wpa_supplicant
       };
 
       # Open Ports
