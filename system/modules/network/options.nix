@@ -7,6 +7,8 @@ with lib;
 with mylib.modules; {
   enable = mkEnableOption "Systemd Network Configuration";
 
+  useNetworkManager = mkEnableOption "Use NetworkManager instead of systemd-networkd";
+
   hostname = mkOption {
     type = types.str;
     description = "The System's Hostname";
@@ -25,6 +27,17 @@ with mylib.modules; {
           [...]
         };
       }
+    '';
+  };
+
+  profiles = mkOption {
+    type = types.attrs;
+    default = {};
+    description = "NetworkManager Profiles";
+    example = ''
+      "50-ether" = {
+        [...]
+      };
     '';
   };
 
