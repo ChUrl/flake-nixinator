@@ -16,16 +16,16 @@
         # This should override the default network 50-ether
         "10-ether-2_5G" = mylib.networking.mkStaticSystemdNetwork {
           interface = "enp8s0";
-          ips = ["192.168.86.50/24" "fd00::32/120"];
-          routers = ["192.168.86.5" "fd00::5"];
-          nameservers = ["192.168.86.26" "fd00::1a"];
+          ips = ["192.168.86.50/24"];
+          routers = ["192.168.86.5"];
+          nameservers = ["192.168.86.26"];
           routable = true;
         };
         "10-ether-1G" = mylib.networking.mkStaticSystemdNetwork {
           interface = "enp5s0";
-          ips = ["192.168.86.50/24" "fd00::32/120"];
-          routers = ["192.168.86.5" "fd00::5"];
-          nameservers = ["192.168.86.26" "fd00::1a"];
+          ips = ["192.168.86.50/24"];
+          routers = ["192.168.86.5"];
+          nameservers = ["192.168.86.26"];
           routable = false;
         };
         # "10-ether-1G" = mylib.networking.mkStaticSystemdNetwork {...};
