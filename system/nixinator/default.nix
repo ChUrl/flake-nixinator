@@ -11,7 +11,7 @@
   ];
 
   modules = {
-    systemd-networkd = {
+    network = {
       networks = {
         # This should override the default network 50-ether
         "10-ether-2_5G" = mylib.networking.mkStaticSystemdNetwork {
