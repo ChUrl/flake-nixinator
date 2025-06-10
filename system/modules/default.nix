@@ -1,6 +1,6 @@
 {...}: {
   imports = [
     ./polkit
-    ./systemd-networkd
+    ./network
   ];
 }

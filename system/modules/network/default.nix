@@ -8,9 +8,9 @@
 with lib;
 with mylib.networking;
 with mylib.modules; let
-  cfg = config.modules.systemd-networkd;
+  cfg = config.modules.network;
 in {
-  options.modules.systemd-networkd = import ./options.nix {inherit lib mylib;};
+  options.modules.network = import ./options.nix {inherit lib mylib;};
 
   config = mkIf cfg.enable {
     services.resolved.enable = true;
@@ -31,7 +31,8 @@ in {
       #   "enp5s0"
       # ];
 
-      networks = cfg.networks;
+      # networks = cfg.networks;
+      inherit (cfg) networks;
     };
 
     # Wireguard VPNs
@@ -71,7 +72,18 @@ in {
       enableIPv6 = false;
 
       # Disable a lot of stuff not needed for systemd-networkd
-      networkmanager.enable = false;
+      networkmanager = {
+        enable = true;
+
+        insertNameservers = [
+          "192.168.86.26"
+        ];
+
+        wifi = {
+          backend = "iwd";
+        };
+      };
+
       useDHCP = false; # Default: true, don't use with networkd
       dhcpcd.enable = false; # Don't use with networkd
       useNetworkd = false; # Only use this if the configuration can't be written in systemd.network completely. It translates some of the networking... options to systemd
@@ -94,11 +106,11 @@ in {
           "docker0"
         ];
 
-        allowedTCPPorts = cfg.allowedTCPPorts;
+        # allowedTCPPorts = cfg.allowedTCPPorts;
         # allowedTCPPortRanges = [];
-
-        allowedUDPPorts = cfg.allowedUDPPorts;
+        # allowedUDPPorts = cfg.allowedUDPPorts;
         # allowedUDPPortRanges = [];
+        inherit (cfg) allowerdTCPPorts allowerdUDPPorts;
       };
     };
   };
