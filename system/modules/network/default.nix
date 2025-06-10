@@ -110,7 +110,7 @@ in {
         # allowedTCPPortRanges = [];
         # allowedUDPPorts = cfg.allowedUDPPorts;
         # allowedUDPPortRanges = [];
-        inherit (cfg) allowerdTCPPorts allowerdUDPPorts;
+        inherit (cfg) allowedTCPPorts allowedUDPPorts;
       };
     };
   };
