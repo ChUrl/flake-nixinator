@@ -973,6 +973,11 @@ in {
                 # {name = "nil_ls";} # Conflicts with nixd's hover
                 {
                   name = "nixd";
+                  extraOptions.cmd = [
+                    "nixd"
+                    "--inlay-hints=false"
+                    "--semantic-tokens=true"
+                  ];
                   extraOptions.settings = {
                     nixd = {
                       nixpkgs = {
@@ -985,10 +990,16 @@ in {
                         nixos = {
                           expr = "(builtins.getFlake \"/home/${username}/NixFlake\").nixosConfigurations.${hostname}.options";
                         };
-                        # When using HM as a NixOS module, nixd's HM option completion doesn't work.
-                        # home_manager = {
+
+                        # For HM standalone
+                        # home-manager = {
                         #   expr = "(builtins.getFlake \"/home/${username}/NixFlake\").homeConfigurations.\"${username}@${hostname}\".options";
                         # };
+
+                        # For HM NixOS module
+                        home-manager = {
+                          expr = "(builtins.getFlake \"/home/${username}/NixFlake\").nixosConfigurations.\"${hostname}\".options.home-manager.users.type.getSubOptions []";
+                        };
                       };
                       diagnostic = {
                         suppress = [
