@@ -33,8 +33,8 @@ in {
         inputs.ags.packages.${pkgs.system}.wireplumber
       ];
 
-      # This should symlink
-      configDir = ./config;
+      # This should symlink but doesn't, it copies the files :/
+      # configDir = ./config;
     };
 
     # The ags module doesn't expose the "astal" cli tool or extraPackages
@@ -64,11 +64,67 @@ in {
     };
 
     home.file = {
-      # NOTE: Keep this symlinked as long as I'm configuring
+      # Keep this symlinked as long as I'm configuring (not required anymore since I can start AGS locally)
       # ".config/ags".source = config.lib.file.mkOutOfStoreSymlink "${config.paths.nixflake}/home/modules/ags/config";
 
-      # LSP typechecking support (use ags --init)
-      # ".config/ags/types".source = config.lib.file.mkOutOfStoreSymlink "${pkgs.ags}/share/com.github.Aylur.ags/types";
+      # NOTE: Don't symlink to ~/.config/ags/colors.scss, since that is already used by configDir
+      ".config/_colors.scss".text = with config.modules.color.hex; ''
+        $dark-rosewater: #${dark.rosewater};
+        $dark-flamingo: #${dark.flamingo};
+        $dark-pink: #${dark.pink};
+        $dark-mauve: #${dark.mauve};
+        $dark-red: #${dark.red};
+        $dark-maroon: #${dark.maroon};
+        $dark-peach: #${dark.peach};
+        $dark-yellow: #${dark.yellow};
+        $dark-green: #${dark.green};
+        $dark-teal: #${dark.teal};
+        $dark-sky: #${dark.sky};
+        $dark-sapphire: #${dark.sapphire};
+        $dark-blue: #${dark.blue};
+        $dark-lavender: #${dark.lavender};
+
+        $dark-text: #${dark.text};
+        $dark-subtext1: #${dark.subtext1};
+        $dark-subtext0: #${dark.subtext0};
+        $dark-overlay2: #${dark.overlay2};
+        $dark-overlay1: #${dark.overlay1};
+        $dark-overlay0: #${dark.overlay0};
+        $dark-surface2: #${dark.surface2};
+        $dark-surface1: #${dark.surface1};
+        $dark-surface0: #${dark.surface0};
+        $dark-base: #${dark.base};
+        $dark-mantle: #${dark.mantle};
+        $dark-crust: #${dark.crust};
+
+        $light-rosewater: #${light.rosewater};
+        $light-flamingo: #${light.flamingo};
+        $light-pink: #${light.pink};
+        $light-mauve: #${light.mauve};
+        $light-red: #${light.red};
+        $light-maroon: #${light.maroon};
+        $light-peach: #${light.peach};
+        $light-yellow: #${light.yellow};
+        $light-green: #${light.green};
+        $light-teal: #${light.teal};
+        $light-sky: #${light.sky};
+        $light-sapphire: #${light.sapphire};
+        $light-blue: #${light.blue};
+        $light-lavender: #${light.lavender};
+
+        $light-text: #${light.text};
+        $light-subtext1: #${light.subtext1};
+        $light-subtext0: #${light.subtext0};
+        $light-overlay2: #${light.overlay2};
+        $light-overlay1: #${light.overlay1};
+        $light-overlay0: #${light.overlay0};
+        $light-surface2: #${light.surface2};
+        $light-surface1: #${light.surface1};
+        $light-surface0: #${light.surface0};
+        $light-base: #${light.base};
+        $light-mantle: #${light.mantle};
+        $light-crust: #${light.crust};
+      '';
     };
   };
 }
