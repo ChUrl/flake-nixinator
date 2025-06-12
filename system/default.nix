@@ -150,12 +150,12 @@ with mylib.networking; {
   # XDG
   xdg.portal = {
     enable = true;
-    wlr.enable = false; # I think hyprland has its own portal automatically enabled...
+    xdgOpenUsePortal = true;
+    wlr.enable = false; # Hyprland has its own portal automatically enabled...
     extraPortals = with pkgs; [
-      # TODO: Needed?
-      # xdg-desktop-portal-kde
-      # xdg-desktop-portal-gtk
+      xdg-desktop-portal-gtk
 
+      # xdg-desktop-portal-kde
       # xdg-desktop-portal-hyprland # Already enabled by hyprland system module
       # xdg-desktop-portal-termfilechooser # Filepicker using nnn
     ];
