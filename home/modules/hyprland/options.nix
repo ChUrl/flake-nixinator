@@ -90,6 +90,16 @@ with mylib.modules; {
     '';
   };
 
+  windowrules = mkOption {
+    type = types.listOf types.str;
+    description = "Specify specific window rules.";
+    example = ''
+      [
+        "suppressevent activate, class: Unity"
+      ]
+    '';
+  };
+
   transparent-opacity = mkOption {
     type = types.str;
     description = "The opacity transparent windows should have.";

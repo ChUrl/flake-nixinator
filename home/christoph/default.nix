@@ -99,6 +99,12 @@ rec {
         ];
       };
 
+      windowrules = [
+        # TODO: Doesn't work, use focus_on_activate for now
+        # "suppressevent activate, class:^(Unity)$"
+        # "suppressevent activatefocus, class:^(Unity)$"
+      ];
+
       workspacerules = {
         "2" = [
           "neovide"
