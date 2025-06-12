@@ -118,8 +118,11 @@
     "wl-paste -p -t text --watch clipman store -P --histpath=\"~/.local/share/clipman-primary.json\""
     "hyprctl setcursor Bibata-Modern-Classic 16"
 
-    # NOTE: Hack because Hyprland doesn't set the xwayland/x11 keymap correctly
+    # HACK: Hyprland doesn't set the xwayland/x11 keymap correctly
     "setxkbmap -layout ${hyprland.kb-layout} -variant ${hyprland.kb-variant} -model pc104"
+
+    # HACK: Flatpak doesn't find applications in the system PATH
+    "systemctl --user import-environment PATH && systemctl --user restart xdg-desktop-portal.service"
 
     # Provide a polkit authentication UI.
     # This is used for example when running systemd commands without root.
@@ -459,7 +462,7 @@ in {
           font_family = "${color.font}";
         };
 
-        # Because those are not windows, but layers,
+        # Because those are not windows, but layouts,
         # we have to blur them explicitly
         layerrule = [
           "blur,rofi"
