@@ -438,7 +438,8 @@ in {
           ]
           ++ lib.pipe hyprland.transparent [
             (builtins.map mkTranslucentRule)
-          ];
+          ]
+          ++ hyprland.windowrules;
 
         dwindle = {
           pseudotile = true;
