@@ -3,6 +3,7 @@
   pkgs,
   nixosConfig,
   config,
+  lib,
   ...
 }: {
   imports = [
@@ -56,39 +57,95 @@
       waybar.monitor = "HDMI-A-1";
     };
 
-    home.packages = with pkgs; [
-      # quartus-prime-lite # Intel FPGA design software
-
-      # Don't want heavy IDE's on the laptop
-      jetbrains.clion
-      jetbrains.rust-rover
-      jetbrains.pycharm-professional
-      jetbrains.idea-ultimate
-      jetbrains.webstorm
-
-      unityhub
-      jetbrains.rider
-      (with dotnetCorePackages;
+    home = let
+      # Extra config to make Rider Unity integration work
+      dotnetCore = with pkgs.dotnetCorePackages;
         combinePackages [
           # sdk_6_0_1xx # Is EOL
           # sdk_7_0_3xx # Is EOL
           sdk_8_0_3xx
           sdk_9_0_3xx
-        ]) # For Rider/Unity
-      mono # For Rider/Unity
+        ];
 
-      blender
-      # godot_4
-      obs-studio
-      kdePackages.kdenlive
-      krita
-      makemkv
+      extra-path = with pkgs; [
+        dotnetCore
+        dotnetPackages.Nuget
+        mono
+        # msbuild
 
-      steam-devices-udev-rules
-    ];
+        # Add any extra binaries you want accessible to Rider here
+      ];
 
-    # home.file.".var/app/com.valvesoftware.Steam/config/MangoHud/MangoHud.conf".source = config.lib.file.mkOutOfStoreSymlink "${config.paths.dotfiles}/mangohud/MangoHud.conf";
-    home.file.".var/app/com.valvesoftware.Steam/config/MangoHud/MangoHud.conf".source = ../../../config/mangohud/MangoHud.conf;
+      extra-lib = with pkgs; [
+        # Add any extra libraries you want accessible to Rider here
+      ];
+
+      rider = pkgs.jetbrains.rider.overrideAttrs (attrs: {
+        postInstall =
+          ''
+            # Wrap rider with extra tools and libraries
+            mv $out/bin/rider $out/bin/.rider-toolless
+            makeWrapper $out/bin/.rider-toolless $out/bin/rider \
+              --argv0 rider \
+              --prefix PATH : "${lib.makeBinPath extra-path}" \
+              --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath extra-lib}"
+
+            # Making Unity Rider plugin work!
+            # The plugin expects the binary to be at /rider/bin/rider,
+            # with bundled files at /rider/
+            # It does this by going up two directories from the binary path
+            # Our rider binary is at $out/bin/rider, so we need to link $out/rider/ to $out/
+            shopt -s extglob
+            ln -s $out/rider/!(bin) $out/
+            shopt -u extglob
+          ''
+          + attrs.postInstall or "";
+      });
+    in {
+      packages = with pkgs; [
+        # quartus-prime-lite # Intel FPGA design software
+
+        # Don't want heavy IDE's on the laptop
+        jetbrains.clion
+        jetbrains.rust-rover
+        jetbrains.pycharm-professional
+        jetbrains.idea-ultimate
+        jetbrains.webstorm
+
+        # Unity Stuff
+        unityhub
+        rider
+        dotnetCore
+        mono
+
+        blender
+        godot_4
+        obs-studio
+        kdePackages.kdenlive
+        krita
+        makemkv
+
+        steam-devices-udev-rules
+      ];
+
+      file = {
+        ".local/share/applications/jetbrains-rider.desktop".source = let
+          desktopFile = pkgs.makeDesktopItem {
+            name = "jetbrains-rider";
+            desktopName = "Rider";
+            exec = "\"${rider}/bin/rider\"";
+            icon = "rider";
+            type = "Application";
+            # Don't show desktop icon in search or run launcher
+            extraConfig.NoDisplay = "true";
+          };
+        in "${desktopFile}/share/applications/jetbrains-rider.desktop";
+
+        ".var/app/com.valvesoftware.Steam/config/MangoHud/MangoHud.conf".source = ../../../config/mangohud/MangoHud.conf;
+
+        # ".var/app/com.valvesoftware.Steam/config/MangoHud/MangoHud.conf".source = config.lib.file.mkOutOfStoreSymlink "${config.paths.dotfiles}/mangohud/MangoHud.conf";
+      };
+    };
 
     services = {
       flatpak = {
