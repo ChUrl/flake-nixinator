@@ -352,6 +352,7 @@ rec {
       AusweisApp2
       thunderbird # TODO: Email module
       obsidian
+      # anytype # Use flatpak
       helvum
 
       # Office
@@ -622,6 +623,7 @@ rec {
 
         # "com.google.Chrome"
         # "md.obsidian.Obsidian" # NOTE: Installed via package
+        "io.anytype.anytype"
       ];
 
       uninstallUnmanaged = true;
@@ -646,6 +648,12 @@ rec {
             # Force correct theme for some GTK apps
             GTK_THEME = "Adwaita:light";
           };
+        };
+
+        "io.anytype.anytype".Context = {
+          filesystems = [
+            "${config.home.homeDirectory}"
+          ];
         };
       };
     };
