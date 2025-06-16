@@ -23,6 +23,8 @@
 
     # Ags for widgets (this was a terrible idea)
     ags.url = "github:Aylur/ags";
+    hyprpanel.url = "github:jas-singhfsu/hyprpanel";
+    hyprpanel.inputs.nixpkgs.follows = "nixpkgs";
 
     # Other
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
