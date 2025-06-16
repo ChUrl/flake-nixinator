@@ -39,7 +39,7 @@ rec {
   };
 
   modules = {
-    ags.enable = true; # TODO: Configure
+    ags.enable = false; # TODO: Configure
 
     chromium = {
       enable = true;
@@ -66,8 +66,8 @@ rec {
 
     hyprland = {
       enable = true;
-      # theme = "Three-Bears";
-      theme = "Foggy-Lake";
+      dunst.enable = false; # Disable for hyprpanel
+      theme = "Foggy-Lake"; # Three-Bears
 
       keybindings = {
         main-mod = "SUPER";
@@ -180,6 +180,7 @@ rec {
       ];
     };
 
+    hyprpanel.enable = true;
     kitty.enable = true;
     latex.enable = true;
 
@@ -197,7 +198,7 @@ rec {
       theme = "Foggy-Lake";
     };
 
-    waybar.enable = true;
+    waybar.enable = false;
     zathura.enable = true;
   };
 
