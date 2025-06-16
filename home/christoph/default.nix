@@ -655,6 +655,12 @@ rec {
             "${config.home.homeDirectory}"
           ];
         };
+
+        "com.discordapp.Discord".Context = {
+          filesystems = [
+            "${config.home.homeDirectory}"
+          ];
+        };
       };
     };
   };
