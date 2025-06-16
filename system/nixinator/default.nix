@@ -58,6 +58,7 @@
         # 31431 # Parsec
         5173 # SvelteKit
         8090 # PocketBase
+        4242 # Lan-Mouse
       ];
 
       allowedUDPPorts = [
@@ -66,6 +67,7 @@
         # 31431 # Parsec
         5173 # SvelteKit
         8090 # PocketBase
+        4242 # Lan-Mouse
       ];
 
       wireguard-tunnels = {
