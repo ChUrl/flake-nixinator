@@ -319,7 +319,7 @@ in {
 
       # Notification service
       dunst = {
-        enable = true;
+        enable = hyprland.dunst.enable;
 
         iconTheme.package = pkgs.papirus-icon-theme;
         iconTheme.name = "Papirus";
