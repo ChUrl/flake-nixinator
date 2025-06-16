@@ -6,19 +6,41 @@
 $fg-color: #{"@theme_fg_color"};
 $bg-color: #{"@theme_bg_color"};
 
-window.Bar {
+// Order is Top-Right-Bottom-Left for combined properties
+
+* {
+    // Remove the default theme's background-image, otherwise background-color doesn't work
+    background-image: none;
+
+    // Clear implicit paddings and margins, otherwise size management is terrible
+    padding: 0;
+    margin: 0;
+}
+
+.Window {
     background: transparent;
-    color: $fg-color;
     font-weight: bold;
+    font-size: x-large;
 
-    >centerbox {
-        background: $bg-color;
-        border-radius: 10px;
-        margin: 8px;
-    }
+    .Bar {
+        background-color: rgba($light-base, 0.3);
+        border-radius: 6px;
+        border-width: 2px;
+        border-color: $dark-lavender;
+        border-style: solid;
+        margin: 10px 10px 0 10px;
 
-    button {
-        border-radius: 8px;
-        margin: 2px;
+        .LauncherButton {
+            background-color: $dark-lavender;
+            border-radius: 6px;
+            border-width: 0;
+            margin: -1px 10px -1px -1px; // Negative margins to remove gaps from border radii
+            min-width: 36px;
+            min-height: 36px;
+
+            >label {
+                margin-left: -4px; // Tux not centered otherwise
+            }
+        }
     }
 }
