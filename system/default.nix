@@ -386,7 +386,7 @@ with mylib.networking; {
     fwupd.enable = true; # Device firmware (I don't think I have any supported devices)
     # locate.enable = true; # Periodically update index
     ntp.enable = true; # Clock sync
-    gvfs.enable = false; # Network shares TODO: Only gnome? Needed?
+    gvfs.enable = true; # Network shares, spotify cover art caching, ...
     udev = {
       packages = with pkgs; [
         usb-blaster-udev-rules # For Intel Quartus

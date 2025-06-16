@@ -100,6 +100,7 @@
     enableRedistributableFirmware = true;
     # cpu.intel.updateMicrocode = true;
     cpu.amd.updateMicrocode = true;
+    bluetooth.enable = true;
 
     nvidia = {
       package = config.boot.kernelPackages.nvidiaPackages.stable;
