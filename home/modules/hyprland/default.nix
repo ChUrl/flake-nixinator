@@ -463,7 +463,7 @@ in {
           font_family = "${color.font}";
         };
 
-        # Because those are not windows, but layouts,
+        # Because those are not windows, but layers,
         # we have to blur them explicitly
         layerrule = [
           "blur,rofi"
@@ -472,6 +472,8 @@ in {
 
           "blur,waybar"
           "blur,gtk4-layer-shell"
+          "blur,bar-0"
+          "blur,bar-1"
         ];
 
         decoration = {
