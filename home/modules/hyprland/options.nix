@@ -25,6 +25,8 @@ with mylib.modules; {
     description = "Wallpaper and colorscheme to use";
   };
 
+  dunst.enable = mkEnableOption "Enable dunst notification daemon";
+
   monitors = mkOption {
     type = types.attrs;
     description = "Hyprland Monitor Configurations";
