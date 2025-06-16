@@ -9,6 +9,7 @@
     ./firefox
     ./fish
     ./hyprland
+    ./hyprpanel
     ./kitty
     ./latex
     ./neovim
