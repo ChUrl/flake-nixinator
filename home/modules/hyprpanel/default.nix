@@ -218,7 +218,7 @@ in {
         "theme.bar.buttons.modules.cpu.text" = "#${color.hex.dark.base}";
 
         # https://github.com/Jas-SinghFSU/HyprPanel/blob/master/src/configuration/modules/config/bar/ram/index.ts
-        "bar.customModules.ram.labelType" = "used/total";
+        "bar.customModules.ram.labelType" = "percentage"; # "used/total", "percentage"
 
         # https://github.com/Jas-SinghFSU/HyprPanel/blob/master/src/configuration/modules/theme/bar/buttons/ram.ts
         "theme.bar.buttons.modules.ram.background" = "#${color.hex.dark.teal}";
@@ -230,8 +230,8 @@ in {
         "theme.bar.buttons.modules.ram.text" = "#${color.hex.dark.base}";
 
         # https://github.com/Jas-SinghFSU/HyprPanel/blob/master/src/configuration/modules/config/bar/storage/index.ts
-        "bar.customModules.storage.labelType" = "used/total";
-        "bar.customModules.storage.tooltipStyle" = "tree";
+        "bar.customModules.storage.labelType" = "percentage"; # "used/total", "percentage"
+        "bar.customModules.storage.tooltipStyle" = "simple"; # "tree", "percentage-bar", "simple"
 
         # https://github.com/Jas-SinghFSU/HyprPanel/blob/master/src/configuration/modules/theme/bar/buttons/storage.ts
         "theme.bar.buttons.modules.storage.background" = "#${color.hex.dark.sky}";
