@@ -56,11 +56,12 @@ in {
         "theme.bar.border.width" = "2px";
         "theme.bar.dropdownGap" = "50px";
         "theme.bar.floating" = true;
+        "theme.bar.label_spacing" = "0px"; # what does this do?
         "theme.bar.margin_bottom" = "0px";
         "theme.bar.margin_sides" = "10px";
         "theme.bar.margin_top" = "10px";
         "theme.bar.opacity" = 30;
-        "theme.bar.outer_spacing" = "2px";
+        "theme.bar.outer_spacing" = "0px"; # NOTE: Left/Right bar padding
         "theme.bar.transparent" = false;
 
         # https://github.com/Jas-SinghFSU/HyprPanel/blob/master/src/configuration/modules/theme/bar/buttons/index.ts
@@ -68,10 +69,10 @@ in {
         "theme.bar.buttons.padding_x" = "10px";
         "theme.bar.buttons.padding_y" = "2px";
         "theme.bar.buttons.radius" = "6px";
-        "theme.bar.buttons.separator.color" = "#ff7800";
         "theme.bar.buttons.spacing" = "3px";
         "theme.bar.buttons.style" = "default";
         "theme.bar.buttons.text" = "#${color.hex.dark.base}";
+        "theme.bar.buttons.y_margins" = "2px"; # NOTE: Top/Bottom bar padding
 
         # https://github.com/Jas-SinghFSU/HyprPanel/blob/master/src/configuration/modules/theme/general/index.ts
         "theme.font.label" = color.font;
