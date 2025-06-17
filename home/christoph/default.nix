@@ -84,6 +84,9 @@ rec {
 
           ", XF86AudioRaiseVolume" = ["exec, wpctl set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 5%+"];
           ", XF86AudioLowerVolume" = ["exec, wpctl set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 5%-"];
+          ", XF86AudioPlay" = ["exec, playerctl play-pause"];
+          ", XF86AudioPrev" = ["exec, playerctl previous"];
+          ", XF86AudioNext" = ["exec, playerctl next"];
         };
       };
 
@@ -296,6 +299,7 @@ rec {
       tokei # Text file statistics in a project
       nvd # nix rebuild diff
       ripdrag # drag & drop from terminal
+      playerctl # media player control
 
       # Hardware/Software info
       pciutils # lspci
