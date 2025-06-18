@@ -359,6 +359,7 @@ rec {
       obsidian
       # anytype # Use flatpak
       helvum
+      vlc
 
       # Office
       wacomtablet # For xournalpp/krita
@@ -465,7 +466,7 @@ rec {
     };
 
     mpv = {
-      enable = true;
+      enable = false;
       config = {
         gpu-context = "wayland";
       };
