@@ -174,12 +174,12 @@ with mylib.networking; {
 
     defaultApplications = let
       textEditor = "neovide.desktop"; # Helix.desktop
-      fileBrowser = "nnn.desktop";
+      fileBrowser = "yazi.desktop";
       webBrowser = "firefox.desktop";
       pdfViewer = "org.pwmt.zathura.desktop";
       imageViewer = "imv.desktop";
-      audioPlayer = "mpv.desktop"; # mov.desktop
-      videoPlayer = "mpv.desktop";
+      audioPlayer = "vlc.desktop"; # mov.desktop
+      videoPlayer = "vlc.desktop";
 
       textMimeTypes = ["text/css" "text/csv" "text/javascript" "application/json" "application/ld+json" "application/x-sh" "text/plain" "application/xml" "text/xml"];
       fileBrowserMimeTypes = ["inode/directory"];
