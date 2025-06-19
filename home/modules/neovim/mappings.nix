@@ -301,14 +301,8 @@
     {
       mode = "n";
       key = "<leader>n";
-      action = "<cmd>Neotree action=show toggle=true<cr><C-w>=";
-      options.desc = "Toggle NeoTree";
-    }
-    {
-      mode = "n";
-      key = "<leader>o";
-      action = "<cmd>Oil<cr>";
-      options.desc = "Toggle Oil";
+      action = "<cmd>lua Snacks.explorer.open({ enter = false, on_show = function() vim.cmd('wincmd =') end })<cr>";
+      options.desc = "Toggle Explorer";
     }
     {
       mode = "n";
