@@ -272,13 +272,6 @@ in {
             };
           };
 
-          bbye = {
-            name = "vim-bbye";
-            pkg = pkgs.vimPlugins.vim-bbye;
-            lazy = true;
-            cmd = ["Bdelete" "Bwipeout"];
-          };
-
           better-escape = rec {
             name = "better_escape";
             pkg = pkgs.vimPlugins.better-escape-nvim;
@@ -1565,6 +1558,23 @@ in {
             lazy = false;
           };
 
+          snacks = rec {
+            name = "snacks";
+            pkg = pkgs.vimPlugins.snacks-nvim;
+            lazy = false;
+            priority = 1000;
+            config = mkDefaultConfig name;
+            opts = {
+              # Disables slow stuff in big files
+              bigfile = {
+                enabled = true;
+                notify = true;
+                size = 1.5 * 1024 * 1024; # 1.5MB
+                line_length = 1000;
+              };
+            };
+          };
+
           tabby = rec {
             name = "tabby";
             pkg = pkgs.vimPlugins.tabby-nvim;
@@ -2086,7 +2096,6 @@ in {
         in [
           autopairs # Automatic closing brackets/parens # NOTE: For now replaced by blink
 
-          bbye # Delete buffer without closing the window or split
           better-escape # Escape to normal mode using "jk"
           catppuccin # Colortheme (also add this here to access palettes)
           cellular-automaton # Procrastinate better by watching animations
@@ -2145,6 +2154,7 @@ in {
 
           sleuth # Heuristically set indent depth # TODO: See intellitab
 
+          snacks # Lots of QoL
           tabby # Nicer tabline (only showing tabpages)
           telescope # Option picker frontend
           todo-comments # Highlight TODOs
