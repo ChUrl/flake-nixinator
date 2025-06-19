@@ -2,22 +2,22 @@
 ; NIXOS
 ; ===========================
 
-% nixos, nixos-rebuild, flake
+% nixos
 # Rebuild a flake system derivation
 sudo nixos-rebuild <type> --flake .#<flake>
 $ type: echo -e "switch\nbuild\nboot"
 $ flake: echo -e "nixinator\nnixtop"
 
-% nixos, nix-store, closure, dependency
+% nixos
 # Find out why a package is included in the closure when building the system derivation
 nix why-depends /run/current-system nixpkgs#<package>
 
-% nixos, nix-store, storepath, link
+% nixos
 # Find the storepath of an executable in the users path
 readlink -f $(which <executable>)
 $ executable: bash -c "compgen -c"
 
-% nixos, nix-store, storepath, libraries
+% nixos
 # Find the wanted dynamic libraries of an executable in the users path
 ldd $(readlink -f $(which <executable>))
 $ executable: bash -c "compgen -c"
@@ -26,36 +26,55 @@ $ executable: bash -c "compgen -c"
 ; SHELL
 ; ===========================
 
-% shell, process
+% shell
 # Launch a detached process with suppressed output
 <command> &>/dev/null &; disown
 
-% yes, head, file
+% shell
 # Generate a large text file
 yes "The quick brown fox jumps over the lazy dog" | head -c <size> > <output>
 
-% fish, for, loop
+% shell
 # For-loop in fish shell
 for o in <objects>; <action>; end
 
-% find
+% shell
 # Find files under a certain size in the current directory
 find . -type f -name "<glob>" -size -<size>
 
+% awk
+# Select a column
+awk -F<separator> '{print <print>}'
+$ separator: echo -e "' '\t\tWhitespace\n'[ ]'\t\tSingle Space\n'\\\t'\t\tTabs" --- --column 1
+
+% mime
+# Determine the mime-type of a file
+file --mime-type <file>
+$ file: eza -f -1
+
+% mime
+# Query the default app for a mime type
+xdg-mime query default <mimetype>
+
+% mime
+# Query the default app for a file
+xdg-mime query default $(file --mime-type <file> | awk -F' ' '{print $2}')
+$ file: eza -f -1
+
 ; ===========================
-; CODING
+; CODE
 ; ===========================
 
-% objdump, disassemble
+% code
 # Disassemble an object file
 objdump -d -S -M intel "<file>" | bat -l nasm
 $ file: eza -f -1
 
 ; ===========================
-; DOCUMENTS
+; DOCS
 ; ===========================
 
-% pdftocairo, pdf, svg
+% docs
 # Extract svg figure from pdf page
 pdftocairo -f <page> -l <page> -svg "<input>" "<output>"
 $ input: eza -f -1
@@ -64,11 +83,11 @@ $ input: eza -f -1
 ; YT-DLP
 ; ===========================
 
-% yt-dlp, mp4
+% yt-dlp
 # Download mp4 video in best quality
 yt-dlp -f 'bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4] / bv*+ba/b' --recode-video mp4 "<url>"
 
-% yt-dlp, mp3
+% yt-dlp
 # Download mp3 video in best quality
 yt-dlp -f 'ba' --extract-audio --audio-format mp3 "<url>"
 
@@ -76,33 +95,33 @@ yt-dlp -f 'ba' --extract-audio --audio-format mp3 "<url>"
 ; FFMPEG
 ; ===========================
 
-% ffmpeg, slowmo
+% ffmpeg
 # Create a slow motion version of a video with interpolated/blended frames
 ffmpeg -i "<input>" -filter:v "minterpolate='mi_mode=mci:mc_mode=aobmc:vsbmc=1:fps=<doublefps>',setpts=2*PTS" output.mp4
 $ input: eza -f -1
 
-% ffmpeg, cropdetect
+% ffmpeg
 # Detect black bar dimensions automatically by looking at the first 10 frames
 ffmpeg -i "<input>" -vframes 10 -vf cropdetect -f null -
 $ input: eza -f -1
 
-% ffmpeg, cropdetect, preview
+% ffmpeg
 # Preview video with applied crop settings
 ffplay -vf crop=<width>:<height>:<x>:<y> "<input>"
 $ input: eza -f -1
 
-% ffmpeg, cropdetect, render
+% ffmpeg
 # Re-encode the video with applied crop settings
 ffmpeg -i "<input>" -vf crop=<width>:<height>:<x>:<y> -c:a copy output.mp4
 $ input: eza -f -1
 
-% ffmpeg, video compression, h265, render, reencode
+% ffmpeg
 # Reencode and compress the video using the h265 codec
 ffmpeg -i "<input>" -vcodec libx265 -crf <quality> "out_<input>"
 $ input: eza -f -1
 $ quality: echo -e "24\n25\n26\n27\n28\n29\n30\n"
 
-% ffmpeg, video compression, h256, render, reencode
+% ffmpeg
 # Reencode and compress multiple videos using the h265 codec
 fish -c "for name in <files>; ffmpeg -i '$name' -vcodec libx265 -crf <quality> 'out_$name'; end"
 $ quality: echo -e "24\n25\n26\n27\n28\n29\n30\n"
