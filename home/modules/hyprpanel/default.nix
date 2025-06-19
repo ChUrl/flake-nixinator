@@ -48,6 +48,10 @@ in {
           };
         };
 
+        "bar.workspaces.applicationIconMap" = {
+          "class:^(signal)$" = "󱋊";
+        };
+
         # https://github.com/Jas-SinghFSU/HyprPanel/blob/master/src/configuration/modules/theme/bar/index.ts
         "theme.bar.background" = "#${color.hex.light.base}";
         "theme.bar.border.color" = "#${color.hex.dark.lavender}";
