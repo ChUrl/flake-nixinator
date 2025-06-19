@@ -76,6 +76,8 @@ rec {
           "$mainMod, T" = ["exec, kitty"];
           "$mainMod, E" = ["exec, kitty"];
           "$mainMod, N" = ["exec, neovide"];
+          "$mainMod SHIFT, N" = ["exec, neovide ${config.paths.dotfiles}/navi/christoph.cheat"];
+          "$mainMod CTRL, N" = ["exec, kitty navi"];
 
           "$mainMod, P" = ["exec, hyprpicker --autocopy --format=hex"];
           "$mainMod, S" = ["exec, grim -g \"$(slurp)\""];
@@ -217,12 +219,21 @@ rec {
   # This only works when HM is installed as a system module,
   # as nixosConfig won't be available otherwise.
   xdg = {
+    enable = true;
     mime.enable = true;
     mimeApps = {
       enable = true;
       associations.added = nixosConfig.xdg.mime.addedAssociations;
       associations.removed = nixosConfig.xdg.mime.removedAssociations;
-      inherit (nixosConfig.xdg.mime) defaultApplications; # Equal to "defaultApplications = nixosConfig.xdg.mime.defaultApplications"
+      defaultApplications = nixosConfig.xdg.mime.defaultApplications;
+    };
+
+    # TODO: What about desktop portals? They're configured in system config, do I need to do sth here?
+    portal = {
+      enable = nixosConfig.xdg.portal.enable;
+      xdgOpenUsePortal = nixosConfig.xdg.portal.xdgOpenUsePortal;
+      config.common.default = nixosConfig.xdg.portal.config.common.default;
+      extraPortals = nixosConfig.xdg.portal.extraPortals;
     };
   };
 
