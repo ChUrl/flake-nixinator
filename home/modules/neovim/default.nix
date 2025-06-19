@@ -735,14 +735,6 @@ in {
             config = mkDefaultConfig name;
           };
 
-          lazygit = {
-            name = "lazygit";
-            pkg = pkgs.vimPlugins.lazygit-nvim;
-            dependencies = [_plenary];
-            lazy = true;
-            cmd = ["LazyGit" "LazyGitConfig" "LazyGitCurrentFile" "LazyGitFilter" "LazyGitFilterCurrentFile"];
-          };
-
           lint = {
             name = "lint";
             pkg = pkgs.vimPlugins.nvim-lint;
@@ -1998,7 +1990,6 @@ in {
 
           jdtls # Eclipse JDT language server integration for Java
           lastplace # Reopen a file at the last editing position
-          lazygit # Git frontend
           # leetcode # Solve leetcode problems
           lint # Lint documents on save
           lspconfig # Language server configurations for different languages
