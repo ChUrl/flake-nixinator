@@ -682,12 +682,16 @@ rec {
     };
   };
 
-  systemd.user.tmpfiles.rules = [
-    # Fix Discord rich presence for Flatpak
-    "L %t/discord-ipc-0 - - - - app/com.discordapp.Discord/discord-ipc-0"
-    # "L %t/discord-ipc-0 - - - - app/com.discordapp.DiscordCanary/discord-ipc-0"
-  ];
+  systemd = {
+    user = {
+      tmpfiles.rules = [
+        # Fix Discord rich presence for Flatpak
+        "L %t/discord-ipc-0 - - - - app/com.discordapp.Discord/discord-ipc-0"
+        # "L %t/discord-ipc-0 - - - - app/com.discordapp.DiscordCanary/discord-ipc-0"
+      ];
 
-  # Nicely reload system units when changing configs
-  systemd.user.startServices = "sd-switch";
+      # Nicely reload system units when changing configs
+      startServices = "sd-switch";
+    };
+  };
 }
