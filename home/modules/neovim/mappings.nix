@@ -678,7 +678,7 @@
     {
       mode = "n";
       key = "<leader>gg";
-      action = "<cmd>LazyGit<cr>";
+      action = "<cmd>lua Snacks.lazygit.open()<cr>";
       options.desc = "LazyGit";
     }
     {
