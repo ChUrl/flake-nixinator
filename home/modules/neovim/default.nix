@@ -356,13 +356,6 @@ in {
             };
           };
 
-          cellular-automaton = {
-            name = "cellular-automaton";
-            pkg = pkgs.vimPlugins.cellular-automaton-nvim;
-            lazy = true;
-            cmd = ["CellularAutomaton"];
-          };
-
           # NOTE: In LazyVim require("clang_extensions").setup(opts) is called where opts is the server definition from lspconfig...
           clangd-extensions = rec {
             name = "clangd_extensions";
@@ -1942,7 +1935,6 @@ in {
 
           better-escape # Escape to normal mode using "jk"
           catppuccin # Colortheme (also add this here to access palettes)
-          cellular-automaton # Procrastinate better by watching animations
           clangd-extensions # Improved clang LSP support
           blink-cmp # Fast as fuck auto completion
 
