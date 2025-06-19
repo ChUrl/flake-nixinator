@@ -147,75 +147,22 @@ with mylib.networking; {
     supportedLocales = ["en_US.UTF-8/UTF-8" "de_DE.UTF-8/UTF-8"];
   };
 
-  # XDG
-  xdg.portal = {
-    enable = true;
-    xdgOpenUsePortal = true;
-    wlr.enable = false; # Hyprland has its own portal automatically enabled...
-    extraPortals = with pkgs; [
-      xdg-desktop-portal-gtk
-
-      # xdg-desktop-portal-kde
-      # xdg-desktop-portal-hyprland # Already enabled by hyprland system module
-      # xdg-desktop-portal-termfilechooser # Filepicker using nnn
-    ];
-  };
-
-  # See https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
-  xdg.mime = rec {
-    enable = true;
-
-    removedAssociations = {
-      "application/pdf" = [
-        "chromium-browser.desktop"
-        "com.google.Chrome.desktop"
-        "firefox.desktop"
-      ];
-      "text/plain" = [
-        "firefox.desktop"
-        "code.desktop"
-      ];
-      "text/html" = [
-        "chromium-browser.desktop"
-        "com.google.Chrome.desktop"
-      ];
-      "application/xhtml+xml" = [
-        "chromium-browser.desktop"
-        "com.google.Chrome.desktop"
-      ];
-    };
-
-    defaultApplications = let
-      textEditor = "neovide.desktop"; # Helix.desktop
-      fileBrowser = "yazi.desktop";
-      webBrowser = "firefox.desktop";
-      pdfViewer = "org.pwmt.zathura.desktop";
-      imageViewer = "imv.desktop";
-      audioPlayer = "vlc.desktop"; # mov.desktop
-      videoPlayer = "vlc.desktop";
-
-      textMimeTypes = [
+  xdg = {
+    # See https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
+    # Find .desktop files: fd ".*\.desktop" / | grep --color=auto -E neovide
+    mime = let
+      textTypes = [
         "text/css"
         "text/csv"
         "text/javascript"
+        "text/plain"
+        "text/xml"
         "application/json"
         "application/ld+json"
         "application/x-sh"
-        "text/plain"
         "application/xml"
-        "text/xml"
       ];
-      fileBrowserMimeTypes = [
-        "inode/directory"
-      ];
-      webBrowserMimeTypes = [
-        "text/html"
-        "application/xhtml+xml"
-      ];
-      pdfMimeTypes = [
-        "application/pdf"
-      ];
-      imageMimeTypes = [
+      imageTypes = [
         "image/apng"
         "image/avif"
         "image/bmp"
@@ -226,7 +173,7 @@ with mylib.networking; {
         "image/tiff"
         "image/webp"
       ];
-      audioMimeTypes = [
+      audioTypes = [
         "audio/aac"
         "audio/mpeg"
         "audio/ogg"
@@ -236,7 +183,7 @@ with mylib.networking; {
         "audio/3gpp"
         "audio/3gpp2"
       ];
-      videoMimeTypes = [
+      videoTypes = [
         "video/x-msvideo"
         "video/mp4"
         "video/mpeg"
@@ -246,21 +193,128 @@ with mylib.networking; {
         "video/3gpp"
         "video/3gpp2"
       ];
-
-      mkAssociation = app: type: {${type} = app;};
-      mkAssociations = app: types: lib.mergeAttrsList (builtins.map (mkAssociation app) types);
-    in
-      lib.mergeAttrsList [
-        (mkAssociations textEditor textMimeTypes)
-        (mkAssociations fileBrowser fileBrowserMimeTypes)
-        (mkAssociations webBrowser webBrowserMimeTypes)
-        (mkAssociations pdfViewer pdfMimeTypes)
-        (mkAssociations imageViewer imageMimeTypes)
-        (mkAssociations audioPlayer audioMimeTypes)
-        (mkAssociations videoPlayer videoMimeTypes)
+      webTypes = [
+        "text/uri-list"
+        "text/x-uri"
+        "text/html"
+        "application/xhtml+xml"
+        "x-scheme-handler/https"
       ];
+    in rec {
+      enable = true;
 
-    addedAssociations = defaultApplications;
+      defaultApplications = let
+        associations = {
+          "neovide.desktop" = textTypes ++ [];
+          "yazi.desktop" = ["inode/directory"];
+          "firefox.desktop" = webTypes ++ [];
+          "org.pwmt.zathura.desktop" = ["application/pdf"];
+          "imv-dir.desktop" = imageTypes ++ []; # imv-dir autoselects the directory so next/prev works
+          "vlc.desktop" = audioTypes ++ videoTypes ++ [];
+        };
+
+        # Applied to a single app and a single type
+        mkAssociation = app: type: {${type} = [app];}; # Result: { "image/jpg" = ["imv.desktop"]; }
+
+        # Applied to a single app and a list of types
+        mkAssociations = app: types: lib.mergeAttrsList (builtins.map (mkAssociation app) types); # Result: { "image/jpg" = ["imv.desktop"]; "image/png" = ["imv.desktop"]; ... }
+      in
+        # Apply to a list of apps each with a list of types
+        lib.mergeAttrsList (lib.mapAttrsToList mkAssociations associations);
+
+      addedAssociations = defaultApplications;
+
+      removedAssociations = let
+        fromTextTypes = [
+          "nvim.desktop"
+        ];
+
+        fromImageTypes = [
+          "imv.desktop"
+          "chromium-browser.desktop"
+          "org.kde.krita.desktop"
+          "krita.desktop"
+          "krita_svg.desktop"
+          "krita_raw.desktop"
+          "krita_heif.desktop"
+          "krita_webp.desktop"
+          "krita_gif.desktop"
+          "krita_brush.desktop"
+          "krita_xcf.desktop"
+          "krita_jpeg.desktop"
+          "krita_spriter.desktop"
+          "krita_jxl.desktop"
+          "krita_ora.desktop"
+          "krita_csv.desktop"
+          "krita_tga.desktop"
+          "krita_psd.desktop"
+          "krita_png.desktop"
+          "krita_tiff.desktop"
+          "krita_exr.desktop"
+          "krita_qimageio.desktop"
+          "krita_pdf.desktop"
+          "krita_jp2.desktop"
+          "krita_heightmap.desktop"
+          "krita_kra.desktop"
+          "krita_krz.desktop"
+        ];
+
+        fromAudioTypes = [];
+
+        fromVideoTypes = [];
+
+        fromWebTypes = [
+          "chromium-browser.desktop"
+          "com.google.Chrome.desktop"
+        ];
+
+        # Applied to a list of apps and a single type
+        removeAssociation = apps: type: {${type} = apps;};
+
+        # Applied to a list of apps and a list of types: For each type the list of apps should be removed
+        removeAssociations = apps: types: lib.mergeAttrsList (builtins.map (removeAssociation apps) types);
+      in
+        lib.mergeAttrsList [
+          {
+            "application/pdf" = [
+              "chromium-browser.desktop"
+              "com.google.Chrome.desktop"
+              "firefox.desktop"
+            ];
+            "text/plain" = [
+              "firefox.desktop"
+              "code.desktop"
+            ];
+          }
+
+          # Only activate those if applications to remove are specified: (len from...Types) > 0
+          (lib.optionalAttrs (builtins.lessThan 0 (builtins.length fromTextTypes))
+            (removeAssociations fromTextTypes textTypes))
+          (lib.optionalAttrs (builtins.lessThan 0 (builtins.length fromImageTypes))
+            (removeAssociations fromImageTypes imageTypes))
+          (lib.optionalAttrs (builtins.lessThan 0 (builtins.length fromAudioTypes))
+            (removeAssociations fromAudioTypes audioTypes))
+          (lib.optionalAttrs (builtins.lessThan 0 (builtins.length fromVideoTypes))
+            (removeAssociations fromVideoTypes videoTypes))
+          (lib.optionalAttrs (builtins.lessThan 0 (builtins.length fromWebTypes))
+            (removeAssociations fromWebTypes webTypes))
+        ];
+    };
+
+    # XDG
+    portal = {
+      enable = true;
+      xdgOpenUsePortal = false;
+      config.common.default = ["*"]; # https://discourse.nixos.org/t/clicked-links-in-desktop-apps-not-opening-browers/29114/26
+      wlr.enable = false; # Hyprland has its own portal automatically enabled...
+      extraPortals = with pkgs; [
+        xdg-desktop-portal-gtk
+
+        # xdg-desktop-portal-kde
+        # xdg-desktop-portal-hyprland # Already enabled by hyprland system module
+        # xdg-desktop-portal-termfilechooser # Filepicker using nnn
+      ];
+    };
   };
 
   fonts = {
@@ -368,7 +422,12 @@ with mylib.networking; {
     # pay-respects.enable = true; # The new fuck
     xwayland.enable = true;
     nix-ld.enable = true; # Load dynamically linked executables
-    hyprland.enable = true;
+
+    hyprland = {
+      enable = true;
+      xwayland.enable = true;
+      withUWSM = true;
+    };
 
     nh = {
       enable = true;
