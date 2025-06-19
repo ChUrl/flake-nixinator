@@ -1,7 +1,4 @@
-# TODO: Use the home-manager module instead of generating my own scuffed config files
-#
 # TODO: The keys to reset the workspaces need to depend on actual workspace config
-# TODO: The border color does not fit the current theme
 {
   config,
   lib,
