@@ -582,83 +582,6 @@ in {
             lazy = false;
           };
 
-          dashboard = rec {
-            name = "dashboard";
-            pkg = pkgs.vimPlugins.dashboard-nvim;
-            dependencies = [
-              web-devicons
-              _persisted
-            ];
-            lazy = false;
-            config = mkDefaultConfig name;
-            opts = {
-              theme = "doom";
-              disable_move = true;
-              shortcut_type = "number";
-
-              config = {
-                center = [
-                  {
-                    action = "Telescope persisted";
-                    desc = " Restore Session";
-                    icon = " ";
-                    key = "s";
-                  }
-                  {
-                    action = "Telescope find_files";
-                    desc = " Find File";
-                    icon = " ";
-                    key = "f";
-                  }
-                  {
-                    action = "Telescope oldfiles";
-                    desc = " Recent Files";
-                    icon = " ";
-                    key = "r";
-                  }
-                  {
-                    action = "ObsidianSearch";
-                    desc = " Obsidian Note";
-                    icon = " ";
-                    key = "o";
-                  }
-                  {
-                    action = "ene | startinsert";
-                    desc = " New File";
-                    icon = " ";
-                    key = "n";
-                  }
-                  {
-                    action = "Telescope live_grep";
-                    desc = " Find Text";
-                    icon = " ";
-                    key = "g";
-                  }
-                  {
-                    action = "Lazy";
-                    desc = " Lazy";
-                    icon = "󰒲 ";
-                    key = "l";
-                  }
-                  {
-                    action = "quitall";
-                    desc = " Quit";
-                    icon = " ";
-                    key = "q";
-                  }
-                ];
-
-                footer.__raw = ''
-                  function()
-                    local stats = require("lazy").stats()
-                    local ms = (math.floor(stats.startuptime * 100 + 0.5) / 100)
-                    return { "⚡ Neovim loaded " .. stats.loaded .. "/" .. stats.count .. " plugins in " .. ms .. "ms" }
-                  end,
-                '';
-              };
-            };
-          };
-
           diffview = {
             name = "diffview";
             pkg = pkgs.vimPlugins.diffview-nvim;
@@ -1561,6 +1484,10 @@ in {
           snacks = rec {
             name = "snacks";
             pkg = pkgs.vimPlugins.snacks-nvim;
+            dependencies = [
+              web-devicons
+              _persisted
+            ];
             lazy = false;
             priority = 1000;
             config = mkDefaultConfig name;
@@ -1571,6 +1498,67 @@ in {
                 notify = true;
                 size = 1.5 * 1024 * 1024; # 1.5MB
                 line_length = 1000;
+              };
+
+              dashboard = {
+                enabled = true;
+
+                preset = {
+                  keys = [
+                    {
+                      icon = " ";
+                      key = "f";
+                      desc = "Find File";
+                      action = "<cmd>lua Snacks.dashboard.pick('files')<cr>";
+                    }
+                    {
+                      icon = " ";
+                      key = "n";
+                      desc = "New File";
+                      action = "<cmd>ene | startinsert<cr>";
+                    }
+                    {
+                      icon = " ";
+                      key = "g";
+                      desc = "Find Text";
+                      action = "<cmd>lua Snacks.dashboard.pick('live_grep')<cr>";
+                    }
+                    {
+                      icon = " ";
+                      key = "r";
+                      desc = "Recent Files";
+                      action = "<cmd>lua Snacks.dashboard.pick('oldfiles')<cr>";
+                    }
+                    {
+                      icon = " ";
+                      key = "s";
+                      desc = "Restore Session";
+                      action = "<cmd>Telescope persisted<cr>";
+                    }
+                    {
+                      icon = "󰒲 ";
+                      key = "L";
+                      desc = "Lazy";
+                      action = "<cmd>Lazy<cr>";
+                    }
+                    {
+                      icon = " ";
+                      key = "q";
+                      desc = "Quit";
+                      action = "<cmd>quitall<cr>";
+                    }
+                  ];
+
+                  sections = [
+                    {section = "header";}
+                    {
+                      section = "keys";
+                      gap = 1;
+                      padding = 1;
+                    }
+                    {section = "startup";}
+                  ];
+                };
               };
             };
           };
@@ -2109,8 +2097,6 @@ in {
 
           # dadbod # Database interface # TODO:
           # dadbod-ui # Dadbod UI # TODO:
-
-          dashboard # Dashboard when starting nvim
 
           # dap # Debug adapter protocol # TODO:
           # dap-ui # Debugger UI # TODO:
