@@ -300,9 +300,15 @@
     }
     {
       mode = "n";
-      key = "<leader>n";
+      key = "<leader>e";
       action = "<cmd>lua Snacks.explorer.open({ enter = false, on_show = function() vim.cmd('wincmd =') end })<cr>";
       options.desc = "Toggle Explorer";
+    }
+    {
+      mode = "n";
+      key = "<leader>n";
+      action = "<cmd>Navbuddy<cr>";
+      options.desc = "Toggle NavBuddy";
     }
     {
       mode = "n";
@@ -782,12 +788,6 @@
       mode = "n";
       key = "<leader>ct";
       action = "+toggle";
-    }
-    {
-      mode = "n";
-      key = "<leader>ctn";
-      action = "<cmd>Navbuddy<cr>";
-      options.desc = "NavBuddy";
     }
     {
       mode = "n";
