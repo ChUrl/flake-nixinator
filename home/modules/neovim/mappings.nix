@@ -324,6 +324,12 @@ _: let
     }
     {
       mode = "n";
+      key = "<leader>i";
+      action = "<cmd>lua Snacks.picker.icons()<cr>";
+      options.desc = "Icons Picker";
+    }
+    {
+      mode = "n";
       key = "<leader>;";
       action = "<cmd>lua Snacks.picker.command_history()<cr>";
       options.desc = "Command History";
