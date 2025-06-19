@@ -597,27 +597,6 @@ in {
             config = mkDefaultConfig name;
           };
 
-          gitmessenger = {
-            name = "gitmessenger";
-            pkg = pkgs.vimPlugins.git-messenger-vim;
-            lazy = true;
-            cmd = ["GitMessenger"];
-            init = let
-              mappings = mylib.generators.toLuaObject {
-                git_messenger_no_default_mappings = true;
-                git_messenger_floating_win_opts = {
-                  border = "rounded";
-                };
-              };
-            in ''
-              function()
-                for k, v in pairs(${mappings}) do
-                  vim.g[k] = v
-                end
-              end
-            '';
-          };
-
           gitsigns = rec {
             name = "gitsigns";
             pkg = pkgs.vimPlugins.gitsigns-nvim;
@@ -1981,7 +1960,6 @@ in {
 
           direnv # Automatically load local environments
           flash # Highlight f/F search results
-          gitmessenger # Show last git commit for the current line
           gitsigns # Show git line additions/deletions/changes in the gutter
           haskell-tools # Haskell integration
           illuminate # Highlight usages of word under cursor
@@ -1990,7 +1968,6 @@ in {
 
           jdtls # Eclipse JDT language server integration for Java
           lastplace # Reopen a file at the last editing position
-          # leetcode # Solve leetcode problems
           lint # Lint documents on save
           lspconfig # Language server configurations for different languages
           lualine # Status line

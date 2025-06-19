@@ -684,8 +684,8 @@
     {
       mode = "n";
       key = "<leader>gm";
-      action = "<cmd>GitMessenger<cr>";
-      options.desc = "GitMessenger";
+      action = "<cmd>lua Snacks.git.blame_line()<cr>";
+      options.desc = "Git Blame";
     }
 
     {
