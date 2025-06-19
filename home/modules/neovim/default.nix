@@ -743,26 +743,6 @@ in {
             cmd = ["LazyGit" "LazyGitConfig" "LazyGitCurrentFile" "LazyGitFilter" "LazyGitFilterCurrentFile"];
           };
 
-          # leetcode = rec {
-          #   name = "leetcode";
-          #   pkg = pkgs.vimUtils.buildVimPlugin {
-          #     name = "leetcode";
-          #     src = pkgs.fetchFromGitHub {
-          #       owner = "kawre";
-          #       repo = "leetcode.nvim";
-          #       rev = "02fb2c855658ad6b60e43671f6b040c812181a1d";
-          #       sha256 = "sha256-YoFRd9Uf+Yv4YM6/l7MVLMjfRqhroSS3RCmZvNowIAo=";
-          #     };
-          #   };
-          #   lazy = true;
-          #   cmd = ["Leet"];
-          #   dependencies = [_notify _nui _plenary telescope treesitter web-devicons];
-          #   config = mkDefaultConfig name;
-          #   opts = {
-          #     lang = "python";
-          #   };
-          # };
-
           lint = {
             name = "lint";
             pkg = pkgs.vimPlugins.nvim-lint;
@@ -1186,77 +1166,6 @@ in {
             };
           };
 
-          neo-tree = rec {
-            name = "neo-tree";
-            pkg = pkgs.vimPlugins.neo-tree-nvim;
-            dependencies = [
-              _plenary
-              web-devicons
-              _nui
-            ];
-            lazy = true;
-            cmd = ["Neotree"];
-            config = mkDefaultConfig name;
-            opts = {
-              use_default_mappings = false;
-              popup_border_style = "rounded";
-              enable_git_status = true;
-              enable_diagnostics = false;
-              open_files_do_not_replace_types = ["terminal" "trouble" "qf"];
-
-              default_component_configs = {
-                container = {
-                  enable_character_fade = true;
-                };
-              };
-
-              filesystem = {
-                bind_to_cwd = true;
-                cwd_target.sidebar = "global";
-
-                filtered_items = {
-                  visible = false; # Toggle with "H"
-                };
-
-                follow_current_file = {
-                  enabled = true;
-                  leave_dirs_open = false;
-                };
-              };
-
-              buffers = {
-                follow_current_file = {
-                  enabled = true;
-                  leave_dirs_open = false;
-                };
-              };
-
-              window = {
-                position = "left";
-
-                mappings = {
-                  "<CR>" = "open";
-                  "c" = "close_node";
-                  "R" = "refresh";
-                  "q" = "close_window";
-                  "i" = "show_file_details";
-                  "r" = "rename";
-                  "d" = "delete";
-                  "x" = "cut_to_clipboard";
-                  "y" = "copy_to_clipboard";
-                  "p" = "paste_from_clipboard";
-                  "a" = "add";
-                  "." = "set_root";
-                  ">" = "navigate_up";
-                  "H" = "toggle_hidden";
-                  "<Esc>" = "cancel";
-                  "/" = "fuzzy_finder";
-                  "?" = "show_help";
-                };
-              };
-            };
-          };
-
           neogen = rec {
             name = "neogen";
             pkg = pkgs.vimPlugins.neogen;
@@ -1380,16 +1289,6 @@ in {
                   path = "~/Notes/Obsidian/Chriphost";
                 }
               ];
-            };
-          };
-
-          oil = rec {
-            name = "oil";
-            pkg = pkgs.vimPlugins.oil-nvim;
-            lazy = false;
-            config = mkDefaultConfig name;
-            opts = {
-              default_file_explorer = true;
             };
           };
 
@@ -1559,6 +1458,11 @@ in {
                     {section = "startup";}
                   ];
                 };
+              };
+
+              explorer = {
+                enabled = true;
+                replace_netrw = true;
               };
             };
           };
@@ -1806,25 +1710,6 @@ in {
                 height = 45;
                 winblend = 0;
               };
-
-              # Hack to make toggleterm respect neotree:
-              # Open + close neotree once toggleterm is opened.
-              # Toggleterm will "glitch" when opening, also neotree will scroll downwards.
-              # on_open.__raw = ''
-              #   function(...)
-              #     local name = vim.fn.bufname("neo-tree")
-              #     local winnr = vim.fn.bufwinnr(name)
-              #
-              #     if winnr ~= -1 then
-              #       vim.defer_fn(function()
-              #         local cmd = string.format("Neotree toggle")
-              #         vim.cmd(cmd)
-              #         vim.cmd(cmd)
-              #         vim.cmd("wincmd p")
-              #       end, 100)
-              #     end
-              #   end
-              # '';
             };
           };
 
@@ -2124,11 +2009,9 @@ in {
           markview # Markdown support # TODO: Disable in help buffers (?) + confiure a bit more
 
           navbuddy # Structural file view
-          neo-tree # File tree sidebar
           neogen # Generate doc comments
           noice # Modern UI overhaul, e.g. floating cmdline
           obsidian # Integration with Obsidian.md
-          oil # File manager
 
           # overseer # Run tasks from within neovim (e.g. cargo) # TODO:
 
