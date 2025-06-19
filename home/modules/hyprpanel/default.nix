@@ -49,7 +49,26 @@ in {
         };
 
         "bar.workspaces.applicationIconMap" = {
+          "class:^(kitty)$" = "󰄛";
+          "class:^(org\.keepassxc\.KeePassXC)$" = "󰟵";
+          "class:^(com\.nextcloud\.desktopclient\.nextcloud)$" = "";
+          "class:^(neovide)$" = "";
+          "class:^(jetbrains-clion)$" = "";
+          "class:^(jetbrains-idea)$" = "";
+          "class:^(jetbrains-pycharm)$" = "";
+          "class:^(jetbrains-rustrover)$" = "";
+          "class:^(jetbrains-rider)$" = "";
+          "class:^(jetbrains-webstorm)$" = "";
+          "class:^(obsidian)$" = "";
+          "class:^(anki)$" = "";
+          "class:^(blender)$" = "󰂫";
+          "class:^(unityhub)$" = "";
+          "class:^(Unity)$" = "";
+          "class:^(steam)$" = "";
+          "class:^(steam_app_)(.+)$" = "";
           "class:^(signal)$" = "󱋊";
+          "class:^(Spotify)$" = "";
+          "class:^(discord)$" = "";
         };
 
         # https://github.com/Jas-SinghFSU/HyprPanel/blob/master/src/configuration/modules/theme/bar/index.ts
