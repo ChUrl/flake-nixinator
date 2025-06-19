@@ -1,4 +1,4 @@
-{...}: let
+_: let
   # TODO: Doesn't work reliably. I think they are rebound by plugins after? Try setting in extraConfigLuaPost...
   disabled-mappings = let
     mkDisabledMapping = mapping: {
@@ -268,14 +268,8 @@
     {
       mode = "n";
       key = "/";
-      action = "<cmd>Telescope current_buffer_fuzzy_find<cr>";
-      options.desc = "Grep Buffer";
-    }
-    {
-      mode = "v";
-      key = "?";
-      action = "<cmd>Telescope grep_string<cr>";
-      options.desc = "Find Selection";
+      action = "<cmd>lua Snacks.picker.lines()<cr>";
+      options.desc = "Find in Buffer";
     }
     {
       mode = "n";
@@ -312,44 +306,50 @@
     }
     {
       mode = "n";
+      key = "<leader>p";
+      action = "<cmd>lua Snacks.picker.pickers()<cr>";
+      options.desc = "Show Pickers";
+    }
+    {
+      mode = "n";
       key = "<leader>N";
-      action = "<cmd>Telescope notify<cr>";
-      options.desc = "Telescope Notify";
+      action = "<cmd>lua Snacks.picker.notifications()<cr>";
+      options.desc = "Notifications Picker";
     }
     {
       mode = "n";
       key = "<leader>r";
-      action = "<cmd>Telescope resume<cr>";
-      options.desc = "Last Telescope";
+      action = "<cmd>lua Snacks.picker.resume()<cr>";
+      options.desc = "Last Picker";
     }
-    # {
-    #   mode = "n";
-    #   key = "<leader>;";
-    #   action = "<cmd>Telescope command_history<cr>";
-    #   options.desc = "Last Commands";
-    # }
+    {
+      mode = "n";
+      key = "<leader>;";
+      action = "<cmd>lua Snacks.picker.command_history()<cr>";
+      options.desc = "Command History";
+    }
     {
       mode = "n";
       key = "<leader>:";
-      action = "<cmd>Telescope commands<cr>";
-      options.desc = "Telescope Command";
-    }
-    {
-      mode = "n";
-      key = "<leader>M";
-      action = "<cmd>Telescope marks<cr>";
-      options.desc = "Telescope Marks";
+      action = "<cmd>lua Snacks.picker.commands()<cr>";
+      options.desc = "Commands Picker";
     }
     # {
     #   mode = "n";
+    #   key = "<leader>M";
+    #   action = "<cmd>lua Snacks.picker.marks()<cr>";
+    #   options.desc = "Marks Picker";
+    # }
+    # {
+    #   mode = "n";
     #   key = "<leader>J";
-    #   action = "<cmd>Telescope jumplist<cr>";
-    #   options.desc = "Telescope Jumps";
+    #   action = "<cmd>lua Snacks.picker.jumps()<cr>";
+    #   options.desc = "Jumps Picker";
     # }
     {
       mode = "n";
       key = "<leader>d";
-      action = "<cmd>TodoTelescope<cr>";
+      action = "<cmd>lua Snacks.picker.todo_comments()<cr>";
       options.desc = "List TODOs";
     }
     {
@@ -361,13 +361,13 @@
     {
       mode = "n";
       key = "<leader>/";
-      action = "<cmd>Telescope live_grep<cr>";
+      action = "<cmd>lua Snacks.picker.grep()<cr>";
       options.desc = "Find in Project";
     }
     {
       mode = "n";
       key = "<leader>Q";
-      action = "<cmd>Telescope quickfixhistory<cr>";
+      action = "<cmd>lua Snacks.picker.qflist()<cr>";
       options.desc = "Quickfix History";
     }
     # {
@@ -393,13 +393,13 @@
     {
       mode = "n";
       key = "<leader>ff";
-      action = "<cmd>Telescope find_files<cr>";
+      action = "<cmd>lua Snacks.picker.files()<cr>";
       options.desc = "Find File";
     }
     {
       mode = "n";
       key = "<leader>fl";
-      action = "<cmd>Telescope oldfiles<cr>";
+      action = "<cmd>lua Snacks.picker.recent()<cr>";
       options.desc = "Last Files";
     }
     {
@@ -417,8 +417,8 @@
     {
       mode = "n";
       key = "<leader>fu";
-      action = "<cmd>Telescope undo<cr>";
-      options.desc = "Telescope Undo";
+      action = "<cmd>lua Snacks.picker.und()<cr>";
+      options.desc = "Undo Picker";
     }
     {
       mode = "n";
@@ -445,29 +445,29 @@
       key = "<leader>h";
       action = "+help";
     }
-    {
-      mode = "n";
-      key = "<leader>hv";
-      action = "<cmd>Telescope vim_options<cr>";
-      options.desc = "Telescope Vimopts";
-    }
+    # {
+    #   mode = "n";
+    #   key = "<leader>hv";
+    #   action = "<cmd>Telescope vim_options<cr>";
+    #   options.desc = "Telescope Vimopts";
+    # }
     {
       mode = "n";
       key = "<leader>hk";
-      action = "<cmd>Telescope keymaps<cr>";
-      options.desc = "Telescope Keys";
+      action = "<cmd>lua Snacks.picker.keymaps()<cr>";
+      options.desc = "Keymaps Picker";
     }
     {
       mode = "n";
       key = "<leader>hm";
-      action = "<cmd>Telescope man_pages<cr>";
-      options.desc = "Telescope Manpages";
+      action = "<cmd>lua Snacks.picker.man()<cr>";
+      options.desc = "Manpages Picker";
     }
     {
       mode = "n";
       key = "<leader>hh";
-      action = "<cmd>Telescope help_tags<cr>";
-      options.desc = "Telescope Helptags";
+      action = "<cmd>lua Snacks.picker.help()<cr>";
+      options.desc = "Helptags Picker";
     }
   ];
 
@@ -500,7 +500,7 @@
     {
       mode = "n";
       key = "<leader>sl";
-      action = "<cmd>Telescope persisted<cr>";
+      action = "<cmd>lua require('persisted').select()<cr>";
       options.desc = "Restore Session";
     }
     {
@@ -526,14 +526,14 @@
     {
       mode = "n";
       key = "<leader>bb";
-      action = "<cmd>Telescope buffers<cr>";
-      options.desc = "List Buffers";
+      action = "<cmd>lua Snacks.picker.buffers()<cr>";
+      options.desc = "Buffers Picker";
     }
     {
       mode = "n";
       key = "<leader><Space>";
-      action = "<cmd>Telescope buffers<cr>";
-      options.desc = "List Buffers";
+      action = "<cmd>lua Snacks.picker.buffers()<cr>";
+      options.desc = "Buffers Picker";
     }
     {
       mode = "n";
@@ -567,18 +567,18 @@
       key = "<leader>t";
       action = "+tab";
     }
-    {
-      mode = "n";
-      key = "<leader>tt";
-      action = "<cmd>Telescope telescope-tabs list_tabs<cr>";
-      options.desc = "List Tabpages";
-    }
-    {
-      mode = "n";
-      key = "<leader><C-Space>";
-      action = "<cmd>Telescope telescope-tabs list_tabs<cr>";
-      options.desc = "List Tabpages";
-    }
+    # {
+    #   mode = "n";
+    #   key = "<leader>tt";
+    #   action = "<cmd>Telescope telescope-tabs list_tabs<cr>";
+    #   options.desc = "List Tabpages";
+    # }
+    # {
+    #   mode = "n";
+    #   key = "<leader><C-Space>";
+    #   action = "<cmd>Telescope telescope-tabs list_tabs<cr>";
+    #   options.desc = "List Tabpages";
+    # }
     {
       mode = "n";
       key = "<leader>tn";
@@ -697,25 +697,25 @@
     {
       mode = "n";
       key = "<leader>gs";
-      action = "<cmd>Telescope git_status<cr>";
+      action = "<cmd>lua Snacks.picker.git_status()<cr>";
       options.desc = "Git Status";
     }
     {
       mode = "n";
       key = "<leader>gl";
-      action = "<cmd>Telescope git_commits<cr>";
+      action = "<cmd>lua Snacks.picker.git_log()<cr>";
       options.desc = "Git Log";
     }
     {
       mode = "n";
       key = "<leader>gb";
-      action = "<cmd>Telescope git_branches<cr>";
+      action = "<cmd>lua Snacks.picker.git_branches()<cr>";
       options.desc = "Git Branches";
     }
     {
       mode = "n";
       key = "<leader>gf";
-      action = "<cmd>Telescope git_bcommits<cr>";
+      action = "<cmd>lua Snacks.picker.git_log_file()<cr>";
       options.desc = "Git File History";
     }
     {
@@ -748,7 +748,7 @@
     {
       mode = "n";
       key = "<leader>cD";
-      action = "<cmd>Telescope diagnostics<cr>";
+      action = "<cmd>lua Snacks.picker.diagnostics()<cr>";
       options.desc = "List Diagnostics";
     }
 
@@ -764,18 +764,18 @@
       action = "<cmd>lua vim.lsp.buf.code_action()<cr>";
       options.desc = "Code Actions";
     }
-    {
-      mode = "n";
-      key = "<leader>cI";
-      action = "<cmd>Telescope lsp_incoming_calls<cr>";
-      options.desc = "LSP Incoming Calls";
-    }
-    {
-      mode = "n";
-      key = "<leader>cO";
-      action = "<cmd>Telescope lsp_outgoing_calls<cr>";
-      options.desc = "LSP Outgoing Calls";
-    }
+    # {
+    #   mode = "n";
+    #   key = "<leader>cI";
+    #   action = "<cmd>Telescope lsp_incoming_calls<cr>";
+    #   options.desc = "LSP Incoming Calls";
+    # }
+    # {
+    #   mode = "n";
+    #   key = "<leader>cO";
+    #   action = "<cmd>Telescope lsp_outgoing_calls<cr>";
+    #   options.desc = "LSP Outgoing Calls";
+    # }
     {
       mode = "n";
       key = "<leader>cC";
@@ -835,26 +835,26 @@
     {
       mode = "n";
       key = "<leader>cgr";
-      action = "<cmd>Telescope lsp_references<cr>";
+      action = "<cmd>lua Snacks.picker.lsp_references()<cr>";
       options.desc = "LSP References";
     }
     {
       mode = "n";
       key = "<leader>cgd";
-      action = "<cmd>Telescope lsp_definitions<cr>";
-      options.desc = "LSP Definition";
+      action = "<cmd>lua Snacks.picker.lsp_definitions()<cr>";
+      options.desc = "LSP Definitions";
     }
     {
       mode = "n";
       key = "<leader>cgi";
-      action = "<cmd>Telescope lsp_implementations<cr>";
-      options.desc = "LSP Implementation";
+      action = "<cmd>lua Snacks.picker.lsp_implementations()<cr>";
+      options.desc = "LSP Implementations";
     }
     {
       mode = "n";
       key = "<leader>cgt";
-      action = "<cmd>Telescope lsp_type_definitions<cr>";
-      options.desc = "LSP Type Definition";
+      action = "<cmd>lua Snacks.picker.lsp_type_definitions()<cr>";
+      options.desc = "LSP Type Definitions";
     }
     {
       mode = "n";

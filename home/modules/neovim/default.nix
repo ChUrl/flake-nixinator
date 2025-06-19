@@ -80,8 +80,8 @@ in {
     };
 
     programs.nixvim = {
-      enable = true;
       defaultEditor = true;
+      enable = true;
       enableMan = false; # Nixvim man pages
       luaLoader.enable = true; # NOTE: Experimental
       viAlias = neovim.alias;
@@ -228,25 +228,6 @@ in {
             end
           '';
         }
-
-        # This breaks if the preview buffer does not refer to a file, e.g. when showing previous notifications
-        # {
-        #   desc = "Enable line wrapping in telescope preview";
-        #   event = ["User"];
-        #   pattern = ["TelescopePreviewerLoaded"];
-        #   callback.__raw = ''
-        #     -- The callback arg is of this format:
-        #     -- {
-        #     --   title: string, # preview window title
-        #     --   filetype: string,
-        #     --   bufname: string,
-        #     -- }
-
-        #     function(args)
-        #       vim.wo.wrap = true
-        #     end
-        #   '';
-        # }
       ];
 
       keymaps = import ./mappings.nix {inherit lib mylib;};
@@ -541,34 +522,6 @@ in {
             };
           };
 
-          # TODO: Don't autosave, but if a session exists, update it (using should_autosave)
-          _persisted = {
-            name = "persisted";
-            pkg = pkgs.vimPlugins.persisted-nvim;
-            dependencies = [telescope];
-            lazy = true;
-            cmd = ["SessionSave" "SessionDelete" "Telescope persisted"];
-            config = ''
-              function(_, opts)
-                require("persisted").setup(opts)
-
-                require("telescope").load_extension("persisted")
-              end
-            '';
-            opts = {
-              silent = false;
-              use_git_branch = false;
-              autosave = false;
-              autoload = false;
-              follow_cwd = true;
-              ignored_dirs = [
-                "/"
-                "~/"
-                "~/Projects/"
-              ];
-            };
-          };
-
           direnv = {
             name = "direnv";
             pkg = pkgs.vimPlugins.direnv-vim;
@@ -627,7 +580,6 @@ in {
               filetypesDenylist = [
                 "DressingSelect"
                 "Outline"
-                "TelescopePrompt"
                 "alpha"
                 "harpoon"
                 "toggleterm"
@@ -1004,7 +956,7 @@ in {
                 }
               '';
             in {
-              extensions = ["fzf" "lazy" "neo-tree" "oil" "quickfix" "toggleterm" "trouble"];
+              extensions = ["fzf" "lazy" "quickfix" "toggleterm" "trouble"];
 
               options = {
                 # theme = "catppuccin";
@@ -1256,6 +1208,28 @@ in {
             };
           };
 
+          # TODO: Don't autosave, but if a session exists, update it (using should_save)
+          # TODO: No idea which opts below really exist...
+          persisted = rec {
+            name = "persisted";
+            pkg = pkgs.vimPlugins.persisted-nvim;
+            lazy = false;
+            config = mkDefaultConfig name;
+            opts = {
+              silent = false;
+              use_git_branch = false;
+              autostart = false;
+              autosave = false;
+              autoload = false;
+              follow_cwd = true;
+              ignored_dirs = [
+                "/"
+                "~/"
+                "~/Projects/"
+              ];
+            };
+          };
+
           presence = rec {
             name = "presence";
             pkg = pkgs.vimPlugins.presence-nvim;
@@ -1349,7 +1323,6 @@ in {
             pkg = pkgs.vimPlugins.snacks-nvim;
             dependencies = [
               web-devicons
-              _persisted
             ];
             lazy = false;
             priority = 1000;
@@ -1396,7 +1369,7 @@ in {
                       icon = " ";
                       key = "s";
                       desc = "Restore Session";
-                      action = "<cmd>Telescope persisted<cr>";
+                      action = "<cmd>lua require('persisted').select()<cr>";
                     }
                     {
                       icon = "󰒲 ";
@@ -1427,6 +1400,27 @@ in {
               explorer = {
                 enabled = true;
                 replace_netrw = true;
+              };
+
+              picker = let
+                defaultLayout = ''
+                  --- Use the default layout or vertical if the window is too narrow
+                  function()
+                    return vim.o.columns >= 120 and "default" or "vertical"
+                  end
+                '';
+              in {
+                enabled = true;
+                layout = {
+                  cycle = true;
+                  preset.__raw = defaultLayout;
+                };
+
+                sources = {
+                  lines = {
+                    layout.__raw = defaultLayout;
+                  };
+                };
               };
             };
           };
@@ -1483,96 +1477,9 @@ in {
           };
 
           _plenary = {
-            name = "plenary"; # For telescope
+            name = "plenary";
             pkg = pkgs.vimPlugins.plenary-nvim;
             lazy = true;
-          };
-
-          _telescope-fzf-native = {
-            name = "telescope-fzf-native";
-            pkg = pkgs.vimPlugins.telescope-fzf-native-nvim;
-            lazy = true;
-          };
-
-          # TODO: Build broken
-          # _telescope-tabs = {
-          #   name = "telescope-tabs";
-          #   pkg = pkgs.vimUtils.buildVimPlugin {
-          #     name = "telescope-tabs";
-          #     src = pkgs.fetchFromGitHub {
-          #       owner = "LukasPietzschmann";
-          #       repo = "telescope-tabs";
-          #       rev = "0a678eefcb71ebe5cb0876aa71dd2e2583d27fd3";
-          #       sha256 = "sha256-IvxZVHPtApnzUXIQzklT2C2kAxgtAkBUq3GNxwgPdPY=";
-          #     };
-          #   };
-          #   lazy = true;
-          # };
-
-          _telescope-undo = {
-            name = "telescope-undo";
-            pkg = pkgs.vimPlugins.telescope-undo-nvim;
-            lazy = true;
-          };
-
-          _telescope-ui-select = {
-            name = "telescope-ui-select";
-            pkg = pkgs.vimPlugins.telescope-ui-select-nvim;
-            lazy = true;
-          };
-
-          telescope = {
-            name = "telescope";
-            pkg = pkgs.vimPlugins.telescope-nvim;
-            lazy = true;
-            cmd = ["Telescope"];
-            dependencies = [
-              _plenary
-              _telescope-fzf-native
-              # _telescope-tabs
-              _telescope-undo
-              _telescope-ui-select
-            ];
-            config = let
-              extensions = mylib.generators.toLuaObject [
-                "undo"
-                "ui-select"
-                "fzf"
-                # "telescope-tabs"
-              ];
-            in ''
-              function(_, opts)
-                local telescope = require("telescope")
-                telescope.setup(opts)
-
-                for i, extension in ipairs(${extensions}) do
-                    telescope.load_extension(extension)
-                end
-              end
-            '';
-            opts = {
-              defaults = {
-                wrap_results = false; # Do wrapping in the preview instead, see autoCmd
-                preview = {
-                  treesitter = true;
-                };
-                mappings = {
-                  i = {
-                    # TODO: This mappings throws an error.
-                    #       Doesn't matter if defined as function or like "<C-h"> = "which_key";.
-                    "<C-h>" = {__raw = ''function(...) return require("telescope.actions").which_key(...) end'';};
-                    "<Esc>" = {__raw = ''function(...) return require("telescope.actions").close(...) end'';};
-                  };
-                };
-              };
-              pickers = {
-                buffers = {
-                  # See :h telescope.builtin.buffers() for opts
-                  ignore_current_buffer = true;
-                  sort_mru = true;
-                };
-              };
-            };
           };
 
           todo-comments = rec {
@@ -1975,6 +1882,7 @@ in {
 
           # overseer # Run tasks from within neovim (e.g. cargo) # TODO:
 
+          persisted # Session management
           presence # Discord rich presence
           quickfix-reflector # Make the quickfix list editable and saveable to apply changes
           rainbow-delimiters # Bracket/Paren colorization
@@ -1985,7 +1893,6 @@ in {
 
           snacks # Lots of QoL
           tabby # Nicer tabline (only showing tabpages)
-          telescope # Option picker frontend
           todo-comments # Highlight TODOs
           toggleterm # Integrated terminal
           treesitter # AST based syntax highlighting + indentation
