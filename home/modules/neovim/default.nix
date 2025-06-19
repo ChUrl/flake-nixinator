@@ -1093,25 +1093,6 @@ in {
             };
           };
 
-          _notify = {
-            name = "notify";
-            pkg = pkgs.vimPlugins.nvim-notify;
-            lazy = true;
-            config = ''
-              function(_, opts)
-                local notify = require("notify")
-
-                notify.setup(opts)
-                vim.notify = notify -- Make vim use notify by default
-              end
-            '';
-            opts = {
-              render = "default";
-              max_width = 45; # In columns
-              top_down = false;
-            };
-          };
-
           _nui = {
             name = "nui"; # For noice
             pkg = pkgs.vimPlugins.nui-nvim;
@@ -1123,7 +1104,6 @@ in {
             pkg = pkgs.vimPlugins.noice-nvim;
             lazy = false;
             dependencies = [
-              _notify
               _nui
             ];
             config = mkDefaultConfig name;
@@ -1400,6 +1380,10 @@ in {
               explorer = {
                 enabled = true;
                 replace_netrw = true;
+              };
+
+              notifier = {
+                enabled = true;
               };
 
               picker = let
