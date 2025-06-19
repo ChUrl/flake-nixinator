@@ -556,14 +556,8 @@
     {
       mode = "n";
       key = "<leader>bd";
-      action = "<cmd>Bdelete<cr>";
+      action = "<cmd>lua Snacks.bufdelete()<cr>";
       options.desc = "Close Buffer";
-    }
-    {
-      mode = "n";
-      key = "<leader>bD";
-      action = "<cmd>Bdelete!<cr>";
-      options.desc = "Force Close Buffer";
     }
   ];
 
