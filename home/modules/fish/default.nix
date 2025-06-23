@@ -46,44 +46,46 @@ in {
     programs.fish = {
       enable = true;
 
-      functions = {
-        nnncd = {
-          wraps = "nnn";
-          description = "support nnn quit and change directory";
-          body = ''
-            # Block nesting of nnn in subshells
-            if test -n "$NNNLVL" -a "$NNNLVL" -ge 1
-                echo "nnn is already running"
-                return
-            end
+      functions = lib.mergeAttrsList [
+        (lib.optionalAttrs config.modules.nnn.enable {
+          nnncd = {
+            wraps = "nnn";
+            description = "support nnn quit and change directory";
+            body = ''
+              # Block nesting of nnn in subshells
+              if test -n "$NNNLVL" -a "$NNNLVL" -ge 1
+                  echo "nnn is already running"
+                  return
+              end
 
-            # The behaviour is set to cd on quit (nnn checks if NNN_TMPFILE is set)
-            # If NNN_TMPFILE is set to a custom path, it must be exported for nnn to
-            # see. To cd on quit only on ^G, remove the "-x" from both lines below,
-            # without changing the paths.
-            if test -n "$XDG_CONFIG_HOME"
-                set -x NNN_TMPFILE "$XDG_CONFIG_HOME/nnn/.lastd"
-            else
-                set -x NNN_TMPFILE "$HOME/.config/nnn/.lastd"
-            end
+              # The behaviour is set to cd on quit (nnn checks if NNN_TMPFILE is set)
+              # If NNN_TMPFILE is set to a custom path, it must be exported for nnn to
+              # see. To cd on quit only on ^G, remove the "-x" from both lines below,
+              # without changing the paths.
+              if test -n "$XDG_CONFIG_HOME"
+                  set -x NNN_TMPFILE "$XDG_CONFIG_HOME/nnn/.lastd"
+              else
+                  set -x NNN_TMPFILE "$HOME/.config/nnn/.lastd"
+              end
 
-            # Unmask ^Q (, ^V etc.) (if required, see `stty -a`) to Quit nnn
-            # stty start undef
-            # stty stop undef
-            # stty lwrap undef
-            # stty lnext undef
+              # Unmask ^Q (, ^V etc.) (if required, see `stty -a`) to Quit nnn
+              # stty start undef
+              # stty stop undef
+              # stty lwrap undef
+              # stty lnext undef
 
-            # The command function allows one to alias this function to `nnn` without
-            # making an infinitely recursive alias
-            command nnn $argv
+              # The command function allows one to alias this function to `nnn` without
+              # making an infinitely recursive alias
+              command nnn $argv
 
-            if test -e $NNN_TMPFILE
-                source $NNN_TMPFILE
-                rm $NNN_TMPFILE
-            end
-          '';
-        };
-      };
+              if test -e $NNN_TMPFILE
+                  source $NNN_TMPFILE
+                  rm $NNN_TMPFILE
+              end
+            '';
+          };
+        })
+      ];
 
       plugins = [
         # Oh-my-fish plugins are stored in their own repositories, which
@@ -137,8 +139,6 @@ in {
             blk = batify "lsblk -o NAME,LABEL,UUID,FSTYPE,SIZE,FSUSE%,MOUNTPOINT,MODEL";
             grep = "grep --color=auto -E"; # grep with extended regex
             watch = "watch -d -c -n 0.5";
-            n = "nnncd -a"; # Doesn't work with abbrify because I have nnn.override?
-            np = "nnncd -a -P p";
             ssh = "kitty +kitten ssh";
 
             # Systemd
@@ -147,16 +147,6 @@ in {
             kernelerrors = "journalctl -p 3 -xb -k";
             uniterrors = "journalctl -xb --unit=";
             useruniterrors = "journalctl -xb --user-unit=";
-
-            # NFS shares
-            msusenet = "sudo mount.nfs4 192.168.86.20:/mnt/WD\\ Blue\\ Stripe\\ 2T/Usenet /media/Stash-Usenet";
-            mspicture = "sudo mount.nfs4 192.168.86.20:/mnt/WD\\ Blue\\ Stripe\\ 2T/Picture /media/Stash-Picture";
-            msvideo = "sudo mount.nfs4 192.168.86.20:/mnt/WD\\ Blue\\ Stripe\\ 2T/Video /media/Stash-Video";
-            msclips = "sudo mount.nfs4 192.168.86.20:/mnt/WD\\ Blue\\ Stripe\\ 2T/Clips /media/Stash-Clips";
-            mmovie = "sudo mount.nfs4 192.168.86.20:/mnt/SG\\ Exos\\ Mirror\\ 18TB/Movie /media/Movie";
-            mshow = "sudo mount.nfs4 192.168.86.20:/mnt/SG\\ Exos\\ Mirror\\ 18TB/Show /media/Show";
-            mmusic = "sudo mount.nfs4 192.168.86.20:/mnt/SG\\ Exos\\ Mirror\\ 18TB/Music /media/Music";
-            musenet = "sudo mount.nfs4 192.168.86.20:/mnt/SG\\ Exos\\ Mirror\\ 18TB/Usenet /media/Usenet";
 
             # Disassemble
             disassemble = "objdump -d -S -M intel";
@@ -197,6 +187,10 @@ in {
           # (abbrify pkgs.gping {ping = "gping";})
 
           (abbrify pkgs.lazygit {lg = "lazygit";})
+
+          # Doesn't work with abbrify because I have nnn.override...
+          (lib.optionalAttrs config.modules.nnn.enable {n = "nnncd -a";})
+          (lib.optionalAttrs config.modules.nnn.enable {np = "nnncd -a -P p";})
 
           (abbrify pkgs.ranger {r = "ranger --choosedir=$HOME/.rangerdir; set LASTDIR (cat $HOME/.rangerdir); cd $LASTDIR";})
 
