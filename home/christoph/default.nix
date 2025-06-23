@@ -195,7 +195,7 @@ rec {
       neovide = true;
     };
 
-    nnn.enable = true;
+    nnn.enable = false;
 
     rofi = {
       enable = true;
@@ -521,7 +521,6 @@ rec {
       '';
     };
 
-    # TODO: Currently depends on nnn module. Create yazi module mirroring nnn module (deps etc.)
     yazi = let
       yazi-plugins = pkgs.fetchFromGitHub {
         owner = "yazi-rs";
@@ -541,9 +540,37 @@ rec {
       enableFishIntegration = true;
       shellWrapperName = "y";
 
+      # https://yazi-rs.github.io/docs/configuration/yazi
       settings = {
         mgr = {
           show_hidden = false;
+        };
+
+        # Associate mimetypes with edit/open/play actions
+        # open = {};
+
+        # Configure programs to edit/open/play files
+        opener = {
+          play = [
+            {
+              run = ''vlc "$@"'';
+              orphan = true;
+              for = "unix";
+            }
+          ];
+          edit = [
+            {
+              run = ''$EDITOR "$@"'';
+              block = true;
+              for = "unix";
+            }
+          ];
+          open = [
+            {
+              run = ''xdg-open "$@"'';
+              desc = "Open";
+            }
+          ];
         };
 
         preview = {
