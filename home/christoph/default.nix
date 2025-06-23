@@ -371,6 +371,7 @@ rec {
       # anytype # Use flatpak
       helvum
       vlc
+      audacity
 
       # Office
       wacomtablet # For xournalpp/krita
