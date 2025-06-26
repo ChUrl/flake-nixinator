@@ -630,6 +630,21 @@ rec {
             run = "plugin chmod";
             desc = "Chmod on selected files";
           }
+          {
+            on = "!";
+            run = ''shell "$SHELL" --block'';
+            desc = "Open $SHELL here";
+          }
+          {
+            on = "<C-n>";
+            run = ''shell -- ripdrag -a -n "$@"''; # $@: all selected files, $0: the hovered file, $n: the nth selected file
+            desc = "Expose files in ripdrag";
+          }
+          {
+            on = "y";
+            run = [''shell -- for path in "$@"; do echo "file://$path"; done | wl-copy -t text/uri-list'' "yank"];
+            desc = "Copy files to system clipboard on yank";
+          }
         ];
       };
     };
