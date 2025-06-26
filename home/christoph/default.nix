@@ -368,6 +368,7 @@ rec {
       AusweisApp2
       thunderbird # TODO: Email module
       obsidian
+      logseq
       # anytype # Use flatpak
       helvum
       vlc
@@ -668,7 +669,7 @@ rec {
 
         # "com.google.Chrome"
         # "md.obsidian.Obsidian" # NOTE: Installed via package
-        "io.anytype.anytype"
+        # "io.anytype.anytype"
       ];
 
       uninstallUnmanaged = true;
