@@ -49,22 +49,35 @@
       options = ["defaults" "rw" "relatime"];
     };
 
+    # If  the bg option is specified, a timeout or failure causes the mount(8) command
+    # to fork a child which continues to attempt to mount the export.
+    # The parent immediately returns with a zero exit code.
+    # This is known as a "background" mount.
+
+    # If the soft option is specified, then the NFS client fails an NFS request
+    # after retrans retransmissions have been sent, causing the NFS client to return
+    # an error to the calling application.
+    # NB: A so-called "soft" timeout can cause silent data corruption in certain cases.
+    # As such, use the soft option only when client responsiveness is more important than data integrity.
+    # Using  NFS over TCP or increasing the value of the retrans option may mitigate
+    # some of the risks of using the soft option.
+
     "/home/christoph/Movies" = {
       device = "192.168.86.20:/mnt/SG Exos Mirror 18TB/Movie";
       fsType = "nfs";
-      options = ["defaults" "rw" "relatime" "_netdev" "bg"];
+      options = ["defaults" "rw" "relatime" "_netdev" "bg" "soft"];
     };
 
     "/home/christoph/Shows" = {
       device = "192.168.86.20:/mnt/SG Exos Mirror 18TB/Show";
       fsType = "nfs";
-      options = ["defaults" "rw" "relatime" "_netdev" "bg"];
+      options = ["defaults" "rw" "relatime" "_netdev" "bg" "soft"];
     };
 
     "/home/christoph/Music" = {
       device = "192.168.86.20:/mnt/SG Exos Mirror 18TB/Music";
       fsType = "nfs";
-      options = ["defaults" "rw" "relatime" "_netdev" "bg"];
+      options = ["defaults" "rw" "relatime" "_netdev" "bg" "soft"];
     };
   };
 
