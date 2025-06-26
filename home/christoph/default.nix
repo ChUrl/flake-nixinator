@@ -368,8 +368,9 @@ rec {
       AusweisApp2
       thunderbird # TODO: Email module
       obsidian
-      logseq
+      # logseq
       # anytype # Use flatpak
+      zotero
       helvum
       vlc
       audacity
