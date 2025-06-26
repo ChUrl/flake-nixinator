@@ -109,28 +109,38 @@ in {
 
           extensions = {
             packages = with pkgs.nur.repos.rycee.firefox-addons; [
+              absolute-enable-right-click # Force enable right click to copy text
               amp2html
               augmented-steam
               betterttv
               # bypass-paywalls-clean
-              c-c-search-extension # Press cc in searchbar and profit
+              # c-c-search-extension # Press cc in searchbar and profit
+              catppuccin-mocha-mauve
+              catppuccin-web-file-icons
               clearurls
               cookie-autodelete
               display-_anchors # Easier linking to specific website parts
               don-t-fuck-with-paste
               enhancer-for-youtube
-              # h264ify
+              fastforwardteam # skip URL shorteners
+              faststream # replace video players with a faster one
+              frankerfacez # twitch emotes
+              indie-wiki-buddy
               keepassxc-browser
               localcdn
               lovely-forks # Display notable forks on GitHub repos
-              # octotree # Github on steroids
+              move-unloaded-tabs-for-tst # move tst tabs without them becoming active
+              native-mathml # native MathML instead of MathJax/MediaWiki
+              no-pdf-download # open pdf in browser without downloading
+              open-in-freedium
               # plasma-integration # TODO: Only when Plasma is used
               privacy-badger
               privacy-settings
               protondb-for-steam
-              refined-github
+              proton-vpn
+              purpleadblock # twitch adblocker
               return-youtube-dislikes
-              rust-search-extension
+              # rust-search-extension
               search-by-image
               single-file
               skip-redirect
@@ -143,14 +153,16 @@ in {
               # to-deepl
               transparent-standalone-image
               tree-style-tab
+              tst-fade-old-tabs
+              twitch-auto-points
               ublacklist
               ublock-origin
-              # umatrix # NOTE: Many pages need manual intervention
               unpaywall
+              video-downloadhelper
               view-image
-              # vimium # NOTE: Shits the bed when site needs general key input outside of text field...
-              # wappalyzer # Identify web technologies
+              web-clipper-obsidian
               youtube-shorts-block
+              zotero-connector
             ];
           };
 
