@@ -373,6 +373,7 @@ rec {
       # logseq
       # anytype # Use flatpak
       zotero
+      zeal-qt6 # docs browser
       helvum
       vlc
       audacity
