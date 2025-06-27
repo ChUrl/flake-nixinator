@@ -9,6 +9,7 @@
   config,
   pkgs,
   system,
+  username,
   ...
 }:
 with mylib.networking; {
@@ -404,6 +405,9 @@ with mylib.networking; {
     # Start dynamically linked executable using "nix-alien-ld -- <Executable>"
     inputs.nix-alien.packages.${system}.nix-alien
 
+    # Search nixpkgs
+    inputs.nps.packages.${system}.default
+
     # egl-wayland
   ];
 
@@ -536,6 +540,33 @@ with mylib.networking; {
 
     oci-containers.backend = "podman"; # "docker" or "podman"
     libvirtd.enable = true;
+  };
+
+  systemd = {
+    # TODO: Technically this should be a user service if it runs as ${username}?
+    timers."refresh-nps-cache" = {
+      wantedBy = ["timers.target"];
+      timerConfig = {
+        OnCalendar = "weekly"; # or however often you'd like
+        Persistent = true;
+        Unit = "refresh-nps-cache.service";
+      };
+    };
+
+    services."refresh-nps-cache" = {
+      # Make sure `nix` and `nix-env` are findable by systemd.services.
+      path = ["/run/current-system/sw/"];
+      serviceConfig = {
+        Type = "oneshot";
+        User = "${username}"; # ⚠️ replace with your "username" or "${user}", if it's defined
+      };
+      script = ''
+        set -eu
+        echo "Start refreshing nps cache..."
+        ${inputs.nps.packages.${system}.default}/bin/nps -dddd -e -r
+        echo "... finished nps cache with exit code $?."
+      '';
+    };
   };
 
   # The current system was installed on 22.05, do not change.

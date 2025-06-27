@@ -16,20 +16,34 @@
     # NeoVim <3
     nixvim.url = "github:nix-community/nixvim";
     nixvim.inputs.nixpkgs.follows = "nixpkgs";
-    # blink-cmp.url = "github:saghen/blink.cmp";
 
     # Nix User Repository (e.g. Firefox addons)
     nur.url = "github:nix-community/NUR";
+    nur.inputs.nixpkgs.follows = "nixpkgs";
 
     # Ags for widgets (this was a terrible idea)
     ags.url = "github:Aylur/ags";
+    ags.inputs.nixpkgs.follows = "nixpkgs";
+
+    # Hyprpanel
     hyprpanel.url = "github:jas-singhfsu/hyprpanel";
     hyprpanel.inputs.nixpkgs.follows = "nixpkgs";
 
-    # Other
+    # Nix Package Search - nps
+    nps.url = "github:OleMussmann/nps";
+    nps.inputs.nixpkgs.follows = "nixpkgs";
+
+    # Declarative Flatpak
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
+    nix-flatpak.inputs.nixpkgs.follows = "nixpkgs";
+
+    # Creates an environment containing required libraries for an executable
     nix-alien.url = "github:thiagokokada/nix-alien";
+    nix-alien.inputs.nixpkgs.follows = "nixpkgs";
+
+    # Emacs nightly
     emacs-overlay.url = "github:nix-community/emacs-overlay";
+    emacs-overlay.inputs.nixpkgs.follows = "nixpkgs";
 
     # TODO: Move away from devshell, as it breaks e.g. C++/Rust library propagation
     #       and doesn't provide any benefits for me
