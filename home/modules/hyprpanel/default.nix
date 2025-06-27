@@ -231,6 +231,7 @@ in {
 
         # https://github.com/Jas-SinghFSU/HyprPanel/blob/master/src/configuration/modules/config/bar/cpu/index.ts
         "bar.customModules.cpu.middleClick" = "kitty btop";
+        "bar.customModules.cpu.pollingInterval" = 1000;
 
         # https://github.com/Jas-SinghFSU/HyprPanel/blob/master/src/configuration/modules/theme/bar/buttons/cpu.ts
         "theme.bar.buttons.modules.cpu.background" = "#${color.hex.dark.green}";
@@ -243,6 +244,7 @@ in {
 
         # https://github.com/Jas-SinghFSU/HyprPanel/blob/master/src/configuration/modules/config/bar/ram/index.ts
         "bar.customModules.ram.labelType" = "percentage"; # "used/total", "percentage"
+        "bar.customModules.ram.pollingInterval" = 1000;
 
         # https://github.com/Jas-SinghFSU/HyprPanel/blob/master/src/configuration/modules/theme/bar/buttons/ram.ts
         "theme.bar.buttons.modules.ram.background" = "#${color.hex.dark.teal}";
@@ -256,6 +258,7 @@ in {
         # https://github.com/Jas-SinghFSU/HyprPanel/blob/master/src/configuration/modules/config/bar/storage/index.ts
         "bar.customModules.storage.labelType" = "percentage"; # "used/total", "percentage"
         "bar.customModules.storage.tooltipStyle" = "simple"; # "tree", "percentage-bar", "simple"
+        "bar.customModules.storage.pollingInterval" = 60000;
 
         # https://github.com/Jas-SinghFSU/HyprPanel/blob/master/src/configuration/modules/theme/bar/buttons/storage.ts
         "theme.bar.buttons.modules.storage.background" = "#${color.hex.dark.sky}";
