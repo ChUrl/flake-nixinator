@@ -112,6 +112,8 @@ rec {
 
       workspacerules = {
         "2" = [
+          "Zotero"
+
           "neovide"
           "code-url-handler"
 
