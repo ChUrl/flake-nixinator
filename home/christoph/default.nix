@@ -386,7 +386,7 @@ rec {
       hunspellDicts.de_DE
 
       # TODO: Module, I need to add python packages from multiple modules to the same interpreter
-      python312
+      python313
 
       # Use NixCommunity binary cache
       cachix
@@ -461,7 +461,7 @@ rec {
       enableFishIntegration = config.modules.fish.enable;
       enableNushellIntegration = false;
       enableXsessionIntegration = true;
-      agents = ["ssh"];
+      # agents = ["ssh"]; # Deprecated
       keys = ["id_ed25519"];
     };
 
