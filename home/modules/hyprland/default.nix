@@ -350,7 +350,8 @@ in {
 
     wayland.windowManager.hyprland = {
       enable = true;
-      systemd.enable = true; # Imports some variables into dbus
+      systemd.enable = true; # Enable hyprland-session.target
+      systemd.variables = ["--all"]; # Import PATH into systemd
       xwayland.enable = true;
 
       settings = {
