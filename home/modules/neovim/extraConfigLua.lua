@@ -14,7 +14,7 @@ vim.diagnostic.config({
 vim.api.nvim_create_user_command("ToggleInlineDiagnostics", function()
 	vim.g.enable_inline_diagnostics = not vim.g.enable_inline_diagnostics
 	vim.diagnostic.config({ virtual_text = vim.g.enable_inline_diagnostics, float = { border = "rounded" } })
-	require("notify")((vim.g.enable_inline_diagnostics and "Enabled" or "Disabled") .. " inline diagnostics")
+	vim.notify((vim.g.enable_inline_diagnostics and "Enabled" or "Disabled") .. " inline diagnostics")
 end, {
 	desc = "Toggle inline diagnostics",
 })
@@ -23,7 +23,7 @@ end, {
 vim.g.disable_autoformat = false
 vim.api.nvim_create_user_command("ToggleAutoformat", function()
 	vim.g.disable_autoformat = not vim.g.disable_autoformat
-	require("notify")((vim.g.disable_autoformat and "Disabled" or "Enabled") .. " autoformat-on-save")
+	vim.notify((vim.g.disable_autoformat and "Disabled" or "Enabled") .. " autoformat-on-save")
 end, {
 	desc = "Toggle autoformat-on-save",
 })
@@ -37,7 +37,7 @@ end
 
 -- Check LSP server config
 vim.api.nvim_create_user_command("LspInspect", function()
-	require("notify")(vim.inspect(vim.lsp.get_active_clients()))
+	vim.notify(vim.inspect(vim.lsp.get_active_clients()))
 end, {
 	desc = "Print LSP server configuration",
 })
@@ -50,7 +50,7 @@ vim.api.nvim_create_user_command("ToggleAutoLint", function()
 		-- vim.diagnostic.reset(vim.api.nvim_get_current_buf())
 		vim.diagnostic.reset() -- Reset for all buffers
 	end
-	require("notify")((vim.g.disable_autolint and "Disabled" or "Enabled") .. " autolint-on-save")
+	vim.notify((vim.g.disable_autolint and "Disabled" or "Enabled") .. " autolint-on-save")
 end, {
 	desc = "Toggle autolint-on-save",
 })
