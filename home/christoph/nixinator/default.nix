@@ -109,11 +109,11 @@
         jetbrains.clion
         jetbrains.rust-rover
         jetbrains.pycharm-professional
-        jetbrains.idea-ultimate
-        jetbrains.webstorm
+        # jetbrains.idea-ultimate
+        # jetbrains.webstorm
 
         # Unity Stuff
-        unityhub
+        # unityhub # TODO: Disable until https://github.com/NixOS/nixpkgs/issues/418451 is closed
         rider
         dotnetCore
         mono
