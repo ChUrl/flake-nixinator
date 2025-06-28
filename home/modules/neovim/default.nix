@@ -31,11 +31,8 @@ in {
             (pkgs.ripgrep.override {withPCRE2 = true;})
 
             # Dependencies
-            lua51Packages.lua-curl # For rest
-            lua51Packages.xml2lua # For rest
-            lua51Packages.mimetypes # For rest
-            lua51Packages.jsregexp # For tree-sitter
-            nodejs_latest
+            lua54Packages.jsregexp # For tree-sitter
+            # nodejs_latest
 
             # Language servers
             clang-tools_18
@@ -47,27 +44,31 @@ in {
             nil
             nixd
             basedpyright
+            pyrefly
+            ty
             rust-analyzer
             svelte-language-server
             tailwindcss-language-server
             tex-fmt
             texlab
             typescript
-            vscode-langservers-extracted
+            # vscode-langservers-extracted # includes nodejs
 
             # Linters
             checkstyle # java
             clippy # rust
             clj-kondo # clojure
             eslint_d # javascript
-            python311Packages.flake8
-            lua51Packages.luacheck
+            python313Packages.ruff
+            python313Packages.flake8
+            python313Packages.pylint
+            lua54Packages.luacheck
             vale # text
             statix # nix
 
             # Formatters
             alejandra # nix
-            python311Packages.black
+            python313Packages.black
             google-java-format
             html-tidy
             jq # json
@@ -698,7 +699,7 @@ in {
                 lua = ["luacheck"];
                 markdown = ["vale"];
                 nix = ["statix"];
-                python = ["flake8"];
+                python = ["ruff" "flake8" "pylint"];
                 tex = ["chktex"];
                 # rust = ["clippy"]; # Not supported, but integrated through rustaceanvim
                 text = ["vale"];
@@ -731,6 +732,8 @@ in {
             config = let
               servers = mylib.generators.toLuaObject [
                 {name = "basedpyright";}
+                # {name = "pyrefly";} # TODO: Config
+                # {name = "ty";} # TODO: Config
                 {
                   name = "clangd";
                   extraOptions = {
@@ -771,7 +774,7 @@ in {
                 {name = "clojure_lsp";}
                 {name = "cmake";}
                 {name = "cssls";}
-                {name = "html";}
+                # {name = "html";} # vscode-langservers-extracted
                 {name = "lua_ls";}
                 {
                   name = "ltex";
