@@ -515,7 +515,8 @@ with mylib.networking; {
       ];
     };
 
-    gnome.gnome-keyring.enable = true; # Some apps require this
+    gnome.gnome-keyring.enable = false; # TODO: Do apps require this?
+    gnome.gcr-ssh-agent.enable = false;
   };
 
   virtualisation = {
