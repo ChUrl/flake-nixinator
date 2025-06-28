@@ -91,7 +91,8 @@ with mylib.networking; {
     };
 
     # Make /tmp volatile
-    tmp.useTmpfs = true;
+    # NOTE: Setting this to true can lead to large derivations running out of tmp space
+    tmp.useTmpfs = false;
   };
 
   security = {
