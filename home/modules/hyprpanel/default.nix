@@ -13,15 +13,12 @@ in {
   config = lib.mkIf hyprpanel.enable {
     programs.hyprpanel = {
       enable = true;
-      overwrite.enable = true;
       systemd.enable = true;
-
-      # settings = {};
 
       # NOTE: Because the HM module sucks (mixes explicit options + JSON conversion), write everything as override...
       # HACK: Only override fully qualified quoted attributes to not override existing attrs with empty values
       #       https://github.com/Jas-SinghFSU/HyprPanel/issues/886
-      override = {
+      settings = {
         #
         # Bar Config
         #
