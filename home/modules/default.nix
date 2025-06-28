@@ -23,6 +23,5 @@
     inputs.nix-flatpak.homeManagerModules.nix-flatpak
     inputs.nixvim.homeManagerModules.nixvim
     inputs.ags.homeManagerModules.default
-    inputs.hyprpanel.homeManagerModules.hyprpanel
   ];
 }

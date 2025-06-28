@@ -25,17 +25,13 @@
     ags.url = "github:Aylur/ags";
     ags.inputs.nixpkgs.follows = "nixpkgs";
 
-    # Hyprpanel
-    hyprpanel.url = "github:jas-singhfsu/hyprpanel";
-    hyprpanel.inputs.nixpkgs.follows = "nixpkgs";
-
     # Nix Package Search - nps
     nps.url = "github:OleMussmann/nps";
     nps.inputs.nixpkgs.follows = "nixpkgs";
 
     # Declarative Flatpak
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
-    nix-flatpak.inputs.nixpkgs.follows = "nixpkgs";
+    # nix-flatpak.inputs.nixpkgs.follows = "nixpkgs"; # nix-flatpak doesn't have this
 
     # Creates an environment containing required libraries for an executable
     nix-alien.url = "github:thiagokokada/nix-alien";
