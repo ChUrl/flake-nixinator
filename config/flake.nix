@@ -1,4 +1,4 @@
-{
+rec {
   description = "";
 
   inputs = {
@@ -10,16 +10,17 @@
   };
 
   outputs = {
-    inputs,
+    self,
     nixpkgs,
     flake-utils,
+    rust-overlay,
   }:
     flake-utils.lib.eachDefaultSystem (system: let
       pkgs = import nixpkgs {
         inherit system;
         config.allowUnfree = true;
         overlays = [
-          inputs.rust-overlay.overlays.default
+          rust-overlay.overlays.default
         ];
       };
 
@@ -41,12 +42,12 @@
         libc = pkgs.glibc;
       };
       gcc = pkgs.hiPrio (pkgs.wrapCCWith {
-        cc = pkgs.gcc15.cc; # Unwrapped gcc
+        cc = pkgs.gcc.cc; # Unwrapped gcc
         libc = pkgs.glibc;
         bintools = bintools;
       });
       clang = pkgs.wrapCCWith {
-        cc = pkgs.clang_20.cc; # Unwrapped clang
+        cc = pkgs.clang.cc; # Unwrapped clang
         libc = pkgs.glibc;
         bintools = bintools;
       };
@@ -57,12 +58,12 @@
         libc = pkgs.glibc_multi;
       };
       gcc_multilib = pkgs.hiPrio (pkgs.wrapCCWith {
-        cc = pkgs.gcc15.cc; # Unwrapped gcc
+        cc = pkgs.gcc.cc; # Unwrapped gcc
         libc = pkgs.glibc_multi;
         bintools = bintools_multilib;
       });
       clang_multilib = pkgs.wrapCCWith {
-        cc = pkgs.clang_20.cc; # Unwrapped clang
+        cc = pkgs.clang.cc; # Unwrapped clang
         libc = pkgs.glibc_multi;
         bintools = bintools_multilib;
       };
@@ -75,7 +76,7 @@
       # };
 
       devShell = pkgs.mkShell {
-        name = "Development Environment";
+        name = description;
 
         # Comments on buildInputs, nativeBuildInputs, buildPackages:
         # https://discourse.nixos.org/t/use-buildinputs-or-nativebuildinputs-for-nix-shell/8464
@@ -110,15 +111,14 @@
         ];
 
         # Stuff ran at build-time (e.g. cmake, autoPatchelfHook).
-        # Architecture will be the build platform (relevant for e.g. cross-compilation).
+        # Architecture will be the build/target platform (relevant for e.g. cross-compilation).
         # Packages will be added to $PATH.
-        nativeBuildInputs = with pkgs; [
-        ];
+        nativeBuildInputs = with pkgs; [];
 
         # Rust stdlib source:
         # RUST_SRC_PATH = "${rust}/lib/rustlib/src/rust/library";
 
-        # Dynamic libraries example:
+        # Custom dynamic libraries:
         # LD_LIBRARY_PATH = builtins.concatStringsSep ":" [
         #   # Rust Bevy GUI app
         #   "${pkgs.xorg.libX11}/lib"
@@ -131,20 +131,31 @@
         # Dynamic libraries from buildinputs:
         # LD_LIBRARY_PATH = nixpkgs.lib.makeLibraryPath buildInputs;
 
-        # Setup the shell when entering the "nix develop" environment
-        shellHook = builtins.concatStringsSep "\n" [
-          # Qt: Set the environment variables that Qt apps expect
-          # ''
-          #   fishdir=$(mktemp -d)
-          #   makeWrapper "$(type -p fish)" "$fishdir/fish" "''${qtWrapperArgs[@]}"
-          #   exec "$fishdir/fish"
-          # ''
+        # Setup the shell when entering the "nix develop" environment (bash script).
+        shellHook = let
+          # Use this to specify commands that should be ran after entering fish shell
+          initProjectShell = pkgs.writeShellScript "init-shell.fish" ''
+            echo "Entering \"${description}\" environment..."
 
-          # Add shell abbreviations specific to this build environment
-          # ''
-          #   abbr -a build-release-windows "CARGO_FEATURE_PURE=1 cargo xwin build --release --target x86_64-pc-windows-msvc"
-          # ''
-        ];
+            # Add shell abbreviations specific to this build environment
+
+            # Rust Bevy:
+            # abbr -a build-release-windows "CARGO_FEATURE_PURE=1 cargo xwin build --release --target x86_64-pc-windows-msvc"
+          '';
+        in
+          builtins.concatStringsSep "\n" [
+            # Launch into pure fish shell
+            ''
+              exec "$(type -p fish)" -C "source ${initProjectShell}"
+            ''
+
+            # Qt: Launch into wrapped fish shell
+            # ''
+            #   fishdir=$(mktemp -d)
+            #   makeWrapper "$(type -p fish)" "$fishdir/fish" "''${qtWrapperArgs[@]}"
+            #   exec "$fishdir/fish" -C "source ${initProjectShell}"
+            # ''
+          ];
       };
     });
 }
