@@ -15,6 +15,7 @@ rec {
     flake-utils,
     rust-overlay,
   }:
+  # Create a shell (and possibly package) for each possible system, not only x86_64-linux
     flake-utils.lib.eachDefaultSystem (system: let
       pkgs = import nixpkgs {
         inherit system;
@@ -23,13 +24,18 @@ rec {
           rust-overlay.overlays.default
         ];
       };
+      inherit (pkgs) lib stdenv;
+
+      # ===========================================================================================
+      # Define custom dependencies
+      # ===========================================================================================
 
       python = pkgs.python313.withPackages (p:
         with p; [
-          pyside6
-          ffmpeg-python
-          matplotlib
-          numpy
+          # numpy
+          # matplotlib
+          # ffmpeg-python
+          # pyside6
         ]);
 
       rust = pkgs.rust-bin.stable.latest.default.override {
@@ -67,53 +73,82 @@ rec {
         libc = pkgs.glibc_multi;
         bintools = bintools_multilib;
       };
-    in {
-      # TODO: Add default packages for different languages
-      # TODO: check nixpkgs docs for buildPythonApplication
-      # packages.default = pkgs.buildPythonApplication {
-      #   pname = "pyside6_image_viewer";
-      #   version = "0.1.0";
-      # };
 
+      # ===========================================================================================
+      # Specify dependencies
+      # https://nixos.org/manual/nixpkgs/stable/#ssec-stdenv-dependencies-overview
+      # Just for a "nix develop" shell, buildInputs can be used for everything.
+      # ===========================================================================================
+
+      # Add dependencies to nativeBuildInputs if they are executed during the build:
+      # - Those which are needed on $PATH during the build, for example cmake and pkg-config
+      # - Setup hooks, for example makeWrapper
+      # - Interpreters needed by patchShebangs for build scripts (with the --build flag), which can be the case for e.g. perl
+      nativeBuildInputs = with pkgs; [
+        # Languages:
+        # python
+        # rust
+        # bintools
+        # gcc
+        # clang
+        # bintools_multilib
+        # gcc_multilib
+        # clang_multilib
+
+        # C/C++:
+        # gdb
+        # valgrind
+        # gnumake
+        # cmake
+        # pkg-config
+
+        # Qt:
+        # qt6.wrapQtAppsHook # For the shellHook
+      ];
+
+      # Add dependencies to buildInputs if they will end up copied or linked into the final output or otherwise used at runtime:
+      # - Libraries used by compilers, for example zlib
+      # - Interpreters needed by patchShebangs for scripts which are installed, which can be the case for e.g. perl
+      buildInputs = with pkgs; [
+        # C/C++:
+        # boost
+        # sfml
+
+        # Qt:
+        # qt6.qtbase
+        # qt6.full
+      ];
+
+      # ===========================================================================================
+      # Define buildable + installable packages
+      # ===========================================================================================
+
+      package = stdenv.mkDerivation {
+        inherit nativeBuildInputs buildInputs;
+        pname = "";
+        version = "1.0.0";
+        src = ./.;
+
+        installPhase = ''
+          mkdir -p $out/bin
+          mv ./BINARY $out/bin
+        '';
+      };
+    in rec {
+      # Provide package for "nix build"
+      defaultPackage = package;
+      defaultApp = flake-utils.lib.mkApp {
+        drv = defaultPackage;
+      };
+
+      # Provide environment for "nix develop"
       devShell = pkgs.mkShell {
+        inherit nativeBuildInputs buildInputs;
         name = description;
 
-        # Comments on buildInputs, nativeBuildInputs, buildPackages:
-        # https://discourse.nixos.org/t/use-buildinputs-or-nativebuildinputs-for-nix-shell/8464
-        # For our "nix develop" shell, buildInputs can be used for everything.
-
-        # Stuff that's linked against.
-        # Architecture will be the host platform.
-        # Packages will be added to $PATH unless "strictDeps = true;".
-        buildInputs = with pkgs; [
-          # Languages:
-          # python
-          # rust
-          # bintools
-          # gcc
-          # clang
-          # bintools_multilib
-          # gcc_multilib
-          # clang_multilib
-
-          # C/C++:
-          # gdb
-          # valgrind
-          # gnumake
-          # cmake
-          # boost
-          # sfml
-
-          # Qt:
-          # qt6.qtbase
-          # qt6.full
-          # qt6.wrapQtAppsHook # For the shellHook
-        ];
-
-        # Stuff ran at build-time (e.g. cmake, autoPatchelfHook).
-        # Architecture will be the build/target platform (relevant for e.g. cross-compilation).
-        # Packages will be added to $PATH.
-        nativeBuildInputs = with pkgs; [];
+        # =========================================================================================
+        # Define environment variables
+        # =========================================================================================
 
         # Rust stdlib source:
         # RUST_SRC_PATH = "${rust}/lib/rustlib/src/rust/library";
@@ -131,29 +166,80 @@ rec {
         # Dynamic libraries from buildinputs:
         # LD_LIBRARY_PATH = nixpkgs.lib.makeLibraryPath buildInputs;
 
+        # =========================================================================================
+        # Define shell environment
+        # =========================================================================================
+
         # Setup the shell when entering the "nix develop" environment (bash script).
         shellHook = let
+          mkCmakeScript = type: let
+            typeLower = lib.toLower type;
+          in
+            pkgs.writers.writeFish "cmake-${typeLower}.fish" ''
+              cd $FLAKE_PROJECT_ROOT
+
+              echo "Removing build directory ./cmake-build-${typeLower}/"
+              rm -rf ./cmake-build-${typeLower}
+
+              echo "Creating build directory"
+              mkdir cmake-build-${typeLower}
+              cd cmake-build-${typeLower}
+
+              echo "Running cmake"
+              cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE="${type}" -DCMAKE_EXPORT_COMPILE_COMMANDS="On" ..
+
+              echo "Linking compile_commands.json"
+              cd ..
+              ln -sf ./cmake-build-${typeLower}/compile_commands.json ./compile_commands.json
+            '';
+
+          cmakeDebug = mkCmakeScript "Debug";
+          cmakeRelease = mkCmakeScript "Release";
+
+          mkBuildScript = type: let
+            typeLower = lib.toLower type;
+          in
+            pkgs.writers.writeFish "cmake-build.fish" ''
+              cd $FLAKE_PROJECT_ROOT/cmake-build-${typeLower}
+
+              echo "Running cmake"
+              cmake --build .
+            '';
+
+          buildDebug = mkBuildScript "Debug";
+          buildRelease = mkBuildScript "Release";
+
           # Use this to specify commands that should be ran after entering fish shell
-          initProjectShell = pkgs.writeShellScript "init-shell.fish" ''
+          initProjectShell = pkgs.writers.writeFish "init-shell.fish" ''
             echo "Entering \"${description}\" environment..."
 
-            # Add shell abbreviations specific to this build environment
+            # Determine the project root, used e.g. in cmake scripts
+            set -g -x FLAKE_PROJECT_ROOT (git rev-parse --show-toplevel)
+
+            # Build the provided NixOS package
+            abbr -a build "nix build -L"
 
             # Rust Bevy:
             # abbr -a build-release-windows "CARGO_FEATURE_PURE=1 cargo xwin build --release --target x86_64-pc-windows-msvc"
+
+            # C/C++:
+            abbr -a cmake-debug "${cmakeDebug}"
+            abbr -a cmake-release "${cmakeRelease}"
+            abbr -a build-debug "${buildDebug}"
+            abbr -a build-release "${buildRelease}"
           '';
         in
           builtins.concatStringsSep "\n" [
             # Launch into pure fish shell
             ''
-              exec "$(type -p fish)" -C "source ${initProjectShell}"
+              exec "$(type -p fish)" -C "source ${initProjectShell} && abbr -a menu '${pkgs.bat}/bin/bat "${initProjectShell}"'"
             ''
 
             # Qt: Launch into wrapped fish shell
             # ''
             #   fishdir=$(mktemp -d)
             #   makeWrapper "$(type -p fish)" "$fishdir/fish" "''${qtWrapperArgs[@]}"
-            #   exec "$fishdir/fish" -C "source ${initProjectShell}"
+            #   exec "$fishdir/fish" -C "source ${initProjectShell} && abbr -a menu '${pkgs.bat}/bin/bat "${initProjectShell}"'"
             # ''
           ];
       };
