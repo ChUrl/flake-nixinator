@@ -23,6 +23,8 @@ in {
 
         # TODO: Derivation borked on standalone HM
         # (lib.optionals firefox.gnomeTheme [firefox-gnome-theme])
+
+        [vdhcoapp]
       ];
 
     home.sessionVariables = lib.mkMerge [
