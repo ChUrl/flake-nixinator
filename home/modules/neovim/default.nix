@@ -39,6 +39,7 @@ in {
             clojure-lsp
             cmake-language-server
             haskell-language-server
+            jdt-language-server
             ltex-ls # TODO: Only enable on-demand
             lua-language-server
             nil
