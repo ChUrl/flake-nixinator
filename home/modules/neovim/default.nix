@@ -68,6 +68,7 @@ in {
 
             # Formatters
             alejandra # nix
+            cljfmt
             python313Packages.black
             google-java-format
             html-tidy
@@ -489,6 +490,7 @@ in {
                 h = ["clang-format"];
                 cpp = ["clang-format"];
                 hpp = ["clang-format"];
+                clojure = ["cljfmt"];
                 css = ["prettierd" "prettier"];
                 html = ["prettierd" "prettier"];
                 java = ["google-java-format"];
