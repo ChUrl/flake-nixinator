@@ -78,6 +78,7 @@ rec {
           "$mainMod, N" = ["exec, neovide"];
           "$mainMod SHIFT, N" = ["exec, neovide ${config.paths.dotfiles}/navi/christoph.cheat"];
           "$mainMod CTRL, N" = ["exec, kitty navi"];
+          "$mainMod SHIFT, F" = ["exec, neovide ${config.paths.dotfiles}/flake.nix"];
 
           "$mainMod, P" = ["exec, hyprpicker --autocopy --format=hex"];
           "$mainMod, S" = ["exec, grim -g \"$(slurp)\""];
