@@ -359,6 +359,7 @@ with mylib.networking; {
       "networkmanager"
       "wheel"
       "audio"
+      "video"
       "pipewire"
       "realtime"
       "gamemode"
@@ -515,8 +516,8 @@ with mylib.networking; {
       ];
     };
 
-    gnome.gnome-keyring.enable = false; # TODO: Do apps require this?
-    gnome.gcr-ssh-agent.enable = false;
+    gnome.gnome-keyring.enable = true; # Apps (e.g. nextcloud) require this
+    gnome.gcr-ssh-agent.enable = false; # TODO: Use this instead of ssh.startAgent?
   };
 
   virtualisation = {

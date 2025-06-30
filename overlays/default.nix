@@ -12,7 +12,8 @@
     };
 
   modifications = final: prev: rec {
-    # dconf-editor-wrapped = import ./dconf-editor.nix { inherit final prev; }; # Only kept as an example, has nothing to do with current dconf-editor-wrapped derivation
+    # Only kept as an example, has nothing to do with current dconf-editor-wrapped derivation
+    # dconf-editor-wrapped = import ./dconf-editor.nix { inherit final prev; };
     # Use dconf-editor.nix: { final, prev }: final.<package>.overrideAttrs (oldAttrs: { ... }) or sth similar
   };
 in
