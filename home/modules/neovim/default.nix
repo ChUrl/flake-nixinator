@@ -35,7 +35,7 @@ in {
             # nodejs_latest
 
             # Language servers
-            clang-tools_18
+            clang-tools
             clojure-lsp
             cmake-language-server
             haskell-language-server
