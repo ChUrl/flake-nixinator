@@ -200,6 +200,9 @@ rec {
         # Dynamic libraries from buildinputs:
         # LD_LIBRARY_PATH = nixpkgs.lib.makeLibraryPath buildInputs;
 
+        # QT imports to use with "qmlls -E"
+        # QML_IMPORT_PATH = "${pkgs.qt6.full}/lib/qt-6/qml";
+
         # =========================================================================================
         # Define shell environment
         # =========================================================================================
