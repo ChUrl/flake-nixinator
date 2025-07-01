@@ -501,6 +501,7 @@ in {
                 markdown = ["prettierd" "prettier"];
                 nix = ["alejandra"];
                 python = ["black"];
+                qml = ["qmlformat"];
                 svelte = ["prettierd" "prettier"];
                 typescript = ["prettierd" "prettier"];
                 rust = ["rustfmt"];
@@ -829,6 +830,7 @@ in {
                     };
                   };
                 }
+                {name = "qmlls";}
                 {name = "svelte";}
                 {name = "tailwindcss";}
                 {name = "texlab";}
