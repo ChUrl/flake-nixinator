@@ -130,41 +130,32 @@ in {
 
             # Fish
             h = batifyWithArgs "history" "-l fish"; # -l fish sets syntax highlighting to fish
-            listabbrs = batifyWithArgs "abbr" "-l fish";
+            abbrs = batifyWithArgs "abbr" "-l fish";
 
             # Tools
             cd = "z"; # zoxide for quickjump to previously visited locations
+            cdd = "zi";
             b = "z -"; # jump to previous dir
             mkdir = "mkdir -p"; # also create parents (-p)
             blk = batify "lsblk -o NAME,LABEL,UUID,FSTYPE,SIZE,FSUSE%,MOUNTPOINT,MODEL";
-            grep = "grep --color=auto -E"; # grep with extended regex
             watch = "watch -d -c -n 0.5";
             ssh = "kitty +kitten ssh";
-
-            # Systemd
-            failed = "systemctl --failed";
-            errors = "journalctl -p 3 -xb";
-            kernelerrors = "journalctl -p 3 -xb -k";
-            uniterrors = "journalctl -xb --unit=";
-            useruniterrors = "journalctl -xb --user-unit=";
-
-            # Disassemble
-            disassemble = "objdump -d -S -M intel";
+            nd = "nix develop";
+            nb = "nix build -L";
           }
 
           # Abbrs only available if package is installed
-          (abbrify pkgs.btop {top = "btop";})
 
           (abbrify pkgs.duf {
-            df = "duf";
-            disksummary = "duf";
+            # df = "duf";
+            disks = "duf";
           })
 
           (abbrify pkgs.eza {
-            ls = "eza --color=always --group-directories-first -F --git --icons=always"; # color-ls
-            lsl = "eza --color=always --group-directories-first -F -l --git --icons=always --octal-permissions";
-            lsa = "eza --color=always --group-directories-first -F -l -a --git --icons=always --octal-permissions";
-            tre = "eza --color=always --group-directories-first -F -T -L 2 ---icons=always";
+            ls = "eza --color=always --group-directories-first -F --git --icons=always --octal-permissions";
+            lsl = "eza --color=always --group-directories-first -F --git --icons=always --octal-permissions -l";
+            lsa = "eza --color=always --group-directories-first -F --git --icons=always --octal-permissions -l -a";
+            tre = "eza --color=always --group-directories-first -F --git --icons=always --octal-permissions -T -L 2";
           })
 
           (abbrify pkgs.fd {find = "fd";})
@@ -172,8 +163,8 @@ in {
           (abbrify pkgs.fzf {fuzzy = "fzf --preview 'bat --color=always --style=numbers --line-range=:500 {}'";})
 
           (abbrify pkgs.gdu {
-            du = "gdu";
-            storageanalysis = "gdu";
+            # du = "gdu";
+            storage = "gdu";
           })
 
           (abbrify pkgs.git {
@@ -184,8 +175,6 @@ in {
             gcl = "git clone";
           })
 
-          # (abbrify pkgs.gping {ping = "gping";})
-
           (abbrify pkgs.lazygit {lg = "lazygit";})
 
           # Doesn't work with abbrify because I have nnn.override...
@@ -194,17 +183,17 @@ in {
 
           (abbrify pkgs.ranger {r = "ranger --choosedir=$HOME/.rangerdir; set LASTDIR (cat $HOME/.rangerdir); cd $LASTDIR";})
 
-          (abbrify pkgs.rsync {
-            copy = "rsync -ahv --inplace --partial --info=progress2";
+          (abbrify pkgs.ripgrep rec {
+            rg = "rg --trim --pretty";
+            grep = rg;
+          })
+
+          (abbrify pkgs.rsync rec {
             rsync = "rsync -ahv --inplace --partial --info=progress2";
+            copy = rsync;
           })
 
           (abbrify pkgs.sd {sed = "sd";})
-
-          (abbrify pkgs.yt-dlp {
-            mp4 = "yt-dlp -f 'bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4] / bv*+ba/b' --recode-video mp4"; # the -f options are yt-dlp defaults
-            mp3 = "yt-dlp -f 'ba' --extract-audio --audio-format mp3";
-          })
         ];
     };
 
