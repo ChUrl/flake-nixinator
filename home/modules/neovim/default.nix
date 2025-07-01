@@ -830,7 +830,13 @@ in {
                     };
                   };
                 }
-                {name = "qmlls";}
+                {
+                  name = "qmlls";
+                  extraOptions.cmd = [
+                    "qmlls"
+                    "-E" # Use QML_IMPORT_PATH env variable
+                  ];
+                }
                 {name = "svelte";}
                 {name = "tailwindcss";}
                 {name = "texlab";}
