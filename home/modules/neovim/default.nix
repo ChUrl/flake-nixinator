@@ -703,7 +703,7 @@ in {
                 lua = ["luacheck"];
                 markdown = ["vale"];
                 nix = ["statix"];
-                python = ["ruff" "flake8" "pylint"];
+                python = ["ruff" "flake8"]; # TODO: "pylint" can't resolve some imports (e.g. PySide6.QtGui)
                 tex = ["chktex"];
                 # rust = ["clippy"]; # Not supported, but integrated through rustaceanvim
                 text = ["vale"];
