@@ -23,6 +23,36 @@ ldd $(readlink -f $(which <executable>))
 $ executable: bash -c "compgen -c"
 
 ; ===========================
+; SYSTEMD
+; ===========================
+
+% systemd
+# List failed system units
+sudo systemctl --failed
+
+% systemd
+# List failed user units
+systemctl --user --failed
+
+% systemd
+# List system errors
+sudo journalctl -p 3 -xb
+
+% systemd
+# List kernel errors
+sudo journalctl -p 3 -xb -k
+
+% systemd
+# List system unit errors
+sudo journalctl -xb --unit=<unit>
+$ unit: sudo systemctl list-units --type=service --all --full --no-pager --legend=false --plain | awk -F' ' '{print $1}'
+
+% systemd
+# List user unit errors
+journalctl -xb --unit=<unit>
+$ unit: systemctl --user list-units --type=service --all --full --no-pager --legend=false --plain | awk -F' ' '{print $1}'
+
+; ===========================
 ; SHELL
 ; ===========================
 
@@ -39,12 +69,25 @@ yes "The quick brown fox jumps over the lazy dog" | head -c <size> > <output>
 for o in <objects>; <action>; end
 
 % shell
-# Find files under a certain size in the current directory
-find . -type f -name "<glob>" -size -<size>
+# Find files larger or smaller than a specified size in the current directory
+fd --type file --size <mode><size> -- "<regex>" .
+$ mode: echo -e "+\t\tFind Larger Files\n-\t\tFind Smaller Files" --- --column 1
+
+% gdu
+# Visualize storage usage on all mounted disks
+sudo gdu -d
+
+% duf
+# List all mounted devices
+sudo duf
+
+% duf
+# Display INode information of all mounted devices
+sudo duf -inode
 
 % awk
 # Select a column
-awk -F<separator> '{print <print>}'
+awk -F<separator> '{print $<print>}'
 $ separator: echo -e "' '\t\tWhitespace\n'[ ]'\t\tSingle Space\n'\\\t'\t\tTabs" --- --column 1
 
 % mime
@@ -67,7 +110,9 @@ $ file: eza -f -1
 
 % code
 # Disassemble an object file
-objdump -d -S -M intel "<file>" | bat -l nasm
+objdump -d -S -M <arch>,<syntax> "<file>" | bat -l nasm
+$ arch: echo -e "x86-64\t\t64 Bit\ni386\t\t32 Bit\ni8086\t\t16 Bit" --- --column 1
+$ syntax: echo -e "intel\t\tIntel Syntax\natt\t\tAT&T Syntax" --- --column 1
 $ file: eza -f -1
 
 ; ===========================
