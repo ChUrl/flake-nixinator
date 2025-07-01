@@ -7,6 +7,9 @@ rec {
 
     rust-overlay.url = "github:oxalica/rust-overlay";
     rust-overlay.inputs.nixpkgs.follows = "nixpkgs";
+
+    clj-nix.url = "github:jlesquembre/clj-nix";
+    clj-nix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = {
@@ -14,6 +17,7 @@ rec {
     nixpkgs,
     flake-utils,
     rust-overlay,
+    clj-nix,
   }:
   # Create a shell (and possibly package) for each possible system, not only x86_64-linux
     flake-utils.lib.eachDefaultSystem (system: let
@@ -30,49 +34,49 @@ rec {
       # Define custom dependencies
       # ===========================================================================================
 
-      python = pkgs.python313.withPackages (p:
-        with p; [
-          # numpy
-          # matplotlib
-          # ffmpeg-python
-          # pyside6
-        ]);
+      # python = pkgs.python313.withPackages (p:
+      #   with p; [
+      #     # numpy
+      #     # matplotlib
+      #     # ffmpeg-python
+      #     # pyside6
+      #   ]);
 
-      rust = pkgs.rust-bin.stable.latest.default.override {
-        extensions = ["rust-src"]; # Include the Rust stdlib source (for IntelliJ)
-      };
+      # rust = pkgs.rust-bin.stable.latest.default.override {
+      #   extensions = ["rust-src"]; # Include the Rust stdlib source (for IntelliJ)
+      # };
 
       # 64 bit C/C++ compilers that don't collide (use the same libc)
-      bintools = pkgs.wrapBintoolsWith {
-        bintools = pkgs.bintools.bintools; # Unwrapped bintools
-        libc = pkgs.glibc;
-      };
-      gcc = pkgs.hiPrio (pkgs.wrapCCWith {
-        cc = pkgs.gcc.cc; # Unwrapped gcc
-        libc = pkgs.glibc;
-        bintools = bintools;
-      });
-      clang = pkgs.wrapCCWith {
-        cc = pkgs.clang.cc; # Unwrapped clang
-        libc = pkgs.glibc;
-        bintools = bintools;
-      };
+      # bintools = pkgs.wrapBintoolsWith {
+      #   bintools = pkgs.bintools.bintools; # Unwrapped bintools
+      #   libc = pkgs.glibc;
+      # };
+      # gcc = pkgs.hiPrio (pkgs.wrapCCWith {
+      #   cc = pkgs.gcc.cc; # Unwrapped gcc
+      #   libc = pkgs.glibc;
+      #   bintools = bintools;
+      # });
+      # clang = pkgs.wrapCCWith {
+      #   cc = pkgs.clang.cc; # Unwrapped clang
+      #   libc = pkgs.glibc;
+      #   bintools = bintools;
+      # };
 
       # Multilib C/C++ compilers that don't collide (use the same libc)
-      bintools_multilib = pkgs.wrapBintoolsWith {
-        bintools = pkgs.bintools.bintools; # Unwrapped bintools
-        libc = pkgs.glibc_multi;
-      };
-      gcc_multilib = pkgs.hiPrio (pkgs.wrapCCWith {
-        cc = pkgs.gcc.cc; # Unwrapped gcc
-        libc = pkgs.glibc_multi;
-        bintools = bintools_multilib;
-      });
-      clang_multilib = pkgs.wrapCCWith {
-        cc = pkgs.clang.cc; # Unwrapped clang
-        libc = pkgs.glibc_multi;
-        bintools = bintools_multilib;
-      };
+      # bintools_multilib = pkgs.wrapBintoolsWith {
+      #   bintools = pkgs.bintools.bintools; # Unwrapped bintools
+      #   libc = pkgs.glibc_multi;
+      # };
+      # gcc_multilib = pkgs.hiPrio (pkgs.wrapCCWith {
+      #   cc = pkgs.gcc.cc; # Unwrapped gcc
+      #   libc = pkgs.glibc_multi;
+      #   bintools = bintools_multilib;
+      # });
+      # clang_multilib = pkgs.wrapCCWith {
+      #   cc = pkgs.clang.cc; # Unwrapped clang
+      #   libc = pkgs.glibc_multi;
+      #   bintools = bintools_multilib;
+      # };
 
       # ===========================================================================================
       # Specify dependencies
@@ -94,6 +98,8 @@ rec {
         # bintools_multilib
         # gcc_multilib
         # clang_multilib
+        # clojure
+        # jdk
 
         # C/C++:
         # gdb
@@ -101,6 +107,13 @@ rec {
         # gnumake
         # cmake
         # pkg-config
+
+        # Clojure:
+        # leiningen
+        # clj-nix.packages.${system}.deps-lock
+
+        # Java:
+        # gradle
 
         # Qt:
         # qt6.wrapQtAppsHook # For the shellHook
@@ -118,28 +131,43 @@ rec {
         # qt6.qtbase
         # qt6.full
       ];
-
       # ===========================================================================================
       # Define buildable + installable packages
       # ===========================================================================================
-
-      package = stdenv.mkDerivation {
-        inherit nativeBuildInputs buildInputs;
-        pname = "";
-        version = "1.0.0";
-        src = ./.;
-
-        installPhase = ''
-          mkdir -p $out/bin
-          mv ./BINARY $out/bin
-        '';
-      };
+      # package = stdenv.mkDerivation {
+      #   inherit nativeBuildInputs buildInputs;
+      #   pname = "";
+      #   version = "1.0.0";
+      #   src = ./.;
+      #
+      #   installPhase = ''
+      #     mkdir -p $out/bin
+      #     mv ./BINARY $out/bin
+      #   '';
+      # };
+      # package = clj-nix.lib.mkCljApp {
+      #   inherit pkgs;
+      #   modules = [
+      #     # Option list: https://jlesquembre.github.io/clj-nix/options/
+      #     {
+      #       name = "";
+      #       version = "1.0.0";
+      #       main-ns = "";
+      #       projectSrc = ./.;
+      #       withLeiningen = true;
+      #       buildCommand = "lein uberjar"; # Requires "withLeiningen = true;"
+      #       jdk = pkgs.jdk; # Default is pkgs.jdk_headless
+      #       # customJdk.enable = true;
+      #       # nativeImage.enable = true;
+      #     }
+      #   ];
+      # };
     in rec {
       # Provide package for "nix build"
-      defaultPackage = package;
-      defaultApp = flake-utils.lib.mkApp {
-        drv = defaultPackage;
-      };
+      # defaultPackage = package;
+      # defaultApp = flake-utils.lib.mkApp {
+      #   drv = defaultPackage;
+      # };
 
       # Provide environment for "nix develop"
       devShell = pkgs.mkShell {
@@ -155,12 +183,18 @@ rec {
 
         # Custom dynamic libraries:
         # LD_LIBRARY_PATH = builtins.concatStringsSep ":" [
-        #   # Rust Bevy GUI app
-        #   "${pkgs.xorg.libX11}/lib"
-        #   "${pkgs.xorg.libXcursor}/lib"
-        #   "${pkgs.xorg.libXrandr}/lib"
-        #   "${pkgs.xorg.libXi}/lib"
-        #   "${pkgs.libGL}/lib"
+        #   # Rust Bevy GUI app:
+        #   # "${pkgs.xorg.libX11}/lib"
+        #   # "${pkgs.xorg.libXcursor}/lib"
+        #   # "${pkgs.xorg.libXrandr}/lib"
+        #   # "${pkgs.xorg.libXi}/lib"
+        #   # "${pkgs.libGL}/lib"
+        #
+        #   # JavaFX app:
+        #   # "${pkgs.libGL}/lib"
+        #   # "${pkgs.gtk3}/lib"
+        #   # "${pkgs.glib.out}/lib"
+        #   # "${pkgs.xorg.libXtst}/lib"
         # ];
 
         # Dynamic libraries from buildinputs:
@@ -223,10 +257,13 @@ rec {
             # abbr -a build-release-windows "CARGO_FEATURE_PURE=1 cargo xwin build --release --target x86_64-pc-windows-msvc"
 
             # C/C++:
-            abbr -a cmake-debug "${cmakeDebug}"
-            abbr -a cmake-release "${cmakeRelease}"
-            abbr -a build-debug "${buildDebug}"
-            abbr -a build-release "${buildRelease}"
+            # abbr -a cmake-debug "${cmakeDebug}"
+            # abbr -a cmake-release "${cmakeRelease}"
+            # abbr -a build-debug "${buildDebug}"
+            # abbr -a build-release "${buildRelease}"
+
+            # Clojure:
+            # abbr -a clojure-deps "deps-lock --lein"
           '';
         in
           builtins.concatStringsSep "\n" [
