@@ -314,6 +314,7 @@ rec {
       nvd # nix rebuild diff
       ripdrag # drag & drop from terminal
       playerctl # media player control
+      pastel # color tools
 
       # Hardware/Software info
       pciutils # lspci
