@@ -250,9 +250,6 @@ rec {
             # Determine the project root, used e.g. in cmake scripts
             set -g -x FLAKE_PROJECT_ROOT (git rev-parse --show-toplevel)
 
-            # Build the provided NixOS package
-            abbr -a build "nix build -L"
-
             # Rust Bevy:
             # abbr -a build-release-windows "CARGO_FEATURE_PURE=1 cargo xwin build --release --target x86_64-pc-windows-msvc"
 
@@ -273,6 +270,7 @@ rec {
             ''
 
             # Qt: Launch into wrapped fish shell
+            # https://nixos.org/manual/nixpkgs/stable/#sec-language-qt
             # ''
             #   fishdir=$(mktemp -d)
             #   makeWrapper "$(type -p fish)" "$fishdir/fish" "''${qtWrapperArgs[@]}"
