@@ -259,10 +259,16 @@ _: let
       action = "<cmd>nohlsearch<cr>";
       options.desc = "Clear Search Highlights";
     }
+    # {
+    #   mode = "n";
+    #   key = "K";
+    #   action = "<cmd>lua vim.lsp.buf.hover()<cr>";
+    #   options.desc = "LSP Hover";
+    # }
     {
       mode = "n";
       key = "K";
-      action = "<cmd>lua vim.lsp.buf.hover()<cr>";
+      action = "<cmd>lua require('hover').hover()<cr>";
       options.desc = "LSP Hover";
     }
     {
@@ -428,7 +434,13 @@ _: let
     }
     {
       mode = "n";
-      key = "<leader>fN";
+      key = "<leader>fc";
+      action = "<cmd>edit ~/.config/nvim/init.lua<cr>";
+      options.desc = "Open Config";
+    }
+    {
+      mode = "n";
+      key = "<leader>fn";
       action = "<cmd>enew<cr>";
       options.desc = "New File";
     }
