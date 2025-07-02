@@ -269,7 +269,9 @@ rec {
     };
 
     # Files to generate in the home directory are specified here.
-    file = {
+    file = let
+      sshPublicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJAoJac+GdGtzblCMA0lBfMdSR6aQ4YyovrNglCFGIny christoph.urlacher@protonmail.com";
+    in {
       # Generate a list of installed user packages in ~/.local/share/current-user-packages
       ".local/share/current-user-packages".text = let
         packages = builtins.map (p: "${p.name}") home.packages;
@@ -280,6 +282,9 @@ rec {
 
       # TODO: If navi enabled
       ".local/share/navi/cheats/christoph.cheat".source = config.lib.file.mkOutOfStoreSymlink "${config.paths.dotfiles}/navi/christoph.cheat";
+
+      ".ssh/id_ed25519.pub".text = "${sshPublicKey}";
+      ".ssh/allowed_signers".text = "* ${sshPublicKey}";
     };
 
     # Here, custom scripts can be run when activating a HM generation.
@@ -452,10 +457,101 @@ rec {
 
     git = {
       enable = true;
-      lfs.enable = true;
 
       userEmail = "christoph.urlacher@protonmail.com";
       userName = "Christoph Urlacher";
+
+      signing = {
+        signByDefault = true;
+        format = "ssh";
+        key = "~/.ssh/id_ed25519.pub";
+      };
+
+      lfs.enable = true;
+      diff-so-fancy = {
+        enable = true;
+        changeHunkIndicators = true;
+        markEmptyLines = false;
+        stripLeadingSymbols = true;
+      };
+
+      extraConfig = {
+        core = {
+          compression = 9;
+          # whitespace = "error";
+          preloadindex = true;
+        };
+
+        init = {
+          defaultBranch = "main";
+        };
+
+        gpg = {
+          ssh = {
+            allowedSignersFile = "~/.ssh/allowed_signers";
+          };
+        };
+
+        status = {
+          branch = true;
+          showStash = true;
+          showUntrackedFiles = "all";
+        };
+
+        pull = {
+          default = "current";
+          rebase = true;
+        };
+
+        push = {
+          autoSetupRemote = true;
+          default = "current";
+          followTags = true;
+        };
+
+        rebase = {
+          autoStash = true;
+          missingCommitsCheck = "warn";
+        };
+
+        diff = {
+          context = 3;
+          renames = "copies";
+          interHunkContext = 10;
+        };
+
+        interactive = {
+          diffFilter = "${pkgs.diff-so-fancy}/bin/diff-so-fancy --patch";
+          singlekey = true;
+        };
+
+        log = {
+          abbrevCommit = true;
+          graphColors = "blue,yellow,cyan,magenta,green,red";
+        };
+
+        branch = {
+          sort = "-committerdate";
+        };
+
+        tag = {
+          sort = "-taggerdate";
+        };
+
+        pager = {
+          branch = false;
+          tag = false;
+        };
+
+        url = {
+          "ssh://git@gitea.local.chriphost.de:222/christoph/" = {
+            insteadOf = "gitea:";
+          };
+          "git@github.com:" = {
+            insteadOf = "github:";
+          };
+        };
+      };
     };
 
     keychain = {
@@ -502,7 +598,25 @@ rec {
     };
 
     nushell.enable = false;
-    ssh.enable = false; # NOTE: Do NOT generate .ssh/config using HM, as it will have invalid permissions!
+    ssh = {
+      enable = true; # NOTE: Do NOT generate .ssh/config using HM, as it will have invalid permissions!
+      compression = true;
+
+      matchBlocks = {
+        "servenix" = {
+          user = "christoph";
+          hostname = "local.chriphost.de";
+        };
+        "thinknix" = {
+          user = "christoph";
+          hostname = "think.chriphost.de";
+        };
+        "vps" = {
+          user = "root";
+          hostname = "vps.chriphost.de";
+        };
+      };
+    };
 
     tmux = {
       enable = false;
