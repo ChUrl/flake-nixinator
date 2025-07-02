@@ -1,5 +1,6 @@
 # TODO: The keys to reset the workspaces need to depend on actual workspace config
 {
+  inputs,
   config,
   lib,
   mylib,
@@ -67,6 +68,9 @@
     "$mainMod CTRL, k" = ["movewindow, u"];
     "$mainMod CTRL, d" = ["movewindow, d"];
 
+    # Special workspace
+    "$mainMod, x" = ["togglespecialworkspace"];
+
     # TODO: Somehow write this more compact? Try to use workspace 0 instead of 10...
     "$mainMod, 1" = ["workspace, 1"];
     "$mainMod, 2" = ["workspace, 2"];
@@ -90,18 +94,17 @@
     "$mainMod SHIFT, 9" = ["movetoworkspace, 9"];
     "$mainMod SHIFT, 0" = ["movetoworkspace, 10"];
 
-    "CTRL ALT, R" = [
-      "moveworkspacetomonitor, 1 HDMI-A-1"
-      "moveworkspacetomonitor, 2 HDMI-A-1"
-      "moveworkspacetomonitor, 3 HDMI-A-1"
-      "moveworkspacetomonitor, 4 HDMI-A-1"
-      "moveworkspacetomonitor, 5 HDMI-A-1"
-      "moveworkspacetomonitor, 6 HDMI-A-1"
-      "moveworkspacetomonitor, 7 HDMI-A-1"
-      "moveworkspacetomonitor, 8 HDMI-A-1"
-      "moveworkspacetomonitor, 9 HDMI-A-1"
-      "moveworkspacetomonitor, 10 DP-1"
-    ];
+    # Reset workspaces to the defined configuration in hyprland.workspaces:
+    # [
+    #   "moveworkspacetomonitor, 1 HDMI-A-1"
+    #   "moveworkspacetomonitor, 2 HDMI-A-1"
+    #   ...
+    # ]
+    "CTRL ALT, R" = let
+      mkWorkspaceBinding = monitor: workspace: "moveworkspacetomonitor, ${builtins.toString workspace} ${builtins.toString monitor}";
+      mkWorkspacesBindings = monitor: workspaces: builtins.map (mkWorkspaceBinding monitor) workspaces;
+    in
+      builtins.concatLists (builtins.attrValues (builtins.mapAttrs mkWorkspacesBindings hyprland.workspaces));
   };
 
   always-bindm = {
@@ -125,6 +128,7 @@
     # Provide a polkit authentication UI.
     # This is used for example when running systemd commands without root.
     "${pkgs.kdePackages.polkit-kde-agent-1}/libexec/polkit-kde-authentication-agent-1"
+    # "systemctl --user start hyprpolkitagent.service"
   ];
 in {
   options.modules.hyprland = import ./options.nix {inherit lib mylib;};
@@ -359,6 +363,14 @@ in {
       systemd.enable = true; # Enable hyprland-session.target
       systemd.variables = ["--all"]; # Import PATH into systemd
       xwayland.enable = true;
+
+      plugins = [
+        # TODO: Takes ages (compiles all hyprland dependencies locally...)
+        #       Probably have to use hyprland flake to follow...
+
+        # inputs.hypr-dynamic-cursors.packages.${pkgs.system}.hypr-dynamic-cursors
+        # inputs.hyprland-plugins.packages.${pkgs.system}.hyprbars
+      ];
 
       settings = {
         "$mainMod" = "${hyprland.keybindings.main-mod}";

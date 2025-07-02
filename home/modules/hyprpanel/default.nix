@@ -109,6 +109,7 @@ in {
         "bar.workspaces.applicationIconEmptyWorkspace" = "";
         "bar.workspaces.applicationIconFallback" = "󰣆";
         "bar.workspaces.applicationIconOncePerWorkspace" = true;
+        "bar.workspaces.ignored" = "-99"; # Special workspace
         "bar.workspaces.monitorSpecific" = true;
         "bar.workspaces.numbered_active_indicator" = "highlight";
         "bar.workspaces.reverse_scroll" = true;
