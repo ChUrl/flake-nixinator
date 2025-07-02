@@ -120,27 +120,4 @@
 
     videoDrivers = ["nvidia"]; # NVIDIA
   };
-
-  # This has been relocated here from the default config,
-  # because it forces en-US keyboard layout.
-  i18n.inputMethod = {
-    enable = true;
-    type = "fcitx5";
-
-    fcitx5 = {
-      waylandFrontend = true;
-
-      addons = with pkgs; [
-        fcitx5-gtk
-        fcitx5-configtool # TODO: Remove this and set config through HomeManager
-        catppuccin-fcitx5
-
-        libsForQt5.fcitx5-qt # QT5
-        libsForQt5.fcitx5-chinese-addons
-
-        qt6Packages.fcitx5-qt # QT6
-        qt6Packages.fcitx5-chinese-addons
-      ];
-    };
-  };
 }
