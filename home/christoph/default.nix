@@ -107,6 +107,7 @@ rec {
           "kitty"
           "nextcloud --background"
           "keepassxc"
+          "ferdium"
         ];
       };
 
@@ -118,6 +119,10 @@ rec {
       ];
 
       workspacerules = {
+        "special" = [
+          "Ferdium"
+        ];
+
         "2" = [
           "Zotero"
 
@@ -312,6 +317,7 @@ rec {
       sd # sed alternative
       fclones # duplicate file finder
       tealdeer # very fast tldr (so readable man)
+      killall
       atool # Archive preview
       ffmpegthumbnailer # Video thumbnails
       mediainfo # Media meta information
@@ -390,6 +396,7 @@ rec {
       helvum
       vlc
       audacity
+      ferdium
 
       # Office
       wacomtablet # For xournalpp/krita
