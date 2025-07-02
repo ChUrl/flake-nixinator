@@ -110,10 +110,11 @@
   };
 
   always-exec = [
-    "dunst" # Notifications
+    # "dunst" # Notifications
     "wl-paste -t text --watch clipman store --no-persist"
     "wl-paste -p -t text --watch clipman store -P --histpath=\"~/.local/share/clipman-primary.json\""
     "hyprctl setcursor Bibata-Modern-Classic 16"
+    "hyprsunset --identity"
 
     # HACK: Hyprland doesn't set the xwayland/x11 keymap correctly
     "setxkbmap -layout ${hyprland.kb-layout} -variant ${hyprland.kb-variant} -model pc104"
@@ -160,6 +161,9 @@ in {
       packages = with pkgs; [
         hyprpaper # Wallpaper setter
         hyprpicker # Color picker
+        # hyprpolkitagent # Ugly polkit authentication GUI
+        hyprland-qt-support
+        hyprsunset # Blue light filter
 
         wl-clipboard
         clipman # Clipboard manager (wl-paste)
@@ -171,18 +175,20 @@ in {
         grim # Grab images from compositor
 
         # Deps for Qt5 and Qt6 apps (e.g., Nextcloud)
-        libsForQt5.qtwayland
-        kdePackages.qtwayland
+        qt5.qtwayland
+        qt6.qtwayland
       ];
 
       file = {
-        ".config/hypr/keybindings.info".text = lib.pipe (hyprland.keybindings.bindings
-          // always-bind) [
-          (builtins.mapAttrs mkBindsHelp)
-          builtins.attrValues
-          builtins.concatLists
-          (builtins.concatStringsSep "\n")
-        ];
+        ".config/hypr/keybindings.info".text =
+          lib.pipe
+          (hyprland.keybindings.bindings // always-bind)
+          [
+            (builtins.mapAttrs mkBindsHelp)
+            builtins.attrValues
+            builtins.concatLists
+            (builtins.concatStringsSep "\n")
+          ];
       };
     };
 
