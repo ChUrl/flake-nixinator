@@ -17,6 +17,12 @@
     nixvim.url = "github:nix-community/nixvim";
     nixvim.inputs.nixpkgs.follows = "nixpkgs";
 
+    # HyprPlugins
+    hyprland-plugins.url = "github:hyprwm/hyprland-plugins";
+    hyprland-plugins.inputs.nixpkgs.follows = "nixpkgs";
+    hypr-dynamic-cursors.url = "github:VirtCode/hypr-dynamic-cursors";
+    hypr-dynamic-cursors.inputs.nixpkgs.follows = "nixpkgs";
+
     # Nix User Repository (e.g. Firefox addons)
     nur.url = "github:nix-community/NUR";
     nur.inputs.nixpkgs.follows = "nixpkgs";
@@ -41,8 +47,10 @@
     emacs-overlay.url = "github:nix-community/emacs-overlay";
     emacs-overlay.inputs.nixpkgs.follows = "nixpkgs";
 
-    # TODO: Move away from devshell, as it breaks e.g. C++/Rust library propagation
-    #       and doesn't provide any benefits for me
+    # Pinned versions
+    v4l2loopback-pinned.url = "github:nixos/nixpkgs/4684fd6b0c01e4b7d99027a34c93c2e09ecafee2";
+
+    # Just for shell.nix
     devshell.url = "github:numtide/devshell";
   };
 
@@ -68,10 +76,21 @@
       config.allowUnfreePredicate = pkg: true;
 
       # Overlays define changes in the nixpkgs package set.
+      # Final is nixpkgs with the overlay applied, prev is nixpkgs before applying the overlay:
+      # final: prev: {
+      #   firefox = prev.firefox.override { ... };
+      #   myBrowser = final.firefox;
+      # }
       overlays = [
         inputs.devshell.overlays.default
         inputs.nur.overlays.default
         inputs.emacs-overlay.overlay
+
+        # TODO: Check if this works
+        # TODO: Remove after OBS is fixed: https://github.com/obsproject/obs-studio/pull/11906
+        # (final: prev: {
+        #   v4l2loopback = inputs.v4l2loopback-pinned.pkgs.v4l2loopback;
+        # })
 
         # All my own overlays
         (import ./overlays {inherit nixpkgs inputs;})
