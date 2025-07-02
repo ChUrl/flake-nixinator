@@ -169,9 +169,12 @@ in {
 
           (abbrify pkgs.git {
             gs = "git status";
-            gcm = "git commit -m";
+            gd = "git diff --output-indicator-new=' ' --output-indicator-old=' '";
+            gl = "git log --all --graph --pretty=format:'%C(magenta)%h %C(white) %an  %ar%C(auto)  %D%n%s%n'";
             ga = "git add";
-            glg = "git log --graph --decorate --oneline";
+            gap = "git add --patch";
+            gc = "git commit --verbose";
+            gcm = "git commit -m";
             gcl = "git clone";
           })
 
