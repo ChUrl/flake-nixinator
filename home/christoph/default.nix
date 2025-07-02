@@ -90,6 +90,11 @@ rec {
           ", XF86AudioPlay" = ["exec, playerctl play-pause"];
           ", XF86AudioPrev" = ["exec, playerctl previous"];
           ", XF86AudioNext" = ["exec, playerctl next"];
+
+          ", XF86MonBrightnessDown" = ["exec, hyprctl hyprsunset gamma -10"];
+          ", XF86MonBrightnessUp" = ["exec, hyprctl hyprsunset gamma +10"];
+          "$mainMod, XF86MonBrightnessDown" = ["exec, hyprctl hyprsunset temperature 6000"];
+          "$mainMod, XF86MonBrightnessUp" = ["exec, hyprctl hyprsunset identity"];
         };
       };
 
@@ -106,6 +111,7 @@ rec {
       };
 
       windowrules = [
+        # Prevent unity from activating when its reloading the editor
         # TODO: Doesn't work, use focus_on_activate for now
         # "suppressevent activate, class:^(Unity)$"
         # "suppressevent activatefocus, class:^(Unity)$"
@@ -364,8 +370,8 @@ rec {
       sshfs # Mount remote directories via SSH
 
       protonvpn-gui
+      protonvpn-cli_2
       protonmail-bridge-gui
-      protonvpn-cli_2 # TODO: Not compatible with systemd-networkd?
       protonmail-bridge # TODO: Enable on startup, email module
 
       # GUI apps
