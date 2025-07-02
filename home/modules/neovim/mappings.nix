@@ -240,7 +240,7 @@ _: let
       options.desc = "Copy";
     }
     {
-      mode = "n";
+      mode = ["n" "i"];
       key = "<C-p>";
       action = "<cmd>YankyRingHistory<cr>";
       options.desc = "Paste (Yanky)";
@@ -278,17 +278,17 @@ _: let
       options.desc = "Find in Buffer";
     }
     {
-      mode = "n";
+      mode = ["n" "v"];
       key = ";";
       action = "%";
       options.desc = "Matching ()[]<>";
     }
-    {
-      mode = "v";
-      key = ";";
-      action = "<Esc>";
-      options.desc = "Exit Visual Mode";
-    }
+    # {
+    #   mode = "v";
+    #   key = ";";
+    #   action = "<Esc>";
+    #   options.desc = "Exit Visual Mode";
+    # }
   ];
 
   leader = [
@@ -346,18 +346,18 @@ _: let
       action = "<cmd>lua Snacks.picker.commands()<cr>";
       options.desc = "Commands Picker";
     }
-    # {
-    #   mode = "n";
-    #   key = "<leader>M";
-    #   action = "<cmd>lua Snacks.picker.marks()<cr>";
-    #   options.desc = "Marks Picker";
-    # }
-    # {
-    #   mode = "n";
-    #   key = "<leader>J";
-    #   action = "<cmd>lua Snacks.picker.jumps()<cr>";
-    #   options.desc = "Jumps Picker";
-    # }
+    {
+      mode = "n";
+      key = "<leader>m";
+      action = "<cmd>lua Snacks.picker.marks()<cr>";
+      options.desc = "Marks Picker";
+    }
+    {
+      mode = "n";
+      key = "<leader>j";
+      action = "<cmd>lua Snacks.picker.jumps()<cr>";
+      options.desc = "Jumps Picker";
+    }
     {
       mode = "n";
       key = "<leader>d";
@@ -436,7 +436,13 @@ _: let
       mode = "n";
       key = "<leader>fc";
       action = "<cmd>edit ~/.config/nvim/init.lua<cr>";
-      options.desc = "Open Config";
+      options.desc = "Open NeoVim Config";
+    }
+    {
+      mode = "n";
+      key = "<leader>fh";
+      action = "<cmd>edit ~/.config/hypr/hyprland.conf<cr>";
+      options.desc = "Open Hyprland Config";
     }
     {
       mode = "n";
