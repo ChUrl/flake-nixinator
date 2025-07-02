@@ -142,6 +142,7 @@ in {
             ssh = "kitty +kitten ssh";
             nd = "nix develop";
             nb = "nix build -L";
+            nps = "nps -e";
           }
 
           # Abbrs only available if package is installed
