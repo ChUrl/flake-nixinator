@@ -388,6 +388,12 @@ _: let
       action = "<cmd>:set wrap!<cr>";
       options.desc = "Toggle Word Wrap";
     }
+    {
+      mode = "n";
+      key = "<leader>y";
+      action = "<cmd>Yazi<cr>";
+      options.desc = "Toggle Yazi";
+    }
   ];
 
   leader-file = [

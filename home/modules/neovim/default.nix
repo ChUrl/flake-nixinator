@@ -1477,7 +1477,7 @@ in {
 
               explorer = {
                 enabled = true;
-                replace_netrw = true;
+                replace_netrw = false; # Use yazi for that
               };
 
               notifier = {
@@ -1919,6 +1919,28 @@ in {
             ];
             config = mkDefaultConfig name;
           };
+
+          yazi = rec {
+            name = "yazi";
+            pkg = pkgs.vimPlugins.yazi-nvim;
+            lazy = true;
+            event = ["VeryLazy"];
+            dependencies = [_plenary];
+            config = mkDefaultConfig name;
+            opts = {
+              open_for_directories = true;
+              highlight_hovered_buffers_in_same_directory = false;
+
+              integrations = {
+                grep_in_directory.__raw = ''
+                  function(directory)
+                    Snacks.picker.grep({dirs={directory}})
+                  end
+                '';
+                picker_add_copy_relative_path_action = "snacks.picker";
+              };
+            };
+          };
         in [
           autopairs # Automatic closing brackets/parens # NOTE: For now replaced by blink
 
@@ -1991,6 +2013,7 @@ in {
           window-picker # Jump to window without multiple <leader-hjkl>
           winshift # Move windows around
           yanky # Clipboard history
+          yazi
         ];
       };
     };
