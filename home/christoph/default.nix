@@ -165,6 +165,10 @@ rec {
           "discord"
           "vesktop"
         ];
+
+        "10" = [
+          "python3"
+        ];
       };
 
       floating = [
@@ -319,6 +323,7 @@ rec {
       tealdeer # very fast tldr (so readable man)
       killall
       atool # Archive preview
+      ouch # unified compression/decompression
       ffmpegthumbnailer # Video thumbnails
       mediainfo # Media meta information
       file # File meta information
@@ -655,26 +660,51 @@ rec {
       '';
     };
 
-    yazi = let
-      yazi-plugins = pkgs.fetchFromGitHub {
-        owner = "yazi-rs";
-        repo = "plugins";
-        rev = "63f9650e522336e0010261dcd0ffb0bf114cf912"; # NOTE: Refresh after system updates depending on the yazi version
-        hash = "sha256-ZCLJ6BjMAj64/zM606qxnmzl2la4dvO/F5QFicBEYfU=";
-      };
-
-      yazi-starship = pkgs.fetchFromGitHub {
-        owner = "Rolv-Apneseth";
-        repo = "starship.yazi";
-        rev = "6a0f3f788971b155cbc7cec47f6f11aebbc148c9";
-        sha256 = "sha256-q1G0Y4JAuAv8+zckImzbRvozVn489qiYVGFQbdCxC98=";
-      };
-    in {
+    yazi = {
       enable = true;
       enableFishIntegration = true;
       shellWrapperName = "y";
 
+      plugins = {
+        inherit (pkgs.yaziPlugins) chmod diff full-border git lazygit mount ouch rsync smart-paste starship sudo;
+      };
+
+      initLua = ''
+        -- Load plugins
+        require("full-border"):setup()
+        require("starship"):setup()
+        require("git"):setup()
+
+        -- Show symlink in status bar
+        Status:children_add(function(self)
+          local h = self._current.hovered
+          if h and h.link_to then
+            return " -> " .. tostring(h.link_to)
+          else
+            return ""
+          end
+        end, 3300, Status.LEFT)
+
+        -- Show user:group in status bar
+        Status:children_add(function()
+          local h = cx.active.current.hovered
+          if not h or ya.target_family() ~= "unix" then
+            return ""
+          end
+
+          return ui.Line {
+            ui.Span(ya.user_name(h.cha.uid) or tostring(h.cha.uid)):fg("magenta"),
+            ":",
+            ui.Span(ya.group_name(h.cha.gid) or tostring(h.cha.gid)):fg("magenta"),
+            " ",
+          }
+        end, 500, Status.RIGHT)
+      '';
+
       # https://yazi-rs.github.io/docs/configuration/yazi
+      # "$n": The n-th selected file (1...n)
+      # "$@": All selected files
+      # "$0": The hovered file
       settings = {
         mgr = {
           show_hidden = false;
@@ -689,20 +719,26 @@ rec {
             {
               run = ''vlc "$@"'';
               orphan = true;
-              for = "unix";
+              desc = "Play selection";
             }
           ];
           edit = [
             {
               run = ''$EDITOR "$@"'';
               block = true;
-              for = "unix";
+              desc = "Edit selection";
             }
           ];
           open = [
             {
               run = ''xdg-open "$@"'';
-              desc = "Open";
+              desc = "Open selection";
+            }
+          ];
+          extract = [
+            {
+              run = ''ouch decompress -y "$@"'';
+              desc = "Extract selection";
             }
           ];
         };
@@ -724,22 +760,38 @@ rec {
             run = "git";
           }
         ];
-      };
 
-      plugins = {
-        full-border = "${yazi-plugins}/full-border.yazi";
-        starship = "${yazi-starship}";
-        git = "${yazi-plugins}/git.yazi";
-        mount = "${yazi-plugins}/mount.yazi";
-        chmod = "${yazi-plugins}/chmod.yazi";
-        # toggle-pane = "${yazi-plugins}/toggle-pane.yazi";
+        plugin.prepend_previewers = [
+          {
+            mime = "application/*zip";
+            run = "ouch";
+          }
+          {
+            mime = "application/x-tar";
+            run = "ouch";
+          }
+          {
+            mime = "application/x-bzip2";
+            run = "ouch";
+          }
+          {
+            mime = "application/x-7z-compressed";
+            run = "ouch";
+          }
+          {
+            mime = "application/x-rar";
+            run = "ouch";
+          }
+          {
+            mime = "application/x-xz";
+            run = "ouch";
+          }
+          {
+            mime = "application/xz";
+            run = "ouch";
+          }
+        ];
       };
-
-      initLua = ''
-        require("full-border"):setup()
-        require("starship"):setup()
-        require("git"):setup()
-      '';
 
       keymap = {
         input.prepend_keymap = [
@@ -753,29 +805,55 @@ rec {
 
         mgr.prepend_keymap = [
           {
-            on = "M";
+            on = ["<C-p>" "m"];
             run = "plugin mount";
             desc = "Manage device mounts";
           }
           {
-            on = ["C"];
+            on = ["<C-p>" "c"];
             run = "plugin chmod";
-            desc = "Chmod on selected files";
+            desc = "Chmod selection";
           }
+          {
+            on = ["<C-p>" "g"];
+            run = "plugin lazygit";
+            desc = "Run LazyGit";
+          }
+          {
+            on = ["<C-p>" "a"];
+            run = "plugin ouch";
+            desc = "Add selection to archive";
+          }
+          {
+            on = ["<C-p>" "d"];
+            run = ''shell -- ripdrag -a -n "$@"'';
+            desc = "Drag & drop selection";
+          }
+          {
+            on = ["<C-p>" "D"];
+            run = "plugin diff";
+            desc = "Diff the selected with the hovered file";
+          }
+          {
+            on = ["<C-p>" "r"];
+            run = "plugin rsync";
+            desc = "Copy files using rsync";
+          }
+
           {
             on = "!";
             run = ''shell "$SHELL" --block'';
             desc = "Open $SHELL here";
           }
           {
-            on = "<C-n>";
-            run = ''shell -- ripdrag -a -n "$@"''; # $@: all selected files, $0: the hovered file, $n: the nth selected file
-            desc = "Expose files in ripdrag";
-          }
-          {
             on = "y";
             run = [''shell -- for path in "$@"; do echo "file://$path"; done | wl-copy -t text/uri-list'' "yank"];
             desc = "Copy files to system clipboard on yank";
+          }
+          {
+            on = "p";
+            run = "plugin smart-paste";
+            desc = "Paste into hovered directory or CWD";
           }
         ];
       };
