@@ -366,12 +366,6 @@ _: let
     }
     {
       mode = "n";
-      key = "<leader>D";
-      action = "<cmd>Trouble todo toggle focus=false win.position=right<cr>";
-      options.desc = "Toggle TODOs";
-    }
-    {
-      mode = "n";
       key = "<leader>/";
       action = "<cmd>lua Snacks.picker.grep()<cr>";
       options.desc = "Find in Project";
@@ -588,12 +582,12 @@ _: let
   leader-tabs = [
     {
       mode = "n";
-      key = "<leader>t";
+      key = "<leader>T";
       action = "+tab";
     }
     # {
     #   mode = "n";
-    #   key = "<leader>tt";
+    #   key = "<leader>Tt";
     #   action = "<cmd>Telescope telescope-tabs list_tabs<cr>";
     #   options.desc = "List Tabpages";
     # }
@@ -605,25 +599,25 @@ _: let
     # }
     {
       mode = "n";
-      key = "<leader>tn";
+      key = "<leader>Tn";
       action = "<cmd>tabnext<cr>";
       options.desc = "Next Tabpage";
     }
     {
       mode = "n";
-      key = "<leader>tp";
+      key = "<leader>Tp";
       action = "<cmd>tabprevious<cr>";
       options.desc = "Previous Tabpage";
     }
     {
       mode = "n";
-      key = "<leader>tN";
+      key = "<leader>TN";
       action = "<cmd>tabnew<cr>";
       options.desc = "New Tabpage";
     }
     {
       mode = "n";
-      key = "<leader>td";
+      key = "<leader>Td";
       action = "<cmd>tabclose<cr>";
       options.desc = "Close Tabpage";
     }
@@ -810,36 +804,42 @@ _: let
     # Toggles
     {
       mode = "n";
-      key = "<leader>ct";
+      key = "<leader>t";
       action = "+toggle";
     }
     {
       mode = "n";
-      key = "<leader>ctd";
+      key = "<leader>td";
       action = "<cmd>ToggleInlineDiagnostics<cr>";
       options.desc = "Inline Diagnostics";
     }
     {
       mode = "n";
-      key = "<leader>ctD";
+      key = "<leader>tt";
       action = "<cmd>Trouble diagnostics toggle focus=false win.position=bottom<cr>";
       options.desc = "Trouble Diagnostics";
     }
     {
       mode = "n";
-      key = "<leader>cts";
+      key = "<leader>tD";
+      action = "<cmd>Trouble todo toggle focus=false win.position=bottom<cr>";
+      options.desc = "Toggle TODOs";
+    }
+    {
+      mode = "n";
+      key = "<leader>ts";
       action = "<cmd>Trouble symbols toggle focus=false win.position=right<cr>";
       options.desc = "Trouble Symbols";
     }
     {
       mode = "n";
-      key = "<leader>ctf";
+      key = "<leader>tf";
       action = "<cmd>ToggleAutoformat<cr>";
       options.desc = "Format on Save";
     }
     {
       mode = "n";
-      key = "<leader>ctl";
+      key = "<leader>tl";
       action = "<cmd>ToggleAutoLint<cr>";
       options.desc = "Lint on Save";
     }
