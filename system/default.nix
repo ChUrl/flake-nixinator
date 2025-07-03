@@ -307,14 +307,22 @@ with mylib.networking; {
     portal = {
       enable = true;
       xdgOpenUsePortal = false;
-      config.common.default = ["*"]; # https://discourse.nixos.org/t/clicked-links-in-desktop-apps-not-opening-browers/29114/26
       wlr.enable = false; # Hyprland has its own portal automatically enabled...
+
+      config = {
+        common.default = ["*"]; # https://discourse.nixos.org/t/clicked-links-in-desktop-apps-not-opening-browers/29114/26
+        common."org.freedesktop.impl.portal.FileChooser" = ["termfilechooser"];
+
+        hyprland.default = ["hyprland"];
+        hyprland."org.freedesktop.impl.portal.FileChooser" = ["termfilechooser"];
+      };
+
       extraPortals = with pkgs; [
         xdg-desktop-portal-gtk
+        xdg-desktop-portal-termfilechooser # Filepicker using yazi
 
         # xdg-desktop-portal-kde
         # xdg-desktop-portal-hyprland # Already enabled by hyprland system module
-        # xdg-desktop-portal-termfilechooser # Filepicker using nnn
       ];
     };
   };
