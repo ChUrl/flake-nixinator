@@ -67,6 +67,7 @@ in {
           "class:^(Spotify)$" = "";
           "class:^(discord)$" = "";
           "class:^(Zotero)$" = "";
+          "class:^(org.zealdocs.zeal)$" = "󰞋";
         };
 
         # https://github.com/Jas-SinghFSU/HyprPanel/blob/master/src/configuration/modules/theme/bar/index.ts
