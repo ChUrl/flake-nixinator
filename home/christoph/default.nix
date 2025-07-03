@@ -246,12 +246,8 @@ rec {
       defaultApplications = nixosConfig.xdg.mime.defaultApplications;
     };
 
-    # TODO: What about desktop portals? They're configured in system config, do I need to do sth here?
     portal = {
-      enable = nixosConfig.xdg.portal.enable;
-      xdgOpenUsePortal = nixosConfig.xdg.portal.xdgOpenUsePortal;
-      config.common.default = nixosConfig.xdg.portal.config.common.default;
-      extraPortals = nixosConfig.xdg.portal.extraPortals;
+      inherit (nixosConfig.xdg.portal) enable xdgOpenUsePortal config extraPortals;
     };
   };
 
@@ -300,6 +296,15 @@ rec {
 
       ".ssh/id_ed25519.pub".text = "${sshPublicKey}";
       ".ssh/allowed_signers".text = "* ${sshPublicKey}";
+
+      ".config/xdg-desktop-portal-termfilechooser/config".text = ''
+        [filechooser]
+        cmd=${pkgs.xdg-desktop-portal-termfilechooser}/share/xdg-desktop-portal-termfilechooser/yazi-wrapper.sh
+        default_dir=$HOME
+        env=TERMCMD=kitty --class=file_chooser
+        open_mode = suggested
+        save_mode = last
+      '';
     };
 
     # Here, custom scripts can be run when activating a HM generation.
