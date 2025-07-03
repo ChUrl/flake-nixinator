@@ -300,6 +300,12 @@ in {
               "toolkit.telemetry.coverage.opt-out" = true;
 
               "widget.use-xdg-desktop-portal" = true;
+              "widget.use-xdg-desktop-portal.file-picker" = 1; # 1: always, 2: auto
+              "widget.use-xdg-desktop-portal.location" = 2;
+              "widget.use-xdg-desktop-portal.mime-handler" = 2;
+              "widget.use-xdg-desktop-portal.native-messaging" = 0;
+              "widget.use-xdg-desktop-portal.open-uri" = 2;
+              "widget.use-xdg-desktop-portal.settings" = 2;
             })
           ];
         };
