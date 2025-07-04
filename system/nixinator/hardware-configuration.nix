@@ -12,13 +12,23 @@
 
   boot = {
     initrd.availableKernelModules = ["xhci_pci" "ahci" "nvme" "usbhid" "usb_storage" "sd_mod"];
+
     # Enable early Nvidia kernel modesetting
     # https://wiki.archlinux.org/title/GDM#GDM_ignores_Wayland_and_uses_X.Org_by_default (not fixed by this)
     # https://wiki.archlinux.org/title/Kernel_mode_setting#Early_KMS_start
     initrd.kernelModules = ["nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm"]; # NVIDIA
-    # initrd.kernelModules = ["amdgpu"]; # Initrd modules are always loaded, e.g. when they are required to mount the rootfs
-    # kernelModules = ["kvm-intel" "iwlwifi"];
-    kernelModules = ["kvm-amd" "sg"]; # sg is for blu ray drive
+
+    kernelModules = [
+      "kvm-amd"
+      "sg" # Blu-Ray drive
+      "zenpower" # Sensors for Zen CPUs: https://github.com/NixOS/nixos-hardware/blob/master/common/cpu/amd/zenpower.nix
+    ];
+
+    blacklistedKernelModules = ["k10temp"]; # Disable in favor of zenpower
+
+    # Enable AMD pstate
+    # https://github.com/NixOS/nixos-hardware/blob/master/common/cpu/amd/pstate.nix
+    kernelParams = ["amd_pstate=active"];
 
     # extraModprobeConfig = ''
     #   options iwlwifi 11n_disable=1 wd_disable=0
@@ -26,8 +36,8 @@
 
     # Specific to used kernel (currently linux_zen)
     extraModulePackages = with config.boot.kernelPackages; [
-      # new-lg4ff # Logitech force feedback
       v4l2loopback
+      zenpower
     ];
   };
 
@@ -117,10 +127,10 @@
 
     nvidia = {
       package = config.boot.kernelPackages.nvidiaPackages.stable;
-      # package = config.boot.kernelPackages.nvidiaPackages.beta; # NOTE: Beta, might (?) prevent discord screen-share
+      # package = config.boot.kernelPackages.nvidiaPackages.beta;
 
       modesetting.enable = true; # Not officially supported by NVidia but needed for wayland
-      open = false; # TODO: Build failure on 2024-18-01
+      open = true;
       nvidiaSettings = false; # Those are for x-server
     };
 
@@ -137,9 +147,10 @@
         vaapiVdpau # Taken from wiki, this is also part of nixos-hardware/common/gpu/nvidia
         libvdpau-va-gl # Taken from wiki
 
-        libvdpau # NOTE: Don't know if needed/where it belongs...
-        libva # NOTE: Don't know if needed/where it belongs...
+        # libvdpau # NOTE: Don't know if needed/where it belongs...
+        # libva # NOTE: Don't know if needed/where it belongs...
 
+        # https://discourse.nixos.org/t/nvidia-open-breaks-hardware-acceleration/58770/3
         nvidia-vaapi-driver # Experimental, doesn't work with chromium
       ];
     };
@@ -155,7 +166,9 @@
 
     # https://github.com/elFarto/nvidia-vaapi-driver?tab=readme-ov-file#environment-variables
     LIBVA_DRIVER_NAME = "nvidia";
-    NVD_BACKEND = "egl";
+
+    # https://wiki.hypr.land/Nvidia/#va-api-hardware-video-acceleration
+    NVD_BACKEND = "direct"; # egl
   };
 
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
