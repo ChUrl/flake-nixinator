@@ -120,7 +120,7 @@ rec {
 
       workspacerules = {
         "special" = [
-          "Ferdium"
+          "ferdium"
         ];
 
         "2" = [
