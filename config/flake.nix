@@ -115,6 +115,10 @@ rec {
         # Java:
         # gradle
 
+        # Python:
+        # hatch
+        # py-spy
+
         # Qt:
         # qt6.wrapQtAppsHook # For the shellHook
       ];
@@ -203,6 +207,9 @@ rec {
         # QT imports to use with "qmlls -E"
         # QML_IMPORT_PATH = "${pkgs.qt6.full}/lib/qt-6/qml";
 
+        # Set PYTHONPATH
+        # PYTHONPATH = ".";
+
         # =========================================================================================
         # Define shell environment
         # =========================================================================================
@@ -264,6 +271,11 @@ rec {
 
             # Clojure:
             # abbr -a clojure-deps "deps-lock --lein"
+
+            # Python:
+            # abbr -a run "python ./app/main.py"
+            # abbr -a profile "py-spy record -o profile.svg -- python ./app/main.py && firefox profile.svg"
+            # abbr -a ptop "py-spy top -- python ./app/main.py"
           '';
         in
           builtins.concatStringsSep "\n" [
