@@ -125,7 +125,7 @@ in {
               don-t-fuck-with-paste
               enhancer-for-youtube
               fastforwardteam # skip URL shorteners
-              faststream # replace video players with a faster one
+              # faststream # replace video players with a faster one
               frankerfacez # twitch emotes
               indie-wiki-buddy
               keepassxc-browser
