@@ -475,6 +475,9 @@ in {
           disable_hyprland_logo = true;
           force_default_wallpaper = 0;
 
+          # Say no to the "Application not responding" window
+          enable_anr_dialog = false;
+
           disable_splash_rendering = true;
           font_family = "${color.font}";
         };
