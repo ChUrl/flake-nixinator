@@ -430,7 +430,7 @@ with mylib.networking; {
     fish.enable = true;
     firejail.enable = true; # Use to run app in network namespace (e.g. through vpn)
     git.enable = true;
-    kdeconnect.enable = false; # Use this instead of HM for firewall setup
+    kdeconnect.enable = true; # Use this instead of HM for firewall setup
     neovim.enable = true;
     starship.enable = true;
     # pay-respects.enable = true; # The new fuck

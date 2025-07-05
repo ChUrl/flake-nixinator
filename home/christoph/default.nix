@@ -53,6 +53,8 @@ rec {
       font = "JetBrainsMono Nerd Font Mono";
     };
 
+    docs.enable = true;
+
     firefox = {
       enable = true;
       wayland = true;
@@ -108,6 +110,7 @@ rec {
           "nextcloud --background"
           "keepassxc"
           "ferdium"
+          "kdeconnect-indicator"
         ];
       };
 
@@ -205,7 +208,6 @@ rec {
 
     hyprpanel.enable = true;
     kitty.enable = true;
-    latex.enable = true;
 
     neovim = {
       enable = true;
@@ -214,6 +216,8 @@ rec {
     };
 
     nnn.enable = false;
+
+    rmpc.enable = true;
 
     rofi = {
       enable = true;
@@ -281,6 +285,7 @@ rec {
 
     # Files to generate in the home directory are specified here.
     file = let
+      # NOTE: SSH public key
       sshPublicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJAoJac+GdGtzblCMA0lBfMdSR6aQ4YyovrNglCFGIny christoph.urlacher@protonmail.com";
     in {
       # Generate a list of installed user packages in ~/.local/share/current-user-packages
@@ -621,6 +626,7 @@ rec {
     };
 
     nushell.enable = false;
+
     ssh = {
       enable = true; # NOTE: Do NOT generate .ssh/config using HM, as it will have invalid permissions!
       compression = true;
@@ -873,7 +879,7 @@ rec {
   };
 
   services = {
-    # kdeconnect.enable = true; # Note: This does not setup the firewall at all
+    kdeconnect.enable = nixosConfig.programs.kdeconnect.enable; # Only the system package sets up the firewall
 
     flatpak = {
       # FlatHub stable is only added by default if no custom remotes are specified
