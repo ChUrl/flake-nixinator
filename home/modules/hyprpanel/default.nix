@@ -91,7 +91,7 @@ in {
         "theme.bar.buttons.padding_x" = "10px";
         "theme.bar.buttons.padding_y" = "2px";
         "theme.bar.buttons.radius" = "6px";
-        "theme.bar.buttons.spacing" = "3px";
+        "theme.bar.buttons.spacing" = "2px"; # NOTE: Horizontal inter-button spacing
         "theme.bar.buttons.style" = "default";
         "theme.bar.buttons.text" = "#${color.hex.dark.base}";
         "theme.bar.buttons.y_margins" = "2px"; # NOTE: Top/Bottom bar padding
@@ -183,7 +183,7 @@ in {
         # https://github.com/Jas-SinghFSU/HyprPanel/blob/master/src/configuration/modules/config/bar/cava/index.ts
         "bar.customModules.cava.showActiveOnly" = true;
         "bar.customModules.cava.bars" = 10;
-        "bar.customModules.cava.leftClick" = "menu:media";
+        # "bar.customModules.cava.leftClick" = "menu:media";
 
         # https://github.com/Jas-SinghFSU/HyprPanel/blob/master/src/configuration/modules/theme/bar/buttons/cava.ts
         "theme.bar.buttons.modules.cava.background" = "#${color.hex.dark.red}";
