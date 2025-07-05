@@ -7,7 +7,7 @@
 }: let
   inherit (config.modules) docs;
 in {
-  options.modules.latex = import ./options.nix {inherit lib mylib;};
+  options.modules.docs = import ./options.nix {inherit lib mylib;};
 
   config = lib.mkIf docs.enable {
     home = {

@@ -39,8 +39,6 @@ rec {
   };
 
   modules = {
-    ags.enable = false; # TODO: Configure
-
     chromium = {
       enable = true;
       google = false;
