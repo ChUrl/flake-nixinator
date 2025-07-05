@@ -3,6 +3,7 @@
 # The nixosConfig allows to access the toplevel system configuration from within home manager
 # https://github.com/nix-community/home-manager/blob/586ac1fd58d2de10b926ce3d544b3179891e58cb/nixos/default.nix#L19
 {
+  inputs,
   hostname,
   username,
   lib,
@@ -523,6 +524,39 @@ rec {
 
     btop.enable = true;
 
+    cava = {
+      enable = true;
+
+      settings = {
+        general = {
+          framerate = 60; # default 60
+          autosens = 1; # default 1
+          sensitivity = 100; # default 100
+          lower_cutoff_freq = 50; # not passed to cava if not provided
+          higher_cutoff_freq = 10000; # not passed to cava if not provided
+        };
+
+        smoothing = {
+          noise_reduction = 77; # default 77
+          monstercat = false; # default false
+          waves = false; # default false
+        };
+
+        color = {
+          # https://github.com/catppuccin/cava/blob/main/themes/latte-transparent.cava
+          gradient = 1;
+          gradient_color_1 = "'#179299'";
+          gradient_color_2 = "'#04a5e5'";
+          gradient_color_3 = "'#209fb5'";
+          gradient_color_4 = "'#1e66f5'";
+          gradient_color_5 = "'#8839ef'";
+          gradient_color_6 = "'#ea76cb'";
+          gradient_color_7 = "'#e64553'";
+          gradient_color_8 = "'#d20f39'";
+        };
+      };
+    };
+
     direnv = {
       enable = true;
       nix-direnv.enable = true;
@@ -685,8 +719,31 @@ rec {
 
     nushell.enable = false;
 
+    spicetify = let
+      spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.system};
+    in {
+      enable = true;
+
+      # https://github.com/catppuccin/spicetify
+      theme = spicePkgs.themes.catppuccin;
+      colorScheme = "mocha";
+
+      wayland = true;
+
+      enabledExtensions = with spicePkgs.extensions; [
+        adblock
+        hidePodcasts
+        oneko # cat
+      ];
+      # enabledCustomApps = with spicePkgs.apps; [];
+      enabledSnippets = with spicePkgs.snippets; [
+        rotatingCoverart
+        pointer
+      ];
+    };
+
     ssh = {
-      enable = true; # NOTE: Do NOT generate .ssh/config using HM, as it will have invalid permissions!
+      enable = true;
       compression = true;
 
       matchBlocks = {
@@ -1011,7 +1068,7 @@ rec {
       packages = [
         "com.github.tchx84.Flatseal"
 
-        "com.spotify.Client"
+        # "com.spotify.Client" # Don't need this when spicetify is enabled
 
         # NOTE: Also change discord-ipc-0 below
         "com.discordapp.Discord"
