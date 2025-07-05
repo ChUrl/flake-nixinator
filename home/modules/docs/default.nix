@@ -5,11 +5,11 @@
   pkgs,
   ...
 }: let
-  inherit (config.modules) latex;
+  inherit (config.modules) docs;
 in {
   options.modules.latex = import ./options.nix {inherit lib mylib;};
 
-  config = lib.mkIf latex.enable {
+  config = lib.mkIf docs.enable {
     home = {
       packages = with pkgs; [
         texliveFull
