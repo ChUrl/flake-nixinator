@@ -3,18 +3,18 @@
     # Obsolete modules are kept in "1_deprecated" for reference.
 
     # My own HM modules
-    ./ags
     ./chromium
     ./color
+    ./docs
     ./firefox
     ./fish
     ./hyprland
     ./hyprpanel
     ./kitty
-    ./latex
     ./neovim
     ./nnn
     ./paths
+    ./rmpc
     ./rofi
     ./waybar
     ./zathura
