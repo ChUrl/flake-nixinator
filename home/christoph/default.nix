@@ -360,10 +360,12 @@ rec {
       lm_sensors # Readout hardware sensors
       acpica-tools # Dump ACPI tables etc.
 
-      # Video/Image utils
+      # Video/Image/Audio utils
       ffmpeg_7-full # I love ffmpeg (including ffplay)
       ffmpeg-normalize # Normalize audio
       imagemagick # Convert image (magic)
+      mp3val # Validate mp3 files
+      flac # Validate flac files
 
       # Document utils
       poppler_utils # pdfunite
@@ -460,6 +462,64 @@ rec {
 
       config = {
         theme = "catppuccin-latte";
+      };
+    };
+
+    # Music taggins and mpd stats collection
+    beets = {
+      enable = true;
+      mpdIntegration = {
+        host = "127.0.0.1";
+        port = config.services.mpd.network.port;
+        enableUpdate = true;
+        enableStats = true;
+      };
+
+      # https://beets.readthedocs.io/en/stable/reference/config.html
+      settings = {
+        directory = "${home.homeDirectory}/Music";
+        threaded = "yes";
+        art_filename = "cover";
+
+        ui = {
+          color = "yes";
+        };
+
+        import = {
+          write = "yes"; # Write metadata to files
+          copy = "yes"; # Move files to the music directory when importing
+          log = "${home.homeDirectory}/Music/.beetslog.txt";
+        };
+
+        paths = {
+          default = "$albumartist/$albumartist - $album/$track $title";
+          singleton = "$arist/0 Singles/$artist - $title"; # Single songs
+          comp = "1 Various Arists/$album/$track $title";
+        };
+
+        plugins = [
+          "badfiles" # check audio file integrity
+          "duplicates"
+          "fetchart" # pickup local cover art or search online
+          "fish" # beet fish generates ~/.config/fish/completions file
+          "lyrics" # fetch song lyrics
+          "replaygain" # write replaygain tags for automatic loudness adjustments
+        ];
+
+        fetchart = {
+          auto = "yes";
+          sources = "filesystem coverart itunes amazon albumart"; # sources are queried in this order
+        };
+
+        lyrics = {
+          synced = "yes"; # prefer synced lyrics if provided
+        };
+
+        replaygain = {
+          auto = "yes"; # analyze on import automatically
+          backend = "ffmpeg";
+          overwrite = true; # re-analyze files with existing replaygain tags on import
+        };
       };
     };
 
@@ -880,6 +940,62 @@ rec {
 
   services = {
     kdeconnect.enable = nixosConfig.programs.kdeconnect.enable; # Only the system package sets up the firewall
+
+    mpd = {
+      enable = true;
+      dataDir = "${home.homeDirectory}/Music/.mpd";
+      musicDirectory = "${home.homeDirectory}/Music";
+      network = {
+        listenAddress = "127.0.0.1"; # Listen on all addresses: "any"
+        port = 6600;
+      };
+      extraArgs = ["--verbose"];
+
+      extraConfig = ''
+        # Refresh the database whenever files in the musicDirectory change
+        auto_update "yes"
+
+        # Don't start playback after startup
+        restore_paused "yes"
+
+        # Use track tags on shuffle and album tags on album play
+        replaygain "auto"
+
+        # PipeWire main output
+        audio_output {
+          type "pipewire"
+          name "PipeWire Sound Server"
+
+          mixer_type "hardware"
+
+          # Use hardware mixer instead of software volume filter (replaygain_handler "software")
+          replay_gain_handler "mixer"
+        }
+
+        # FiFo output for cava visualization
+        audio_output {
+          type   "fifo"
+          name   "my_fifo"
+          path   "/tmp/mpd.fifo"
+          format "44100:16:2"
+        }
+
+        # Pre-cache 1GB of the queue
+        # input_cache {
+        #   size "1 GB"
+        # }
+
+        # follow_outside_symlinks "no" # If mpd should follow symlinks pointing outside the musicDirectory
+        # follow_inside_symlinks "yes" # If mpd should follow symlinks pointing inside the musicDirectory
+      '';
+    };
+
+    # MPD integration with mpris (used by player-ctl).
+    # We want to use mpris as it also supports other players (e.g. Spotify) or browsers.
+    mpd-mpris = {
+      enable = true;
+      mpd.useLocal = true;
+    };
 
     flatpak = {
       # FlatHub stable is only added by default if no custom remotes are specified
