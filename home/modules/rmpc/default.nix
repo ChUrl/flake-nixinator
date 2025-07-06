@@ -148,12 +148,12 @@ in {
                     name: "Playlists (5)",
                     pane: Pane(Playlists),
                 ),
+                // (
+                //     name: "Directories (6)",
+                //     pane: Pane(Directories),
+                // ),
                 (
-                    name: "Directories (6)",
-                    pane: Pane(Directories),
-                ),
-                (
-                    name: "Search (7)",
+                    name: "Search (6)",
                     pane: Pane(Search),
                 ),
                 // (
@@ -206,8 +206,8 @@ in {
                     "3":       SwitchToTab("Album Artists (3)"),
                     "4":       SwitchToTab("Artists (4)"),
                     "5":       SwitchToTab("Playlists (5)"),
-                    "6":       SwitchToTab("Directories (6)"),
-                    "7":       SwitchToTab("Search (7)"),
+                    // "6":       SwitchToTab("Directories (6)"),
+                    "6":       SwitchToTab("Search (6)"),
                     // "8":       SwitchToTab("Visualizer (8)"),
 
                     "f":       SeekForward,
