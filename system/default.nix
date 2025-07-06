@@ -362,7 +362,7 @@ with mylib.networking; {
       defaultFonts = {
         serif = ["Noto Serif CJK SC"];
         sansSerif = ["Noto Sans CJK SC"];
-        monospace = ["JetBrainsMono Nerd Font Mono"]; # NOTE: Match with color.font
+        monospace = ["MonoLisa" "JetBrainsMono Nerd Font Mono"]; # NOTE: Match with color.font
       };
     };
   };
