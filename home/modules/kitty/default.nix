@@ -27,7 +27,10 @@ in {
         "kitty_mod+l" = "next_layout";
       };
 
-      settings = {
+      settings = let
+        light = color.hex.light;
+        dark = color.hex.dark;
+      in {
         editor = config.home.sessionVariables.EDITOR;
         scrollback_lines = 10000;
         window_padding_width = 10; # Looks stupid with editors if bg doesn't match
@@ -48,74 +51,74 @@ in {
         #
 
         # The basic colors
-        foreground = "#${color.hex.light.text}";
-        background = "#${color.hex.light.base}";
-        selection_foreground = "#${color.hex.light.base}";
-        selection_background = "#${color.hex.light.rosewater}";
+        background = "#${light.base}";
+        foreground = "#${light.text}";
+        selection_foreground = "#${light.base}";
+        selection_background = "#${light.rosewater}";
 
         # Cursor colors
-        cursor = "#${color.hex.light.rosewater}";
-        cursor_text_color = "#${color.hex.light.base}";
+        cursor = "#${light.rosewater}";
+        cursor_text_color = "#${light.base}";
 
         # URL underline color when hovering with mouse
-        url_color = "#${color.hex.light.rosewater}";
+        url_color = "#${light.rosewater}";
 
         # Kitty window border colors
-        active_border_color = "#${color.hex.light.lavender}";
-        inactive_border_color = "#${color.hex.light.overlay0}";
-        bell_border_color = "#${color.hex.light.yellow}";
+        active_border_color = "#${light.lavender}";
+        inactive_border_color = "#${light.overlay0}";
+        bell_border_color = "#${light.yellow}";
 
         # OS Window titlebar colors
         wayland_titlebar_color = "system";
         macos_titlebar_color = "system";
 
         # Tab bar colors
-        active_tab_foreground = "#${color.hex.dark.base}";
-        active_tab_background = "#${color.hex.dark.lavender}";
-        inactive_tab_foreground = "#${color.hex.dark.text}";
-        inactive_tab_background = "#${color.hex.dark.crust}";
-        tab_bar_background = "#${color.hex.light.base}";
+        active_tab_foreground = "#${dark.base}";
+        active_tab_background = "#${dark.lavender}";
+        inactive_tab_foreground = "#${dark.text}";
+        inactive_tab_background = "#${dark.crust}";
+        tab_bar_background = "#${light.base}";
 
         # Color for marks (marked text in the terminal)
-        mark1_foreground = "#${color.hex.light.base}";
-        mark1_background = "#${color.hex.light.lavender}";
-        mark2_foreground = "#${color.hex.light.base}";
-        mark2_background = "#${color.hex.light.mauve}";
-        mark3_foreground = "#${color.hex.light.base}";
-        mark3_background = "#${color.hex.light.sapphire}";
+        mark1_foreground = "#${light.base}";
+        mark1_background = "#${light.lavender}";
+        mark2_foreground = "#${light.base}";
+        mark2_background = "#${light.mauve}";
+        mark3_foreground = "#${light.base}";
+        mark3_background = "#${light.sapphire}";
 
         # The 16 terminal colors
         # black
-        color0 = "#${color.hex.light.subtext1}";
-        color8 = "#${color.hex.light.subtext0}";
+        color0 = "#${light.subtext1}";
+        color8 = "#${light.subtext0}";
 
         # red
-        color1 = "#${color.hex.light.red}";
-        color9 = "#${color.hex.light.red}";
+        color1 = "#${light.red}";
+        color9 = "#${light.red}";
 
         # green
-        color2 = "#${color.hex.light.green}";
-        color10 = "#${color.hex.light.green}";
+        color2 = "#${light.green}";
+        color10 = "#${light.green}";
 
         # yellow
-        color3 = "#${color.hex.light.yellow}";
-        color11 = "#${color.hex.light.yellow}";
+        color3 = "#${light.yellow}";
+        color11 = "#${light.yellow}";
 
         # blue
-        color4 = "#${color.hex.light.blue}";
-        color12 = "#${color.hex.light.blue}";
+        color4 = "#${light.blue}";
+        color12 = "#${light.blue}";
 
         # magenta
-        color5 = "#${color.hex.light.pink}";
-        color13 = "#${color.hex.light.pink}";
+        color5 = "#${light.pink}";
+        color13 = "#${light.pink}";
 
         # cyan
-        color6 = "#${color.hex.light.teal}";
-        color14 = "#${color.hex.light.teal}";
+        color6 = "#${light.teal}";
+        color14 = "#${light.teal}";
 
         # white
-        color7 = "#${color.hex.light.surface2}";
-        color15 = "#${color.hex.light.surface1}";
+        color7 = "#${light.surface2}";
+        color15 = "#${light.surface1}";
       };
     };
   };
