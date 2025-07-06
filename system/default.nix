@@ -123,7 +123,14 @@ with mylib.networking; {
   documentation = {
     enable = true;
     man.enable = true;
+    man.generateCaches = false; # very slow
+    info.enable = true;
     dev.enable = true;
+    doc.enable = false;
+    nixos = {
+      enable = true;
+      includeAllModules = true;
+    };
   };
 
   # Set your time zone.
