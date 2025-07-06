@@ -366,6 +366,7 @@ rec {
       imagemagick # Convert image (magic)
       mp3val # Validate mp3 files
       flac # Validate flac files
+      spotdl
 
       # Document utils
       poppler_utils # pdfunite
@@ -478,28 +479,29 @@ rec {
       # https://beets.readthedocs.io/en/stable/reference/config.html
       settings = {
         directory = "${home.homeDirectory}/Music";
-        threaded = "yes";
+        threaded = true;
         art_filename = "cover";
 
         ui = {
-          color = "yes";
+          color = true;
         };
 
         import = {
-          write = "yes"; # Write metadata to files
-          copy = "yes"; # Move files to the music directory when importing
+          write = true; # Write metadata to files
+          copy = true; # Move files to the music directory when importing
           log = "${home.homeDirectory}/Music/.beetslog.txt";
         };
 
         paths = {
           default = "$albumartist/$albumartist - $album/$track $title";
-          singleton = "$artist/0 Singles/$artist - $title"; # Single songs
-          comp = "1 Various Arists/$album/$track $title";
+          singleton = "0 Singles/$artist - $title"; # Single songs
+          comp = "1 Various/$album/$track $title";
         };
 
         plugins = [
           "badfiles" # check audio file integrity
           "duplicates"
+          "edit" # edit metadata in text editor
           "fetchart" # pickup local cover art or search online
           "fish" # beet fish generates ~/.config/fish/completions file
           # "lyrics" # fetch song lyrics
@@ -507,7 +509,7 @@ rec {
         ];
 
         fetchart = {
-          auto = "yes";
+          auto = true;
           sources = "filesystem coverart itunes amazon albumart"; # sources are queried in this order
         };
 
@@ -517,7 +519,7 @@ rec {
         # };
 
         replaygain = {
-          auto = "no"; # analyze on import automatically
+          auto = false; # analyze on import automatically
           backend = "ffmpeg";
           overwrite = true; # re-analyze files with existing replaygain tags on import
         };
@@ -721,28 +723,28 @@ rec {
 
     nushell.enable = false;
 
-    spicetify = let
-      spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.system};
-    in {
-      enable = true;
-
-      # https://github.com/catppuccin/spicetify
-      theme = spicePkgs.themes.catppuccin;
-      colorScheme = "mocha";
-
-      wayland = true;
-
-      enabledExtensions = with spicePkgs.extensions; [
-        adblock
-        hidePodcasts
-        oneko # cat
-      ];
-      # enabledCustomApps = with spicePkgs.apps; [];
-      enabledSnippets = with spicePkgs.snippets; [
-        rotatingCoverart
-        pointer
-      ];
-    };
+    # spicetify = let
+    #   spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.system};
+    # in {
+    #   enable = true;
+    #
+    #   # https://github.com/catppuccin/spicetify
+    #   theme = spicePkgs.themes.catppuccin;
+    #   colorScheme = "mocha";
+    #
+    #   wayland = true;
+    #
+    #   enabledExtensions = with spicePkgs.extensions; [
+    #     adblock
+    #     hidePodcasts
+    #     oneko # cat
+    #   ];
+    #   # enabledCustomApps = with spicePkgs.apps; [];
+    #   enabledSnippets = with spicePkgs.snippets; [
+    #     rotatingCoverart
+    #     pointer
+    #   ];
+    # };
 
     ssh = {
       enable = true;
@@ -794,7 +796,7 @@ rec {
       shellWrapperName = "y";
 
       plugins = {
-        inherit (pkgs.yaziPlugins) chmod diff full-border git lazygit mount ouch rsync smart-paste starship sudo;
+        inherit (pkgs.yaziPlugins) chmod diff full-border git lazygit mount ouch rsync starship sudo; # smar-paste
       };
 
       initLua = ''
@@ -978,11 +980,11 @@ rec {
             run = [''shell -- for path in "$@"; do echo "file://$path"; done | wl-copy -t text/uri-list'' "yank"];
             desc = "Copy files to system clipboard on yank";
           }
-          {
-            on = "p";
-            run = "plugin smart-paste";
-            desc = "Paste into hovered directory or CWD";
-          }
+          # {
+          #   on = "p";
+          #   run = "plugin smart-paste";
+          #   desc = "Paste into hovered directory or CWD";
+          # }
           {
             on = "d";
             run = "remove --permanently";
@@ -1076,7 +1078,7 @@ rec {
       packages = [
         "com.github.tchx84.Flatseal"
 
-        # "com.spotify.Client" # Don't need this when spicetify is enabled
+        "com.spotify.Client" # Don't need this when spicetify is enabled
 
         # NOTE: Also change discord-ipc-0 below
         "com.discordapp.Discord"
