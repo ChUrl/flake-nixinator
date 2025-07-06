@@ -329,6 +329,8 @@ with mylib.networking; {
 
   fonts = {
     enableDefaultPackages = true; # Some default fonts for unicode coverage
+
+    # https://wiki.nixos.org/wiki/Fonts#Flatpak_applications_can.27t_find_system_fonts
     fontDir.enable = true; # Puts fonts to /run/current-system/sw/share/X11/fonts
 
     # Font packages go here.
@@ -337,6 +339,8 @@ with mylib.networking; {
     packages = with pkgs; [
       # Monospace fonts
       nerd-fonts.jetbrains-mono
+      nerd-fonts.victor-mono
+      monolisa
 
       # Sans/Serif fonts
       noto-fonts
@@ -351,10 +355,14 @@ with mylib.networking; {
       hinting.enable = true;
       hinting.autohint = true;
       cache32Bit = true;
+
+      # https://wiki.nixos.org/wiki/Fonts#Noto_Color_Emoji_doesn.27t_render_on_Firefox
+      useEmbeddedBitmaps = true;
+
       defaultFonts = {
         serif = ["Noto Serif CJK SC"];
         sansSerif = ["Noto Sans CJK SC"];
-        monospace = ["JetBrainsMono Nerd Font Mono"];
+        monospace = ["JetBrainsMono Nerd Font Mono"]; # NOTE: Match with color.font
       };
     };
   };
