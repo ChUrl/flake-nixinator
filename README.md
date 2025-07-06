@@ -6,6 +6,8 @@ Modular NixOS configuration, using Hyprland for a lightweight desktop.
 
 ![](NeoVim.png)
 
+![](Rmpc.png)
+
 To install, run `nixos-rebuild` with the `--flake` parameter from the `NixFlake` directory: `nixos-rebuild switch --flake .#nixinator`.
 
 ## NixFlake/system
