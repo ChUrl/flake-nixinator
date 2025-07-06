@@ -49,7 +49,7 @@ rec {
       enable = true; # You can't disable this
       lightScheme = "catppuccin-latte";
       darkScheme = "catppuccin-mocha";
-      font = "JetBrainsMono Nerd Font Mono";
+      font = "JetBrainsMono Nerd Font Mono"; # NOTE: Match with fontconfig monospace default font
     };
 
     docs.enable = true;
@@ -511,11 +511,12 @@ rec {
         };
 
         lyrics = {
+          auto = "yes";
           synced = "yes"; # prefer synced lyrics if provided
         };
 
         replaygain = {
-          auto = "yes"; # analyze on import automatically
+          auto = "no"; # analyze on import automatically
           backend = "ffmpeg";
           overwrite = true; # re-analyze files with existing replaygain tags on import
         };
@@ -981,6 +982,11 @@ rec {
             run = "plugin smart-paste";
             desc = "Paste into hovered directory or CWD";
           }
+          {
+            on = "d";
+            run = "remove --permanently";
+            desc = "Delete selection";
+          }
         ];
       };
     };
@@ -1013,18 +1019,19 @@ rec {
         # Don't start playback after startup
         restore_paused "yes"
 
-        # Use track tags on shuffle and album tags on album play
-        replaygain "auto"
+        # Use track tags on shuffle and album tags on album play (auto)
+        # Use album's tags (album)
+        # Use track's tags (track)
+        # replaygain "auto"
 
         # PipeWire main output
         audio_output {
           type "pipewire"
           name "PipeWire Sound Server"
 
-          mixer_type "hardware"
-
           # Use hardware mixer instead of software volume filter (replaygain_handler "software")
-          replay_gain_handler "mixer"
+          # mixer_type "hardware"
+          # replay_gain_handler "mixer"
         }
 
         # FiFo output for cava visualization
