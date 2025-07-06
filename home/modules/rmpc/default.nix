@@ -28,6 +28,8 @@ in {
     home.file = let
       themeName = "chriphost";
     in {
+      # TODO: notify-send song title or sth.
+      # TODO: status bar colors (the thing that pops up in the progress/seeking bar sometimes)
       ".config/rmpc/config.ron".text = ''
         #![enable(implicit_some)]
         #![enable(unwrap_newtypes)]
@@ -37,7 +39,7 @@ in {
             password: None,
             theme: "${themeName}",
             cache_dir: None,
-            on_song_change: None, // TODO: notify-send song title or sth.
+            on_song_change: None,
             volume_step: 5,
             max_fps: 30,
             scrolloff: 0,
@@ -325,12 +327,13 @@ in {
                 playlist_style: None,
             ),
 
+            // The stuff shown in the status bar (on the progress bar)
             level_styles: (
-                info: (fg: "blue", bg: "black"),
-                warn: (fg: "yellow", bg: "black"),
-                error: (fg: "red", bg: "black"),
-                debug: (fg: "light_green", bg: "black"),
-                trace: (fg: "magenta", bg: "black"),
+                info: (fg: "#${accent}", bg: "#${surface}"),
+                warn: (fg: "#${dark.yellow}", bg: "#${surface}"),
+                error: (fg: "#${dark.red}", bg: "#${surface}"),
+                debug: (fg: "#${dark.green}", bg: "#${surface}"),
+                trace: (fg: "#${dark.mauve}", bg: "#${surface}"),
             ),
 
             progress_bar: (
@@ -482,6 +485,7 @@ in {
                                 style: (fg: "#${text}")
                             )
                         ],
+
                         center: [
                             (
                                 kind: Property(Song(Artist)),
@@ -504,6 +508,7 @@ in {
                                 )
                             )
                         ],
+
                         right: [
                             // (
                             //     kind: Property(Widget(States(
