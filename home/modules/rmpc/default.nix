@@ -83,7 +83,7 @@ in {
 
             tabs: [
                 (
-                    name: "Queue",
+                    name: "Queue (1)",
                     pane: Split(
                         borders: "NONE",
                         direction: Horizontal,
@@ -133,31 +133,31 @@ in {
                     ),
                 ),
                 (
-                    name: "Albums",
+                    name: "Albums (2)",
                     pane: Pane(Albums),
                 ),
                 (
-                    name: "Artists",
+                    name: "Album Artists (3)",
+                    pane: Pane(AlbumArtists),
+                ),
+                (
+                    name: "Artists (4)",
                     pane: Pane(Artists),
                 ),
                 (
-                    name: "Playlists",
+                    name: "Playlists (5)",
                     pane: Pane(Playlists),
                 ),
                 (
-                    name: "Search",
+                    name: "Directories (6)",
+                    pane: Pane(Directories),
+                ),
+                (
+                    name: "Search (7)",
                     pane: Pane(Search),
                 ),
                 // (
-                //     name: "Album Artists",
-                //     pane: Pane(AlbumArtists),
-                // ),
-                // (
-                //     name: "Directories",
-                //     pane: Pane(Directories),
-                // ),
-                // (
-                //     name: "Visualizer",
+                //     name: "Visualizer (8)",
                 //     pane: Pane(Cava),
                 // ),
             ],
@@ -201,20 +201,20 @@ in {
 
                     "<Tab>":   NextTab,
                     "<S-Tab>": PreviousTab,
-                    "1":       SwitchToTab("Queue"),
-                    "2":       SwitchToTab("Albums"),
-                    "3":       SwitchToTab("Artists"),
-                    "4":       SwitchToTab("Playlists"),
-                    "5":       SwitchToTab("Search"),
-                    // " ":       SwitchToTab("Visualizer"),
-                    // " ":       SwitchToTab("Directories"),
-                    // " ":       SwitchToTab("Album Artists"),
+                    "1":       SwitchToTab("Queue (1)"),
+                    "2":       SwitchToTab("Albums (2)"),
+                    "3":       SwitchToTab("Album Artists (3)"),
+                    "4":       SwitchToTab("Artists (4)"),
+                    "5":       SwitchToTab("Playlists (5)"),
+                    "6":       SwitchToTab("Directories (6)"),
+                    "7":       SwitchToTab("Search (7)"),
+                    // "8":       SwitchToTab("Visualizer (8)"),
 
                     "f":       SeekForward,
                     "z":       ToggleRepeat,
                     "x":       ToggleRandom,
-                    "c":       ToggleConsume,
-                    "v":       ToggleSingle,
+                    "c":       ToggleConsumeOnOff, // Skip OneShot mode
+                    "v":       ToggleSingleOnOff, // Skip OneShot mode
                     "b":       SeekBack,
                     "~":       ShowHelp,
                     "u":       Update,
@@ -505,13 +505,64 @@ in {
                             )
                         ],
                         right: [
+                            // (
+                            //     kind: Property(Widget(States(
+                            //         active_style: (fg: "#${accentHL}", modifiers: "Bold|Underlined"),
+                            //         inactive_style: (fg: "#${text}"),
+                            //         separator_style: (fg: "#${text}"))),
+                            //     )
+                            //     // style: (fg: "dark_gray")
+                            // ),
                             (
-                                kind: Property(Widget(States(
-                                    active_style: (fg: "#${accentHL}", modifiers: "Bold|Underlined"),
-                                    inactive_style: (fg: "#${text}"),
-                                    separator_style: (fg: "#${text}")))
-                                )
-                                // style: (fg: "dark_gray")
+                                kind: Property(Status(RepeatV2(
+                                    on_label: "Repeat (z)",
+                                    off_label: "Repeat (z)",
+                                    on_style: (fg: "#${accentHL}", modifiers: "Bold|Underlined"),
+                                    off_style: (fg: "#${text}"),
+                                ))),
+                            ),
+                            (
+                                kind: Text(" / "),
+                                style: (fg: "#${text}"),
+                            ),
+
+                            (
+                                kind: Property(Status(RandomV2(
+                                    on_label: "Random (x)",
+                                    off_label: "Random (x)",
+                                    on_style: (fg: "#${accentHL}", modifiers: "Bold|Underlined"),
+                                    off_style: (fg: "#${text}"),
+                                ))),
+                            ),
+                            (
+                                kind: Text(" / "),
+                                style: (fg: "#${text}"),
+                            ),
+
+                            (
+                                kind: Property(Status(ConsumeV2(
+                                    on_label: "Consume (c)",
+                                    oneshot_label: "Consume OS (c)",
+                                    off_label: "Consume (c)",
+                                    on_style: (fg: "#${accentHL}", modifiers: "Bold|Underlined"),
+                                    oneshot_style: (fg: "#${accentHL}", modifiers: "Bold|Underlined"),
+                                    off_style: (fg: "#${text}"),
+                                ))),
+                            ),
+                            (
+                                kind: Text(" / "),
+                                style: (fg: "#${text}"),
+                            ),
+
+                            (
+                                kind: Property(Status(SingleV2(
+                                    on_label: "Single (v)",
+                                    oneshot_label: "Single OS (v)",
+                                    off_label: "Single (v)",
+                                    on_style: (fg: "#${accentHL}", modifiers: "Bold|Underlined"),
+                                    oneshot_style: (fg: "#${accentHL}", modifiers: "Bold|Underlined"),
+                                    off_style: (fg: "#${text}")
+                                ))),
                             ),
                         ]
                     ),
