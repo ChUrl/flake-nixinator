@@ -493,7 +493,7 @@ rec {
 
         paths = {
           default = "$albumartist/$albumartist - $album/$track $title";
-          singleton = "$arist/0 Singles/$artist - $title"; # Single songs
+          singleton = "$artist/0 Singles/$artist - $title"; # Single songs
           comp = "1 Various Arists/$album/$track $title";
         };
 
@@ -502,7 +502,7 @@ rec {
           "duplicates"
           "fetchart" # pickup local cover art or search online
           "fish" # beet fish generates ~/.config/fish/completions file
-          "lyrics" # fetch song lyrics
+          # "lyrics" # fetch song lyrics
           "replaygain" # write replaygain tags for automatic loudness adjustments
         ];
 
@@ -511,10 +511,10 @@ rec {
           sources = "filesystem coverart itunes amazon albumart"; # sources are queried in this order
         };
 
-        lyrics = {
-          auto = "yes";
-          synced = "yes"; # prefer synced lyrics if provided
-        };
+        # lyrics = {
+        #   auto = "no"; # we need the lyrics as .lrc files, not embedded into the metadata
+        #   synced = "yes"; # prefer synced lyrics if provided
+        # };
 
         replaygain = {
           auto = "no"; # analyze on import automatically
