@@ -49,7 +49,8 @@ rec {
       enable = true; # You can't disable this
       lightScheme = "catppuccin-latte";
       darkScheme = "catppuccin-mocha";
-      font = "JetBrainsMono Nerd Font Mono"; # NOTE: Match with fontconfig monospace default font
+      # font = "JetBrainsMono Nerd Font Mono";
+      font = builtins.head nixosConfig.fonts.fontconfig.defaultFonts.monospace;
     };
 
     docs.enable = true;
