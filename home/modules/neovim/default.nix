@@ -1643,6 +1643,7 @@ in {
             cmd = ["ToggleTerm"];
             keys = ["<C-/>"];
             config = mkDefaultConfig name;
+
             opts = {
               open_mapping.__raw = "[[<C-/>]]";
               autochdir = true;
@@ -1651,16 +1652,19 @@ in {
               shading_factor = 30; # Default is -30 to darken the terminal
               start_in_insert = true;
               terminal_mappings = true;
-              persist_mode = true;
+              size = 20;
+              persist_size = true;
+              persist_mode = false; # Don't persist the current mode (insert/normal)
               insert_mappings = true;
               close_on_exit = true;
               shell = "fish";
               direction = "horizontal"; # 'vertical' | 'horizontal' | 'window' | 'float'
               auto_scroll = true;
+
               float_opts = {
                 border = "curved"; # 'single' | 'double' | 'shadow' | 'curved'
                 width = 80;
-                height = 45;
+                height = 80;
                 winblend = 0;
               };
             };

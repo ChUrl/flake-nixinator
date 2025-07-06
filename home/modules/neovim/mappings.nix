@@ -324,9 +324,15 @@ _: let
     }
     {
       mode = "n";
-      key = "<leader>r";
+      key = "<leader>R";
       action = "<cmd>lua Snacks.picker.resume()<cr>";
       options.desc = "Last Picker";
+    }
+    {
+      mode = "n";
+      key = "<leader>r";
+      action = "<cmd>lua vim.g.toggle_rcmp()<cr>"; # Defined in extraConfigLua.lua
+      options.desc = "Show Rcmp";
     }
     {
       mode = "n";

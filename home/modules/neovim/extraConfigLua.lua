@@ -54,3 +54,12 @@ vim.api.nvim_create_user_command("ToggleAutoLint", function()
 end, {
 	desc = "Toggle autolint-on-save",
 })
+
+-- Toggle Rcmp
+local Terminal = require("toggleterm.terminal").Terminal
+local rmcp =
+	Terminal:new({ cmd = "rmpc", hidden = true, close_on_exit = true, auto_scroll = false, direction = "float" })
+
+vim.g.toggle_rcmp = function()
+	rmcp:toggle()
+end
