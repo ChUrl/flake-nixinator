@@ -205,6 +205,8 @@ rec {
         "code-url-handler"
         "neovide"
         "steam"
+        "rmpc"
+        "navi"
       ];
     };
 
