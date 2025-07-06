@@ -45,6 +45,7 @@ in {
           };
         };
 
+        # TODO: Expose this as a module option: applicationIcons = {kitty = "󰄛"; ...};
         "bar.workspaces.applicationIconMap" = {
           "class:^(kitty)$" = "󰄛";
           "class:^(org\.keepassxc\.KeePassXC)$" = "󰟵";
@@ -65,9 +66,11 @@ in {
           "class:^(steam_app_)(.+)$" = "";
           "class:^(signal)$" = "󱋊";
           "class:^(Spotify)$" = "";
+          "class:^(rmpc)$" = "󰝚";
           "class:^(discord)$" = "";
           "class:^(Zotero)$" = "";
           "class:^(org.zealdocs.zeal)$" = "󰞋";
+          "class:^(navi)$" = "";
         };
 
         # https://github.com/Jas-SinghFSU/HyprPanel/blob/master/src/configuration/modules/theme/bar/index.ts
