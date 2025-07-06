@@ -136,6 +136,10 @@ yt-dlp -f 'bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4] / bv*+ba/b' --recode-video mp4 "<
 # Download mp3 video in best quality
 yt-dlp -f 'ba' --extract-audio --audio-format mp3 "<url>"
 
+% spotdl
+# Download spotify playlist
+spotdl --config /home/christoph/.spotdl/config.json --user-auth --format m4a --bitrate disable --threads 24 --generate-lrc --m3u "<name>" download "<url>"
+
 ; ===========================
 ; FFMPEG
 ; ===========================
