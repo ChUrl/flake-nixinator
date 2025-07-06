@@ -78,8 +78,9 @@ rec {
           "$mainMod, T" = ["exec, kitty"];
           "$mainMod, E" = ["exec, kitty"];
           "$mainMod, N" = ["exec, neovide"];
+          "$mainMod, R" = ["exec, kitty --class=rmpc --title=Rmpc rmpc"];
+          "$mainMod CTRL, N" = ["exec, kitty --class=navi --title=Navi navi"];
           "$mainMod SHIFT, N" = ["exec, neovide ${config.paths.dotfiles}/navi/christoph.cheat"];
-          "$mainMod CTRL, N" = ["exec, kitty navi"];
           "$mainMod SHIFT, F" = ["exec, neovide ${config.paths.dotfiles}/flake.nix"];
 
           "$mainMod, P" = ["exec, hyprpicker --autocopy --format=hex"];
@@ -163,6 +164,7 @@ rec {
         ];
         "8" = [
           "Spotify"
+          "rmpc"
         ];
         "9" = [
           "discord"
