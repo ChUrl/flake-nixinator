@@ -113,7 +113,9 @@
         # jetbrains.webstorm
 
         # Unity Stuff
-        # unityhub # TODO: Disable until https://github.com/NixOS/nixpkgs/issues/418451 is closed
+        # unityhub
+        unityhub_pinned_3_13.unityhub # TODO: Remove after https://github.com/NixOS/nixpkgs/issues/418451
+
         rider
         dotnetCore
         mono
