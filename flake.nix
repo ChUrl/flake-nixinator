@@ -5,6 +5,9 @@
   # It depends on "inputs" that are passed as arguments to the "outputs" function.
   # The inputs' git revisions get locked in the flake.lock file, making the outputs deterministic.
   inputs = {
+    # Just for shell.nix
+    devshell.url = "github:numtide/devshell";
+
     # Nixpkgs
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     hardware.url = "github:nixos/nixos-hardware";
@@ -13,9 +16,29 @@
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
+    # Nix User Repository (e.g. Firefox addons)
+    nur.url = "github:nix-community/NUR";
+    nur.inputs.nixpkgs.follows = "nixpkgs";
+
+    # Nix Package Search - nps
+    nps.url = "github:OleMussmann/nps";
+    nps.inputs.nixpkgs.follows = "nixpkgs";
+
+    # Run unpatched binaries on NixOS
+    nix-alien.url = "github:thiagokokada/nix-alien";
+    nix-alien.inputs.nixpkgs.follows = "nixpkgs";
+
     # NeoVim <3
     nixvim.url = "github:nix-community/nixvim";
     nixvim.inputs.nixpkgs.follows = "nixpkgs";
+
+    # Emacs nightly
+    emacs-overlay.url = "github:nix-community/emacs-overlay";
+    emacs-overlay.inputs.nixpkgs.follows = "nixpkgs";
+
+    # Declarative Flatpak
+    nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
+    # nix-flatpak.inputs.nixpkgs.follows = "nixpkgs"; # nix-flatpak doesn't have this
 
     # HyprPlugins
     hyprland-plugins.url = "github:hyprwm/hyprland-plugins";
@@ -23,46 +46,34 @@
     hypr-dynamic-cursors.url = "github:VirtCode/hypr-dynamic-cursors";
     hypr-dynamic-cursors.inputs.nixpkgs.follows = "nixpkgs";
 
-    # Nix User Repository (e.g. Firefox addons)
-    nur.url = "github:nix-community/NUR";
-    nur.inputs.nixpkgs.follows = "nixpkgs";
+    # Realtime audio
+    musnix.url = "github:musnix/musnix";
+    musnix.inputs.nixpkgs.follows = "nixpkgs";
 
-    # Spicetify
-    spicetify-nix.url = "github:Gerg-L/spicetify-nix";
-    spicetify-nix.inputs.nixpkgs.follows = "nixpkgs";
+    nix-topology.url = "github:oddlama/nix-topology";
+    nix-topology.inputs.nixpkgs.follows = "nixpkgs";
 
     # Ags for widgets (this was a terrible idea)
     ags.url = "github:Aylur/ags";
     ags.inputs.nixpkgs.follows = "nixpkgs";
 
-    # Nix Package Search - nps
-    nps.url = "github:OleMussmann/nps";
-    nps.inputs.nixpkgs.follows = "nixpkgs";
-
-    # Declarative Flatpak
-    nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
-    # nix-flatpak.inputs.nixpkgs.follows = "nixpkgs"; # nix-flatpak doesn't have this
-
-    # Creates an environment containing required libraries for an executable
-    nix-alien.url = "github:thiagokokada/nix-alien";
-    nix-alien.inputs.nixpkgs.follows = "nixpkgs";
-
-    # Emacs nightly
-    emacs-overlay.url = "github:nix-community/emacs-overlay";
-    emacs-overlay.inputs.nixpkgs.follows = "nixpkgs";
+    # Spicetify
+    spicetify-nix.url = "github:Gerg-L/spicetify-nix";
+    spicetify-nix.inputs.nixpkgs.follows = "nixpkgs";
 
     # Pinned versions
     v4l2loopback-pinned.url = "github:nixos/nixpkgs/4684fd6b0c01e4b7d99027a34c93c2e09ecafee2";
-
-    # Just for shell.nix
-    devshell.url = "github:numtide/devshell";
     unityhub-pinned.url = "github:huantianad/nixpkgs/9542b0bc7701e173a10e6977e57bbba68bb3051f";
   };
 
   # Outputs is a function that takes the inputs as arguments.
   # To handle extra arguments we use the @ inputs pattern.
   # It gives the name "inputs" to the ... ellipses.
-  outputs = {nixpkgs, ...} @ inputs: let
+  outputs = {
+    self,
+    nixpkgs,
+    ...
+  } @ inputs: let
     # Our configuration is buildable on the following system/platform.
     # Configs can support more than a single system simultaneously,
     # e.g. NixOS (linux) and MacOS (darwin) or Arm.
@@ -90,6 +101,7 @@
         inputs.devshell.overlays.default
         inputs.nur.overlays.default
         inputs.emacs-overlay.overlay
+        inputs.nix-topology.overlays.default
 
         # https://github.com/NixOS/nixpkgs/issues/418451
         (final: prev: {
@@ -121,6 +133,18 @@
     # Local shell for NixFlake directory
     devShells."${system}".default = import ./shell.nix {inherit pkgs;};
 
+    # TODO: Add my homelab configs into this flake, then add a topology config for each host
+    # Output that generates a system topology diagram
+    # topology = import inputs.nix-topology {
+    #   inherit pkgs; # Only this package set must include nix-topology.overlays.default
+    #   modules = [
+    #     # Your own file to define global topology. Works in principle like a nixos module but uses different options.
+    #     # ./topology.nix
+    #     # Inline module to inform topology of your existing NixOS hosts.
+    #     {nixosConfigurations = self.nixosConfigurations;}
+    #   ];
+    # };
+
     # We give each configuration a (host)name to choose a configuration when rebuilding.
     # This makes it easy to add different configurations (e.g. for a laptop).
     # Usage: sudo nixos-rebuild switch --flake .#nixinator
@@ -139,13 +163,19 @@
         inherit system mylib;
         hostname = "nixinator";
         username = "christoph";
-        extraModules = [];
+        extraModules = [
+          # TODO:
+          # inputs.nix-topology.nixosModules.default
+        ];
       };
       nixtop = mylib.nixos.mkNixosConfigWithHomeManagerModule {
         inherit system mylib;
         hostname = "nixtop";
         username = "christoph";
-        extraModules = [];
+        extraModules = [
+          # TODO:
+          # inputs.nix-topology.nixosModules.default
+        ];
       };
 
       # These configurations don't include HM.
