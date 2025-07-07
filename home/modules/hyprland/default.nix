@@ -68,9 +68,6 @@
     "$mainMod CTRL, k" = ["movewindow, u"];
     "$mainMod CTRL, d" = ["movewindow, d"];
 
-    # Special workspace
-    "$mainMod, x" = ["togglespecialworkspace"];
-
     # TODO: Somehow write this more compact? Try to use workspace 0 instead of 10...
     "$mainMod, 1" = ["workspace, 1"];
     "$mainMod, 2" = ["workspace, 2"];
@@ -82,6 +79,7 @@
     "$mainMod, 8" = ["workspace, 8"];
     "$mainMod, 9" = ["workspace, 9"];
     "$mainMod, 0" = ["workspace, 10"];
+    "$mainMod, x" = ["togglespecialworkspace"];
 
     "$mainMod SHIFT, 1" = ["movetoworkspace, 1"];
     "$mainMod SHIFT, 2" = ["movetoworkspace, 2"];
@@ -93,6 +91,7 @@
     "$mainMod SHIFT, 8" = ["movetoworkspace, 8"];
     "$mainMod SHIFT, 9" = ["movetoworkspace, 9"];
     "$mainMod SHIFT, 0" = ["movetoworkspace, 10"];
+    "$mainMod SHIFT, x" = ["movetoworkspace, special"];
 
     # Reset workspaces to the defined configuration in hyprland.workspaces:
     # [
@@ -112,23 +111,25 @@
     "$mainMod, mouse:273" = ["resizewindow"];
   };
 
-  always-exec = [
-    # "dunst" # Notifications
-    "wl-paste -t text --watch clipman store --no-persist"
-    "wl-paste -p -t text --watch clipman store -P --histpath=\"~/.local/share/clipman-primary.json\""
-    "hyprctl setcursor Bibata-Modern-Classic 16"
-    "hyprsunset --identity"
+  always-exec = builtins.concatLists [
+    (lib.optionals hyprland.dunst.enable ["dunst"]) # Notifications
+    [
+      "wl-paste -t text --watch clipman store --no-persist"
+      "wl-paste -p -t text --watch clipman store -P --histpath=\"~/.local/share/clipman-primary.json\""
+      "hyprctl setcursor Bibata-Modern-Classic 16"
+      "hyprsunset --identity"
 
-    # HACK: Hyprland doesn't set the xwayland/x11 keymap correctly
-    "setxkbmap -layout ${hyprland.kb-layout} -variant ${hyprland.kb-variant} -model pc104"
+      # HACK: Hyprland doesn't set the xwayland/x11 keymap correctly
+      "setxkbmap -layout ${hyprland.kb-layout} -variant ${hyprland.kb-variant} -model pc104"
 
-    # HACK: Flatpak doesn't find applications in the system PATH
-    "systemctl --user import-environment PATH && systemctl --user restart xdg-desktop-portal.service"
+      # HACK: Flatpak doesn't find applications in the system PATH
+      "systemctl --user import-environment PATH && systemctl --user restart xdg-desktop-portal.service"
 
-    # Provide a polkit authentication UI.
-    # This is used for example when running systemd commands without root.
-    "${pkgs.kdePackages.polkit-kde-agent-1}/libexec/polkit-kde-authentication-agent-1"
-    # "systemctl --user start hyprpolkitagent.service"
+      # Provide a polkit authentication UI.
+      # This is used for example when running systemd commands without root.
+      "${pkgs.kdePackages.polkit-kde-agent-1}/libexec/polkit-kde-authentication-agent-1"
+      # "systemctl --user start hyprpolkitagent.service"
+    ]
   ];
 in {
   options.modules.hyprland = import ./options.nix {inherit lib mylib;};
@@ -159,7 +160,7 @@ in {
         x11.enable = true;
         package = pkgs.bibata-cursors;
         name = "Bibata-Modern-Classic";
-        size = 16;
+        size = 32;
       };
 
       packages = with pkgs; [
