@@ -9,6 +9,16 @@ $ type: echo -e "switch\nbuild\nboot"
 $ flake: echo -e "nixinator\nnixtop"
 
 % nixos
+# Rebuild the system using nh
+nh os <mode>
+$ mode: echo -e "switch\nbuild\nboot"
+
+% nixos
+# Clean the nix store
+nh clean <mode>
+$ mode: echo -e "all\nuser"
+
+% nixos
 # Find out why a package is included in the closure when building the system derivation
 nix why-depends /run/current-system nixpkgs#<package>
 
@@ -21,6 +31,35 @@ $ executable: bash -c "compgen -c"
 # Find the wanted dynamic libraries of an executable in the users path
 ldd $(readlink -f $(which <executable>))
 $ executable: bash -c "compgen -c"
+
+% nixos
+# Browse closures in the nix store sorted by size
+nix-tree
+
+% nixos
+# Search in nixpkgs
+nps -e "<package>"
+
+% nixos
+# Search in nixpkgs, nur, nixos and home-manager
+nix-search-tv print --indexes 'nixos,home-manager,nixpkgs,nur' | fzf --preview 'nix-search-tv preview {}' --scheme history
+
+% nixos
+# Compare the current NixOS generation to another one
+nvd diff /run/current-system ./result
+
+% nixos
+# Generate a nix fetcher section
+nurl "<url>"
+
+% nixos
+# Generate a nix fetcher section for a specific revision
+nurl "<url>" "<rev>"
+
+% nixos
+# Run an unpatched binary on NixOS
+nix-alien-ld -- <binary>
+$ binary: eza -f -1
 
 ; ===========================
 ; SYSTEMD
@@ -104,6 +143,37 @@ xdg-mime query default <mimetype>
 xdg-mime query default $(file --mime-type <file> | awk -F' ' '{print $2}')
 $ file: eza -f -1
 
+% ouch
+# Extract an archive
+ouch decompress "<archive>"
+$ archive: eza -f -1
+
+% pastel
+# Generate a color
+pastel color <color>
+$ color: pastel list
+
+% pastel
+# Generate an adjacent color
+pastel color <color> | pastel <mode>
+$ color: pastel list
+$ mode: echo -e "complement\ntextcolor"
+
+% pastel
+# Generate a color gradient
+pastel gradient <a> <b> | pastel format hex
+$ a: pastel list
+$ b: pastel list
+
+% ripdrag
+# Drag & drop file from the terminal
+ripdrag <file>
+$ file: eza -1
+
+% nvidia-smi
+# Monitor Nvidia GPUs
+watch -d -c -n 0.5 nvidia-smi
+
 ; ===========================
 ; CODE
 ; ===========================
@@ -138,7 +208,11 @@ yt-dlp -f 'ba' --extract-audio --audio-format mp3 "<url>"
 
 % spotdl
 # Download spotify playlist
-spotdl --config /home/christoph/.spotdl/config.json --user-auth --format m4a --bitrate disable --threads 24 --generate-lrc --m3u "<name>" download "<url>"
+mkdir -p "<name>" && cd "<name>" && spotdl --client-id (cat /home/christoph/.secrets/spotify_client_id) --client-secret (cat /home/christoph/.secrets/spotify_client_secret) --user-auth --cookie-file /home/christoph/.secrets/youtube_music_cookies --format opus --bitrate disable --threads 24 --m3u "<name>" download "<url>" && cd ..
+
+% spotdl
+# Download spotify item
+mkdir -p "<name>" && cd "<name>" && spotdl --client-id (cat /home/christoph/.secrets/spotify_client_id) --client-secret (cat /home/christoph/.secrets/spotify_client_secret) --user-auth --cookie-file /home/christoph/.secrets/youtube_music_cookies --format opus --bitrate disable --threads 24 download "<url>" && cd ..
 
 ; ===========================
 ; FFMPEG
