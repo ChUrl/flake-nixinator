@@ -411,29 +411,20 @@ with mylib.networking; {
   # Empty since we basically only need git + editor which is enabled below
   environment.systemPackages = with pkgs; [
     iw
-
-    # iPhone tethering + mounting
-    libimobiledevice
-    ifuse
-    usbmuxd
-
     mprocs # run multiple processes in single terminal window, screen alternative
     parted # partition manager
     procs # Better ps
     procps # pgrep, pkill
+    killall
     slirp4netns # user network namespaces
     wireguard-tools
     man-pages
     man-pages-posix
 
-    # Sets NIX_LD_LIBRARY_PATH and NIX_LD variables for nix-ld
-    # Start dynamically linked executable using "nix-alien-ld -- <Executable>"
-    inputs.nix-alien.packages.${system}.nix-alien
-
-    # Search nixpkgs
-    inputs.nps.packages.${system}.default
-
-    # egl-wayland
+    # iPhone tethering + mounting
+    libimobiledevice
+    ifuse
+    usbmuxd
   ];
 
   # It is preferred to use the module (if it exists) over environment.systemPackages,
