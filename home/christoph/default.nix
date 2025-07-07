@@ -68,7 +68,7 @@ rec {
 
     hyprland = {
       enable = true;
-      dunst.enable = false; # Disable for hyprpanel
+      dunst.enable = !config.modules.hyprpanel.enable; # Disable for hyprpanel
       theme = "Foggy-Lake"; # Three-Bears
 
       keybindings = {
@@ -111,7 +111,6 @@ rec {
           "nextcloud --background"
           "keepassxc"
           "ferdium"
-          "kdeconnect-indicator"
         ];
       };
 
@@ -219,8 +218,7 @@ rec {
       neovide = true;
     };
 
-    nnn.enable = false;
-
+    nnn.enable = false; # Use yazi
     rmpc.enable = true;
 
     rofi = {
@@ -229,7 +227,7 @@ rec {
       theme = "Foggy-Lake";
     };
 
-    waybar.enable = false;
+    waybar.enable = false; # Use hyprpanel
     zathura.enable = true;
   };
 
@@ -347,10 +345,21 @@ rec {
       unzip # Unzip stuff
       progress # Find coreutils processes and show their progress
       tokei # Text file statistics in a project
-      nvd # nix rebuild diff
       ripdrag # drag & drop from terminal
       playerctl # media player control
       pastel # color tools
+      nvd # nix rebuild diff
+      nix-search-tv # search nixpkgs, nur, nixos options and homemanager options
+      nix-tree # Browse the nix store sorted by size (gdu for closures)
+      nurl # Generate nix fetcher sections based on URLs
+
+      # Run unpatched binaries on NixOS
+      # Sets NIX_LD_LIBRARY_PATH and NIX_LD variables for nix-ld.
+      # Start dynamically linked executable using "nix-alien-ld -- <Executable>".
+      inputs.nix-alien.packages.${system}.nix-alien
+
+      # Search nixpkgs
+      inputs.nps.packages.${system}.default
 
       # Hardware/Software info
       pciutils # lspci
@@ -492,7 +501,8 @@ rec {
 
         import = {
           write = true; # Write metadata to files
-          copy = true; # Move files to the music directory when importing
+          copy = false; # Copy files to the music directory when importing
+          move = true; # Move files to the music directory when importing
           log = "${home.homeDirectory}/Music/.beetslog.txt";
         };
 
@@ -1007,7 +1017,10 @@ rec {
   };
 
   services = {
-    kdeconnect.enable = nixosConfig.programs.kdeconnect.enable; # Only the system package sets up the firewall
+    kdeconnect = {
+      enable = nixosConfig.programs.kdeconnect.enable; # Only the system package sets up the firewall
+      indicator = nixosConfig.programs.kdeconnect.enable;
+    };
 
     mpd = {
       enable = true;
