@@ -56,6 +56,7 @@
 
     # Just for shell.nix
     devshell.url = "github:numtide/devshell";
+    unityhub-pinned.url = "github:huantianad/nixpkgs/9542b0bc7701e173a10e6977e57bbba68bb3051f";
   };
 
   # Outputs is a function that takes the inputs as arguments.
@@ -90,11 +91,13 @@
         inputs.nur.overlays.default
         inputs.emacs-overlay.overlay
 
-        # TODO: Check if this works
-        # TODO: Remove after OBS is fixed: https://github.com/obsproject/obs-studio/pull/11906
-        # (final: prev: {
-        #   v4l2loopback = inputs.v4l2loopback-pinned.pkgs.v4l2loopback;
-        # })
+        # https://github.com/NixOS/nixpkgs/issues/418451
+        (final: prev: {
+          unityhub_pinned_3_13 = import inputs.unityhub-pinned {
+            config.allowUnfree = true;
+            localSystem = {inherit (prev) system;};
+          };
+        })
 
         # All my own overlays
         (import ./overlays {inherit nixpkgs inputs;})
