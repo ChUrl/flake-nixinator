@@ -181,6 +181,8 @@ in {
 
           (abbrify pkgs.lazygit {lg = "lazygit";})
 
+          (abbrify pkgs.nix-search-tv {search = "nix-search-tv print --indexes 'nixos,home-manager,nixpkgs,nur' | fzf --preview 'nix-search-tv preview {}' --scheme history";})
+
           # Doesn't work with abbrify because I have nnn.override...
           (lib.optionalAttrs config.modules.nnn.enable {n = "nnncd -a";})
           (lib.optionalAttrs config.modules.nnn.enable {np = "nnncd -a -P p";})
