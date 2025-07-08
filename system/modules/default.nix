@@ -1,7 +1,9 @@
 {...}: {
   imports = [
-    ./polkit
+    ./desktopportal
+    ./fonts
     ./mime
+    ./polkit
     ./network
   ];
 }
