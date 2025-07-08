@@ -106,6 +106,7 @@
     # cpu.intel.updateMicrocode = true;
     cpu.amd.updateMicrocode = true;
     bluetooth.enable = true;
+    nvidia-container-toolkit.enable = true;
 
     nvidia = {
       package = config.boot.kernelPackages.nvidiaPackages.stable;
