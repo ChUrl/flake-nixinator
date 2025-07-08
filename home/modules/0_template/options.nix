@@ -2,8 +2,6 @@
   lib,
   mylib,
   ...
-}:
-with lib;
-with mylib.modules; {
-  enable = mkEnableOption "TEMPLATE";
+}: {
+  enable = lib.mkEnableOption "TEMPLATE";
 }
