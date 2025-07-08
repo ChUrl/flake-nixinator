@@ -340,7 +340,7 @@ with mylib.networking; {
 
     acpid.enable = true;
     dbus.enable = true;
-    flatpak.enable = true; # Not quite the nix style but useful for bottles/proprietary stuff/steam/gaming
+    flatpak.enable = !headless; # Not quite the nix style but useful for bottles/proprietary stuff/steam/gaming
     fstrim.enable = true; # SSD
     fwupd.enable = true; # Device firmware (I don't think I have any supported devices)
     # locate.enable = true; # Periodically update index
