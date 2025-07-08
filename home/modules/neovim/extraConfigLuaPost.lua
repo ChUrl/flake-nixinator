@@ -19,7 +19,7 @@ if g.neovide then
 
 	-- Neovide Fonts
 	-- o.guifont = "JetBrainsMono Nerd Font Mono:h12:Medium"
-	o.guifont = "MonoLisa:h12:Medium"
+	o.guifont = "MonoLisa Alt Script:h12:Medium"
 else
 	-- require("notify").notify("Not running in NeoVide")
 end
