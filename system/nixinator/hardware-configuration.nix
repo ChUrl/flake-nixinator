@@ -103,7 +103,6 @@
     # Use all redistributable firmware (i.e. nonfree)
     enableAllFirmware = true;
     enableRedistributableFirmware = true;
-    # cpu.intel.updateMicrocode = true;
     cpu.amd.updateMicrocode = true;
     bluetooth.enable = true;
     nvidia-container-toolkit.enable = true;
@@ -122,16 +121,10 @@
       enable = true;
       enable32Bit = true;
 
-      # AMD: https://nixos.wiki/wiki/AMD_GPU
+      # https://nixos.wiki/wiki/Accelerated_Video_Playback
       extraPackages = with pkgs; [
-        # amdvlk # RADV (mesa) and AMDVLK (amd) can be used simultaneously
-
-        # VAAPI/VDPAU: https://nixos.wiki/wiki/Accelerated_Video_Playback
         vaapiVdpau # Taken from wiki, this is also part of nixos-hardware/common/gpu/nvidia
         libvdpau-va-gl # Taken from wiki
-
-        # libvdpau # NOTE: Don't know if needed/where it belongs...
-        # libva # NOTE: Don't know if needed/where it belongs...
 
         # https://discourse.nixos.org/t/nvidia-open-breaks-hardware-acceleration/58770/3
         nvidia-vaapi-driver # Experimental, doesn't work with chromium
@@ -142,7 +135,6 @@
     # xpadneo.enable = true; # Xbox Controller
   };
 
-  # environment.variables.AMD_VULKAN_ICD = "RADV"; # Choose mesa driver by default
   environment.variables = {
     GBM_BACKEND = "nvidia-drm";
     __GLX_VENDOR_LIBRARY_NAME = "nvidia";
