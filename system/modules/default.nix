@@ -1,5 +1,6 @@
 {...}: {
   imports = [
+    ./bootloader
     ./desktopportal
     ./fonts
     ./mime
