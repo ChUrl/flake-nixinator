@@ -1,5 +1,5 @@
 # Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
+# your system. Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 {
   inputs,
@@ -25,11 +25,22 @@ with mylib.networking; {
   ];
 
   modules = {
+    bootloader = {
+      enable = true;
+
+      loader =
+        if headless
+        then "grub"
+        else "systemd-boot";
+      systemd-boot.bootDevice = "/boot/efi";
+      grub.bootDevice = "/dev/sda";
+    };
+
     desktopportal = {
       enable = !headless;
 
       termfilechooser.enable = true;
-      hyprland.enabled = config.programs.hyprland.enable;
+      hyprland.enable = config.programs.hyprland.enable;
     };
 
     fonts = {
@@ -69,7 +80,6 @@ with mylib.networking; {
       ];
       allowedUDPPorts = [
         9918 # Wireguard
-        24727 # AusweisApp2
       ];
     };
 
@@ -104,19 +114,6 @@ with mylib.networking; {
   boot = {
     kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
     kernelParams = ["mitigations=off"]; # I don't care
-
-    # plymouth.enable = true;
-    loader = {
-      timeout = 10;
-      systemd-boot = {
-        enable = true;
-        configurationLimit = 5;
-        editor = false;
-        consoleMode = "max";
-      };
-      efi.canTouchEfiVariables = true;
-      efi.efiSysMountPoint = "/boot/efi";
-    };
 
     # Make /tmp volatile
     # NOTE: Setting this to true can lead to large derivations running out of tmp space
@@ -249,15 +246,15 @@ with mylib.networking; {
     fish.enable = true;
     firejail.enable = true; # Use to run app in network namespace (e.g. through vpn)
     git.enable = true;
-    kdeconnect.enable = true; # Use this instead of HM for firewall setup
+    kdeconnect.enable = !headless; # Use this instead of HM for firewall setup
     neovim.enable = true;
     starship.enable = true;
     # pay-respects.enable = true; # The new fuck
-    xwayland.enable = true;
+    xwayland.enable = !headless;
     nix-ld.enable = true; # Load dynamically linked executables
 
     hyprland = {
-      enable = true;
+      enable = !headless;
       xwayland.enable = true;
       withUWSM = true;
     };
@@ -276,14 +273,13 @@ with mylib.networking; {
     };
 
     fuse.userAllowOther = true; # Allow users to mount e.g. samba shares (cifs)
-    # ausweisapp.openFirewall = true; # Directly set port in firewall
   };
 
   # List services that you want to enable:
   services = {
     # Enable sound with pipewire.
     pipewire = {
-      enable = true;
+      enable = !headless;
       alsa.enable = true;
       alsa.support32Bit = true;
       pulse.enable = true;
@@ -294,7 +290,7 @@ with mylib.networking; {
 
     # Enable the X11 windowing system.
     xserver = {
-      enable = true;
+      enable = !headless;
 
       # Startx replaces the displaymanager so default (lightdm) isn't used, start to shell
       displayManager.startx.enable = true;

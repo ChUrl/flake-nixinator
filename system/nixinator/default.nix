@@ -113,11 +113,20 @@
     kernelPackages = pkgs.linuxPackages_zen;
   };
 
-  services.xserver = {
-    # Configure keymap in X11
-    xkb.layout = "us";
-    xkb.variant = "altgr-intl";
+  programs = {
+    ausweisapp = {
+      enable = true;
+      openFirewall = true; # Directly set port in firewall
+    };
+  };
 
-    videoDrivers = ["nvidia"]; # NVIDIA
+  services = {
+    xserver = {
+      # Configure keymap in X11
+      xkb.layout = "us";
+      xkb.variant = "altgr-intl";
+
+      videoDrivers = ["nvidia"]; # NVIDIA
+    };
   };
 }
