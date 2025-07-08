@@ -8,6 +8,7 @@
     ./docs
     ./firefox
     ./fish
+    ./git
     ./hyprland
     ./hyprpanel
     ./kitty
