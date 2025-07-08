@@ -6,6 +6,18 @@
   ];
 
   modules = {
+    mime = {
+      enable = true;
+
+      defaultTextEditor = "neovide.desktop";
+      defaultFileBrowser = "yazi.desktop";
+      defaultWebBrowser = "firefox.desktop";
+      defaultPdfViewer = "org.pwmt.zathura.desktop";
+      defaultImageViewer = "imv-dir.desktop";
+      defaultAudioPlayer = "vlc.desktop";
+      defaultVideoPlayer = "vlc.desktop";
+    };
+
     network = {
       wireguard-tunnels = {
         wg0-de-74 =
