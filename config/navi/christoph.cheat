@@ -107,10 +107,14 @@ yes "The quick brown fox jumps over the lazy dog" | head -c <size> > <output>
 # For-loop in fish shell
 for o in <objects>; <action>; end
 
-% shell
+% fd
 # Find files larger or smaller than a specified size in the current directory
 fd --type file --size <mode><size> -- "<regex>" .
 $ mode: echo -e "+\t\tFind Larger Files\n-\t\tFind Smaller Files" --- --column 1
+
+% fd
+# Find .desktop files of an application
+fd ".*\.desktop" / | rg --trim --pretty "<application>"
 
 % gdu
 # Visualize storage usage on all mounted disks
