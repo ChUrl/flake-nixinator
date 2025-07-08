@@ -4,15 +4,19 @@
   pkgs,
   ...
 }: {
-  # Extra git user for Gitea
-  users.users.git = {
-    uid = 500;
-    group = "git";
-    isNormalUser = false;
-    isSystemUser = true;
-    description = "Gitea User";
-    extraGroups = ["docker" "podman"];
-    shell = pkgs.fish;
+  users = {
+    groups.git = {};
+
+    # Extra git user for Gitea
+    users.git = {
+      uid = 500;
+      group = "git";
+      isNormalUser = false;
+      isSystemUser = true;
+      description = "Gitea User";
+      extraGroups = ["docker" "podman"];
+      shell = pkgs.fish;
+    };
   };
 
   virtualisation.oci-containers.containers.gitea-db = {
