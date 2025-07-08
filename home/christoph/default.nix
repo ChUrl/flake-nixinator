@@ -446,10 +446,6 @@
           hunspellDicts.de_DE
         ])
       ];
-
-    # Do not change.
-    # This marks the version when NixOS was installed for backwards-compatibility.
-    stateVersion = "22.05";
   };
 
   # home.file.".options-doc".source = "${pkgs.modules-options-doc}";
