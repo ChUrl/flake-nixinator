@@ -6,17 +6,19 @@
   inputs,
   hostname,
   username,
+  publicKeys,
   lib,
   mylib,
   nixosConfig,
   config,
   pkgs,
+  headless,
   ...
 }:
 # This is a HM module.
 # Because no imports/options/config is defined explicitly, everything is treated as config:
 # { inputs, lib, ... }: { ... } gets turned into { inputs, lib, ... }: { config = { ... }; } implicitly.
-rec {
+{
   # Every module is a nix expression, specifically a function { inputs, lib, ... }: { ... }.
   # Every module (/function) is called with the same arguments as this module.
   # Arguments with matching names are "plugged in" into the right slots,
@@ -33,15 +35,17 @@ rec {
   ];
 
   # Enable and configure my custom HM modules.
-  paths = {
+  paths = rec {
     enable = true; # You can't disable this
     nixflake = "${config.home.homeDirectory}/NixFlake";
-    dotfiles = "${config.home.homeDirectory}/NixFlake/config";
+    dotfiles = "${nixflake}/config";
   };
 
   modules = {
+    beets.enable = !headless;
+
     chromium = {
-      enable = true;
+      enable = !headless;
       google = false;
     };
 
@@ -53,10 +57,10 @@ rec {
       font = builtins.head nixosConfig.fonts.fontconfig.defaultFonts.monospace;
     };
 
-    docs.enable = true;
+    docs.enable = !headless;
 
     firefox = {
-      enable = true;
+      enable = !headless;
       wayland = true;
       vaapi = true;
       disableTabBar = true;
@@ -66,10 +70,18 @@ rec {
 
     fish.enable = true;
 
-    hyprland = {
+    git = {
       enable = true;
+
+      userName = "Christoph Urlacher";
+      userEmail = "christoph.urlacher@protonmail.com";
+      signCommits = true;
+    };
+
+    hyprland = {
+      enable = !headless;
       dunst.enable = !config.modules.hyprpanel.enable; # Disable for hyprpanel
-      theme = "Foggy-Lake"; # Three-Bears
+      theme = "Foggy-Lake"; # TODO: Remove this in favor of color.lightScheme
 
       keybindings = {
         main-mod = "SUPER";
@@ -79,6 +91,7 @@ rec {
           "$mainMod, E" = ["exec, kitty"];
           "$mainMod, N" = ["exec, neovide"];
           "$mainMod, R" = ["exec, kitty --class=rmpc --title=Rmpc rmpc"];
+          "$mainMod, F" = ["exec, firefox"];
           "$mainMod CTRL, N" = ["exec, kitty --class=navi --title=Navi navi"];
           "$mainMod SHIFT, N" = ["exec, neovide ${config.paths.dotfiles}/navi/christoph.cheat"];
           "$mainMod SHIFT, F" = ["exec, neovide ${config.paths.dotfiles}/flake.nix"];
@@ -114,12 +127,7 @@ rec {
         ];
       };
 
-      windowrules = [
-        # Prevent unity from activating when its reloading the editor
-        # TODO: Doesn't work, use focus_on_activate for now
-        # "suppressevent activate, class:^(Unity)$"
-        # "suppressevent activatefocus, class:^(Unity)$"
-      ];
+      windowrules = [];
 
       workspacerules = {
         "special" = [
@@ -209,26 +217,27 @@ rec {
       ];
     };
 
-    hyprpanel.enable = true;
-    kitty.enable = true;
+    hyprpanel.enable = !headless;
+    kitty.enable = !headless;
+    mpd.enable = !headless;
 
     neovim = {
       enable = true;
       alias = true;
-      neovide = true;
+      neovide = !headless;
     };
 
     nnn.enable = false; # Use yazi
-    rmpc.enable = true;
+    rmpc.enable = !headless;
 
     rofi = {
-      enable = true;
-      # theme = "Three-Bears";
-      theme = "Foggy-Lake";
+      enable = !headless;
+      theme = "Foggy-Lake"; # TODO: Remove this in favor of color.lightScheme
     };
 
     waybar.enable = false; # Use hyprpanel
-    zathura.enable = true;
+    yazi.enable = true;
+    zathura.enable = !headless;
   };
 
   manual = {
@@ -238,12 +247,12 @@ rec {
 
   # Make fonts installed through user packages available to applications.
   # Also updates the font-cache.
-  fonts.fontconfig.enable = true;
+  fonts.fontconfig.enable = !headless;
 
   # This only works when HM is installed as a system module,
   # as nixosConfig won't be available otherwise.
   xdg = {
-    enable = true;
+    enable = !headless;
     mime.enable = true;
     mimeApps = {
       enable = true;
@@ -260,59 +269,55 @@ rec {
   home = {
     inherit username; # Inherited from flake.nix
 
-    homeDirectory = "/home/${home.username}";
+    homeDirectory = "/home/${config.home.username}";
     enableNixpkgsReleaseCheck = true;
 
     # Environment variables
-    sessionVariables = {
-      LANG = "en_US.UTF-8";
+    sessionVariables = lib.mkMerge [
+      {
+        LANG = "en_US.UTF-8";
+        DOCKER_BUILDKIT = 1;
+      }
+      (lib.mkIf (!headless) {
+        # TERMINAL = "alacritty -o font.size=12";
+        TERMINAL = "kitty";
+        BROWSER = "firefox";
 
-      # TERMINAL = "alacritty -o font.size=12";
-      TERMINAL = "kitty";
-      BROWSER = "firefox";
+        # Enable wayland
+        XDG_SESSION_TYPE = "wayland";
+        QT_QPA_PLATFORM = "wayland";
+        NIXOS_OZONE_WL = "1";
+        SDL_VIDEODRIVER = "wayland";
 
-      DOCKER_BUILDKIT = 1;
+        # Run SSH_ASKPASS as GUI, not TTY for Obsidian git
+        SSH_ASKPASS_REQUIRE = "prefer";
 
-      # Enable wayland
-      XDG_SESSION_TYPE = "wayland";
-      QT_QPA_PLATFORM = "wayland";
-      NIXOS_OZONE_WL = "1";
-      SDL_VIDEODRIVER = "wayland";
-
-      # Run SSH_ASKPASS as GUI, not TTY for Obsidian git
-      SSH_ASKPASS_REQUIRE = "prefer";
-
-      # GTK_IM_MODULE, QT_IM_MODULE, XMODIFIERS are set by HomeManager fcitx5 module
-    };
+        # GTK_IM_MODULE, QT_IM_MODULE, XMODIFIERS are set by HomeManager fcitx5 module
+      })
+    ];
 
     # Files to generate in the home directory are specified here.
-    file = let
-      # NOTE: SSH public key
-      sshPublicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJAoJac+GdGtzblCMA0lBfMdSR6aQ4YyovrNglCFGIny christoph.urlacher@protonmail.com";
-    in {
-      # Generate a list of installed user packages in ~/.local/share/current-user-packages
-      ".local/share/current-user-packages".text = let
-        packages = builtins.map (p: "${p.name}") home.packages;
-        sortedUnique = builtins.sort builtins.lessThan (lib.unique packages);
-        formatted = builtins.concatStringsSep "\n" sortedUnique;
-      in
-        formatted;
-
-      # TODO: If navi enabled
-      ".local/share/navi/cheats/christoph.cheat".source = config.lib.file.mkOutOfStoreSymlink "${config.paths.dotfiles}/navi/christoph.cheat";
-
-      ".ssh/id_ed25519.pub".text = "${sshPublicKey}";
-      ".ssh/allowed_signers".text = "* ${sshPublicKey}";
-
-      ".config/xdg-desktop-portal-termfilechooser/config".text = ''
-        [filechooser]
-        cmd=${pkgs.xdg-desktop-portal-termfilechooser}/share/xdg-desktop-portal-termfilechooser/yazi-wrapper.sh
-        default_dir=$HOME
-        env=TERMCMD=kitty --class=file_chooser
-        open_mode = suggested
-        save_mode = last
-      '';
-    };
+    file = lib.mkMerge [
+      {
+        ".ssh/id_ed25519.pub".text = "${publicKeys.ssh}";
+      }
+      (lib.mkIf nixosConfig.modules.desktopportal.termfilechooser.enable {
+        ".config/xdg-desktop-portal-termfilechooser/config".text = ''
+          [filechooser]
+          cmd=${pkgs.xdg-desktop-portal-termfilechooser}/share/xdg-desktop-portal-termfilechooser/yazi-wrapper.sh
+          default_dir=$HOME
+          env=TERMCMD=kitty --class=file_chooser
+          open_mode = suggested
+          save_mode = last
+        '';
+      })
+      (lib.mkIf config.modules.git.enable {
+        ".ssh/allowed_signers".text = "* ${publicKeys.ssh}";
+      })
+      (lib.mkIf config.programs.navi.enable {
+        ".local/share/navi/cheats/christoph.cheat".source = config.lib.file.mkOutOfStoreSymlink "${config.paths.dotfiles}/navi/christoph.cheat";
+      })
+    ];
 
     # Here, custom scripts can be run when activating a HM generation.
     # If those scripts contain side-effects, like creating files,
@@ -325,126 +330,122 @@ rec {
     };
 
     # Add stuff for your user as you see fit:
-    packages = with pkgs; [
-      # Shell utils
-      (ripgrep.override {withPCRE2 = true;}) # fast as fuck
-      gdu # Alternative to du-dust (I like it better)
-      duf # Disk usage analyzer (for all disk overview)
-      sd # sed alternative
-      fclones # duplicate file finder
-      tealdeer # very fast tldr (so readable man)
-      killall
-      atool # Archive preview
-      ouch # unified compression/decompression
-      ffmpegthumbnailer # Video thumbnails
-      mediainfo # Media meta information
-      file # File meta information
-      tree # Folder preview
-      unrar # Cooler WinRar
-      p7zip # Zip stuff
-      unzip # Unzip stuff
-      progress # Find coreutils processes and show their progress
-      tokei # Text file statistics in a project
-      ripdrag # drag & drop from terminal
-      playerctl # media player control
-      pastel # color tools
-      nvd # nix rebuild diff
-      nix-search-tv # search nixpkgs, nur, nixos options and homemanager options
-      nix-tree # Browse the nix store sorted by size (gdu for closures)
-      nurl # Generate nix fetcher sections based on URLs
+    packages = with pkgs;
+      lib.mkMerge [
+        [
+          # Shell utils
+          (ripgrep.override {withPCRE2 = true;}) # fast as fuck
+          gdu # Alternative to du-dust (I like it better)
+          duf # Disk usage analyzer (for all disk overview)
+          sd # sed alternative
+          fclones # duplicate file finder
+          tealdeer # very fast tldr (so readable man)
+          killall
+          atool # Archive preview
+          ouch # unified compression/decompression
+          ffmpegthumbnailer # Video thumbnails
+          mediainfo # Media meta information
+          file # File meta information
+          tree # Folder preview
+          unrar # Cooler WinRar
+          p7zip # Zip stuff
+          unzip # Unzip stuff
+          progress # Find coreutils processes and show their progress
+          tokei # Text file statistics in a project
+          ripdrag # drag & drop from terminal
+          playerctl # media player control
+          pastel # color tools
+          nvd # nix rebuild diff
+          nix-search-tv # search nixpkgs, nur, nixos options and homemanager options
+          nix-tree # Browse the nix store sorted by size (gdu for closures)
+          nurl # Generate nix fetcher sections based on URLs
+          python313 # Nicer scripting than bash
 
-      # Run unpatched binaries on NixOS
-      # Sets NIX_LD_LIBRARY_PATH and NIX_LD variables for nix-ld.
-      # Start dynamically linked executable using "nix-alien-ld -- <Executable>".
-      inputs.nix-alien.packages.${system}.nix-alien
+          # Hardware/Software info
+          pciutils # lspci
+          glxinfo # opengl info
+          wayland-utils # wayland-info
+          clinfo # OpenCL info
+          vulkan-tools # vulkaninfo
+          libva-utils # vainfo
+          vdpauinfo # Video-Decode and Presentation API for Unix info
+          hwloc # Generate CPU topology diagram
+          lm_sensors # Readout hardware sensors
+          acpica-tools # Dump ACPI tables etc.
 
-      # Search nixpkgs
-      inputs.nps.packages.${system}.default
+          # Video/Image/Audio utils
+          ffmpeg-full # I love ffmpeg (including ffplay)
+          ffmpeg-normalize # Normalize audio
+          imagemagick # Convert image (magic)
+          mp3val # Validate mp3 files
+          flac # Validate flac files
+          spotdl
 
-      # Hardware/Software info
-      pciutils # lspci
-      glxinfo # opengl info
-      wayland-utils # wayland-info
-      clinfo # OpenCL info
-      vulkan-tools # vulkaninfo
-      libva-utils # vainfo
-      vdpauinfo # Video-Decode and Presentation API for Unix info
-      hwloc # Generate CPU topology diagram
-      lm_sensors # Readout hardware sensors
-      acpica-tools # Dump ACPI tables etc.
+          # Document utils
+          poppler_utils # pdfunite
+          graphviz # generate graphs from code
+          d2 # generate diagrams from code
+          plantuml # generate diagrams
+          gnuplot # generate function plots
+          pdf2svg # extract vector graphics from pdf
+          pandoc # document converting madness
 
-      # Video/Image/Audio utils
-      ffmpeg_7-full # I love ffmpeg (including ffplay)
-      ffmpeg-normalize # Normalize audio
-      imagemagick # Convert image (magic)
-      mp3val # Validate mp3 files
-      flac # Validate flac files
-      spotdl
+          # Networking
+          dig # Make DNS requests
+          tcpdump # Listen in on TCP traffic
+          traceroute # "Follow" a packet
+          gping # ping with graph
+          curlie # curl a'la httpie
+          wget # download that shit
+          dogdns # dns client
+          rsync # cp on steroids
+          rclone # Rsync for cloud
+          httpie # Cool http client
+          cifs-utils # Mount samba shares
+          nfs-utils # Mount NFS shares
+          sshfs # Mount remote directories via SSH
+          protonvpn-cli_2
+          protonmail-bridge # TODO: Enable on startup, email module
 
-      # Document utils
-      poppler_utils # pdfunite
-      graphviz # generate graphs from code
-      d2 # generate diagrams from code
-      plantuml # generate diagrams
-      gnuplot # generate function plots
-      pdf2svg # extract vector graphics from pdf
-      pandoc # document converting madness
-      # decker # TODO: Build failure
+          # Run unpatched binaries on NixOS
+          # Sets NIX_LD_LIBRARY_PATH and NIX_LD variables for nix-ld.
+          # Usage: "nix-alien-ld -- <Executable>".
+          inputs.nix-alien.packages.${system}.nix-alien
 
-      # Networking
-      dig # Make DNS requests
-      tcpdump # Listen in on TCP traffic
-      traceroute # "Follow" a packet
-      gping # ping with graph
-      curlie # curl a'la httpie
-      wget # download that shit
-      dogdns # dns client
-      rsync # cp on steroids
-      rclone # Rsync for cloud
-      httpie # Cool http client
-      cifs-utils # Mount samba shares
-      nfs-utils # Mount NFS shares
-      sshfs # Mount remote directories via SSH
+          # Search nixpkgs
+          inputs.nps.packages.${system}.default
 
-      protonvpn-gui
-      protonvpn-cli_2
-      protonmail-bridge-gui
-      protonmail-bridge # TODO: Enable on startup, email module
+          # Use NixCommunity binary cache
+          cachix
+        ]
+        (lib.mkIf (!headless) [
+          # Proton
+          protonvpn-gui
+          protonmail-bridge-gui
 
-      # GUI apps
-      signal-desktop
-      anki
-      font-manager # Previews fonts, but doesn't set them
-      nextcloud-client
-      keepassxc
-      AusweisApp2
-      thunderbird # TODO: Email module
-      obsidian
-      # logseq
-      # anytype # Use flatpak
-      zotero
-      zeal-qt6 # docs browser
-      helvum
-      vlc
-      audacity
-      ferdium
+          # GUI stuff
+          signal-desktop
+          anki
+          font-manager # Previews fonts, but doesn't set them
+          nextcloud-client
+          keepassxc
+          thunderbird # TODO: Email module
+          obsidian
+          zotero
+          zeal-qt6 # docs browser
+          helvum
+          vlc
+          audacity
+          ferdium
 
-      # Office
-      wacomtablet # For xournalpp/krita
-      xournalpp # Write with a pen, like old people
-      hunspell # I cna't type
-      hunspellDicts.en_US
-      hunspellDicts.de_DE
-
-      # TODO: Module, I need to add python packages from multiple modules to the same interpreter
-      python313
-
-      # Use NixCommunity binary cache
-      cachix
-
-      # Generate documentation
-      # modules-options-doc
-    ];
+          # Office
+          wacomtablet # For xournalpp/krita
+          xournalpp # Write with a pen, like old people
+          hunspell # I cna't type
+          hunspellDicts.en_US
+          hunspellDicts.de_DE
+        ])
+      ];
 
     # Do not change.
     # This marks the version when NixOS was installed for backwards-compatibility.
@@ -479,71 +480,10 @@ rec {
       };
     };
 
-    # Music taggins and mpd stats collection
-    beets = {
-      enable = true;
-      mpdIntegration = {
-        host = "127.0.0.1";
-        port = config.services.mpd.network.port;
-        enableUpdate = true;
-        enableStats = true;
-      };
-
-      # https://beets.readthedocs.io/en/stable/reference/config.html
-      settings = {
-        directory = "${home.homeDirectory}/Music";
-        threaded = true;
-        art_filename = "cover";
-
-        ui = {
-          color = true;
-        };
-
-        import = {
-          write = true; # Write metadata to files
-          copy = false; # Copy files to the music directory when importing
-          move = true; # Move files to the music directory when importing
-          log = "${home.homeDirectory}/Music/.beetslog.txt";
-        };
-
-        paths = {
-          default = "$albumartist/$albumartist - $album/$track $title";
-          singleton = "0 Singles/$artist - $title"; # Single songs
-          comp = "1 Various/$album/$track $title";
-        };
-
-        plugins = [
-          "badfiles" # check audio file integrity
-          "duplicates"
-          "edit" # edit metadata in text editor
-          "fetchart" # pickup local cover art or search online
-          "fish" # beet fish generates ~/.config/fish/completions file
-          # "lyrics" # fetch song lyrics
-          "replaygain" # write replaygain tags for automatic loudness adjustments
-        ];
-
-        fetchart = {
-          auto = true;
-          sources = "filesystem coverart itunes amazon albumart"; # sources are queried in this order
-        };
-
-        # lyrics = {
-        #   auto = "no"; # we need the lyrics as .lrc files, not embedded into the metadata
-        #   synced = "yes"; # prefer synced lyrics if provided
-        # };
-
-        replaygain = {
-          auto = false; # analyze on import automatically
-          backend = "ffmpeg";
-          overwrite = true; # re-analyze files with existing replaygain tags on import
-        };
-      };
-    };
-
     btop.enable = true;
 
     cava = {
-      enable = true;
+      enable = !headless;
 
       settings = {
         general = {
@@ -593,110 +533,11 @@ rec {
       enableFishIntegration = config.modules.fish.enable;
     };
 
-    git = {
-      enable = true;
-
-      userEmail = "christoph.urlacher@protonmail.com";
-      userName = "Christoph Urlacher";
-
-      signing = {
-        signByDefault = true;
-        format = "ssh";
-        key = "~/.ssh/id_ed25519.pub";
-      };
-
-      lfs.enable = true;
-      diff-so-fancy = {
-        enable = true;
-        changeHunkIndicators = true;
-        markEmptyLines = false;
-        stripLeadingSymbols = true;
-      };
-
-      extraConfig = {
-        core = {
-          compression = 9;
-          # whitespace = "error";
-          preloadindex = true;
-        };
-
-        init = {
-          defaultBranch = "main";
-        };
-
-        gpg = {
-          ssh = {
-            allowedSignersFile = "~/.ssh/allowed_signers";
-          };
-        };
-
-        status = {
-          branch = true;
-          showStash = true;
-          showUntrackedFiles = "all";
-        };
-
-        pull = {
-          default = "current";
-          rebase = true;
-        };
-
-        push = {
-          autoSetupRemote = true;
-          default = "current";
-          followTags = true;
-        };
-
-        rebase = {
-          autoStash = true;
-          missingCommitsCheck = "warn";
-        };
-
-        diff = {
-          context = 3;
-          renames = "copies";
-          interHunkContext = 10;
-        };
-
-        interactive = {
-          diffFilter = "${pkgs.diff-so-fancy}/bin/diff-so-fancy --patch";
-          singlekey = true;
-        };
-
-        log = {
-          abbrevCommit = true;
-          graphColors = "blue,yellow,cyan,magenta,green,red";
-        };
-
-        branch = {
-          sort = "-committerdate";
-        };
-
-        tag = {
-          sort = "-taggerdate";
-        };
-
-        pager = {
-          branch = false;
-          tag = false;
-        };
-
-        url = {
-          "ssh://git@gitea.local.chriphost.de:222/christoph/" = {
-            insteadOf = "gitea:";
-          };
-          "git@github.com:" = {
-            insteadOf = "github:";
-          };
-        };
-      };
-    };
-
     keychain = {
       enable = true;
       enableFishIntegration = config.modules.fish.enable;
       enableNushellIntegration = false;
-      enableXsessionIntegration = true;
+      enableXsessionIntegration = !headless;
       # agents = ["ssh"]; # Deprecated
       keys = ["id_ed25519"];
     };
@@ -765,6 +606,10 @@ rec {
       compression = true;
 
       matchBlocks = {
+        "nixinator" = {
+          user = "christoph";
+          hostname = "192.168.86.50";
+        };
         "servenix" = {
           user = "christoph";
           hostname = "local.chriphost.de";
@@ -804,210 +649,6 @@ rec {
       '';
     };
 
-    yazi = {
-      enable = true;
-      enableFishIntegration = true;
-      shellWrapperName = "y";
-
-      plugins = {
-        inherit (pkgs.yaziPlugins) chmod diff full-border git lazygit mount ouch rsync starship sudo; # smar-paste
-      };
-
-      initLua = ''
-        -- Load plugins
-        require("full-border"):setup()
-        require("starship"):setup()
-        require("git"):setup()
-
-        -- Show symlink in status bar
-        Status:children_add(function(self)
-          local h = self._current.hovered
-          if h and h.link_to then
-            return " -> " .. tostring(h.link_to)
-          else
-            return ""
-          end
-        end, 3300, Status.LEFT)
-
-        -- Show user:group in status bar
-        Status:children_add(function()
-          local h = cx.active.current.hovered
-          if not h or ya.target_family() ~= "unix" then
-            return ""
-          end
-
-          return ui.Line {
-            ui.Span(ya.user_name(h.cha.uid) or tostring(h.cha.uid)):fg("magenta"),
-            ":",
-            ui.Span(ya.group_name(h.cha.gid) or tostring(h.cha.gid)):fg("magenta"),
-            " ",
-          }
-        end, 500, Status.RIGHT)
-      '';
-
-      # https://yazi-rs.github.io/docs/configuration/yazi
-      # "$n": The n-th selected file (1...n)
-      # "$@": All selected files
-      # "$0": The hovered file
-      settings = {
-        mgr = {
-          show_hidden = false;
-        };
-
-        # Associate mimetypes with edit/open/play actions
-        # open = {};
-
-        # Configure programs to edit/open/play files
-        opener = {
-          play = [
-            {
-              run = ''vlc "$@"'';
-              orphan = true;
-              desc = "Play selection";
-            }
-          ];
-          edit = [
-            {
-              run = ''$EDITOR "$@"'';
-              block = true;
-              desc = "Edit selection";
-            }
-          ];
-          open = [
-            {
-              run = ''xdg-open "$@"'';
-              desc = "Open selection";
-            }
-          ];
-          extract = [
-            {
-              run = ''ouch decompress -y "$@"'';
-              desc = "Extract selection";
-            }
-          ];
-        };
-
-        preview = {
-          max_width = 1000;
-          max_height = 1000;
-        };
-
-        plugin.prepend_fetchers = [
-          {
-            id = "git";
-            name = "*";
-            run = "git";
-          }
-          {
-            id = "git";
-            name = "*/";
-            run = "git";
-          }
-        ];
-
-        plugin.prepend_previewers = [
-          {
-            mime = "application/*zip";
-            run = "ouch";
-          }
-          {
-            mime = "application/x-tar";
-            run = "ouch";
-          }
-          {
-            mime = "application/x-bzip2";
-            run = "ouch";
-          }
-          {
-            mime = "application/x-7z-compressed";
-            run = "ouch";
-          }
-          {
-            mime = "application/x-rar";
-            run = "ouch";
-          }
-          {
-            mime = "application/x-xz";
-            run = "ouch";
-          }
-          {
-            mime = "application/xz";
-            run = "ouch";
-          }
-        ];
-      };
-
-      keymap = {
-        input.prepend_keymap = [
-          {
-            # Don't exit vi mode on <Esc>, but close the input
-            on = "<Esc>";
-            run = "close";
-            desc = "Cancel input";
-          }
-        ];
-
-        mgr.prepend_keymap = [
-          {
-            on = ["<C-p>" "m"];
-            run = "plugin mount";
-            desc = "Manage device mounts";
-          }
-          {
-            on = ["<C-p>" "c"];
-            run = "plugin chmod";
-            desc = "Chmod selection";
-          }
-          {
-            on = ["<C-p>" "g"];
-            run = "plugin lazygit";
-            desc = "Run LazyGit";
-          }
-          {
-            on = ["<C-p>" "a"];
-            run = "plugin ouch";
-            desc = "Add selection to archive";
-          }
-          {
-            on = ["<C-p>" "d"];
-            run = ''shell -- ripdrag -a -n "$@"'';
-            desc = "Drag & drop selection";
-          }
-          {
-            on = ["<C-p>" "D"];
-            run = "plugin diff";
-            desc = "Diff the selected with the hovered file";
-          }
-          {
-            on = ["<C-p>" "r"];
-            run = "plugin rsync";
-            desc = "Copy files using rsync";
-          }
-
-          {
-            on = "!";
-            run = ''shell "$SHELL" --block'';
-            desc = "Open $SHELL here";
-          }
-          {
-            on = "y";
-            run = [''shell -- for path in "$@"; do echo "file://$path"; done | wl-copy -t text/uri-list'' "yank"];
-            desc = "Copy files to system clipboard on yank";
-          }
-          # {
-          #   on = "p";
-          #   run = "plugin smart-paste";
-          #   desc = "Paste into hovered directory or CWD";
-          # }
-          {
-            on = "d";
-            run = "remove --permanently";
-            desc = "Delete selection";
-          }
-        ];
-      };
-    };
-
     yt-dlp.enable = true;
 
     zoxide = {
@@ -1020,63 +661,6 @@ rec {
     kdeconnect = {
       enable = nixosConfig.programs.kdeconnect.enable; # Only the system package sets up the firewall
       indicator = nixosConfig.programs.kdeconnect.enable;
-    };
-
-    mpd = {
-      enable = true;
-      dataDir = "${home.homeDirectory}/Music/.mpd";
-      musicDirectory = "${home.homeDirectory}/Music";
-      network = {
-        listenAddress = "127.0.0.1"; # Listen on all addresses: "any"
-        port = 6600;
-      };
-      extraArgs = ["--verbose"];
-
-      extraConfig = ''
-        # Refresh the database whenever files in the musicDirectory change
-        auto_update "yes"
-
-        # Don't start playback after startup
-        restore_paused "yes"
-
-        # Use track tags on shuffle and album tags on album play (auto)
-        # Use album's tags (album)
-        # Use track's tags (track)
-        # replaygain "auto"
-
-        # PipeWire main output
-        audio_output {
-          type "pipewire"
-          name "PipeWire Sound Server"
-
-          # Use hardware mixer instead of software volume filter (replaygain_handler "software")
-          # mixer_type "hardware"
-          # replay_gain_handler "mixer"
-        }
-
-        # FiFo output for cava visualization
-        audio_output {
-          type   "fifo"
-          name   "my_fifo"
-          path   "/tmp/mpd.fifo"
-          format "44100:16:2"
-        }
-
-        # Pre-cache 1GB of the queue
-        # input_cache {
-        #   size "1 GB"
-        # }
-
-        # follow_outside_symlinks "no" # If mpd should follow symlinks pointing outside the musicDirectory
-        # follow_inside_symlinks "yes" # If mpd should follow symlinks pointing inside the musicDirectory
-      '';
-    };
-
-    # MPD integration with mpris (used by player-ctl).
-    # We want to use mpris as it also supports other players (e.g. Spotify) or browsers.
-    mpd-mpris = {
-      enable = true;
-      mpd.useLocal = true;
     };
 
     flatpak = {
@@ -1092,19 +676,22 @@ rec {
         }
       ];
 
-      packages = [
-        "com.github.tchx84.Flatseal"
+      packages = lib.mkMerge [
+        []
+        (lib.mkIf (!headless) [
+          "com.github.tchx84.Flatseal"
 
-        "com.spotify.Client" # Don't need this when spicetify is enabled
+          "com.spotify.Client" # Don't need this when spicetify is enabled
 
-        # NOTE: Also change discord-ipc-0 below
-        "com.discordapp.Discord"
-        # "com.discordapp.DiscordCanary"
-        # "dev.vencord.Vesktop"
+          # NOTE: Also change discord-ipc-0 below
+          "com.discordapp.Discord"
+          # "com.discordapp.DiscordCanary"
+          # "dev.vencord.Vesktop"
 
-        # "com.google.Chrome"
-        # "md.obsidian.Obsidian" # NOTE: Installed via package
-        # "io.anytype.anytype"
+          # "com.google.Chrome"
+          # "md.obsidian.Obsidian" # NOTE: Installed via package
+          # "io.anytype.anytype"
+        ])
       ];
 
       uninstallUnmanaged = true;
@@ -1148,10 +735,20 @@ rec {
 
   systemd = {
     user = {
-      tmpfiles.rules = [
-        # Fix Discord rich presence for Flatpak
-        "L %t/discord-ipc-0 - - - - app/com.discordapp.Discord/discord-ipc-0"
-        # "L %t/discord-ipc-0 - - - - app/com.discordapp.DiscordCanary/discord-ipc-0"
+      tmpfiles.rules = lib.mkMerge [
+        []
+        (lib.mkIf (mylib.modules.contains
+          config.services.flatpak.packages
+          "com.discordapp.Discord") [
+          # Fix Discord rich presence for Flatpak
+          "L %t/discord-ipc-0 - - - - app/com.discordapp.Discord/discord-ipc-0"
+        ])
+        (lib.mkIf (mylib.modules.contains
+          config.services.flatpak.packages
+          "com.discordapp.DiscordCanary") [
+          # Fix Discord rich presence for Flatpak
+          "L %t/discord-ipc-0 - - - - app/com.discordapp.DiscordCanary/discord-ipc-0"
+        ])
       ];
 
       # Nicely reload system units when changing configs
