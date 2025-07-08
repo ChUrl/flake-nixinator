@@ -146,6 +146,10 @@
 
         # ".var/app/com.valvesoftware.Steam/config/MangoHud/MangoHud.conf".source = config.lib.file.mkOutOfStoreSymlink "${config.paths.dotfiles}/mangohud/MangoHud.conf";
       };
+
+      # Do not change.
+      # This marks the version when NixOS was installed for backwards-compatibility.
+      stateVersion = "22.05";
     };
 
     services = {

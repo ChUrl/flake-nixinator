@@ -31,6 +31,12 @@
       waybar.monitor = "eDP-1";
     };
 
-    # home.packages = with pkgs; [];
+    home = {
+      # packages = with pkgs; [];
+
+      # Do not change.
+      # This marks the version when NixOS was installed for backwards-compatibility.
+      stateVersion = "22.05";
+    };
   };
 }
