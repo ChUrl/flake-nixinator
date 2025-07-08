@@ -50,7 +50,10 @@ in {
         # extraPackages = with pkgs; [];
       };
 
-      oci-containers.backend = "podman"; # "docker" or "podman"
+      oci-containers.backend =
+        if docker.podman
+        then "podman"
+        else "docker"; # "docker" or "podman"
       libvirtd.enable = true;
     };
   };
