@@ -253,9 +253,9 @@
   # as nixosConfig won't be available otherwise.
   xdg = {
     enable = !headless;
-    mime.enable = true;
+    mime.enable = nixosConfig.xdg.mime.enable;
     mimeApps = {
-      enable = true;
+      enable = nixosConfig.xdg.mime.enable;
       associations.added = nixosConfig.xdg.mime.addedAssociations;
       associations.removed = nixosConfig.xdg.mime.removedAssociations;
       defaultApplications = nixosConfig.xdg.mime.defaultApplications;
