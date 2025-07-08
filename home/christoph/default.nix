@@ -661,7 +661,7 @@
       indicator = nixosConfig.programs.kdeconnect.enable;
     };
 
-    flatpak = {
+    flatpak = lib.mkIf nixosConfig.services.flatpak.enable {
       # FlatHub stable is only added by default if no custom remotes are specified
       remotes = lib.mkOptionDefault [
         {
