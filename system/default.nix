@@ -10,6 +10,7 @@
   pkgs,
   system,
   username,
+  headless,
   ...
 }:
 with mylib.networking; {
@@ -24,7 +25,32 @@ with mylib.networking; {
   ];
 
   modules = {
-    polkit.enable = true;
+    desktopportal = {
+      enable = !headless;
+
+      termfilechooser.enable = true;
+      hyprland.enabled = config.programs.hyprland.enable;
+    };
+
+    fonts = {
+      enable = !headless;
+
+      defaultSerifFont = "Noto Serif CJK SC";
+      defaultSansSerifFont = "Noto Sans CJK SC";
+      defaultMonoFont = "MonoLisa Alt Script";
+    };
+
+    mime = {
+      enable = !headless;
+
+      defaultTextEditor = "neovide.desktop";
+      defaultFileBrowser = "yazi.desktop";
+      defaultWebBrowser = "firefox.desktop";
+      defaultPdfViewer = "org.pwmt.zathura.desktop";
+      defaultImageViewer = "imv-dir.desktop";
+      defaultAudioPlayer = "vlc.desktop";
+      defaultVideoPlayer = "vlc.desktop";
+    };
 
     network = {
       inherit hostname;
@@ -46,6 +72,8 @@ with mylib.networking; {
         24727 # AusweisApp2
       ];
     };
+
+    polkit.enable = true;
   };
 
   # Enable flakes
@@ -134,7 +162,10 @@ with mylib.networking; {
   };
 
   # Set your time zone.
-  time.timeZone = "Europe/Berlin";
+  time = {
+    timeZone = "Europe/Berlin";
+    hardwareClockInLocalTime = false;
+  };
 
   # Select internationalisation properties.
   i18n = {
@@ -154,70 +185,6 @@ with mylib.networking; {
 
     # https://github.com/NixOS/nixpkgs/issues/179486
     supportedLocales = ["en_US.UTF-8/UTF-8" "de_DE.UTF-8/UTF-8"];
-  };
-
-  xdg = {
-    portal = {
-      enable = true;
-      xdgOpenUsePortal = false;
-      wlr.enable = false; # Hyprland has its own portal automatically enabled...
-
-      config = {
-        common.default = ["*"]; # https://discourse.nixos.org/t/clicked-links-in-desktop-apps-not-opening-browers/29114/26
-        common."org.freedesktop.impl.portal.FileChooser" = ["termfilechooser"];
-
-        hyprland.default = ["hyprland"];
-        hyprland."org.freedesktop.impl.portal.FileChooser" = ["termfilechooser"];
-      };
-
-      extraPortals = with pkgs; [
-        xdg-desktop-portal-gtk
-        xdg-desktop-portal-termfilechooser # Filepicker using yazi
-
-        # xdg-desktop-portal-kde
-        # xdg-desktop-portal-hyprland # Already enabled by hyprland system module
-      ];
-    };
-  };
-
-  fonts = {
-    enableDefaultPackages = true; # Some default fonts for unicode coverage
-
-    # https://wiki.nixos.org/wiki/Fonts#Flatpak_applications_can.27t_find_system_fonts
-    fontDir.enable = true; # Puts fonts to /run/current-system/sw/share/X11/fonts
-
-    # Font packages go here.
-    # They are installed system-wide so they land in fontdir,
-    # this is required for flatpak to find them.
-    packages = with pkgs; [
-      # Monospace fonts
-      nerd-fonts.jetbrains-mono
-      nerd-fonts.victor-mono
-      monolisa
-
-      # Sans/Serif fonts
-      noto-fonts
-      noto-fonts-emoji
-      noto-fonts-cjk-sans
-      lxgw-wenkai
-    ];
-
-    fontconfig = {
-      enable = true;
-      antialias = true;
-      hinting.enable = true;
-      hinting.autohint = true;
-      cache32Bit = true;
-
-      # https://wiki.nixos.org/wiki/Fonts#Noto_Color_Emoji_doesn.27t_render_on_Firefox
-      useEmbeddedBitmaps = true;
-
-      defaultFonts = {
-        serif = ["Noto Serif CJK SC"];
-        sansSerif = ["Noto Sans CJK SC"];
-        monospace = ["MonoLisa Alt Script" "JetBrainsMono Nerd Font Mono"]; # NOTE: Match with color.font
-      };
-    };
   };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
