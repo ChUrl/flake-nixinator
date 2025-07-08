@@ -11,7 +11,7 @@ in {
   options.modules.git = import ./options.nix {inherit lib mylib;};
 
   config = lib.mkIf git.enable {
-    home.programs.git = {
+    programs.git = {
       enable = true;
 
       # userEmail = "christoph.urlacher@protonmail.com";
