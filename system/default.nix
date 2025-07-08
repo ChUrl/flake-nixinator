@@ -43,6 +43,15 @@ with mylib.networking; {
       hyprland.enable = config.programs.hyprland.enable;
     };
 
+    docker = {
+      enable = true;
+
+      # Use podman on the desktops, the servers are
+      # already configured using docker though...
+      podman = !headless;
+      docker.rootless = true;
+    };
+
     fonts = {
       enable = !headless;
 
@@ -184,6 +193,9 @@ with mylib.networking; {
     supportedLocales = ["en_US.UTF-8/UTF-8" "de_DE.UTF-8/UTF-8"];
   };
 
+  # Configure console keymap
+  console.keyMap = "us-acentos";
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.christoph = {
     isNormalUser = true;
@@ -221,10 +233,12 @@ with mylib.networking; {
   # Empty since we basically only need git + editor which is enabled below
   environment.systemPackages = with pkgs; [
     iw
+    wget
     mprocs # run multiple processes in single terminal window, screen alternative
     parted # partition manager
     procs # Better ps
     procps # pgrep, pkill
+    busybox
     killall
     slirp4netns # user network namespaces
     wireguard-tools
@@ -299,7 +313,7 @@ with mylib.networking; {
     };
 
     # Enable touchpad support (enabled default in most desktopManager).
-    libinput.enable = true;
+    libinput.enable = !headless;
 
     # Enable CUPS to print documents.
     printing = {
@@ -343,31 +357,6 @@ with mylib.networking; {
     gnome.gcr-ssh-agent.enable = false; # TODO: Use this instead of ssh.startAgent?
   };
 
-  virtualisation = {
-    docker = {
-      enable = false;
-      autoPrune.enable = true;
-
-      rootless = {
-        enable = true;
-        setSocketVariable = true;
-      };
-    };
-
-    podman = {
-      enable = true;
-      autoPrune.enable = true;
-      dockerCompat = true;
-      dockerSocket.enable = true;
-      defaultNetwork.settings.dns_enabled = true;
-
-      # extraPackages = with pkgs; [];
-    };
-
-    oci-containers.backend = "podman"; # "docker" or "podman"
-    libvirtd.enable = true;
-  };
-
   systemd = {
     # TODO: Technically this should be a user service if it runs as ${username}?
     timers."refresh-nps-cache" = {
@@ -384,7 +373,7 @@ with mylib.networking; {
       path = ["/run/current-system/sw/"];
       serviceConfig = {
         Type = "oneshot";
-        User = "${username}"; # ⚠️ replace with your "username" or "${user}", if it's defined
+        User = "${username}";
       };
       script = ''
         set -eu
