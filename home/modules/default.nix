@@ -3,6 +3,7 @@
     # Obsolete modules are kept in "1_deprecated" for reference.
 
     # My own HM modules
+    ./beets
     ./chromium
     ./color
     ./docs
@@ -12,12 +13,14 @@
     ./hyprland
     ./hyprpanel
     ./kitty
+    ./mpd
     ./neovim
     ./nnn
     ./paths
     ./rmpc
     ./rofi
     ./waybar
+    ./yazi
     ./zathura
 
     # HM modules imported from the flake inputs
