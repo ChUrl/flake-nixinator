@@ -12,6 +12,8 @@
 
   modules = {
     network = {
+      useNetworkManager = true;
+
       # Systemd-networkd configs
       networks = {
         # This should override the default network 50-ether

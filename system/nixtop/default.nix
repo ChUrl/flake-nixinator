@@ -7,6 +7,8 @@
 
   modules = {
     network = {
+      useNetworkManager = true;
+
       wireguard-tunnels = {
         wg0-de-74 =
           mylib.networking.mkWireguardService

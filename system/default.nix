@@ -75,7 +75,6 @@ with mylib.networking; {
     network = {
       inherit hostname;
       enable = true;
-      useNetworkManager = true;
 
       networks = {
         # Default wildcard ethernet network for all hosts
