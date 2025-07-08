@@ -163,6 +163,7 @@
         inherit system mylib;
         hostname = "nixinator";
         username = "christoph";
+        headless = false;
         extraModules = [
           # TODO:
           # inputs.nix-topology.nixosModules.default
@@ -172,6 +173,7 @@
         inherit system mylib;
         hostname = "nixtop";
         username = "christoph";
+        headless = false;
         extraModules = [
           # TODO:
           # inputs.nix-topology.nixosModules.default
