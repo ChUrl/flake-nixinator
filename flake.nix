@@ -33,37 +33,37 @@
     nixvim.inputs.nixpkgs.follows = "nixpkgs";
 
     # Emacs nightly
-    emacs-overlay.url = "github:nix-community/emacs-overlay";
-    emacs-overlay.inputs.nixpkgs.follows = "nixpkgs";
+    # emacs-overlay.url = "github:nix-community/emacs-overlay";
+    # emacs-overlay.inputs.nixpkgs.follows = "nixpkgs";
 
     # Declarative Flatpak
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
     # nix-flatpak.inputs.nixpkgs.follows = "nixpkgs"; # nix-flatpak doesn't have this
 
     # HyprPlugins
-    hyprland-plugins.url = "github:hyprwm/hyprland-plugins";
-    hyprland-plugins.inputs.nixpkgs.follows = "nixpkgs";
-    hypr-dynamic-cursors.url = "github:VirtCode/hypr-dynamic-cursors";
-    hypr-dynamic-cursors.inputs.nixpkgs.follows = "nixpkgs";
+    # hyprland-plugins.url = "github:hyprwm/hyprland-plugins";
+    # hyprland-plugins.inputs.nixpkgs.follows = "nixpkgs";
+    # hypr-dynamic-cursors.url = "github:VirtCode/hypr-dynamic-cursors";
+    # hypr-dynamic-cursors.inputs.nixpkgs.follows = "nixpkgs";
 
     # Realtime audio
-    musnix.url = "github:musnix/musnix";
-    musnix.inputs.nixpkgs.follows = "nixpkgs";
+    # musnix.url = "github:musnix/musnix";
+    # musnix.inputs.nixpkgs.follows = "nixpkgs";
 
     nix-topology.url = "github:oddlama/nix-topology";
     nix-topology.inputs.nixpkgs.follows = "nixpkgs";
 
     # Ags for widgets (this was a terrible idea)
-    ags.url = "github:Aylur/ags";
-    ags.inputs.nixpkgs.follows = "nixpkgs";
+    # ags.url = "github:Aylur/ags";
+    # ags.inputs.nixpkgs.follows = "nixpkgs";
 
     # Spicetify
-    spicetify-nix.url = "github:Gerg-L/spicetify-nix";
-    spicetify-nix.inputs.nixpkgs.follows = "nixpkgs";
+    # spicetify-nix.url = "github:Gerg-L/spicetify-nix";
+    # spicetify-nix.inputs.nixpkgs.follows = "nixpkgs";
 
     # Pinned versions
-    v4l2loopback-pinned.url = "github:nixos/nixpkgs/4684fd6b0c01e4b7d99027a34c93c2e09ecafee2";
-    unityhub-pinned.url = "github:huantianad/nixpkgs/9542b0bc7701e173a10e6977e57bbba68bb3051f";
+    # v4l2loopback-pinned.url = "github:nixos/nixpkgs/4684fd6b0c01e4b7d99027a34c93c2e09ecafee2";
+    # unityhub-pinned.url = "github:huantianad/nixpkgs/9542b0bc7701e173a10e6977e57bbba68bb3051f";
   };
 
   # Outputs is a function that takes the inputs as arguments.
@@ -100,16 +100,18 @@
       overlays = [
         inputs.devshell.overlays.default
         inputs.nur.overlays.default
-        inputs.emacs-overlay.overlay
         inputs.nix-topology.overlays.default
+        # inputs.emacs-overlay.overlay
 
+        # Overriding specific packages from a different nixpkgs (e.g. a pull request)
+        # can be done like this. Note that this creates an additional nixpkgs instance.
         # https://github.com/NixOS/nixpkgs/issues/418451
-        (final: prev: {
-          unityhub_pinned_3_13 = import inputs.unityhub-pinned {
-            config.allowUnfree = true;
-            localSystem = {inherit (prev) system;};
-          };
-        })
+        # (final: prev: {
+        #   unityhub_pinned_3_13 = import inputs.unityhub-pinned {
+        #     config.allowUnfree = true;
+        #     localSystem = {inherit (prev) system;};
+        #   };
+        # })
 
         # All my own overlays
         (import ./overlays {inherit nixpkgs inputs;})
