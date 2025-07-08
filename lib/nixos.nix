@@ -9,6 +9,7 @@
     mylib,
     hostname,
     username,
+    publicKeys,
     extraModules ? [],
     headless ? false,
   }:
@@ -16,7 +17,9 @@
       inherit system;
 
       # Values in "specialArgs" are propagated to all system modules.
-      specialArgs = {inherit inputs hostname mylib system username headless;};
+      specialArgs = {
+        inherit inputs system hostname mylib username publicKeys headless;
+      };
 
       modules = builtins.concatLists [
         [
@@ -36,7 +39,9 @@
           {
             home-manager = {
               # Values in "extraSpecialArgs" are propagated to all HM modules.
-              extraSpecialArgs = {inherit inputs system hostname username mylib headless;};
+              extraSpecialArgs = {
+                inherit inputs system hostname mylib username publicKeys headless;
+              };
 
               # Use the "pkgs" from the system configuration.
               # This disables "nixpkgs.*" options in HM modules.
