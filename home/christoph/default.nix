@@ -252,10 +252,12 @@
   # This only works when HM is installed as a system module,
   # as nixosConfig won't be available otherwise.
   xdg = {
-    enable = !headless;
-    mime.enable = !headless;
+    enable = true; # This only does xdg path management
+    mime.enable = nixosConfig.modules.mime.enable;
+
     mimeApps = {
-      enable = !headless;
+      enable = nixosConfig.modules.mime.enable;
+
       associations.added = nixosConfig.xdg.mime.addedAssociations;
       associations.removed = nixosConfig.xdg.mime.removedAssociations;
       defaultApplications = nixosConfig.xdg.mime.defaultApplications;
