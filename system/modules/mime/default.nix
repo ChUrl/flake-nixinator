@@ -16,15 +16,27 @@ in {
         enable = true;
 
         defaultApplications = let
-          associations = {
-            ${mime.defaultTextEditor} = mime.textTypes;
-            ${mime.defaultFileBrowser} = ["inode/directory"];
-            ${mime.defaultWebBrowser} = mime.webTypes;
-            ${mime.defaultPdfViewer} = ["application/pdf"];
-            ${mime.defaultImageViewer} = mime.imageTypes;
-            ${mime.defaultAudioPlayer} = mime.audioTypes;
-            ${mime.defaultVideoPlayer} = mime.videoTypes;
-          };
+          associations =
+            {
+              ${mime.defaultTextEditor} = mime.textTypes;
+              ${mime.defaultFileBrowser} = ["inode/directory"];
+              ${mime.defaultWebBrowser} = mime.webTypes;
+              ${mime.defaultPdfViewer} = ["application/pdf"];
+              ${mime.defaultImageViewer} = mime.imageTypes;
+
+              # If audio and video player are equal, we assign all types to the audio player,
+              # as multiple identical keys cannot exist in attrsets.
+              ${mime.defaultAudioPlayer} =
+                mime.audioTypes
+                ++ (lib.optionals
+                  (mime.defaultAudioPlayer == mime.defaultVideoPlayer)
+                  mime.videoTypes);
+            }
+            # If audio and video player are not equal, we associate the video types with
+            # the chosen video player. Otherwise video types will be included with audio.
+            // (lib.optionalAttrs (mime.defaultAudioPlayer != mime.defaultVideoPlayer) {
+              ${mime.defaultVideoPlayer} = mime.videoTypes;
+            });
 
           # Applied to a single app and a single type
           # Result: { "image/jpg" = ["imv.desktop"]; }
