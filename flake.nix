@@ -129,6 +129,12 @@
       # This is required because mylib also uses the default nixpkgs lib.
       inherit (nixpkgs) lib;
     };
+
+    # NOTE: Keep public keys here so they're easy to rotate
+
+    publicKeys = {
+      ssh = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJAoJac+GdGtzblCMA0lBfMdSR6aQ4YyovrNglCFGIny christoph.urlacher@protonmail.com";
+    };
   in {
     # Local shell for NixFlake directory
     devShells."${system}".default = import ./shell.nix {inherit pkgs;};
@@ -160,7 +166,7 @@
       # - The nixd HM options completion doesn't seem to work
       # - The system needs to be rebuilt with every HM config change
       nixinator = mylib.nixos.mkNixosConfigWithHomeManagerModule {
-        inherit system mylib;
+        inherit system mylib publicKeys;
         hostname = "nixinator";
         username = "christoph";
         headless = false;
@@ -170,10 +176,30 @@
         ];
       };
       nixtop = mylib.nixos.mkNixosConfigWithHomeManagerModule {
-        inherit system mylib;
+        inherit system mylib publicKeys;
         hostname = "nixtop";
         username = "christoph";
         headless = false;
+        extraModules = [
+          # TODO:
+          # inputs.nix-topology.nixosModules.default
+        ];
+      };
+      servenix = mylib.nixos.mkNixosConfigWithHomeManagerModule {
+        inherit system mylib publicKeys;
+        hostname = "servenix";
+        username = "christoph";
+        headless = true;
+        extraModules = [
+          # TODO:
+          # inputs.nix-topology.nixosModules.default
+        ];
+      };
+      thinknix = mylib.nixos.mkNixosConfigWithHomeManagerModule {
+        inherit system mylib publicKeys;
+        hostname = "thinknix";
+        username = "christoph";
+        headless = true;
         extraModules = [
           # TODO:
           # inputs.nix-topology.nixosModules.default
