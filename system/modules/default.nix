@@ -1,6 +1,7 @@
 {...}: {
   imports = [
     ./polkit
+    ./mime
     ./network
   ];
 }
