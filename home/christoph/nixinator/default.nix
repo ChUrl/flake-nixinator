@@ -114,7 +114,6 @@
 
         # Unity Stuff
         # unityhub
-        unityhub_pinned_3_13.unityhub # TODO: Remove after https://github.com/NixOS/nixpkgs/issues/418451
 
         rider
         dotnetCore
