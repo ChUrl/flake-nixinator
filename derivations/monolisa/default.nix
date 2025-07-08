@@ -4,7 +4,7 @@
 }:
 stdenvNoCC.mkDerivation {
   pname = "monolisa";
-  version = "1.0";
+  version = "2.016";
 
   src = ./.;
 
@@ -12,8 +12,7 @@ stdenvNoCC.mkDerivation {
     runHook preInstall
 
     mkdir -p $out/share/fonts/truetype
-    mv MonoLisa-italic.ttf $out/share/fonts/truetype/
-    mv MonoLisa-normal.ttf $out/share/fonts/truetype/
+    tar -xzf fonts.tar.gz -C $out/share/fonts/truetype
 
     runHook postInstall
   '';
