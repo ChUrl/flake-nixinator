@@ -13,7 +13,6 @@ in {
       docker = {
         enable = !docker.podman;
         autoPrune.enable = true;
-        enableNvidia = true;
 
         rootless = {
           enable = docker.docker.rootless;
