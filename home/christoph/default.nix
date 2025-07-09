@@ -36,7 +36,6 @@
 
   # Enable and configure my custom HM modules.
   paths = rec {
-    enable = true; # You can't disable this
     nixflake = "${config.home.homeDirectory}/NixFlake";
     dotfiles = "${nixflake}/config";
   };
@@ -50,7 +49,6 @@
     };
 
     color = {
-      enable = true; # You can't disable this
       lightScheme = "catppuccin-latte";
       darkScheme = "catppuccin-mocha";
       # font = "JetBrainsMono Nerd Font Mono";
@@ -301,7 +299,7 @@
     # Files to generate in the home directory are specified here.
     file = lib.mkMerge [
       {
-        ".ssh/id_ed25519.pub".text = "${publicKeys.ssh}";
+        ".ssh/id_ed25519.pub".text = "${publicKeys.${username}.ssh}";
       }
       (lib.mkIf nixosConfig.modules.desktopportal.termfilechooser.enable {
         ".config/xdg-desktop-portal-termfilechooser/config".text = ''
@@ -314,7 +312,7 @@
         '';
       })
       (lib.mkIf config.modules.git.enable {
-        ".ssh/allowed_signers".text = "* ${publicKeys.ssh}";
+        ".ssh/allowed_signers".text = "* ${publicKeys.${username}.ssh}";
       })
       (lib.mkIf config.programs.navi.enable {
         ".local/share/navi/cheats/christoph.cheat".source = config.lib.file.mkOutOfStoreSymlink "${config.paths.dotfiles}/navi/christoph.cheat";
@@ -543,6 +541,9 @@
     lazygit = {
       enable = true;
       settings = {
+        # Allow editing past signed commits
+        git.overrideGpg = true;
+
         gui.theme = {
           lightTheme = false;
           activeBorderColor = ["#40a02b" "bold"];
