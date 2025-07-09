@@ -196,8 +196,17 @@ $ mode: echo -e "--list-keys       \tList public keys\n--list-secret-keys\tList 
 gpg --delete-secret-and-public-key <key>
 
 % gpg
-# Export public GPG key
-gpg --export --armor --output <output> <key>
+# Export GPG key
+gpg <mode> --armor --output <output> <key>
+$ mode: echo -e "--export            \tExport public key\n--export-secret-keys\tExport private key" --- --column 1
+
+% sops
+# Edit secrets.yaml
+sops --config ~/NixFlake/system/modules/sops/sops.yaml ~/NixFlake/system/modules/sops/secrets.yaml
+
+% sops
+# Rekey secrets.yaml
+sops --config ~/NixFlake/system/modules/sops/sops.yaml updatekeys ~/NixFlake/system/modules/sops/secrets.yaml
 
 ; ===========================
 ; CODE
