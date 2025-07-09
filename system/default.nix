@@ -262,16 +262,23 @@ with mylib.networking; {
   # I would prefer to use HomeManager for some of these but the modules don't exist (yet).
   programs = {
     adb.enable = true;
-    dconf.enable = true;
+    dconf.enable = !headless;
     fish.enable = true;
     firejail.enable = true; # Use to run app in network namespace (e.g. through vpn)
+    fuse.userAllowOther = true; # Allow users to mount e.g. samba shares (cifs)
     git.enable = true;
     kdeconnect.enable = !headless; # Use this instead of HM for firewall setup
     neovim.enable = true;
-    starship.enable = true;
-    # pay-respects.enable = true; # The new fuck
-    xwayland.enable = !headless;
     nix-ld.enable = true; # Load dynamically linked executables
+
+    gnupg = {
+      agent = {
+        enable = true;
+        enableBrowserSocket = true;
+        enableExtraSocket = true;
+        enableSSHSupport = true;
+      };
+    };
 
     hyprland = {
       enable = !headless;
@@ -286,13 +293,9 @@ with mylib.networking; {
       flake = "/home/christoph/NixFlake";
     };
 
-    ssh = {
-      startAgent = true;
-      # enableAskPassword = true;
-      # askPassword = lib.mkForce "${pkgs.kdePackages.ksshaskpass}/bin/ksshaskpass";
-    };
-
-    fuse.userAllowOther = true; # Allow users to mount e.g. samba shares (cifs)
+    ssh.startAgent = false; # Use gnupg
+    starship.enable = true;
+    xwayland.enable = !headless;
   };
 
   # List services that you want to enable:
