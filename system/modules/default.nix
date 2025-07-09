@@ -7,6 +7,6 @@
     ./mime
     ./network
     ./polkit
-    ./sops
+    ./sops-nix
   ];
 }
