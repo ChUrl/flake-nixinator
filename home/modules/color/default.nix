@@ -18,46 +18,45 @@ in {
     mkColorAssignment = defs: key: {${key} = defs.${key};};
     mkRgbColorAssignment = defs: key: {${key} = mylib.color.hexToRGB defs.${key};};
     mkRgbStringColorAssignment = defs: key: {${key} = mylib.color.hexToRGBString "," defs.${key};};
-  in
-    lib.mkIf color.enable {
-      # This module sets its own options
-      # to the values specified in a colorscheme file.
-      modules.color = {
-        hex = {
-          light = lib.pipe colorKeys [
-            (builtins.map (mkColorAssignment lightDefs))
-            lib.mergeAttrsList
-          ];
+  in {
+    # This module sets its own options
+    # to the values specified in a colorscheme file.
+    modules.color = {
+      hex = {
+        light = lib.pipe colorKeys [
+          (builtins.map (mkColorAssignment lightDefs))
+          lib.mergeAttrsList
+        ];
 
-          dark = lib.pipe colorKeys [
-            (builtins.map (mkColorAssignment darkDefs))
-            lib.mergeAttrsList
-          ];
-        };
+        dark = lib.pipe colorKeys [
+          (builtins.map (mkColorAssignment darkDefs))
+          lib.mergeAttrsList
+        ];
+      };
 
-        rgb = {
-          light = lib.pipe colorKeys [
-            (builtins.map (mkRgbColorAssignment lightDefs))
-            lib.mergeAttrsList
-          ];
+      rgb = {
+        light = lib.pipe colorKeys [
+          (builtins.map (mkRgbColorAssignment lightDefs))
+          lib.mergeAttrsList
+        ];
 
-          dark = lib.pipe colorKeys [
-            (builtins.map (mkRgbColorAssignment darkDefs))
-            lib.mergeAttrsList
-          ];
-        };
+        dark = lib.pipe colorKeys [
+          (builtins.map (mkRgbColorAssignment darkDefs))
+          lib.mergeAttrsList
+        ];
+      };
 
-        rgbString = {
-          light = lib.pipe colorKeys [
-            (builtins.map (mkRgbStringColorAssignment lightDefs))
-            lib.mergeAttrsList
-          ];
+      rgbString = {
+        light = lib.pipe colorKeys [
+          (builtins.map (mkRgbStringColorAssignment lightDefs))
+          lib.mergeAttrsList
+        ];
 
-          dark = lib.pipe colorKeys [
-            (builtins.map (mkRgbStringColorAssignment darkDefs))
-            lib.mergeAttrsList
-          ];
-        };
+        dark = lib.pipe colorKeys [
+          (builtins.map (mkRgbStringColorAssignment darkDefs))
+          lib.mergeAttrsList
+        ];
       };
     };
+  };
 }

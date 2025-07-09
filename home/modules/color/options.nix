@@ -5,8 +5,6 @@
 }:
 with lib;
 with mylib.modules; {
-  enable = mkEnableOption "Enable color schemes";
-
   lightScheme = mkOption {
     type = types.str;
     description = "The color scheme to use for light colors";
