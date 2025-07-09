@@ -4,8 +4,8 @@
   pkgs,
   ...
 }: {
-  virtualisation.oci-containers.containers.nginx-proxy-manager = {
-    image = "jc21/nginx-proxy-manager:latest";
+  virtualisation.oci-containers.containers.wireguard = {
+    image = "linuxserver/wireguard:latest";
     autoStart = true;
 
     login = {
@@ -20,24 +20,24 @@
     dependsOn = [];
 
     ports = [
-      "80:80"
-      # "81:81" # Web interface
-      "443:443"
+      "51820:51820"
     ];
 
     volumes = [
-      "nginx_config:/data"
-      "nginx_snippets:/snippets"
-      "nginx_letsencrypt:/etc/letsencrypt"
+      "wireguard_vps_config:/config"
+      "wireguard_vps_modules:/lib/modules"
     ];
 
     environment = {
-      DISABLE_IPV6 = "true";
+      PUID = "1000";
+      PGID = "1000";
+      TZ = "Europe/Berlin";
     };
 
     extraOptions = [
-      # "--net=host"
-      "--net=behind-nginx"
+      "--cap-add=NET_ADMIN"
+      "--cap-add=SYS_MODULE"
+      # "--net=behind-nginx"
     ];
   };
 }
