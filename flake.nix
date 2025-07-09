@@ -16,9 +16,13 @@
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
-    # Agenix
+    # Manage secrets with agenix
     agenix.url = "github:ryantm/agenix";
     agenix.inputs.nixpkgs.follows = "nixpkgs";
+
+    # Manage secrets with sops
+    sops-nix.url = "github:Mic92/sops-nix";
+    sops-nix.inputs.nixpkgs.follows = "nixpkgs";
 
     # Nix User Repository (e.g. Firefox addons)
     nur.url = "github:nix-community/NUR";
@@ -141,6 +145,15 @@
     publicKeys.christoph = {
       ssh = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJAoJac+GdGtzblCMA0lBfMdSR6aQ4YyovrNglCFGIny christoph.urlacher@protonmail.com";
     };
+
+    # Extra NixOS system modules for all hosts.
+    # HM modules are passed through home/modules/default.nix instead.
+    commonModules = [
+      inputs.agenix.nixosModules.default
+      inputs.sops-nix.nixosModules.sops
+
+      # TODO: inputs.nix-topology.nixosModules.default
+    ];
   in {
     # Local shell for NixFlake directory
     devShells."${system}".default = import ./shell.nix {inherit pkgs;};
@@ -176,47 +189,36 @@
         hostname = "nixinator";
         username = "christoph";
         headless = false;
-
-        # Extra NixOS system modules.
-        # HM modules are passed through home/modules/default.nix
-        extraModules = [
-          # TODO:
-          # inputs.nix-topology.nixosModules.default
-          inputs.agenix.nixosModules.default
-        ];
+        extraModules =
+          []
+          ++ commonModules;
       };
       nixtop = mylib.nixos.mkNixosConfigWithHomeManagerModule {
         inherit system mylib publicKeys;
         hostname = "nixtop";
         username = "christoph";
         headless = false;
-        extraModules = [
-          # TODO:
-          # inputs.nix-topology.nixosModules.default
-          inputs.agenix.nixosModules.default
-        ];
+        extraModules =
+          []
+          ++ commonModules;
       };
       servenix = mylib.nixos.mkNixosConfigWithHomeManagerModule {
         inherit system mylib publicKeys;
         hostname = "servenix";
         username = "christoph";
         headless = true;
-        extraModules = [
-          # TODO:
-          # inputs.nix-topology.nixosModules.default
-          inputs.agenix.nixosModules.default
-        ];
+        extraModules =
+          []
+          ++ commonModules;
       };
       thinknix = mylib.nixos.mkNixosConfigWithHomeManagerModule {
         inherit system mylib publicKeys;
         hostname = "thinknix";
         username = "christoph";
         headless = true;
-        extraModules = [
-          # TODO:
-          # inputs.nix-topology.nixosModules.default
-          inputs.agenix.nixosModules.default
-        ];
+        extraModules =
+          []
+          ++ commonModules;
       };
 
       # These configurations don't include HM.
