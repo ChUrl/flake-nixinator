@@ -179,6 +179,27 @@ $ file: eza -1
 watch -d -c -n 0.5 nvidia-smi
 
 ; ===========================
+; GPG
+; ===========================
+
+% gpg
+# Generate a new GPG key
+gpg --full-generate-key
+
+% gpg
+# List GPG keys
+gpg <mode> --keyid-format=long
+$ mode: echo -e "--list-keys       \tList public keys\n--list-secret-keys\tList private keys" --- --column 1
+
+% gpg
+# Delete GPG key
+gpg --delete-secret-and-public-key <key>
+
+% gpg
+# Export public GPG key
+gpg --export --armor --output <output> <key>
+
+; ===========================
 ; CODE
 ; ===========================
 
