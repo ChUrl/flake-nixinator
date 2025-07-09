@@ -300,6 +300,7 @@
     file = lib.mkMerge [
       {
         ".ssh/id_ed25519.pub".text = "${publicKeys.${username}.ssh}";
+        ".secrets/age/age.pub".text = "${publicKeys.${username}.age}";
       }
       (lib.mkIf nixosConfig.modules.desktopportal.termfilechooser.enable {
         ".config/xdg-desktop-portal-termfilechooser/config".text = ''
