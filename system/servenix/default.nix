@@ -61,6 +61,13 @@
         3000 # Gitea runner needs to reach local gitea instance
       ];
     };
+
+    sops-nix.secrets.${username} = [
+      "heidi-discord-token"
+      "kopia-server-username"
+      "kopia-server-password"
+      "kopia-user-password"
+    ];
   };
 
   networking.firewall.trustedInterfaces = ["docker0" "podman0"];
