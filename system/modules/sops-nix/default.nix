@@ -17,6 +17,11 @@ in {
       ssh-to-age
     ];
 
+    environment.variables = {
+      # Set this environment variable to make "sops edit secrets.yaml" work
+      SOPS_AGE_KEY_FILE = config.sops.age.keyFile;
+    };
+
     sops = {
       defaultSopsFile = ./secrets.yaml;
 
