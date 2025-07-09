@@ -8,6 +8,15 @@
     image = "gitea.vps.chriphost.de/christoph/pocketbase:0.25.0";
     autoStart = true;
 
+    # login = {
+    #   # Uses DockerHub by default
+    #   # registry = "";
+    #
+    #   # DockerHub Credentials
+    #   username = "christoph.urlacher@protonmail.com";
+    #   passwordFile = "${config.age.secrets.dockerhub-pasword.path}";
+    # };
+
     dependsOn = [
       # "pihole"
     ];
@@ -32,6 +41,15 @@
     image = "gitea.vps.chriphost.de/christoph/formula11:latest";
     autoStart = true;
 
+    # login = {
+    #   # Uses DockerHub by default
+    #   # registry = "";
+    #
+    #   # DockerHub Credentials
+    #   username = "christoph.urlacher@protonmail.com";
+    #   passwordFile = "${config.age.secrets.dockerhub-pasword.path}";
+    # };
+
     dependsOn = [
       "formula11_pocketbase"
     ];
@@ -51,10 +69,10 @@
       # PB_PROTOCOL="https";
       # PB_URL="f11pb.vps.chriphost.de";
 
-      PUBLIC_PBURL="https://f11pb.vps.chriphost.de";
+      PUBLIC_PBURL = "https://f11pb.vps.chriphost.de";
 
       # Required by SvelteKit to prevent cross-site POST errors
-      ORIGIN="https://f11.vps.chriphost.de";
+      ORIGIN = "https://f11.vps.chriphost.de";
     };
 
     extraOptions = [

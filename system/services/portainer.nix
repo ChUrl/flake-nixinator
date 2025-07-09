@@ -32,6 +32,15 @@
     image = "portainer/agent:latest";
     autoStart = true;
 
+    login = {
+      # Uses DockerHub by default
+      # registry = "";
+
+      # DockerHub Credentials
+      username = "christoph.urlacher@protonmail.com";
+      passwordFile = "${config.age.secrets.dockerhub-pasword.path}";
+    };
+
     dependsOn = [];
 
     ports = [
