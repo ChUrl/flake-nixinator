@@ -1,8 +1,0 @@
-keys:
-  # sops-nix public gpg key fingerprint
-  - &christoph 2D77520CF698928A855E0B9A2AB59FDA7728388B
-creation_rules:
-  - path_regex: secrets.yaml$
-    key_groups:
-      - pgp:
-        - *christoph
