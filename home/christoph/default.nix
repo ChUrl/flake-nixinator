@@ -301,6 +301,17 @@
       {
         ".ssh/id_ed25519.pub".text = "${publicKeys.${username}.ssh}";
         ".secrets/age/age.pub".text = "${publicKeys.${username}.age}";
+
+        # The sops config specifies what happens when we call sops edit
+        ".sops.yaml".text = ''
+          keys:
+            - &${username} ${publicKeys.${username}.age}
+          creation_rules:
+            - path_regex: secrets.yaml$
+              key_groups:
+                - age:
+                  - *${username}
+        '';
       }
       (lib.mkIf nixosConfig.modules.desktopportal.termfilechooser.enable {
         ".config/xdg-desktop-portal-termfilechooser/config".text = ''
