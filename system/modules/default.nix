@@ -5,7 +5,8 @@
     ./docker
     ./fonts
     ./mime
-    ./polkit
     ./network
+    ./polkit
+    ./sops
   ];
 }
