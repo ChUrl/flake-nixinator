@@ -17,8 +17,8 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     # Manage secrets with agenix
-    agenix.url = "github:ryantm/agenix";
-    agenix.inputs.nixpkgs.follows = "nixpkgs";
+    # agenix.url = "github:ryantm/agenix";
+    # agenix.inputs.nixpkgs.follows = "nixpkgs";
 
     # Manage secrets with sops
     sops-nix.url = "github:Mic92/sops-nix";
@@ -149,7 +149,7 @@
     # Extra NixOS system modules for all hosts.
     # HM modules are passed through home/modules/default.nix instead.
     commonModules = [
-      inputs.agenix.nixosModules.default
+      # inputs.agenix.nixosModules.default
       inputs.sops-nix.nixosModules.sops
 
       # TODO: inputs.nix-topology.nixosModules.default

@@ -1,6 +1,5 @@
 {...}: {
   imports = [
-    ./agenix
     ./bootloader
     ./desktopportal
     ./docker
