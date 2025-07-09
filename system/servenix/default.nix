@@ -36,6 +36,13 @@
   ];
 
   modules = {
+    agenix.secrets.${username} = [
+      "heidi-discord-token"
+      "kopia-password"
+      "kopia-server-username"
+      "kopia-server-password"
+    ];
+
     network = {
       useNetworkManager = false;
 

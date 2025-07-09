@@ -1,6 +1,7 @@
 {
   mylib,
   pkgs,
+  username,
   ...
 }: {
   imports = [
@@ -11,6 +12,8 @@
   ];
 
   modules = {
+    # agenix.secrets.${username} = [];
+
     network = {
       useNetworkManager = true;
 

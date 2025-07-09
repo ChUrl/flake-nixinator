@@ -10,4 +10,4 @@ result
 config/neovim/store
 home/modules/ags/config/types
 home/modules/ags/config/tsconfig.json
-home/modules/agenix/secrets.nix
+system/modules/agenix/secrets.nix

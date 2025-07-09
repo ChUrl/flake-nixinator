@@ -3,7 +3,6 @@
     # Obsolete modules are kept in "1_deprecated" for reference.
 
     # My own HM modules
-    ./agenix
     ./beets
     ./chromium
     ./color
