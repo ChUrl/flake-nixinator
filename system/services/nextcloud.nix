@@ -4,9 +4,40 @@
   pkgs,
   ...
 }: {
+  systemd.services.nextcloud-cron = {
+    enable = true;
+    description = "Nextcloud Cron Job";
+
+    serviceConfig = {
+      ExecStart = "${pkgs.docker}/bin/docker exec -u www-data nextcloud /usr/local/bin/php -f /var/www/html/cron.php";
+    };
+  };
+
+  systemd.timers.nextcloud-cron = {
+    enable = true;
+    description = "Nextcloud Cron Job";
+
+    timerConfig = {
+      OnBootSec = "5min";
+      OnUnitActiveSec = "5min";
+      Unit = "nextcloud-cron.service";
+    };
+
+    wantedBy = ["timers.target"];
+  };
+
   virtualisation.oci-containers.containers.nextcloud-db = {
     image = "postgres:alpine";
     autoStart = true;
+
+    login = {
+      # Uses DockerHub by default
+      # registry = "";
+
+      # DockerHub Credentials
+      username = "christoph.urlacher@protonmail.com";
+      passwordFile = "${config.age.secrets.dockerhub-pasword.path}";
+    };
 
     dependsOn = [];
 
@@ -33,6 +64,15 @@
     image = "redis:alpine";
     autoStart = true;
 
+    login = {
+      # Uses DockerHub by default
+      # registry = "";
+
+      # DockerHub Credentials
+      username = "christoph.urlacher@protonmail.com";
+      passwordFile = "${config.age.secrets.dockerhub-pasword.path}";
+    };
+
     dependsOn = [];
 
     ports = [
@@ -53,6 +93,15 @@
   virtualisation.oci-containers.containers.nextcloud = {
     image = "nextcloud:apache";
     autoStart = true;
+
+    login = {
+      # Uses DockerHub by default
+      # registry = "";
+
+      # DockerHub Credentials
+      username = "christoph.urlacher@protonmail.com";
+      passwordFile = "${config.age.secrets.dockerhub-pasword.path}";
+    };
 
     dependsOn = [
       "nextcloud-db"
@@ -86,7 +135,7 @@
       APACHE_DISABLE_REWRITE_IP = "1";
       TRUSTED_PROXIES = "192.168.86.25 212.227.233.241 172.19.0.1";
       OVERWRITEPROTOCOL = "https";
-      
+
       # DB
       POSTGRES_HOST = "nextcloud-db";
       POSTGRES_PASSWORD = "nextcloud";
@@ -100,27 +149,5 @@
     extraOptions = [
       "--net=behind-nginx"
     ];
-  };
-
-  systemd.services.nextcloud-cron = {
-    enable = true;
-    description = "Nextcloud Cron Job";
-    
-    serviceConfig = {
-      ExecStart = "${pkgs.docker}/bin/docker exec -u www-data nextcloud /usr/local/bin/php -f /var/www/html/cron.php";
-    };
-  };
-
-  systemd.timers.nextcloud-cron = {
-    enable = true;
-    description = "Nextcloud Cron Job";
-
-    timerConfig = {
-      OnBootSec = "5min";
-      OnUnitActiveSec = "5min";
-      Unit = "nextcloud-cron.service";
-    };
-
-    wantedBy = ["timers.target"];
   };
 }

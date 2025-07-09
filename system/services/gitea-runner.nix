@@ -8,6 +8,15 @@
     image = "gitea/act_runner:latest"; # NOTE: vegardit has other runner images
     autoStart = true;
 
+    login = {
+      # Uses DockerHub by default
+      # registry = "";
+
+      # DockerHub Credentials
+      username = "christoph.urlacher@protonmail.com";
+      passwordFile = "${config.age.secrets.dockerhub-pasword.path}";
+    };
+
     dependsOn = [];
 
     ports = [];
@@ -15,7 +24,7 @@
     volumes = [
       "gitea-runner_data:/data"
       "gitea-runner_config:/config" # Managed by env variables for vegardit image
-    
+
       "/var/run/docker.sock:/var/run/docker.sock" # Disable for dind
     ];
 

@@ -5,8 +5,17 @@
   ...
 }: {
   virtualisation.oci-containers.containers.paperless-redis = {
-    image = "docker.io/library/redis:7";
+    image = "redis:7";
     autoStart = true;
+
+    login = {
+      # Uses DockerHub by default
+      # registry = "";
+
+      # DockerHub Credentials
+      username = "christoph.urlacher@protonmail.com";
+      passwordFile = "${config.age.secrets.dockerhub-pasword.path}";
+    };
 
     dependsOn = [];
 
@@ -24,8 +33,17 @@
   };
 
   virtualisation.oci-containers.containers.paperless-postgres = {
-    image = "docker.io/library/postgres:15";
+    image = "postgres:15";
     autoStart = true;
+
+    login = {
+      # Uses DockerHub by default
+      # registry = "";
+
+      # DockerHub Credentials
+      username = "christoph.urlacher@protonmail.com";
+      passwordFile = "${config.age.secrets.dockerhub-pasword.path}";
+    };
 
     dependsOn = [];
 
@@ -49,6 +67,15 @@
   virtualisation.oci-containers.containers.paperless = {
     image = "ghcr.io/paperless-ngx/paperless-ngx:latest";
     autoStart = true;
+
+    # login = {
+    #   # Uses DockerHub by default
+    #   # registry = "";
+    #
+    #   # DockerHub Credentials
+    #   username = "christoph.urlacher@protonmail.com";
+    #   passwordFile = "${config.age.secrets.dockerhub-pasword.path}";
+    # };
 
     dependsOn = [
       "paperless-redis"

@@ -23,6 +23,15 @@
     image = "postgres:14";
     autoStart = true;
 
+    login = {
+      # Uses DockerHub by default
+      # registry = "";
+
+      # DockerHub Credentials
+      username = "christoph.urlacher@protonmail.com";
+      passwordFile = "${config.age.secrets.dockerhub-pasword.path}";
+    };
+
     dependsOn = [];
 
     ports = [];
@@ -45,6 +54,15 @@
   virtualisation.oci-containers.containers.gitea = {
     image = "gitea/gitea:latest";
     autoStart = true;
+
+    login = {
+      # Uses DockerHub by default
+      # registry = "";
+
+      # DockerHub Credentials
+      username = "christoph.urlacher@protonmail.com";
+      passwordFile = "${config.age.secrets.dockerhub-pasword.path}";
+    };
 
     dependsOn = [
       "gitea-db"
