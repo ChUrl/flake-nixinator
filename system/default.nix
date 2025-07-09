@@ -271,13 +271,11 @@ with mylib.networking; {
     neovim.enable = true;
     nix-ld.enable = true; # Load dynamically linked executables
 
-    gnupg = {
-      agent = {
-        enable = true;
-        enableBrowserSocket = true;
-        enableExtraSocket = true;
-        enableSSHSupport = true;
-      };
+    gnupg.agent = {
+      enable = true;
+      enableBrowserSocket = true;
+      enableExtraSocket = true;
+      enableSSHSupport = true;
     };
 
     hyprland = {
