@@ -1191,6 +1191,77 @@ in {
             };
           };
 
+          neotree = rec {
+            name = "neo-tree";
+            pkg = pkgs.vimPlugins.neo-tree-nvim;
+            dependencies = [
+              _plenary
+              web-devicons
+              _nui
+            ];
+            lazy = true;
+            cmd = ["Neotree"];
+            config = mkDefaultConfig name;
+            opts = {
+              use_default_mappings = false;
+              popup_border_style = "rounded";
+              enable_git_status = true;
+              enable_diagnostics = false;
+              open_files_do_not_replace_types = ["terminal" "trouble" "qf"];
+
+              default_component_configs = {
+                container = {
+                  enable_character_fade = true;
+                };
+              };
+
+              filesystem = {
+                bind_to_cwd = true;
+                cwd_target.sidebar = "global";
+
+                filtered_items = {
+                  visible = false; # Toggle with "H"
+                };
+
+                follow_current_file = {
+                  enabled = true;
+                  leave_dirs_open = false;
+                };
+              };
+
+              buffers = {
+                follow_current_file = {
+                  enabled = true;
+                  leave_dirs_open = false;
+                };
+              };
+
+              window = {
+                position = "left";
+
+                mappings = {
+                  "<CR>" = "open";
+                  "c" = "close_node";
+                  "R" = "refresh";
+                  "q" = "close_window";
+                  "i" = "show_file_details";
+                  "r" = "rename";
+                  "d" = "delete";
+                  "x" = "cut_to_clipboard";
+                  "y" = "copy_to_clipboard";
+                  "p" = "paste_from_clipboard";
+                  "a" = "add";
+                  "." = "set_root";
+                  ">" = "navigate_up";
+                  "H" = "toggle_hidden";
+                  "<Esc>" = "cancel";
+                  "/" = "fuzzy_finder";
+                  "?" = "show_help";
+                };
+              };
+            };
+          };
+
           _nui = {
             name = "nui"; # For noice
             pkg = pkgs.vimPlugins.nui-nvim;
@@ -1475,9 +1546,8 @@ in {
                 };
               };
 
-              # TODO: Replace with neo-tree (or figure out how to multiselect and cut/paste)
               explorer = {
-                enabled = true;
+                enabled = false;
                 replace_netrw = false; # Use yazi for that
               };
 
@@ -1987,6 +2057,7 @@ in {
 
           navbuddy # Structural file view
           neogen # Generate doc comments
+          neotree
           noice # Modern UI overhaul, e.g. floating cmdline
           obsidian # Integration with Obsidian.md
 
