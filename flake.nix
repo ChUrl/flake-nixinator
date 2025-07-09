@@ -143,7 +143,11 @@
     # NOTE: Keep public keys here so they're easy to rotate
 
     publicKeys.christoph = {
+      # /home/christoph/.ssh/id_ed25519.pub
       ssh = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJAoJac+GdGtzblCMA0lBfMdSR6aQ4YyovrNglCFGIny christoph.urlacher@protonmail.com";
+
+      # /home/christoph/.secrets/age/age.pub
+      age = "age14ph8vrj657e7s35d60xehzuq46t9zd6pzcm6pw4jragzrvf6xs9s77usnm";
     };
 
     # Extra NixOS system modules for all hosts.
