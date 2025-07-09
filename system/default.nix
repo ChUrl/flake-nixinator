@@ -96,6 +96,10 @@ with mylib.networking; {
     sops-nix.secrets.${username} = [
       "docker-password"
     ];
+
+    sops-nix.bootSecrets.${username} = [
+      "user-password"
+    ];
   };
 
   # Enable flakes
@@ -105,7 +109,7 @@ with mylib.networking; {
       experimental-features = nix-command flakes
     '';
 
-    settings.trusted-users = ["root" "christoph"];
+    settings.trusted-users = ["root" "${username}"];
 
     # Auto garbage-collect and optimize store
     # gc.automatic = true; # NOTE: Disabled for "nh clean"
@@ -144,7 +148,7 @@ with mylib.networking; {
     sudo.enable = true;
     sudo.extraRules = [
       {
-        users = ["christoph"];
+        users = ["${username}"];
         commands = [
           # We allow running flatpak without password
           # so flatpaks can be installed from the hm config
@@ -199,9 +203,10 @@ with mylib.networking; {
   # Configure console keymap
   console.keyMap = "us-acentos";
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.christoph = {
+  # Define a user account. Password is set from sops-nix secrets automatically.
+  users.users.${username} = {
     isNormalUser = true;
+    hashedPasswordFile = config.sops.secrets.user-password.path;
     description = "Christoph";
     extraGroups = [
       "networkmanager"
@@ -223,14 +228,6 @@ with mylib.networking; {
     # We do this with HomeManager
     # packages = with pkgs; [];
   };
-
-  # Generate a list of installed system packages in /etc/current-system-packages
-  environment.etc."current-system-packages".text = let
-    packages = builtins.map (p: "${p.name}") config.environment.systemPackages;
-    sortedUnique = builtins.sort builtins.lessThan (lib.unique packages);
-    formatted = builtins.concatStringsSep "\n" sortedUnique;
-  in
-    formatted;
 
   # We want these packages to be available even when no user profile is active
   # Empty since we basically only need git + editor which is enabled below
@@ -285,7 +282,7 @@ with mylib.networking; {
       enable = true;
       clean.enable = true;
       clean.extraArgs = "--keep 3";
-      flake = "/home/christoph/NixFlake";
+      flake = "/home/${username}/NixFlake";
     };
 
     ssh.startAgent = true; # Use gnupg
