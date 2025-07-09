@@ -16,6 +16,10 @@
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
+    # Agenix
+    agenix.url = "github:ryantm/agenix";
+    agenix.inputs.nixpkgs.follows = "nixpkgs";
+
     # Nix User Repository (e.g. Firefox addons)
     nur.url = "github:nix-community/NUR";
     nur.inputs.nixpkgs.follows = "nixpkgs";
@@ -134,7 +138,7 @@
 
     # NOTE: Keep public keys here so they're easy to rotate
 
-    publicKeys = {
+    publicKeys.christoph = {
       ssh = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJAoJac+GdGtzblCMA0lBfMdSR6aQ4YyovrNglCFGIny christoph.urlacher@protonmail.com";
     };
   in {
@@ -172,9 +176,13 @@
         hostname = "nixinator";
         username = "christoph";
         headless = false;
+
+        # Extra NixOS system modules.
+        # HM modules are passed through home/modules/default.nix
         extraModules = [
           # TODO:
           # inputs.nix-topology.nixosModules.default
+          inputs.agenix.nixosModules.default
         ];
       };
       nixtop = mylib.nixos.mkNixosConfigWithHomeManagerModule {
@@ -185,6 +193,7 @@
         extraModules = [
           # TODO:
           # inputs.nix-topology.nixosModules.default
+          inputs.agenix.nixosModules.default
         ];
       };
       servenix = mylib.nixos.mkNixosConfigWithHomeManagerModule {
@@ -195,6 +204,7 @@
         extraModules = [
           # TODO:
           # inputs.nix-topology.nixosModules.default
+          inputs.agenix.nixosModules.default
         ];
       };
       thinknix = mylib.nixos.mkNixosConfigWithHomeManagerModule {
@@ -205,6 +215,7 @@
         extraModules = [
           # TODO:
           # inputs.nix-topology.nixosModules.default
+          inputs.agenix.nixosModules.default
         ];
       };
 

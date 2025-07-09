@@ -248,6 +248,9 @@ with mylib.networking; {
     libimobiledevice
     ifuse
     usbmuxd
+
+    # Secrets handling
+    inputs.agenix.packages.${system}.default
   ];
 
   # It is preferred to use the module (if it exists) over environment.systemPackages,
