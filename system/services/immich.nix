@@ -8,15 +8,6 @@
     image = "ghcr.io/immich-app/postgres:15-vectorchord0.3.0-pgvectors0.2.0";
     autoStart = true;
 
-    # login = {
-    #   # Uses DockerHub by default
-    #   # registry = "";
-    #
-    #   # DockerHub Credentials
-    #   username = "christoph.urlacher@protonmail.com";
-    #   passwordFile = "${config.age.secrets.dockerhub-pasword.path}";
-    # };
-
     dependsOn = [];
 
     ports = [
@@ -48,7 +39,7 @@
 
       # DockerHub Credentials
       username = "christoph.urlacher@protonmail.com";
-      passwordFile = "${config.age.secrets.dockerhub-pasword.path}";
+      passwordFile = "${config.sops.secrets.docker-password.path}";
     };
 
     dependsOn = [];
@@ -69,15 +60,6 @@
   virtualisation.oci-containers.containers.immich = {
     image = "ghcr.io/imagegenius/immich:latest";
     autoStart = true;
-
-    # login = {
-    #   # Uses DockerHub by default
-    #   # registry = "";
-    #
-    #   # DockerHub Credentials
-    #   username = "christoph.urlacher@protonmail.com";
-    #   passwordFile = "${config.age.secrets.dockerhub-pasword.path}";
-    # };
 
     dependsOn = [
       "immich-database"

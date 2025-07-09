@@ -4,6 +4,11 @@
   pkgs,
   ...
 }: {
+  # If we need to pass secrets to containers we can't use plain env variables.
+  sops.templates."TEMPLATE_secrets.env".content = ''
+    SECRET=${config.sops.placeholder.SECRET}
+  '';
+
   virtualisation.oci-containers.containers.TEMPLATE = {
     image = "TEMPLATE";
     autoStart = true;
@@ -14,7 +19,7 @@
 
       # DockerHub Credentials
       username = "christoph.urlacher@protonmail.com";
-      passwordFile = "${config.age.secrets.dockerhub-pasword.path}";
+      passwordFile = "${config.sops.secrets.docker-password.path}";
     };
 
     dependsOn = [];
@@ -31,9 +36,13 @@
       # NVIDIA_DRIVER_CAPABILITIES = "all";
     };
 
+    environmentFiles = [
+      config.sops.templates."TEMPLATE_secrets.env".path
+    ];
+
     extraOptions = [
-      # "--gpus=all"
       "--net=behind-nginx"
+      # "--gpus=all"
     ];
   };
 }
