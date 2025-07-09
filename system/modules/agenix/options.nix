@@ -5,7 +5,7 @@
 }: {
   secrets = lib.mkOption {
     type = lib.types.attrs;
-    description = "The secret files managed by agenix (and their associated keys)";
+    description = "The secret files managed by agenix (encrypted by SSH key)";
     example = ''
       {
         christoph = [

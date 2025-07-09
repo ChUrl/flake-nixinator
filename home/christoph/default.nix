@@ -312,7 +312,7 @@
             # If this user defined any secrets...
             (builtins.hasAttr "${username}" nixosConfig.modules.agenix.secrets)
             # ...we will add them to the current secrets.nix,
-            # s.t. agenix can be used to encrypt the secret.
+            # s.t. agenix can be used to encrypt/access them.
             (builtins.concatStringsSep "\n"
               (builtins.map
                 (mkSecret publicKeys.${username}.ssh)

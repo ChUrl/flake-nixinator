@@ -25,6 +25,10 @@ with mylib.networking; {
   ];
 
   modules = {
+    agenix.secrets.${username} = [
+      "dockerhub-password"
+    ];
+
     bootloader = {
       enable = true;
 
