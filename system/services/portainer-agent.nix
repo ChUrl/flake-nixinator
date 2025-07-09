@@ -4,8 +4,8 @@
   pkgs,
   ...
 }: {
-  virtualisation.oci-containers.containers.nginx-proxy-manager = {
-    image = "jc21/nginx-proxy-manager:latest";
+  virtualisation.oci-containers.containers.portainer-agent = {
+    image = "portainer/agent:latest";
     autoStart = true;
 
     login = {
@@ -20,24 +20,19 @@
     dependsOn = [];
 
     ports = [
-      "80:80"
-      # "81:81" # Web interface
-      "443:443"
+      "9001:9001"
     ];
 
     volumes = [
-      "nginx_config:/data"
-      "nginx_snippets:/snippets"
-      "nginx_letsencrypt:/etc/letsencrypt"
+      "/var/run/docker.sock:/var/run/docker.sock"
+      "/var/lib/docker/volumes:/var/lib/docker/volumes"
     ];
 
-    environment = {
-      DISABLE_IPV6 = "true";
-    };
+    environment = {};
 
     extraOptions = [
-      # "--net=host"
-      "--net=behind-nginx"
+      # This container needs to be accessible from another machine inside the LAN
+      # "--net=behind-nginx"
     ];
   };
 }
