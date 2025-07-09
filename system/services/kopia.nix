@@ -56,7 +56,7 @@
     environment = {
       TZ = "Europe/Berlin";
       USER = "christoph";
-      KOPIA_PASSWORD = (builtins.readFile ./kopia.password);
+      KOPIA_PASSWORD = builtins.readFile config.age.secrets.kopia-user-password.path;
     };
 
     entrypoint = "/bin/kopia";
@@ -67,8 +67,8 @@
       "--disable-csrf-token-checks"
       "--insecure"
       "--address=0.0.0.0:51515"
-      "--server-username=christoph"
-      "--server-password=kopia"
+      "--server-username=${builtins.readFile config.age.secrets.kopia-server-username.path}"
+      "--server-password=${builtins.readFile config.age.secrets.kopia-server-password.path}"
     ];
 
     extraOptions = [
