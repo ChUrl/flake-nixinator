@@ -30,6 +30,7 @@ in {
     in {
       # TODO: notify-send song title or sth.
       # TODO: status bar colors (the thing that pops up in the progress/seeking bar sometimes)
+      # TODO: allow adding items to playlists not only from the queue view
       ".config/rmpc/config.ron".text = ''
         #![enable(implicit_some)]
         #![enable(unwrap_newtypes)]
@@ -212,13 +213,13 @@ in {
                     "6":       SwitchToTab("Search (6)"),
                     // "8":       SwitchToTab("Visualizer (8)"),
 
-                    "f":       SeekForward,
+                    "?":       ShowHelp,
                     "z":       ToggleRepeat,
                     "x":       ToggleRandom,
                     "c":       ToggleConsumeOnOff, // Skip OneShot mode
                     "v":       ToggleSingleOnOff, // Skip OneShot mode
+                    "f":       SeekForward,
                     "b":       SeekBack,
-                    "~":       ShowHelp,
                     "u":       Update,
                     "U":       Rescan,
                     "I":       ShowCurrentSongInfo,
