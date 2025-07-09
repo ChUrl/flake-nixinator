@@ -1,7 +1,0 @@
-keys:
-  - &christoph age14ph8vrj657e7s35d60xehzuq46t9zd6pzcm6pw4jragzrvf6xs9s77usnm
-creation_rules:
-  - path_regex: secrets.yaml$
-    key_groups:
-      - age:
-        - *christoph
