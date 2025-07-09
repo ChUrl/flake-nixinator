@@ -14,7 +14,7 @@
 
       # DockerHub Credentials
       username = "christoph.urlacher@protonmail.com";
-      passwordFile = "${config.age.secrets.dockerhub-pasword.path}";
+      passwordFile = "${config.sops.secrets.docker-password.path}";
     };
 
     dependsOn = [];
@@ -42,7 +42,7 @@
 
       # DockerHub Credentials
       username = "christoph.urlacher@protonmail.com";
-      passwordFile = "${config.age.secrets.dockerhub-pasword.path}";
+      passwordFile = "${config.sops.secrets.docker-password.path}";
     };
 
     dependsOn = [];
@@ -67,15 +67,6 @@
   virtualisation.oci-containers.containers.paperless = {
     image = "ghcr.io/paperless-ngx/paperless-ngx:latest";
     autoStart = true;
-
-    # login = {
-    #   # Uses DockerHub by default
-    #   # registry = "";
-    #
-    #   # DockerHub Credentials
-    #   username = "christoph.urlacher@protonmail.com";
-    #   passwordFile = "${config.age.secrets.dockerhub-pasword.path}";
-    # };
 
     dependsOn = [
       "paperless-redis"

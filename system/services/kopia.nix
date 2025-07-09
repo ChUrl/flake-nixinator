@@ -4,6 +4,11 @@
   pkgs,
   ...
 }: {
+  # If we need to pass secrets to containers we can't use plain env variables.
+  sops.templates."kopia_secrets.env".content = ''
+    KOPIA_PASSWORD=${config.sops.placeholder.kopia-user-password}
+  '';
+
   virtualisation.oci-containers.containers.kopia = {
     image = "kopia/kopia:latest";
     autoStart = true;
@@ -14,7 +19,7 @@
 
       # DockerHub Credentials
       username = "christoph.urlacher@protonmail.com";
-      passwordFile = "${config.age.secrets.dockerhub-pasword.path}";
+      passwordFile = "${config.sops.secrets.docker-password.path}";
     };
 
     dependsOn = [];
@@ -65,8 +70,11 @@
     environment = {
       TZ = "Europe/Berlin";
       USER = "christoph";
-      KOPIA_PASSWORD = builtins.readFile config.age.secrets.kopia-user-password.path;
     };
+
+    environmentFiles = [
+      config.sops.templates."kopia_secrets.env".path
+    ];
 
     entrypoint = "/bin/kopia";
 
@@ -76,8 +84,8 @@
       "--disable-csrf-token-checks"
       "--insecure"
       "--address=0.0.0.0:51515"
-      "--server-username=${builtins.readFile config.age.secrets.kopia-server-username.path}"
-      "--server-password=${builtins.readFile config.age.secrets.kopia-server-password.path}"
+      "--server-username=$(cat ${config.sops.secrets.kopia-server-username.path})"
+      "--server-password=$(cat ${config.sops.secrets.kopia-server-password.path})"
     ];
 
     extraOptions = [

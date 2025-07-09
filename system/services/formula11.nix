@@ -8,15 +8,6 @@
     image = "gitea.vps.chriphost.de/christoph/pocketbase:0.25.0";
     autoStart = true;
 
-    # login = {
-    #   # Uses DockerHub by default
-    #   # registry = "";
-    #
-    #   # DockerHub Credentials
-    #   username = "christoph.urlacher@protonmail.com";
-    #   passwordFile = "${config.age.secrets.dockerhub-pasword.path}";
-    # };
-
     dependsOn = [
       # "pihole"
     ];
@@ -40,15 +31,6 @@
   virtualisation.oci-containers.containers.formula11 = {
     image = "gitea.vps.chriphost.de/christoph/formula11:latest";
     autoStart = true;
-
-    # login = {
-    #   # Uses DockerHub by default
-    #   # registry = "";
-    #
-    #   # DockerHub Credentials
-    #   username = "christoph.urlacher@protonmail.com";
-    #   passwordFile = "${config.age.secrets.dockerhub-pasword.path}";
-    # };
 
     dependsOn = [
       "formula11_pocketbase"
