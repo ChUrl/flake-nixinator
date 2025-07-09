@@ -300,6 +300,25 @@
     file = lib.mkMerge [
       {
         ".ssh/id_ed25519.pub".text = "${publicKeys.${username}.ssh}";
+
+        # The user will be able to decrypt .age files using agenix.
+        # On each user/machine, this should generate a corresponding secrets.nix
+        "${config.paths.nixflake}/system/modules/agenix/secrets.nix".text = let
+          mkSecret = key: name: "\"${name}.age\".publicKeys = [\"${key}\"];";
+        in ''
+          # NOTE: This file will contain keys depending on the host/by which user it was built on.
+          {
+            ${lib.optionalString
+            # If this user defined any secrets...
+            (builtins.hasAttr "${username}" nixosConfig.modules.agenix.secrets)
+            # ...we will add them to the current secrets.nix,
+            # s.t. agenix can be used to encrypt the secret.
+            (builtins.concatStringsSep "\n"
+              (builtins.map
+                (mkSecret publicKeys.${username}.ssh)
+                nixosConfig.modules.agenix.secrets.${username}))}
+          }
+        '';
       }
       (lib.mkIf nixosConfig.modules.desktopportal.termfilechooser.enable {
         ".config/xdg-desktop-portal-termfilechooser/config".text = ''
