@@ -31,11 +31,16 @@
     ../services/nextcloud.nix
     ../services/nginx-proxy-manager.nix
     ../services/paperless.nix
-    ../services/portainer.nix
+    ../services/portainer-agent.nix
     ../services/whats-up-docker.nix
   ];
 
   modules = {
+    docker.networks."behind-nginx" = {
+      disable_masquerade = false;
+      ipv6.enable = false;
+    };
+
     network = {
       useNetworkManager = false;
 
@@ -70,41 +75,12 @@
     ];
   };
 
-  networking.firewall.trustedInterfaces = ["docker0" "podman0"];
-
-  systemd.services.init-behind-nginx-docker-network = {
-    description = "Create a docker network bridge for all services behind nginx-proxy-manager.";
-    after = ["network.target"];
-    wantedBy = ["multi-user.target"];
-
-    serviceConfig.Type = "oneshot";
-    script = let
-      cli = "${config.virtualisation.docker.package}/bin/docker";
-      network = "behind-nginx";
-    in ''
-      # Put a true at the end to prevent getting non-zero return code, which will
-      # crash the whole service.
-      check=$(${cli} network ls | grep ${network} || true)
-      if [ -z "$check" ]; then
-        # TODO: Disable IP masquerading to show individual containers in AdGuard/Pi-Hole
-        #       - Disabling this prevents containers from having internet connection. DNS issue?
-        # ${cli} network create -o "com.docker.network.bridge.enable_ip_masquerade"="false" ${network}
-
-        # ${cli} network create --ipv6 --gateway="2000::1" --subnet="2000::/80" ${network}
-        ${cli} network create ${network}
-      else
-        echo "${network} already exists in docker"
-      fi
-    '';
-  };
-
   # List services that you want to enable:
   services = {
     # Configure keymap in X11
     xserver = {
       xkb.layout = "us";
       xkb.variant = "altgr-intl";
-
       videoDrivers = ["nvidia"];
     };
 
