@@ -4,6 +4,7 @@
   nixosConfig,
   config,
   lib,
+  username,
   ...
 }: {
   imports = [
@@ -12,6 +13,8 @@
 
   config = {
     modules = {
+      # agenix.secrets.${username} = [];
+
       hyprland = {
         kb-layout = "us";
         kb-variant = "altgr-intl";
