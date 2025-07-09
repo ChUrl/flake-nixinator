@@ -1475,6 +1475,7 @@ in {
                 };
               };
 
+              # TODO: Replace with neo-tree (or figure out how to multiselect and cut/paste)
               explorer = {
                 enabled = true;
                 replace_netrw = false; # Use yazi for that

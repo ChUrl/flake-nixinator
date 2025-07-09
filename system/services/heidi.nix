@@ -19,7 +19,9 @@
     ];
 
     environment = {
-      DISCORD_TOKEN = (builtins.readFile ./heidi.discord_token);
+      # TODO: I can't do this because readFile obviously doesn't
+      #       read at runtime but at buildtime, duh...
+      DISCORD_TOKEN = builtins.readFile config.age.secrets.heidi-discord-token.path;
       DOCKER = "True";
     };
 
