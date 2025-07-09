@@ -9,6 +9,12 @@ in {
   options.modules.docker = import ./options.nix {inherit lib mylib;};
 
   config = lib.mkIf docker.enable {
+    environment.variables = lib.mkMerge [
+      (lib.mkIf (!docker.podman) {
+        DOCKER_BUILDKIT = 1;
+      })
+    ];
+
     virtualisation = {
       docker = {
         enable = !docker.podman;

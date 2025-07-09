@@ -275,7 +275,6 @@
     sessionVariables = lib.mkMerge [
       {
         LANG = "en_US.UTF-8";
-        DOCKER_BUILDKIT = 1;
       }
       (lib.mkIf (!headless) {
         # TERMINAL = "alacritty -o font.size=12";
