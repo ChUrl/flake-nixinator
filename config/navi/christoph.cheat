@@ -208,6 +208,20 @@ sops --config ~/NixFlake/system/modules/sops/sops.yaml ~/NixFlake/system/modules
 # Rekey secrets.yaml
 sops --config ~/NixFlake/system/modules/sops/sops.yaml updatekeys ~/NixFlake/system/modules/sops/secrets.yaml
 
+% ssh
+# Generate a new SSH key
+ssh-keygen -t <type> -C "<comment>"
+$ type: echo -e "ed25519    \tElliptic Curve\nrsa -b 4096\t4096 bit RSA" --- --column 1
+
+% age
+# Generate a new age key
+age-keygen -o <file>
+
+% age
+# Print the public key of an age key
+age-keygen -y <key>
+$ key: eza -f -1
+
 ; ===========================
 ; CODE
 ; ===========================
