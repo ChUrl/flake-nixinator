@@ -89,7 +89,6 @@
           "$mainMod, E" = ["exec, kitty"];
           "$mainMod, N" = ["exec, neovide"];
           "$mainMod, R" = ["exec, kitty --class=rmpc --title=Rmpc rmpc"];
-          "$mainMod, F" = ["exec, firefox"];
           "$mainMod CTRL, N" = ["exec, kitty --class=navi --title=Navi navi"];
           "$mainMod SHIFT, N" = ["exec, neovide ${config.paths.dotfiles}/navi/christoph.cheat"];
           "$mainMod SHIFT, F" = ["exec, neovide ${config.paths.dotfiles}/flake.nix"];
