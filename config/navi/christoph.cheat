@@ -179,7 +179,7 @@ $ file: eza -1
 watch -d -c -n 0.5 nvidia-smi
 
 ; ===========================
-; GPG
+; SECRETS
 ; ===========================
 
 % gpg
@@ -202,11 +202,11 @@ $ mode: echo -e "--export            \tExport public key\n--export-secret-keys\t
 
 % sops
 # Edit secrets.yaml
-sops --config ~/NixFlake/system/modules/sops/sops.yaml ~/NixFlake/system/modules/sops/secrets.yaml
+sops ~/NixFlake/system/modules/sops-nix/secrets.yaml
 
 % sops
 # Rekey secrets.yaml
-sops --config ~/NixFlake/system/modules/sops/sops.yaml updatekeys ~/NixFlake/system/modules/sops/secrets.yaml
+sops updatekeys ~/NixFlake/system/modules/sops-nix/secrets.yaml
 
 % ssh
 # Generate a new SSH key
@@ -221,6 +221,10 @@ age-keygen -o <file>
 # Print the public key of an age key
 age-keygen -y <key>
 $ key: eza -f -1
+
+% mkpasswd
+# Print the hash of a password
+echo "<password>" | mkpasswd -s
 
 ; ===========================
 ; CODE
