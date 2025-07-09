@@ -14,7 +14,7 @@ in {
     environment.systemPackages = with pkgs; [
       sops
       age
-      ssh-to-age
+      # ssh-to-age
     ];
 
     environment.variables = {
@@ -32,11 +32,33 @@ in {
       };
 
       secrets = let
-        mkSecret = name: {${name} = {};};
+        mkSecret = name: {
+          ${name} = {
+            owner = config.users.users.${username}.name;
+            group = config.users.users.${username}.group;
+          };
+        };
+
+        mkBootSecret = name: {
+          ${name} = {
+            # Make these secrets available before creating users.
+            # This means we can't set the owner or group.
+            neededForUsers = true;
+          };
+        };
       in
-        if (builtins.hasAttr "${username}" sops-nix.secrets)
-        then lib.mergeAttrsList (builtins.map mkSecret sops-nix.secrets.${username})
-        else {};
+        lib.mkMerge [
+          (
+            if (builtins.hasAttr "${username}" sops-nix.secrets)
+            then lib.mergeAttrsList (builtins.map mkSecret sops-nix.secrets.${username})
+            else {}
+          )
+          (
+            if (builtins.hasAttr "${username}" sops-nix.bootSecrets)
+            then lib.mergeAttrsList (builtins.map mkBootSecret sops-nix.bootSecrets.${username})
+            else {}
+          )
+        ];
     };
   };
 }
