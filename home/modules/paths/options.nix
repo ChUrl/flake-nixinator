@@ -5,8 +5,6 @@
 }:
 with lib;
 with mylib.modules; {
-  enable = mkEnableOption "paths";
-
   nixflake = lib.mkOption {
     type = lib.types.path;
     apply = toString;
