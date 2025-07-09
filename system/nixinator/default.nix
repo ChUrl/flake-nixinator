@@ -12,8 +12,6 @@
   ];
 
   modules = {
-    # agenix.secrets.${username} = [];
-
     network = {
       useNetworkManager = true;
 

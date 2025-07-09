@@ -26,7 +26,7 @@
     # HM modules imported from the flake inputs
     inputs.nix-flatpak.homeManagerModules.nix-flatpak
     inputs.nixvim.homeManagerModules.nixvim
-    inputs.agenix.homeManagerModules.default
+    # inputs.agenix.homeManagerModules.default
     # inputs.ags.homeManagerModules.default
     # inputs.spicetify-nix.homeManagerModules.default
   ];

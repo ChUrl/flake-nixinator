@@ -25,10 +25,6 @@ with mylib.networking; {
   ];
 
   modules = {
-    agenix.secrets.${username} = [
-      "dockerhub-password"
-    ];
-
     bootloader = {
       enable = true;
 
@@ -254,7 +250,7 @@ with mylib.networking; {
     usbmuxd
 
     # Secrets handling
-    inputs.agenix.packages.${system}.default
+    # inputs.agenix.packages.${system}.default
   ];
 
   # It is preferred to use the module (if it exists) over environment.systemPackages,
