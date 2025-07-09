@@ -92,6 +92,10 @@ with mylib.networking; {
     };
 
     polkit.enable = true;
+
+    sops-nix.secrets.${username} = [
+      "docker-password"
+    ];
   };
 
   # Enable flakes
@@ -265,7 +269,7 @@ with mylib.networking; {
     nix-ld.enable = true; # Load dynamically linked executables
 
     gnupg.agent = {
-      enable = true;
+      enable = false;
       enableBrowserSocket = true;
       enableExtraSocket = true;
       enableSSHSupport = true;
@@ -284,7 +288,7 @@ with mylib.networking; {
       flake = "/home/christoph/NixFlake";
     };
 
-    ssh.startAgent = false; # Use gnupg
+    ssh.startAgent = true; # Use gnupg
     starship.enable = true;
     xwayland.enable = !headless;
   };
