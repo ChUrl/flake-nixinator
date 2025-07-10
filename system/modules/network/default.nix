@@ -13,8 +13,13 @@ in {
   options.modules.network = import ./options.nix {inherit lib mylib;};
 
   config = mkIf cfg.enable {
-    services.resolved.enable = true;
-    services.resolved.llmnr = "false";
+    services.resolved = {
+      enable = true;
+      llmnr = "false";
+      extraConfig = ''
+        DNSStubListener=no
+      '';
+    };
 
     # Use the programs.nm-applet instead
     # environment.systemPackages = with pkgs;
