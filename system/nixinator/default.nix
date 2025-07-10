@@ -72,43 +72,6 @@
         8090 # PocketBase
         4242 # Lan-Mouse
       ];
-
-      wireguard-tunnels = {
-        wg0-de-115 =
-          mylib.networking.mkWireguardService
-          "wg0-de-115"
-          "proton-de-115.key"
-          "9+CorlxrTsQR7qjIOVKsEkk8Z7UUS5WT3R1ccF7a0ic="
-          "194.126.177.14";
-
-        wg0-de-205 =
-          mylib.networking.mkWireguardService
-          "wg0-de-205"
-          "proton-de-205.key"
-          "MOLPnnM2MSq7s7KqAgpm+AWpmzFAtuE46qBFHeLg5Tk="
-          "217.138.216.130";
-
-        wg0-lu-16 =
-          mylib.networking.mkWireguardService
-          "wg0-lu-16"
-          "proton-lu-16.key"
-          "asu9KtQoZ3iKwELsDTgjPEiFNcD1XtgGgy3O4CZFg2w="
-          "92.223.89.133";
-
-        wg0-kh-8 =
-          mylib.networking.mkWireguardService
-          "wg0-kh-8"
-          "proton-kh-8.key"
-          "D4M0O60wCBf1nYWOmXRfK7IpgG7VBBwQLeWVFLIqFG4="
-          "188.215.235.82";
-
-        wg0-ch-70 =
-          mylib.networking.mkWireguardService
-          "wg0-ch-70"
-          "proton-ch-70.key"
-          "17I34jHOMcmI7LKBqxosTfLgwGjO5OKApLcRSPlyymM="
-          "185.159.157.13";
-      };
     };
   };
 
