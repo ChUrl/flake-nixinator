@@ -44,38 +44,8 @@ in {
       inherit (cfg) networks;
     };
 
-    # Wireguard VPNs
-    systemd.services = mkIf (!cfg.useNetworkManager) cfg.wireguard-tunnels;
-
-    # NOTE: I can connect to TU Dortmund directly
-    # TODO: Use config with netns, like with wireguard
-    # services.openvpn.servers = {
-    #   # TODO: Can't read config file...
-    #   tu-dortmund-irb = {
-    #     autoStart = false;
-    #     config = "config ~/NixFlake/config/openvpn/tu-dortmund-irb.ovpn";
-    #   };
-    # };
-
-    # TODO: Rewrite with lib.pipe
-    # Generate list of vpns for rofi menu
-    environment.etc."rofi-vpns" = let
-      names-list = attrNames cfg.wireguard-tunnels;
-      names = concatStringsSep "\n" names-list;
-    in
-      mkIf (!cfg.useNetworkManager) {text = names;};
-
-    # Allow to enable/disable tunnels without root password
-    modules.polkit.allowedSystemServices = let
-      vpn-services = lib.pipe cfg.wireguard-tunnels [
-        attrNames
-        (map (v: "${v}.service"))
-      ];
-    in
-      mkIf (!cfg.useNetworkManager) vpn-services;
-
     modules.polkit.allowedActions = mkIf cfg.useNetworkManager [
-      # NOTE: List permissions by running "nmcli general permissions"
+      # List NM permissions by running "nmcli general permissions"
       "org.freedesktop.NetworkManager.settings.modify.system"
     ];
 

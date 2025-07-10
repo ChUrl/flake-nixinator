@@ -41,17 +41,6 @@ with mylib.modules; {
     '';
   };
 
-  wireguard-tunnels = mkOption {
-    type = types.attrs;
-    default = {};
-    description = "Wireguard VPN Tunnels";
-    example = ''
-      wg0-de-115 = {
-        [...]
-      };
-    '';
-  };
-
   allowedTCPPorts = mkOption {
     type = types.listOf types.int;
     default = [];
