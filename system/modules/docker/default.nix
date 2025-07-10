@@ -110,7 +110,7 @@ in {
       mkPodmanNetwork = options:
         builtins.concatStringsSep "\n" [
           ''
-            ehco "Can't create Podman networks (yet)!"
+            echo "Can't create Podman networks (yet)!"
           ''
         ];
 
