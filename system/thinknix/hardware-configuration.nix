@@ -12,7 +12,10 @@
   boot = {
     initrd.availableKernelModules = ["ata_piix" "uhci_hcd" "virtio_pci" "virtio_scsi" "sd_mod"];
     initrd.kernelModules = [];
-    kernelModules = ["kvm-intel"];
+    kernelModules = [
+      "kvm-intel"
+      "ip_tables" # Required by wireguard docker container
+    ];
     extraModulePackages = [];
   };
 
