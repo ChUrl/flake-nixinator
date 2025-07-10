@@ -92,6 +92,7 @@ in {
 
         insertNameservers = [
           "192.168.86.26"
+          "8.8.8.8"
         ];
 
         wifi = {
