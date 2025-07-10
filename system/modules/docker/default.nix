@@ -70,11 +70,11 @@ in {
         then "${config.virtualisation.podman.package}/bin/podman"
         else "${config.virtualisation.docker.package}/bin/docker";
 
-      mkDockerNetwork = name: options:
+      mkDockerNetwork = options:
         builtins.concatStringsSep "\n" [
           # Make sure to return true on fail to not crash
           ''
-            check=$(${cli} network inspect ${name} || true)
+            check=$(${cli} network inspect ${options.name} || true)
             if [ -z "$check" ]; then
           ''
 
@@ -82,55 +82,57 @@ in {
             "${cli} network create"
 
             # Disable masquerading
-            (lib.mkIf
+            (lib.optionalString
               options.disable_masquerade
               ''-o "com.docker.network.bridge.enable_ip_masquerade"="false"'')
 
             # Enable ipv6
-            (lib.mkIf
+            (lib.optionalString
               options.ipv6.enable
               "--ipv6")
-            (lib.mkIf
-              (builtins.hasAttr "gateway" options.ipv6)
+            (lib.optionalString
+              (!(builtins.isNull options.ipv6.gateway))
               ''--gateway="${options.ipv6.gateway}"'')
-            (lib.mkIf
-              (builtins.hasAttrs "subnet" options.ipv6)
+            (lib.optionalString
+              (!(builtins.isNull options.ipv6.subnet))
               ''--subnet="${options.ipv6.subnet}"'')
 
-            "${name}"
+            "${options.name}"
           ])
 
           ''
             else
-              echo "${name} already exists!"
+              echo "Network ${options.name} already exists!"
             fi
           ''
         ];
 
-      mkPodmanNetwork = name: options:
+      mkPodmanNetwork = options:
         builtins.concatStringsSep "\n" [
           ''
             ehco "Can't create Podman networks (yet)!"
           ''
         ];
 
-      mkSystemdNetworkService = name: options: let
+      mkSystemdNetworkService = options: let
         toolName =
           if docker.podman
-          then "Podman"
-          else "Docker";
+          then "podman"
+          else "docker";
       in {
-        description = "Creates the ${toolName} network \"${name}\"";
-        after = ["network.target"];
-        wantedBy = ["multi-user.target"];
+        "${toolName}-create-${options.name}-network" = {
+          description = "Creates the ${toolName} network \"${options.name}\"";
+          after = ["network.target"];
+          wantedBy = ["multi-user.target"];
 
-        serviceConfig.Type = "oneshot";
-        script =
-          if docker.podman
-          then (mkPodmanNetwork name options)
-          else (mkDockerNetwork name options);
+          serviceConfig.Type = "oneshot";
+          script =
+            if docker.podman
+            then (mkPodmanNetwork options)
+            else (mkDockerNetwork options);
+        };
       };
     in
-      lib.mkMerge (builtins.mapAttrs mkSystemdNetworkService docker.networks);
+      lib.mkMerge (builtins.map mkSystemdNetworkService docker.networks);
   };
 }

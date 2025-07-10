@@ -25,10 +25,13 @@
   ];
 
   modules = {
-    docker.networks."behind-nginx" = {
-      disable_masquerade = false;
-      ipv6.enable = false;
-    };
+    docker.networks = [
+      {
+        name = "behind-nginx";
+        disable_masquerade = false;
+        ipv6.enable = false;
+      }
+    ];
 
     network = {
       useNetworkManager = false;
