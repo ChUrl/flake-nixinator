@@ -133,6 +133,10 @@ sudo duf -inode
 awk -F<separator> '{print $<print>}'
 $ separator: echo -e "' '\t\tWhitespace\n'[ ]'\t\tSingle Space\n'\\\t'\t\tTabs" --- --column 1
 
+% sort
+# Remove duplicate lines
+sort -u
+
 % mime
 # Determine the mime-type of a file
 file --mime-type <file>
@@ -300,3 +304,17 @@ $ quality: echo -e "24\n25\n26\n27\n28\n29\n30\n"
 # Reencode and compress multiple videos using the h265 codec
 fish -c "for name in <files>; ffmpeg -i '$name' -vcodec libx265 -crf <quality> 'out_$name'; end"
 $ quality: echo -e "24\n25\n26\n27\n28\n29\n30\n"
+
+; ===========================
+; DISKS
+; ===========================
+
+% nvme
+# Query NVME disk SMART information
+sudo nvme smart-log /dev/<drive>
+$ drive: eza -1 /dev | rg --trim -e "^nvme\dn\dp\d" | sd "n\dp\d" "" | sort -u
+
+% nvme
+# Query NVME SSD used percentage
+sudo nvme smart-log /dev/<drive> | rg --trim "percentage_used"
+$ drive: eza -1 /dev | rg --trim -e "^nvme\dn\dp\d" | sd "n\dp\d" "" | sort -u
