@@ -22,14 +22,14 @@
           interface = "enp8s0";
           ips = ["192.168.86.50/24"];
           routers = ["192.168.86.5"];
-          nameservers = ["192.168.86.26"];
+          nameservers = ["192.168.86.26" "8.8.8.8"];
           routable = true;
         };
         "10-ether-1G" = mylib.networking.mkStaticSystemdNetwork {
           interface = "enp5s0";
           ips = ["192.168.86.50/24"];
           routers = ["192.168.86.5"];
-          nameservers = ["192.168.86.26"];
+          nameservers = ["192.168.86.26" "8.8.8.8"];
           routable = false;
         };
         # "10-ether-1G" = mylib.networking.mkStaticSystemdNetwork {...};
