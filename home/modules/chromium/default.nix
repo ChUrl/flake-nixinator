@@ -33,12 +33,16 @@ in {
       # package = pkgs.ungoogled-chromium;
 
       extensions = [
-        {id = "cjpalhdlnbpafiamejdnhcphjbkeiagm";} # UBlock Origin
         {id = "oboonakemofpalcgghocfoadofidjkkk";} # KeepassXC Browser
         {id = "pkehgijcmpdhfbdbbnkijodmdjhbjlgp";} # Privacy Badger
-        {id = "lckanjgmijmafbedllaakclkaicjfmnk";} # ClearURLs
-        {id = "njdfdhgcmkocbgbhcioffdbicglldapd";} # LocalCDN
-        {id = "jaoafjdoijdconemdmodhbfpianehlon";} # Skip Redirect
+        {id = "jplgfhpmjnbigmhklmmbgecoobifkmpa";} # ProtonVPN
+        {id = "ddkjiahejlhfcafbddmgiahcphecmpfh";} # UBlock Origin Lite
+
+        # No longer supported after Manifest v3 (joke browser)
+        # {id = "cjpalhdlnbpafiamejdnhcphjbkeiagm";} # UBlock Origin
+        # {id = "lckanjgmijmafbedllaakclkaicjfmnk";} # ClearURLs
+        # {id = "njdfdhgcmkocbgbhcioffdbicglldapd";} # LocalCDN
+        # {id = "jaoafjdoijdconemdmodhbfpianehlon";} # Skip Redirect
       ];
     };
   };
