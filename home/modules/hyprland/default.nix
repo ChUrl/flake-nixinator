@@ -129,6 +129,7 @@
       # This is used for example when running systemd commands without root.
       "${pkgs.kdePackages.polkit-kde-agent-1}/libexec/polkit-kde-authentication-agent-1"
       # "systemctl --user start hyprpolkitagent.service"
+      # "${pkgs.polkit-gnome}/libexec/polkit-gnome-authentication-agent-1"
     ]
   ];
 in {
