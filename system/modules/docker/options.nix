@@ -9,12 +9,18 @@
   docker.rootless = lib.mkEnableOption "Use rootless docker (no effect if podman is used)";
 
   networks = lib.mkOption {
-    type = lib.types.attrsOf (lib.types.submodule ({
+    type = lib.types.listOf (lib.types.submodule ({
       lib,
       mylib,
       ...
     }: {
       options = {
+        name = lib.mkOption {
+          type = lib.types.str;
+          description = "The name of the docker/podman network";
+          example = "behind-nginx";
+        };
+
         disable_masquerade = lib.mkEnableOption "Disable IP masquerading for this network";
 
         ipv6 = {
