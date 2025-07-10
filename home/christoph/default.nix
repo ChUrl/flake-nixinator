@@ -429,6 +429,8 @@
           cachix
         ]
         (lib.mkIf (!headless) [
+          veracrypt
+
           # Proton
           protonvpn-gui
           protonmail-bridge-gui
