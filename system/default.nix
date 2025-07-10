@@ -234,6 +234,7 @@ with mylib.networking; {
     wget
     mprocs # run multiple processes in single terminal window, screen alternative
     parted # partition manager
+    exfat
     procs # Better ps
     procps # pgrep, pkill
     busybox
