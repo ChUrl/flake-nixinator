@@ -42,7 +42,7 @@
           interface = "enp8s0";
           ip = "192.168.86.50/24";
           router = "192.168.86.5";
-          nameserver = "192.168.86.26"; # TODO: Add fallback 8.8.8.8
+          nameserver = "192.168.86.26"; # TODO: Add fallback 8.8.8.8 (create imperatively then use nm2nix)
           autoconnect = true;
         };
         "10-ether-1G" = mylib.networking.mkStaticNetworkManagerProfile {
@@ -50,7 +50,7 @@
           interface = "enp5s0";
           ip = "192.168.86.50/24";
           router = "192.168.86.5";
-          nameserver = "192.168.86.26"; # TODO: Add fallback 8.8.8.8
+          nameserver = "192.168.86.26"; # TODO: Add fallback 8.8.8.8 (create imperatively then use nm2nix)
           autoconnect = false;
         };
       };

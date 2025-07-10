@@ -40,7 +40,7 @@
           interface = "ens18";
           ips = ["192.168.86.26/24"];
           routers = ["192.168.86.5"];
-          nameservers = ["127.0.0.1" "8.8.8.8"];
+          nameservers = ["8.8.8.8"]; # NOTE: Use reliable DNS for servers instead of 127.0.0.1
           routable = true;
         };
       };
@@ -69,20 +69,28 @@
     #   ${pkgs.iproute2}/bin/ip netns add ${name}
     # '';
 
+    # postSetup = ''
+    #   ${pkgs.iptables}/bin/iptables -A FORWARD -i vps-wg-client -j ACCEPT
+    #   ${pkgs.iptables}/bin/iptables -t nat -A POSTROUTING -o ens18 -j MASQUERADE
+    # '';
+    # postShutdown = ''
+    #   ${pkgs.iptables}/bin/iptables -D FORWARD -i vps-wg-client -j ACCEPT
+    #   ${pkgs.iptables}/bin/iptables -t nat -D POSTROUTING -o ens18 -j MASQUERADE
+    # '';
     postSetup = ''
-      ${pkgs.iptables}/bin/iptables -A FORWARD -i vps-wg-client -j ACCEPT
-      ${pkgs.iptables}/bin/iptables -t nat -A POSTROUTING -o ens18 -j MASQUERADE
+      ${pkgs.iptables} -A FORWARD -i wg0-client -j ACCEPT
+      ${pkgs.iptables} -t nat -A POSTROUTING -o eth0 -j MASQUERADE
     '';
     postShutdown = ''
-      ${pkgs.iptables}/bin/iptables -D FORWARD -i vps-wg-client -j ACCEPT
-      ${pkgs.iptables}/bin/iptables -t nat -D POSTROUTING -o ens18 -j MASQUERADE
+      ${pkgs.iptables} -D FORWARD -i wg0-client -j ACCEPT
+      ${pkgs.iptables} -t nat -D POSTROUTING -o eth0 -j MASQUERADE
     '';
 
     peers = [
       {
         name = "chriphost-vps";
         publicKey = "w/U8p9fizw0jk8PFaMZXV1N49Ws+q6mUHzNFYtoDTS8=";
-        endpoint = "vps.chriphost.de:51820";
+        endpoint = "212.227.233.241:51820";
         allowedIPs = [
           "10.10.10.0/24"
         ];
