@@ -21,7 +21,6 @@
     ../services/nginx-proxy-manager.nix
     ../services/portainer.nix
     ../services/whats-up-docker.nix
-    # ../services/wireguard.nix
   ];
 
   modules = {
