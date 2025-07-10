@@ -356,13 +356,11 @@
           ffmpegthumbnailer # Video thumbnails
           mediainfo # Media meta information
           file # File meta information
-          tree # Folder preview
           unrar # Cooler WinRar
           p7zip # Zip stuff
           unzip # Unzip stuff
           progress # Find coreutils processes and show their progress
           tokei # Text file statistics in a project
-          ripdrag # drag & drop from terminal
           playerctl # media player control
           pastel # color tools
           nvd # nix rebuild diff
@@ -431,6 +429,7 @@
           cachix
         ]
         (lib.mkIf (!headless) [
+          ripdrag # drag & drop from terminal
           veracrypt
 
           # Proton
@@ -452,6 +451,7 @@
           audacity
           ferdium
           gparted
+          exfatprogs
 
           # Office
           wacomtablet # For xournalpp/krita
