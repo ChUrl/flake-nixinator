@@ -70,14 +70,14 @@
     #   ${pkgs.iproute2}/bin/ip netns add ${name}
     # '';
 
-    # postSetup = ''
-    #   ${pkgs.iptables} -A FORWARD -i wg0-client -j ACCEPT
-    #   ${pkgs.iptables} -t nat -A POSTROUTING -o eth0 -j MASQUERADE
-    # '';
-    # postShutdown = ''
-    #   ${pkgs.iptables} -D FORWARD -i wg0-client -j ACCEPT
-    #   ${pkgs.iptables} -t nat -D POSTROUTING -o eth0 -j MASQUERADE
-    # '';
+    postSetup = ''
+      ${pkgs.iptables}/bin/iptables -A FORWARD -i vps-wg-client -j ACCEPT
+      ${pkgs.iptables}/bin/iptables -t nat -A POSTROUTING -o ens18 -j MASQUERADE
+    '';
+    postShutdown = ''
+      ${pkgs.iptables}/bin/iptables -D FORWARD -i vps-wg-client -j ACCEPT
+      ${pkgs.iptables}/bin/iptables -t nat -D POSTROUTING -o ens18 -j MASQUERADE
+    '';
 
     peers = [
       {
