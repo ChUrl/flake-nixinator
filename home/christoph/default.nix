@@ -449,6 +449,7 @@
           vlc
           audacity
           ferdium
+          gparted
 
           # Office
           wacomtablet # For xournalpp/krita
