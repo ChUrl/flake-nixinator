@@ -52,7 +52,7 @@
           interface = "ens18";
           ips = ["192.168.86.25/24"];
           routers = ["192.168.86.5"];
-          nameservers = ["192.168.86.26"];
+          nameservers = ["192.168.86.26" "8.8.8.8"];
           routable = true;
         };
       };
