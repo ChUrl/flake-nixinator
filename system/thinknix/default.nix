@@ -60,8 +60,8 @@
   services = {
     # Configure keymap in X11
     xserver = {
-      layout = "us";
-      xkbVariant = "altgr-intl";
+      xkb.layout = "us";
+      xkb.variant = "altgr-intl";
     };
 
     qemuGuest.enable = true;
