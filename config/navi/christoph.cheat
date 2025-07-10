@@ -137,6 +137,10 @@ $ separator: echo -e "' '\t\tWhitespace\n'[ ]'\t\tSingle Space\n'\\\t'\t\tTabs" 
 # Remove duplicate lines
 sort -u
 
+% uname
+# Determine the current Linux kernel version
+uname -r
+
 % mime
 # Determine the mime-type of a file
 file --mime-type <file>
