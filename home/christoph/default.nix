@@ -382,6 +382,8 @@
           hwloc # Generate CPU topology diagram
           lm_sensors # Readout hardware sensors
           acpica-tools # Dump ACPI tables etc.
+          smartmontools # Disk health
+          nvme-cli # NVME disk health
 
           # Video/Image/Audio utils
           ffmpeg-full # I love ffmpeg (including ffplay)
