@@ -127,9 +127,9 @@
 
       # Provide a polkit authentication UI.
       # This is used for example when running systemd commands without root.
-      "${pkgs.kdePackages.polkit-kde-agent-1}/libexec/polkit-kde-authentication-agent-1"
       # "systemctl --user start hyprpolkitagent.service"
-      # "${pkgs.polkit-gnome}/libexec/polkit-gnome-authentication-agent-1"
+      # "${pkgs.kdePackages.polkit-kde-agent-1}/libexec/polkit-kde-authentication-agent-1"
+      "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"
     ]
   ];
 in {
