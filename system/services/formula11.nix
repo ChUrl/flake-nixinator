@@ -23,7 +23,6 @@
     environment = {};
 
     extraOptions = [
-      # "--gpus=all"
       "--net=behind-nginx"
     ];
   };
@@ -58,7 +57,6 @@
     };
 
     extraOptions = [
-      # "--gpus=all"
       "--net=behind-nginx"
     ];
   };

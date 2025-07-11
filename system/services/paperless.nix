@@ -98,7 +98,6 @@
     };
 
     extraOptions = [
-      # "--gpus=all"
       "--net=behind-nginx"
     ];
   };
