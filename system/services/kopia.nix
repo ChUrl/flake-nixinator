@@ -98,8 +98,8 @@ in {
         "--insecure"
         "--address=0.0.0.0:51515"
         # TODO: How to set this?
-        "--server-username=$KOPIA_SERVER_USERNAME"
-        "--server-password=$KOPIA_SERVER_PASSWORD"
+        "--server-username=(cat ${config.sops.secrets.kopia-server-username.path})"
+        "--server-password=(cat ${config.sops.secrets.kopia-server-password.path})"
       ];
 
       extraOptions = [
