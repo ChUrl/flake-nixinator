@@ -139,7 +139,6 @@ in {
             mkdir = "mkdir -p"; # also create parents (-p)
             blk = batify "lsblk -o NAME,LABEL,UUID,FSTYPE,SIZE,FSUSE%,MOUNTPOINT,MODEL";
             watch = "watch -d -c -n 0.5";
-            ssh = "kitty +kitten ssh";
             nd = "nix develop";
             nb = "nix build -L";
             nps = "nps -e";
@@ -178,6 +177,8 @@ in {
             gcm = "git commit -m";
             gcl = "git clone";
           })
+
+          (lib.optionalAttrs config.modules.kitty.enable {ssh = "kitty +kitten ssh";})
 
           (abbrify pkgs.lazygit {lg = "lazygit";})
 
