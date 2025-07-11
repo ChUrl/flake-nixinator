@@ -60,46 +60,46 @@
     ];
   };
 
-  networking.wireguard.interfaces."vps-wg-client" = {
-    ips = ["10.10.10.2/32"];
-    privateKeyFile = "${config.sops.secrets.wireguard-vps-private-key.path}";
+  # networking.wireguard.interfaces."vps-wg-client" = {
+  #   ips = ["10.10.10.2/32"];
+  #   privateKeyFile = "${config.sops.secrets.wireguard-vps-private-key.path}";
 
-    # Create the depending network namespace
-    # preSetup = ''
-    #   ${pkgs.iproute2}/bin/ip netns add ${name}
-    # '';
+  #   # Create the depending network namespace
+  #   # preSetup = ''
+  #   #   ${pkgs.iproute2}/bin/ip netns add ${name}
+  #   # '';
 
-    # postSetup = ''
-    #   ${pkgs.iptables}/bin/iptables -A FORWARD -i vps-wg-client -j ACCEPT
-    #   ${pkgs.iptables}/bin/iptables -t nat -A POSTROUTING -o ens18 -j MASQUERADE
-    # '';
-    # postShutdown = ''
-    #   ${pkgs.iptables}/bin/iptables -D FORWARD -i vps-wg-client -j ACCEPT
-    #   ${pkgs.iptables}/bin/iptables -t nat -D POSTROUTING -o ens18 -j MASQUERADE
-    # '';
-    postSetup = ''
-      ${pkgs.iptables} -A FORWARD -i wg0-client -j ACCEPT
-      ${pkgs.iptables} -t nat -A POSTROUTING -o eth0 -j MASQUERADE
-    '';
-    postShutdown = ''
-      ${pkgs.iptables} -D FORWARD -i wg0-client -j ACCEPT
-      ${pkgs.iptables} -t nat -D POSTROUTING -o eth0 -j MASQUERADE
-    '';
+  #   # postSetup = ''
+  #   #   ${pkgs.iptables}/bin/iptables -A FORWARD -i vps-wg-client -j ACCEPT
+  #   #   ${pkgs.iptables}/bin/iptables -t nat -A POSTROUTING -o ens18 -j MASQUERADE
+  #   # '';
+  #   # postShutdown = ''
+  #   #   ${pkgs.iptables}/bin/iptables -D FORWARD -i vps-wg-client -j ACCEPT
+  #   #   ${pkgs.iptables}/bin/iptables -t nat -D POSTROUTING -o ens18 -j MASQUERADE
+  #   # '';
+  #   postSetup = ''
+  #     ${pkgs.iptables} -A FORWARD -i wg0-client -j ACCEPT
+  #     ${pkgs.iptables} -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+  #   '';
+  #   postShutdown = ''
+  #     ${pkgs.iptables} -D FORWARD -i wg0-client -j ACCEPT
+  #     ${pkgs.iptables} -t nat -D POSTROUTING -o eth0 -j MASQUERADE
+  #   '';
 
-    peers = [
-      {
-        name = "chriphost-vps";
-        publicKey = "w/U8p9fizw0jk8PFaMZXV1N49Ws+q6mUHzNFYtoDTS8=";
-        endpoint = "212.227.233.241:51820";
-        allowedIPs = [
-          "10.10.10.0/24"
-        ];
+  #   peers = [
+  #     {
+  #       name = "chriphost-vps";
+  #       publicKey = "w/U8p9fizw0jk8PFaMZXV1N49Ws+q6mUHzNFYtoDTS8=";
+  #       endpoint = "212.227.233.241:51820";
+  #       allowedIPs = [
+  #         "10.10.10.0/24"
+  #       ];
 
-        # Keep this connection alive so the server can always reach us
-        persistentKeepalive = 25;
-      }
-    ];
-  };
+  #       # Keep this connection alive so the server can always reach us
+  #       persistentKeepalive = 25;
+  #     }
+  #   ];
+  # };
 
   services = {
     # Configure keymap in X11
