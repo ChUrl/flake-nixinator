@@ -90,7 +90,7 @@
   }: {
     connection = {
       inherit id autoconnect;
-      autoconnect-priority = "${priority}";
+      autoconnect-priority = "${builtins.toString priority}";
       type = "ethernet";
       interface-name = interface;
     };
