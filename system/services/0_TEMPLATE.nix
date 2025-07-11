@@ -32,8 +32,6 @@
       PUID = "1000";
       PGID = "1000";
       TZ = "Europe/Berlin";
-      # NVIDIA_VISIBLE_DEVICES = "all";
-      # NVIDIA_DRIVER_CAPABILITIES = "all";
     };
 
     environmentFiles = [
@@ -41,8 +39,9 @@
     ];
 
     extraOptions = [
+      # "--privileged"
+      # "--device=nvidia.com/gpu=all"
       "--net=behind-nginx"
-      # "--gpus=all"
     ];
   };
 }

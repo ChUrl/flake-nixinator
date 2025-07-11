@@ -97,8 +97,8 @@
     };
 
     extraOptions = [
-      "--privileged"
-      "--gpus=all"
+      # "--privileged"
+      "--device=nvidia.com/gpu=all"
       "--net=behind-nginx"
     ];
   };
