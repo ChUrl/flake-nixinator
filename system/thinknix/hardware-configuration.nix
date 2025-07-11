@@ -55,7 +55,12 @@
     };
   };
 
-  swapDevices = [];
+  swapDevices = [
+    {
+      device = "/var/swap";
+      size = 1024 * 4; # Without hibernation 4.0 GB to 0.5 x RAM
+    }
+  ];
 
   hardware = {
     enableAllFirmware = true;
