@@ -155,24 +155,24 @@
     commonModules = [
       # inputs.agenix.nixosModules.default
       inputs.sops-nix.nixosModules.sops
-
-      # TODO: inputs.nix-topology.nixosModules.default
+      inputs.nix-topology.nixosModules.default
     ];
   in {
     # Local shell for NixFlake directory
-    devShells."${system}".default = import ./shell.nix {inherit pkgs;};
+    devShells.${system}.default = import ./shell.nix {inherit pkgs;};
 
-    # TODO: Add my homelab configs into this flake, then add a topology config for each host
     # Output that generates a system topology diagram
-    # topology = import inputs.nix-topology {
-    #   inherit pkgs; # Only this package set must include nix-topology.overlays.default
-    #   modules = [
-    #     # Your own file to define global topology. Works in principle like a nixos module but uses different options.
-    #     # ./topology.nix
-    #     # Inline module to inform topology of your existing NixOS hosts.
-    #     {nixosConfigurations = self.nixosConfigurations;}
-    #   ];
-    # };
+    topology.${system} = import inputs.nix-topology {
+      inherit pkgs; # Only this package set must include nix-topology.overlays.default
+      modules = [
+        # Your own file to define global topology.
+        # Works in principle like a nixos module but uses different options.
+        ./topology/topology.nix
+
+        # Inline module to inform topology of your existing NixOS hosts.
+        {inherit (self) nixosConfigurations;}
+      ];
+    };
 
     # We give each configuration a (host)name to choose a configuration when rebuilding.
     # This makes it easy to add different configurations (e.g. for a laptop).
