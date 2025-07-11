@@ -10,7 +10,7 @@ in {
 
   config = lib.mkIf docker.enable {
     environment.variables = lib.mkMerge [
-      (lib.mkIf ((!docker.podman) && docker.buildkit) {
+      (lib.mkIf ((!docker.podman) && docker.docker.buildkit) {
         DOCKER_BUILDKIT = 1;
       })
     ];
