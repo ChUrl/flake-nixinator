@@ -5,8 +5,56 @@
   ...
 }: let
   paperlessVersion = "2.17.1";
+  paperlessNCVersion = "1.0.1";
 in {
+  sops.templates."paperless-nextcloud-sync_secrets.env".content = ''
+    WEBDRIVE_PASSWORD=${config.sops.placeholder.paperless-nextcloud-sync-password}
+  '';
+
   virtualisation.oci-containers.containers = {
+    paperless-nextcloud-sync = {
+      image = "flor1der/paperless-nextcloud-sync:${paperlessNCVersion}";
+      autoStart = true;
+
+      login = {
+        # Uses DockerHub by default
+        # registry = "";
+
+        # DockerHub Credentials
+        username = "christoph.urlacher@protonmail.com";
+        passwordFile = "${config.sops.secrets.docker-password.path}";
+      };
+
+      dependsOn = [];
+
+      ports = [];
+
+      volumes = [
+        "/media/paperless-media:/mnt/source:ro"
+        "paperless-nextcloud-sync_logs:/var/log"
+      ];
+
+      environment = let
+        user = "PaperlessNextcloudSync";
+      in {
+        WEBDRIVE_URL = "https://nextcloud.local.chriphost.de/remote.php/dav/files/${user}/";
+        WEBDRIVE_USER = "${user}";
+
+        LC_ALL = "de_DE.UTF-8";
+        TZ = "Europe/Berlin";
+      };
+
+      environmentFiles = [
+        config.sops.templates."paperless-nextcloud-sync_secrets.env".path
+      ];
+
+      extraOptions = [
+        "--privileged"
+        "--device=/dev/fuse:/dev/fuse:rwm"
+        "--net=behind-nginx"
+      ];
+    };
+
     paperless-redis = {
       image = "redis:7";
       autoStart = true;
