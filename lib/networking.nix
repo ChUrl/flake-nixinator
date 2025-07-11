@@ -79,17 +79,18 @@
     };
   };
 
-  # TODO: What other config options are there?
   mkStaticNetworkManagerProfile = {
     id,
     interface,
     ip,
     router,
-    nameserver,
-    autoconnect,
+    nameserver ? "8.8.8.8;8.8.4.4;",
+    autoconnect ? true,
+    priority ? 0,
   }: {
     connection = {
       inherit id autoconnect;
+      autoconnect-priority = "${priority}";
       type = "ethernet";
       interface-name = interface;
     };
@@ -99,6 +100,10 @@
       addresses = ip;
       gateway = router;
       dns = nameserver;
+    };
+
+    ipv6 = {
+      method = "disabled";
     };
   };
 }
