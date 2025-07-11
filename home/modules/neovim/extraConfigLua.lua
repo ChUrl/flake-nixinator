@@ -1,5 +1,8 @@
 -- Make Lazy window border rounded
 require("lazy.core.config").options.ui.border = "rounded"
+
+-- Disable rocks. For some reason, we still have to activate
+-- "Install" in the Lazy menu once to disable rocks completely.
 require("lazy.core.config").options.rocks.enabled = false
 
 -- Default filetype to tex instead of plaintex
