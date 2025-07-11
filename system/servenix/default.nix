@@ -75,6 +75,7 @@
       "kopia-server-username"
       "kopia-server-password"
       "kopia-user-password"
+      "paperless-nextcloud-sync-password"
     ];
   };
 
