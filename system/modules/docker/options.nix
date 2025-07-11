@@ -7,6 +7,7 @@
 
   podman = lib.mkEnableOption "Use podman instead of docker";
   docker.rootless = lib.mkEnableOption "Use rootless docker (no effect if podman is used)";
+  docker.buildkit = lib.mkEnableOption "Use Docker BuildKit (no effect if podman is used)";
 
   networks = lib.mkOption {
     type = lib.types.listOf (lib.types.submodule ({
