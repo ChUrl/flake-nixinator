@@ -51,7 +51,7 @@ in {
         "formula10_cache:/data/formula10_cache:ro"
         "formula10_data:/data/formula10_data:ro"
 
-        "formula11_pb_data:/pb/pb_data:ro"
+        "formula11_pb_data:/data/formula11_pb_data:ro"
 
         "gitea-db_data:/data/gitea-db_data:ro"
         "gitea-runner_config:/data/gitea-runner_config:ro"
