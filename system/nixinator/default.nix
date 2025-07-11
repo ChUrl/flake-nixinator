@@ -36,22 +36,23 @@
       };
 
       # NetworkManager profiles
+      # Run "nix run github:Janik-Haag/nm2nix | nix run github:kamadorueda/alejandra"
+      # in /etc/NetworkManager/system-connections/
       profiles = {
         "10-ether-2_5G" = mylib.networking.mkStaticNetworkManagerProfile {
           id = "Wired 2.5G";
           interface = "enp8s0";
           ip = "192.168.86.50/24";
           router = "192.168.86.5";
-          nameserver = "192.168.86.26"; # TODO: Add fallback 8.8.8.8 (create imperatively then use nm2nix)
-          autoconnect = true;
+          nameserver = "192.168.86.26;8.8.8.8;";
+          priority = 10; # Rather connect to 2.5G than to 1G
         };
         "10-ether-1G" = mylib.networking.mkStaticNetworkManagerProfile {
           id = "Wired 1G";
           interface = "enp5s0";
           ip = "192.168.86.50/24";
           router = "192.168.86.5";
-          nameserver = "192.168.86.26"; # TODO: Add fallback 8.8.8.8 (create imperatively then use nm2nix)
-          autoconnect = false;
+          nameserver = "192.168.86.26;8.8.8.8;";
         };
       };
 
