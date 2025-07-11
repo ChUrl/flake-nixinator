@@ -65,9 +65,7 @@
     enableRedistributableFirmware = true;
     cpu.intel.updateMicrocode = true;
     bluetooth.enable = false;
-
-    # TODO: Jul 09 22:54:59 servenix dockerd[17484]: error initializing buildkit: error creating buildkit instance: CDI registry initialization failure: failed to load CDI Spec failed to parse CDI Spec "/var/run/cdi/nvidia-container-toolkit.json", no Spec data
-    # nvidia-container-toolkit.enable = true;
+    nvidia-container-toolkit.enable = true;
 
     nvidia = {
       package = config.boot.kernelPackages.nvidiaPackages.stable;
