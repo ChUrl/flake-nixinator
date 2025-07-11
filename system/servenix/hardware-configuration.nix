@@ -71,7 +71,7 @@
       package = config.boot.kernelPackages.nvidiaPackages.stable;
 
       modesetting.enable = false;
-      open = true;
+      open = false; # GTX 1070 is too old for open drivers
       nvidiaSettings = false;
     };
 
