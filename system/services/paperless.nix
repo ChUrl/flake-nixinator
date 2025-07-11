@@ -88,6 +88,8 @@ in {
       ];
 
       environment = {
+        PAPERLESS_FILENAME_FORMAT = "{{ created_year }}/{{ correspondent }}/{{ title }}";
+
         PAPERLESS_REDIS = "redis://paperless-redis:6379";
         PAPERLESS_DBHOST = "paperless-postgres";
 
