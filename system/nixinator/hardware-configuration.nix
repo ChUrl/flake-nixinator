@@ -94,7 +94,6 @@
   swapDevices = lib.mkForce [
     {
       device = "/var/swap";
-      # size = 1024 * 32 * 2; # twice the RAM for hibernation
       size = 1024 * 16; # Without hibernation 4.0 GB to 0.5 x RAM
     }
   ];
