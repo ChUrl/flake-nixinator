@@ -491,7 +491,10 @@
       };
     };
 
-    btop.enable = true;
+    btop = {
+      enable = true;
+      # settings = {};
+    };
 
     cava = {
       enable = !headless;
