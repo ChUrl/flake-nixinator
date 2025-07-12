@@ -56,7 +56,7 @@
     };
 
     sops-nix.secrets.${username} = [
-      "wireguard-vps-private-key"
+      # "wireguard-vps-private-key"
     ];
   };
 
