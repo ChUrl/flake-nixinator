@@ -152,6 +152,10 @@
       stateVersion = "22.05";
     };
 
+    programs = {
+      btop.package = pkgs.btop-cuda;
+    };
+
     services = {
       flatpak = {
         packages = [
