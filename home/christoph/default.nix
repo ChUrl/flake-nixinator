@@ -559,19 +559,32 @@
     lazygit = {
       enable = true;
       settings = {
-        # Allow editing past signed commits
-        git.overrideGpg = true;
+        notARepository = "quit";
+        timeFormat = "2022-12-31";
+        shortTimeFormat = "23:49";
+        border = "rounded";
+        update.method = "never";
 
-        gui.theme = {
-          lightTheme = false;
-          activeBorderColor = ["#40a02b" "bold"];
-          inactiveBorderColor = ["#4c4f69"];
-          optionsTextColor = ["#1e66f5"];
-          selectedLineBgColor = ["#ccd0da"];
-          selectedRangeBgColor = ["#ccd0da"];
-          cherryPickedCommitBgColor = ["#179299"];
-          cherryPickedCommitFgColor = ["#1e66f5"];
-          unstagedChangeColor = ["red"];
+        git = {
+          overrideGpg = true; # Allow editing past signed commits
+          branchLogCmd = "git log --all --graph --pretty=format:'%C(magenta)%h %C(white) %an  %ar%C(auto)  %D%n%s%n'";
+          parseEmoji = true;
+        };
+
+        gui = {
+          nerdFontsVersion = "3"; # Show icons
+
+          theme = {
+            lightTheme = false;
+            activeBorderColor = ["#40a02b" "bold"];
+            inactiveBorderColor = ["#4c4f69"];
+            optionsTextColor = ["#1e66f5"];
+            selectedLineBgColor = ["#ccd0da"];
+            selectedRangeBgColor = ["#ccd0da"];
+            cherryPickedCommitBgColor = ["#179299"];
+            cherryPickedCommitFgColor = ["#1e66f5"];
+            unstagedChangeColor = ["red"];
+          };
         };
       };
     };
