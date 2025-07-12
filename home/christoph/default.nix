@@ -302,6 +302,11 @@
         ".ssh/id_ed25519.pub".text = "${publicKeys.${username}.ssh}";
         ".secrets/age/age.pub".text = "${publicKeys.${username}.age}";
 
+        # Because we can't access the absolute path /run/secrets/... we have to symlink.
+        # This will create a chain of links leading to /run/secrets/... without /nix/store
+        # containing the secret contents.
+        # ".config/docker/key.json".source = config.lib.file.mkOutOfStoreSymlink "${nixosConfig.sops.secrets.docker-key.path}";
+
         # The sops config specifies what happens when we call sops edit
         ".sops.yaml".text = ''
           keys:
