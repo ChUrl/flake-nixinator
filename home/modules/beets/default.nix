@@ -23,6 +23,7 @@ in {
       # https://beets.readthedocs.io/en/stable/reference/config.html
       settings = {
         directory = "${config.home.homeDirectory}/Music";
+        library = "${config.home.homeDirectory}/Music/.beets/library.db";
         threaded = true;
         art_filename = "cover";
 
