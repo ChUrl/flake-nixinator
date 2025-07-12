@@ -11,13 +11,13 @@
   ];
 
   config = {
+    modules = {
+      btop.cuda = true;
+    };
+
     home.packages = with pkgs; [
       docker-compose
     ];
-
-    programs = {
-      btop.package = pkgs.btop-cuda;
-    };
 
     home.stateVersion = "23.05";
   };

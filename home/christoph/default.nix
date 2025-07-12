@@ -43,6 +43,8 @@
   modules = {
     beets.enable = !headless;
 
+    btop.enable = true;
+
     chromium = {
       enable = !headless;
       google = false;
@@ -489,11 +491,6 @@
       config = {
         theme = "catppuccin-latte";
       };
-    };
-
-    btop = {
-      enable = true;
-      # settings = {};
     };
 
     cava = {

@@ -12,6 +12,8 @@
 
   config = {
     modules = {
+      btop.cuda = true;
+
       hyprland = {
         kb-layout = "us";
         kb-variant = "altgr-intl";
@@ -150,10 +152,6 @@
       # Do not change.
       # This marks the version when NixOS was installed for backwards-compatibility.
       stateVersion = "22.05";
-    };
-
-    programs = {
-      btop.package = pkgs.btop-cuda;
     };
 
     services = {
