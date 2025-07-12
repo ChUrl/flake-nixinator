@@ -58,8 +58,9 @@
     # musnix.url = "github:musnix/musnix";
     # musnix.inputs.nixpkgs.follows = "nixpkgs";
 
-    nix-topology.url = "github:oddlama/nix-topology";
-    nix-topology.inputs.nixpkgs.follows = "nixpkgs";
+    # Network topology diagram generation
+    # nix-topology.url = "github:oddlama/nix-topology";
+    # nix-topology.inputs.nixpkgs.follows = "nixpkgs";
 
     # Ags for widgets (this was a terrible idea)
     # ags.url = "github:Aylur/ags";
@@ -108,7 +109,6 @@
       overlays = [
         inputs.devshell.overlays.default
         inputs.nur.overlays.default
-        inputs.nix-topology.overlays.default
         # inputs.emacs-overlay.overlay
 
         # Overriding specific packages from a different nixpkgs (e.g. a pull request)
@@ -155,24 +155,10 @@
     commonModules = [
       # inputs.agenix.nixosModules.default
       inputs.sops-nix.nixosModules.sops
-      inputs.nix-topology.nixosModules.default
     ];
   in {
     # Local shell for NixFlake directory
     devShells.${system}.default = import ./shell.nix {inherit pkgs;};
-
-    # Output that generates a system topology diagram
-    topology.${system} = import inputs.nix-topology {
-      inherit pkgs; # Only this package set must include nix-topology.overlays.default
-      modules = [
-        # Your own file to define global topology.
-        # Works in principle like a nixos module but uses different options.
-        ./topology/topology.nix
-
-        # Inline module to inform topology of your existing NixOS hosts.
-        {inherit (self) nixosConfigurations;}
-      ];
-    };
 
     # We give each configuration a (host)name to choose a configuration when rebuilding.
     # This makes it easy to add different configurations (e.g. for a laptop).

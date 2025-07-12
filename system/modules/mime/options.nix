@@ -224,6 +224,7 @@
     example = ''
       [
         "imv.desktop"
+        "org.inkscape.Inkscape.desktop"
         "chromium-browser.desktop"
         "org.kde.krita.desktop"
         "krita.desktop"
