@@ -1337,25 +1337,25 @@ in {
             };
           };
 
-          obsidian = rec {
-            name = "obsidian";
-            pkg = pkgs.vimPlugins.obsidian-nvim;
-            lazy = true;
-            cmd = ["ObsidianSearch" "ObsidianNew"];
-            ft = ["markdown"];
-            dependencies = [
-              _plenary
-            ];
-            config = mkDefaultConfig name;
-            opts = {
-              workspaces = [
-                {
-                  name = "Chriphost";
-                  path = "~/Notes/Obsidian/Chriphost";
-                }
-              ];
-            };
-          };
+          # obsidian = rec {
+          #   name = "obsidian";
+          #   pkg = pkgs.vimPlugins.obsidian-nvim;
+          #   lazy = true;
+          #   cmd = ["ObsidianSearch" "ObsidianNew"];
+          #   ft = ["markdown"];
+          #   dependencies = [
+          #     _plenary
+          #   ];
+          #   config = mkDefaultConfig name;
+          #   opts = {
+          #     workspaces = [
+          #       {
+          #         name = "Chriphost";
+          #         path = "~/Notes/Obsidian/Chriphost";
+          #       }
+          #     ];
+          #   };
+          # };
 
           # TODO: Don't autosave, but if a session exists, update it (using should_save)
           # TODO: No idea which opts below really exist...
@@ -2059,7 +2059,7 @@ in {
           neogen # Generate doc comments
           neotree
           noice # Modern UI overhaul, e.g. floating cmdline
-          obsidian # Integration with Obsidian.md
+          # obsidian # Integration with Obsidian.md
 
           # overseer # Run tasks from within neovim (e.g. cargo) # TODO:
 
