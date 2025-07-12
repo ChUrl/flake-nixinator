@@ -71,5 +71,13 @@ in {
         };
       };
     };
+
+    # Generate fish completions
+    home.activation = {
+      beets-fish-completions = lib.hm.dag.entryAfter ["writeBoundary"] ''
+        echo "Generating beet completions for fish shell at ~/.config/fish/completions/beet.fish"
+        beet fish
+      '';
+    };
   };
 }
