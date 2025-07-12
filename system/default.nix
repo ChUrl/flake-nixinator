@@ -96,9 +96,19 @@ with mylib.networking; {
     ];
 
     sops-nix.secrets.${username} = [
-      "docker-password"
       "ssh-private-key"
+      "nix-github-token"
+      "docker-password"
     ];
+  };
+
+  # Write the nix user config file here so we have secrets access
+  sops.templates."nix.conf" = {
+    owner = config.users.users.${username}.name;
+    group = config.users.users.${username}.group;
+    content = ''
+      access-tokens = github.com=${config.sops.placeholder.nix-github-token}
+    '';
   };
 
   # Enable flakes
@@ -111,7 +121,7 @@ with mylib.networking; {
     settings.trusted-users = ["root" "${username}"];
 
     # Auto garbage-collect and optimize store
-    # gc.automatic = true; # NOTE: Disabled for "nh clean"
+    gc.automatic = true;
     gc.options = "--delete-older-than 5d";
     settings.auto-optimise-store = true;
     optimise.automatic = true;
@@ -122,7 +132,10 @@ with mylib.networking; {
     registry = lib.mapAttrs' (n: v: lib.nameValuePair n {flake = v;}) inputs;
 
     # Set NIX_PATH to find nixpgks
-    nixPath = ["nixpkgs=${inputs.nixpkgs.outPath}" "home-manager=${inputs.home-manager.outPath}"];
+    nixPath = [
+      "nixpkgs=${inputs.nixpkgs.outPath}"
+      "home-manager=${inputs.home-manager.outPath}"
+    ];
   };
 
   # Bootloader/Kernel stuff
