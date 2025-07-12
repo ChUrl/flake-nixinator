@@ -131,23 +131,34 @@
         steam-devices-udev-rules
       ];
 
-      file = {
-        ".local/share/applications/jetbrains-rider.desktop".source = let
-          desktopFile = pkgs.makeDesktopItem {
-            name = "jetbrains-rider";
-            desktopName = "Rider";
-            exec = "\"${rider}/bin/rider\"";
-            icon = "rider";
-            type = "Application";
-            # Don't show desktop icon in search or run launcher
-            extraConfig.NoDisplay = "true";
-          };
-        in "${desktopFile}/share/applications/jetbrains-rider.desktop";
+      file = lib.mkMerge [
+        {
+          ".local/share/applications/jetbrains-rider.desktop".source = let
+            desktopFile = pkgs.makeDesktopItem {
+              name = "jetbrains-rider";
+              desktopName = "Rider";
+              exec = "\"${rider}/bin/rider\"";
+              icon = "rider";
+              type = "Application";
+              # Don't show desktop icon in search or run launcher
+              extraConfig.NoDisplay = "true";
+            };
+          in "${desktopFile}/share/applications/jetbrains-rider.desktop";
 
-        ".var/app/com.valvesoftware.Steam/config/MangoHud/MangoHud.conf".source = ../../../config/mangohud/MangoHud.conf;
-
-        # ".var/app/com.valvesoftware.Steam/config/MangoHud/MangoHud.conf".source = config.lib.file.mkOutOfStoreSymlink "${config.paths.dotfiles}/mangohud/MangoHud.conf";
-      };
+          ".var/app/com.valvesoftware.Steam/config/MangoHud/MangoHud.conf".source = ../../../config/mangohud/MangoHud.conf;
+        }
+        (lib.optionalAttrs nixosConfig.programs.kdeconnect.enable {
+          ".config/kdeconnect/certificate.pem".source =
+            config.lib.file.mkOutOfStoreSymlink
+            "${nixosConfig.sops.secrets.kdeconnect-cert.path}";
+          ".config/kdeconnect/privateKey.pem".source =
+            config.lib.file.mkOutOfStoreSymlink
+            "${nixosConfig.sops.secrets.kdeconnect-privatekey.path}";
+          ".config/kdeconnect/trusted_devices".source =
+            config.lib.file.mkOutOfStoreSymlink
+            "${nixosConfig.sops.secrets.kdeconnect-devices.path}";
+        })
+      ];
 
       # Do not change.
       # This marks the version when NixOS was installed for backwards-compatibility.
