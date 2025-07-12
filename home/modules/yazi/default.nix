@@ -190,6 +190,11 @@ in {
             run = "plugin rsync";
             desc = "Copy files using rsync";
           }
+          {
+            on = ["<C-p>" "w"];
+            run = ''wl-copy < "$0"'';
+            desc = "Copy hovered file contents using wl-copy";
+          }
 
           {
             on = "!";
