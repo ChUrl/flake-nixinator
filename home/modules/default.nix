@@ -4,6 +4,7 @@
 
     # My own HM modules
     ./beets
+    ./btop
     ./chromium
     ./color
     ./docs
