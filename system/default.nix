@@ -91,12 +91,13 @@ with mylib.networking; {
 
     polkit.enable = true;
 
-    sops-nix.secrets.${username} = [
-      "docker-password"
-    ];
-
     sops-nix.bootSecrets.${username} = [
       "user-password"
+    ];
+
+    sops-nix.secrets.${username} = [
+      "docker-password"
+      "ssh-private-key"
     ];
   };
 

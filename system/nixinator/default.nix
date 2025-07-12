@@ -74,6 +74,12 @@
         4242 # Lan-Mouse
       ];
     };
+
+    sops-nix.secrets.${username} = [
+      "kdeconnect-cert"
+      "kdeconnect-privatekey"
+      "kdeconnect-devices"
+    ];
   };
 
   boot = {
