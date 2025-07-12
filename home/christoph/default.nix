@@ -341,6 +341,37 @@
       (lib.mkIf config.programs.navi.enable {
         ".local/share/navi/cheats/christoph.cheat".source = config.lib.file.mkOutOfStoreSymlink "${config.paths.dotfiles}/navi/christoph.cheat";
       })
+      (lib.mkIf (!headless) {
+        ".config/Proton/VPN/settings.json".text = ''
+          {
+              "protocol": "wireguard",
+              "killswitch": 0,
+              "custom_dns": {
+                  "enabled": false,
+                  "ip_list": []
+              },
+              "ipv6": true,
+              "anonymous_crash_reports": false,
+              "features": {
+                  "netshield": 1,
+                  "moderate_nat": true,
+                  "vpn_accelerator": true,
+                  "port_forwarding": false
+              }
+          }
+        '';
+        ".config/Proton/VPN/app-config.json".text = ''
+          {
+              "tray_pinned_servers": [
+                  "DE",
+                  "CH",
+                  "AU"
+              ],
+              "connect_at_app_startup": null,
+              "start_app_minimized": true
+          }
+        '';
+      })
     ];
 
     # Here, custom scripts can be run when activating a HM generation.
