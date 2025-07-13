@@ -2,6 +2,7 @@
   mylib,
   pkgs,
   username,
+  config,
   ...
 }: {
   imports = [
@@ -94,6 +95,44 @@
   };
 
   services = {
+    ollama = {
+      enable = true;
+      acceleration = "cuda";
+      home = "/var/lib/ollama";
+
+      loadModels = [
+        "deepseek-r1:8b"
+        "deepseek-r1:14b"
+      ];
+
+      host = "127.0.0.1";
+      port = 11434;
+      openFirewall = false;
+    };
+
+    open-webui = {
+      enable = true;
+      stateDir = "/var/lib/open-webui";
+
+      # https://docs.openwebui.com/getting-started/env-configuration
+      environment = {
+        WEBUI_AUTH = "False";
+
+        ENABLE_OLLAMA_API = "True";
+        OLLAMA_BASE_URL = "http://${config.services.ollama.host}:${builtins.toString config.services.ollama.port}";
+
+        ENABLE_OPENAI_API = "False";
+
+        ANONYMIZED_TELEMETRY = "False";
+        DO_NOT_TRACK = "True";
+        SCARF_NO_ANALYTICS = "True";
+      };
+
+      host = "127.0.0.1";
+      port = 11435;
+      openFirewall = false;
+    };
+
     xserver = {
       # Configure keymap in X11
       xkb.layout = "us";
