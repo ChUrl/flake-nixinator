@@ -109,6 +109,65 @@ in {
             '')
           ];
 
+          search = {
+            force = true;
+            default = "kagi";
+            privateDefault = "kagi";
+            order = [
+              "kagi"
+              "wiki"
+              "nixos-packages"
+              "nixos-functions"
+              "nixos-wiki"
+              "google"
+            ];
+
+            engines = {
+              kagi = {
+                name = "Kagi";
+                urls = [{template = "https://kagi.com/search?q={searchTerms}";}];
+                iconMapObj."16" = "https://kagi.com/favicon.ico";
+                definedAliases = ["@k"];
+              };
+
+              wiki = {
+                name = "Wikipedia";
+                urls = [{template = "https://en.wikipedia.org/wiki/Special:Search?search={searchTerms}";}];
+                iconMapObj."16" = "https://en.wikipedia.org/favicon.ico";
+                definedAliases = ["@w"];
+              };
+
+              nixos-packages = {
+                name = "NixOS Packages";
+                urls = [{template = "https://searchix.ovh/?query={searchTerms}";}];
+                iconMapObj."16" = "https://nixos.org/favicon.ico";
+                definedAliases = ["@np"];
+              };
+
+              nixos-functions = {
+                name = "NixOS Functions";
+                urls = [{template = "https://noogle.dev/q?term={searchTerms}";}];
+                iconMapObj."16" = "https://nixos.org/favicon.ico";
+                definedAliases = ["@nf"];
+              };
+
+              nixos-wiki = {
+                name = "NixOS Wiki";
+                urls = [{template = "https://wiki.nixos.org/w/index.php?search={searchTerms}";}];
+                iconMapObj."16" = "https://nixos.org/favicon.ico";
+                definedAliases = ["@nw"];
+              };
+
+              google.metaData.alias = "@g"; # builtin engines only support specifying one additional alias
+
+              # Hide bullshit
+              bing.metaData.hidden = true;
+              ddg.metaData.hidden = true;
+              ecosia.metaData.hidden = true;
+              wikipedia.metaData.hidden = true;
+            };
+          };
+
           extensions = {
             packages = with pkgs.nur.repos.rycee.firefox-addons; [
               absolute-enable-right-click # Force enable right click to copy text
