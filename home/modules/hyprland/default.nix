@@ -1,4 +1,3 @@
-# TODO: The keys to reset the workspaces need to depend on actual workspace config
 {
   inputs,
   config,
@@ -10,101 +9,81 @@
 }: let
   inherit (config.modules) hyprland color waybar;
 
-  # This function is mapped to the "cfg.monitors" attrSet.
-  # For each key-value entry in "cfg.monitors",
-  # the key will be assigned to "name" and the value to "conf".
-  mkMonitor = name: conf: "${name}, ${toString conf.width}x${toString conf.height}@${toString conf.rate}, ${toString conf.x}x${toString conf.y}, ${toString conf.scale}";
+  always-bind = lib.mergeAttrsList [
+    {
+      # Hyprland control
+      "$mainMod, a" = ["exec, rofi -drun-show-actions -show drun"];
+      "$mainMod, q" = ["killactive"];
+      "$mainMod, v" = ["togglefloating"];
+      "$mainMod, f" = ["fullscreen"];
+      "$mainMod, c" = ["exec, clipman pick --tool=rofi"];
+      "$mainMod SHIFT, l" = ["exec, loginctl lock-session"];
+      "$mainMod, tab" = ["workspace, previous"];
+      "ALT, tab" = ["exec, rofi -show window"];
+      # "$mainMod, g" = ["togglegroup"];
+      # "ALT, tab" = ["changegroupactive"];
 
-  mkWorkspace = monitor: workspace: "${toString workspace}, monitor:${toString monitor}";
-  mkWorkspaces = monitor: workspace-list: map (mkWorkspace monitor) workspace-list;
+      # Move focus with mainMod + arrow keys
+      "$mainMod, h" = ["movefocus, l"];
+      "$mainMod, l" = ["movefocus, r"];
+      "$mainMod, k" = ["movefocus, u"];
+      "$mainMod, j" = ["movefocus, d"];
 
-  mkWorkspaceRule = workspace: class: "workspace ${workspace}, class:^(${class})$";
-  mkWorkspaceRules = workspace: class-list: builtins.map (mkWorkspaceRule workspace) class-list;
+      # Swap windows
+      "$mainMod CTRL, h" = ["movewindow, l"];
+      "$mainMod CTRL, l" = ["movewindow, r"];
+      "$mainMod CTRL, k" = ["movewindow, u"];
+      "$mainMod CTRL, d" = ["movewindow, d"];
 
-  mkFloatingRule = attrs:
-    "float"
-    + (lib.optionalString (builtins.hasAttr "class" attrs) ", class:^(${attrs.class})$")
-    + (lib.optionalString (builtins.hasAttr "title" attrs) ", title:^(${attrs.title})$");
+      # Reset workspaces to the defined configuration in hyprland.workspaces:
+      "CTRL ALT, R" = let
+        mkWBinding = m: w:
+          "moveworkspacetomonitor, "
+          + "${builtins.toString w} ${builtins.toString m}";
+        mkWsBindings = m: ws: builtins.map (mkWBinding m) ws;
+      in
+        hyprland.workspaces
+        |> builtins.mapAttrs mkWsBindings
+        |> builtins.attrValues
+        |> builtins.concatLists;
+    }
 
-  mkTranslucentRule = class: "opacity ${hyprland.transparent-opacity} ${hyprland.transparent-opacity}, class:^(${class})$";
-
-  mkBind = key: action: "${key}, ${action}";
-  mkBinds = key: actions: builtins.map (mkBind key) actions;
-
-  # These functions are used to generate the keybindings.info file for Rofi
-  fixupNoMod = key: ''${builtins.replaceStrings ["<-"] ["<"] key}'';
-  mkBindHelpKey = key: ''${builtins.replaceStrings ["$mainMod" " " ","] ["${hyprland.keybindings.main-mod}" "-" ""] key}'';
-  mkBindHelpAction = action: ''${builtins.replaceStrings [","] [""] action}'';
-  mkBindHelp = key: action: "<${mkBindHelpKey key}>: ${mkBindHelpAction action}";
-  mkBindsHelp = key: actions: builtins.map fixupNoMod (builtins.map (mkBindHelp key) actions);
-
-  mkWallpaper = monitor: "${monitor}, ${config.home.homeDirectory}/NixFlake/wallpapers/${hyprland.theme}.png";
-
-  mkDelayedStart = str: "hyprctl dispatch exec \"sleep 5s && ${str}\"";
-  delayed-exec = builtins.map mkDelayedStart hyprland.autostart.delayed;
-  mkExec = prog: "${prog}";
-
-  always-bind = {
-    # Hyprland control
-    "$mainMod, A" = ["exec, rofi -drun-show-actions -show drun"];
-    "$mainMod, Q" = ["killactive"];
-    "$mainMod, V" = ["togglefloating"];
-    "$mainMod, F" = ["fullscreen"];
-    "$mainMod, C" = ["exec, clipman pick --tool=rofi"];
-    "$mainMod, G" = ["togglegroup"];
-    "$mainMod, L" = ["exec, loginctl lock-session"];
-    "ALT, tab" = ["changegroupactive"];
-    "$mainMod, tab" = ["workspace, previous"];
-
-    # Move focus with mainMod + arrow keys
-    "$mainMod, h" = ["movefocus, l"];
-    "$mainMod, l" = ["movefocus, r"];
-    "$mainMod, k" = ["movefocus, u"];
-    "$mainMod, j" = ["movefocus, d"];
-
-    # Swap windows
-    "$mainMod CTRL, h" = ["movewindow, l"];
-    "$mainMod CTRL, l" = ["movewindow, r"];
-    "$mainMod CTRL, k" = ["movewindow, u"];
-    "$mainMod CTRL, d" = ["movewindow, d"];
-
-    # TODO: Somehow write this more compact? Try to use workspace 0 instead of 10...
-    "$mainMod, 1" = ["workspace, 1"];
-    "$mainMod, 2" = ["workspace, 2"];
-    "$mainMod, 3" = ["workspace, 3"];
-    "$mainMod, 4" = ["workspace, 4"];
-    "$mainMod, 5" = ["workspace, 5"];
-    "$mainMod, 6" = ["workspace, 6"];
-    "$mainMod, 7" = ["workspace, 7"];
-    "$mainMod, 8" = ["workspace, 8"];
-    "$mainMod, 9" = ["workspace, 9"];
-    "$mainMod, 0" = ["workspace, 10"];
-    "$mainMod, x" = ["togglespecialworkspace"];
-
-    "$mainMod SHIFT, 1" = ["movetoworkspace, 1"];
-    "$mainMod SHIFT, 2" = ["movetoworkspace, 2"];
-    "$mainMod SHIFT, 3" = ["movetoworkspace, 3"];
-    "$mainMod SHIFT, 4" = ["movetoworkspace, 4"];
-    "$mainMod SHIFT, 5" = ["movetoworkspace, 5"];
-    "$mainMod SHIFT, 6" = ["movetoworkspace, 6"];
-    "$mainMod SHIFT, 7" = ["movetoworkspace, 7"];
-    "$mainMod SHIFT, 8" = ["movetoworkspace, 8"];
-    "$mainMod SHIFT, 9" = ["movetoworkspace, 9"];
-    "$mainMod SHIFT, 0" = ["movetoworkspace, 10"];
-    "$mainMod SHIFT, x" = ["movetoworkspace, special"];
-
-    # Reset workspaces to the defined configuration in hyprland.workspaces:
-    # [
-    #   "moveworkspacetomonitor, 1 HDMI-A-1"
-    #   "moveworkspacetomonitor, 2 HDMI-A-1"
-    #   ...
-    # ]
-    "CTRL ALT, R" = let
-      mkWorkspaceBinding = monitor: workspace: "moveworkspacetomonitor, ${builtins.toString workspace} ${builtins.toString monitor}";
-      mkWorkspacesBindings = monitor: workspaces: builtins.map (mkWorkspaceBinding monitor) workspaces;
+    # Switch to WS: "$mainMod, 1" = ["workspace, 1"];
+    (let
+      mkWBinding = w: k: {"$mainMod, ${k}" = ["workspace, ${w}"];};
     in
-      builtins.concatLists (builtins.attrValues (builtins.mapAttrs mkWorkspacesBindings hyprland.workspaces));
-  };
+      hyprland.keybindings.ws-bindings
+      |> builtins.mapAttrs mkWBinding
+      |> builtins.attrValues
+      |> lib.mergeAttrsList)
+
+    # Toggle special WS: "$mainMod, x" = ["togglespecialworkspace, ferdium"];
+    (let
+      mkSpecialWBinding = w: k: {"$mainMod, ${k}" = ["togglespecialworkspace, ${w}"];};
+    in
+      hyprland.keybindings.special-ws-bindings
+      |> builtins.mapAttrs mkSpecialWBinding
+      |> builtins.attrValues
+      |> lib.mergeAttrsList)
+
+    # Move to WS: "$mainMod SHIFT, 1" = ["movetoworkspace, 1"];
+    (let
+      mkMoveWBinding = w: k: {"$mainMod SHIFT, ${k}" = ["movetoworkspace, ${w}"];};
+    in
+      (hyprland.keybindings.ws-bindings)
+      |> builtins.mapAttrs mkMoveWBinding
+      |> builtins.attrValues
+      |> lib.mergeAttrsList)
+
+    # Move to special WS: "$mainMod SHIFT, x" = ["movetoworkspace, special:ferdium"];
+    (let
+      mkSpecialMoveWBinding = w: k: {"$mainMod SHIFT, ${k}" = ["movetoworkspace, special:${w}"];};
+    in
+      (hyprland.keybindings.special-ws-bindings)
+      |> builtins.mapAttrs mkSpecialMoveWBinding
+      |> builtins.attrValues
+      |> lib.mergeAttrsList)
+  ];
 
   always-bindm = {
     "$mainMod, mouse:272" = ["movewindow"];
@@ -114,8 +93,10 @@
   always-exec = builtins.concatLists [
     (lib.optionals hyprland.dunst.enable ["dunst"]) # Notifications
     [
+      # Start clipboard management
       "wl-paste -t text --watch clipman store --no-persist"
       "wl-paste -p -t text --watch clipman store -P --histpath=\"~/.local/share/clipman-primary.json\""
+
       "hyprctl setcursor Bibata-Modern-Classic 16"
       "hyprsunset --identity"
 
@@ -186,15 +167,34 @@ in {
       ];
 
       file = {
-        ".config/hypr/keybindings.info".text =
-          lib.pipe
+        ".config/hypr/keybindings.info".text = let
+          fixupNoMod = key: ''${builtins.replaceStrings
+              ["<-"]
+              ["<"]
+              key}'';
+
+          mkBindHelpKey = key: ''${builtins.replaceStrings
+              ["$mainMod" " " ","]
+              ["${hyprland.keybindings.main-mod}" "-" ""]
+              key}'';
+
+          mkBindHelpAction = action: ''${builtins.replaceStrings
+              [","]
+              [""]
+              action}'';
+
+          mkBindHelp = key: action: "<${mkBindHelpKey key}>: ${mkBindHelpAction action}";
+
+          mkBindsHelp = key: actions:
+            actions
+            |> builtins.map (mkBindHelp key)
+            |> builtins.map fixupNoMod;
+        in
           (hyprland.keybindings.bindings // always-bind)
-          [
-            (builtins.mapAttrs mkBindsHelp)
-            builtins.attrValues
-            builtins.concatLists
-            (builtins.concatStringsSep "\n")
-          ];
+          |> builtins.mapAttrs mkBindsHelp
+          |> builtins.attrValues
+          |> builtins.concatLists
+          |> builtins.concatStringsSep "\n";
       };
     };
 
@@ -293,11 +293,15 @@ in {
           splash = false;
           splash_offset = 2.0;
 
-          preload = "~/NixFlake/wallpapers/${hyprland.theme}.png";
-          wallpaper = lib.pipe hyprland.monitors [
-            builtins.attrNames
-            (builtins.map mkWallpaper)
-          ];
+          preload = "${config.paths.nixflake}/wallpapers/${hyprland.theme}.png";
+          wallpaper = let
+            mkWallpaper = monitor:
+              "${monitor}, "
+              + "${config.paths.nixflake}/wallpapers/${hyprland.theme}.png";
+          in
+            hyprland.monitors
+            |> builtins.attrNames
+            |> builtins.map mkWallpaper;
         };
       };
 
@@ -417,47 +421,93 @@ in {
           sensitivity = 0; # -1.0 - 1.0, 0 means no modification.
         };
 
-        monitor = lib.pipe hyprland.monitors [
-          (builtins.mapAttrs mkMonitor)
-          builtins.attrValues
-        ];
+        monitor = let
+          mkMonitor = name: conf:
+            "${name}, "
+            + "${builtins.toString conf.width}x${builtins.toString conf.height}@"
+            + "${builtins.toString conf.rate}, "
+            + "${builtins.toString conf.x}x${builtins.toString conf.y}, "
+            + "${builtins.toString conf.scale}";
+        in
+          hyprland.monitors
+          |> builtins.mapAttrs mkMonitor
+          |> builtins.attrValues;
 
-        workspace = lib.pipe hyprland.workspaces [
-          (builtins.mapAttrs mkWorkspaces)
-          builtins.attrValues
-          builtins.concatLists
-        ];
+        workspace = let
+          mkWorkspace = monitor: workspace:
+            "${builtins.toString workspace}, "
+            + "monitor:${builtins.toString monitor}";
 
-        bind = lib.pipe (hyprland.keybindings.bindings
-          // always-bind) [
-          (builtins.mapAttrs mkBinds)
-          builtins.attrValues
-          builtins.concatLists
-        ];
+          mkWorkspaces = monitor: workspace-list:
+            builtins.map (mkWorkspace monitor) workspace-list;
+        in
+          hyprland.workspaces
+          |> builtins.mapAttrs mkWorkspaces
+          |> builtins.attrValues
+          |> builtins.concatLists;
 
-        bindm = lib.pipe always-bindm [
-          (builtins.mapAttrs mkBinds)
-          builtins.attrValues
-          builtins.concatLists
-        ];
+        bind = let
+          mkBind = key: action: "${key}, ${action}";
+          mkBinds = key: actions: builtins.map (mkBind key) actions;
+        in
+          (hyprland.keybindings.bindings // always-bind)
+          |> builtins.mapAttrs mkBinds
+          |> builtins.attrValues
+          |> builtins.concatLists;
 
-        exec-once = lib.pipe (always-exec ++ hyprland.autostart.immediate ++ delayed-exec) [
-          (builtins.map mkExec)
-        ];
+        bindm = let
+          mkBind = key: action: "${key}, ${action}";
+          mkBinds = key: actions: builtins.map (mkBind key) actions;
+        in
+          always-bindm
+          |> builtins.mapAttrs mkBinds
+          |> builtins.attrValues
+          |> builtins.concatLists;
 
-        windowrule =
-          lib.pipe hyprland.workspacerules [
-            (builtins.mapAttrs mkWorkspaceRules)
-            builtins.attrValues
-            builtins.concatLists
-          ]
-          ++ lib.pipe hyprland.floating [
-            (builtins.map mkFloatingRule)
-          ]
-          ++ lib.pipe hyprland.transparent [
-            (builtins.map mkTranslucentRule)
-          ]
-          ++ hyprland.windowrules;
+        exec-once = let
+          mkDelayedStart = str: ''hyprctl dispatch exec "sleep 5s && ${str}"'';
+
+          mkSpecialSilentStart = w: str: "[workspace special:${w} silent] ${str}";
+          mkSpecialSilentStarts = w: strs: builtins.map (mkSpecialSilentStart w) strs;
+        in
+          lib.mkMerge [
+            always-exec
+            hyprland.autostart.immediate
+            (hyprland.autostart.special-silent
+              |> builtins.mapAttrs mkSpecialSilentStarts
+              |> builtins.attrValues
+              |> builtins.concatLists)
+            (hyprland.autostart.delayed
+              |> builtins.map mkDelayedStart)
+          ];
+
+        windowrule = let
+          mkWorkspaceRule = workspace: class:
+            "workspace ${workspace}, "
+            + "class:^(${class})$";
+          mkWorkspaceRules = workspace: class-list:
+            builtins.map (mkWorkspaceRule workspace) class-list;
+
+          mkFloatingRule = attrs:
+            "float"
+            + (lib.optionalString (builtins.hasAttr "class" attrs) ", class:^(${attrs.class})$")
+            + (lib.optionalString (builtins.hasAttr "title" attrs) ", title:^(${attrs.title})$");
+
+          mkTranslucentRule = class:
+            "opacity ${hyprland.transparent-opacity} ${hyprland.transparent-opacity}, "
+            + "class:^(${class})$";
+        in
+          lib.mkMerge [
+            (hyprland.workspacerules
+              |> builtins.mapAttrs mkWorkspaceRules
+              |> builtins.attrValues
+              |> builtins.concatLists)
+            (hyprland.floating
+              |> builtins.map mkFloatingRule)
+            (hyprland.transparent
+              |> builtins.map mkTranslucentRule)
+            hyprland.windowrules
+          ];
 
         dwindle = {
           pseudotile = true;

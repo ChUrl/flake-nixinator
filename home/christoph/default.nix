@@ -87,18 +87,18 @@
         main-mod = "SUPER";
 
         bindings = {
-          "$mainMod, T" = ["exec, kitty"];
-          "$mainMod, E" = ["exec, kitty"];
-          "$mainMod, N" = ["exec, neovide"];
-          "$mainMod, R" = ["exec, kitty --class=rmpc --title=Rmpc rmpc"];
-          "$mainMod CTRL, N" = ["exec, kitty --class=navi --title=Navi navi"];
-          "$mainMod SHIFT, N" = ["exec, neovide ${config.paths.dotfiles}/navi/christoph.cheat"];
-          "$mainMod SHIFT, F" = ["exec, neovide ${config.paths.dotfiles}/flake.nix"];
+          "$mainMod, t" = ["exec, kitty"];
+          "$mainMod, e" = ["exec, kitty"];
+          "$mainMod, n" = ["exec, neovide"];
+          "$mainMod, r" = ["exec, kitty --title=Rmpc rmpc"];
+          "$mainMod CTRL, n" = ["exec, kitty --title=Navi navi"];
+          "$mainMod SHIFT, n" = ["exec, neovide ${config.paths.dotfiles}/navi/christoph.cheat"];
+          "$mainMod SHIFT, f" = ["exec, neovide ${config.paths.dotfiles}/flake.nix"];
 
-          "$mainMod, P" = ["exec, hyprpicker --autocopy --format=hex"];
-          "$mainMod, S" = ["exec, grim -g \"$(slurp)\""];
-          "$mainMod CTRL, S" = ["exec, grim -g \"$(slurp)\" - | wl-copy"];
-          "$mainMod SHIFT, S" = ["exec, grim -g \"$(slurp)\" - | wl-copy"];
+          "$mainMod, p" = ["exec, hyprpicker --autocopy --format=hex"];
+          "$mainMod, s" = ["exec, grim -g \"$(slurp)\""];
+          "$mainMod CTRL, s" = ["exec, grim -g \"$(slurp)\" - | wl-copy"];
+          "$mainMod SHIFT, s" = ["exec, grim -g \"$(slurp)\" - | wl-copy"];
 
           ", XF86AudioRaiseVolume" = ["exec, wpctl set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 5%+"];
           ", XF86AudioLowerVolume" = ["exec, wpctl set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 5%-"];
@@ -108,78 +108,67 @@
 
           ", XF86MonBrightnessDown" = ["exec, hyprctl hyprsunset gamma -10"];
           ", XF86MonBrightnessUp" = ["exec, hyprctl hyprsunset gamma +10"];
-          "$mainMod, XF86MonBrightnessDown" = ["exec, hyprctl hyprsunset temperature 6000"];
+          "$mainMod, XF86MonBrightnessDown" = ["exec, hyprctl hyprsunset temperature 5750"];
           "$mainMod, XF86MonBrightnessUp" = ["exec, hyprctl hyprsunset identity"];
+        };
+
+        ws-bindings = {
+          # "<Workspace>" = "<Key>";
+          "1" = "1";
+          "2" = "2";
+          "3" = "3";
+          "4" = "4";
+          "5" = "5";
+          "6" = "6";
+          "7" = "7";
+          "8" = "8";
+          "9" = "9";
+          "10" = "0";
+        };
+
+        special-ws-bindings = {
+          "ferdium" = "x";
+          "msty" = "z";
+          "btop" = "b";
+          "rmcp" = "r";
+          "yazi" = "y";
         };
       };
 
       autostart = {
         immediate = [
-        ];
-
-        delayed = [
-          # "kdeconnect-indicator"
           "kitty"
           "nextcloud --background"
+          "protonvpn-app"
           "keepassxc"
-          "ferdium"
+
+          # "kdeconnect-indicator" # started by services.kdeconnect.indicator
         ];
+
+        special-silent = {
+          "ferdium" = ["ferdium"];
+          "msty" = ["msty"];
+          "btop" = ["kitty --title=Btop btop"];
+          "yazi" = ["kitty --title=Yazi yazi"];
+          "rmcp" = ["kitty --title=Rmcp rmcp"];
+        };
+
+        delayed = [];
       };
 
       windowrules = [];
 
       workspacerules = {
-        "special" = [
-          "ferdium"
-        ];
-
-        "2" = [
-          "Zotero"
-
-          "neovide"
-          "code-url-handler"
-
-          # NOTE: Pinning Jetbrains IDEs to a workspace prevents them from being on any other :(
-          # "jetbrains-clion"
-          # "jetbrains-idea"
-          # "jetbrains-pycharm"
-          # "jetbrains-rustrover"
-          # "jetbrains-rider"
-          # "jetbrains-webstorm"
-        ];
-        "3" = [
-          "obsidian"
-
-          "unityhub"
-          "Unity"
-        ];
-        "4" = [
-          "firefox"
-          "Google-chrome"
-          "chromium-browser"
-        ];
-        "5" = [
-          "steam"
-        ];
-        "6" = [
-          # Should match all steam games
-          "steam_app_(.+)"
-        ];
-        "7" = [
-          "signal"
-        ];
-        "8" = [
-          "Spotify"
-          "rmpc"
-        ];
-        "9" = [
-          "discord"
-          "vesktop"
-        ];
-
-        "10" = [
-          "python3"
-        ];
+        "1" = [];
+        "2" = ["Zotero" "neovide" "code-url-handler"];
+        "3" = ["obsidian" "unityhub" "Unity"];
+        "4" = ["firefox" "Google-chrome" "chromium-browser"];
+        "5" = ["steam"];
+        "6" = ["steam_app_(.+)"];
+        "7" = ["signal"];
+        "8" = ["Spotify" "rmpc"];
+        "9" = ["discord" "vesktop"];
+        "10" = ["python3"];
       };
 
       floating = [
@@ -211,8 +200,8 @@
         "code-url-handler"
         "neovide"
         "steam"
-        "rmpc"
-        "navi"
+        "ferdium"
+        "Msty"
       ];
     };
 
