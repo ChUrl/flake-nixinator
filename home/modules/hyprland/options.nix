@@ -2,33 +2,31 @@
   lib,
   mylib,
   ...
-}:
-with lib;
-with mylib.modules; {
-  enable = mkEnableOption "Hyprland Window Manager + Compositor";
+}: {
+  enable = lib.mkEnableOption "Hyprland Window Manager + Compositor";
 
-  kb-layout = mkOption {
-    type = types.str;
+  kb-layout = lib.mkOption {
+    type = lib.types.str;
     example = "us";
     description = "Keyboard layout to use";
   };
 
-  kb-variant = mkOption {
-    type = types.str;
+  kb-variant = lib.mkOption {
+    type = lib.types.str;
     example = "altgr-intl";
     description = "Keyboard layout variant";
   };
 
-  theme = mkOption {
-    type = types.str;
+  theme = lib.mkOption {
+    type = lib.types.str;
     example = "Three-Bears";
     description = "Wallpaper and colorscheme to use";
   };
 
-  dunst.enable = mkEnableOption "Enable dunst notification daemon";
+  dunst.enable = lib.mkEnableOption "Enable dunst notification daemon";
 
-  monitors = mkOption {
-    type = types.attrs;
+  monitors = lib.mkOption {
+    type = lib.types.attrs;
     description = "Hyprland Monitor Configurations";
     example = ''
       {
@@ -44,8 +42,8 @@ with mylib.modules; {
     '';
   };
 
-  workspaces = mkOption {
-    type = types.attrs;
+  workspaces = lib.mkOption {
+    type = lib.types.attrs;
     description = "How workspaces are distributed to monitors. These monitors will also receive a wallpaper.";
     example = ''
       {
@@ -56,8 +54,8 @@ with mylib.modules; {
   };
 
   autostart = {
-    immediate = mkOption {
-      type = types.listOf types.str;
+    immediate = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       description = "Programs to launch when Hyprland starts";
       example = ''
         [
@@ -67,8 +65,8 @@ with mylib.modules; {
       default = [];
     };
 
-    delayed = mkOption {
-      type = types.listOf types.str;
+    delayed = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       description = "Programs to launch with a delay when Hyprland starts (e.g. to wait for the waybar tray)";
       example = ''
         [
@@ -76,11 +74,24 @@ with mylib.modules; {
           "nextcloud --background"
         ]
       '';
+      default = [];
+    };
+
+    special-silent = lib.mkOption {
+      type = lib.types.attrsOf (lib.types.listOf lib.types.str);
+      description = "Programs to silently launch on special workspaces";
+      example = ''
+        {
+          "ferdium" = ["ferdium"];
+          "btop" = ["kitty --title=Btop btop"];
+        }
+      '';
+      default = {};
     };
   };
 
-  workspacerules = mkOption {
-    type = types.attrs;
+  workspacerules = lib.mkOption {
+    type = lib.types.attrs;
     description = "Launch programs on specified workspaces, accepts window class.";
     example = ''
       {
@@ -92,8 +103,8 @@ with mylib.modules; {
     '';
   };
 
-  windowrules = mkOption {
-    type = types.listOf types.str;
+  windowrules = lib.mkOption {
+    type = lib.types.listOf lib.types.str;
     description = "Specify specific window rules.";
     example = ''
       [
@@ -102,14 +113,14 @@ with mylib.modules; {
     '';
   };
 
-  transparent-opacity = mkOption {
-    type = types.str;
+  transparent-opacity = lib.mkOption {
+    type = lib.types.str;
     description = "The opacity transparent windows should have.";
     example = "0.8";
   };
 
-  floating = mkOption {
-    type = types.listOf types.attrs;
+  floating = lib.mkOption {
+    type = lib.types.listOf lib.types.attrs;
     description = "What programs are floating down here?";
     example = ''
       [
@@ -124,8 +135,8 @@ with mylib.modules; {
     '';
   };
 
-  transparent = mkOption {
-    type = types.listOf types.str;
+  transparent = lib.mkOption {
+    type = lib.types.listOf lib.types.str;
     description = "What programs should be transparent? Accepts window class.";
     example = ''
       [
@@ -135,8 +146,8 @@ with mylib.modules; {
   };
 
   keybindings = {
-    main-mod = mkOption {
-      type = types.str;
+    main-mod = lib.mkOption {
+      type = lib.types.str;
       description = "Main modifier key";
       example = ''
         "SUPER"
@@ -144,8 +155,8 @@ with mylib.modules; {
       default = "SUPER";
     };
 
-    bindings = mkOption {
-      type = types.attrs;
+    bindings = lib.mkOption {
+      type = lib.types.attrsOf (lib.types.listOf lib.types.str);
       description = "Hyprland keyboard shortcuts";
       default = {};
       example = ''
@@ -154,6 +165,32 @@ with mylib.modules; {
             "moveworkspacetomonitor, 1 HDMI-A-1"
             "moveworkspacetomonitor, 2 HDMI-A-1"
           ];
+        }
+      '';
+    };
+
+    ws-bindings = lib.mkOption {
+      type = lib.types.attrsOf lib.types.str;
+      description = "Map keys to workspaces";
+      default = {};
+      example = ''
+        {
+          # "<Workspace>" = "<Key>";
+          "1" = "1";
+          "10" = "0";
+        }
+      '';
+    };
+
+    special-ws-bindings = lib.mkOption {
+      type = lib.types.attrsOf lib.types.str;
+      description = "Map keys to special (scratchpad) workspaces";
+      default = {};
+      example = ''
+        {
+          # "<Workspace>" = "<Key>";
+          "ferdium" = "x";
+          "btop" = "b";
         }
       '';
     };
