@@ -73,7 +73,7 @@ in {
             WebSuggestions = false;
           };
           HardwareAcceleration = true;
-          NoDefaultBookmarks = true;
+          # NoDefaultBookmarks = true; # Prevents HM from applying bookmarks
           OfferToSaveLogins = false;
           PictureInPicture = true;
           SanitizeOnShutdown = {
@@ -230,12 +230,13 @@ in {
           };
 
           settings = lib.mkMerge [
-            (builtins.readFile ./settings.nix)
+            (import ./settings.nix)
 
             {
               # NOTE: This has to be updated when something is changed inside firefox...
               "browser.uiCustomization.state" = builtins.readFile ./customizationState.json;
               "toolkit.legacyUserProfileCustomizations.stylesheets" = firefox.disableTabBar;
+              "identity.fxaccounts.account.device.name" = hostname;
             }
 
             (lib.optionalAttrs firefox.vaapi {
