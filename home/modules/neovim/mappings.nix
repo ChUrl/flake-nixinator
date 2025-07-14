@@ -421,12 +421,12 @@ _: let
       action = "<cmd>lua Snacks.picker.recent()<cr>";
       options.desc = "Last Files";
     }
-    {
-      mode = "n";
-      key = "<leader>fo";
-      action = "<cmd>ObsidianSearch<cr>";
-      options.desc = "Obsidian Note";
-    }
+    # {
+    #   mode = "n";
+    #   key = "<leader>fo";
+    #   action = "<cmd>ObsidianSearch<cr>";
+    #   options.desc = "Obsidian Note";
+    # }
     {
       mode = "n";
       key = "<leader>fr";
