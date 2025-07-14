@@ -15,9 +15,6 @@ in {
       enable = true;
       systemd.enable = true;
 
-      # NOTE: Because the HM module sucks (mixes explicit options + JSON conversion), write everything as override...
-      # HACK: Only override fully qualified quoted attributes to not override existing attrs with empty values
-      #       https://github.com/Jas-SinghFSU/HyprPanel/issues/886
       settings = {
         #
         # Bar Config
@@ -113,7 +110,7 @@ in {
         "bar.workspaces.applicationIconEmptyWorkspace" = "";
         "bar.workspaces.applicationIconFallback" = "󰣆";
         "bar.workspaces.applicationIconOncePerWorkspace" = true;
-        "bar.workspaces.ignored" = "-99"; # Special workspace
+        "bar.workspaces.ignored" = "-\\d+"; # Special workspaces
         "bar.workspaces.monitorSpecific" = true;
         "bar.workspaces.numbered_active_indicator" = "highlight";
         "bar.workspaces.reverse_scroll" = true;
