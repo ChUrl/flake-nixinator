@@ -75,8 +75,6 @@
   "geo.provider.network.url" = "https://location.services.mozilla.com/v1/geolocate?key=%MOZILLA_API_KEY%";
   "geo.provider.use_gpsd" = false;
 
-  "identity.fxaccounts.account.device.name" = hostname;
-
   "media.hardwaremediakeys.enabled" = false; # Do not interfere with spotify
   "media.videocontrols.picture-in-picture.video-toggle.enabled" = true;
 
