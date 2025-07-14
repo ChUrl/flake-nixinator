@@ -127,6 +127,7 @@
         kdePackages.kdenlive
         krita
         makemkv
+        msty
 
         steam-devices-udev-rules
       ];
