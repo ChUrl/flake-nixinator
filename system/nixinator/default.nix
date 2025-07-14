@@ -83,7 +83,16 @@
       "kagi-api-key"
       "google-pse-id"
       "google-pse-key"
+      "makemkv-app-key"
     ];
+  };
+
+  sops.templates."makemkv-settings.conf" = {
+    owner = config.users.users.${username}.name;
+    content = ''
+      app_Key = "${config.sops.placeholder.makemkv-app-key}"
+      sdf_Stop = ""
+    '';
   };
 
   sops.templates."open-webui-secrets.env".content = ''

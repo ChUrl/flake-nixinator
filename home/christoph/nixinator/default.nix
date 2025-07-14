@@ -4,6 +4,7 @@
   nixosConfig,
   config,
   lib,
+  mylib,
   ...
 }: {
   imports = [
@@ -158,6 +159,11 @@
           ".config/kdeconnect/trusted_devices".source =
             config.lib.file.mkOutOfStoreSymlink
             "${nixosConfig.sops.secrets.kdeconnect-devices.path}";
+        })
+        (lib.optionalAttrs (mylib.modules.contains config.home.packages pkgs.makemkv) {
+          ".MakeMKV/settings.conf".source =
+            config.lib.file.mkOutOfStoreSymlink
+            "${nixosConfig.sops.templates."makemkv-settings.conf".path}";
         })
       ];
 
