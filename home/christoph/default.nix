@@ -131,7 +131,6 @@
           "msty" = "z";
           "btop" = "b";
           "rmcp" = "r";
-          "yazi" = "y";
         };
       };
 
@@ -149,7 +148,6 @@
           "ferdium" = ["ferdium"];
           "msty" = ["msty"];
           "btop" = ["kitty --title=Btop btop"];
-          "yazi" = ["kitty --title=Yazi yazi"];
           "rmcp" = ["kitty --title=Rmcp rmcp"];
         };
 
@@ -165,9 +163,9 @@
         "4" = ["firefox" "Google-chrome" "chromium-browser"];
         "5" = ["steam"];
         "6" = ["steam_app_(.+)"];
-        "7" = ["signal"];
-        "8" = ["Spotify" "rmpc"];
-        "9" = ["discord" "vesktop"];
+        "7" = [];
+        "8" = ["signal"];
+        "9" = ["discord"];
         "10" = ["python3"];
       };
 
