@@ -12,20 +12,7 @@ in {
   options.modules.firefox = import ./options.nix {inherit lib mylib;};
 
   config = lib.mkIf firefox.enable {
-    home.packages = with pkgs;
-      builtins.concatLists [
-        # TODO: I don't think vaapi works yet
-        (lib.optionals firefox.vaapi [
-          # NOTE: I put these into hardware.opengl.extrapackages, don't know if they belong there...
-          # libva
-          # libvdpau
-        ])
-
-        # TODO: Derivation borked on standalone HM
-        # (lib.optionals firefox.gnomeTheme [firefox-gnome-theme])
-
-        [vdhcoapp]
-      ];
+    home.packages = with pkgs; [vdhcoapp];
 
     home.sessionVariables = lib.mkMerge [
       {
@@ -35,12 +22,9 @@ in {
       (lib.optionalAttrs firefox.wayland {
         MOZ_ENABLE_WAYLAND = 1;
         EGL_PLATFORM = "wayland";
-        # XDG_CURRENT_DESKTOP = "Hyprland"; # TODO: Or "sway"? # Already set by hyprland
       })
 
       (lib.optionalAttrs firefox.vaapi {
-        # LIBVA_DRIVER_NAME = "radeonsi"; # "nvidia" for Nvidia card
-        # LIBVA_DRIVER_NAME = "nvidia"; # Specified in hardware-configuration
         MOZ_DISABLE_RDD_SANDBOX = 1;
       })
     ];
@@ -60,36 +44,52 @@ in {
 
       # firefox-unwrapped is the pure firefox browser, wrapFirefox adds configuration ontop
       package = pkgs.wrapFirefox pkgs.firefox-unwrapped {
-        # forceWayland = cfg.wayland; # Enabled by default now: https://github.com/NixOS/nixpkgs/commit/c156bdf40d2f0e64b574ade52c5611d90a0b6273
-
-        # Find options by grepping for "cfg" in https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/networking/browsers/firefox/wrapper.nix
-        cfg = {
-          # enablePlasmaBrowserIntegration = true; # TODO: Option, # NOTE: Interferes with mediaplayer, I don't want to start a youtube video when pressing the play key...
-        };
-
         # About policies: https://github.com/mozilla/policy-templates#enterprisepoliciesenabled
-        # NOTE: Some of these settings are duplicated in the about:config settings so they are
-        #       not strictly necessary
         extraPolicies = {
-          # TODO: Make library function to allow easy bookmark creation and add my default bookmarks/folders
-          Bookmarks = lib.optionalAttrs firefox.defaultBookmarks {};
           CaptivePortal = false;
+          DisableAppUpdate = true;
           DisableFirefoxAccounts = true;
+          DisableFirefoxScreenshots = true;
           DisableFirefoxStudies = true;
-          DisablePocket = true;
+          DisableSetDesktopBackground = true;
           DisableTelemetry = true;
           DisplayBookmarksToolbar = true;
+          EnableTrackingProtection = {
+            Value = true;
+            Cryptomining = true;
+            Fingerprinting = true;
+            EmailTracking = true;
+          };
           FirefoxHome = {
-            Pocket = false;
+            Highlights = false;
+            Search = true;
             Snippets = false;
+            SponsoredTopSites = false;
+            TopSites = false;
+          };
+          FirefoxSuggest = {
+            ImproveSuggest = false;
+            SponsoredSuggestions = false;
+            WebSuggestions = false;
           };
           HardwareAcceleration = true;
           NoDefaultBookmarks = true;
           OfferToSaveLogins = false;
           PictureInPicture = true;
+          SanitizeOnShutdown = {
+            Cache = false;
+            Cookies = false;
+            FormData = true;
+            History = false;
+            Sessions = false;
+            SiteSettings = false;
+          };
           UserMessaging = {
             ExtensionRecommendations = false;
+            FeatureRecommendations = false;
+            MoreFromMozilla = false;
             SkipOnboarding = true;
+            UrlbarInteventions = false;
           };
         };
       };
@@ -99,18 +99,13 @@ in {
           id = 0; # 0 is default profile
 
           userChrome = lib.concatStringsSep "\n" [
-            # TODO: Borked after standalone HM
-            # (optionalString cfg.gnomeTheme ''
-            #   @import "${pkgs.firefox-gnome-theme}/share/firefox-gnome-theme/gnome-theme.css";
-            # '')
-
             (lib.optionalString firefox.disableTabBar ''
               #TabsToolbar { display: none; }
             '')
           ];
 
           search = {
-            force = true;
+            force = true; # Always override search engines
             default = "kagi";
             privateDefault = "kagi";
             order = [
@@ -169,6 +164,8 @@ in {
           };
 
           extensions = {
+            force = true; # Always override extensions
+
             packages = with pkgs.nur.repos.rycee.firefox-addons; [
               absolute-enable-right-click # Force enable right click to copy text
               amp2html
@@ -225,6 +222,11 @@ in {
               youtube-shorts-block
               zotero-connector
             ];
+          };
+
+          bookmarks = {
+            force = true; # Always override bookmarks (so we don't forget to add them through here)
+            settings = import ./bookmarks.nix;
           };
 
           settings = lib.mkMerge [
