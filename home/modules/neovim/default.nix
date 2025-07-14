@@ -65,7 +65,7 @@ in {
             python313Packages.pylint
             lua54Packages.luacheck
             vale # text
-            statix # nix
+            # statix # nix (doesn't recognize pipe operator)
 
             # Formatters
             alejandra # nix
@@ -786,7 +786,7 @@ in {
                 javascript = ["eslint_d"];
                 lua = ["luacheck"];
                 markdown = ["vale"];
-                nix = ["statix"];
+                # nix = ["statix"];
                 python = ["ruff" "flake8"]; # TODO: "pylint" can't resolve some imports (e.g. PySide6.QtGui)
                 tex = ["chktex"];
                 # rust = ["clippy"]; # Not supported, but integrated through rustaceanvim
