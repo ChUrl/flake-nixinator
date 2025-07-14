@@ -121,7 +121,7 @@
   services = {
     # TODO: Docling doesn't find tesseract OCR engine... Probably use docker?
     docling-serve = {
-      enable = true;
+      enable = false;
       stateDir = "/var/lib/docling-serve";
 
       host = "127.0.0.1";
@@ -159,8 +159,9 @@
       openFirewall = false;
     };
 
+    # TODO: WebSearch + RAG issues
     open-webui = {
-      enable = true;
+      enable = false;
       stateDir = "/var/lib/open-webui";
 
       # https://docs.openwebui.com/getting-started/env-configuration
