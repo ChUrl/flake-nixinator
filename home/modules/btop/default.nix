@@ -117,7 +117,7 @@ in {
         shown_boxes = "cpu gpu0 mem net proc";
         update_ms = 1000;
         proc_sorting = "memory";
-        proc_tree = false;
+        proc_tree = true;
         proc_mem_bytes = true;
         proc_cpu_graphs = true;
 
