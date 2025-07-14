@@ -342,10 +342,12 @@
         ".local/share/navi/cheats/christoph.cheat".source = config.lib.file.mkOutOfStoreSymlink "${config.paths.dotfiles}/navi/christoph.cheat";
       })
       (lib.mkIf (!headless) {
+        # killswitch: 0, 1, 2 (off, on, advanced - still on after reboot)
+        # netshield: 0, 1, 2 (off, malware, ads+malware+trackers)
         ".config/Proton/VPN/settings.json".text = ''
           {
               "protocol": "wireguard",
-              "killswitch": 0,
+              "killswitch": 1,
               "custom_dns": {
                   "enabled": false,
                   "ip_list": []
