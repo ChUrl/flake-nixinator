@@ -121,7 +121,7 @@ with mylib.networking; {
     settings.trusted-users = ["root" "${username}"];
 
     # Auto garbage-collect and optimize store
-    gc.automatic = true;
+    gc.automatic = false; #  Done by nh.clean.enable;
     gc.options = "--delete-older-than 5d";
     settings.auto-optimise-store = true;
     optimise.automatic = true;
