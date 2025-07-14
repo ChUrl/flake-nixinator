@@ -64,8 +64,6 @@
       wayland = true;
       vaapi = true;
       disableTabBar = true;
-      defaultBookmarks = true;
-      gnomeTheme = true;
     };
 
     fish.enable = true;
