@@ -262,6 +262,7 @@
     sessionVariables = lib.mkMerge [
       {
         LANG = "en_US.UTF-8";
+        MANPAGER = "nvim +Man!";
       }
       (lib.mkIf (!headless) {
         # TERMINAL = "alacritty -o font.size=12";
