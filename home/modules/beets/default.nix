@@ -73,11 +73,12 @@ in {
     };
 
     # Generate fish completions
-    home.activation = {
-      beets-fish-completions = lib.hm.dag.entryAfter ["writeBoundary"] ''
-        echo "Generating beet completions for fish shell at ~/.config/fish/completions/beet.fish"
-        beet fish
-      '';
-    };
+    # TODO: This doesn't work if ~/Music is mounted after the activation...
+    # home.activation = {
+    #   beets-fish-completions = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    #     echo "Generating beet completions for fish shell at ~/.config/fish/completions/beet.fish"
+    #     beet fish
+    #   '';
+    # };
   };
 }
