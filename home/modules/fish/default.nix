@@ -137,7 +137,7 @@ in {
             cdd = "zi";
             b = "z -"; # jump to previous dir
             mkdir = "mkdir -p"; # also create parents (-p)
-            blk = batify "lsblk -o NAME,LABEL,UUID,FSTYPE,SIZE,FSUSE%,MOUNTPOINT,MODEL";
+            blk = batify "lsblk -o NAME,LABEL,ID,UUID,FSTYPE,SIZE,FSUSE%,MOUNTPOINT,MODEL";
             watch = "watch -d -c -n 0.5";
             nd = "nix develop";
             nb = "nix build -L";
