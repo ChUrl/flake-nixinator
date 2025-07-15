@@ -332,8 +332,8 @@ _: let
     {
       mode = "n";
       key = "<leader>r";
-      action = "<cmd>lua vim.g.toggle_rcmp()<cr>"; # Defined in extraConfigLua.lua
-      options.desc = "Show Rcmp";
+      action = "<cmd>lua vim.g.toggle_rmpc()<cr>"; # Defined in extraConfigLua.lua
+      options.desc = "Show Rmpc";
     }
     {
       mode = "n";

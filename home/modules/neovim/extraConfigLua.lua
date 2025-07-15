@@ -58,11 +58,11 @@ end, {
 	desc = "Toggle autolint-on-save",
 })
 
--- Toggle Rcmp
+-- Toggle Rmpc
 local Terminal = require("toggleterm.terminal").Terminal
-local rmcp =
+local rmpc =
 	Terminal:new({ cmd = "rmpc", hidden = true, close_on_exit = true, auto_scroll = false, direction = "float" })
 
-vim.g.toggle_rcmp = function()
-	rmcp:toggle()
+vim.g.toggle_rmpc = function()
+	rmpc:toggle()
 end
