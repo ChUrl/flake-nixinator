@@ -8,6 +8,8 @@
           type = "gpt";
           partitions = {
             ESP = {
+              # NOTE: The disk identification uses /dev/disk/by-partlabel,
+              #       so make sure this matches the actual partlabel!!!
               label = "EFI";
               size = "512M";
               type = "EF00";
@@ -15,7 +17,7 @@
                 type = "filesystem";
                 format = "vfat";
                 mountpoint = "/boot";
-                mountOptions = ["defaults"];
+                mountOptions = ["umask=077"];
               };
             };
             luks = {
