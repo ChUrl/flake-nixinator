@@ -29,7 +29,7 @@ with mylib.networking; {
         if headless
         then "grub"
         else "systemd-boot";
-      systemd-boot.bootDevice = "/boot/efi";
+      systemd-boot.bootDevice = "/boot";
       grub.bootDevice = "/dev/sda";
     };
 
