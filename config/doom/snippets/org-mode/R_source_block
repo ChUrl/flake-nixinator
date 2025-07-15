@@ -1,7 +1,0 @@
-# -*- mode: snippet -*-
-# name: R source block
-# key: srcR
-# --
-#+begin_src R :session *R* :tangle yes :exports both
-
-#+end_src
