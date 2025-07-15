@@ -22,7 +22,7 @@
 
     # Opt-in state
     impermanence.url = "github:nix-community/impermanence";
-    impermanence.inputs.nixpkgs.follows = "nixpkgs";
+    # impermanence.inputs.nixpkgs.follows = "nixpkgs";
 
     # Manage secrets with sops
     sops-nix.url = "github:Mic92/sops-nix";
