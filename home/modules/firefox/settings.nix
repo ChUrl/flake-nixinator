@@ -12,6 +12,7 @@
   "browser.crashReports.unsubmittedCheck.autoSubmit2" = false; # don't submit backlogged reports
   "browser.disableResetPrompt" = true; # "Looks like you haven't started Firefox in a while."
   "browser.discovery.enabled" = false;
+  "browser.download.useDownloadDir" = false; # Always ask
   "browser.fixup.alternate.enabled" = false; # http://www-archive.mozilla.org/docs/end-user/domain-guessing.html
   "browser.formfill.enable" = false;
   "browser.newtabpage.enabled" = false;
@@ -31,6 +32,7 @@
   "browser.send_pings" = false; # http://kb.mozillazine.org/Browser.send_pings
   "browser.sessionstore.interval" = "1800000"; # Reduce File IO / SSD abuse by increasing write interval
   "browser.shell.checkDefaultBrowser" = false;
+  "browser.startup.couldRestoreSession.count" = 2; # Restore last session
   "browser.tabs.crashReporting.sendReport" = false;
   "browser.toolbars.bookmarks.visibility" = "always";
   "browser.urlbar.dnsResolveSingleWordsAfterSearch" = 0; # https://bugzilla.mozilla.org/1642623
