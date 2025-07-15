@@ -1,4 +1,5 @@
 {pkgs, ...}:
+# TODO: Use pkgs.mkShell or Navi for this...
 pkgs.devshell.mkShell {
   name = "NixFlake Shell";
 
@@ -31,8 +32,6 @@ pkgs.devshell.mkShell {
       help = "Run NixOS store verification with repair (slow)";
       command = "nix-store --verify --check-contents";
     }
-
-    # TODO: Use navi for this
     {
       name = "help-store-path";
       help = "Display the location of a binary in the nix store";
@@ -47,6 +46,11 @@ pkgs.devshell.mkShell {
       name = "help-closure";
       help = "Display the closure of a package";
       command = "echo 'nix path-info --recursive --size --closure-size --human-readable (readlink -f (which <arg>))'";
+    }
+    {
+      name = "help-disko";
+      help = "Partition disk using disko";
+      command = ''echo "sudo nix run 'github:nix-community/disko/latest#disko-install' -- --flake .#<target> --disk <disk-name> <disk-device>"'';
     }
   ];
 }
