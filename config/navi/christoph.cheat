@@ -322,3 +322,16 @@ $ drive: eza -1 /dev | rg --trim -e "^nvme\dn\dp\d" | sd "n\dp\d" "" | sort -u
 # Query NVME SSD used percentage
 sudo nvme smart-log /dev/<drive> | rg --trim "percentage_used"
 $ drive: eza -1 /dev | rg --trim -e "^nvme\dn\dp\d" | sd "n\dp\d" "" | sort -u
+
+% cryptsetup
+# Open LUKS device
+sudo cryptsetup luksOpen /dev/<drive> <label>
+$ drive: eza -1 /dev | rg --trim -e "^nvme\dn\dp\d" | sd "n\dp\d" "" | sort -u
+
+% cryptsetup
+# Close LUKS device
+sudo cryptsetup luksClose <label>
+
+% disko
+# Partition and format disks
+sudo disko --mode disko --flake .#<target>
