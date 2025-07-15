@@ -1904,12 +1904,12 @@ in {
             '';
           };
 
-          wakatime = {
-            name = "wakatime";
-            pkg = pkgs.vimPlugins.vim-wakatime;
-            lazy = true;
-            event = ["BufReadPost" "BufNewFile"];
-          };
+          # wakatime = {
+          #   name = "wakatime";
+          #   pkg = pkgs.vimPlugins.vim-wakatime;
+          #   lazy = true;
+          #   event = ["BufReadPost" "BufNewFile"];
+          # };
 
           web-devicons = rec {
             name = "nvim-web-devicons";
@@ -2083,7 +2083,7 @@ in {
           typescript-tools # Typescript tsserver LSP
           ufo # Code folding
           vimtex # LaTeX support
-          wakatime # Time tracking
+          # wakatime # Time tracking
           web-devicons # Icons for many plugins
           which-key # Live keybinding help
           window-picker # Jump to window without multiple <leader-hjkl>
