@@ -20,9 +20,9 @@
     disko.url = "github:nix-community/disko/latest";
     disko.inputs.nixpkgs.follows = "nixpkgs";
 
-    # Manage secrets with agenix
-    # agenix.url = "github:ryantm/agenix";
-    # agenix.inputs.nixpkgs.follows = "nixpkgs";
+    # Opt-in state
+    impermanence.url = "github:nix-community/impermanence";
+    impermanence.inputs.nixpkgs.follows = "nixpkgs";
 
     # Manage secrets with sops
     sops-nix.url = "github:Mic92/sops-nix";
@@ -61,18 +61,6 @@
     # Realtime audio
     # musnix.url = "github:musnix/musnix";
     # musnix.inputs.nixpkgs.follows = "nixpkgs";
-
-    # Network topology diagram generation
-    # nix-topology.url = "github:oddlama/nix-topology";
-    # nix-topology.inputs.nixpkgs.follows = "nixpkgs";
-
-    # Ags for widgets (this was a terrible idea)
-    # ags.url = "github:Aylur/ags";
-    # ags.inputs.nixpkgs.follows = "nixpkgs";
-
-    # Spicetify
-    # spicetify-nix.url = "github:Gerg-L/spicetify-nix";
-    # spicetify-nix.inputs.nixpkgs.follows = "nixpkgs";
 
     # Pinned versions
     # v4l2loopback-pinned.url = "github:nixos/nixpkgs/4684fd6b0c01e4b7d99027a34c93c2e09ecafee2";
@@ -157,9 +145,9 @@
     # Extra NixOS system modules for all hosts.
     # HM modules are passed through home/modules/default.nix instead.
     commonModules = [
-      # inputs.agenix.nixosModules.default
       inputs.sops-nix.nixosModules.sops
       inputs.disko.nixosModules.disko
+      inputs.impermanence.nixosModules.impermanence
     ];
   in {
     # Local shell for NixFlake directory
