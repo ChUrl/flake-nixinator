@@ -86,9 +86,9 @@
 
         bindings = {
           "$mainMod, t" = ["exec, kitty"];
-          "$mainMod, e" = ["exec, kitty"];
+          "$mainMod, e" = ["exec, kitty --title=Yazi yazi"];
           "$mainMod, n" = ["exec, neovide"];
-          "$mainMod, r" = ["exec, kitty --title=Rmpc rmpc"];
+          # "$mainMod, r" = ["exec, kitty --title=Rmpc rmpc"];
           "$mainMod CTRL, n" = ["exec, kitty --title=Navi navi"];
           "$mainMod SHIFT, n" = ["exec, neovide ${config.paths.dotfiles}/navi/christoph.cheat"];
           "$mainMod SHIFT, f" = ["exec, neovide ${config.paths.dotfiles}/flake.nix"];
@@ -128,7 +128,7 @@
           "ferdium" = "x";
           "msty" = "z";
           "btop" = "b";
-          "rmcp" = "r";
+          "rmpc" = "r";
         };
       };
 
@@ -146,7 +146,7 @@
           "ferdium" = ["ferdium"];
           "msty" = ["msty"];
           "btop" = ["kitty --title=Btop btop"];
-          "rmcp" = ["kitty --title=Rmcp rmcp"];
+          "rmpc" = ["kitty --title=Rmpc rmpc"];
         };
 
         delayed = [];
@@ -737,15 +737,13 @@
         (lib.mkIf (!headless) [
           "com.github.tchx84.Flatseal"
 
-          "com.spotify.Client" # Don't need this when spicetify is enabled
+          # "com.spotify.Client" # Don't need this when spicetify is enabled
 
-          # NOTE: Also change discord-ipc-0 below
           "com.discordapp.Discord"
           # "com.discordapp.DiscordCanary"
-          # "dev.vencord.Vesktop"
 
           # "com.google.Chrome"
-          # "md.obsidian.Obsidian" # NOTE: Installed via package
+          # "md.obsidian.Obsidian"
           # "io.anytype.anytype"
         ])
       ];
