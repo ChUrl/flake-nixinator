@@ -41,14 +41,14 @@
     ];
   };
 
-  # NOTE: Some filesystems are managed by disko (see ./disks.nix)
   fileSystems = {
-    # TODO: Reformat
-    # "/home/christoph/Games" = {
-    #   device = "/dev/disk/by-uuid/e57c1831-09d7-4046-9c62-086d3596f825";
-    #   fsType = "ext4";
-    #   options = ["defaults" "rw" "relatime"];
-    # };
+    # NOTE: Some filesystems are managed by disko (see ./disks.nix)
+
+    "/home/christoph/Games" = {
+      device = "/dev/disk/by-id/nvme-WD_BLACK_SN850X_2000GB_231623802252-part1";
+      fsType = "ext4";
+      options = ["defaults" "rw" "noatime"];
+    };
 
     # If  the bg option is specified, a timeout or failure causes the mount(8) command
     # to fork a child which continues to attempt to mount the export.
@@ -66,19 +66,19 @@
     "/home/christoph/Movies" = {
       device = "192.168.86.20:/mnt/SG Exos Mirror 18TB/Movie";
       fsType = "nfs";
-      options = ["defaults" "rw" "relatime" "_netdev" "bg" "soft"];
+      options = ["defaults" "rw" "noatime" "_netdev" "bg" "soft"];
     };
 
     "/home/christoph/Shows" = {
       device = "192.168.86.20:/mnt/SG Exos Mirror 18TB/Show";
       fsType = "nfs";
-      options = ["defaults" "rw" "relatime" "_netdev" "bg" "soft"];
+      options = ["defaults" "rw" "noatime" "_netdev" "bg" "soft"];
     };
 
     "/home/christoph/Music" = {
       device = "192.168.86.20:/mnt/SG Exos Mirror 18TB/Music";
       fsType = "nfs";
-      options = ["defaults" "rw" "relatime" "_netdev" "bg" "soft"];
+      options = ["defaults" "rw" "noatime" "_netdev" "bg" "soft"];
     };
   };
 
