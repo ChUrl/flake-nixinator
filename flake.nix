@@ -16,6 +16,10 @@
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
+    # Disk partitioning
+    disko.url = "github:nix-community/disko/latest";
+    disko.inputs.nixpkgs.follows = "nixpkgs";
+
     # Manage secrets with agenix
     # agenix.url = "github:ryantm/agenix";
     # agenix.inputs.nixpkgs.follows = "nixpkgs";
@@ -155,6 +159,7 @@
     commonModules = [
       # inputs.agenix.nixosModules.default
       inputs.sops-nix.nixosModules.sops
+      inputs.disko.nixosModules.disko
     ];
   in {
     # Local shell for NixFlake directory
