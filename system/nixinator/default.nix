@@ -78,9 +78,6 @@
     };
 
     sops-nix.secrets.${username} = [
-      "kdeconnect-cert"
-      "kdeconnect-privatekey"
-      "kdeconnect-devices"
       "kagi-api-key"
       "google-pse-id"
       "google-pse-key"

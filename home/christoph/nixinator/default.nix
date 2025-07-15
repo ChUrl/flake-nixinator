@@ -149,17 +149,6 @@
 
           ".var/app/com.valvesoftware.Steam/config/MangoHud/MangoHud.conf".source = ../../../config/mangohud/MangoHud.conf;
         }
-        (lib.optionalAttrs nixosConfig.programs.kdeconnect.enable {
-          ".config/kdeconnect/certificate.pem".source =
-            config.lib.file.mkOutOfStoreSymlink
-            "${nixosConfig.sops.secrets.kdeconnect-cert.path}";
-          ".config/kdeconnect/privateKey.pem".source =
-            config.lib.file.mkOutOfStoreSymlink
-            "${nixosConfig.sops.secrets.kdeconnect-privatekey.path}";
-          ".config/kdeconnect/trusted_devices".source =
-            config.lib.file.mkOutOfStoreSymlink
-            "${nixosConfig.sops.secrets.kdeconnect-devices.path}";
-        })
         (lib.optionalAttrs (mylib.modules.contains config.home.packages pkgs.makemkv) {
           ".MakeMKV/settings.conf".source =
             config.lib.file.mkOutOfStoreSymlink
