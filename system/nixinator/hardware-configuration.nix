@@ -41,24 +41,14 @@
     ];
   };
 
+  # NOTE: Some filesystems are managed by disko (see ./disks.nix)
   fileSystems = {
-    # Done by disko
-    # "/" = {
-    #   device = "/dev/disk/by-uuid/68bd46a0-e95c-4764-a006-44bd9975a6c2";
+    # TODO: Reformat
+    # "/home/christoph/Games" = {
+    #   device = "/dev/disk/by-uuid/e57c1831-09d7-4046-9c62-086d3596f825";
     #   fsType = "ext4";
     #   options = ["defaults" "rw" "relatime"];
     # };
-    #
-    # "/boot/efi" = {
-    #   device = "/dev/disk/by-uuid/36A9-3D74";
-    #   fsType = "vfat";
-    # };
-
-    "/home/christoph/Games" = {
-      device = "/dev/disk/by-uuid/e57c1831-09d7-4046-9c62-086d3596f825";
-      fsType = "ext4";
-      options = ["defaults" "rw" "relatime"];
-    };
 
     # If  the bg option is specified, a timeout or failure causes the mount(8) command
     # to fork a child which continues to attempt to mount the export.
@@ -91,14 +81,6 @@
       options = ["defaults" "rw" "relatime" "_netdev" "bg" "soft"];
     };
   };
-
-  # Done by disko
-  # swapDevices = lib.mkForce [
-  #   {
-  #     device = "/var/swap";
-  #     size = 1024 * 16; # Without hibernation 4.0 GB to 0.5 x RAM
-  #   }
-  # ];
 
   hardware = {
     # Use all redistributable firmware (i.e. nonfree)
