@@ -18,6 +18,12 @@
     # https://wiki.archlinux.org/title/Kernel_mode_setting#Early_KMS_start
     initrd.kernelModules = ["nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm"]; # NVIDIA
 
+    initrd.supportedFilesystems = [
+      "ext4"
+      "btrfs"
+      "vfat"
+    ];
+
     kernelModules = [
       "kvm-amd"
       "sg" # Blu-Ray drive
