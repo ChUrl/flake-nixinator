@@ -117,6 +117,7 @@ in {
             (mkUDir ".config/keepassxc" m755)
             (mkUDir ".config/Msty" m755)
             (mkUDir ".config/Nextcloud" m755)
+            (mkUDir ".config/obsidian" m755)
             (mkUDir ".config/Zeal" m755)
 
             (mkUDir ".local/share/direnv" m755)
