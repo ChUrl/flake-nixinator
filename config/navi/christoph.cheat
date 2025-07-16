@@ -345,3 +345,8 @@ sudo cryptsetup luksClose <label>
 % disko
 # Partition and format disks
 sudo disko --mode disko --flake .#<target>
+
+% impermanence
+# Find directories not yet persisted (individual files are always listed!)
+sudo fd --one-file-system --base-directory <dir> --type f --hidden --exclude "{tmp,etc/passwd,.cache}"
+$ dir: echo -e "/\n/home/christoph"
