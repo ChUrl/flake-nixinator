@@ -23,17 +23,17 @@ in {
 
     mkDir = user: directory: mode: {
       inherit directory mode;
-      user = config.users.users.${user}.name;
-      group = config.users.users.${user}.group;
+      # user = config.users.users.${user}.name;
+      # group = config.users.users.${user}.group;
     };
 
     mkFile = user: file: mode: {
       inherit file;
-      parentDirectory = {
-        inherit mode;
-        user = config.users.users.${user}.name;
-        group = config.users.users.${user}.group;
-      };
+      # parentDirectory = {
+      #   inherit mode;
+      #   user = config.users.users.${user}.name;
+      #   group = config.users.users.${user}.group;
+      # };
     };
   in
     lib.mkIf impermanence.enable {
@@ -55,6 +55,8 @@ in {
           (mkRDir "/etc/secureboot" m755)
           (mkRDir "/etc/ssh" m755)
 
+          (mkRDir "/nix/var" m755)
+
           # https://github.com/nix-community/impermanence/issues/253
           (mkRDir "/usr/systemd-placeholder" m755)
 
@@ -63,9 +65,10 @@ in {
           (mkRDir "/var/lib/bluetooth" m755) # m700
           (mkRDir "/var/lib/containers" m755)
           (mkRDir "/var/lib/flatpak" m755)
-          (mkRDir "/var/lib/NetworkManager" m755)
           (mkRDir "/var/lib/libvirt" m755)
+          (mkRDir "/var/lib/NetworkManager" m755)
           (mkRDir "/var/lib/nixos" m755)
+          (mkRDir "/var/lib/private/ollama" m755)
           (mkRDir "/var/lib/systemd" m755)
 
           (mkRDir "/var/tmp" m777)
@@ -126,9 +129,33 @@ in {
             (mkUDir ".local/share/zoxide" m755)
 
             (mkUDir ".local/state/astal/notifd" m755)
+            (mkUDir ".local/state/nix" m755)
             (mkUDir ".local/state/nvim" m755)
           ];
         };
+      };
+
+      # NOTE: This is REQUIRED for HM activation! Otherwise the home directory won't be writable!
+      systemd.services."impermanence-fix-home-ownership" = let
+        homeDir = "/home/${username}";
+        homeUser = builtins.toString config.users.users.${username}.uid;
+        homeGroup = builtins.toString config.users.groups.${config.users.users.${username}.group}.gid;
+      in {
+        description = "Fix impermanent home ownership";
+        wantedBy = ["home-manager-christoph.service"]; # Required for HM activation
+        before = ["home-manager-christoph.service"];
+        after = ["home.mount"];
+        partOf = ["home.mount"];
+        serviceConfig.Type = "oneshot";
+
+        script = ''
+          if [[ -d ${homeDir} ]]; then
+            chown -R ${homeUser}:${homeGroup} ${homeDir}
+            echo "Set ownership for ${homeDir} to ${homeUser}:${homeGroup}"
+          else
+            echo "ERROR: Home ${homeDir} does not exist!"
+          fi
+        '';
       };
 
       # Because we have a LUKS encrypted drive
@@ -140,6 +167,9 @@ in {
           backupDuration = "7"; # Days
           mountDir = "/btrfs_tmp";
           persistDir = "${mountDir}/persist";
+
+          homeUser = builtins.toString config.users.users.${username}.uid;
+          homeGroup = builtins.toString config.users.groups.${config.users.users.${username}.group}.gid;
         in {
           description = "Clean impermanent btrfs subvolumes";
           wantedBy = ["initrd.target"];
@@ -150,63 +180,73 @@ in {
           # path = ["/bin" config.system.build.extraUtils pkgs.coreutils-full];
 
           script = ''
-            mkdir -p ${mountDir}
-            mount -o subvol=/ /dev/mapper/crypted ${mountDir}
+                   mkdir -p ${mountDir}
+                   mount -o subvol=/ /dev/mapper/crypted ${mountDir}
 
-            # Backup old root subvolume
-            if [[ -e ${mountDir}/root ]]; then
-                mkdir -p ${persistDir}/old_roots
-                timestamp=$(date --date="@$(stat -c %Y ${mountDir}/root)" "+%Y-%m-%-d_%H:%M:%S")
-                mv ${mountDir}/root "${persistDir}/old_roots/$timestamp"
+                   # Backup old root subvolume
+                   if [[ -e ${mountDir}/root ]]; then
+                       mkdir -p ${persistDir}/old_roots
+                       timestamp=$(date --date="@$(stat -c %Y ${mountDir}/root)" "+%Y-%m-%-d_%H:%M:%S")
+                       mv ${mountDir}/root "${persistDir}/old_roots/$timestamp"
 
-                echo "Backed up previous root subvolume to ${persistDir}/old_roots/$timestamp"
+                       echo "Backed up previous root subvolume to ${persistDir}/old_roots/$timestamp"
+                   fi
+
+                   # Backup old home subvolume
+                   if [[ -e ${mountDir}/home ]]; then
+                       mkdir -p ${persistDir}/old_homes
+                       timestamp=$(date --date="@$(stat -c %Y ${mountDir}/home)" "+%Y-%m-%-d_%H:%M:%S")
+                       mv ${mountDir}/home "${persistDir}/old_homes/$timestamp"
+
+                       echo "Backed up previous home subvolume to ${persistDir}/old_homes/$timestamp"
+                   fi
+
+                   # Delete a backed up subvolume
+                   delete_subvolume_recursively() {
+                       IFS=$'\n'
+
+                       # https://github.com/nix-community/impermanence/issues/258#issuecomment-2733383737
+                       # If we accidentally end up with a file or directory under old_roots,
+                       # the code will enumerate all subvolumes under the main volume.
+                       # We don't want to remove everything under true main volume. Only
+                       # proceed if this path is a btrfs subvolume (inode=256).
+                       if [ $(stat -c %i "$1") -ne 256 ]; then return; fi
+
+                       for subvol in $(btrfs subvolume list -o "$1" | cut -f 9- -d ' '); do
+                           delete_subvolume_recursively "${persistDir}/$subvol"
+                       done
+
+                       btrfs subvolume delete "$1"
+                       echo "Deleted old subvolume $1"
+                   }
+
+                   # Delete old roots
+                   for old_root in $(find ${persistDir}/old_roots/ -maxdepth 1 -mtime +${backupDuration}); do
+                       delete_subvolume_recursively "$old_root"
+                   done
+
+                   # Delete old homes
+                   for old_home in $(find ${persistDir}/old_homes/ -maxdepth 1 -mtime +${backupDuration}); do
+                       delete_subvolume_recursively "$old_home"
+                   done
+
+                   # Create new root + home subvolumes
+                   btrfs subvolume create ${mountDir}/root
+                   btrfs subvolume create ${mountDir}/home
+                   echo "Created new subvolumes ${mountDir}/root and ${mountDir}/home"
+
+                   if [[ -d ${mountDir}/home/${username} ]]; then
+                     chown -R ${homeUser}:${homeGroup} ${mountDir}/home/${username}
+                     echo "Set permissions for ${mountDir}/home/${username} to ${homeUser}:${homeGroup}"
             fi
 
-            # Backup old home subvolume
-            if [[ -e ${mountDir}/home ]]; then
-                mkdir -p ${persistDir}/old_homes
-                timestamp=$(date --date="@$(stat -c %Y ${mountDir}/home)" "+%Y-%m-%-d_%H:%M:%S")
-                mv ${mountDir}/home "${persistDir}/old_homes/$timestamp"
-
-                echo "Backed up previous home subvolume to ${persistDir}/old_homes/$timestamp"
+                   if [[ -d ${persistDir}/home/${username} ]]; then
+                     chown -R ${homeUser}:${homeGroup} ${persistDir}/home/${username}
+                     echo "Set permissions for ${persistDir}/home/${username} to ${homeUser}:${homeGroup}"
             fi
 
-            # Delete a backed up subvolume
-            delete_subvolume_recursively() {
-                IFS=$'\n'
-
-                # https://github.com/nix-community/impermanence/issues/258#issuecomment-2733383737
-                # If we accidentally end up with a file or directory under old_roots,
-                # the code will enumerate all subvolumes under the main volume.
-                # We don't want to remove everything under true main volume. Only
-                # proceed if this path is a btrfs subvolume (inode=256).
-                if [ $(stat -c %i "$1") -ne 256 ]; then return; fi
-
-                for subvol in $(btrfs subvolume list -o "$1" | cut -f 9- -d ' '); do
-                    delete_subvolume_recursively "${persistDir}/$subvol"
-                done
-
-                btrfs subvolume delete "$1"
-                echo "Deleted old subvolume $1"
-            }
-
-            # Delete old roots
-            for old_root in $(find ${persistDir}/old_roots/ -maxdepth 1 -mtime +${backupDuration}); do
-                delete_subvolume_recursively "$old_root"
-            done
-
-            # Delete old homes
-            for old_home in $(find ${persistDir}/old_homes/ -maxdepth 1 -mtime +${backupDuration}); do
-                delete_subvolume_recursively "$old_home"
-            done
-
-            # Create new root + home subvolumes
-            btrfs subvolume create ${mountDir}/root
-            btrfs subvolume create ${mountDir}/home
-            echo "Created new subvolumes ${mountDir}/root and ${mountDir}/home"
-
-            umount ${mountDir}
-            rmdir ${mountDir}
+                   umount ${mountDir}
+                   rmdir ${mountDir}
           '';
         };
       };
