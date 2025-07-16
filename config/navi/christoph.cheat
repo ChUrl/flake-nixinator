@@ -186,6 +186,16 @@ $ file: eza -1
 # Monitor Nvidia GPUs
 watch -d -c -n 0.5 nvidia-smi
 
+% lsattr
+# List file/directory attributes
+lsattr <file>
+$ file: eza -1
+
+% chattr
+# Make files/directories mutable
+sudo chattr -R -i <file>
+$ file: eza -1
+
 ; ===========================
 ; SECRETS
 ; ===========================
