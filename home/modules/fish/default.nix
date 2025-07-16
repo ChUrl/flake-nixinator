@@ -138,7 +138,7 @@ in {
             b = "z -"; # jump to previous dir
             mkdir = "mkdir -p"; # also create parents (-p)
             blk = batify "lsblk -o NAME,LABEL,PARTLABEL,FSTYPE,SIZE,FSUSE%,MOUNTPOINT";
-            blkid = batify "lsblk -o NAME,LABEL,FSTYPE,SIZE,PARTLABEL,MODEL,ID,UUID";
+            blkids = batify "lsblk -o NAME,LABEL,FSTYPE,SIZE,PARTLABEL,MODEL,ID,UUID";
             watch = "watch -d -c -n 0.5";
             nd = "nix develop";
             nb = "nix build -L";

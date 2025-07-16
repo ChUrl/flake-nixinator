@@ -4,6 +4,7 @@
     ./desktopportal
     ./docker
     ./fonts
+    ./impermanence
     ./mime
     ./network
     ./polkit

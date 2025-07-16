@@ -14,6 +14,8 @@
   ];
 
   modules = {
+    impermanence.enable = true;
+
     network = {
       useNetworkManager = true;
 
