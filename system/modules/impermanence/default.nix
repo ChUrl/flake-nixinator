@@ -55,8 +55,6 @@ in {
           (mkRDir "/etc/secureboot" m755)
           (mkRDir "/etc/ssh" m755)
 
-          (mkRDir "/nix/var" m755)
-
           # https://github.com/nix-community/impermanence/issues/253
           (mkRDir "/usr/systemd-placeholder" m755)
 
@@ -104,6 +102,7 @@ in {
             (mkUDir ".ollama" m755)
             (mkUDir ".var/app" m755)
             (mkUDir ".vim/undo" m755)
+            (mkUDir ".zotero" m755)
 
             (mkUDir ".cache/fish/generated_completions" m755)
             (mkUDir ".cache/nix-index" m755)
@@ -118,6 +117,7 @@ in {
             (mkUDir ".config/keepassxc" m755)
             (mkUDir ".config/Msty" m755)
             (mkUDir ".config/Nextcloud" m755)
+            (mkUDir ".config/Zeal" m755)
 
             (mkUDir ".local/share/direnv" m755)
             (mkUDir ".local/share/docker" m755)
@@ -143,13 +143,25 @@ in {
         homeGroup = builtins.toString config.users.groups.${config.users.users.${username}.group}.gid;
       in {
         description = "Fix impermanent home ownership";
-        wantedBy = ["home-manager-christoph.service"]; # Required for HM activation
-        before = ["home-manager-christoph.service"];
+        wantedBy = ["home-manager-${username}.service"]; # Required for HM activation
+        before = ["home-manager-${username}.service"];
         after = ["home.mount"];
         partOf = ["home.mount"];
         serviceConfig.Type = "oneshot";
 
         script = ''
+          # Don't chown if NFS shares are already mounted.
+          # This can happen outside of regular booting (e.g. nixos-rebuild switch),
+          # so we don't return an error.
+          nfs_mounts=$(grep ' nfs4 ' /proc/mounts)
+          if [ -n "$nfs_mounts" ]; then
+            echo "NFS shares are mounted into the home directory, aborting:"
+            echo "$nfs_mounts"
+            exit 0
+          else
+            echo "No NFS shares are mounted into the home directory, continuing..."
+          fi
+
           if [[ -d ${homeDir} ]]; then
             chown -R ${homeUser}:${homeGroup} ${homeDir}
             echo "Set ownership for ${homeDir} to ${homeUser}:${homeGroup}"
