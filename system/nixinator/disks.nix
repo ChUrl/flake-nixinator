@@ -45,47 +45,42 @@
                   type = "btrfs";
                   extraArgs = ["-L" "NIXOS" "-f"];
                   subvolumes = {
-                    "/root" = {
+                    "root" = {
                       mountpoint = "/";
                       mountOptions = [
-                        "subvol=root"
                         "compress=zstd"
                         "noatime"
                       ];
                     };
-                    "/home" = {
+                    "home" = {
                       mountpoint = "/home";
                       mountOptions = [
-                        "subvol=home"
                         "compress=zstd"
                         "noatime"
                       ];
                     };
-                    "/nix" = {
+                    "nix" = {
                       mountpoint = "/nix";
                       mountOptions = [
-                        "subvol=nix"
                         "compress=zstd"
                         "noatime"
                       ];
                     };
-                    "/persist" = {
+                    "persist" = {
                       mountpoint = "/persist";
                       mountOptions = [
-                        "subvol=persist"
                         "compress=zstd"
                         "noatime"
                       ];
                     };
-                    "/log" = {
+                    "log" = {
                       mountpoint = "/var/log";
                       mountOptions = [
-                        "subvol=log"
                         "compress=zstd"
                         "noatime"
                       ];
                     };
-                    "/swap" = {
+                    "swap" = {
                       mountpoint = "/swap";
                       swap.swapfile.size = "16G";
                     };
