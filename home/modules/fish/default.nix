@@ -143,6 +143,9 @@ in {
             nd = "nix develop";
             nb = "nix build -L";
             nps = "nps -e";
+
+            newroot = "sudo fd --one-file-system --base-directory / --type f --hidden --exclude '{tmp,etc/passwd}'";
+            newhome = "sudo fd --one-file-system --base-directory /home/christoph --type f --hidden --exclude '{.cache}'";
           }
 
           # Abbrs only available if package is installed
