@@ -23,17 +23,17 @@ in {
 
     mkDir = user: directory: mode: {
       inherit directory mode;
-      # user = config.users.users.${user}.name;
-      # group = config.users.users.${user}.group;
+      user = config.users.users.${user}.name;
+      group = config.users.users.${user}.group;
     };
 
     mkFile = user: file: mode: {
       inherit file;
-      # parentDirectory = {
-      #   inherit mode;
-      #   user = config.users.users.${user}.name;
-      #   group = config.users.users.${user}.group;
-      # };
+      parentDirectory = {
+        inherit mode;
+        user = config.users.users.${user}.name;
+        group = config.users.users.${user}.group;
+      };
     };
   in
     lib.mkIf impermanence.enable {
@@ -76,12 +76,10 @@ in {
 
         users.${username} = {
           files = [
-            # (mkUFile ".ssh/known_hosts" m755) # m644
-            #
-            # (mkUFile ".secrets/spotify_client_id" m755) # m644
-            # (mkUFile ".secrets/spotify_client_secret" m755) # m644
-            # (mkUFile ".secrets/youtube_music_cookies" m755) # m644
-            # (mkUFile ".secrets/age/age.key" m755) # m600
+            (mkUFile ".local/share/fish/fish_history" m755)
+            (mkUFile ".local/share/hyprland/lastVersion" m755)
+
+            (mkUFile ".local/state/lazygit/state.yml" m755)
           ];
 
           directories = [
@@ -122,15 +120,18 @@ in {
             (mkUDir ".config/Nextcloud" m755)
 
             (mkUDir ".local/share/direnv" m755)
+            (mkUDir ".local/share/docker" m755)
             (mkUDir ".local/share/flatpak" m755)
             (mkUDir ".local/share/keyrings" m755) # m700
             (mkUDir ".local/share/nix" m755)
-            (mkUDir ".local/share/nvim/sessions" m755)
+            (mkUDir ".local/share/nvim" m755)
+            (mkUDir ".local/share/systemd" m755)
             (mkUDir ".local/share/zoxide" m755)
 
             (mkUDir ".local/state/astal/notifd" m755)
             (mkUDir ".local/state/nix" m755)
             (mkUDir ".local/state/nvim" m755)
+            (mkUDir ".local/state/wireplumber" m755)
           ];
         };
       };
