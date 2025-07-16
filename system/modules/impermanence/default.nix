@@ -128,5 +128,68 @@ in {
           ];
         };
       };
+
+      # Because we have a LUKS encrypted drive
+      # we use a systemd service to cleanup the volumes
+      boot.initrd.systemd = {
+        enable = true;
+
+        services.btrfs-volume-cleanup = let
+          backupDuration = "7"; # Days
+          mountDir = "/btrfs_tmp";
+        in {
+          description = "Clean btrfs subvolumes for impermanence";
+          wantedBy = ["initrd.target"];
+          after = ["dev-mapper-crypted.device"];
+          before = ["sysroot.mount"];
+          unitConfig.DefaultDependencies = "no";
+          serviceConfig.Type = "oneshot";
+          path = ["/bin" config.system.build.extraUtils];
+
+          script = ''
+            mkdir -p ${mountDir}
+            mount -o subvol=/ /dev/mapper/crypted ${mountDir}
+
+            # Backup old root subvolume
+            if [[ -e ${mountDir}/root ]]; then
+                mkdir -p ${mountDir}/old_roots
+                timestamp=$(date --date="@$(stat -c %Y ${mountDir}/root)" "+%Y-%m-%-d_%H:%M:%S")
+                mv ${mountDir}/root "${mountDir}/old_roots/$timestamp"
+            fi
+
+            # Backup old home subvolume
+            if [[ -e ${mountDir}/home ]]; then
+                mkdir -p ${mountDir}/old_homes
+                timestamp=$(date --date="@$(stat -c %Y ${mountDir}/home)" "+%Y-%m-%-d_%H:%M:%S")
+                mv ${mountDir}/home "${mountDir}/old_homes/$timestamp"
+            fi
+
+            delete_subvolume_recursively() {
+                IFS=$'\n'
+                for subvol in $(btrfs subvolume list -o "$1" | cut -f 9- -d ' '); do
+                    delete_subvolume_recursively "${mountDir}/$subvol"
+                done
+                btrfs subvolume delete "$1"
+            }
+
+            # Delete old roots
+            for old_root in $(find ${mountDir}/old_roots/ -maxdepth 1 -mtime +${backupDuration}); do
+                delete_subvolume_recursively "$old_root"
+            done
+
+            # Delete old homes
+            for old_home in $(find ${mountDir}/old_homes/ -maxdepth 1 -mtime +${backupDuration}); do
+                delete_subvolume_recursively "$old_home"
+            done
+
+            # Create new root + home subvolumes
+            btrfs subvolume create ${mountDir}/root
+            btrfs subvolume create ${mountDir}/home
+
+            umount ${mountDir}
+            rmdir ${mountDir}
+          '';
+        };
+      };
     };
 }
