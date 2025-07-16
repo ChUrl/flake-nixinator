@@ -216,10 +216,13 @@ with mylib.networking; {
   console.keyMap = "us-acentos";
 
   # Define a user account. Password is set from sops-nix secrets automatically.
+  users.mutableUsers = false; # Users are always overridden by stuff defined here
   users.users.${username} = {
     isNormalUser = true;
     hashedPasswordFile = config.sops.secrets.user-password.path;
     description = "Christoph";
+    group = "users";
+    uid = 1000;
     extraGroups = [
       "networkmanager"
       "wheel"
@@ -240,6 +243,8 @@ with mylib.networking; {
     # We do this with HomeManager
     # packages = with pkgs; [];
   };
+
+  users.groups."users".gid = 100;
 
   # We want these packages to be available even when no user profile is active
   # Empty since we basically only need git + editor which is enabled below
