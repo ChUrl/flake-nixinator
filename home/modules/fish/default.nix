@@ -3,6 +3,7 @@
   lib,
   mylib,
   pkgs,
+  username,
   ...
 }: let
   inherit (config.modules) fish;
@@ -143,16 +144,30 @@ in {
             nd = "nix develop";
             nb = "nix build -L";
             nps = "nps -e";
-
-            newroot = "sudo fd --one-file-system --base-directory / --type f --hidden --exclude '{tmp,etc/passwd}'";
-            newhome = "sudo fd --one-file-system --base-directory /home/christoph --type f --hidden --exclude '{.cache}'";
           }
+
+          # Impermanence
+          # TODO: Those should be scripts
+          (let
+            fzfHome = "sudo fzf --preview 'bat --color=always --theme=ansi --style=numbers --line-range=:100 {}'";
+            fzfRoot = "sudo fzf --preview 'bat --color=always --theme=ansi --style=numbers --line-range=:100 /{}'";
+
+            cmdHome = "sudo fd --one-file-system --base-directory /home/${username} --type f --hidden --exclude \"{.cache}\"";
+            cmdRoot = "sudo fd --one-file-system --base-directory / --type f --hidden --exclude \"{tmp,etc/passwd}\"";
+
+            mvHome = "mkdir -p /persist/home/${username}/$(dirname {}) && mv {} /persist/home/${username}/$(dirname {})";
+            mvRoot = "sudo mkdir -p /persist/$(dirname {}) && sudo mv {} /persist/$(dirname {})";
+          in {
+            newroot = ''${cmdRoot} | ${fzfRoot} --header 'Press CTRL-R to reload, CTRL-M to move' --bind 'ctrl-r:reload(${cmdRoot}),ctrl-m:execute(${mvRoot})' '';
+
+            newhome = ''${cmdHome} | ${fzfHome} --header 'Press CTRL-R to reload, CTRL-M to move' --bind 'ctrl-r:reload(${cmdHome}),ctrl-m:execute(${mvHome})' '';
+          })
 
           # Abbrs only available if package is installed
 
           (abbrify pkgs.duf {
-            # df = "duf";
-            disks = "duf";
+            disks = "duf --hide-mp '/var/*,/etc/*,/usr/*,/home/christoph/.*'";
+            alldisks = "duf";
           })
 
           (abbrify pkgs.eza {
