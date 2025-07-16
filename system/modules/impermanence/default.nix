@@ -3,6 +3,7 @@
   lib,
   mylib,
   username,
+  pkgs,
   ...
 }: let
   inherit (config.modules) impermanence;
@@ -105,6 +106,7 @@ in {
 
             (mkUDir ".cache/fish/generated_completions" m755)
             (mkUDir ".cache/nix-index" m755)
+            (mkUDir ".cache/nix-search-tv" m755)
             (mkUDir ".cache/nvim" m755)
 
             (mkUDir ".config/beets" m755)
@@ -134,17 +136,18 @@ in {
       boot.initrd.systemd = {
         enable = true;
 
-        services.btrfs-volume-cleanup = let
+        services.impermanence-btrfs-cleanup = let
           backupDuration = "7"; # Days
           mountDir = "/btrfs_tmp";
+          persistDir = "${mountDir}/persist";
         in {
-          description = "Clean btrfs subvolumes for impermanence";
+          description = "Clean impermanent btrfs subvolumes";
           wantedBy = ["initrd.target"];
           after = ["dev-mapper-crypted.device"];
           before = ["sysroot.mount"];
           unitConfig.DefaultDependencies = "no";
           serviceConfig.Type = "oneshot";
-          path = ["/bin" config.system.build.extraUtils];
+          # path = ["/bin" config.system.build.extraUtils pkgs.coreutils-full];
 
           script = ''
             mkdir -p ${mountDir}
@@ -152,39 +155,55 @@ in {
 
             # Backup old root subvolume
             if [[ -e ${mountDir}/root ]]; then
-                mkdir -p ${mountDir}/old_roots
+                mkdir -p ${persistDir}/old_roots
                 timestamp=$(date --date="@$(stat -c %Y ${mountDir}/root)" "+%Y-%m-%-d_%H:%M:%S")
-                mv ${mountDir}/root "${mountDir}/old_roots/$timestamp"
+                mv ${mountDir}/root "${persistDir}/old_roots/$timestamp"
+
+                echo "Backed up previous root subvolume to ${persistDir}/old_roots/$timestamp"
             fi
 
             # Backup old home subvolume
             if [[ -e ${mountDir}/home ]]; then
-                mkdir -p ${mountDir}/old_homes
+                mkdir -p ${persistDir}/old_homes
                 timestamp=$(date --date="@$(stat -c %Y ${mountDir}/home)" "+%Y-%m-%-d_%H:%M:%S")
-                mv ${mountDir}/home "${mountDir}/old_homes/$timestamp"
+                mv ${mountDir}/home "${persistDir}/old_homes/$timestamp"
+
+                echo "Backed up previous home subvolume to ${persistDir}/old_homes/$timestamp"
             fi
 
+            # Delete a backed up subvolume
             delete_subvolume_recursively() {
                 IFS=$'\n'
+
+                # https://github.com/nix-community/impermanence/issues/258#issuecomment-2733383737
+                # If we accidentally end up with a file or directory under old_roots,
+                # the code will enumerate all subvolumes under the main volume.
+                # We don't want to remove everything under true main volume. Only
+                # proceed if this path is a btrfs subvolume (inode=256).
+                if [ $(stat -c %i "$1") -ne 256 ]; then return; fi
+
                 for subvol in $(btrfs subvolume list -o "$1" | cut -f 9- -d ' '); do
-                    delete_subvolume_recursively "${mountDir}/$subvol"
+                    delete_subvolume_recursively "${persistDir}/$subvol"
                 done
+
                 btrfs subvolume delete "$1"
+                echo "Deleted old subvolume $1"
             }
 
             # Delete old roots
-            for old_root in $(find ${mountDir}/old_roots/ -maxdepth 1 -mtime +${backupDuration}); do
+            for old_root in $(find ${persistDir}/old_roots/ -maxdepth 1 -mtime +${backupDuration}); do
                 delete_subvolume_recursively "$old_root"
             done
 
             # Delete old homes
-            for old_home in $(find ${mountDir}/old_homes/ -maxdepth 1 -mtime +${backupDuration}); do
+            for old_home in $(find ${persistDir}/old_homes/ -maxdepth 1 -mtime +${backupDuration}); do
                 delete_subvolume_recursively "$old_home"
             done
 
             # Create new root + home subvolumes
             btrfs subvolume create ${mountDir}/root
             btrfs subvolume create ${mountDir}/home
+            echo "Created new subvolumes ${mountDir}/root and ${mountDir}/home"
 
             umount ${mountDir}
             rmdir ${mountDir}
