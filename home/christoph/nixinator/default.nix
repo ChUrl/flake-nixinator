@@ -117,12 +117,7 @@
 
         # Unity Stuff
         # TODO: Unity module
-
-        # TODO: Unityhub builds again, but the editor doesn't launch
-        #       due to missing dynamic libraries.
-        #       They are declared in the unityhub derivation but not picked up...
-        #       Can use flatpak as a workaround :(
-        # unityhub_3_13
+        # unityhub # TODO: Wait for https://nixpk.gs/pr-tracker.html?pr=422785
         unity-rider
         dotnetCore
         mono
