@@ -141,6 +141,7 @@ in {
           "Poweroff" = "poweroff";
           "Reboot" = "reboot";
           "Lock" = "loginctl lock-session";
+          "Reload Hyprpanel" = "systemctl --user restart hyprpanel.service";
           "Reload Hyprland" = "hyprctl reload";
           "Exit Hyprland" = "hyprctl dispatch exit";
         };
@@ -153,7 +154,7 @@ in {
         {
           "$mainMod, escape" = ["exec, \"${power-menu}\""];
           "$mainMod, M" = ["exec, \"${keybinds-menu}\""];
-          # "$mainMod, O" = ["exec, \"${lectures-menu}\""]; # TODO: Broken, expand on that
+          # "$mainMod, O" = ["exec, \"${lectures-menu}\""];
         }
         (lib.optionalAttrs (!nixosConfig.modules.network.useNetworkManager) {
           "$mainMod, U" = ["exec, \"${vpn-menu}\""];
