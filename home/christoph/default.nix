@@ -108,6 +108,8 @@
           ", XF86MonBrightnessUp" = ["exec, hyprctl hyprsunset gamma +10"];
           "$mainMod, XF86MonBrightnessDown" = ["exec, hyprctl hyprsunset temperature 5750"];
           "$mainMod, XF86MonBrightnessUp" = ["exec, hyprctl hyprsunset identity"];
+
+          "CTRL ALT, r" = ["exec, systemctl --user restart hyprpanel.service"];
         };
 
         ws-bindings = {
@@ -484,7 +486,7 @@
           audacity
           ferdium
           gparted
-          exfatprogs
+          tidal-hifi
 
           # Office
           wacomtablet # For xournalpp/krita
