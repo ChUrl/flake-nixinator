@@ -109,7 +109,7 @@
           "$mainMod, XF86MonBrightnessDown" = ["exec, hyprctl hyprsunset temperature 5750"];
           "$mainMod, XF86MonBrightnessUp" = ["exec, hyprctl hyprsunset identity"];
 
-          "CTRL ALT, t" = ["exec, systemctl --user restart hyprpanel.service"];
+          # "CTRL ALT, t" = ["exec, bash -c 'systemctl --user restart hyprpanel.service'"];
         };
 
         ws-bindings = {
@@ -163,8 +163,8 @@
         "4" = ["firefox" "Google-chrome" "chromium-browser"];
         "5" = ["steam"];
         "6" = ["steam_app_(.+)"];
-        "7" = [];
-        "8" = ["signal"];
+        "7" = ["signal"];
+        "8" = ["tidal-hifi"];
         "9" = ["discord"];
         "10" = ["python3"];
       };
@@ -188,6 +188,7 @@
         "signal"
         "vesktop"
         "Spotify"
+        "tidal-hifi"
         "obsidian"
         "jetbrains-clion"
         "jetbrains-idea"
