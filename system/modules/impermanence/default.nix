@@ -74,8 +74,8 @@ in {
 
         users.${username} = {
           files = [
-            (mkUFile ".config/mimeapps.list" m755)
-
+            # NOTE: Don't put files generated/linked by HM here
+            #       as HM can't overwrite file mounts...
             (mkUFile ".local/share/fish/fish_history" m755)
             (mkUFile ".local/share/hyprland/lastVersion" m755)
 
