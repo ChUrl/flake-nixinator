@@ -487,6 +487,7 @@
           ferdium
           gparted
           tidal-hifi
+          tidal-dl-ng
 
           # Office
           wacomtablet # For xournalpp/krita
