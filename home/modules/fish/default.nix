@@ -147,20 +147,30 @@ in {
           }
 
           # Impermanence
-          # TODO: Those should be scripts
+          # TODO: Those should be a single script to be called with the search path (/ or /home/christoph or just .)
           (let
+            fdIgnoreHome = "fdignore-home";
+            fdIgnoreRoot = "fdignore-root";
+
+            cmdHome = "sudo fd --one-file-system --base-directory /home/${username} --type f --hidden --ignore-file /home/${username}/.config/impermanence/${fdIgnoreHome}";
+            cmdRoot = "sudo fd --one-file-system --base-directory / --type f --hidden --ignore-file /home/${username}/.config/impermanence/${fdIgnoreRoot}";
+
             fzfHome = "sudo fzf --preview 'bat --color=always --theme=ansi --style=numbers --line-range=:100 {}'";
             fzfRoot = "sudo fzf --preview 'bat --color=always --theme=ansi --style=numbers --line-range=:100 /{}'";
 
-            cmdHome = "sudo fd --one-file-system --base-directory /home/${username} --type f --hidden --exclude \"{.cache}\"";
-            cmdRoot = "sudo fd --one-file-system --base-directory / --type f --hidden --exclude \"{tmp,etc/passwd}\"";
-
             mvHome = "mkdir -p /persist/home/${username}/$(dirname {}) && mv {} /persist/home/${username}/$(dirname {})";
             mvRoot = "sudo mkdir -p /persist/$(dirname {}) && sudo mv {} /persist/$(dirname {})";
-          in {
-            newroot = ''${cmdRoot} | ${fzfRoot} --header 'Press CTRL-R to reload, CTRL-M to move' --bind 'ctrl-r:reload(${cmdRoot}),ctrl-m:execute(${mvRoot})' '';
 
-            newhome = ''${cmdHome} | ${fzfHome} --header 'Press CTRL-R to reload, CTRL-M to move' --bind 'ctrl-r:reload(${cmdHome}),ctrl-m:execute(${mvHome})' '';
+            header = "--header 'Press CTRL-R to reload, CTRL-M to move, CTRL-F to ignore file'";
+
+            ignoreFileHome = "echo '{}' >> /home/${username}/.config/impermanence/${fdIgnoreHome}";
+            ignoreFileRoot = "echo '{}' >> /home/${username}/.config/impermanence/${fdIgnoreRoot}";
+
+            bindHome = "--bind 'ctrl-r:reload(${cmdHome}),ctrl-m:execute(${mvHome}),ctrl-f:execute(${ignoreFileHome})'";
+            bindRoot = "--bind 'ctrl-r:reload(${cmdRoot}),ctrl-m:execute(${mvRoot}),ctrl-f:execute(${ignoreFileRoot})'";
+          in {
+            newhome = ''${cmdHome} | ${fzfHome} ${header} ${bindHome}'';
+            newroot = ''${cmdRoot} | ${fzfRoot} ${header} ${bindRoot}'';
           })
 
           # Abbrs only available if package is installed
