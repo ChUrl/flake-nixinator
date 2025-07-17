@@ -36,7 +36,7 @@
       "$mainMod CTRL, d" = ["movewindow, d"];
 
       # Reset workspaces to the defined configuration in hyprland.workspaces:
-      "CTRL ALT, R" = let
+      "CTRL ALT, r" = let
         mkWBinding = m: w:
           "moveworkspacetomonitor, "
           + "${builtins.toString w} ${builtins.toString m}";

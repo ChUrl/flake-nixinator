@@ -254,6 +254,7 @@ with mylib.networking; {
     mprocs # run multiple processes in single terminal window, screen alternative
     parted # partition manager
     exfat
+    exfatprogs
     procs # Better ps
     procps # pgrep, pkill
     busybox
