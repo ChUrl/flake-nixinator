@@ -96,6 +96,8 @@ in {
             (mkUDir ".secrets" m755) # m644
             (mkUDir ".ssh" m755) # m644
 
+            (mkUDir ".android" m755) # Unity
+            (mkUDir ".java" m755) # Unity/Rider
             (mkUDir ".mozilla/firefox" m755) # TODO: Remove this someday
             (mkUDir ".mozilla/native-messaging-hosts" m755)
             (mkUDir ".nix-package-search" m755)
@@ -114,16 +116,19 @@ in {
             (mkUDir ".config/Ferdium" m755)
             (mkUDir ".config/fish/completions" m755)
             (mkUDir ".config/impermanence" m755)
+            (mkUDir ".config/JetBrains" m755) # Unity/Rider
             (mkUDir ".config/kdeconnect" m755)
             (mkUDir ".config/keepassxc" m755)
             (mkUDir ".config/Msty" m755)
             (mkUDir ".config/Nextcloud" m755)
             (mkUDir ".config/obsidian" m755)
+            (mkUDir ".config/unity3d" m755) # Unity
             (mkUDir ".config/Zeal" m755)
 
             (mkUDir ".local/share/direnv" m755)
             (mkUDir ".local/share/docker" m755)
             (mkUDir ".local/share/flatpak" m755)
+            (mkUDir ".local/share/JetBrains" m755) # Unity/Rider
             (mkUDir ".local/share/keyrings" m755) # m700
             (mkUDir ".local/share/nix" m755)
             (mkUDir ".local/share/nvim" m755)
