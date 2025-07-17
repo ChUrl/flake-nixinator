@@ -109,7 +109,7 @@
           "$mainMod, XF86MonBrightnessDown" = ["exec, hyprctl hyprsunset temperature 5750"];
           "$mainMod, XF86MonBrightnessUp" = ["exec, hyprctl hyprsunset identity"];
 
-          "CTRL ALT, r" = ["exec, systemctl --user restart hyprpanel.service"];
+          "CTRL ALT, t" = ["exec, systemctl --user restart hyprpanel.service"];
         };
 
         ws-bindings = {
