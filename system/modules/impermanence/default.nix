@@ -155,8 +155,9 @@ in {
           # Don't chown if NFS shares are already mounted.
           # This can happen outside of regular booting (e.g. nixos-rebuild switch),
           # so we don't return an error.
-          nfs_mounts=$(grep ' nfs4 ' /proc/mounts)
-          if [ -n "$nfs_mounts" ]; then
+          # NOTE: Use || true as NixOS sets the damn -e, otherwise this unit fails on boot!
+          nfs_mounts=$(grep ' nfs4 ' /proc/mounts || true)
+          if [[ -n "$nfs_mounts" ]]; then
             echo "NFS shares are mounted into the home directory, aborting:"
             echo "$nfs_mounts"
             exit 0
@@ -169,6 +170,7 @@ in {
             echo "Set ownership for ${homeDir} to ${homeUser}:${homeGroup}"
           else
             echo "ERROR: Home ${homeDir} does not exist!"
+            exit 1
           fi
         '';
       };
