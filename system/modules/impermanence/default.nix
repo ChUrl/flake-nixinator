@@ -113,6 +113,7 @@ in {
             (mkUDir ".config/chromium" m755) # TODO: Remove this someday
             (mkUDir ".config/Ferdium" m755)
             (mkUDir ".config/fish/completions" m755)
+            (mkUDir ".config/impermanence" m755)
             (mkUDir ".config/kdeconnect" m755)
             (mkUDir ".config/keepassxc" m755)
             (mkUDir ".config/Msty" m755)
