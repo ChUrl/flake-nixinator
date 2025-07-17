@@ -74,10 +74,13 @@ in {
 
         users.${username} = {
           files = [
+            (mkUFile ".config/mimeapps.list" m755)
+
             (mkUFile ".local/share/fish/fish_history" m755)
             (mkUFile ".local/share/hyprland/lastVersion" m755)
 
             (mkUFile ".local/state/lazygit/state.yml" m755)
+            (mkUFile ".local/state/xdg-desktop-portal-termfilechooser/last_dir" m755)
           ];
 
           directories = [
@@ -130,6 +133,7 @@ in {
             (mkUDir ".local/share/flatpak" m755)
             (mkUDir ".local/share/JetBrains" m755) # Unity/Rider
             (mkUDir ".local/share/keyrings" m755) # m700
+            (mkUDir ".local/share/mime" m755)
             (mkUDir ".local/share/nix" m755)
             (mkUDir ".local/share/nvim" m755)
             (mkUDir ".local/share/systemd" m755)
