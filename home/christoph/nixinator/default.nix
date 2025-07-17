@@ -83,7 +83,7 @@
         # Add any extra libraries you want accessible to Rider here
       ];
 
-      rider = pkgs.jetbrains.rider.overrideAttrs (attrs: {
+      unity-rider = pkgs.jetbrains.rider.overrideAttrs (attrs: {
         postInstall =
           ''
             # Wrap rider with extra tools and libraries
@@ -116,11 +116,11 @@
         # jetbrains.webstorm
 
         # Unity Stuff
-        # unityhub
-
-        # rider
-        # dotnetCore
-        # mono
+        # TODO: Unity module
+        unityhub_3_13
+        unity-rider
+        dotnetCore
+        mono
 
         blender
         godot_4
@@ -139,7 +139,7 @@
             desktopFile = pkgs.makeDesktopItem {
               name = "jetbrains-rider";
               desktopName = "Rider";
-              exec = "\"${rider}/bin/rider\"";
+              exec = "\"${unity-rider}/bin/rider\"";
               icon = "rider";
               type = "Application";
               # Don't show desktop icon in search or run launcher
