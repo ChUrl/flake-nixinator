@@ -7,5 +7,4 @@
 
   monolisa = pkgs.callPackage ./monolisa {};
   msty = pkgs.callPackage ./msty {};
-  unityhub_3_13 = pkgs.callPackage ./unityhub_3_13 {};
 }
