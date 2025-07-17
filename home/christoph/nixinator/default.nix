@@ -117,7 +117,12 @@
 
         # Unity Stuff
         # TODO: Unity module
-        unityhub_3_13
+
+        # TODO: Unityhub builds again, but the editor doesn't launch
+        #       due to missing dynamic libraries.
+        #       They are declared in the unityhub derivation but not picked up...
+        #       Can use flatpak as a workaround :(
+        # unityhub_3_13
         unity-rider
         dotnetCore
         mono
@@ -174,6 +179,8 @@
           "org.prismlauncher.PrismLauncher"
           "com.usebottles.bottles"
           "io.github.lawstorant.boxflat"
+
+          "com.unity.UnityHub"
         ];
 
         overrides = {
@@ -197,6 +204,13 @@
             filesystems = [
               "${config.home.homeDirectory}/.var/app/com.valvesoftware.Steam"
               "${config.home.homeDirectory}/Games"
+            ];
+          };
+
+          "com.unity.UnityHub".Context = {
+            filesystems = [
+              "${config.home.homeDirectory}/Unity"
+              "${config.home.homeDirectory}/Projects"
             ];
           };
         };
