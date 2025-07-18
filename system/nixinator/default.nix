@@ -117,8 +117,13 @@
     };
   };
 
-  # TODO: To AI module
   services = {
+    btrfs.autoScrub = {
+      enable = true;
+      interval = "weekly";
+      fileSystems = ["/"];
+    };
+
     # TODO: Docling doesn't find tesseract OCR engine... Probably use docker?
     docling-serve = {
       enable = false;
@@ -129,6 +134,7 @@
       openFirewall = false;
     };
 
+    # TODO: To AI module
     ollama = {
       enable = true;
       acceleration = "cuda";
@@ -159,6 +165,7 @@
       openFirewall = false;
     };
 
+    # TODO: To AI module
     # TODO: WebSearch + RAG issues
     open-webui = {
       enable = false;
