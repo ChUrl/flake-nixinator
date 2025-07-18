@@ -103,6 +103,9 @@
 
   boot = {
     kernelPackages = pkgs.linuxPackages_zen;
+
+    # kernelParams = ["quiet"];
+    # plymouth.enable = true;
   };
 
   environment.systemPackages = with pkgs; [
