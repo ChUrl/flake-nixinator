@@ -127,6 +127,7 @@ in {
             (mkUDir ".config/Msty" m755)
             (mkUDir ".config/Nextcloud" m755)
             (mkUDir ".config/obsidian" m755)
+            (mkUDir ".config/Signal" m755)
             (mkUDir ".config/tidal-hifi" m755)
             (mkUDir ".config/tidal_dl_ng" m755)
             (mkUDir ".config/unity3d" m755) # Unity
