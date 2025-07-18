@@ -140,10 +140,12 @@
       acceleration = "cuda";
       home = "/var/lib/ollama";
 
-      loadModels = [
-        "deepseek-r1:8b" # Default
-        "deepseek-r1:14b"
-      ];
+      # TODO: This slows down booting although models are present?
+      #       Maybe because it's waiting for /persist/var/lib/private/ollama?
+      # loadModels = [
+      #   "deepseek-r1:8b" # Default
+      #   "deepseek-r1:14b"
+      # ];
 
       # https://github.com/ollama/ollama/blob/main/docs/faq.md#how-do-i-configure-ollama-server
       environmentVariables = {
