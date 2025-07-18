@@ -79,7 +79,7 @@ in {
           files = [
             # NOTE: Don't put files generated/linked by HM here (they're already managed)
 
-            # TODO: Why do these not work?
+            # TODO: These files are not mounted?
             (mkUFile ".config/.tidal-dl.json" m755)
             (mkUFile ".config/.tidal-dl.token.json" m755)
             (mkUFile ".config/QtProject.conf" m755) # KeePassXC
@@ -272,6 +272,7 @@ in {
             # Create new home subvolume
             ${mkNewSubvol "home"}
 
+            # TODO: Did this removal of old backups always brick the system?
             # Delete a backed up subvolume
             # delete_subvolume_recursively() {
             #   IFS=$'\n'

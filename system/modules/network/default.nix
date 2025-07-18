@@ -104,7 +104,7 @@ in {
       };
     };
 
-    # We don't need this, the nfs mounts should retry until online
-    systemd.services.NetworkManager-wait-online.enable = false;
+    # We need this (sadly), otherwise the nfs mounts don't work
+    systemd.services.NetworkManager-wait-online.enable = true;
   };
 }
