@@ -41,7 +41,8 @@
   };
 
   modules = {
-    beets.enable = !headless;
+    # TODO: Reenable after build-failure on 2025-07-18
+    beets.enable = false; # !headless;
 
     btop.enable = true;
 

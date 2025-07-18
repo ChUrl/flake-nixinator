@@ -83,6 +83,7 @@
         # Add any extra libraries you want accessible to Rider here
       ];
 
+      # TODO: Broken, jetbrains.jdk doesn't build (see nixpkgs #425328)
       unity-rider = pkgs.jetbrains.rider.overrideAttrs (attrs: {
         postInstall =
           ''
@@ -118,9 +119,9 @@
         # Unity Stuff
         # TODO: Unity module
         # unityhub # TODO: Wait for https://nixpk.gs/pr-tracker.html?pr=422785
-        unity-rider
-        dotnetCore
-        mono
+        # unity-rider
+        # dotnetCore
+        # mono
 
         blender
         godot_4
@@ -135,17 +136,17 @@
 
       file = lib.mkMerge [
         {
-          ".local/share/applications/jetbrains-rider.desktop".source = let
-            desktopFile = pkgs.makeDesktopItem {
-              name = "jetbrains-rider";
-              desktopName = "Rider";
-              exec = "\"${unity-rider}/bin/rider\"";
-              icon = "rider";
-              type = "Application";
-              # Don't show desktop icon in search or run launcher
-              extraConfig.NoDisplay = "true";
-            };
-          in "${desktopFile}/share/applications/jetbrains-rider.desktop";
+          # ".local/share/applications/jetbrains-rider.desktop".source = let
+          #   desktopFile = pkgs.makeDesktopItem {
+          #     name = "jetbrains-rider";
+          #     desktopName = "Rider";
+          #     exec = "\"${unity-rider}/bin/rider\"";
+          #     icon = "rider";
+          #     type = "Application";
+          #     # Don't show desktop icon in search or run launcher
+          #     extraConfig.NoDisplay = "true";
+          #   };
+          # in "${desktopFile}/share/applications/jetbrains-rider.desktop";
 
           ".var/app/com.valvesoftware.Steam/config/MangoHud/MangoHud.conf".source = ../../../config/mangohud/MangoHud.conf;
         }
