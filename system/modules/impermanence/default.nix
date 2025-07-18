@@ -76,11 +76,8 @@ in {
           files = [
             # NOTE: Don't put files generated/linked by HM here
             #       as HM can't overwrite file mounts...
-            (mkUFile ".local/share/fish/fish_history" m755)
-            (mkUFile ".local/share/hyprland/lastVersion" m755)
-
-            (mkUFile ".local/state/lazygit/state.yml" m755)
-            (mkUFile ".local/state/xdg-desktop-portal-termfilechooser/last_dir" m755)
+            (mkUFile ".config/.tidal-dl.json" m755)
+            (mkUFile ".config/.tidal-dl.token.json" m755)
           ];
 
           directories = [
@@ -125,13 +122,18 @@ in {
             (mkUDir ".config/Msty" m755)
             (mkUDir ".config/Nextcloud" m755)
             (mkUDir ".config/obsidian" m755)
+            (mkUDir ".config/tidal-hifi" m755)
+            (mkUDir ".config/tidal_dl_ng" m755)
             (mkUDir ".config/unity3d" m755) # Unity
+            (mkUDir ".config/vlc" m755)
             (mkUDir ".config/Zeal" m755)
 
             (mkUDir ".local/share/direnv" m755)
             (mkUDir ".local/share/docker" m755)
+            (mkUDir ".local/share/fish" m755)
             (mkUDir ".local/share/flatpak" m755)
             (mkUDir ".local/share/JetBrains" m755) # Unity/Rider
+            (mkUDir ".local/share/hyprland" m755)
             (mkUDir ".local/share/keyrings" m755) # m700
             (mkUDir ".local/share/mime" m755)
             (mkUDir ".local/share/nix" m755)
@@ -140,6 +142,7 @@ in {
             (mkUDir ".local/share/zoxide" m755)
 
             (mkUDir ".local/state/astal/notifd" m755)
+            (mkUDir ".local/state/lazygit" m755)
             (mkUDir ".local/state/nix" m755)
             (mkUDir ".local/state/nvim" m755)
             (mkUDir ".local/state/wireplumber" m755)
@@ -206,73 +209,73 @@ in {
           # path = ["/bin" config.system.build.extraUtils pkgs.coreutils-full];
 
           script = ''
-                   mkdir -p ${mountDir}
-                   mount -o subvol=/ /dev/mapper/crypted ${mountDir}
+            mkdir -p ${mountDir}
+            mount -o subvol=/ /dev/mapper/crypted ${mountDir}
 
-                   # Backup old root subvolume
-                   if [[ -e ${mountDir}/root ]]; then
-                       mkdir -p ${persistDir}/old_roots
-                       timestamp=$(date --date="@$(stat -c %Y ${mountDir}/root)" "+%Y-%m-%-d_%H:%M:%S")
-                       mv ${mountDir}/root "${persistDir}/old_roots/$timestamp"
+            # Backup old root subvolume
+            if [[ -e ${mountDir}/root ]]; then
+              mkdir -p ${persistDir}/old_roots
+              timestamp=$(date --date="@$(stat -c %Y ${mountDir}/root)" "+%Y-%m-%-d_%H:%M:%S")
+              mv ${mountDir}/root "${persistDir}/old_roots/$timestamp"
 
-                       echo "Backed up previous root subvolume to ${persistDir}/old_roots/$timestamp"
-                   fi
-
-                   # Backup old home subvolume
-                   if [[ -e ${mountDir}/home ]]; then
-                       mkdir -p ${persistDir}/old_homes
-                       timestamp=$(date --date="@$(stat -c %Y ${mountDir}/home)" "+%Y-%m-%-d_%H:%M:%S")
-                       mv ${mountDir}/home "${persistDir}/old_homes/$timestamp"
-
-                       echo "Backed up previous home subvolume to ${persistDir}/old_homes/$timestamp"
-                   fi
-
-                   # Delete a backed up subvolume
-                   delete_subvolume_recursively() {
-                       IFS=$'\n'
-
-                       # https://github.com/nix-community/impermanence/issues/258#issuecomment-2733383737
-                       # If we accidentally end up with a file or directory under old_roots,
-                       # the code will enumerate all subvolumes under the main volume.
-                       # We don't want to remove everything under true main volume. Only
-                       # proceed if this path is a btrfs subvolume (inode=256).
-                       if [ $(stat -c %i "$1") -ne 256 ]; then return; fi
-
-                       for subvol in $(btrfs subvolume list -o "$1" | cut -f 9- -d ' '); do
-                           delete_subvolume_recursively "${persistDir}/$subvol"
-                       done
-
-                       btrfs subvolume delete "$1"
-                       echo "Deleted old subvolume $1"
-                   }
-
-                   # Delete old roots
-                   for old_root in $(find ${persistDir}/old_roots/ -maxdepth 1 -mtime +${backupDuration}); do
-                       delete_subvolume_recursively "$old_root"
-                   done
-
-                   # Delete old homes
-                   for old_home in $(find ${persistDir}/old_homes/ -maxdepth 1 -mtime +${backupDuration}); do
-                       delete_subvolume_recursively "$old_home"
-                   done
-
-                   # Create new root + home subvolumes
-                   btrfs subvolume create ${mountDir}/root
-                   btrfs subvolume create ${mountDir}/home
-                   echo "Created new subvolumes ${mountDir}/root and ${mountDir}/home"
-
-                   if [[ -d ${mountDir}/home/${username} ]]; then
-                     chown -R ${homeUser}:${homeGroup} ${mountDir}/home/${username}
-                     echo "Set permissions for ${mountDir}/home/${username} to ${homeUser}:${homeGroup}"
+              echo "Backed up previous root subvolume to ${persistDir}/old_roots/$timestamp"
             fi
 
-                   if [[ -d ${persistDir}/home/${username} ]]; then
-                     chown -R ${homeUser}:${homeGroup} ${persistDir}/home/${username}
-                     echo "Set permissions for ${persistDir}/home/${username} to ${homeUser}:${homeGroup}"
+            # Backup old home subvolume
+            if [[ -e ${mountDir}/home ]]; then
+              mkdir -p ${persistDir}/old_homes
+              timestamp=$(date --date="@$(stat -c %Y ${mountDir}/home)" "+%Y-%m-%-d_%H:%M:%S")
+              mv ${mountDir}/home "${persistDir}/old_homes/$timestamp"
+
+              echo "Backed up previous home subvolume to ${persistDir}/old_homes/$timestamp"
             fi
 
-                   umount ${mountDir}
-                   rmdir ${mountDir}
+            # Delete a backed up subvolume
+            delete_subvolume_recursively() {
+              IFS=$'\n'
+
+              # https://github.com/nix-community/impermanence/issues/258#issuecomment-2733383737
+              # If we accidentally end up with a file or directory under old_roots,
+              # the code will enumerate all subvolumes under the main volume.
+              # We don't want to remove everything under true main volume. Only
+              # proceed if this path is a btrfs subvolume (inode=256).
+              if [ $(stat -c %i "$1") -ne 256 ]; then return; fi
+
+              for subvol in $(btrfs subvolume list -o "$1" | cut -f 9- -d ' '); do
+                  delete_subvolume_recursively "${persistDir}/$subvol"
+              done
+
+              btrfs subvolume delete "$1"
+              echo "Deleted old subvolume $1"
+            }
+
+            # Delete old roots
+            for old_root in $(find ${persistDir}/old_roots/ -maxdepth 1 -mtime +${backupDuration}); do
+              delete_subvolume_recursively "$old_root"
+            done
+
+            # Delete old homes
+            for old_home in $(find ${persistDir}/old_homes/ -maxdepth 1 -mtime +${backupDuration}); do
+              delete_subvolume_recursively "$old_home"
+            done
+
+            # Create new root + home subvolumes
+            btrfs subvolume create ${mountDir}/root
+            btrfs subvolume create ${mountDir}/home
+            echo "Created new subvolumes ${mountDir}/root and ${mountDir}/home"
+
+            if [[ -d ${mountDir}/home/${username} ]]; then
+              chown -R ${homeUser}:${homeGroup} ${mountDir}/home/${username}
+              echo "Set permissions for ${mountDir}/home/${username} to ${homeUser}:${homeGroup}"
+            fi
+
+            if [[ -d ${persistDir}/home/${username} ]]; then
+              chown -R ${homeUser}:${homeGroup} ${persistDir}/home/${username}
+              echo "Set permissions for ${persistDir}/home/${username} to ${homeUser}:${homeGroup}"
+            fi
+
+            umount ${mountDir}
+            rmdir ${mountDir}
           '';
         };
       };
