@@ -489,6 +489,7 @@
           gparted
           tidal-hifi
           tidal-dl-ng
+          picard
 
           # Office
           wacomtablet # For xournalpp/krita
