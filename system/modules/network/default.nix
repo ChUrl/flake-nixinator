@@ -103,5 +103,8 @@ in {
         inherit (cfg) allowedTCPPorts allowedUDPPorts;
       };
     };
+
+    # We don't need this, the nfs mounts should retry until online
+    systemd.services.NetworkManager-wait-online.enable = false;
   };
 }
