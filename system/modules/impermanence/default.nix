@@ -29,11 +29,14 @@ in {
 
     mkFile = user: file: mode: {
       inherit file;
-      parentDirectory = {
-        inherit mode;
-        user = config.users.users.${user}.name;
-        group = config.users.users.${user}.group;
-      };
+
+      # This doesn't make much sense to set generally, e.g. when
+      # linking multiple files to ~/.config (they all have the same parent directory)
+      # parentDirectory = {
+      #   inherit mode;
+      #   user = config.users.users.${user}.name;
+      #   group = config.users.users.${user}.group;
+      # };
     };
   in
     lib.mkIf impermanence.enable {
@@ -74,10 +77,12 @@ in {
 
         users.${username} = {
           files = [
-            # NOTE: Don't put files generated/linked by HM here
-            #       as HM can't overwrite file mounts...
+            # NOTE: Don't put files generated/linked by HM here (they're already managed)
+
+            # TODO: Why do these not work?
             (mkUFile ".config/.tidal-dl.json" m755)
             (mkUFile ".config/.tidal-dl.token.json" m755)
+            (mkUFile ".config/QtProject.conf" m755) # KeePassXC
           ];
 
           directories = [
@@ -202,77 +207,95 @@ in {
         in {
           description = "Clean impermanent btrfs subvolumes";
           wantedBy = ["initrd.target"];
-          after = ["dev-mapper-crypted.device"];
+          # after = ["dev-mapper-crypted.device"];
+          after = ["systemd-cryptsetup@crypted.service"];
           before = ["sysroot.mount"];
           unitConfig.DefaultDependencies = "no";
           serviceConfig.Type = "oneshot";
           # path = ["/bin" config.system.build.extraUtils pkgs.coreutils-full];
 
-          script = ''
+          # NOTE: If any single line of this script fails, the entire system might be bricked
+          #       NixOS automatically sets "-e", so if unlucky, the subvolumes won'e exist for mounting
+          script = let
+            mvSubvolToPersist = subvol: ''
+              if [[ -e ${mountDir}/${subvol} ]]; then
+                mkdir -p ${persistDir}/old_${subvol}s
+                timestamp=$(date --date="@$(stat -c %Y ${mountDir}/${subvol})" "+%Y-%m-%-d_%H:%M:%S")
+                mv ${mountDir}/${subvol} "${persistDir}/old_${subvol}s/$timestamp"
+
+                # Make the backup mutable (in case it is not, e.g. /var/empty)
+                # chattr -R -i -f "${persistDir}/old_${subvol}s/$timestamp"
+
+                echo "Backed up previous ${subvol} subvolume to ${persistDir}/old_${subvol}s/$timestamp"
+              fi
+            '';
+
+            mkNewSubvol = subvol: ''
+              if [[ ! -e ${mountDir}/${subvol} ]]; then
+                btrfs subvolume create ${mountDir}/${subvol}
+                echo "Created new subvolume ${mountDir}/${subvol}"
+              else
+                echo "Failed to move ${mountDir}/${subvol} (${mountDir}/${subvol} still exists), not creating new subvolume..."
+              fi
+            '';
+
+            deleteOldBackups = subvol: ''
+              for old_${subvol} in $(find ${persistDir}/old_${subvol}s/ -maxdepth 1 -mtime +${backupDuration}); do
+                delete_subvolume_recursively "$old_${subvol}"
+              done
+            '';
+          in ''
+            # This dir will be created in the initrd ramdisk
             mkdir -p ${mountDir}
+
+            # We mount the root subvolume. Because we're using a flat btrfs layout,
+            # "/" contains the subfolders (-volumes) home, log, nix, persist, root, swap, ...
             mount -o subvol=/ /dev/mapper/crypted ${mountDir}
 
-            # Backup old root subvolume
-            if [[ -e ${mountDir}/root ]]; then
-              mkdir -p ${persistDir}/old_roots
-              timestamp=$(date --date="@$(stat -c %Y ${mountDir}/root)" "+%Y-%m-%-d_%H:%M:%S")
-              mv ${mountDir}/root "${persistDir}/old_roots/$timestamp"
-
-              echo "Backed up previous root subvolume to ${persistDir}/old_roots/$timestamp"
+            # Check if the persist dir exists so we can move stuff to it
+            if [[ ! -e ${persistDir} ]]; then
+              echo "${persistDir} doesn't exist, aborting..."
+              umount ${mountDir}
+              rmdir ${mountDir}
+              exit 0
             fi
 
-            # Backup old home subvolume
-            if [[ -e ${mountDir}/home ]]; then
-              mkdir -p ${persistDir}/old_homes
-              timestamp=$(date --date="@$(stat -c %Y ${mountDir}/home)" "+%Y-%m-%-d_%H:%M:%S")
-              mv ${mountDir}/home "${persistDir}/old_homes/$timestamp"
+            # Move root subvolume to backup location
+            ${mvSubvolToPersist "root"}
 
-              echo "Backed up previous home subvolume to ${persistDir}/old_homes/$timestamp"
-            fi
+            # Move home subvolume to backup location
+            ${mvSubvolToPersist "home"}
+
+            # Create new root subvolume
+            ${mkNewSubvol "root"}
+
+            # Create new home subvolume
+            ${mkNewSubvol "home"}
 
             # Delete a backed up subvolume
-            delete_subvolume_recursively() {
-              IFS=$'\n'
+            # delete_subvolume_recursively() {
+            #   IFS=$'\n'
 
-              # https://github.com/nix-community/impermanence/issues/258#issuecomment-2733383737
-              # If we accidentally end up with a file or directory under old_roots,
-              # the code will enumerate all subvolumes under the main volume.
-              # We don't want to remove everything under true main volume. Only
-              # proceed if this path is a btrfs subvolume (inode=256).
-              if [ $(stat -c %i "$1") -ne 256 ]; then return; fi
+            #   # https://github.com/nix-community/impermanence/issues/258#issuecomment-2733383737
+            #   # If we accidentally end up with a file or directory under old_roots,
+            #   # the code will enumerate all subvolumes under the main volume.
+            #   # We don't want to remove everything under true main volume. Only
+            #   # proceed if this path is a btrfs subvolume (inode=256).
+            #   if [ $(stat -c %i "$1") -ne 256 ]; then return; fi
 
-              for subvol in $(btrfs subvolume list -o "$1" | cut -f 9- -d ' '); do
-                  delete_subvolume_recursively "${persistDir}/$subvol"
-              done
+            #   for subvol in $(btrfs subvolume list -o "$1" | cut -f 9- -d ' '); do
+            #     delete_subvolume_recursively "${persistDir}/$subvol"
+            #   done
 
-              btrfs subvolume delete "$1"
-              echo "Deleted old subvolume $1"
-            }
+            #   btrfs subvolume delete "$1"
+            #   echo "Deleted old subvolume $1"
+            # }
 
-            # Delete old roots
-            for old_root in $(find ${persistDir}/old_roots/ -maxdepth 1 -mtime +${backupDuration}); do
-              delete_subvolume_recursively "$old_root"
-            done
+            # Delete old root backups
+            # $ {deleteOldBackups "root"}
 
-            # Delete old homes
-            for old_home in $(find ${persistDir}/old_homes/ -maxdepth 1 -mtime +${backupDuration}); do
-              delete_subvolume_recursively "$old_home"
-            done
-
-            # Create new root + home subvolumes
-            btrfs subvolume create ${mountDir}/root
-            btrfs subvolume create ${mountDir}/home
-            echo "Created new subvolumes ${mountDir}/root and ${mountDir}/home"
-
-            if [[ -d ${mountDir}/home/${username} ]]; then
-              chown -R ${homeUser}:${homeGroup} ${mountDir}/home/${username}
-              echo "Set permissions for ${mountDir}/home/${username} to ${homeUser}:${homeGroup}"
-            fi
-
-            if [[ -d ${persistDir}/home/${username} ]]; then
-              chown -R ${homeUser}:${homeGroup} ${persistDir}/home/${username}
-              echo "Set permissions for ${persistDir}/home/${username} to ${homeUser}:${homeGroup}"
-            fi
+            # Delete old home backups
+            # $ {deleteOldBackups "home"}
 
             umount ${mountDir}
             rmdir ${mountDir}
