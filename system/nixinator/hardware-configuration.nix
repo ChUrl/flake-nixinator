@@ -6,6 +6,7 @@
   lib,
   pkgs,
   modulesPath,
+  username,
   ...
 }: {
   imports = [(modulesPath + "/installer/scan/not-detected.nix")];
@@ -50,7 +51,7 @@
   fileSystems = {
     # NOTE: Some filesystems are managed by disko (see ./disks.nix)
 
-    "/home/christoph/Games" = {
+    "/home/${username}/Games" = {
       device = "/dev/disk/by-id/nvme-WD_BLACK_SN850X_2000GB_231623802252-part1";
       fsType = "ext4";
       options = ["defaults" "rw" "noatime"];
@@ -69,20 +70,26 @@
     # Using  NFS over TCP or increasing the value of the retrans option may mitigate
     # some of the risks of using the soft option.
 
-    "/home/christoph/Movies" = {
+    "/home/${username}/Movies" = {
       device = "192.168.86.20:/mnt/SG Exos Mirror 18TB/Movie";
       fsType = "nfs";
       options = ["defaults" "rw" "noatime" "_netdev" "bg" "soft"];
     };
 
-    "/home/christoph/Shows" = {
+    "/home/${username}/Shows" = {
       device = "192.168.86.20:/mnt/SG Exos Mirror 18TB/Show";
       fsType = "nfs";
       options = ["defaults" "rw" "noatime" "_netdev" "bg" "soft"];
     };
 
-    "/home/christoph/Music" = {
+    "/home/${username}/Music" = {
       device = "192.168.86.20:/mnt/SG Exos Mirror 18TB/Music";
+      fsType = "nfs";
+      options = ["defaults" "rw" "noatime" "_netdev" "bg" "soft"];
+    };
+
+    "/home/${username}/Restic" = {
+      device = "192.168.86.15:/volume1/NixinatorPersistence";
       fsType = "nfs";
       options = ["defaults" "rw" "noatime" "_netdev" "bg" "soft"];
     };
