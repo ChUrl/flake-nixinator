@@ -429,18 +429,28 @@ in {
             };
           };
 
-          # colorizer = rec {
-          #   name = "colorizer";
-          #   pkg = pkgs.vimPlugins.nvim-colorizer-lua;
-          #   lazy = true;
-          #   event = ["BufReadPost" "BufNewFile"];
-          #   config = (mkDefaultConfig name);
-          #   opts = {
-          #     filtetypes = null;
-          #     user_default_options = null;
-          #     buftypes = null;
-          #   };
-          # };
+          colorizer = rec {
+            name = "colorizer";
+            pkg = pkgs.vimPlugins.nvim-colorizer-lua;
+            lazy = true;
+            event = ["BufReadPost" "BufNewFile"];
+            config = mkDefaultConfig name;
+
+            # https://github.com/catgoose/nvim-colorizer.lua
+            opts = {
+              filtetypes = ["*"];
+              user_default_options = {
+                names = false;
+                RGB = true; # #RGB hex codes
+                RGBA = true; # #RGBA hex codes
+                RRGGBB = true; # #RRGGBB hex codes
+                RRGGBBAA = true; # #RRGGBBAA hex codes
+                AARRGGBB = false; # 0xAARRGGBB hex codes
+                rgb_fn = true; # CSS rgb() and rgba() functions
+                hsl_fn = true; # CSS hsl() and hsla() functions
+              };
+            };
+          };
 
           _ts-context-commentstring = rec {
             name = "ts_context_commentstring";
@@ -2023,9 +2033,7 @@ in {
           catppuccin # Colortheme (also add this here to access palettes)
           clangd-extensions # Improved clang LSP support
           blink-cmp # Fast as fuck auto completion
-
-          # colorizer # Colorize color strings # TODO: Only colorize html/css/scss/sass/js
-
+          colorizer # Colorize color strings
           comment # Toggle line- or block-comments
           conform # Auto formatting on save
 
