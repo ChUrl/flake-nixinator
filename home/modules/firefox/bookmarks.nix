@@ -43,7 +43,10 @@ in [
           (mkBm "Local NGINX" "https://nginx.local.chriphost.de/")
           (mkBm "Think NGINX" "https://nginx.think.chriphost.de/")
           (mkBm "VPS NGINX" "http://vps.chriphost.de:51810/")
+          (mkBm "Synology DS223j" "https://synology.think.chriphost.de/")
           (mkBm "Portainer" "https://portainer.think.chriphost.de/")
+          (mkBm "WUD ServeNix" "https://update.local.chriphost.de/")
+          (mkBm "WUD ThinkNix" "https://update.think.chriphost.de/")
         ];
       }
       (mkBm "Cloud" "https://nextcloud.local.chriphost.de/apps/files/files")
@@ -52,7 +55,7 @@ in [
       (mkBm "HASS" "https://hass.think.chriphost.de/lovelace")
       (mkBm "Docs" "https://paperless.local.chriphost.de/documents?sort=created&reverse=1&page=1")
       (mkBm "Gitea" "https://gitea.local.chriphost.de/christoph")
-      (mkBm "Chat" "http://localhost:11435/")
+      # (mkBm "Chat" "http://localhost:11435/") # Local WebUI
       "separator"
 
       # Coding
