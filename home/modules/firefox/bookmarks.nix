@@ -15,15 +15,16 @@ in [
           (mkBm "Package Search" "https://search.nixos.org/packages")
           (mkBm "Option Search" "https://search.nixos.org/options?")
           (mkBm "Function Search" "https://noogle.dev/")
-          (mkBm "HM Option Search" "https://mipmip.github.io/home-manager-option-search/")
-          (mkBm "NUR Package Sarch" "https://nur.nix-community.org/")
-          (mkBm "Nix Package Versions" "https://lazamar.co.uk/nix-versions/")
-          (mkBm "Nixpkgs Progress Tracker" "https://nixpk.gs/pr-tracker.html")
+          (mkBm "HM Search" "https://mipmip.github.io/home-manager-option-search/")
+          (mkBm "NUR Search" "https://nur.nix-community.org/")
+          (mkBm "Nixpkgs Version Search" "https://lazamar.co.uk/nix-versions/")
+          (mkBm "Nixpkgs PR Tracker" "https://nixpk.gs/pr-tracker.html")
+          "separator"
           (mkBm "NixOS Wiki" "https://wiki.nixos.org/wiki/NixOS_Wiki")
-          (mkBm "Nix Manual" "https://nix.dev/manual/nix/stable/")
+          (mkBm "Nixpkgs Issues" "https://github.com/NixOS/nixpkgs/issues")
           (mkBm "Nixpkgs Manual" "https://nixos.org/manual/nixpkgs/unstable/")
           (mkBm "NixOS Manual" "https://nixos.org/manual/nixos/unstable/")
-          (mkBm "Nixpkgs Issues" "https://github.com/NixOS/nixpkgs/issues")
+          (mkBm "Nix Manual" "https://nix.dev/manual/nix/stable/")
         ];
       }
       (mkBm "Searchix" "https://searchix.ovh/")
@@ -38,13 +39,14 @@ in [
           (mkBm "LAN Smart Switch" "http://192.168.86.2/")
           (mkBm "WiFi Access Point" "http://192.168.86.3/")
           (mkBm "OPNsense" "https://192.168.86.5/")
+          (mkBm "Synology DS223j" "https://synology.think.chriphost.de/")
           (mkBm "PVE Direct" "https://192.168.86.4:8006/#v1:0:18:4:::::::")
           (mkBm "PVF Direct" "https://192.168.86.13:8006/#v1:0:18:4:::::::")
+          (mkBm "Portainer" "https://portainer.think.chriphost.de/")
+          "separator"
           (mkBm "Local NGINX" "https://nginx.local.chriphost.de/")
           (mkBm "Think NGINX" "https://nginx.think.chriphost.de/")
           (mkBm "VPS NGINX" "http://vps.chriphost.de:51810/")
-          (mkBm "Synology DS223j" "https://synology.think.chriphost.de/")
-          (mkBm "Portainer" "https://portainer.think.chriphost.de/")
           (mkBm "WUD ServeNix" "https://update.local.chriphost.de/")
           (mkBm "WUD ThinkNix" "https://update.think.chriphost.de/")
         ];
@@ -67,6 +69,20 @@ in [
           (mkBm "Rust" "https://doc.rust-lang.org/stable/book/ch03-00-common-programming-concepts.html")
           (mkBm "RustOS" "https://os.phil-opp.com/")
           (mkBm "Interpreters" "https://craftinginterpreters.com/contents.html")
+        ];
+      }
+      {
+        name = "\"AI\"";
+        bookmarks = [
+          (mkBm "Mistral Chat" "https://chat.mistral.ai/chat")
+          (mkBm "DeepSeek Chat" "https://chat.deepseek.com/")
+          (mkBm "Claude Chat" "https://claude.ai/new")
+          (mkBm "ChatGPT" "https://chatgpt.com/")
+          "separator"
+          (mkBm "Mistral API" "https://console.mistral.ai/usage")
+          (mkBm "DeepSeek API" "https://platform.deepseek.com/usage")
+          (mkBm "Claude API" "https://console.anthropic.com/usage")
+          (mkBm "OpenRouter API" "https://openrouter.ai/activity")
         ];
       }
       (mkBm "GH" "https://github.com/churl")
