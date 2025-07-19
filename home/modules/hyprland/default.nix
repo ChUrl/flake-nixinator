@@ -538,7 +538,8 @@ in {
         # we have to blur them explicitly
         layerrule = [
           "blur,rofi"
-          "ignorealpha 0.001,rofi"
+          "ignorealpha 0.001,rofi" # Fix pixelated corners
+          "xray 0,rofi" # Render on top of other windows
           "dimaround,rofi"
 
           "blur,waybar"
