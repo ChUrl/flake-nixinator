@@ -6,42 +6,42 @@
   username,
   ...
 }: let
-  inherit (config.modules) fish;
+  inherit (config.modules) fish color;
 in {
   options.modules.fish = import ./options.nix {inherit lib mylib;};
 
   config = lib.mkIf fish.enable {
     home.file.".config/fish/themes/catppuccin-latte.theme".text = ''
-      # name: 'Catppuccin Latte'
+      # name: 'Catppuccin Mocha'
       # url: 'https://github.com/catppuccin/fish'
-      # preferred_background: eff1f5
+      # preferred_background: ${color.hex.base}
 
-      fish_color_normal 4c4f69
-      fish_color_command 1e66f5
-      fish_color_param dd7878
-      fish_color_keyword d20f39
-      fish_color_quote 40a02b
-      fish_color_redirection ea76cb
-      fish_color_end fe640b
-      fish_color_comment 8c8fa1
-      fish_color_error d20f39
-      fish_color_gray 9ca0b0
-      fish_color_selection --background=ccd0da
-      fish_color_search_match --background=ccd0da
-      fish_color_option 40a02b
-      fish_color_operator ea76cb
-      fish_color_escape e64553
-      fish_color_autosuggestion 9ca0b0
-      fish_color_cancel d20f39
-      fish_color_cwd df8e1d
-      fish_color_user 179299
-      fish_color_host_remote 40a02b
-      fish_color_host 1e66f5
-      fish_color_status d20f39
-      fish_pager_color_progress 9ca0b0
-      fish_pager_color_prefix ea76cb
-      fish_pager_color_completion 4c4f69
-      fish_pager_color_description 9ca0b0
+      fish_color_normal ${color.hex.text}
+      fish_color_command ${color.hex.blue}
+      fish_color_param f2cdcd
+      fish_color_keyword f38ba8
+      fish_color_quote a6e3a1
+      fish_color_redirection f5c2e7
+      fish_color_end fab387
+      fish_color_comment 7f849c
+      fish_color_error f38ba8
+      fish_color_gray 6c7086
+      fish_color_selection --background=313244
+      fish_color_search_match --background=313244
+      fish_color_option a6e3a1
+      fish_color_operator f5c2e7
+      fish_color_escape eba0ac
+      fish_color_autosuggestion 6c7086
+      fish_color_cancel f38ba8
+      fish_color_cwd f9e2af
+      fish_color_user 94e2d5
+      fish_color_host ${color.hex.blue}
+      fish_color_host_remote a6e3a1
+      fish_color_status f38ba8
+      fish_pager_color_progress 6c7086
+      fish_pager_color_prefix f5c2e7
+      fish_pager_color_completion ${color.hex.text}
+      fish_pager_color_description 6c7086
     '';
 
     programs.fish = {

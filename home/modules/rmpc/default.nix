@@ -277,14 +277,11 @@ in {
       '';
 
       ".config/rmpc/themes/${themeName}.ron".text = let
-        light = color.hex.light;
-        dark = color.hex.dark;
-
-        bg = light.base;
-        text = light.text;
-        accent = dark.mauve;
-        accentHL = dark.red;
-        surface = dark.base;
+        bg = color.hex.base;
+        text = color.hex.text;
+        accent = color.hex.mauve;
+        accentHL = color.hex.red;
+        surface = color.hex.base;
       in ''
         #![enable(implicit_some)]
         #![enable(unwrap_newtypes)]
@@ -331,10 +328,10 @@ in {
             // The stuff shown in the status bar (on the progress bar)
             level_styles: (
                 info: (fg: "#${accent}", bg: "#${surface}"),
-                warn: (fg: "#${dark.yellow}", bg: "#${surface}"),
-                error: (fg: "#${dark.red}", bg: "#${surface}"),
-                debug: (fg: "#${dark.green}", bg: "#${surface}"),
-                trace: (fg: "#${dark.mauve}", bg: "#${surface}"),
+                warn: (fg: "#${color.hex.yellow}", bg: "#${surface}"),
+                error: (fg: "#${color.hex.red}", bg: "#${surface}"),
+                debug: (fg: "#${color.hex.green}", bg: "#${surface}"),
+                trace: (fg: "#${color.hex.mauve}", bg: "#${surface}"),
             ),
 
             progress_bar: (

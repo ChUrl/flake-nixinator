@@ -809,7 +809,7 @@ _: let
     # }
     {
       mode = "n";
-      key = "<leader>cC";
+      key = "<leader>cc";
       action = "<cmd>Neogen<cr>";
       options.desc = "Generate Doc Comment";
     }

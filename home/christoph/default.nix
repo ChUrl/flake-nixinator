@@ -52,9 +52,7 @@
     };
 
     color = {
-      lightScheme = "catppuccin-latte";
-      darkScheme = "catppuccin-mocha";
-      # font = "JetBrainsMono Nerd Font Mono";
+      scheme = "catppuccin-mocha";
       font = builtins.head nixosConfig.fonts.fontconfig.defaultFonts.monospace;
     };
 

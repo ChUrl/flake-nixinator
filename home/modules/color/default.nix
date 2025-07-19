@@ -10,11 +10,7 @@ in {
   options.modules.color = import ./options.nix {inherit lib mylib;};
 
   config = let
-    lightDefs = import ./schemes/${color.lightScheme}.nix;
-    darkDefs = import ./schemes/${color.darkScheme}.nix;
-
-    # Assignments will be generated from those keys
-    colorKeys = builtins.attrNames lightDefs;
+    colorDefs = import ./schemes/${color.scheme}.nix;
 
     mkColorAssignment = defs: key: {${key} = defs.${key};};
     mkStringColorAssignment = defs: key: {${key} = "#${defs.${key}}";};
@@ -23,17 +19,20 @@ in {
   in {
     # Helper script that processes a visual mode selection and replaces
     # referenced colors in-place with their counterparts in this module.
-    # Usage: '<,'>!applyColors<cr>
+    # Usage: ":'<,'>!applyColors<cr>"
     home.packages = let
-      applyColors = let
-        mkPythonColorDef = name: value: "    '${name}': '${value}',";
-      in
+      mkPythonColorDef = name: value: "    '${name}': '${value}',";
+
+      applyColors =
         pkgs.writers.writePython3Bin
         "applyColors"
+        {
+          doCheck = false;
+        }
         (
           builtins.concatStringsSep "\n" [
             "colors: dict[str, str] = {"
-            (config.modules.color.hex.dark
+            (config.modules.color.hex
               |> builtins.mapAttrs mkPythonColorDef
               |> builtins.attrValues
               |> builtins.concatStringsSep "\n")
@@ -44,56 +43,34 @@ in {
     in [applyColors];
 
     # This module sets its own options to the values specified in a colorscheme file.
-    # TODO: This is fucking stupid. Add an option to set a colorscheme,
-    #       then provide a single hex/rgb/rgbString set, not this light/dark shit.
     modules.color = {
-      hex = {
-        light =
-          colorKeys
-          |> builtins.map (mkColorAssignment lightDefs)
-          |> lib.mergeAttrsList;
+      # RRGGBB (0-F)
+      hex =
+        colorDefs
+        |> builtins.attrNames
+        |> builtins.map (mkColorAssignment colorDefs)
+        |> lib.mergeAttrsList;
 
-        dark =
-          colorKeys
-          |> builtins.map (mkColorAssignment darkDefs)
-          |> lib.mergeAttrsList;
-      };
+      # #RRGGBB (0-F)
+      hexS =
+        colorDefs
+        |> builtins.attrNames
+        |> builtins.map (mkStringColorAssignment colorDefs)
+        |> lib.mergeAttrsList;
 
-      hexString = {
-        light =
-          colorKeys
-          |> builtins.map (mkStringColorAssignment lightDefs)
-          |> lib.mergeAttrsList;
+      # [RR GG BB] (0-255)
+      rgb =
+        colorDefs
+        |> builtins.attrNames
+        |> builtins.map (mkRgbColorAssignment colorDefs)
+        |> lib.mergeAttrsList;
 
-        dark =
-          colorKeys
-          |> builtins.map (mkStringColorAssignment darkDefs)
-          |> lib.mergeAttrsList;
-      };
-
-      rgb = {
-        light =
-          colorKeys
-          |> builtins.map (mkRgbColorAssignment lightDefs)
-          |> lib.mergeAttrsList;
-
-        dark =
-          colorKeys
-          |> builtins.map (mkRgbColorAssignment darkDefs)
-          |> lib.mergeAttrsList;
-      };
-
-      rgbString = {
-        light =
-          colorKeys
-          |> builtins.map (mkRgbStringColorAssignment lightDefs)
-          |> lib.mergeAttrsList;
-
-        dark =
-          colorKeys
-          |> builtins.map (mkRgbStringColorAssignment darkDefs)
-          |> lib.mergeAttrsList;
-      };
+      # RR,GG,BB (0-255)
+      rgbS =
+        colorDefs
+        |> builtins.attrNames
+        |> builtins.map (mkRgbStringColorAssignment colorDefs)
+        |> lib.mergeAttrsList;
     };
   };
 }

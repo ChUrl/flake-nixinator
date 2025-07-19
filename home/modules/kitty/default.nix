@@ -5,7 +5,7 @@
   mylib,
   ...
 }: let
-  inherit (config.modules) kitty;
+  inherit (config.modules) kitty color;
 in {
   options.modules.kitty = import ./options.nix {inherit lib mylib;};
 
@@ -27,9 +27,7 @@ in {
         "kitty_mod+l" = "next_layout";
       };
 
-      settings = let
-        color = config.modules.color.hex.dark;
-      in {
+      settings = {
         editor = config.home.sessionVariables.EDITOR;
         scrollback_lines = 10000;
         window_padding_width = 10; # Looks stupid with editors if bg doesn't match
@@ -50,74 +48,74 @@ in {
         #
 
         # The basic colors
-        background = "#${color.base}";
-        foreground = "#${color.text}";
-        selection_foreground = "#${color.base}";
-        selection_background = "#${color.rosewater}";
+        background = color.hexS.base;
+        foreground = color.hexS.text;
+        selection_foreground = color.hexS.base;
+        selection_background = color.hexS.rosewater;
 
         # Cursor colors
-        cursor = "#${color.rosewater}";
-        cursor_text_color = "#${color.base}";
+        cursor = color.hexS.rosewater;
+        cursor_text_color = color.hexS.base;
 
         # URL underline color when hovering with mouse
-        url_color = "#${color.rosewater}";
+        url_color = color.hexS.rosewater;
 
         # Kitty window border colors
-        active_border_color = "#${color.lavender}";
-        inactive_border_color = "#${color.overlay0}";
-        bell_border_color = "#${color.yellow}";
+        active_border_color = color.hexS.lavender;
+        inactive_border_color = color.hexS.overlay0;
+        bell_border_color = color.hexS.yellow;
 
         # OS Window titlebar colors
         wayland_titlebar_color = "system";
         macos_titlebar_color = "system";
 
         # Tab bar colors
-        active_tab_foreground = "#${color.base}";
-        active_tab_background = "#${color.lavender}";
-        inactive_tab_foreground = "#${color.text}";
-        inactive_tab_background = "#${color.crust}";
-        tab_bar_background = "#${color.base}";
+        active_tab_foreground = color.hexS.base;
+        active_tab_background = color.hexS.lavender;
+        inactive_tab_foreground = color.hexS.text;
+        inactive_tab_background = color.hexS.crust;
+        tab_bar_background = color.hexS.base;
 
         # Color for marks (marked text in the terminal)
-        mark1_foreground = "#${color.base}";
-        mark1_background = "#${color.lavender}";
-        mark2_foreground = "#${color.base}";
-        mark2_background = "#${color.mauve}";
-        mark3_foreground = "#${color.base}";
-        mark3_background = "#${color.sapphire}";
+        mark1_foreground = color.hexS.base;
+        mark1_background = color.hexS.lavender;
+        mark2_foreground = color.hexS.base;
+        mark2_background = color.hexS.mauve;
+        mark3_foreground = color.hexS.base;
+        mark3_background = color.hexS.sapphire;
 
         # The 16 terminal colors
         # black
-        color0 = "#${color.subtext1}";
-        color8 = "#${color.subtext0}";
+        color0 = color.hexS.subtext1;
+        color8 = color.hexS.subtext0;
 
         # red
-        color1 = "#${color.red}";
-        color9 = "#${color.red}";
+        color1 = color.hexS.red;
+        color9 = color.hexS.red;
 
         # green
-        color2 = "#${color.green}";
-        color10 = "#${color.green}";
+        color2 = color.hexS.green;
+        color10 = color.hexS.green;
 
         # yellow
-        color3 = "#${color.yellow}";
-        color11 = "#${color.yellow}";
+        color3 = color.hexS.yellow;
+        color11 = color.hexS.yellow;
 
         # blue
-        color4 = "#${color.blue}";
-        color12 = "#${color.blue}";
+        color4 = color.hexS.blue;
+        color12 = color.hexS.blue;
 
         # magenta
-        color5 = "#${color.pink}";
-        color13 = "#${color.pink}";
+        color5 = color.hexS.pink;
+        color13 = color.hexS.pink;
 
         # cyan
-        color6 = "#${color.teal}";
-        color14 = "#${color.teal}";
+        color6 = color.hexS.teal;
+        color14 = color.hexS.teal;
 
         # white
-        color7 = "#${color.surface2}";
-        color15 = "#${color.surface1}";
+        color7 = color.hexS.surface2;
+        color15 = color.hexS.surface1;
       };
     };
   };
