@@ -35,46 +35,42 @@ in {
         sidebar-mode = false;
       };
 
+      # https://github.com/davatorium/rofi/blob/next/doc/rofi-theme.5.markdown#basic-layout-structure
+      # https://github.com/davatorium/rofi/blob/next/doc/rofi-theme.5.markdown#base-widgets
       theme = let
         inherit (config.lib.formats.rasi) mkLiteral;
-      in {
-        "*" = {
-          bg = mkLiteral "rgba(${color.rgbString.light.base}, 0.3)";
-          hl = mkLiteral "#${color.hex.dark.lavender}";
-          hl-pink = mkLiteral "#${color.hex.dark.pink}";
-          text = mkLiteral "#${color.hex.dark.base}";
-          trans = mkLiteral "rgba(0, 0, 0, 0)";
-        };
 
+        trans = "rgba(0, 0, 0, 0)";
+      in {
         "element-text,element-icon,mode-switcher" = {
           background-color = mkLiteral "inherit";
           text-color = mkLiteral "inherit";
         };
 
         "window" = {
-          height = 480;
-          width = 700;
+          height = "50%";
+          width = "50%";
           border = mkLiteral "2 solid 2 solid 2 solid 2 solid";
           border-radius = 6;
-          border-color = mkLiteral "@hl";
-          background-color = mkLiteral "@bg";
+          border-color = mkLiteral color.hexS.accent;
+          background-color = mkLiteral "rgba(${color.rgbS.bg}, 0.2)";
         };
 
         "mainbox" = {
-          background-color = mkLiteral "@trans";
+          background-color = mkLiteral trans;
         };
 
         "message" = {
-          background-color = mkLiteral "@trans";
+          background-color = mkLiteral trans;
         };
 
         "error-message" = {
-          background-color = mkLiteral "@trans";
+          background-color = mkLiteral trans;
           margin = mkLiteral "0px 0px 20px 0px";
         };
 
         "textbox" = {
-          background-color = mkLiteral "@trans";
+          background-color = mkLiteral trans;
           padding = 6;
           margin = mkLiteral "20px 20px 0px 20px";
           border-radius = 3;
@@ -82,13 +78,13 @@ in {
 
         "inputbar" = {
           children = builtins.map mkLiteral ["prompt" "entry"];
-          background-color = mkLiteral "@trans";
+          background-color = mkLiteral trans;
         };
 
         "prompt" = {
-          background-color = mkLiteral "@hl-pink";
+          background-color = mkLiteral color.hexS.accentHL;
           padding = 6;
-          text-color = mkLiteral "@text";
+          text-color = mkLiteral color.hexS.accentText;
           border-radius = 3;
           margin = mkLiteral "20px 0px 0px 20px";
         };
@@ -96,11 +92,11 @@ in {
         "entry" = {
           padding = 6;
           margin = mkLiteral "20px 20px 0px 10px";
-          text-color = mkLiteral "@text";
-          background-color = mkLiteral "@trans";
+          text-color = mkLiteral color.hexS.text;
+          background-color = mkLiteral trans;
           border = mkLiteral "2 solid 2 solid 2 solid 2 solid";
           border-radius = 3;
-          border-color = mkLiteral "@hl-pink";
+          border-color = mkLiteral color.hexS.accentHL;
         };
 
         "listview" = {
@@ -108,17 +104,17 @@ in {
           padding = 0;
           margin = mkLiteral "10px 20px 20px 20px";
           columns = 1;
-          background-color = mkLiteral "@trans";
+          background-color = mkLiteral trans;
           border = mkLiteral "2 solid 2 solid 2 solid 2 solid";
           border-radius = 3;
-          border-color = mkLiteral "@hl-pink";
+          border-color = mkLiteral color.hexS.accentHL;
         };
 
         "element" = {
           padding = 5;
           margin = 0;
-          background-color = mkLiteral "@trans";
-          text-color = mkLiteral "@text";
+          background-color = mkLiteral trans;
+          text-color = mkLiteral color.hexS.text;
           # border-radius = 3;
         };
 
@@ -127,8 +123,8 @@ in {
         };
 
         "element selected" = {
-          background-color = mkLiteral "@hl-pink";
-          text-color = mkLiteral "@text";
+          background-color = mkLiteral color.hexS.accentHL;
+          text-color = mkLiteral color.hexS.accentText;
         };
       };
     };
@@ -138,12 +134,12 @@ in {
         mylib.rofi.mkSimpleMenu
         "power"
         {
-          "Poweroff" = "poweroff";
-          "Reboot" = "reboot";
-          "Lock" = "loginctl lock-session";
-          "Reload Hyprpanel" = "systemctl --user restart hyprpanel.service";
-          "Reload Hyprland" = "hyprctl reload";
-          "Exit Hyprland" = "hyprctl dispatch exit";
+          "󰤂 Poweroff" = "poweroff";
+          "󰜉 Reboot" = "reboot";
+          "󰌾 Lock" = "loginctl lock-session";
+          " Reload Hyprpanel" = "systemctl --user restart hyprpanel.service";
+          " Reload Hyprland" = "hyprctl reload";
+          " Exit Hyprland" = "hyprctl dispatch exit";
         };
 
       vpn-menu = pkgs.writeScript "rofi-menu-vpn" (builtins.readFile ./menus/vpn.fish);
