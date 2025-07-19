@@ -16,11 +16,10 @@
     mkCase = option: action: "else if test \"${option}\" = $OPTION\n    set ACTION \"${action}\"";
 
     cases = attrs:
-      lib.pipe attrs [
-        (builtins.mapAttrs mkCase)
-        builtins.attrValues
-        (builtins.concatStringsSep "\n")
-      ];
+      attrs
+      |> builtins.mapAttrs mkCase
+      |> builtins.attrValues
+      |> builtins.concatStringsSep "\n";
   in
     prompt: attrs:
       pkgs.writeScript "rofi-menu-${prompt}" ''
