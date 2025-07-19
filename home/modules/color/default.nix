@@ -2,6 +2,7 @@
   config,
   lib,
   mylib,
+  pkgs,
   ...
 }: let
   inherit (config.modules) color;
@@ -20,8 +21,29 @@ in {
     mkRgbColorAssignment = defs: key: {${key} = mylib.color.hexToRGB defs.${key};};
     mkRgbStringColorAssignment = defs: key: {${key} = mylib.color.hexToRGBString "," defs.${key};};
   in {
-    # This module sets its own options
-    # to the values specified in a colorscheme file.
+    # Helper script that processes a visual mode selection and replaces
+    # referenced colors in-place with their counterparts in this module.
+    # Usage: '<,'>!applyColors<cr>
+    home.packages = let
+      applyColors = let
+        mkPythonColorDef = name: value: "    '${name}': '${value}',";
+      in
+        pkgs.writers.writePython3Bin
+        "applyColors"
+        (
+          builtins.concatStringsSep "\n" [
+            "colors: dict[str, str] = {"
+            (config.modules.color.hex.dark
+              |> builtins.mapAttrs mkPythonColorDef
+              |> builtins.attrValues
+              |> builtins.concatStringsSep "\n")
+            "}"
+            (builtins.readFile ./applyColors.py)
+          ]
+        );
+    in [applyColors];
+
+    # This module sets its own options to the values specified in a colorscheme file.
     # TODO: This is fucking stupid. Add an option to set a colorscheme,
     #       then provide a single hex/rgb/rgbString set, not this light/dark shit.
     modules.color = {
