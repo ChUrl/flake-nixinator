@@ -57,7 +57,18 @@ in {
 
     # This module sets its own options to the values specified in a colorscheme file.
     modules.color = let
-      colorDefs = import ./schemes/${color.scheme}.nix;
+      scheme = import ./schemes/${color.scheme}.nix;
+
+      # Add the aliases
+      colorDefs =
+        scheme
+        // {
+          bg = scheme.${color.bg};
+          text = scheme.${color.text};
+          accent = scheme.${color.accent};
+          accentHL = scheme.${color.accentHL};
+          accentText = scheme.${color.accentText};
+        };
 
       mkColorAssignment = key: {${key} = colorDefs.${key};};
       mkStringColorAssignment = key: {${key} = "#${colorDefs.${key}}";};
