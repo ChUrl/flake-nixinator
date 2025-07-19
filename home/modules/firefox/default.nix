@@ -1,4 +1,3 @@
-# TODO: https://github.com/nix-community/home-manager/commit/69d19b9839638fc487b370e0600a03577a559081
 {
   config,
   lib,
@@ -45,6 +44,7 @@ in {
       # firefox-unwrapped is the pure firefox browser, wrapFirefox adds configuration ontop
       package = pkgs.wrapFirefox pkgs.firefox-unwrapped {
         # About policies: https://github.com/mozilla/policy-templates#enterprisepoliciesenabled
+        # TODO: To separate file
         extraPolicies = {
           CaptivePortal = false;
           DisableAppUpdate = true;
@@ -104,6 +104,7 @@ in {
             '')
           ];
 
+          # TODO: To separate file
           search = {
             force = true; # Always override search engines
             default = "kagi";
@@ -153,7 +154,7 @@ in {
                 definedAliases = ["@nw"];
               };
 
-              google.metaData.alias = "@g"; # builtin engines only support specifying one additional alias
+              google.metaData.alias = "@g";
 
               # Hide bullshit
               bing.metaData.hidden = true;
@@ -163,6 +164,7 @@ in {
             };
           };
 
+          # TODO: To separate file
           extensions = {
             force = true; # Always override extensions
 
@@ -174,7 +176,7 @@ in {
               # bypass-paywalls-clean
               # c-c-search-extension # Press cc in searchbar and profit
               catppuccin-mocha-mauve
-              catppuccin-web-file-icons
+              # catppuccin-web-file-icons
               clearurls
               cookie-autodelete
               display-_anchors # Easier linking to specific website parts
@@ -225,7 +227,8 @@ in {
           };
 
           bookmarks = {
-            force = true; # Always override bookmarks (so we don't forget to add them through here)
+            # Always override bookmarks (so we don't forget to add them through here)
+            force = true;
             settings = import ./bookmarks.nix;
           };
 
@@ -240,21 +243,12 @@ in {
             }
 
             (lib.optionalAttrs firefox.vaapi {
-              # Firefox wayland hardware video acceleration
               # https://github.com/elFarto/nvidia-vaapi-driver/#firefox=
-              # TODO: Disable and check if it works by default
-              # "gfx.canvas.accelerated" = true; # Default value
-              # "gfx.webrender.enabled" = true; # Does not exist?
-
               "media.ffmpeg.vaapi.enabled" = true;
               "media.rdd-ffmpeg.enabled" = true; # Default value
               "media.av1.enabled" = true;
               "gfx.x11-egl.force-enabled" = true;
               "widget.dmabuf.force-enabled" = true;
-
-              # "layers.acceleration.force-enabled" = true;
-              # "media.hardware-video-decoding.force-enabled" = true;
-              # "widget.wayland-dmabuf-vaapi.enabled" = true; # Does not exist?
             })
           ];
         };
