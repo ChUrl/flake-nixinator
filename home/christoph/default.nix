@@ -377,6 +377,7 @@
     };
 
     # Add stuff for your user as you see fit:
+    # TODO: Make the headless installations smaller
     packages = with pkgs;
       lib.mkMerge [
         [
@@ -384,12 +385,12 @@
           (ripgrep.override {withPCRE2 = true;}) # fast as fuck
           gdu # Alternative to du-dust (I like it better)
           duf # Disk usage analyzer (for all disk overview)
-          sd # sed alternative
-          fclones # duplicate file finder
-          tealdeer # very fast tldr (so readable man)
+          sd # Sed alternative
+          fclones # Duplicate file finder
+          tealdeer # Very fast tldr (so readable man)
           killall
           atool # Archive preview
-          ouch # unified compression/decompression
+          ouch # Unified compression/decompression
           ffmpegthumbnailer # Video thumbnails
           mediainfo # Media meta information
           file # File meta information
@@ -398,17 +399,21 @@
           unzip # Unzip stuff
           progress # Find coreutils processes and show their progress
           tokei # Text file statistics in a project
-          playerctl # media player control
-          pastel # color tools
-          nvd # nix rebuild diff
-          nix-search-tv # search nixpkgs, nur, nixos options and homemanager options
+          playerctl # Media player control
+          pastel # Color tools
+          nvd # Nix rebuild diff
+          nix-search-tv # Search nixpkgs, nur, nixos options and homemanager options
           nix-tree # Browse the nix store sorted by size (gdu for closures)
           nurl # Generate nix fetcher sections based on URLs
           python313 # Nicer scripting than bash
+          binsider # Analyze binaries
+          lazyjournal # Journalctl viewer
+          systemctl-tui
+          restic # Backups
 
           # Hardware/Software info
           pciutils # lspci
-          glxinfo # opengl info
+          glxinfo # OpenGL info
           wayland-utils # wayland-info
           clinfo # OpenCL info
           vulkan-tools # vulkaninfo
