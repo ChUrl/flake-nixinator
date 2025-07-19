@@ -25,32 +25,32 @@ in {
         window-title-home-tilde = statusbar-home-tilde;
 
         # Colorscheme
-        default-bg = "#${color.hex.light.base}";
-        default-fg = "#${color.hex.light.text}";
+        default-bg = "#${color.hex.bg}";
+        default-fg = "#${color.hex.text}";
 
-        highlight-color = "rgba(${color.rgbString.dark.lavender}, 0.5)";
-        highlight-fg = "rgba(${color.rgbString.dark.green}, 0.5)";
-        highlight-active-color = "rgba(${color.rgbString.dark.pink}, 0.5)";
+        highlight-color = "rgba(${color.rgbS.accent}, 0.5)";
+        highlight-fg = "rgba(${color.rgbS.accentText}, 0.5)";
+        highlight-active-color = "rgba(${color.rgbS.accentHL}, 0.5)";
 
-        statusbar-bg = "#${color.hex.dark.lavender}";
-        statusbar-fg = default-fg;
+        statusbar-bg = "#${color.hex.accent}";
+        statusbar-fg = "#${color.hex.accentText}";
 
         inputbar-bg = statusbar-bg;
         inputbar-fg = statusbar-fg;
 
-        completion-bg = "#${color.hex.light.surface0}";
+        completion-bg = "#${color.hex.bg}";
         completion-fg = default-fg;
         completion-highlight-bg = statusbar-bg;
-        completion-highlight-fg = completion-fg;
+        completion-highlight-fg = statusbar-fg;
         completion-group-bg = completion-bg;
         completion-group-fg = completion-fg;
 
         notification-bg = completion-bg;
         notification-fg = default-fg;
         notification-warning-bg = notification-bg;
-        notification-warning-fg = "#${color.hex.light.peach}";
+        notification-warning-fg = "#${color.hex.peach}";
         notification-error-bg = notification-bg;
-        notification-error-fg = "#${color.hex.light.red}";
+        notification-error-fg = "#${color.hex.red}";
 
         recolor-lightcolor = default-bg;
         recolor-darkcolor = default-fg;
