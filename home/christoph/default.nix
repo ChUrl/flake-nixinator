@@ -54,6 +54,12 @@
     color = {
       scheme = "catppuccin-mocha";
       font = builtins.head nixosConfig.fonts.fontconfig.defaultFonts.monospace;
+
+      bg = "base";
+      text = "text";
+      accent = "mauve";
+      accentHL = "pink";
+      accentText = "base";
     };
 
     docs.enable = !headless;
