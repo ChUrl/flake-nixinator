@@ -203,11 +203,11 @@ in {
         enable = true;
         settings = {
           options = {
-            background = "${color.hex.text}";
+            background = "${color.hex.bg}";
             overlay = true;
             overlay_font = "${color.font}:12";
-            overlay_text_color = "${color.hex.text}";
-            overlay_background_color = "${color.hex.base}";
+            overlay_background_color = "${color.hex.accent}";
+            overlay_text_color = "${color.hex.accentText}";
           };
         };
       };
@@ -242,14 +242,14 @@ in {
               monitor = "";
               dots_center = true;
               fade_on_empty = false;
-              font_color = "rgb(${color.hex.base})";
+              font_color = "rgb(${color.hex.accentText})";
               font_family = "${color.font}";
-              inner_color = "rgb(${color.hex.lavender})";
-              outer_color = "rgb(${color.hex.base})";
+              inner_color = "rgb(${color.hex.accent})";
+              outer_color = "rgb(${color.hex.accent})";
               outline_thickness = 2;
-              placeholder_text = "<span foreground='\#\#${color.hex.base}'>Password...</span>";
+              placeholder_text = "<span foreground='\#\#${color.hex.accentText}'>Password...</span>";
               shadow_passes = 0;
-              rounding = 5;
+              rounding = 4;
               halign = "center";
               valign = "center";
             }
@@ -298,6 +298,7 @@ in {
             mkPreload = name: "${config.paths.nixflake}/wallpapers/${name}.jpg";
           in
             hyprland.wallpapers |> builtins.map mkPreload;
+
           wallpaper = let
             mkWallpaper = monitor:
               "${monitor}, "
@@ -346,23 +347,23 @@ in {
             monitor = config.modules.waybar.monitor;
             font = "${color.font} 11";
             offset = "10x10";
-            background = "#${color.hex.base}";
-            foreground = "#${color.hex.text}";
+            background = color.hexS.base;
+            foreground = color.hexS.text;
             frame_width = 2;
-            corner_radius = 5;
+            corner_radius = 6;
             separator_color = "frame";
           };
 
           urgency_low = {
-            frame_color = "#${color.hex.green}";
+            frame_color = color.hexS.green;
           };
 
           urgency_normal = {
-            frame_color = "#${color.hex.green}";
+            frame_color = color.hexS.green;
           };
 
           urgency_critical = {
-            frame_color = "#${color.hex.red}";
+            frame_color = color.hexS.red;
           };
         };
       };
@@ -390,8 +391,8 @@ in {
           gaps_out = 10;
           border_size = 2;
 
-          "col.active_border" = "rgb(${color.hex.lavender})";
-          "col.inactive_border" = "rgba(${color.hex.base}AA)";
+          "col.active_border" = "rgb(${color.hex.accent})";
+          "col.inactive_border" = "rgb(${color.hex.bg})";
         };
 
         group = {
@@ -401,12 +402,12 @@ in {
             font_size = 10;
             gradients = false;
 
-            "col.active" = "rgb(${color.hex.lavender})";
-            "col.inactive" = "rgba(${color.hex.base}AA)";
+            "col.active" = "rgb(${color.hex.accent})";
+            "col.inactive" = "rgb(${color.hex.bg})";
           };
 
-          "col.border_active" = "rgb(${color.hex.lavender})";
-          "col.border_inactive" = "rgba(${color.hex.base}AA)";
+          "col.border_active" = "rgb(${color.hex.accent})";
+          "col.border_inactive" = "rgb(${color.hex.bg})";
         };
 
         input = {
@@ -553,7 +554,7 @@ in {
         ];
 
         decoration = {
-          rounding = 5;
+          rounding = 4;
 
           shadow = {
             enabled = false;
