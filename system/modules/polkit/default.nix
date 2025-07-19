@@ -23,19 +23,19 @@ in {
       always-services = [];
 
       mkServicePredicate = service: "action.lookup(\"unit\") == \"${service}\"";
-      servicePredicates = lib.pipe (cfg.allowedSystemServices ++ always-services) [
-        (builtins.map mkServicePredicate)
-        (builtins.concatStringsSep " ||\n")
-      ];
+      servicePredicates =
+        (cfg.allowedSystemServices ++ always-services)
+        |> builtins.map mkServicePredicate
+        |> builtins.concatStringsSep " ||\n";
 
       # Actions that should always be allowed
       always-actions = [];
 
       mkActionPredicate = action: "action.id == \"${action}\"";
-      actionPredicates = lib.pipe (cfg.allowedActions ++ always-actions) [
-        (builtins.map mkActionPredicate)
-        (builtins.concatStringsSep " ||\n")
-      ];
+      actionPredicates =
+        (cfg.allowedActions ++ always-actions)
+        |> builtins.map mkActionPredicate
+        |> builtins.concatStringsSep " ||\n";
     in
       lib.concatStrings [
         ''

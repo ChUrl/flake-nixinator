@@ -55,21 +55,21 @@ in {
 
     # Allow start/stop containers without root password
     modules.polkit.allowedSystemServices = let
-      container-services = lib.pipe virtualisation.oci-containers.containers [
-        builtins.attrNames
-        (builtins.filter (c: cfg.${c}.enable))
-        (builtins.map (c: "podman-${c}.service"))
-      ];
+      container-services =
+        virtualisation.oci-containers.containers
+        |> builtins.attrNames
+        |> builtins.filter (c: cfg.${c}.enable)
+        |> builtins.map (c: "podman-${c}.service");
     in
       container-services;
 
     # Generate list of containers for rofi menu
     environment.etc."rofi-containers".text = let
-      containers = lib.pipe virtualisation.oci-containers.containers [
-        builtins.attrNames
-        (builtins.filter (c: cfg.${c}.enable))
-        (builtins.concatStringsSep "\n")
-      ];
+      containers =
+        virtualisation.oci-containers.containers
+        |> builtins.attrNames
+        |> builtins.filter (c: cfg.${c}.enable)
+        |> builtins.concatStringsSep "\n";
     in
       containers;
   };
