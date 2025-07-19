@@ -141,9 +141,10 @@ in {
             blk = batify "lsblk -o NAME,LABEL,PARTLABEL,FSTYPE,SIZE,FSUSE%,MOUNTPOINT";
             blkids = batify "lsblk -o NAME,LABEL,FSTYPE,SIZE,PARTLABEL,MODEL,ID,UUID";
             watch = "watch -d -c -n 0.5";
+            nps = "nps -e";
             nd = "nix develop";
             nb = "nix build -L";
-            nps = "nps -e";
+            ns = "nix shell nixpkgs#";
           }
 
           # Impermanence
