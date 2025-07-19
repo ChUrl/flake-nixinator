@@ -66,13 +66,13 @@ in {
 
         "error-message" = {
           background-color = mkLiteral trans;
-          margin = mkLiteral "0px 0px 20px 0px";
+          margin = mkLiteral "0px 0px 10px 0px";
         };
 
         "textbox" = {
           background-color = mkLiteral trans;
           padding = 6;
-          margin = mkLiteral "20px 20px 0px 20px";
+          margin = mkLiteral "10px 10px 0px 10px";
           border-radius = 3;
         };
 
@@ -86,12 +86,12 @@ in {
           padding = 6;
           text-color = mkLiteral color.hexS.accentText;
           border-radius = 3;
-          margin = mkLiteral "20px 0px 0px 20px";
+          margin = mkLiteral "10px 0px 0px 10px";
         };
 
         "entry" = {
           padding = 6;
-          margin = mkLiteral "20px 20px 0px 10px";
+          margin = mkLiteral "10px 10px 0px 5px";
           text-color = mkLiteral color.hexS.text;
           background-color = mkLiteral trans;
           border = mkLiteral "2 solid 2 solid 2 solid 2 solid";
@@ -102,7 +102,7 @@ in {
         "listview" = {
           # border = mkLiteral "0px 0px 0px";
           padding = 0;
-          margin = mkLiteral "10px 20px 20px 20px";
+          margin = mkLiteral "5px 10px 10px 10px";
           columns = 1;
           background-color = mkLiteral trans;
           border = mkLiteral "2 solid 2 solid 2 solid 2 solid";
@@ -130,6 +130,21 @@ in {
     };
 
     modules.hyprland.keybindings = let
+      vpn-menu =
+        pkgs.writeScript
+        "rofi-menu-vpn"
+        (builtins.readFile ./menus/vpn.fish);
+
+      keybinds-menu =
+        pkgs.writeScript
+        "rofi-menu-keybinds"
+        (builtins.readFile ./menus/keybinds.fish);
+
+      lectures-menu =
+        pkgs.writeScript
+        "rofi-menu-lectures"
+        (builtins.readFile ./menus/lectures.fish);
+
       power-menu =
         mylib.rofi.mkSimpleMenu
         "power"
@@ -142,15 +157,32 @@ in {
           " Exit Hyprland" = "hyprctl dispatch exit";
         };
 
-      vpn-menu = pkgs.writeScript "rofi-menu-vpn" (builtins.readFile ./menus/vpn.fish);
-      keybinds-menu = pkgs.writeScript "rofi-menu-keybinds" (builtins.readFile ./menus/keybinds.fish);
-      lectures-menu = pkgs.writeScript "rofi-menu-lectures" (builtins.readFile ./menus/lectures.fish);
+      wallpaper-menu = let
+        setWallpaperOnMonitor = name: monitor:
+          "hyprctl hyprpaper wallpaper "
+          + "${monitor},${config.paths.nixflake}/wallpapers/${name}.png";
+
+        setWallpaperOnMonitors = monitors: name: {
+          ${name} =
+            monitors
+            |> builtins.map (setWallpaperOnMonitor name)
+            |> builtins.concatStringsSep " && ";
+        };
+
+        monitors = builtins.attrNames config.modules.hyprland.monitors;
+      in
+        mylib.rofi.mkSimpleMenu
+        "wall"
+        (config.modules.hyprland.wallpapers
+          |> builtins.map (setWallpaperOnMonitors monitors)
+          |> lib.mergeAttrsList);
     in {
       bindings = lib.mergeAttrsList [
         {
           "$mainMod, escape" = ["exec, \"${power-menu}\""];
-          "$mainMod, M" = ["exec, \"${keybinds-menu}\""];
-          # "$mainMod, O" = ["exec, \"${lectures-menu}\""];
+          "$mainMod, m" = ["exec, \"${keybinds-menu}\""];
+          "$mainMod, w" = ["exec, \"${wallpaper-menu}\""];
+          # "$mainMod, o" = ["exec, \"${lectures-menu}\""];
         }
         (lib.optionalAttrs (!nixosConfig.modules.network.useNetworkManager) {
           "$mainMod, U" = ["exec, \"${vpn-menu}\""];

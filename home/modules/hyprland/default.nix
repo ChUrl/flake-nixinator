@@ -227,7 +227,7 @@ in {
 
           background = [
             {
-              path = "~/NixFlake/wallpapers/${hyprland.theme}.png";
+              path = "${config.paths.nixflake}/wallpapers/${hyprland.wallpaper}.jpg";
               blur_passes = 3;
               blur_size = 10;
               monitor = "";
@@ -293,11 +293,15 @@ in {
           splash = false;
           splash_offset = 2.0;
 
-          preload = "${config.paths.nixflake}/wallpapers/${hyprland.theme}.png";
+          # Wallpapers have to be preloaded to be displayed
+          preload = let
+            mkPreload = name: "${config.paths.nixflake}/wallpapers/${name}.jpg";
+          in
+            hyprland.wallpapers |> builtins.map mkPreload;
           wallpaper = let
             mkWallpaper = monitor:
               "${monitor}, "
-              + "${config.paths.nixflake}/wallpapers/${hyprland.theme}.png";
+              + "${config.paths.nixflake}/wallpapers/${hyprland.wallpaper}.jpg";
           in
             hyprland.monitors
             |> builtins.attrNames

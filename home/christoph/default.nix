@@ -84,7 +84,7 @@
     hyprland = {
       enable = !headless;
       dunst.enable = !config.modules.hyprpanel.enable; # Disable for hyprpanel
-      wallpaper = "Foggy-Lake";
+      wallpaper = "City-Outlook";
 
       keybindings = {
         main-mod = "SUPER";
