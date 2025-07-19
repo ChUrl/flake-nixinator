@@ -140,9 +140,12 @@
           "kitty"
           "nextcloud --background"
           "protonvpn-app"
-          "keepassxc"
 
           # "kdeconnect-indicator" # started by services.kdeconnect.indicator
+        ];
+
+        delayed = [
+          "keepassxc" # The tray doesn't work when started too early
         ];
 
         special-silent = {
@@ -151,8 +154,6 @@
           "btop" = ["kitty --title=Btop btop"];
           "rmpc" = ["kitty --title=Rmpc rmpc"];
         };
-
-        delayed = [];
       };
 
       windowrules = [];
