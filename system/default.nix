@@ -175,13 +175,14 @@ with mylib.networking; {
 
   documentation = {
     enable = true;
-    man.enable = true;
+    # NOTE: Disable this while configuring stuff, it's slow
+    man.enable = config.documentation.enable;
     man.generateCaches = true; # Slow but needed for neovim man picker
-    info.enable = true;
-    dev.enable = true;
-    doc.enable = false;
+    info.enable = config.documentation.enable;
+    dev.enable = config.documentation.enable;
+    doc.enable = config.documentation.enable;
     nixos = {
-      enable = true;
+      enable = config.documentation.enable;
       includeAllModules = true;
     };
   };
@@ -193,19 +194,22 @@ with mylib.networking; {
   };
 
   # Select internationalisation properties.
-  i18n = {
-    defaultLocale = "en_US.UTF-8";
+  i18n = let
+    en = "en_US.UTF-8";
+    de = "de_DE.UTF-8";
+  in {
+    defaultLocale = en;
 
     extraLocaleSettings = {
-      LC_ADDRESS = "de_DE.UTF-8";
-      LC_IDENTIFICATION = "de_DE.UTF-8";
-      LC_MEASUREMENT = "de_DE.UTF-8";
-      LC_MONETARY = "de_DE.UTF-8";
-      LC_NAME = "de_DE.UTF-8";
-      LC_NUMERIC = "de_DE.UTF-8";
-      LC_PAPER = "de_DE.UTF-8";
-      LC_TELEPHONE = "de_DE.UTF-8";
-      LC_TIME = "de_DE.UTF-8";
+      LC_ADDRESS = de;
+      LC_IDENTIFICATION = de;
+      LC_MEASUREMENT = de;
+      LC_MONETARY = de;
+      LC_NAME = de;
+      LC_NUMERIC = de;
+      LC_PAPER = de;
+      LC_TELEPHONE = de;
+      LC_TIME = de;
     };
 
     # https://github.com/NixOS/nixpkgs/issues/179486
@@ -276,13 +280,17 @@ with mylib.networking; {
   programs = {
     adb.enable = true;
     dconf.enable = !headless;
-    fish.enable = true;
     firejail.enable = true; # Use to run app in network namespace (e.g. through vpn)
     fuse.userAllowOther = true; # Allow users to mount e.g. samba shares (cifs)
     git.enable = true;
     kdeconnect.enable = !headless; # Use this instead of HM for firewall setup
     neovim.enable = true;
     nix-ld.enable = true; # Load dynamically linked executables
+
+    fish = {
+      enable = true;
+      generateCompletions = config.documentation.enable;
+    };
 
     gnupg.agent = {
       enable = false;
