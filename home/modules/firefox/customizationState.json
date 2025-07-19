@@ -36,7 +36,8 @@
       "_a7399979-5203-4489-9861-b168187b52e1_-browser-action",
       "addon_fastforward_team-browser-action",
       "firefox-extension_steamdb_info-browser-action",
-      "_cb31ec5d-c49a-4e5a-b240-16c767444f62_-browser-action"
+      "_cb31ec5d-c49a-4e5a-b240-16c767444f62_-browser-action",
+      "_bbb880ce-43c9-47ae-b746-c3e0096c5b76_-browser-action"
     ],
     "nav-bar": [
       "back-button",
@@ -59,6 +60,7 @@
       "clipper_obsidian_md-browser-action",
       "zotero_chnm_gmu_edu-browser-action",
       "vpn_proton_ch-browser-action",
+      "jid1-qofqdk4qzufgwq_jetpack-browser-action",
       "unified-extensions-button"
     ],
     "toolbar-menubar": [
@@ -124,7 +126,9 @@
     "zotero_chnm_gmu_edu-browser-action",
     "_b9db16a4-6edc-47ec-a1f4-b86292ed211d_-browser-action",
     "_cb31ec5d-c49a-4e5a-b240-16c767444f62_-browser-action",
-    "screenshot-button"
+    "screenshot-button",
+    "_bbb880ce-43c9-47ae-b746-c3e0096c5b76_-browser-action",
+    "jid1-qofqdk4qzufgwq_jetpack-browser-action"
   ],
   "dirtyAreaCache": [
     "nav-bar",
@@ -136,5 +140,5 @@
     "vertical-tabs"
   ],
   "currentVersion": 22,
-  "newElementCount": 7
+  "newElementCount": 8
 }
