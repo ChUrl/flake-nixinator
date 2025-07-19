@@ -5,6 +5,7 @@
   config,
   lib,
   mylib,
+  username,
   ...
 }: {
   imports = [
@@ -163,6 +164,35 @@
     };
 
     services = {
+      ollama = {
+        enable = true;
+        acceleration = "cuda";
+        # home = "/var/lib/ollama";
+
+        # loadModels = [
+        #   "deepseek-r1:8b" # Default
+        #   "deepseek-r1:14b"
+        # ];
+
+        # https://github.com/ollama/ollama/blob/main/docs/faq.md#how-do-i-configure-ollama-server
+        environmentVariables = {
+          # Flash Attention is a feature of most modern models
+          # that can significantly reduce memory usage as the context size grows.
+          OLLAMA_FLASH_ATTENTION = "1";
+
+          # The K/V context cache can be quantized to significantly
+          # reduce memory usage when Flash Attention is enabled.
+          OLLAMA_KV_CACHE_TYPE = "q8_0"; # f16, q8_0 q4_0
+
+          # To improve Retrieval-Augmented Generation (RAG) performance, you should increase
+          # the context length to 8192+ tokens in your Ollama model settings.
+          OLLAMA_CONTEXT_LENGTH = "8192";
+        };
+
+        host = "127.0.0.1";
+        port = 11434;
+      };
+
       flatpak = {
         packages = [
           "com.valvesoftware.Steam"
