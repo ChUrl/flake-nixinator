@@ -4,6 +4,7 @@
   mylib,
   pkgs,
   username,
+  nixosConfig,
   ...
 }: let
   inherit (config.modules) fish color;
@@ -11,41 +12,39 @@ in {
   options.modules.fish = import ./options.nix {inherit lib mylib;};
 
   config = lib.mkIf fish.enable {
+    # https://github.com/catppuccin/fish/blob/main/themes/Catppuccin%20Mocha.theme
     home.file.".config/fish/themes/catppuccin-latte.theme".text = ''
-      # name: 'Catppuccin Mocha'
-      # url: 'https://github.com/catppuccin/fish'
-      # preferred_background: ${color.hex.base}
-
       fish_color_normal ${color.hex.text}
       fish_color_command ${color.hex.blue}
-      fish_color_param f2cdcd
-      fish_color_keyword f38ba8
-      fish_color_quote a6e3a1
-      fish_color_redirection f5c2e7
-      fish_color_end fab387
-      fish_color_comment 7f849c
-      fish_color_error f38ba8
-      fish_color_gray 6c7086
-      fish_color_selection --background=313244
-      fish_color_search_match --background=313244
-      fish_color_option a6e3a1
-      fish_color_operator f5c2e7
-      fish_color_escape eba0ac
-      fish_color_autosuggestion 6c7086
-      fish_color_cancel f38ba8
-      fish_color_cwd f9e2af
-      fish_color_user 94e2d5
+      fish_color_param ${color.hex.flamingo}
+      fish_color_keyword ${color.hex.red}
+      fish_color_quote ${color.hex.green}
+      fish_color_redirection ${color.hex.accentHL}
+      fish_color_end ${color.hex.peach}
+      fish_color_comment ${color.hex.overlay1}
+      fish_color_error ${color.hex.red}
+      fish_color_gray ${color.hex.overlay0}
+      fish_color_selection --background=${color.hex.surface0}
+      fish_color_search_match --background=${color.hex.surface0}
+      fish_color_option ${color.hex.green}
+      fish_color_operator ${color.hex.accentHL}
+      fish_color_escape ${color.hex.maroon}
+      fish_color_autosuggestion ${color.hex.overlay0}
+      fish_color_cancel ${color.hex.red}
+      fish_color_cwd ${color.hex.yellow}
+      fish_color_user ${color.hex.teal}
       fish_color_host ${color.hex.blue}
-      fish_color_host_remote a6e3a1
-      fish_color_status f38ba8
-      fish_pager_color_progress 6c7086
-      fish_pager_color_prefix f5c2e7
+      fish_color_host_remote ${color.hex.green}
+      fish_color_status ${color.hex.red}
+      fish_pager_color_progress ${color.hex.overlay0}
+      fish_pager_color_prefix ${color.hex.accentHL}
       fish_pager_color_completion ${color.hex.text}
-      fish_pager_color_description 6c7086
+      fish_pager_color_description ${color.hex.overlay0}
     '';
 
     programs.fish = {
       enable = true;
+      generateCompletions = nixosConfig.programs.fish.generateCompletions;
 
       functions = lib.mergeAttrsList [
         (lib.optionalAttrs config.modules.nnn.enable {
@@ -222,7 +221,7 @@ in {
 
           (abbrify pkgs.ripgrep rec {
             rg = "rg --trim --pretty";
-            grep = rg;
+            # grep = rg;
           })
 
           (abbrify pkgs.rsync rec {
@@ -230,30 +229,48 @@ in {
             copy = rsync;
           })
 
-          (abbrify pkgs.sd {sed = "sd";})
+          # (abbrify pkgs.sd {sed = "sd";})
         ];
     };
 
-    programs.starship = let
-      flavour = "latte"; # One of `latte`, `frappe`, `macchiato`, or `mocha`
-    in {
+    programs.starship = {
       enable = true;
       enableFishIntegration = config.modules.fish.enable;
-      settings =
-        {
-          # Other config here
-          format = "$all"; # Remove this line to disable the default prompt format
-          palette = "catppuccin_${flavour}";
-        }
-        // builtins.fromTOML (builtins.readFile
-          (pkgs.fetchFromGitHub
-            {
-              owner = "catppuccin";
-              repo = "starship";
-              rev = "3e3e54410c3189053f4da7a7043261361a1ed1bc";
-              sha256 = "sha256-soEBVlq3ULeiZFAdQYMRFuswIIhI9bclIU8WXjxd7oY=";
-            }
-            + /palettes/${flavour}.toml));
+      settings = {
+        # Other config here
+        format = "$all"; # Remove this line to disable the default prompt format
+        palette = "nixos-palette";
+
+        # https://github.com/catppuccin/starship/blob/main/themes/mocha.toml
+        palettes."nixos-palette" = {
+          rosewater = color.hexS.rosewater;
+          flamingo = color.hexS.flamingo;
+          pink = color.hexS.accentHL;
+          mauve = color.hexS.accent;
+          red = color.hexS.red;
+          maroon = color.hexS.maroon;
+          peach = color.hexS.peach;
+          yellow = color.hexS.yellow;
+          green = color.hexS.green;
+          teal = color.hexS.teal;
+          sky = color.hexS.sky;
+          sapphire = color.hexS.sapphire;
+          blue = color.hexS.blue;
+          lavender = color.hexS.lavender;
+          text = color.hexS.text;
+          subtext1 = color.hexS.subtext1;
+          subtext0 = color.hexS.subtext0;
+          overlay2 = color.hexS.overlay2;
+          overlay1 = color.hexS.overlay1;
+          overlay0 = color.hexS.overlay0;
+          surface2 = color.hexS.surface2;
+          surface1 = color.hexS.surface1;
+          surface0 = color.hexS.surface0;
+          base = color.hexS.accentText;
+          mantle = color.hexS.mantle;
+          crust = color.hexS.crust;
+        };
+      };
     };
   };
 }
