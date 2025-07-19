@@ -2,23 +2,23 @@
 ; NIXOS
 ; ===========================
 
-% nixos
+% nixos-rebuild
 # Rebuild a flake system derivation
 sudo nixos-rebuild <type> --flake .#<flake>
 $ type: echo -e "switch\nbuild\nboot"
 $ flake: echo -e "nixinator\nnixtop"
 
-% nixos
+% nh
 # Rebuild the system using nh
 nh os <mode>
 $ mode: echo -e "switch\nbuild\nboot"
 
-% nixos
+% nh
 # Clean the nix store
 nh clean <mode>
 $ mode: echo -e "all\nuser"
 
-% nixos
+% nix
 # Find out why a package is included in the closure when building the system derivation
 nix why-depends /run/current-system nixpkgs#<package>
 
@@ -32,34 +32,38 @@ $ executable: bash -c "compgen -c"
 ldd $(readlink -f $(which <executable>))
 $ executable: bash -c "compgen -c"
 
-% nixos
+% nix-tree
 # Browse closures in the nix store sorted by size
 nix-tree
 
-% nixos
+% nps
 # Search in nixpkgs
 nps -e "<package>"
 
-% nixos
+% nix-search-tv
 # Search in nixpkgs, nur, nixos and home-manager
 nix-search-tv print --indexes 'nixos,home-manager,nixpkgs,nur' | fzf --preview 'nix-search-tv preview {}' --scheme history
 
-% nixos
+% nvd
 # Compare the current NixOS generation to another one
 nvd diff /run/current-system ./result
 
-% nixos
+% nurl
 # Generate a nix fetcher section
 nurl "<url>"
 
-% nixos
+% nurl
 # Generate a nix fetcher section for a specific revision
 nurl "<url>" "<rev>"
 
-% nixos
+% nix-alien
 # Run an unpatched binary on NixOS
 nix-alien-ld -- <binary>
 $ binary: eza -f -1
+
+% nix repl
+# Enter a repl with loaded NixFlake
+nix repl --extra-experimental-features "flakes" /home/christoph/NixFlake
 
 ; ===========================
 ; SYSTEMD
