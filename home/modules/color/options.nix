@@ -33,6 +33,11 @@ with mylib.modules; {
     description = "Colors in \"RRGGBB\" hexadecimal format";
   };
 
+  hexString = mkOption {
+    type = types.attrs;
+    description = "Colors in \"#RRGGBB\" hexadecimal format";
+  };
+
   rgbString = mkOption {
     type = types.attrs;
     description = "Colors in \"RR,GG,BB\" decimal format";
