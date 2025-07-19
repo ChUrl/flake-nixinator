@@ -84,7 +84,7 @@
     hyprland = {
       enable = !headless;
       dunst.enable = !config.modules.hyprpanel.enable; # Disable for hyprpanel
-      theme = "Foggy-Lake"; # TODO: Remove this in favor of color.lightScheme
+      wallpaper = "Foggy-Lake";
 
       keybindings = {
         main-mod = "SUPER";
@@ -225,7 +225,6 @@
 
     rofi = {
       enable = !headless;
-      theme = "Foggy-Lake"; # TODO: Remove this in favor of color.lightScheme
     };
 
     waybar.enable = false; # Use hyprpanel
@@ -234,7 +233,7 @@
   };
 
   manual = {
-    manpages.enable = true;
+    manpages.enable = nixosConfig.documentation.enable;
     html.enable = false;
   };
 
