@@ -43,9 +43,9 @@ def getRule(
         f"{value}": lambda line, name, value: line.replace(
             f"{value}", f"${{color.hex.{name}}}"
         ),
-        # "#${color.hex.white}" -> ${color.hexS.white}
-        '"#${color.hex."': lambda line, name, value: line.replace(
-            '"#${color.hex."', "${color.hexS.}"
+        # #${color.hex.white} -> ${color.hexS.white}
+        "#${color.hex.": lambda line, name, value: line.replace(
+            "#${color.hex.", "${color.hexS."
         ),
         # ff,ff,ff -> ${color.rgbS.white}
         f"{value[0:2]},{value[2:4]},{value[4:6]}": lambda line, name, value: line.replace(
