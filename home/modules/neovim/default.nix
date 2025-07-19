@@ -1026,39 +1026,39 @@ in {
               bubbles = ''
                 {
                   normal = {
-                    a = { fg = "#${color.hex.base}", bg = "#${color.hex.lavender}", gui = "bold" },
+                    a = { fg = "#${color.hex.bg}", bg = "#${color.hex.accent}", gui = "bold" },
                     b = { fg = "#${color.hex.text}", bg = "#${color.hex.crust}" },
                     c = { fg = "#${color.hex.text}", bg = "NONE" },
                   },
 
                   insert = {
-                    a = { fg = "#${color.hex.base}", bg = "#${color.hex.green}", gui = "bold" },
+                    a = { fg = "#${color.hex.bg}", bg = "#${color.hex.green}", gui = "bold" },
                     b = { fg = "#${color.hex.green}", bg = "#${color.hex.crust}" },
                   },
 
                   visual = {
-                    a = { fg = "#${color.hex.base}", bg = "#${color.hex.mauve}", gui = "bold" },
-                    b = { fg = "#${color.hex.mauve}", bg = "#${color.hex.crust}" },
+                    a = { fg = "#${color.hex.bg}", bg = "#${color.hex.blue}", gui = "bold" },
+                    b = { fg = "#${color.hex.blue}", bg = "#${color.hex.crust}" },
                   },
 
                   replace = {
-                    a = { fg = "#${color.hex.base}", bg = "#${color.hex.red}", gui = "bold" },
+                    a = { fg = "#${color.hex.bg}", bg = "#${color.hex.red}", gui = "bold" },
                     b = { fg = "#${color.hex.red}", bg = "#${color.hex.crust}" },
                   },
 
                   -- terminal = {
-                  --   a = { fg = "#${color.hex.base}", bg = "#${color.hex.green}", gui = "bold" },
+                  --   a = { fg = "#${color.hex.bg}", bg = "#${color.hex.green}", gui = "bold" },
                   --   b = { fg = "#${color.hex.green}", bg = "#${color.hex.crust}" },
                   -- },
 
                   command = {
-                    a = { fg = "#${color.hex.base}", bg = "#${color.hex.peach}", gui = "bold" },
+                    a = { fg = "#${color.hex.bg}", bg = "#${color.hex.peach}", gui = "bold" },
                     b = { fg = "#${color.hex.peach}", bg = "#${color.hex.crust}" },
                   },
 
                   inactive = {
-                    a = { fg = "#${color.hex.text}", bg = "#${color.hex.base}" },
-                    b = { fg = "#${color.hex.text}", bg = "#${color.hex.base}" },
+                    a = { fg = "#${color.hex.text}", bg = "#${color.hex.bg}" },
+                    b = { fg = "#${color.hex.text}", bg = "#${color.hex.bg}" },
                     c = { fg = "#${color.hex.text}", bg = "NONE" },
                   },
                 }
@@ -1598,41 +1598,41 @@ in {
             opts = {
               line.__raw = ''
                 function(line)
-                  local base = { fg = "#${color.hex.base}", bg = "#${color.hex.base}" }
+                  local bg = { fg = "#${color.hex.bg}", bg = "#${color.hex.bg}" }
                   local crust = { fg = "#${color.hex.crust}", bg = "#${color.hex.crust}" }
                   local text = { fg = "#${color.hex.text}", bg = "#${color.hex.crust}" }
-                  local lavender = { fg = "#${color.hex.lavender}", bg = "#${color.hex.lavender}" }
+                  local accent = { fg = "#${color.hex.accent}", bg = "#${color.hex.accent}" }
 
                   local numtabs = vim.call("tabpagenr", "$")
 
                   return {
                     -- Head
                     {
-                        { " NEOVIM ", hl = { fg = "#${color.hex.base}", bg = "#${color.hex.lavender}", style = "bold" } },
+                        { " NEOVIM ", hl = { fg = "#${color.hex.bg}", bg = "#${color.hex.accent}", style = "bold" } },
 
                         -- The separator gets a foreground and background fill (each have fg + bg).
-                        -- line.sep("", lavender, lavender),
+                        -- line.sep("", accent, lavender),
                     },
 
                     -- Tabs
                     line.tabs().foreach(function(tab)
                       -- Switch out the start separator instead of the ending one because the last separator is different
-                      local hl = tab.is_current() and { fg = "#${color.hex.lavender}", bg = "#${color.hex.crust}", style = "bold" } or text
+                      local hl = tab.is_current() and { fg = "#${color.hex.accent}", bg = "#${color.hex.crust}", style = "bold" } or text
                       local sep_start = tab.number() == 1 and "" or ""
                       local sep_end = tab.number() == numtabs and "" or ""
 
                       return {
-                        line.sep(sep_start, lavender, crust),
+                        line.sep(sep_start, accent, crust),
                         tab.number(),
                         tab.name(),
-                        line.sep(sep_end, crust, base),
+                        line.sep(sep_end, crust, bg),
                         hl = hl,
                         margin = " ",
                       }
                     end),
 
                     -- Background
-                    hl = base,
+                    hl = bg,
                   }
                 end
               '';
