@@ -72,6 +72,7 @@ in rec {
   in
     lib.mkOption {
       type = lib.types.listOf lib.types.str;
+      readOnly = true;
       description = "The available wallpapers";
       default = wallpapers;
     };
@@ -117,21 +118,25 @@ in rec {
 
   hex = lib.mkOption {
     type = lib.types.attrs;
+    readOnly = true;
     description = "Colors in \"RRGGBB\" hexadecimal format";
   };
 
   hexS = lib.mkOption {
     type = lib.types.attrs;
+    readOnly = true;
     description = "Colors in \"#RRGGBB\" hexadecimal format";
   };
 
   rgb = lib.mkOption {
     type = lib.types.attrs;
+    readOnly = true;
     description = "Colors in [RR GG BB] decimal format";
   };
 
   rgbS = lib.mkOption {
     type = lib.types.attrs;
+    readOnly = true;
     description = "Colors in \"RR,GG,BB\" decimal format";
   };
 }
