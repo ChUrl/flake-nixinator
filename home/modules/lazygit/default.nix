@@ -31,14 +31,21 @@ in {
 
           theme = {
             lightTheme = false;
+
             activeBorderColor = [color.hexS.accent "bold"];
             inactiveBorderColor = [color.hexS.overlay0];
+
+            defaultFgColor = [color.hexS.text];
             optionsTextColor = [color.hexS.accentDim];
-            selectedLineBgColor = [color.hexS.accentDim];
-            selectedRangeBgColor = [color.hexS.accentDim];
-            cherryPickedCommitBgColor = ["#179299"];
-            cherryPickedCommitFgColor = ["#1e66f5"];
-            unstagedChangeColor = ["red"];
+
+            # Because we can't set the fucking foregrounds for this, use a dark color
+            selectedLineBgColor = [color.hexS.surface0];
+            selectedRangeBgColor = [color.hexS.surface0];
+
+            cherryPickedCommitBgColor = [color.hexS.green];
+            cherryPickedCommitFgColor = [color.hexS.blue];
+
+            unstagedChangeColor = [color.hexS.red];
           };
         };
       };
