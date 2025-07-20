@@ -277,11 +277,10 @@ in {
       '';
 
       ".config/rmpc/themes/${themeName}.ron".text = let
-        bg = color.hex.base;
-        text = color.hex.text;
-        accent = color.hex.mauve;
-        accentHL = color.hex.red;
-        surface = color.hex.base;
+        accent = color.hexS.accent;
+        accentHl = color.hexS.accentHl;
+        accentDim = color.hexS.accentDim;
+        accentText = color.hexS.accentText;
       in ''
         #![enable(implicit_some)]
         #![enable(unwrap_newtypes)]
@@ -299,20 +298,20 @@ in {
             header_background_color: None,
             modal_background_color: None,
 
-            text_color: "#${text}",
-            preview_label_style: (fg: "yellow"),
-            preview_metadata_group_style: (fg: "yellow", modifiers: "Bold"),
+            text_color: "${color.hexS.text}",
+            preview_label_style: (fg: "${color.hexS.yellow}"),
+            preview_metadata_group_style: (fg: "${color.hexS.yellow}", modifiers: "Bold"),
 
             tab_bar: (
                 enabled: true,
-                active_style: (fg: "#${text}", bg: "#${accent}", modifiers: "Bold|Italic"),
+                active_style: (fg: "${accentText}", bg: "${accent}", modifiers: "Bold|Italic"),
                 inactive_style: (),
             ),
 
-            highlighted_item_style: (fg: "#${accentHL}", modifiers: "Bold|Italic"), // Currently playing
-            current_item_style: (fg: "#${text}", bg: "#${accentHL}", modifiers: "Bold"), // Tracks list cursor
-            borders_style: (fg: "#${accent}", modifiers: "Bold"),
-            highlight_border_style: (fg: "#${accent}", modifiers: "Bold"),
+            highlighted_item_style: (fg: "${accentHl}", modifiers: "Bold|Italic"), // Currently playing
+            current_item_style: (fg: "${accentText}", bg: "${accentDim}", modifiers: "Bold|Italic"), // Tracks list cursor
+            borders_style: (fg: "${accent}", modifiers: "Bold"),
+            highlight_border_style: (fg: "${accent}", modifiers: "Bold"),
 
             symbols: (
                 song: "󰝚",
@@ -327,60 +326,60 @@ in {
 
             // The stuff shown in the status bar (on the progress bar)
             level_styles: (
-                info: (fg: "#${accent}", bg: "#${surface}"),
-                warn: (fg: "#${color.hex.yellow}", bg: "#${surface}"),
-                error: (fg: "#${color.hex.red}", bg: "#${surface}"),
-                debug: (fg: "#${color.hex.green}", bg: "#${surface}"),
-                trace: (fg: "#${color.hex.mauve}", bg: "#${surface}"),
+                info: (fg: "${accent}", bg: "${accentText}"),
+                warn: (fg: "${color.hexS.yellow}", bg: "${accentText}"),
+                error: (fg: "${color.hexS.red}", bg: "${accentText}"),
+                debug: (fg: "${color.hexS.green}", bg: "${accentText}"),
+                trace: (fg: "${color.hexS.mauve}", bg: "${accentText}"),
             ),
 
             progress_bar: (
                 // symbols: ["[", "-", ">", " ", "]"],
                 symbols: ["█", "█", "█", "█", "█"],
-                track_style: (fg: "#${surface}"),
-                elapsed_style: (fg: "#${accent}"),
-                thumb_style: (fg: "#${accentHL}"), // "The draggable part"
+                track_style: (fg: "${color.hexS.surface0}"),
+                elapsed_style: (fg: "${accentDim}"),
+                thumb_style: (fg: "${accentDim}"), // "The draggable part"
             ),
 
             scrollbar: (
                 symbols: ["│", "█", "▲", "▼"],
-                track_style: (fg: "#${surface}"),
-                ends_style: (fg: "#${accentHL}"),
-                thumb_style: (fg: "#${accentHL}"), // "The draggable part"
+                track_style: (fg: "${color.hexS.surface0}"),
+                ends_style: (fg: "${accentDim}"),
+                thumb_style: (fg: "${accentDim}"), // "The draggable part"
             ),
 
             song_table_format: [
                 (
                     prop: (
                         kind: Property(Artist),
-                        style: (fg: "#${text}"),
+                        style: (fg: "${color.hexS.text}"),
                         default: (kind: Text("Unknown"))
                     ),
-                    width: "20%",
+                    width: "25%",
                 ),
                 (
                     prop: (
                         kind: Property(Title),
-                        style: (fg: "#${text}"),
+                        style: (fg: "${color.hexS.text}"),
                         default: (kind: Text("Unknown"))
                     ),
-                    width: "35%",
+                    width: "40%",
                 ),
                 (
                     prop: (
                         kind: Property(Album),
-                        style: (fg: "#${text}"),
+                        style: (fg: "${color.hexS.text}"),
                         default: (kind: Text("Unknown Album"), style: (fg: "white"))
                     ),
-                    width: "30%",
+                    width: "25%",
                 ),
                 (
                     prop: (
                         kind: Property(Duration),
-                        style: (fg: "#${text}"),
+                        style: (fg: "${color.hexS.text}"),
                         default: (kind: Text("-"))
                     ),
-                    width: "15%",
+                    width: "10%",
                     alignment: Right,
                 ),
             ],
@@ -416,7 +415,7 @@ in {
                         left: [
                             (
                                 kind: Text("["),
-                                style: (fg: "#${accentHL}", modifiers: "Bold")
+                                style: (fg: "${accentDim}", modifiers: "Bold")
                             ),
                             (
                                 kind: Property(Status(StateV2(
@@ -424,21 +423,21 @@ in {
                                     paused_label: "Paused",
                                     stopped_label: "Stopped"))
                                 ),
-                                style: (fg: "#${accentHL}", modifiers: "Bold")
+                                style: (fg: "${accentDim}", modifiers: "Bold")
                             ),
                             (
                                 kind: Text("]"),
-                                style: (fg: "#${accentHL}", modifiers: "Bold")
+                                style: (fg: "${accentDim}", modifiers: "Bold")
                             )
                         ],
 
                         center: [
                             (
                                 kind: Property(Song(Title)),
-                                style: (fg: "#${accentHL}", modifiers: "Bold"),
+                                style: (fg: "${accentDim}", modifiers: "Bold"),
                                 default: (
                                     kind: Text("No Song"),
-                                    style: (fg: "#${text}", modifiers: "Bold")
+                                    style: (fg: "${color.hexS.text}", modifiers: "Bold")
                                 )
                             )
                         ],
@@ -446,11 +445,11 @@ in {
                         right: [
                             (
                                 kind: Property(Widget(ScanStatus)),
-                                style: (fg: "#${accentHL}")
+                                style: (fg: "${accentDim}")
                             ),
                             (
                                 kind: Property(Widget(Volume)),
-                                style: (fg: "#${accentHL}")
+                                style: (fg: "${accentDim}")
                             )
                         ]
                     ),
@@ -460,86 +459,78 @@ in {
                         left: [
                             (
                                 kind: Property(Status(Elapsed)),
-                                style: (fg: "#${text}")
+                                style: (fg: "${color.hexS.text}")
                             ),
                             (
                                 kind: Text(" / "),
-                                style: (fg: "#${text}")
+                                style: (fg: "${color.hexS.text}")
                             ),
                             (
                                 kind: Property(Status(Duration)),
-                                style: (fg: "#${text}")
+                                style: (fg: "${color.hexS.text}")
                             ),
                             (
                                 kind: Text(" ("),
-                                style: (fg: "#${text}")
+                                style: (fg: "${color.hexS.text}")
                             ),
                             (
                                 kind: Property(Status(Bitrate)),
-                                style: (fg: "#${text}")
+                                style: (fg: "${color.hexS.text}")
                             ),
                             (
                                 kind: Text(" kbps)"),
-                                style: (fg: "#${text}")
+                                style: (fg: "${color.hexS.text}")
                             )
                         ],
 
                         center: [
                             (
                                 kind: Property(Song(Artist)),
-                                style: (fg: "#${text}", modifiers: "Bold"),
+                                style: (fg: "${color.hexS.text}", modifiers: "Bold"),
                                 default: (
                                     kind: Text("Unknown"),
-                                    style: (fg: "#${text}", modifiers: "Bold")
+                                    style: (fg: "${color.hexS.text}", modifiers: "Bold")
                                 )
                             ),
                             (
                                 kind: Text(" - "),
-                                style: (fg: "#${text}")
+                                style: (fg: "${color.hexS.text}")
                             ),
                             (
                                 kind: Property(Song(Album)),
-                                style: (fg: "#${text}"),
+                                style: (fg: "${color.hexS.text}"),
                                 default: (
                                     kind: Text("Unknown Album"),
-                                    style: (fg: "#${text}")
+                                    style: (fg: "${color.hexS.text}")
                                 )
                             )
                         ],
 
                         right: [
-                            // (
-                            //     kind: Property(Widget(States(
-                            //         active_style: (fg: "#${accentHL}", modifiers: "Bold|Underlined"),
-                            //         inactive_style: (fg: "#${text}"),
-                            //         separator_style: (fg: "#${text}"))),
-                            //     )
-                            //     // style: (fg: "dark_gray")
-                            // ),
                             (
                                 kind: Property(Status(RepeatV2(
                                     on_label: "Repeat (z)",
                                     off_label: "Repeat (z)",
-                                    on_style: (fg: "#${accentHL}", modifiers: "Bold|Underlined"),
-                                    off_style: (fg: "#${text}"),
+                                    on_style: (fg: "${accentDim}", modifiers: "Bold|Underlined"),
+                                    off_style: (fg: "${color.hexS.text}"),
                                 ))),
                             ),
                             (
                                 kind: Text(" / "),
-                                style: (fg: "#${text}"),
+                                style: (fg: "${color.hexS.text}"),
                             ),
 
                             (
                                 kind: Property(Status(RandomV2(
                                     on_label: "Random (x)",
                                     off_label: "Random (x)",
-                                    on_style: (fg: "#${accentHL}", modifiers: "Bold|Underlined"),
-                                    off_style: (fg: "#${text}"),
+                                    on_style: (fg: "${accentDim}", modifiers: "Bold|Underlined"),
+                                    off_style: (fg: "${color.hexS.text}"),
                                 ))),
                             ),
                             (
                                 kind: Text(" / "),
-                                style: (fg: "#${text}"),
+                                style: (fg: "${color.hexS.text}"),
                             ),
 
                             (
@@ -547,14 +538,14 @@ in {
                                     on_label: "Consume (c)",
                                     oneshot_label: "Consume OS (c)",
                                     off_label: "Consume (c)",
-                                    on_style: (fg: "#${accentHL}", modifiers: "Bold|Underlined"),
-                                    oneshot_style: (fg: "#${accentHL}", modifiers: "Bold|Underlined"),
-                                    off_style: (fg: "#${text}"),
+                                    on_style: (fg: "${accentDim}", modifiers: "Bold|Underlined"),
+                                    oneshot_style: (fg: "${accentDim}", modifiers: "Bold|Underlined"),
+                                    off_style: (fg: "${color.hexS.text}"),
                                 ))),
                             ),
                             (
                                 kind: Text(" / "),
-                                style: (fg: "#${text}"),
+                                style: (fg: "${color.hexS.text}"),
                             ),
 
                             (
@@ -562,9 +553,9 @@ in {
                                     on_label: "Single (v)",
                                     oneshot_label: "Single OS (v)",
                                     off_label: "Single (v)",
-                                    on_style: (fg: "#${accentHL}", modifiers: "Bold|Underlined"),
-                                    oneshot_style: (fg: "#${accentHL}", modifiers: "Bold|Underlined"),
-                                    off_style: (fg: "#${text}")
+                                    on_style: (fg: "${accentDim}", modifiers: "Bold|Underlined"),
+                                    oneshot_style: (fg: "${accentDim}", modifiers: "Bold|Underlined"),
+                                    off_style: (fg: "${color.hexS.text}")
                                 ))),
                             ),
                         ]
@@ -637,8 +628,8 @@ in {
                 // value will be used as 0 and 100. Only hex and RGB colors are supported here and your terminal
                 // must support them as well!
                 bar_color: Gradient({
-                      0: "#${accent}",
-                    100: "#${accentHL}",
+                      0: "${accentDim}",
+                    100: "${accent}",
                 }),
             ),
         )
