@@ -15,6 +15,7 @@
     ./hyprland
     ./hyprpanel
     ./kitty
+    ./lazygit
     ./mpd
     ./neovim
     ./nnn
