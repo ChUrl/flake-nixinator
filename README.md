@@ -4,9 +4,11 @@ Modular NixOS configuration, using Hyprland for a lightweight desktop.
 
 ![](FastFetch.png)
 
-![](NeoVim.png)
-
-![](Rmpc.png) ![](Btop.png)
+<p float="left" align="middle">
+  <img src="/NeoVim.png" width="33%" />
+  <img src="/Rmpc.png" width="33%" />
+  <img src="/Btop.png" width="33%" />
+</p>
 
 To install, run `nixos-rebuild` with the `--flake` parameter from the `NixFlake` directory: `nixos-rebuild switch --flake .#nixinator`.
 
