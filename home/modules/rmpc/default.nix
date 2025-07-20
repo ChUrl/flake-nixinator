@@ -308,7 +308,7 @@ in {
                 inactive_style: (),
             ),
 
-            highlighted_item_style: (fg: "${accentHl}", modifiers: "Bold|Italic"), // Currently playing
+            highlighted_item_style: (fg: "${accentDim}", modifiers: "Bold|Italic"), // Currently playing
             current_item_style: (fg: "${accentText}", bg: "${accentDim}", modifiers: "Bold|Italic"), // Tracks list cursor
             borders_style: (fg: "${accent}", modifiers: "Bold"),
             highlight_border_style: (fg: "${accent}", modifiers: "Bold"),
