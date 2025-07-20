@@ -2043,9 +2043,10 @@ in {
             };
           };
         in [
-          autopairs # Automatic closing brackets/parens # NOTE: For now replaced by blink
+          autopairs # Automatic closing brackets/parens
 
-          better-escape # Escape to normal mode using "jk"
+          # better-escape # Escape with "jk" # NOTE: Bad in lazygit + looses visual selection when correcting too fast
+
           catppuccin # Colortheme (also add this here to access palettes)
           clangd-extensions # Improved clang LSP support
           blink-cmp # Fast as fuck auto completion
