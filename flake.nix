@@ -117,6 +117,24 @@
         #   };
         # })
 
+        # TODO: Remove this after 0.15.1 hit nixpkgs
+        (final: prev: {
+          neovide = prev.neovide.overrideAttrs (finalAttrs: prevAttrs: {
+            version = "0.15.1";
+            src = prev.fetchFromGitHub {
+              owner = "neovide";
+              repo = "neovide";
+              tag = finalAttrs.version;
+              hash = "sha256-2iV3g6tcCkMF7sFG/GZDz3czPZNIDi6YLfrVzYO9jYI=";
+            };
+            cargoHash = "sha256-YlHAcUCRk6ROg5yXIumHfsiR/2TrsSzbuXz/IQK7sEo=";
+            cargoDeps = prev.rustPlatform.fetchCargoVendor {
+              inherit (finalAttrs) pname src version;
+              hash = finalAttrs.cargoHash;
+            };
+          });
+        })
+
         # All my own overlays
         (import ./overlays {inherit nixpkgs inputs;})
       ];

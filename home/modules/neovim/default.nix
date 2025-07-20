@@ -25,23 +25,7 @@ in {
 
       packages = with pkgs;
         builtins.concatLists [
-          (lib.optionals neovim.neovide [
-            # TODO: Remove this after 0.15.1 hit nixpkgs
-            (neovide.overrideAttrs (finalAttrs: prevAttrs: {
-              version = "0.15.1";
-              src = fetchFromGitHub {
-                owner = "neovide";
-                repo = "neovide";
-                tag = finalAttrs.version;
-                hash = "sha256-2iV3g6tcCkMF7sFG/GZDz3czPZNIDi6YLfrVzYO9jYI=";
-              };
-              cargoHash = "sha256-YlHAcUCRk6ROg5yXIumHfsiR/2TrsSzbuXz/IQK7sEo=";
-              cargoDeps = pkgs.rustPlatform.fetchCargoVendor {
-                inherit (finalAttrs) pname src version;
-                hash = finalAttrs.cargoHash;
-              };
-            }))
-          ])
+          (lib.optionals neovim.neovide [neovide])
 
           [
             (pkgs.ripgrep.override {withPCRE2 = true;})
