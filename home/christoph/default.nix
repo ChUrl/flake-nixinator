@@ -68,6 +68,7 @@
       enable = !headless;
       wayland = true;
       vaapi = true;
+      textfox = true;
       disableTabBar = true;
     };
 
@@ -195,6 +196,7 @@
         "Spotify"
         "tidal-hifi"
         "obsidian"
+        "firefox"
         "jetbrains-clion"
         "jetbrains-idea"
         "jetbrains-pycharm"

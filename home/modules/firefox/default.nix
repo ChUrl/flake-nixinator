@@ -6,11 +6,54 @@
   hostname,
   ...
 }: let
-  inherit (config.modules) firefox;
+  inherit (config.modules) firefox color;
 in {
   options.modules.firefox = import ./options.nix {inherit lib mylib;};
 
   config = lib.mkIf firefox.enable {
+    textfox = {
+      enable = firefox.textfox;
+      useLegacyExtensions = false;
+      profile = "default";
+
+      config = {
+        background = {
+          color = color.hexS.base;
+        };
+
+        border = {
+          color = color.hexS.overlay1;
+          width = "2px";
+          transition = "1.0s ease";
+          radius = "3px";
+        };
+
+        displayWindowControls = true;
+        displayNavButtons = true;
+        displayUrlbarIcons = true;
+        displaySidebarTools = false;
+        displayTitles = false;
+
+        icons = {
+          toolbar.extensions.enable = true;
+          context.extensions.enable = true;
+          context.firefox.enable = true;
+        };
+
+        tabs = {
+          horizontal.enable = !firefox.disableTabBar;
+          vertical.enable = firefox.disableTabBar;
+          # vertical.margin = "1rem";
+        };
+
+        font = {
+          family = color.font;
+          size = "14px";
+          accent = color.hexS.accent;
+        };
+      };
+    };
+
     home.packages = with pkgs; [vdhcoapp];
 
     home.sessionVariables = lib.mkMerge [
@@ -179,6 +222,7 @@ in {
               # catppuccin-web-file-icons
               clearurls
               cookie-autodelete
+              dark-background-light-text
               display-_anchors # Easier linking to specific website parts
               don-t-fuck-with-paste
               enhancer-for-youtube

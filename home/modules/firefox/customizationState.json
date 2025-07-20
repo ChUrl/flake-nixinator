@@ -46,6 +46,7 @@
       "downloads-button",
       "urlbar-container",
       "save-to-pocket-button",
+      "_3c078156-979c-498b-8990-85f7987dd929_-browser-action",
       "fxa-toolbar-menu-button",
       "treestyletab_piro_sakura_ne_jp-browser-action",
       "ublock0_raymondhill_net-browser-action",
@@ -128,7 +129,8 @@
     "_cb31ec5d-c49a-4e5a-b240-16c767444f62_-browser-action",
     "screenshot-button",
     "_bbb880ce-43c9-47ae-b746-c3e0096c5b76_-browser-action",
-    "jid1-qofqdk4qzufgwq_jetpack-browser-action"
+    "jid1-qofqdk4qzufgwq_jetpack-browser-action",
+    "_3c078156-979c-498b-8990-85f7987dd929_-browser-action"
   ],
   "dirtyAreaCache": [
     "nav-bar",
@@ -140,5 +142,5 @@
     "vertical-tabs"
   ],
   "currentVersion": 22,
-  "newElementCount": 8
+  "newElementCount": 9
 }
