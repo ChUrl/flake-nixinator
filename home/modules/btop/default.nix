@@ -31,19 +31,19 @@ in {
           theme[title]=${color.hexS.text}
 
           # Highlight color for keyboard shortcuts
-          theme[hi_fg]=${color.hexS.blue}
+          theme[hi_fg]=${color.hexS.accent}
 
           # Background color of selected item in processes box
           theme[selected_bg]=${color.hexS.surface1}
 
           # Foreground color of selected item in processes box
-          theme[selected_fg]=${color.hexS.blue}
+          theme[selected_fg]=${color.hexS.accent}
 
           # Color of inactive/disabled text
           theme[inactive_fg]=${color.hexS.overlay1}
 
           # Color of text appearing on top of graphs, i.e uptime and current network graph scaling
-          theme[graph_text]=${color.hexS.rosewater}
+          theme[graph_text]=${color.hexS.overlay0}
 
           # Background color of the percentage meters
           theme[meter_bg]=${color.hexS.surface1}
