@@ -23,15 +23,12 @@
     type = lib.types.listOf lib.types.str;
     description = "Available wallpapers";
 
-    # Run eza -1 | sd ".png" "" | sd "^" "\"" | sd "\$" "\"" | sd "\"\"" "" | wl-copy
+    # Run eza -1 | sd ".jpg" "" | sd "^" "\"" | sd "\$" "\"" | sd "\"\"" "" | wl-copy
     # in ~/NixFlake/wallpapers/
     default = [
-      "Blade-Runner-Atari"
-      "Blade-Runner-Coca-Cola"
       "Blade-Runner-Downwards"
       "Blade-Runner-Upwards"
       "City-Outlook"
-      "Cozy-Bedroom"
       "Everest-Fishing"
       "Foggy-Lake"
       "Three-Bears"

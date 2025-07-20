@@ -41,6 +41,9 @@ in {
         inherit (config.lib.formats.rasi) mkLiteral;
 
         trans = "rgba(0, 0, 0, 0)";
+
+        paddingInner = "5px";
+        paddingOuter = "10px";
       in {
         "element-text,element-icon,mode-switcher" = {
           background-color = mkLiteral "inherit";
@@ -49,7 +52,7 @@ in {
 
         "window" = {
           height = "50%";
-          width = "50%";
+          width = "33%";
           border = mkLiteral "2 solid 2 solid 2 solid 2 solid";
           border-radius = 6;
           border-color = mkLiteral color.hexS.accent;
@@ -160,7 +163,7 @@ in {
       wallpaper-menu = let
         setWallpaperOnMonitor = name: monitor:
           "hyprctl hyprpaper wallpaper "
-          + "${monitor},${config.paths.nixflake}/wallpapers/${name}.png";
+          + "${monitor},${config.paths.nixflake}/wallpapers/${name}.jpg";
 
         setWallpaperOnMonitors = monitors: name: {
           ${name} =
