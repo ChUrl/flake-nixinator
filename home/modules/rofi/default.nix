@@ -134,17 +134,17 @@ in {
 
     modules.hyprland.keybindings = let
       vpn-menu =
-        pkgs.writeScript
+        pkgs.writeScriptBin
         "rofi-menu-vpn"
         (builtins.readFile ./menus/vpn.fish);
 
       keybinds-menu =
-        pkgs.writeScript
+        pkgs.writeScriptBin
         "rofi-menu-keybinds"
         (builtins.readFile ./menus/keybinds.fish);
 
       lectures-menu =
-        pkgs.writeScript
+        pkgs.writeScriptBin
         "rofi-menu-lectures"
         (builtins.readFile ./menus/lectures.fish);
 
@@ -182,13 +182,13 @@ in {
     in {
       bindings = lib.mergeAttrsList [
         {
-          "$mainMod, escape" = ["exec, \"${power-menu}\""];
-          "$mainMod, m" = ["exec, \"${keybinds-menu}\""];
-          "$mainMod, w" = ["exec, \"${wallpaper-menu}\""];
+          "$mainMod, escape" = ["exec, \"${power-menu}/bin/rofi-menu-power\""];
+          "$mainMod, m" = ["exec, \"${keybinds-menu}/bin/rofi-menu-keybinds\""];
+          "$mainMod, w" = ["exec, \"${wallpaper-menu}/bin/rofi-menu-wall\""];
           # "$mainMod, o" = ["exec, \"${lectures-menu}\""];
         }
         (lib.optionalAttrs (!nixosConfig.modules.network.useNetworkManager) {
-          "$mainMod, U" = ["exec, \"${vpn-menu}\""];
+          "$mainMod, U" = ["exec, \"${vpn-menu}/rofi-menu-vpn\""];
         })
       ];
     };

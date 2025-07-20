@@ -22,7 +22,7 @@
       |> builtins.concatStringsSep "\n";
   in
     prompt: attrs:
-      pkgs.writeScript "rofi-menu-${prompt}" ''
+      pkgs.writeScriptBin "rofi-menu-${prompt}" ''
         #! ${pkgs.fish}/bin/fish
 
         # OPTIONS contains all possible values Rofi will display

@@ -5,6 +5,7 @@
   mylib,
   pkgs,
   nixosConfig,
+  username,
   ...
 }: let
   inherit (config.modules) hyprland color;
@@ -168,27 +169,34 @@ in {
 
       file = {
         ".config/hypr/keybindings.info".text = let
-          fixupNoMod = key: ''${builtins.replaceStrings
-              ["<-"]
-              ["<"]
-              key}'';
+          fixupHomeDir = key:
+            builtins.replaceStrings ["/home/${username}"] ["~"] key;
 
-          mkBindHelpKey = key: ''${builtins.replaceStrings
-              ["$mainMod" " " ","]
-              ["${hyprland.keybindings.main-mod}" "-" ""]
-              key}'';
+          fixupNixStore = key: let
+            # The pattern has to match the entire string, otherwise it won't work
+            matches = builtins.match ".*/nix/store/(.*)/.*" key;
+          in
+            if (matches == null)
+            then key
+            else builtins.replaceStrings matches ["..."] key;
 
-          mkBindHelpAction = action: ''${builtins.replaceStrings
-              [","]
-              [""]
-              action}'';
+          fixupNoMod = key:
+            builtins.replaceStrings ["<-"] ["<"] key;
+
+          mkBindHelpKey = key:
+            builtins.replaceStrings ["$mainMod" " " ","] ["${hyprland.keybindings.main-mod}" "-" ""] key;
+
+          mkBindHelpAction = action:
+            builtins.replaceStrings [","] [""] action;
 
           mkBindHelp = key: action: "<${mkBindHelpKey key}>: ${mkBindHelpAction action}";
 
           mkBindsHelp = key: actions:
             actions
             |> builtins.map (mkBindHelp key)
-            |> builtins.map fixupNoMod;
+            |> builtins.map fixupNoMod
+            |> builtins.map fixupNixStore
+            |> builtins.map fixupHomeDir;
         in
           (hyprland.keybindings.bindings // always-bind)
           |> builtins.mapAttrs mkBindsHelp
