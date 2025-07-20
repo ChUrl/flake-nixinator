@@ -13,7 +13,7 @@ in {
 
   config = lib.mkIf fish.enable {
     # https://github.com/catppuccin/fish/blob/main/themes/Catppuccin%20Mocha.theme
-    home.file.".config/fish/themes/catppuccin-latte.theme".text = ''
+    home.file.".config/fish/themes/system-theme.theme".text = ''
       fish_color_normal ${color.hex.text}
       fish_color_command ${color.hex.blue}
       fish_color_param ${color.hex.flamingo}
@@ -87,24 +87,11 @@ in {
         })
       ];
 
-      plugins = [
-        # Oh-my-fish plugins are stored in their own repositories, which
-        # makes them simple to import into home-manager.
-        # NOTE: Currently, HM ignores theme plugins
-        # {
-        #   name = "Catppuccin Latte";
-        #   src = pkgs.fetchFromGitHub {
-        #     owner = "catppuccin";
-        #     repo = "fish";
-        #     rev = "91e6d6721362be05a5c62e235ed8517d90c567c9";
-        #     sha256 = "sha256-l9V7YMfJWhKDL65dNbxaddhaM6GJ0CFZ6z+4R6MJwBA=";
-        #   };
-        # }
-      ];
+      plugins = [];
 
       shellInit = ''
-        set -e fish_greeting
-        yes | fish_config theme save "catppuccin-latte"
+        set fish_greeting
+        yes | fish_config theme save "system-theme"
       '';
 
       shellAbbrs = let
