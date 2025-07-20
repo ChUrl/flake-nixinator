@@ -145,6 +145,7 @@ in {
             (mkUDir ".local/share/mime" m755)
             (mkUDir ".local/share/nix" m755)
             (mkUDir ".local/share/nvim" m755)
+            (mkUDir ".local/share/qutebrowser" m755)
             (mkUDir ".local/share/systemd" m755)
             (mkUDir ".local/share/zoxide" m755)
 
