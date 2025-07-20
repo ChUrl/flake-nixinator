@@ -223,6 +223,7 @@
     };
 
     nnn.enable = false; # Use yazi
+    qutebrowser.enable = !headless;
     rmpc.enable = !headless;
 
     rofi = {

@@ -20,6 +20,7 @@
     ./neovim
     ./nnn
     ./paths
+    ./qutebrowser
     ./rmpc
     ./rofi
     ./waybar
