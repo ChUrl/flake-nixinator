@@ -63,17 +63,24 @@ in {
       colorDefs =
         scheme
         // {
-          bg = scheme.${color.bg};
-          text = scheme.${color.text};
           accent = scheme.${color.accent};
-          accentHL = scheme.${color.accentHL};
+          accentHl = scheme.${color.accentHl};
+          accentDim = scheme.${color.accentDim};
           accentText = scheme.${color.accentText};
         };
 
-      mkColorAssignment = key: {${key} = colorDefs.${key};};
-      mkStringColorAssignment = key: {${key} = "#${colorDefs.${key}}";};
-      mkRgbColorAssignment = key: {${key} = mylib.color.hexToRGB colorDefs.${key};};
-      mkRgbStringColorAssignment = key: {${key} = mylib.color.hexToRGBString "," colorDefs.${key};};
+      mkColorAssignment = key: {
+        ${key} = colorDefs.${key};
+      };
+      mkStringColorAssignment = key: {
+        ${key} = "#${colorDefs.${key}}";
+      };
+      mkRgbColorAssignment = key: {
+        ${key} = mylib.color.hexToRGB colorDefs.${key};
+      };
+      mkRgbStringColorAssignment = key: {
+        ${key} = mylib.color.hexToRGBString "," colorDefs.${key};
+      };
     in {
       # RRGGBB (0-F)
       hex =

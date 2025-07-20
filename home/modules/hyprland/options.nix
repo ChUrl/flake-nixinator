@@ -17,31 +17,6 @@
     description = "Keyboard layout variant";
   };
 
-  # A bit dumb, but I want a single location where those are defined.
-  # Only supposed to be set from here.
-  wallpapers = lib.mkOption {
-    type = lib.types.listOf lib.types.str;
-    description = "Available wallpapers";
-
-    # Run eza -1 | sd ".jpg" "" | sd "^" "\"" | sd "\$" "\"" | sd "\"\"" "" | wl-copy
-    # in ~/NixFlake/wallpapers/
-    default = [
-      "Blade-Runner-Downwards"
-      "Blade-Runner-Upwards"
-      "City-Outlook"
-      "Everest-Fishing"
-      "Foggy-Lake"
-      "Three-Bears"
-    ];
-  };
-
-  wallpaper = lib.mkOption {
-    type = lib.types.enum wallpapers.default;
-    example = "Three-Bears";
-    description = "Wallpaper to use";
-    default = "Foggy-Lake";
-  };
-
   dunst.enable = lib.mkEnableOption "Enable dunst notification daemon";
 
   monitors = lib.mkOption {

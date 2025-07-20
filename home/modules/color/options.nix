@@ -32,7 +32,7 @@
     "mantle"
     "crust"
   ];
-in {
+in rec {
   scheme = lib.mkOption {
     type = lib.types.enum [
       "catppuccin-latte"
@@ -48,6 +48,69 @@ in {
     description = "The font to use";
     example = "JetBrainsMono Nerd Font Mono";
     default = "JetBrainsMono Nerd Font Mono";
+  };
+
+  # This option is set automatically
+  wallpapers = let
+    # Collect all the available wallpapers.
+    # We can't do this in default.nix as the value
+    # needs to be available during option evaluation.
+    wallpapers = let
+      rmFileExt = file: builtins.replaceStrings [".jpg"] [""] file;
+
+      rmBasePath = file: let
+        matches = builtins.match "/.*/(.*)" file;
+      in
+        if matches == null
+        then file
+        else (builtins.head matches);
+    in
+      lib.filesystem.listFilesRecursive ../../../wallpapers
+      |> builtins.map builtins.toString
+      |> builtins.map rmFileExt
+      |> builtins.map rmBasePath;
+  in
+    lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      description = "The available wallpapers";
+      default = wallpapers;
+    };
+
+  wallpaper = lib.mkOption {
+    type = lib.types.enum wallpapers.default;
+    description = "The wallpaper to use";
+    example = "Foggy-Lake";
+    default = "Foggy-Lake";
+  };
+
+  # Some semantic aliases for colors
+
+  accent = lib.mkOption {
+    type = lib.types.enum colorKeys;
+    description = "The accent color to use";
+    example = "mauve";
+    default = "mauve";
+  };
+
+  accentHl = lib.mkOption {
+    type = lib.types.enum colorKeys;
+    description = "The accented accent color to use";
+    example = "pink";
+    default = "pink";
+  };
+
+  accentDim = lib.mkOption {
+    type = lib.types.enum colorKeys;
+    description = "The dim accent color to use";
+    example = "lavender";
+    default = "lavender";
+  };
+
+  accentText = lib.mkOption {
+    type = lib.types.enum colorKeys;
+    description = "The text color to use for accents";
+    example = "base";
+    default = "base";
   };
 
   # These options will be populated automatically.
@@ -70,41 +133,5 @@ in {
   rgbS = lib.mkOption {
     type = lib.types.attrs;
     description = "Colors in \"RR,GG,BB\" decimal format";
-  };
-
-  # Some semantic aliases for colors
-  bg = lib.mkOption {
-    type = lib.types.enum colorKeys;
-    description = "The color to use as background";
-    example = "base";
-    default = "base";
-  };
-
-  text = lib.mkOption {
-    type = lib.types.enum colorKeys;
-    description = "The text color to use";
-    example = "text";
-    default = "text";
-  };
-
-  accent = lib.mkOption {
-    type = lib.types.enum colorKeys;
-    description = "The accent color to use";
-    example = "mauve";
-    default = "mauve";
-  };
-
-  accentHL = lib.mkOption {
-    type = lib.types.enum colorKeys;
-    description = "The accented accent color to use";
-    example = "pink";
-    default = "pink";
-  };
-
-  accentText = lib.mkOption {
-    type = lib.types.enum colorKeys;
-    description = "The text color to use for accents";
-    example = "base";
-    default = "base";
   };
 }

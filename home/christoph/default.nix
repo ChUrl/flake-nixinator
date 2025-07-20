@@ -54,11 +54,11 @@
     color = {
       scheme = "catppuccin-mocha";
       font = builtins.head nixosConfig.fonts.fontconfig.defaultFonts.monospace;
+      wallpaper = "Windows";
 
-      bg = "base";
-      text = "text";
       accent = "mauve";
-      accentHL = "pink";
+      accentHl = "pink";
+      accentDim = "lavender";
       accentText = "base";
     };
 
@@ -84,7 +84,6 @@
     hyprland = {
       enable = !headless;
       dunst.enable = !config.modules.hyprpanel.enable; # Disable for hyprpanel
-      wallpaper = "City-Outlook";
 
       keybindings = {
         main-mod = "SUPER";
