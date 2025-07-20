@@ -197,6 +197,13 @@ in {
                 definedAliases = ["@nw"];
               };
 
+              arch-wiki = {
+                name = "Arch Wiki";
+                urls = [{template = "https://wiki.archlinux.org/?search={searchTerms}";}];
+                iconMapObj."16" = "https://wiki.archlinux.org/favicon.ico";
+                definedAliases = ["@aw"];
+              };
+
               google.metaData.alias = "@g";
 
               # Hide bullshit
