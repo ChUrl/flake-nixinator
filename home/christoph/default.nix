@@ -166,7 +166,7 @@
         "1" = [];
         "2" = ["Zotero" "neovide" "code-url-handler"];
         "3" = ["obsidian" "unityhub" "Unity"];
-        "4" = ["firefox" "Google-chrome" "chromium-browser"];
+        "4" = ["firefox" "Google-chrome" "chromium-browser" "org.qutebrowser.qutebrowser"];
         "5" = ["steam"];
         "6" = ["steam_app_(.+)"];
         "7" = ["signal"];
@@ -197,6 +197,7 @@
         "tidal-hifi"
         "obsidian"
         "firefox"
+        "org.qutebrowser.qutebrowser"
         "jetbrains-clion"
         "jetbrains-idea"
         "jetbrains-pycharm"
