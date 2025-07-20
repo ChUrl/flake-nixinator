@@ -8,6 +8,7 @@
     ./chromium
     ./color
     ./docs
+    ./fcitx
     ./firefox
     ./fish
     ./git
