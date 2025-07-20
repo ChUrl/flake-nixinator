@@ -6,7 +6,7 @@
   pkgs,
   ...
 }: let
-  inherit (config.modules) yazi;
+  inherit (config.modules) yazi color;
 in {
   options.modules.yazi = import ./options.nix {inherit lib mylib;};
 
@@ -17,7 +17,7 @@ in {
       shellWrapperName = "y";
 
       plugins = {
-        inherit (pkgs.yaziPlugins) chmod diff full-border git lazygit mount ouch rsync starship sudo; # smar-paste
+        inherit (pkgs.yaziPlugins) chmod diff full-border git lazygit mount ouch rsync starship sudo; # smart-paste
       };
 
       initLua = ''
@@ -144,6 +144,7 @@ in {
         ];
       };
 
+      # TODO: Extract to separate file
       keymap = {
         input.prepend_keymap = [
           {
@@ -217,6 +218,229 @@ in {
             desc = "Delete selection";
           }
         ];
+      };
+
+      # https://github.com/catppuccin/yazi/blob/main/themes/mocha/catppuccin-mocha-lavender.toml
+      theme = {
+        mgr = {
+          cwd = {fg = color.hexS.teal;};
+
+          hovered = {
+            fg = color.hexS.accentText;
+            bg = color.hexS.accentDim;
+            italic = true;
+            bold = true;
+          };
+          preview_hovered = {
+            fg = color.hexS.accentText;
+            bg = color.hexS.accentDim;
+            italic = true;
+            bold = true;
+          };
+
+          find_keyword = {
+            italic = true;
+            bold = true;
+            underline = true;
+          };
+          find_position = {
+            italic = true;
+            bold = true;
+            underline = true;
+          };
+
+          marker_copied = {
+            fg = color.hexS.green;
+            bg = color.hexS.green;
+          };
+          marker_cut = {
+            fg = color.hexS.red;
+            bg = color.hexS.red;
+          };
+          marker_marked = {
+            fg = color.hexS.teal;
+            bg = color.hexS.teal;
+          };
+          marker_selected = {
+            fg = color.hexS.lavender;
+            bg = color.hexS.lavender;
+          };
+
+          count_copied = {
+            fg = color.hexS.accentText;
+            bg = color.hexS.green;
+          };
+          count_cut = {
+            fg = color.hexS.accentText;
+            bg = color.hexS.red;
+          };
+          count_selected = {
+            fg = color.hexS.accentText;
+            bg = color.hexS.lavender;
+          };
+
+          border_symbol = "│";
+          border_style = {fg = color.hexS.overlay1;};
+        };
+
+        tabs = {
+          active = {
+            fg = color.hexS.accentText;
+
+            # Has to be the same as inactive.fg,
+            # otherwise the separators are colored incorrectly
+            bg = color.hexS.accent;
+
+            bold = true;
+            italic = true;
+          };
+          inactive = {
+            fg = color.hexS.accent;
+            bg = color.hexS.surface0;
+          };
+        };
+
+        mode = {
+          normal_main = {
+            fg = color.hexS.accentText;
+            bg = color.hexS.accent;
+            bold = true;
+          };
+          normal_alt = {
+            fg = color.hexS.accent;
+            bg = color.hexS.surface0;
+          };
+
+          select_main = {
+            fg = color.hexS.accentText;
+            bg = color.hexS.green;
+            bold = true;
+          };
+          select_alt = {
+            fg = color.hexS.green;
+            bg = color.hexS.surface0;
+          };
+
+          unset_main = {
+            fg = color.hexS.accentText;
+            bg = color.hexS.flamingo;
+            bold = true;
+          };
+          unset_alt = {
+            fg = color.hexS.flamingo;
+            bg = color.hexS.surface0;
+          };
+        };
+
+        status = {
+          separator_open = "";
+          separator_close = "";
+
+          progress_label = {
+            fg = color.hexS.accentText;
+            bold = true;
+          };
+          progress_normal = {
+            fg = color.hexS.blue;
+            bg = color.hexS.surface0;
+          };
+          progress_error = {
+            fg = color.hexS.red;
+            bg = color.hexS.surface0;
+          };
+
+          perm_type = {fg = color.hexS.blue;};
+          perm_read = {fg = color.hexS.yellow;};
+          perm_write = {fg = color.hexS.red;};
+          perm_exec = {fg = color.hexS.green;};
+          perm_sep = {fg = color.hexS.overlay1;};
+        };
+
+        input = {
+          border = {fg = color.hexS.accentDim;};
+          title = {};
+          value = {};
+          selected = {reversed = true;};
+        };
+
+        pick = {
+          border = {fg = color.hexS.accentDim;};
+          active = {fg = color.hexS.accentHl;};
+          inactive = {};
+        };
+
+        confirm = {
+          border = {fg = color.hexS.accentDim;};
+          title = {fg = color.hexS.accentDim;};
+          content = {};
+          list = {};
+          btn_yes = {reversed = true;};
+          btn_no = {};
+        };
+
+        cmp = {
+          border = {fg = color.hexS.accentDim;};
+        };
+
+        tasks = {
+          border = {fg = color.hexS.accentDim;};
+          title = {};
+          hovered = {underline = true;};
+        };
+
+        which = {
+          cand = {fg = color.hexS.accent;};
+          desc = {fg = color.hexS.accentHl;};
+          mask = {bg = color.hexS.surface0;};
+          rest = {fg = color.hexS.surface0;};
+          separator = "  ";
+          separator_style = {fg = color.hexS.text;};
+        };
+
+        help = {
+          on = {fg = color.hexS.accent;};
+          run = {fg = color.hexS.accentHl;};
+          desc = {fg = color.hexS.text;};
+          hovered = {
+            fg = color.hexS.accentText; # TODO: This is not applied
+
+            bg = color.hexS.surface0; # If the fg would work we could use color.hexS.accentDim
+            bold = true;
+            italic = true;
+          };
+          footer = {
+            fg = color.hexS.text;
+            bg = color.hexS.surface0;
+          };
+        };
+
+        notify = {
+          title_info = {fg = color.hexS.teal;};
+          title_warn = {fg = color.hexS.yellow;};
+          title_error = {fg = color.hexS.red;};
+        };
+
+        spot = {
+          border = {fg = color.hexS.lavender;};
+          title = {fg = color.hexS.lavender;};
+          tbl_cell = {
+            fg = color.hexS.lavender;
+            reversed = true;
+          };
+          tbl_col = {bold = true;};
+        };
+
+        # Default rules good enough
+        # filetype = {
+        #   prepend_rules = import ./specialFiletypes.nix {inherit lib nixosConfig color;};
+        # };
+
+        # Prepend to override default config
+        icon = {
+          prepend_dirs = import ./specialDirectories.nix {inherit color;};
+          prepend_files = import ./specialFiles.nix {inherit color;};
+          prepend_exts = import ./specialExtensions.nix {inherit color;};
+        };
       };
     };
   };

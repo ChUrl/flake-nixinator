@@ -3,23 +3,25 @@
   nixosConfig,
   color,
 }: let
-  mkFiletype = name: fg: {
+  mkName = fg: name: {
     inherit name fg;
   };
 
-  mkFiletypes = names: fg: names |> mkFiletype fg;
+  mkMime = fg: mime: {
+    inherit mime fg;
+  };
+
+  mkMimes = fg: mimes: mimes |> builtins.map (mkMime fg);
 in
-  lib.mkMerge [
+  builtins.concatLists [
     [
-      (mkFiletype "*" color.hexS.text) # Files default
-      (mkFiletype "*/" color.hexS.lavender) # Directories default
-      (mkFiletype "application/*zip" color.hexS.accentHL)
-      (mkFiletype "application/x-(mkFiletypetarbzip*7z-compressedxzrar)" color.hexS.accentHL)
-      (mkFiletype "application/pdf" color.hexS.green)
+      (mkName color.hexS.text "*") # Files default
+      (mkName color.hexS.lavender "*/") # Directories default
+      (mkMime color.hexS.green "application/pdf")
     ]
 
-    (mkFiletypes nixosConfig.modules.mime.textTypes color.hexS.text)
-    (mkFiletypes nixosConfig.modules.mime.imageTypes color.hexS.teal)
-    (mkFiletypes nixosConfig.modules.mime.videoTypes color.hexS.yellow)
-    (mkFiletypes nixosConfig.modules.mime.audioTypes color.hexS.sky)
+    (mkMimes color.hexS.text nixosConfig.modules.mime.textTypes)
+    (mkMimes color.hexS.teal nixosConfig.modules.mime.imageTypes)
+    (mkMimes color.hexS.yellow nixosConfig.modules.mime.videoTypes)
+    (mkMimes color.hexS.sky nixosConfig.modules.mime.audioTypes)
   ]

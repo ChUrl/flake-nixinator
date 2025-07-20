@@ -1,21 +1,23 @@
 {color}: let
-  mkIcon = name: text: fg: {
-    inherit name text fg;
+  mkIcon = name: text: {
+    inherit name text;
+    fg = color.hexS.accentHl;
   };
 in [
-  (mkIcon "Documents" "󰈙" color.hexS.accentHL)
-  (mkIcon "Downloads" "󰇚" color.hexS.accentHL)
-  (mkIcon "Games" "󰓓" color.hexS.accentHL)
-  (mkIcon "GitRepos" "" color.hexS.accentHL)
-  (mkIcon "Movies" "󰿎" color.hexS.accentHL)
-  (mkIcon "Music" "󰎄" color.hexS.accentHL)
-  (mkIcon "NixFlake" "" color.hexS.accentHL)
-  (mkIcon "Notes" "󰠮" color.hexS.accentHL)
-  (mkIcon "Pictures" "" color.hexS.accentHL)
-  (mkIcon "Projects" "󱃷" color.hexS.accentHL)
-  (mkIcon "Public" "󰒗" color.hexS.accentHL)
-  (mkIcon "Restic" "󰁯" color.hexS.accentHL)
-  (mkIcon "Shows" "󰿎" color.hexS.accentHL)
-  (mkIcon "Unity" "󰚯" color.hexS.accentHL)
-  (mkIcon "Videos" "" color.hexS.accentHL)
+  # /home/christoph/
+  (mkIcon "Documents" "󰈙")
+  (mkIcon "Downloads" "󰇚")
+  (mkIcon "Games" "󰓓")
+  (mkIcon "GitRepos" "")
+  (mkIcon "Movies" "󰿎")
+  (mkIcon "Music" "󰎄")
+  (mkIcon "NixFlake" "")
+  (mkIcon "Notes" "󰠮")
+  (mkIcon "Pictures" "")
+  (mkIcon "Projects" "󱃷")
+  (mkIcon "Public" "󰒗")
+  (mkIcon "Restic" "󰁯")
+  (mkIcon "Shows" "󰿎")
+  (mkIcon "Unity" "󰚯")
+  (mkIcon "Videos" "")
 ]
