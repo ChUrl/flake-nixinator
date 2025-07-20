@@ -201,10 +201,10 @@ in {
       settings = {
         # Other config here
         format = "$all"; # Remove this line to disable the default prompt format
-        palette = "nixos-palette";
+        palette = "system-theme";
 
         # https://github.com/catppuccin/starship/blob/main/themes/mocha.toml
-        palettes."nixos-palette" = {
+        palettes."system-theme" = {
           rosewater = color.hexS.rosewater;
           flamingo = color.hexS.flamingo;
           pink = color.hexS.accentHl;

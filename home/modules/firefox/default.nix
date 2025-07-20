@@ -22,7 +22,7 @@ in {
         };
 
         border = {
-          color = color.hexS.overlay1;
+          color = color.hexS.overlay0;
           width = "2px";
           transition = "1.0s ease";
           radius = "3px";

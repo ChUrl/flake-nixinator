@@ -40,7 +40,7 @@ in {
           theme[selected_fg]=${color.hexS.accent}
 
           # Color of inactive/disabled text
-          theme[inactive_fg]=${color.hexS.overlay1}
+          theme[inactive_fg]=${color.hexS.overlay0}
 
           # Color of text appearing on top of graphs, i.e uptime and current network graph scaling
           theme[graph_text]=${color.hexS.overlay0}

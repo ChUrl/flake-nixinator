@@ -280,7 +280,7 @@ in {
           };
 
           border_symbol = "│";
-          border_style = {fg = color.hexS.overlay1;};
+          border_style = {fg = color.hexS.overlay0;};
         };
 
         tabs = {
@@ -353,7 +353,7 @@ in {
           perm_read = {fg = color.hexS.yellow;};
           perm_write = {fg = color.hexS.red;};
           perm_exec = {fg = color.hexS.green;};
-          perm_sep = {fg = color.hexS.overlay1;};
+          perm_sep = {fg = color.hexS.overlay0;};
         };
 
         input = {
