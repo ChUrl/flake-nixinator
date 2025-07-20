@@ -211,7 +211,7 @@ in {
         enable = true;
         settings = {
           options = {
-            background = "${color.hex.bg}";
+            background = "${color.hex.base}";
             overlay = true;
             overlay_font = "${color.font}:12";
             overlay_background_color = "${color.hex.accent}";
@@ -400,7 +400,7 @@ in {
           border_size = 2;
 
           "col.active_border" = "rgb(${color.hex.accent})";
-          "col.inactive_border" = "rgb(${color.hex.bg})";
+          "col.inactive_border" = "rgb(${color.hex.base})";
         };
 
         group = {
@@ -411,11 +411,11 @@ in {
             gradients = false;
 
             "col.active" = "rgb(${color.hex.accent})";
-            "col.inactive" = "rgb(${color.hex.bg})";
+            "col.inactive" = "rgb(${color.hex.base})";
           };
 
           "col.border_active" = "rgb(${color.hex.accent})";
-          "col.border_inactive" = "rgb(${color.hex.bg})";
+          "col.border_inactive" = "rgb(${color.hex.base})";
         };
 
         input = {

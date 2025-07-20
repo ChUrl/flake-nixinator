@@ -25,12 +25,12 @@ in {
         window-title-home-tilde = statusbar-home-tilde;
 
         # Colorscheme
-        default-bg = "#${color.hex.bg}";
+        default-bg = "#${color.hex.base}";
         default-fg = "#${color.hex.text}";
 
         highlight-color = "rgba(${color.rgbS.accent}, 0.5)";
         highlight-fg = "rgba(${color.rgbS.accentText}, 0.5)";
-        highlight-active-color = "rgba(${color.rgbS.accentHL}, 0.5)";
+        highlight-active-color = "rgba(${color.rgbS.accentHl}, 0.5)";
 
         statusbar-bg = "#${color.hex.accent}";
         statusbar-fg = "#${color.hex.accentText}";
@@ -38,7 +38,7 @@ in {
         inputbar-bg = statusbar-bg;
         inputbar-fg = statusbar-fg;
 
-        completion-bg = "#${color.hex.bg}";
+        completion-bg = "#${color.hex.base}";
         completion-fg = default-fg;
         completion-highlight-bg = statusbar-bg;
         completion-highlight-fg = statusbar-fg;

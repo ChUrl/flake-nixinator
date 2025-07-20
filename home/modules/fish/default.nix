@@ -19,7 +19,7 @@ in {
       fish_color_param ${color.hex.flamingo}
       fish_color_keyword ${color.hex.red}
       fish_color_quote ${color.hex.green}
-      fish_color_redirection ${color.hex.accentHL}
+      fish_color_redirection ${color.hex.accentHl}
       fish_color_end ${color.hex.peach}
       fish_color_comment ${color.hex.overlay1}
       fish_color_error ${color.hex.red}
@@ -27,7 +27,7 @@ in {
       fish_color_selection --background=${color.hex.surface0}
       fish_color_search_match --background=${color.hex.surface0}
       fish_color_option ${color.hex.green}
-      fish_color_operator ${color.hex.accentHL}
+      fish_color_operator ${color.hex.accentHl}
       fish_color_escape ${color.hex.maroon}
       fish_color_autosuggestion ${color.hex.overlay0}
       fish_color_cancel ${color.hex.red}
@@ -37,7 +37,7 @@ in {
       fish_color_host_remote ${color.hex.green}
       fish_color_status ${color.hex.red}
       fish_pager_color_progress ${color.hex.overlay0}
-      fish_pager_color_prefix ${color.hex.accentHL}
+      fish_pager_color_prefix ${color.hex.accentHl}
       fish_pager_color_completion ${color.hex.text}
       fish_pager_color_description ${color.hex.overlay0}
     '';
@@ -245,7 +245,7 @@ in {
         palettes."nixos-palette" = {
           rosewater = color.hexS.rosewater;
           flamingo = color.hexS.flamingo;
-          pink = color.hexS.accentHL;
+          pink = color.hexS.accentHl;
           mauve = color.hexS.accent;
           red = color.hexS.red;
           maroon = color.hexS.maroon;

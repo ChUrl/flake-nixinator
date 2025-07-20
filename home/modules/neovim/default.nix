@@ -1042,39 +1042,39 @@ in {
               bubbles = ''
                 {
                   normal = {
-                    a = { fg = "#${color.hex.bg}", bg = "#${color.hex.accent}", gui = "bold" },
+                    a = { fg = "#${color.hex.base}", bg = "#${color.hex.accent}", gui = "bold" },
                     b = { fg = "#${color.hex.text}", bg = "#${color.hex.crust}" },
                     c = { fg = "#${color.hex.text}", bg = "NONE" },
                   },
 
                   insert = {
-                    a = { fg = "#${color.hex.bg}", bg = "#${color.hex.green}", gui = "bold" },
+                    a = { fg = "#${color.hex.base}", bg = "#${color.hex.green}", gui = "bold" },
                     b = { fg = "#${color.hex.green}", bg = "#${color.hex.crust}" },
                   },
 
                   visual = {
-                    a = { fg = "#${color.hex.bg}", bg = "#${color.hex.blue}", gui = "bold" },
+                    a = { fg = "#${color.hex.base}", bg = "#${color.hex.blue}", gui = "bold" },
                     b = { fg = "#${color.hex.blue}", bg = "#${color.hex.crust}" },
                   },
 
                   replace = {
-                    a = { fg = "#${color.hex.bg}", bg = "#${color.hex.red}", gui = "bold" },
+                    a = { fg = "#${color.hex.base}", bg = "#${color.hex.red}", gui = "bold" },
                     b = { fg = "#${color.hex.red}", bg = "#${color.hex.crust}" },
                   },
 
                   -- terminal = {
-                  --   a = { fg = "#${color.hex.bg}", bg = "#${color.hex.green}", gui = "bold" },
+                  --   a = { fg = "#${color.hex.base}", bg = "#${color.hex.green}", gui = "bold" },
                   --   b = { fg = "#${color.hex.green}", bg = "#${color.hex.crust}" },
                   -- },
 
                   command = {
-                    a = { fg = "#${color.hex.bg}", bg = "#${color.hex.peach}", gui = "bold" },
+                    a = { fg = "#${color.hex.base}", bg = "#${color.hex.peach}", gui = "bold" },
                     b = { fg = "#${color.hex.peach}", bg = "#${color.hex.crust}" },
                   },
 
                   inactive = {
-                    a = { fg = "#${color.hex.text}", bg = "#${color.hex.bg}" },
-                    b = { fg = "#${color.hex.text}", bg = "#${color.hex.bg}" },
+                    a = { fg = "#${color.hex.text}", bg = "#${color.hex.base}" },
+                    b = { fg = "#${color.hex.text}", bg = "#${color.hex.base}" },
                     c = { fg = "#${color.hex.text}", bg = "NONE" },
                   },
                 }
@@ -1614,7 +1614,7 @@ in {
             opts = {
               line.__raw = ''
                 function(line)
-                  local bg = { fg = "#${color.hex.bg}", bg = "#${color.hex.bg}" }
+                  local base = { fg = "#${color.hex.base}", bg = "#${color.hex.base}" }
                   local crust = { fg = "#${color.hex.crust}", bg = "#${color.hex.crust}" }
                   local text = { fg = "#${color.hex.text}", bg = "#${color.hex.crust}" }
                   local accent = { fg = "#${color.hex.accent}", bg = "#${color.hex.accent}" }
@@ -1624,7 +1624,7 @@ in {
                   return {
                     -- Head
                     {
-                        { " NEOVIM ", hl = { fg = "#${color.hex.bg}", bg = "#${color.hex.accent}", style = "bold" } },
+                        { " NEOVIM ", hl = { fg = "#${color.hex.base}", bg = "#${color.hex.accent}", style = "bold" } },
 
                         -- The separator gets a foreground and background fill (each have fg + bg).
                         -- line.sep("", accent, lavender),
@@ -1641,7 +1641,7 @@ in {
                         line.sep(sep_start, accent, crust),
                         tab.number(),
                         tab.name(),
-                        line.sep(sep_end, crust, bg),
+                        line.sep(sep_end, crust, base),
                         hl = hl,
                         margin = " ",
                       }

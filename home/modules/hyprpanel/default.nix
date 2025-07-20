@@ -71,7 +71,7 @@ in {
         };
 
         # https://github.com/Jas-SinghFSU/HyprPanel/blob/master/src/configuration/modules/theme/bar/index.ts
-        "theme.bar.background" = "#${color.hex.bg}";
+        "theme.bar.background" = "#${color.hex.base}";
         "theme.bar.border.color" = "#${color.hex.accent}";
         "theme.bar.border.location" = "full";
         "theme.bar.border_radius" = "6px";
@@ -82,7 +82,7 @@ in {
         "theme.bar.margin_bottom" = "0px";
         "theme.bar.margin_sides" = "10px";
         "theme.bar.margin_top" = "10px";
-        "theme.bar.opacity" = 60;
+        "theme.bar.opacity" = 80;
         "theme.bar.outer_spacing" = "0px"; # NOTE: Left/Right bar padding
         "theme.bar.transparent" = false;
 
@@ -123,17 +123,17 @@ in {
         "bar.workspaces.workspaces" = 9;
 
         # https://github.com/Jas-SinghFSU/HyprPanel/blob/master/src/configuration/modules/theme/bar/buttons/workspaces.ts
-        "theme.bar.buttons.workspaces.active" = "#${color.hex.accentHL}";
+        "theme.bar.buttons.workspaces.active" = "#${color.hex.accentHl}";
         "theme.bar.buttons.workspaces.available" = "#${color.hex.accentText}";
         "theme.bar.buttons.workspaces.background" = "#${color.hex.accent}";
         "theme.bar.buttons.workspaces.border" = "#${color.hex.accent}";
         "theme.bar.buttons.workspaces.enableBorder" = false;
         "theme.bar.buttons.workspaces.fontSize" = "18px";
-        "theme.bar.buttons.workspaces.hover" = "#${color.hex.accentHL}";
+        "theme.bar.buttons.workspaces.hover" = "#${color.hex.accentHl}";
         "theme.bar.buttons.workspaces.numbered_active_highlight_border" = "4px"; # border radius
         "theme.bar.buttons.workspaces.numbered_active_highlighted_text_color" = "#${color.hex.accentText}";
         "theme.bar.buttons.workspaces.numbered_active_highlight_padding" = "6px";
-        "theme.bar.buttons.workspaces.numbered_active_underline_color" = "#${color.hex.accentHL}";
+        "theme.bar.buttons.workspaces.numbered_active_underline_color" = "#${color.hex.accentHl}";
         "theme.bar.buttons.workspaces.numbered_inactive_padding" = "6px"; # make the same as numbered_active_highlight_padding to avoid layout jumping
         "theme.bar.buttons.workspaces.occupied" = "#${color.hex.accentText}";
         "theme.bar.buttons.workspaces.smartHighlight" = "false";
@@ -307,7 +307,7 @@ in {
         # TODO: Menus Config
         #
 
-        "theme.bar.menus.background" = "#${color.hex.bg}";
+        "theme.bar.menus.background" = "#${color.hex.base}";
         "theme.bar.menus.border.color" = "#${color.hex.accent}";
         "theme.bar.menus.border.radius" = "6px";
         "theme.bar.menus.border.size" = "2px";

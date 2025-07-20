@@ -51,12 +51,12 @@ in {
         };
 
         "window" = {
-          height = "50%";
-          width = "33%";
+          height = mkLiteral "50%";
+          width = mkLiteral "33%";
           border = mkLiteral "2 solid 2 solid 2 solid 2 solid";
           border-radius = 6;
           border-color = mkLiteral color.hexS.accent;
-          background-color = mkLiteral "rgba(${color.rgbS.bg}, 0.2)";
+          background-color = mkLiteral "rgba(${color.rgbS.base}, 0.2)";
         };
 
         "mainbox" = {
@@ -85,7 +85,7 @@ in {
         };
 
         "prompt" = {
-          background-color = mkLiteral color.hexS.accentHL;
+          background-color = mkLiteral color.hexS.accentHl;
           padding = 6;
           text-color = mkLiteral color.hexS.accentText;
           border-radius = 3;
@@ -99,7 +99,7 @@ in {
           background-color = mkLiteral trans;
           border = mkLiteral "2 solid 2 solid 2 solid 2 solid";
           border-radius = 3;
-          border-color = mkLiteral color.hexS.accentHL;
+          border-color = mkLiteral color.hexS.accentHl;
         };
 
         "listview" = {
@@ -110,7 +110,7 @@ in {
           background-color = mkLiteral trans;
           border = mkLiteral "2 solid 2 solid 2 solid 2 solid";
           border-radius = 3;
-          border-color = mkLiteral color.hexS.accentHL;
+          border-color = mkLiteral color.hexS.accentHl;
         };
 
         "element" = {
@@ -126,7 +126,7 @@ in {
         };
 
         "element selected" = {
-          background-color = mkLiteral color.hexS.accentHL;
+          background-color = mkLiteral color.hexS.accentHl;
           text-color = mkLiteral color.hexS.accentText;
         };
       };
@@ -176,7 +176,7 @@ in {
       in
         mylib.rofi.mkSimpleMenu
         "wall"
-        (config.modules.hyprland.wallpapers
+        (color.wallpapers
           |> builtins.map (setWallpaperOnMonitors monitors)
           |> lib.mergeAttrsList);
     in {
