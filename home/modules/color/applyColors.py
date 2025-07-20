@@ -10,6 +10,12 @@ from typing import Callable
 # }
 colors: dict[str, str]
 
+# We don't want the accent aliases here
+del colors["accent"]
+del colors["accentHl"]
+del colors["accentDim"]
+del colors["accentText"]
+
 
 def getRule(
     line: str,
