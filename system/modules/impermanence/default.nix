@@ -38,15 +38,17 @@ in {
       #   group = config.users.users.${user}.group;
       # };
     };
+
+    mkRDir = mkDir "root";
+    mkRFile = mkFile "root";
+    mkUDir = mkDir "${username}";
+    mkUFile = mkFile "${username}";
   in
     lib.mkIf impermanence.enable {
-      environment.persistence."/persist" = let
-        mkRDir = mkDir "root";
-        mkRFile = mkFile "root";
-        mkUDir = mkDir "${username}";
-        mkUFile = mkFile "${username}";
-      in {
-        hideMounts = true; # Sets x-gvfs-hide option
+      # TODO: Create options to allow host-specific impermanence setup
+      #       inside the respective modules
+      environment.persistence."/persist" = {
+        hideMounts = false; # Sets x-gvfs-hide option
 
         files = [
           (mkRFile "/etc/adjtime" m644)
@@ -155,14 +157,57 @@ in {
         };
       };
 
-      # NOTE: This is REQUIRED for HM activation! Otherwise the home directory won't be writable!
+      # Add some helper scripts to identify files that might need persisting
+      environment.systemPackages = let
+        base = {
+          "root" = "/";
+          "home" = "/home/${username}";
+        };
+        ignore = {
+          "root" = "/home/${username}/.config/impermanence/fdignore-root";
+          "home" = "/home/${username}/.config/impermanence/fdignore-home";
+        };
+        move = {
+          "root" = "/persist/$(dirname {})";
+          "home" = "/persist/home/${username}/$(dirname {})";
+        };
+
+        mkHeader = "Press CTRL-R to reload, CTRL-M to move, CTRL-I to ignore file";
+        mkPreview = mode: "bat --color=always --theme=ansi --style=numbers --line-range=:100 ${base.${mode}}/{}";
+        mkReload = mode: "sudo fd --one-file-system --type f --hidden --base-directory ${base.${mode}} --ignore-file ${ignore.${mode}}";
+        mkIgnore = mode: "echo '{}' >> ${ignore.${mode}}";
+        mkMove = mode: "sudo mkdir -p ${move.${mode}} && sudo mv {} ${move.${mode}}";
+
+        mkScript = mode: ''
+          sudo ${mkReload mode} | \
+          sudo fzf \
+            --header "${mkHeader}" \
+            --preview "${mkPreview mode}" \
+            --bind "ctrl-r:reload:(${mkReload mode})" \
+            --bind "ctrl-i:execute:(${mkIgnore mode})" \
+            --bind "ctrl-m:execute:(${mkMove mode})"
+        '';
+
+        newroot = pkgs.writeShellScriptBin "newroot" (mkScript "root");
+        newhome = pkgs.writeShellScriptBin "newhome" (mkScript "home");
+      in [
+        newroot
+        newhome
+      ];
+
+      # NOTE: This is REQUIRED for HM activation!
+      #       Otherwise the home directory won't be writable!
       systemd.services."impermanence-fix-home-ownership" = let
         homeDir = "/home/${username}";
-        homeUser = builtins.toString config.users.users.${username}.uid;
-        homeGroup = builtins.toString config.users.groups.${config.users.users.${username}.group}.gid;
+        homeUser =
+          builtins.toString
+          config.users.users.${username}.uid;
+        homeGroup =
+          builtins.toString
+          config.users.groups.${config.users.users.${username}.group}.gid;
       in {
         description = "Fix impermanent home ownership";
-        wantedBy = ["home-manager-${username}.service"]; # Required for HM activation
+        wantedBy = ["home-manager-${username}.service"];
         before = ["home-manager-${username}.service"];
         after = ["home.mount"];
         partOf = ["home.mount"];
@@ -201,21 +246,18 @@ in {
           backupDuration = "7"; # Days
           mountDir = "/btrfs_tmp";
           persistDir = "${mountDir}/persist";
-
-          homeUser = builtins.toString config.users.users.${username}.uid;
-          homeGroup = builtins.toString config.users.groups.${config.users.users.${username}.group}.gid;
         in {
           description = "Clean impermanent btrfs subvolumes";
           wantedBy = ["initrd.target"];
-          # after = ["dev-mapper-crypted.device"];
           after = ["systemd-cryptsetup@crypted.service"];
           before = ["sysroot.mount"];
           unitConfig.DefaultDependencies = "no";
           serviceConfig.Type = "oneshot";
-          # path = ["/bin" config.system.build.extraUtils pkgs.coreutils-full];
 
-          # NOTE: If any single line of this script fails, the entire system might be bricked
-          #       NixOS automatically sets "-e", so if unlucky, the subvolumes won'e exist for mounting
+          # NOTE: If any single line of this script fails
+          #       the entire system might be bricked.
+          #       NixOS automatically sets "-e", so if unlucky,
+          #       the subvolumes won'e exist for mounting...
           script = let
             mvSubvolToPersist = subvol: ''
               if [[ -e ${mountDir}/${subvol} ]]; then
@@ -239,6 +281,7 @@ in {
               fi
             '';
 
+            # TODO: This fails and bricks the system
             deleteOldBackups = subvol: ''
               for old_${subvol} in $(find ${persistDir}/old_${subvol}s/ -maxdepth 1 -mtime +${backupDuration}); do
                 delete_subvolume_recursively "$old_${subvol}"
