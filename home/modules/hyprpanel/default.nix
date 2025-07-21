@@ -68,6 +68,7 @@ in {
           "class:^(Zotero)$" = "";
           "class:^(org.zealdocs.zeal)$" = "󰞋";
           "class:^(navi)$" = "";
+          "class:^(org.qutebrowser.qutebrowser)$" = "󰖟";
         };
 
         # https://github.com/Jas-SinghFSU/HyprPanel/blob/master/src/configuration/modules/theme/bar/index.ts
