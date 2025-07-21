@@ -185,7 +185,7 @@
         }
       ];
 
-      transparent-opacity = "0.8";
+      transparent-opacity = "0.75";
 
       transparent = [
         "kitty"

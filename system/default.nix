@@ -231,8 +231,8 @@ with mylib.networking; {
       color.hex.blue
       color.hex.pink
       color.hex.teal
-      color.hex.subtext0
       color.hex.surface2
+      color.hex.subtext0
       color.hex.red
       color.hex.green
       color.hex.yellow

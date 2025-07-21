@@ -41,9 +41,6 @@ in {
         inherit (config.lib.formats.rasi) mkLiteral;
 
         trans = "rgba(0, 0, 0, 0)";
-
-        paddingInner = "5px";
-        paddingOuter = "10px";
       in {
         "element-text,element-icon,mode-switcher" = {
           background-color = mkLiteral "inherit";
@@ -56,7 +53,9 @@ in {
           border = mkLiteral "2 solid 2 solid 2 solid 2 solid";
           border-radius = 6;
           border-color = mkLiteral color.hexS.accent;
-          background-color = mkLiteral "rgba(${color.rgbS.base}, 0.2)";
+
+          # This is not opacity but translucency
+          background-color = mkLiteral "rgba(${color.rgbS.base}, 0.25)";
         };
 
         "mainbox" = {

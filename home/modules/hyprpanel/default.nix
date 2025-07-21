@@ -83,7 +83,7 @@ in {
         "theme.bar.margin_bottom" = "0px";
         "theme.bar.margin_sides" = "10px";
         "theme.bar.margin_top" = "10px";
-        "theme.bar.opacity" = 80;
+        "theme.bar.opacity" = 75;
         "theme.bar.outer_spacing" = "0px"; # NOTE: Left/Right bar padding
         "theme.bar.transparent" = false;
 
