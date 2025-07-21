@@ -142,6 +142,7 @@
       autostart = {
         immediate = [
           "kitty"
+          "zeal"
           "nextcloud --background"
           "protonvpn-app"
 
@@ -176,13 +177,12 @@
       };
 
       floating = [
-        {
-          class = "org.kde.polkit-kde-authentication-agent-1";
-        }
+        {class = "org.kde.polkit-kde-authentication-agent-1";}
         {
           class = "thunar";
           title = "File Operation Progress";
         }
+        {class = "ffplay";}
       ];
 
       transparent-opacity = "0.75";
