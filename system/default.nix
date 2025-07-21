@@ -216,8 +216,32 @@ with mylib.networking; {
     supportedLocales = ["en_US.UTF-8/UTF-8" "de_DE.UTF-8/UTF-8"];
   };
 
-  # Configure console keymap
-  console.keyMap = "us-acentos";
+  console = {
+    earlySetup = true;
+    useXkbConfig = true;
+    packages = [pkgs.terminus_font];
+    font = "Lat2-Terminus16";
+    colors = let
+      color = config.home-manager.users.${username}.modules.color;
+    in [
+      color.hex.subtext1
+      color.hex.red
+      color.hex.green
+      color.hex.yellow
+      color.hex.blue
+      color.hex.pink
+      color.hex.teal
+      color.hex.subtext0
+      color.hex.surface2
+      color.hex.red
+      color.hex.green
+      color.hex.yellow
+      color.hex.blue
+      color.hex.pink
+      color.hex.teal
+      color.hex.surface1
+    ];
+  };
 
   # Define a user account. Password is set from sops-nix secrets automatically.
   users.mutableUsers = false; # Users are always overridden by stuff defined here
