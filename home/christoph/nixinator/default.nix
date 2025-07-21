@@ -21,8 +21,11 @@
       fcitx.enable = true;
 
       hyprland = {
-        kb-layout = "us";
-        kb-variant = "altgr-intl";
+        keyboard = {
+          layout = "us";
+          variant = "altgr-intl";
+          option = "nodeadkeys";
+        };
 
         monitors = {
           "HDMI-A-1" = {

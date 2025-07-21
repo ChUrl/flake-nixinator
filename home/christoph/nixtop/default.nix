@@ -7,10 +7,11 @@
   config = {
     modules = {
       hyprland = {
-        # kb-layout = "de";
-        # kb-variant = "nodeadkeys";
-        kb-layout = "us";
-        kb-variant = "altgr-intl";
+        keyboard = {
+          layout = "us";
+          variant = "altgr-intl";
+          option = "nodeadkeys";
+        };
 
         monitors = {
           "eDP-1" = {

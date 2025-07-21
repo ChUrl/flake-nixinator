@@ -102,7 +102,7 @@
       "hyprsunset --identity"
 
       # HACK: Hyprland doesn't set the xwayland/x11 keymap correctly
-      "setxkbmap -layout ${hyprland.kb-layout} -variant ${hyprland.kb-variant} -model pc104"
+      "setxkbmap -layout ${hyprland.keyboard.layout} -variant ${hyprland.keyboard.variant} -option ${hyprland.keyboard.option} -model pc104"
 
       # HACK: Flatpak doesn't find applications in the system PATH
       "systemctl --user import-environment PATH && systemctl --user restart xdg-desktop-portal.service"
@@ -419,10 +419,10 @@ in {
         };
 
         input = {
-          kb_layout = "${hyprland.kb-layout}";
-          kb_variant = "${hyprland.kb-variant}";
+          kb_layout = hyprland.keyboard.layout;
+          kb_variant = hyprland.keyboard.variant;
+          kb_options = hyprland.keyboard.option;
           kb_model = "pc104";
-          kb_options = "";
           kb_rules = "";
 
           follow_mouse = true;

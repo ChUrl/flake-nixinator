@@ -5,16 +5,24 @@
 }: rec {
   enable = lib.mkEnableOption "Hyprland Window Manager + Compositor";
 
-  kb-layout = lib.mkOption {
-    type = lib.types.str;
-    example = "us";
-    description = "Keyboard layout to use";
-  };
+  keyboard = {
+    layout = lib.mkOption {
+      type = lib.types.str;
+      example = "us";
+      description = "Keyboard layout to use";
+    };
 
-  kb-variant = lib.mkOption {
-    type = lib.types.str;
-    example = "altgr-intl";
-    description = "Keyboard layout variant";
+    variant = lib.mkOption {
+      type = lib.types.str;
+      example = "altgr-intl";
+      description = "Keyboard layout variant";
+    };
+
+    option = lib.mkOption {
+      type = lib.types.str;
+      example = "nodeadkeys";
+      description = "Keyboard layout options";
+    };
   };
 
   dunst.enable = lib.mkEnableOption "Enable dunst notification daemon";
