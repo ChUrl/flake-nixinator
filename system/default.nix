@@ -220,26 +220,40 @@ with mylib.networking; {
     earlySetup = true;
     useXkbConfig = true;
     packages = [pkgs.terminus_font];
-    font = "Lat2-Terminus16";
+    font = "ter-220b";
+
+    # Normal      Bright
+    # --------    -------
+    # 0 Black      8 Black
+    # 1 Red        9 Red
+    # 2 Yellow    10 Yellow
+    # 3 Green     11 Green
+    # 4 Blue      12 Blue
+    # 5 Magenta   13 Magenta
+    # 6 Cyan      14 Cyan
+    # 7 White     15 White
     colors = let
       color = config.home-manager.users.${username}.modules.color;
     in [
-      color.hex.subtext1
+      # 0 - 7
+      "000000" # Dark black
       color.hex.red
       color.hex.green
-      color.hex.yellow
+      color.hex.yellow # Swapped with green for kitty consistency
       color.hex.blue
       color.hex.pink
       color.hex.teal
-      color.hex.surface2
-      color.hex.subtext0
+      color.hex.text # Dark white
+
+      # 8 - 15
+      color.hex.surface2 # Light black
       color.hex.red
       color.hex.green
-      color.hex.yellow
+      color.hex.yellow # Swapped with green for kitty consistency
       color.hex.blue
       color.hex.pink
       color.hex.teal
-      color.hex.surface1
+      "ffffff" # Light white
     ];
   };
 
