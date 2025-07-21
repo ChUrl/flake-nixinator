@@ -204,6 +204,13 @@ in {
                 definedAliases = ["@aw"];
               };
 
+              github = {
+                name = "GitHub";
+                urls = [{template = "https://github.com/search?q={searchTerms}&type=repositories";}];
+                iconMapObj."16" = "https://github.com/favicon.ico";
+                definedAliases = ["@gh"];
+              };
+
               google.metaData.alias = "@g";
 
               # Hide bullshit
