@@ -74,7 +74,9 @@ in {
       };
 
       mpd-discord-rpc = {
-        enable = true;
+        # NOTE: Creates a new thread for each IPC request but don't cleans them up?
+        #       They just keep accumulating when discord is not running lol
+        enable = false;
 
         # NOTE: Bitch wants to create a default config file inside a
         #       read-only filesystem when changing settings here...
