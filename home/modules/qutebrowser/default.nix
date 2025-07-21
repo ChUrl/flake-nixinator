@@ -96,6 +96,7 @@ in {
 
       # TODO: Find a unified version for qutebrowser + firefox (+ other browsers ideally)
       searchEngines = {
+        DEFAULT = "https://kagi.com/search?q={}";
         k = "https://kagi.com/search?q={}";
         w = "https://en.wikipedia.org/wiki/Special:Search?search={}";
         np = "https://searchix.ovh/?query={}";
@@ -129,24 +130,49 @@ in {
       enableDefaultBindings = true;
 
       settings = {
+        # Theme
         colors = import ./colors.nix {inherit color;};
+        fonts = {
+          default_family = color.font;
+          default_size = "12pt";
+          web.family.fixed = color.font;
+        };
+        hints.border = "1px solid " + color.hexS.mantle;
+
+        # Settings
+        auto_save.session = true;
+        changelog_after_upgrade = "minor";
+        completion.height = "33%";
+        content = {
+          autoplay = true;
+          blocking.enabled = true;
+          blocking.method = "auto"; # "auto", "adblock", "hosts", "both"
+          dns_prefetch = true;
+        };
+        editor.command = ["neovide" "{file}" "--" "normal {line}G{column0}l"];
+        # TODO: termfilechooser, also for downloads (those are separate)
+        # fileselect = {
+        #   handler = "external";
+        #   folder.command = [];
+        #   multiple_files.command = [];
+        #   single_file.command = [];
+        # };
+        input.media_keys = false;
+        prompt.radius = 6;
+        scrolling.smooth = true;
+        session.lazy_restore = true;
+        tabs.position = "right";
+        url = {
+          default_page = "about:blank";
+          open_base_url = true;
+          start_pages = ["https://kagi.com"];
+        };
       };
 
       # Same keys as qutebrowser.settings, but per domain
       # perDomainSettings = {
       #   "github.com".colors.webpage.darkmode.enabled = false;
       # };
-
-      extraConfig = builtins.concatStringsSep "\n" [
-        # Options
-        ''
-          c.editor.command = ["neovide", "{file}", "--", "normal {line}G{column0}l"]
-        ''
-
-        # Theme
-        ''
-        ''
-      ];
     };
   };
 }
