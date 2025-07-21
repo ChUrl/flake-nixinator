@@ -301,9 +301,14 @@ _: let
     {
       mode = "n";
       key = "<leader>e";
-      # action = "<cmd>lua Snacks.explorer.open({ enter = false, on_show = function() vim.cmd('wincmd =') end })<cr>";
       action = "<cmd>Neotree action=show toggle=true<cr><C-w>=";
       options.desc = "Toggle Explorer";
+    }
+    {
+      mode = "n";
+      key = "<leader>E";
+      action = "<cmd>Neotree<cr>";
+      options.desc = "Focus Explorer";
     }
     {
       mode = "n";
