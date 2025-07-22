@@ -64,7 +64,7 @@
 
   autostart = {
     immediate = [
-      "kitty"
+      "kitty --hold fastfetch"
       "zeal"
       "nextcloud --background"
       "protonvpn-app"
