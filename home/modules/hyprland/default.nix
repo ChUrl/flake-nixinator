@@ -10,20 +10,21 @@
 }: let
   inherit (config.modules) hyprland color;
 
+  # Autostart programs
+  always-exec = import ./autostart.nix {inherit lib pkgs config hyprland;};
+
+  # Keybindings
   always-bind = import ./mappings.nix {inherit lib config hyprland;};
 
+  # Mousebindings
   always-bindm = {
     "$mainMod, mouse:272" = ["movewindow"];
     "$mainMod, mouse:273" = ["resizewindow"];
   };
-
-  always-exec = import ./autostart.nix {inherit lib pkgs config hyprland;};
 in {
   options.modules.hyprland = import ./options.nix {inherit lib mylib;};
 
   config = lib.mkIf hyprland.enable {
-    # Some assertion is not possible if HM is used standalone,
-    # because nixosConfig won't be available.
     assertions = [
       {
         assertion = nixosConfig.programs.hyprland.enable;

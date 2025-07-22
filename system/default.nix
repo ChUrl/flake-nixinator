@@ -213,7 +213,7 @@ with mylib.networking; {
     };
 
     # https://github.com/NixOS/nixpkgs/issues/179486
-    supportedLocales = ["en_US.UTF-8/UTF-8" "de_DE.UTF-8/UTF-8"];
+    supportedLocales = ["${en}/UTF-8" "${de}/UTF-8"];
   };
 
   console = {
@@ -339,6 +339,10 @@ with mylib.networking; {
 
     hyprland = {
       enable = !headless;
+
+      package = inputs.hyprland.packages.${system}.hyprland;
+      portalPackage = inputs.hyprland.packages.${system}.xdg-desktop-portal-hyprland;
+
       xwayland.enable = true;
       withUWSM = true;
     };

@@ -43,9 +43,10 @@ in {
               xdg-desktop-portal-gtk # Fallback
             ]
 
-            (lib.mkIf desktopportal.hyprland.enable [
-              xdg-desktop-portal-hyprland
-            ])
+            # We don't need to install that explicitly
+            # (lib.mkIf desktopportal.hyprland.enable [
+            #   xdg-desktop-portal-hyprland
+            # ])
 
             (lib.mkIf desktopportal.termfilechooser.enable [
               xdg-desktop-portal-termfilechooser # Filechooser using yazi
