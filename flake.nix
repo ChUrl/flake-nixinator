@@ -51,6 +51,9 @@
     hypr-dynamic-cursors.url = "github:VirtCode/hypr-dynamic-cursors";
     hypr-dynamic-cursors.inputs.nixpkgs.follows = "nixpkgs";
     hypr-dynamic-cursors.inputs.hyprland.follows = "hyprland";
+    hyprspace.url = "github:KZDKM/Hyprspace";
+    hyprspace.inputs.nixpkgs.follows = "nixpkgs";
+    hyprspace.inputs.hyprland.follows = "hyprland";
 
     # NeoVim <3
     nixvim.url = "github:nix-community/nixvim";

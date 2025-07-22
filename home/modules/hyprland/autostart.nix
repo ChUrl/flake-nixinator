@@ -11,7 +11,7 @@ builtins.concatLists [
     "wl-paste -t text --watch clipman store --no-persist"
     "wl-paste -p -t text --watch clipman store -P --histpath=\"~/.local/share/clipman-primary.json\""
 
-    "hyprctl setcursor Bibata-Modern-Classic 16"
+    "hyprctl setcursor ${config.home.pointerCursor.name} ${builtins.toString config.home.pointerCursor.size}"
     "hyprsunset --identity"
 
     # HACK: Hyprland doesn't set the xwayland/x11 keymap correctly

@@ -2,8 +2,14 @@
   lib,
   mylib,
   ...
-}: rec {
+}: {
   enable = lib.mkEnableOption "Hyprland Window Manager + Compositor";
+
+  dunst.enable = lib.mkEnableOption "Enable dunst notification daemon";
+  bars.enable = lib.mkEnableOption "Enable window bars";
+  dynamicCursor.enable = lib.mkEnableOption "Enable dynamic cursors";
+  trails.enable = lib.mkEnableOption "Enable dynamic window trails";
+  hyprspace.enable = lib.mkEnableOption "Enable hyprspace workspace overview";
 
   keyboard = {
     layout = lib.mkOption {
@@ -23,128 +29,6 @@
       example = "nodeadkeys";
       description = "Keyboard layout options";
     };
-  };
-
-  dunst.enable = lib.mkEnableOption "Enable dunst notification daemon";
-
-  monitors = lib.mkOption {
-    type = lib.types.attrs;
-    description = "Hyprland Monitor Configurations";
-    example = ''
-      {
-        "HDMI-A-1" = {
-          width = 2560;
-          height = 1440;
-          rate = 144;
-          x = 1920;
-          y = 0;
-          scale = 1;
-        }
-      }
-    '';
-  };
-
-  workspaces = lib.mkOption {
-    type = lib.types.attrs;
-    description = "How workspaces are distributed to monitors. These monitors will also receive a wallpaper.";
-    example = ''
-      {
-        "HDMI-A-1" = [1 2 3 4 5 6 7 8 9];
-        "HDMI-A-2" = [0];
-      }
-    '';
-  };
-
-  autostart = {
-    immediate = lib.mkOption {
-      type = lib.types.listOf lib.types.str;
-      description = "Programs to launch when Hyprland starts";
-      example = ''
-        [
-          "kitty"
-        ]
-      '';
-      default = [];
-    };
-
-    delayed = lib.mkOption {
-      type = lib.types.listOf lib.types.str;
-      description = "Programs to launch with a delay when Hyprland starts (e.g. to wait for the waybar tray)";
-      example = ''
-        [
-          "keepassxc"
-          "nextcloud --background"
-        ]
-      '';
-      default = [];
-    };
-
-    special-silent = lib.mkOption {
-      type = lib.types.attrsOf (lib.types.listOf lib.types.str);
-      description = "Programs to silently launch on special workspaces";
-      example = ''
-        {
-          "ferdium" = ["ferdium"];
-          "btop" = ["kitty --title=Btop btop"];
-        }
-      '';
-      default = {};
-    };
-  };
-
-  workspacerules = lib.mkOption {
-    type = lib.types.attrs;
-    description = "Launch programs on specified workspaces, accepts window class.";
-    example = ''
-      {
-        "2" = [
-          "jetbrains-clion"
-          "code-url-handler"
-        ];
-      }
-    '';
-  };
-
-  windowrules = lib.mkOption {
-    type = lib.types.listOf lib.types.str;
-    description = "Specify specific window rules.";
-    example = ''
-      [
-        "suppressevent activate, class: Unity"
-      ]
-    '';
-  };
-
-  transparent-opacity = lib.mkOption {
-    type = lib.types.str;
-    description = "The opacity transparent windows should have.";
-    example = "0.8";
-  };
-
-  floating = lib.mkOption {
-    type = lib.types.listOf lib.types.attrs;
-    description = "What programs are floating down here?";
-    example = ''
-      [
-        {
-          class = "thunar";
-          title = "File Operation Progress";
-        }
-        {
-          class = "org.kde.polkit-kde-authentication-agent-1";
-        }
-      ]
-    '';
-  };
-
-  transparent = lib.mkOption {
-    type = lib.types.listOf lib.types.str;
-    description = "What programs should be transparent? Accepts window class.";
-    example = ''
-      [
-        "kitty"
-      ]
-    '';
   };
 
   keybindings = {
@@ -195,6 +79,126 @@
           "btop" = "b";
         }
       '';
+    };
+  };
+
+  monitors = lib.mkOption {
+    type = lib.types.attrs;
+    description = "Hyprland Monitor Configurations";
+    example = ''
+      {
+        "HDMI-A-1" = {
+          width = 2560;
+          height = 1440;
+          rate = 144;
+          x = 1920;
+          y = 0;
+          scale = 1;
+        }
+      }
+    '';
+  };
+
+  workspaces = lib.mkOption {
+    type = lib.types.attrs;
+    description = "How workspaces are distributed to monitors. These monitors will also receive a wallpaper.";
+    example = ''
+      {
+        "HDMI-A-1" = [1 2 3 4 5 6 7 8 9];
+        "HDMI-A-2" = [0];
+      }
+    '';
+  };
+
+  workspacerules = lib.mkOption {
+    type = lib.types.attrs;
+    description = "Launch programs on specified workspaces, accepts window class.";
+    example = ''
+      {
+        "2" = [
+          "jetbrains-clion"
+          "code-url-handler"
+        ];
+      }
+    '';
+  };
+
+  windowrules = lib.mkOption {
+    type = lib.types.listOf lib.types.str;
+    description = "Specify specific window rules.";
+    example = ''
+      [
+        "suppressevent activate, class: Unity"
+      ]
+    '';
+  };
+
+  transparent-opacity = lib.mkOption {
+    type = lib.types.str;
+    description = "The opacity transparent windows should have.";
+    example = "0.8";
+  };
+
+  transparent = lib.mkOption {
+    type = lib.types.listOf lib.types.str;
+    description = "What programs should be transparent? Accepts window class.";
+    example = ''
+      [
+        "kitty"
+      ]
+    '';
+  };
+
+  floating = lib.mkOption {
+    type = lib.types.listOf lib.types.attrs;
+    description = "What programs are floating down here?";
+    example = ''
+      [
+        {
+          class = "thunar";
+          title = "File Operation Progress";
+        }
+        {
+          class = "org.kde.polkit-kde-authentication-agent-1";
+        }
+      ]
+    '';
+  };
+
+  autostart = {
+    immediate = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      description = "Programs to launch when Hyprland starts";
+      example = ''
+        [
+          "kitty"
+        ]
+      '';
+      default = [];
+    };
+
+    delayed = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      description = "Programs to launch with a delay when Hyprland starts (e.g. to wait for the waybar tray)";
+      example = ''
+        [
+          "keepassxc"
+          "nextcloud --background"
+        ]
+      '';
+      default = [];
+    };
+
+    special-silent = lib.mkOption {
+      type = lib.types.attrsOf (lib.types.listOf lib.types.str);
+      description = "Programs to silently launch on special workspaces";
+      example = ''
+        {
+          "ferdium" = ["ferdium"];
+          "btop" = ["kitty --title=Btop btop"];
+        }
+      '';
+      default = {};
     };
   };
 }

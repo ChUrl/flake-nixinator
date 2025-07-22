@@ -4,6 +4,10 @@
 }: {
   enable = !headless;
   dunst.enable = !config.modules.hyprpanel.enable; # Disable for hyprpanel
+  bars.enable = false;
+  dynamicCursor.enable = true;
+  trails.enable = true;
+  hyprspace.enable = true;
 
   keybindings = {
     main-mod = "SUPER";

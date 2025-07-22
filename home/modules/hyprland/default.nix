@@ -48,7 +48,7 @@ in {
         x11.enable = true;
         package = pkgs.bibata-cursors;
         name = "Bibata-Modern-Classic";
-        size = 16;
+        size = 24;
       };
 
       packages = with pkgs; [
@@ -145,9 +145,19 @@ in {
       systemd.variables = ["--all"]; # Import PATH into systemd
       xwayland.enable = true;
 
-      plugins = [
-        inputs.hypr-dynamic-cursors.packages.${pkgs.system}.hypr-dynamic-cursors
-        inputs.hyprland-plugins.packages.${pkgs.system}.hyprbars
+      plugins = builtins.concatLists [
+        (lib.optionals
+          hyprland.bars.enable
+          [inputs.hyprland-plugins.packages.${pkgs.system}.hyprbars])
+        (lib.optionals
+          hyprland.dynamicCursor.enable
+          [inputs.hypr-dynamic-cursors.packages.${pkgs.system}.hypr-dynamic-cursors])
+        (lib.optionals
+          hyprland.trails.enable
+          [inputs.hyprland-plugins.packages.${pkgs.system}.hyprtrails])
+        (lib.optionals
+          hyprland.hyprspace.enable
+          [inputs.hyprspace.packages.${pkgs.system}.Hyprspace])
       ];
 
       settings = import ./settings.nix {
