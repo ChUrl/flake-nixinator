@@ -34,11 +34,28 @@ rec {
       # Define custom dependencies
       # ===========================================================================================
 
+      # Python package example
+      # typed-ffmpeg = pkgs.python313Packages.buildPythonPackage rec {
+      #   pname = "typed_ffmpeg";
+      #   version = "3.6";
+      #
+      #   src = pkgs.python313Packages.fetchPypi {
+      #     inherit pname version;
+      #     hash = "sha256-YPspq/lqI/jx/9FCQntmQPw4lrPIsdxtHTUg0F0QbrM=";
+      #   };
+      #
+      #   pyproject = true;
+      #   build-system = [
+      #     pkgs.python313Packages.setuptools
+      #     pkgs.python313Packages.setuptools-scm
+      #   ];
+      # };
+
       # python = pkgs.python313.withPackages (p:
       #   with p; [
       #     # numpy
       #     # matplotlib
-      #     # ffmpeg-python
+      #     # typed-ffmpeg
       #     # pyside6
       #   ]);
 
@@ -209,6 +226,9 @@ rec {
 
         # Set PYTHONPATH
         # PYTHONPATH = ".";
+
+        # Set matplotlib backend
+        # MPLBACKEND = "TkAgg";
 
         # =========================================================================================
         # Define shell environment
