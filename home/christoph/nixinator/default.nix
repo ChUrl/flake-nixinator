@@ -130,6 +130,7 @@
         rider-unity
         dotnetCore
         mono
+        steam-run-free # nix-alien doesn't seem to run unity apps, this does...
 
         blender
         godot_4

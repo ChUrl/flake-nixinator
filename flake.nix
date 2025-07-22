@@ -41,7 +41,9 @@
 
     # Run unpatched binaries on NixOS
     nix-alien.url = "github:thiagokokada/nix-alien";
-    nix-alien.inputs.nixpkgs.follows = "nixpkgs";
+    # Don't follow nixpkgs:
+    # https://github.com/thiagokokada/nix-alien#user-content-nixos-installation-with-flakes
+    # nix-alien.inputs.nixpkgs.follows = "nixpkgs";
 
     # Hyprland (use flake so plugins are not built from source)
     hyprland.url = "github:hyprwm/Hyprland";
