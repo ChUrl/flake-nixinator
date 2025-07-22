@@ -96,11 +96,7 @@
   boot = {
     # kernelPackages = pkgs.linuxPackages_zen;
 
-    kernelParams = [
-      "loglevel=4" # 0 (critical) - 7 (debug)
-      "udev.log_level=0" # 0 (debug) - 3 (critical)
-      # "quiet"
-    ];
+    # kernelParams = [ "quiet" ];
     # plymouth.enable = true;
   };
 
