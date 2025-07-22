@@ -68,6 +68,7 @@ in {
           (mkBm "DeepSeek Chat" "https://chat.deepseek.com/")
           (mkBm "Claude Chat" "https://claude.ai/new")
           (mkBm "ChatGPT" "https://chatgpt.com/")
+          (mkBm "DeepWiki" "https://deepwiki.com/")
           (mkBm "Mistral API" "https://console.mistral.ai/usage")
           (mkBm "DeepSeek API" "https://platform.deepseek.com/usage")
           (mkBm "Claude API" "https://console.anthropic.com/usage")
