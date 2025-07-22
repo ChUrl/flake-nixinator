@@ -248,7 +248,7 @@
         # rotate  - rotate the cursor based on movement direction
         # stretch - stretch the cursor shape based on direction and velocity
         # none    - do not change the cursors behaviour
-        mode = "rotate";
+        mode = "tilt";
 
         # minimum angle difference in degrees after which the shape is changed
         # smaller values are smoother, but more expensive for hw cursors
@@ -270,7 +270,7 @@
           # controls how powerful the tilt is, the lower, the more power
           # this value controls at which speed (px/s) the full tilt is reached
           # the full tilt being 60° in both directions
-          limit = 2500;
+          limit = 1000;
 
           # relationship between speed and tilt, supports these values:
           # linear             - a linear function is used
@@ -288,7 +288,7 @@
         # magnifies the cursor if its is being shaken
         shake = {
           # enables shake to find
-          enabled = true;
+          enabled = false;
 
           # use nearest-neighbour (pixelated) scaling when shaking
           # may look weird when effects are enabled
