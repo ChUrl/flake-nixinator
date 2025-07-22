@@ -1574,6 +1574,7 @@ in {
                 '';
               in {
                 enabled = true;
+
                 layout = {
                   cycle = true;
                   preset.__raw = defaultLayout;
@@ -1582,6 +1583,13 @@ in {
                 sources = {
                   lines = {
                     layout.__raw = defaultLayout;
+                  };
+                };
+
+                formatters = {
+                  file = {
+                    filename_first = true;
+                    truncate = 80;
                   };
                 };
               };
