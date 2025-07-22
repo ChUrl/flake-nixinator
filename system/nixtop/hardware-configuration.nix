@@ -13,10 +13,21 @@
   ];
 
   boot = {
-    initrd.availableKernelModules = ["xhci_pci" "ehci_pci" "ahci" "usb_storage" "sd_mod" "rtsx_pci_sdmmc"];
+    initrd.availableKernelModules = [
+      "xhci_pci"
+      "ehci_pci"
+      "ahci"
+      "usb_storage"
+      "sd_mod"
+      "rtsx_pci_sdmmc"
+    ];
+
     initrd.kernelModules = [];
+
     kernelModules = ["kvm-intel"];
+
     extraModulePackages = with config.boot.kernelPackages; [];
+
     # NOTE: Didn't work with Zen, switched to regular kernel instead
     # kernelPatches = [
     #   {

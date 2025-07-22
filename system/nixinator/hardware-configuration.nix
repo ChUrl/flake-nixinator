@@ -12,12 +12,22 @@
   imports = [(modulesPath + "/installer/scan/not-detected.nix")];
 
   boot = {
-    initrd.availableKernelModules = ["xhci_pci" "ahci" "nvme" "usbhid" "usb_storage" "sd_mod"];
+    initrd.availableKernelModules = [
+      "xhci_pci"
+      "ahci"
+      "nvme"
+      "usbhid"
+      "usb_storage"
+      "sd_mod"
+    ];
 
-    # Enable early Nvidia kernel modesetting
-    # https://wiki.archlinux.org/title/GDM#GDM_ignores_Wayland_and_uses_X.Org_by_default (not fixed by this)
-    # https://wiki.archlinux.org/title/Kernel_mode_setting#Early_KMS_start
-    initrd.kernelModules = ["nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm"]; # NVIDIA
+    initrd.kernelModules = [
+      # Enable Nvidia early KMS
+      "nvidia"
+      "nvidia_modeset"
+      "nvidia_uvm"
+      "nvidia_drm"
+    ];
 
     initrd.supportedFilesystems = [
       "ext4"
