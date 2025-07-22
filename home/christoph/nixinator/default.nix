@@ -126,7 +126,7 @@
 
         # Unity Stuff
         # TODO: Unity module
-        # unityhub # TODO: Wait for https://nixpk.gs/pr-tracker.html?pr=422785
+        unityhub
         rider-unity
         dotnetCore
         mono
@@ -214,7 +214,7 @@
           "com.usebottles.bottles"
           "io.github.lawstorant.boxflat"
 
-          "com.unity.UnityHub"
+          # "com.unity.UnityHub"
         ];
 
         overrides = {

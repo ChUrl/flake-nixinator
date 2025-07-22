@@ -77,10 +77,6 @@
     # Realtime audio
     # musnix.url = "github:musnix/musnix";
     # musnix.inputs.nixpkgs.follows = "nixpkgs";
-
-    # Pinned versions
-    # v4l2loopback-pinned.url = "github:nixos/nixpkgs/4684fd6b0c01e4b7d99027a34c93c2e09ecafee2";
-    # unityhub-pinned.url = "github:huantianad/nixpkgs/9542b0bc7701e173a10e6977e57bbba68bb3051f";
   };
 
   # Outputs is a function that takes the inputs as arguments.

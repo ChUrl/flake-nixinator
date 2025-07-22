@@ -1,4 +1,3 @@
-# Taken from pull/422785
 {
   lib,
   stdenv,
@@ -47,7 +46,15 @@ stdenv.mkDerivation rec {
         ++ extraPkgs pkgs;
 
     multiPkgs = pkgs:
-      with pkgs;
+      with pkgs; let
+        libxml2-legacy = libxml2.overrideAttrs (previousAttrs: rec {
+          version = "2.13.8";
+          src = fetchurl {
+            url = "mirror://gnome/sources/libxml2/${lib.versions.majorMinor version}/libxml2-${version}.tar.xz";
+            hash = "sha256-J3KUyzMRmrcbK8gfL0Rem8lDW4k60VuyzSsOhZoO6Eo=";
+          };
+        });
+      in
         [
           # Unity Hub ldd dependencies
           cups
@@ -94,7 +101,7 @@ stdenv.mkDerivation rec {
           xorg.libXcursor
           glib
           gdk-pixbuf
-          libxml2
+          libxml2-legacy
           zlib
           clang
           git # for git-based packages in unity package manager

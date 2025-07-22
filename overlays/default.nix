@@ -20,7 +20,7 @@
     # Overriding specific packages from a different nixpkgs (e.g. a pull request)
     # can be done like this. Note that this creates an additional nixpkgs instance.
     # https://github.com/NixOS/nixpkgs/issues/418451
-    # unityhub_pinned_3_13 =
+    # unityhub_3_13 =
     #   (import inputs.unityhub-pinned {
     #     config.allowUnfree = true;
     #     localSystem = {inherit (prev) system;};
