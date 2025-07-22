@@ -10,110 +10,14 @@
 }: let
   inherit (config.modules) hyprland color;
 
-  always-bind = lib.mergeAttrsList [
-    {
-      # Hyprland control
-      "$mainMod, a" = ["exec, rofi -drun-show-actions -show drun"];
-      "$mainMod, q" = ["killactive"];
-      "$mainMod, v" = ["togglefloating"];
-      "$mainMod, f" = ["fullscreen"];
-      "$mainMod, c" = ["exec, clipman pick --tool=rofi"];
-      "$mainMod SHIFT, l" = ["exec, loginctl lock-session"];
-      "$mainMod, tab" = ["workspace, previous"];
-      "ALT, tab" = ["exec, rofi -show window"];
-      # "$mainMod, g" = ["togglegroup"];
-      # "ALT, tab" = ["changegroupactive"];
-
-      # Move focus with mainMod + arrow keys
-      "$mainMod, h" = ["movefocus, l"];
-      "$mainMod, l" = ["movefocus, r"];
-      "$mainMod, k" = ["movefocus, u"];
-      "$mainMod, j" = ["movefocus, d"];
-
-      # Swap windows
-      "$mainMod CTRL, h" = ["movewindow, l"];
-      "$mainMod CTRL, l" = ["movewindow, r"];
-      "$mainMod CTRL, k" = ["movewindow, u"];
-      "$mainMod CTRL, d" = ["movewindow, d"];
-
-      # Reset workspaces to the defined configuration in hyprland.workspaces:
-      "CTRL ALT, r" = let
-        mkWBinding = m: w:
-          "moveworkspacetomonitor, "
-          + "${builtins.toString w} ${builtins.toString m}";
-        mkWsBindings = m: ws: builtins.map (mkWBinding m) ws;
-      in
-        hyprland.workspaces
-        |> builtins.mapAttrs mkWsBindings
-        |> builtins.attrValues
-        |> builtins.concatLists;
-    }
-
-    # Switch to WS: "$mainMod, 1" = ["workspace, 1"];
-    (let
-      mkWBinding = w: k: {"$mainMod, ${k}" = ["workspace, ${w}"];};
-    in
-      hyprland.keybindings.ws-bindings
-      |> builtins.mapAttrs mkWBinding
-      |> builtins.attrValues
-      |> lib.mergeAttrsList)
-
-    # Toggle special WS: "$mainMod, x" = ["togglespecialworkspace, ferdium"];
-    (let
-      mkSpecialWBinding = w: k: {"$mainMod, ${k}" = ["togglespecialworkspace, ${w}"];};
-    in
-      hyprland.keybindings.special-ws-bindings
-      |> builtins.mapAttrs mkSpecialWBinding
-      |> builtins.attrValues
-      |> lib.mergeAttrsList)
-
-    # Move to WS: "$mainMod SHIFT, 1" = ["movetoworkspace, 1"];
-    (let
-      mkMoveWBinding = w: k: {"$mainMod SHIFT, ${k}" = ["movetoworkspace, ${w}"];};
-    in
-      (hyprland.keybindings.ws-bindings)
-      |> builtins.mapAttrs mkMoveWBinding
-      |> builtins.attrValues
-      |> lib.mergeAttrsList)
-
-    # Move to special WS: "$mainMod SHIFT, x" = ["movetoworkspace, special:ferdium"];
-    (let
-      mkSpecialMoveWBinding = w: k: {"$mainMod SHIFT, ${k}" = ["movetoworkspace, special:${w}"];};
-    in
-      (hyprland.keybindings.special-ws-bindings)
-      |> builtins.mapAttrs mkSpecialMoveWBinding
-      |> builtins.attrValues
-      |> lib.mergeAttrsList)
-  ];
+  always-bind = import ./mappings.nix {inherit lib config hyprland;};
 
   always-bindm = {
     "$mainMod, mouse:272" = ["movewindow"];
     "$mainMod, mouse:273" = ["resizewindow"];
   };
 
-  always-exec = builtins.concatLists [
-    (lib.optionals hyprland.dunst.enable ["dunst"]) # Notifications
-    [
-      # Start clipboard management
-      "wl-paste -t text --watch clipman store --no-persist"
-      "wl-paste -p -t text --watch clipman store -P --histpath=\"~/.local/share/clipman-primary.json\""
-
-      "hyprctl setcursor Bibata-Modern-Classic 16"
-      "hyprsunset --identity"
-
-      # HACK: Hyprland doesn't set the xwayland/x11 keymap correctly
-      "setxkbmap -layout ${hyprland.keyboard.layout} -variant ${hyprland.keyboard.variant} -option ${hyprland.keyboard.option} -model pc104"
-
-      # HACK: Flatpak doesn't find applications in the system PATH
-      "systemctl --user import-environment PATH && systemctl --user restart xdg-desktop-portal.service"
-
-      # Provide a polkit authentication UI.
-      # This is used for example when running systemd commands without root.
-      # "systemctl --user start hyprpolkitagent.service"
-      # "${pkgs.kdePackages.polkit-kde-agent-1}/libexec/polkit-kde-authentication-agent-1"
-      "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"
-    ]
-  ];
+  always-exec = import ./autostart.nix {inherit lib pkgs config hyprland;};
 in {
   options.modules.hyprland = import ./options.nix {inherit lib mylib;};
 
@@ -207,6 +111,9 @@ in {
     };
 
     programs = {
+      hyprlock = import ./hyprlock.nix {inherit config hyprland color;};
+
+      # TODO: IMV shouldn't be part of the hyprland module
       imv = {
         enable = true;
         settings = {
@@ -219,176 +126,27 @@ in {
           };
         };
       };
-
-      hyprlock = {
-        enable = true;
-
-        settings = {
-          general = {
-            disable_loading_bar = true;
-            grace = 0; # Immediately lock
-            hide_cursor = true;
-            no_fade_in = false;
-          };
-
-          # The widgets start here.
-
-          background = [
-            {
-              path = "${config.paths.nixflake}/wallpapers/${color.wallpaper}.jpg";
-              blur_passes = 3;
-              blur_size = 10;
-              monitor = "";
-            }
-          ];
-
-          input-field = [
-            # Password input
-            {
-              size = "200, 50";
-              position = "0, 0";
-              monitor = "";
-              dots_center = true;
-              fade_on_empty = false;
-              font_color = "rgb(${color.hex.accentText})";
-              font_family = "${color.font}";
-              inner_color = "rgb(${color.hex.accent})";
-              outer_color = "rgb(${color.hex.accent})";
-              outline_thickness = 2;
-              placeholder_text = "<span foreground='\#\#${color.hex.accentText}'>Password...</span>";
-              shadow_passes = 0;
-              rounding = 4;
-              halign = "center";
-              valign = "center";
-            }
-          ];
-
-          label = [
-            # Date
-            {
-              position = "0, 300";
-              monitor = "";
-              text = ''cmd[update:1000] date -I'';
-              color = "rgba(${color.hex.text}AA)";
-              font_size = 22;
-              font_family = "${color.font}";
-              halign = "center";
-              valign = "center";
-            }
-
-            # Time
-            {
-              position = "0, 200";
-              monitor = "";
-              text = ''cmd[update:1000] date +"%-H:%M"'';
-              color = "rgba(${color.hex.text}AA)";
-              font_size = 95;
-              font_family = "${color.font} Extrabold";
-              halign = "center";
-              valign = "center";
-            }
-          ];
-        };
-      };
     };
 
     services = {
-      hyprpaper = {
-        enable = true;
-
-        settings = {
-          ipc = "on";
-          splash = false;
-          splash_offset = 2.0;
-
-          # Wallpapers have to be preloaded to be displayed
-          preload = let
-            mkPreload = name: "${config.paths.nixflake}/wallpapers/${name}.jpg";
-          in
-            color.wallpapers |> builtins.map mkPreload;
-
-          wallpaper = let
-            mkWallpaper = monitor:
-              "${monitor}, "
-              + "${config.paths.nixflake}/wallpapers/${color.wallpaper}.jpg";
-          in
-            hyprland.monitors
-            |> builtins.attrNames
-            |> builtins.map mkWallpaper;
-        };
-      };
-
-      hypridle = {
-        enable = true;
-
-        settings = {
-          general = {
-            # DPMS - Display Powermanagement Signaling. "On" means the monitor is on.
-            after_sleep_cmd = "hyprctl dispatch dpms on";
-            ignore_dbus_inhibit = false;
-            lock_cmd = "hyprlock";
-          };
-
-          listener = [
-            {
-              timeout = 900;
-              on-timeout = "hyprlock";
-            }
-            {
-              timeout = 1200;
-              on-timeout = "hyprctl dispatch dpms off";
-              on-resume = "hyprctl dispatch dpms on";
-            }
-          ];
-        };
-      };
-
-      # Notification service
-      dunst = {
-        enable = hyprland.dunst.enable;
-
-        iconTheme.package = pkgs.papirus-icon-theme;
-        iconTheme.name = "Papirus";
-
-        settings = {
-          global = {
-            monitor = config.modules.waybar.monitor;
-            font = "${color.font} 11";
-            offset = "10x10";
-            background = color.hexS.base;
-            foreground = color.hexS.text;
-            frame_width = 2;
-            corner_radius = 6;
-            separator_color = "frame";
-          };
-
-          urgency_low = {
-            frame_color = color.hexS.green;
-          };
-
-          urgency_normal = {
-            frame_color = color.hexS.green;
-          };
-
-          urgency_critical = {
-            frame_color = color.hexS.red;
-          };
-        };
-      };
+      # TODO: Dunst shouldn't be part of the hyprland module
+      dunst = import ./dunst.nix {inherit pkgs config hyprland color;};
+      hypridle = import ./hypridle.nix {inherit config hyprland color;};
+      hyprpaper = import ./hyprpaper.nix {inherit config hyprland color;};
     };
 
     wayland.windowManager.hyprland = {
       enable = true;
+      package = inputs.hyprland.packages.${pkgs.system}.hyprland;
+      portalPackage = inputs.hyprland.packages.${pkgs.system}.xdg-desktop-portal-hyprland;
+
       systemd.enable = true; # Enable hyprland-session.target
       systemd.variables = ["--all"]; # Import PATH into systemd
       xwayland.enable = true;
 
       plugins = [
-        # TODO: Takes ages (compiles all hyprland dependencies locally...)
-        #       Probably have to use hyprland flake to follow...
-
-        # inputs.hypr-dynamic-cursors.packages.${pkgs.system}.hypr-dynamic-cursors
-        # inputs.hyprland-plugins.packages.${pkgs.system}.hyprbars
+        inputs.hypr-dynamic-cursors.packages.${pkgs.system}.hypr-dynamic-cursors
+        inputs.hyprland-plugins.packages.${pkgs.system}.hyprbars
       ];
 
       settings = {

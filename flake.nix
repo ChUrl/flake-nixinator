@@ -32,10 +32,6 @@
     nur.url = "github:nix-community/NUR";
     nur.inputs.nixpkgs.follows = "nixpkgs";
 
-    # Firefox theme
-    textfox.url = "github:adriankarlen/textfox";
-    textfox.inputs.nixpkgs.follows = "nixpkgs";
-
     # Nix Package Search - nps
     nps.url = "github:OleMussmann/nps";
     nps.inputs.nixpkgs.follows = "nixpkgs";
@@ -43,6 +39,16 @@
     # Run unpatched binaries on NixOS
     nix-alien.url = "github:thiagokokada/nix-alien";
     nix-alien.inputs.nixpkgs.follows = "nixpkgs";
+
+    # Hyprland (use flake so plugins are not built from source)
+    hyprland.url = "github:hyprwm/Hyprland";
+    hyprland.inputs.nixpkgs.follows = "nixpkgs";
+
+    # HyprPlugins
+    hyprland-plugins.url = "github:hyprwm/hyprland-plugins";
+    hyprland-plugins.inputs.nixpkgs.follows = "nixpkgs";
+    hypr-dynamic-cursors.url = "github:VirtCode/hypr-dynamic-cursors";
+    hypr-dynamic-cursors.inputs.nixpkgs.follows = "nixpkgs";
 
     # NeoVim <3
     nixvim.url = "github:nix-community/nixvim";
@@ -52,6 +58,10 @@
     # emacs-overlay.url = "github:nix-community/emacs-overlay";
     # emacs-overlay.inputs.nixpkgs.follows = "nixpkgs";
 
+    # Firefox theme
+    textfox.url = "github:adriankarlen/textfox";
+    textfox.inputs.nixpkgs.follows = "nixpkgs";
+
     # Declarative Flatpak
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
     # nix-flatpak.inputs.nixpkgs.follows = "nixpkgs"; # nix-flatpak doesn't have this
@@ -59,12 +69,6 @@
     # Realtime audio
     # musnix.url = "github:musnix/musnix";
     # musnix.inputs.nixpkgs.follows = "nixpkgs";
-
-    # HyprPlugins
-    # hyprland-plugins.url = "github:hyprwm/hyprland-plugins";
-    # hyprland-plugins.inputs.nixpkgs.follows = "nixpkgs";
-    # hypr-dynamic-cursors.url = "github:VirtCode/hypr-dynamic-cursors";
-    # hypr-dynamic-cursors.inputs.nixpkgs.follows = "nixpkgs";
 
     # Pinned versions
     # v4l2loopback-pinned.url = "github:nixos/nixpkgs/4684fd6b0c01e4b7d99027a34c93c2e09ecafee2";
