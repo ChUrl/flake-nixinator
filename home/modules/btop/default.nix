@@ -34,10 +34,10 @@ in {
           theme[hi_fg]=${color.hexS.accent}
 
           # Background color of selected item in processes box
-          theme[selected_bg]=${color.hexS.surface1}
+          theme[selected_bg]=${color.hexS.accentDim}
 
           # Foreground color of selected item in processes box
-          theme[selected_fg]=${color.hexS.accent}
+          theme[selected_fg]=${color.hexS.accentText}
 
           # Color of inactive/disabled text
           theme[inactive_fg]=${color.hexS.overlay0}

@@ -62,21 +62,7 @@ in {
           background-color = mkLiteral trans;
         };
 
-        "message" = {
-          background-color = mkLiteral trans;
-        };
-
-        "error-message" = {
-          background-color = mkLiteral trans;
-          margin = mkLiteral "0px 0px 10px 0px";
-        };
-
-        "textbox" = {
-          background-color = mkLiteral trans;
-          padding = 6;
-          margin = mkLiteral "10px 10px 0px 10px";
-          border-radius = 3;
-        };
+        # TOP INPUT BAR START
 
         "inputbar" = {
           children = builtins.map mkLiteral ["prompt" "entry"];
@@ -101,6 +87,26 @@ in {
           border-color = mkLiteral color.hexS.accentHl;
         };
 
+        # MESSAGEBOX (usually not visible)
+
+        "message" = {
+          background-color = mkLiteral trans;
+        };
+
+        "error-message" = {
+          background-color = mkLiteral trans;
+          margin = mkLiteral "0px 0px 10px 0px";
+        };
+
+        "textbox" = {
+          background-color = mkLiteral trans;
+          padding = 6;
+          margin = mkLiteral "10px 10px 0px 10px";
+          border-radius = 3;
+        };
+
+        # LISTVIEW
+
         "listview" = {
           # border = mkLiteral "0px 0px 0px";
           padding = 0;
@@ -109,7 +115,7 @@ in {
           background-color = mkLiteral trans;
           border = mkLiteral "2 solid 2 solid 2 solid 2 solid";
           border-radius = 3;
-          border-color = mkLiteral color.hexS.accentHl;
+          border-color = mkLiteral color.hexS.accentDim;
         };
 
         "element" = {
@@ -125,7 +131,7 @@ in {
         };
 
         "element selected" = {
-          background-color = mkLiteral color.hexS.accentHl;
+          background-color = mkLiteral color.hexS.accentDim;
           text-color = mkLiteral color.hexS.accentText;
         };
       };
