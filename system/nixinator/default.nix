@@ -94,7 +94,7 @@
   };
 
   boot = {
-    kernelPackages = pkgs.linuxPackages_zen;
+    # kernelPackages = pkgs.linuxPackages_zen;
 
     kernelParams = [
       "loglevel=4" # 0 (critical) - 7 (debug)
