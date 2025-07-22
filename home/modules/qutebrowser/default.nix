@@ -103,6 +103,7 @@ in {
         nf = "https://noogle.dev/q?term={}";
         nw = "https://wiki.nixos.org/index.php?search={}";
         aw = "https://wiki.archlinux.org/?search={}";
+        i = "https://github.com/NixOS/nixpkgs/issues?q=is%3Aissue%20{}";
         gh = "https://github.com/search?q={}&type=repositories";
         g = "https://www.google.com/search?hl=en&q={}";
       };

@@ -204,6 +204,13 @@ in {
                 definedAliases = ["@aw"];
               };
 
+              nixpkgs-issues = {
+                name = "Nixpkgs Issues";
+                urls = [{template = "https://github.com/NixOS/nixpkgs/issues?q=is%3Aissue%20{searchTerms}";}];
+                iconMapObj."16" = "https://github.com/favicon.ico";
+                definedAliases = ["@i"];
+              };
+
               github = {
                 name = "GitHub";
                 urls = [{template = "https://github.com/search?q={searchTerms}&type=repositories";}];
