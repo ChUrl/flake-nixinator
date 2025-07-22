@@ -1,6 +1,7 @@
 {
   inputs,
   nixpkgs,
+  pkgs-stable,
   ...
 }: let
   # Taken from https://github.com/Misterio77/nix-config/blob/main/overlay/default.nix
@@ -11,14 +12,39 @@
       pkgs = final;
     };
 
-  modifications = final: prev: rec {
+  modifications = final: prev: {
     # Only kept as an example, has nothing to do with current dconf-editor-wrapped derivation
     # dconf-editor-wrapped = import ./dconf-editor.nix { inherit final prev; };
     # Use dconf-editor.nix: { final, prev }: final.<package>.overrideAttrs (oldAttrs: { ... }) or sth similar
+
+    # Overriding specific packages from a different nixpkgs (e.g. a pull request)
+    # can be done like this. Note that this creates an additional nixpkgs instance.
+    # https://github.com/NixOS/nixpkgs/issues/418451
+    # unityhub_pinned_3_13 =
+    #   (import inputs.unityhub-pinned {
+    #     config.allowUnfree = true;
+    #     localSystem = {inherit (prev) system;};
+    #   }).unityhub;
+
+    # TODO: Remove this after 0.15.1 hits nixpkgs
+    neovide = prev.neovide.overrideAttrs (finalAttrs: prevAttrs: {
+      version = "0.15.1";
+      src = prev.fetchFromGitHub {
+        owner = "neovide";
+        repo = "neovide";
+        tag = finalAttrs.version;
+        hash = "sha256-2iV3g6tcCkMF7sFG/GZDz3czPZNIDi6YLfrVzYO9jYI=";
+      };
+      cargoHash = "sha256-YlHAcUCRk6ROg5yXIumHfsiR/2TrsSzbuXz/IQK7sEo=";
+      cargoDeps = prev.rustPlatform.fetchCargoVendor {
+        inherit (finalAttrs) pname src version;
+        hash = finalAttrs.cargoHash;
+      };
+    });
+
+    # TODO: Remove this after jetbrains.jdk builds again (nixpkgs issue 425328)
+    jetbrains.rider = pkgs-stable.jetbrains.rider;
   };
 in
-  # TODO: I have absolutely no clue what happens here lol
-  # Basically we need some sort of list of all overlays that can be imported from the flake
-  # in the overlays = [ ... ] section of the pkgs = import nixpkgs { ... } configuration
-  # Somehow this library function turns additions/modifications into that
+  # Composes a list of overlays and returns a single overlay function that combines them.
   nixpkgs.lib.composeManyExtensions [additions modifications]

@@ -12,6 +12,9 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     hardware.url = "github:nixos/nixos-hardware";
 
+    # NOTE: Update this after May and November
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.05";
+
     # Home Manager
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
@@ -52,7 +55,7 @@
     hypr-dynamic-cursors.inputs.nixpkgs.follows = "nixpkgs";
     hypr-dynamic-cursors.inputs.hyprland.follows = "hyprland";
     hyprspace.url = "github:KZDKM/Hyprspace";
-    hyprspace.inputs.nixpkgs.follows = "nixpkgs";
+    # hyprspace.inputs.nixpkgs.follows = "nixpkgs";
     hyprspace.inputs.hyprland.follows = "hyprland";
 
     # NeoVim <3
@@ -111,41 +114,24 @@
       #   firefox = prev.firefox.override { ... };
       #   myBrowser = final.firefox;
       # }
-      overlays = [
+      overlays = let
+        # Maintain additional stable pkgs.
+        # This is supposed to provide a backup for packages in case they
+        # stop building on the unstable branch.
+        # It should otherwise not be mixed with this configuration,
+        # so don't even pass it to the modules.
+        pkgs-stable = import inputs.nixpkgs-stable {
+          inherit system;
+          config.allowUnfree = true;
+          config.allowUnfreePredicate = pkg: true;
+        };
+      in [
         inputs.devshell.overlays.default
         inputs.nur.overlays.default
         # inputs.emacs-overlay.overlay
 
-        # Overriding specific packages from a different nixpkgs (e.g. a pull request)
-        # can be done like this. Note that this creates an additional nixpkgs instance.
-        # https://github.com/NixOS/nixpkgs/issues/418451
-        # (final: prev: {
-        #   unityhub_pinned_3_13 = import inputs.unityhub-pinned {
-        #     config.allowUnfree = true;
-        #     localSystem = {inherit (prev) system;};
-        #   };
-        # })
-
-        # TODO: Remove this after 0.15.1 hit nixpkgs
-        (final: prev: {
-          neovide = prev.neovide.overrideAttrs (finalAttrs: prevAttrs: {
-            version = "0.15.1";
-            src = prev.fetchFromGitHub {
-              owner = "neovide";
-              repo = "neovide";
-              tag = finalAttrs.version;
-              hash = "sha256-2iV3g6tcCkMF7sFG/GZDz3czPZNIDi6YLfrVzYO9jYI=";
-            };
-            cargoHash = "sha256-YlHAcUCRk6ROg5yXIumHfsiR/2TrsSzbuXz/IQK7sEo=";
-            cargoDeps = prev.rustPlatform.fetchCargoVendor {
-              inherit (finalAttrs) pname src version;
-              hash = finalAttrs.cargoHash;
-            };
-          });
-        })
-
-        # All my own overlays
-        (import ./overlays {inherit nixpkgs inputs;})
+        # All my own overlays (derivations + modifications)
+        (import ./overlays {inherit inputs nixpkgs pkgs-stable;})
       ];
     };
 

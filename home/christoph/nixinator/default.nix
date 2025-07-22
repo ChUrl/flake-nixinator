@@ -91,8 +91,7 @@
         # Add any extra libraries you want accessible to Rider here
       ];
 
-      # TODO: Broken, jetbrains.jdk doesn't build (see nixpkgs #425328)
-      unity-rider = pkgs.jetbrains.rider.overrideAttrs (attrs: {
+      rider-unity = pkgs.jetbrains.rider.overrideAttrs (attrs: {
         postInstall =
           ''
             # Wrap rider with extra tools and libraries
@@ -115,21 +114,22 @@
       });
     in {
       packages = with pkgs; [
-        # quartus-prime-lite # Intel FPGA design software
+        # Intel FPGA design software
+        # quartus-prime-lite
 
-        # Don't want heavy IDE's on the laptop
         # jetbrains.clion
         # jetbrains.rust-rover
         # jetbrains.pycharm-professional
         # jetbrains.idea-ultimate
         # jetbrains.webstorm
+        # jetbrains.rider
 
         # Unity Stuff
         # TODO: Unity module
         # unityhub # TODO: Wait for https://nixpk.gs/pr-tracker.html?pr=422785
-        # unity-rider
-        # dotnetCore
-        # mono
+        rider-unity
+        dotnetCore
+        mono
 
         blender
         godot_4
@@ -144,19 +144,20 @@
 
       file = lib.mkMerge [
         {
-          # ".local/share/applications/jetbrains-rider.desktop".source = let
-          #   desktopFile = pkgs.makeDesktopItem {
-          #     name = "jetbrains-rider";
-          #     desktopName = "Rider";
-          #     exec = "\"${unity-rider}/bin/rider\"";
-          #     icon = "rider";
-          #     type = "Application";
-          #     # Don't show desktop icon in search or run launcher
-          #     extraConfig.NoDisplay = "true";
-          #   };
-          # in "${desktopFile}/share/applications/jetbrains-rider.desktop";
+          ".local/share/applications/jetbrains-rider.desktop".source = let
+            desktopFile = pkgs.makeDesktopItem {
+              name = "jetbrains-rider";
+              desktopName = "Rider";
+              exec = "\"${rider-unity}/bin/rider\"";
+              icon = "rider";
+              type = "Application";
+              # Don't show desktop icon in search or run launcher
+              extraConfig.NoDisplay = "true";
+            };
+          in "${desktopFile}/share/applications/jetbrains-rider.desktop";
 
-          ".var/app/com.valvesoftware.Steam/config/MangoHud/MangoHud.conf".source = ../../../config/mangohud/MangoHud.conf;
+          ".var/app/com.valvesoftware.Steam/config/MangoHud/MangoHud.conf".source =
+            ../../../config/mangohud/MangoHud.conf;
         }
         (lib.optionalAttrs (mylib.modules.contains config.home.packages pkgs.makemkv) {
           ".MakeMKV/settings.conf".source =
