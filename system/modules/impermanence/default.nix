@@ -132,6 +132,7 @@ in {
             (mkUDir ".config/tidal-hifi" m755)
             (mkUDir ".config/tidal_dl_ng" m755)
             (mkUDir ".config/unity3d" m755) # Unity
+            (mkUDir ".config/unityhub" m755)
             (mkUDir ".config/vlc" m755)
             (mkUDir ".config/Zeal" m755)
 
@@ -147,6 +148,7 @@ in {
             (mkUDir ".local/share/nvim" m755)
             (mkUDir ".local/share/qutebrowser" m755)
             (mkUDir ".local/share/systemd" m755)
+            (mkUDir ".local/share/unity3d" m755)
             (mkUDir ".local/share/zoxide" m755)
 
             (mkUDir ".local/state/astal/notifd" m755)
