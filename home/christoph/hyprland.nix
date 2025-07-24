@@ -104,7 +104,11 @@
     };
   };
 
-  windowrules = [];
+  windowrules = [
+    # Fix jetbrains tooltip flicker
+    "float,class:^(jetbrains-.*)$,title:^(win[0-9]+)$"
+    "nofocus,class:^(jetbrains-.*)$,title:^(win[0-9]+)$"
+  ];
 
   workspacerules = {
     "1" = [];
