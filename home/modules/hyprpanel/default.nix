@@ -283,6 +283,10 @@ in {
         "theme.bar.buttons.clock.text" = "#${color.hex.accentText}";
 
         # https://github.com/Jas-SinghFSU/HyprPanel/blob/master/src/configuration/modules/config/bar/systray/index.ts
+        "bar.systray.ignore" = [
+          "Fcitx" # Keyboard indicator
+        ]; # Middle click the tray icon to show a notification with the app name :)
+        "bar.systray.customIcons" = {};
 
         # https://github.com/Jas-SinghFSU/HyprPanel/blob/master/src/configuration/modules/theme/bar/buttons/systray.ts
         "theme.bar.buttons.systray.background" = "#${color.hex.blue}";
