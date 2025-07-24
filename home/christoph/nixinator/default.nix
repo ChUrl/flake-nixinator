@@ -132,9 +132,9 @@
         mono
         steam-run-free # nix-alien doesn't seem to run unity apps, this does...
 
-        blender
+        (blender.override {cudaSupport = true;})
         godot_4
-        obs-studio
+        (obs-studio.override {cudaSupport = true;})
         kdePackages.kdenlive
         krita
         makemkv
