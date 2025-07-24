@@ -43,9 +43,11 @@
 
     blacklistedKernelModules = ["k10temp"]; # Disable in favor of zenpower
 
-    # Enable AMD pstate
-    # https://github.com/NixOS/nixos-hardware/blob/master/common/cpu/amd/pstate.nix
-    kernelParams = ["amd_pstate=active"];
+    kernelParams = [
+      # Enable AMD pstate
+      # https://github.com/NixOS/nixos-hardware/blob/master/common/cpu/amd/pstate.nix
+      "amd_pstate=active"
+    ];
 
     # extraModprobeConfig = ''
     #   options iwlwifi 11n_disable=1 wd_disable=0
@@ -117,9 +119,9 @@
       package = config.boot.kernelPackages.nvidiaPackages.stable;
       # package = config.boot.kernelPackages.nvidiaPackages.beta;
 
-      modesetting.enable = true; # Not officially supported by NVidia but needed for wayland
       open = true;
       nvidiaSettings = false; # Those are for x-server
+      modesetting.enable = true; # Required for wayland
     };
 
     # video.hidpi.enable = lib.mkDefault true; # No longer has any effect

@@ -43,6 +43,12 @@ in {
     mkRFile = mkFile "root";
     mkUDir = mkDir "${username}";
     mkUFile = mkFile "${username}";
+    # TODO: sth. like this, make options for configdirs/sharedirs/statedirs/homedirs
+    #       populate options from respective modules, not here...
+    # mkConfigDirs = dirs:
+    #   dirs
+    #   |> builtins.map (dir: ".config/${dir}")
+    #   |> builtins.map mkUDir # NOTE: mkUDir has wrong arg order
   in
     lib.mkIf impermanence.enable {
       # TODO: Create options to allow host-specific impermanence setup
@@ -80,13 +86,13 @@ in {
           files = [
             # NOTE: Don't put files generated/linked by HM here (they're already managed)
 
-            # TODO: These files are not mounted?
-            (mkUFile ".config/.tidal-dl.json" m755)
-            (mkUFile ".config/.tidal-dl.token.json" m755)
-            (mkUFile ".config/QtProject.conf" m755) # KeePassXC
+            # TODO: Specifying files here (e.g. .config/QtProject.conf) doesn't seem to work
+            #       They won't get mounted, also they can't be unmounted (because they're not mounted),
+            #       which leads to /home not being unmounted correctly during shutdown...
           ];
 
           directories = [
+            # Home directory
             (mkUDir "Downloads" m755)
             (mkUDir "Documents" m755)
             (mkUDir "GitRepos" m755)
@@ -98,26 +104,35 @@ in {
             (mkUDir "Unity" m755)
             (mkUDir "Videos" m755)
 
+            # Secrets
             (mkUDir ".gnupg" m755) # m600
             (mkUDir ".secrets" m755) # m644
             (mkUDir ".ssh" m755) # m644
 
+            # The shit some applications add to ~/ without asking
             (mkUDir ".android" m755) # Unity
+            (mkUDir ".gradle" m755) # Unity
             (mkUDir ".java" m755) # Unity/Rider
             (mkUDir ".mozilla/firefox" m755) # TODO: Remove this someday
             (mkUDir ".mozilla/native-messaging-hosts" m755)
             (mkUDir ".nix-package-search" m755)
+            (mkUDir ".nv" m755) # Unity
             (mkUDir ".ollama" m755)
+            (mkUDir ".plastic4" m755) # Unity
             (mkUDir ".var/app" m755)
             (mkUDir ".vim/undo" m755)
             (mkUDir ".zotero" m755)
 
+            # Cache that's actually useful
             (mkUDir ".cache/fish/generated_completions" m755)
             (mkUDir ".cache/nix-index" m755)
             (mkUDir ".cache/nix-search-tv" m755)
             (mkUDir ".cache/nvim" m755)
 
+            # Config
+            (mkUDir ".config/.android" m755) # Unity
             (mkUDir ".config/beets" m755)
+            (mkUDir ".config/blender" m755)
             (mkUDir ".config/chromium" m755) # TODO: Remove this someday
             (mkUDir ".config/Ferdium" m755)
             (mkUDir ".config/fish/completions" m755)
@@ -128,19 +143,22 @@ in {
             (mkUDir ".config/Msty" m755)
             (mkUDir ".config/Nextcloud" m755)
             (mkUDir ".config/obsidian" m755)
+            (mkUDir ".config/obs-studio" m755)
             (mkUDir ".config/Signal" m755)
+            (mkUDir ".config/singularitygroup-hotreload" m755) # Unity
             (mkUDir ".config/tidal-hifi" m755)
             (mkUDir ".config/tidal_dl_ng" m755)
             (mkUDir ".config/unity3d" m755) # Unity
-            (mkUDir ".config/unityhub" m755)
+            (mkUDir ".config/unityhub" m755) # Unity
             (mkUDir ".config/vlc" m755)
             (mkUDir ".config/Zeal" m755)
 
+            # Share
             (mkUDir ".local/share/direnv" m755)
             (mkUDir ".local/share/docker" m755)
             (mkUDir ".local/share/fish" m755)
             (mkUDir ".local/share/flatpak" m755)
-            (mkUDir ".local/share/JetBrains" m755) # Unity/Rider
+            (mkUDir ".local/share/JetBrains" m755) # Unity
             (mkUDir ".local/share/hyprland" m755)
             (mkUDir ".local/share/keyrings" m755) # m700
             (mkUDir ".local/share/mime" m755)
@@ -148,10 +166,12 @@ in {
             (mkUDir ".local/share/nvim" m755)
             (mkUDir ".local/share/qutebrowser" m755)
             (mkUDir ".local/share/systemd" m755)
-            (mkUDir ".local/share/unity3d" m755)
+            (mkUDir ".local/share/unity3d" m755) # Unity
             (mkUDir ".local/share/zoxide" m755)
 
+            # State
             (mkUDir ".local/state/astal/notifd" m755)
+            (mkUDir ".local/state/home-manager/gc-roots" m755) # nix-flatpak stores its state there
             (mkUDir ".local/state/lazygit" m755)
             (mkUDir ".local/state/nix" m755)
             (mkUDir ".local/state/nvim" m755)
