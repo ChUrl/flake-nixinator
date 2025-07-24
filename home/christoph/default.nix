@@ -81,7 +81,7 @@
       signCommits = true;
     };
 
-    hyprland = import ./hyprland.nix {inherit config headless;};
+    hyprland = import ./hyprland.nix {inherit pkgs config headless;};
     hyprpanel.enable = !headless;
     kitty.enable = !headless;
     lazygit.enable = true;

@@ -1,11 +1,12 @@
 {
+  pkgs,
   config,
   headless,
 }: {
   enable = !headless;
   dunst.enable = !config.modules.hyprpanel.enable; # Disable for hyprpanel
   bars.enable = false;
-  dynamicCursor.enable = true;
+  dynamicCursor.enable = false;
   trails.enable = true;
   hyprspace.enable = true;
 
@@ -36,6 +37,25 @@
       ", XF86MonBrightnessUp" = ["exec, hyprctl hyprsunset gamma +10"];
       "$mainMod, XF86MonBrightnessDown" = ["exec, hyprctl hyprsunset temperature 5750"];
       "$mainMod, XF86MonBrightnessUp" = ["exec, hyprctl hyprsunset identity"];
+
+      "CTRL ALT, f" = let
+        hyprctl = "${config.wayland.windowManager.hyprland.package}/bin/hyprctl";
+        grep = "${pkgs.gnugrep}/bin/grep";
+        awk = "${pkgs.gawk}/bin/gawk";
+        notify = "${pkgs.libnotify}/bin/notify-send";
+
+        toggleMouseFocus = pkgs.writeScriptBin "hypr-toggle-mouse-focus" ''
+          CURRENT=$(${hyprctl} getoption input:follow_mouse | ${grep} int | ${awk} -F' ' '{print $2}')
+
+          if [[ "$CURRENT" == "1" ]]; then
+            ${hyprctl} keyword input:follow_mouse 0
+            ${notify} "Disabled Mouse Focus!"
+          else
+            ${hyprctl} keyword input:follow_mouse 1
+            ${notify} "Enabled Mouse Focus!"
+          fi
+        '';
+      in ["exec, ${toggleMouseFocus}/bin/hypr-toggle-mouse-focus"];
 
       # "CTRL ALT, t" = ["exec, bash -c 'systemctl --user restart hyprpanel.service'"];
     };
@@ -89,7 +109,7 @@
   workspacerules = {
     "1" = [];
     "2" = ["Zotero" "neovide" "code-url-handler"];
-    "3" = ["obsidian" "unityhub" "Unity"];
+    "3" = ["obsidian"];
     "4" = ["firefox" "Google-chrome" "chromium-browser" "org.qutebrowser.qutebrowser"];
     "5" = ["steam"];
     "6" = ["steam_app_(.+)"];
@@ -106,6 +126,7 @@
       title = "File Operation Progress";
     }
     {class = "ffplay";}
+    {class = "Unity";}
   ];
 
   transparent-opacity = "0.75";
