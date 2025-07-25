@@ -26,9 +26,7 @@ in {
       defaultSopsFile = ./secrets.yaml;
 
       age = {
-        # NOTE: Sops needs the keys before impermanence kicks in
-        #       so we have to link to /persist directly...
-        keyFile = "/persist/home/${username}/.secrets/age/age.key";
+        keyFile = lib.mkDefault "/home/${username}/.secrets/age/age.key";
         generateKey = false;
         sshKeyPaths = [];
       };

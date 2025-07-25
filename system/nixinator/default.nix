@@ -85,6 +85,10 @@
     ];
   };
 
+  # NOTE: Sops needs the keys before impermanence kicks in
+  #       so we have to link to /persist directly...
+  sops.age.keyFile = "/persist/home/${username}/.secrets/age/age.key";
+
   sops.templates."makemkv-settings.conf" = {
     owner = config.users.users.${username}.name;
     content = ''
