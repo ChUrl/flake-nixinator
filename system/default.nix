@@ -91,6 +91,8 @@ with mylib.networking; {
 
     polkit.enable = true;
 
+    # TODO: This does not work on ServeNix?
+    #       Check on ThinkNix...
     sops-nix.bootSecrets.${username} = [
       "user-password"
     ];

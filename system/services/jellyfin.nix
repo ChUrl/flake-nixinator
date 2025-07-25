@@ -43,7 +43,7 @@ in {
       };
 
       extraOptions = [
-        # "--privileged"
+        "--privileged"
         "--device=nvidia.com/gpu=all"
         "--net=behind-nginx"
       ];
