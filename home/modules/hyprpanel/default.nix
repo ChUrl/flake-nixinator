@@ -28,12 +28,13 @@ in {
         "bar.autoHide" = "never";
 
         # https://github.com/Jas-SinghFSU/HyprPanel/blob/master/src/configuration/modules/config/bar/layouts/index.ts
+        # TODO: To module option
         # TODO: This should contain battery etc. for laptop
         "bar.layouts" = {
           "HDMI-A-1" = {
             "left" = ["workspaces" "windowtitle"];
             "middle" = ["media"]; # "cava"
-            "right" = ["volume" "network" "bluetooth" "cpu" "ram" "storage" "clock" "systray" "notifications"];
+            "right" = ["volume" "network" "cpu" "ram" "storage" "clock" "systray" "notifications"]; # "bluetooth"
           };
           "DP-1" = {
             "left" = ["workspaces" "windowtitle"];
@@ -282,6 +283,7 @@ in {
         "theme.bar.buttons.clock.spacing" = "6px";
         "theme.bar.buttons.clock.text" = "#${color.hex.accentText}";
 
+        # TODO: To module option
         # https://github.com/Jas-SinghFSU/HyprPanel/blob/master/src/configuration/modules/config/bar/systray/index.ts
         "bar.systray.ignore" = [
           "Fcitx" # Keyboard indicator
