@@ -77,6 +77,7 @@ in {
           (mkRDir "/var/lib/libvirt" m755)
           (mkRDir "/var/lib/NetworkManager" m755)
           (mkRDir "/var/lib/nixos" m755)
+          (mkRDir "/var/lib/sbctl" m755)
           (mkRDir "/var/lib/systemd" m755)
 
           (mkRDir "/var/tmp" m777)
