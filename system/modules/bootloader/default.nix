@@ -1,4 +1,5 @@
 {
+  pkgs,
   config,
   lib,
   mylib,
@@ -29,6 +30,21 @@ in {
         enable = true;
         useOSProber = true;
         device = bootloader.grub.bootDevice;
+      };
+    })
+    (lib.mkIf (bootloader.loader == "lanzaboote") {
+      environment.systemPackages = with pkgs; [
+        sbctl
+      ];
+
+      # Lanzaboote replaces systemd-boot
+      boot.loader.systemd-boot.enable = lib.mkForce false;
+
+      boot.lanzaboote = {
+        enable = true;
+
+        # WARN: Make sure to persist this if using impermanence!
+        pkiBundle = "/var/lib/sbctl";
       };
     })
   ]);

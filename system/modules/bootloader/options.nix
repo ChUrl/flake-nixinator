@@ -9,6 +9,7 @@
     type = lib.types.enum [
       "grub"
       "systemd-boot"
+      "lanzaboote"
     ];
     description = "What boot loader to use";
     example = "systemd-boot";
