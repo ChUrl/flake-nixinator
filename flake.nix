@@ -165,6 +165,7 @@
     # HM modules are passed through home/modules/default.nix instead.
     commonModules = [
       inputs.sops-nix.nixosModules.sops
+      inputs.impermanence.nixosModules.impermanence
       inputs.lanzaboote.nixosModules.lanzaboote
     ];
   in {
@@ -193,7 +194,6 @@
         extraModules =
           [
             inputs.disko.nixosModules.disko
-            inputs.impermanence.nixosModules.impermanence
           ]
           ++ commonModules;
       };
