@@ -31,6 +31,10 @@
     sops-nix.url = "github:Mic92/sops-nix";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
 
+    # Secure boot
+    lanzaboote.url = "github:nix-community/lanzaboote/v0.4.2";
+    lanzaboote.inputs.nixpkgs.follows = "nixpkgs";
+
     # Nix User Repository (e.g. Firefox addons)
     nur.url = "github:nix-community/NUR";
     nur.inputs.nixpkgs.follows = "nixpkgs";
@@ -161,8 +165,6 @@
     # HM modules are passed through home/modules/default.nix instead.
     commonModules = [
       inputs.sops-nix.nixosModules.sops
-      inputs.disko.nixosModules.disko
-      inputs.impermanence.nixosModules.impermanence
     ];
   in {
     # Local shell for NixFlake directory
@@ -188,7 +190,11 @@
         username = "christoph";
         headless = false;
         extraModules =
-          []
+          [
+            inputs.disko.nixosModules.disko
+            inputs.impermanence.nixosModules.impermanence
+            inputs.lanzaboote.nixosModules.lanzaboote
+          ]
           ++ commonModules;
       };
       nixtop = mylib.nixos.mkNixosConfigWithHomeManagerModule {

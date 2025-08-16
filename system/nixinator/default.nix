@@ -1,4 +1,5 @@
 {
+  lib,
   mylib,
   pkgs,
   username,
@@ -14,6 +15,11 @@
   ];
 
   modules = {
+    bootloader = {
+      # Secure boot
+      loader = "lanzaboote";
+    };
+
     impermanence.enable = true;
 
     network = {
