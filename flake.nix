@@ -165,6 +165,7 @@
     # HM modules are passed through home/modules/default.nix instead.
     commonModules = [
       inputs.sops-nix.nixosModules.sops
+      inputs.lanzaboote.nixosModules.lanzaboote
     ];
   in {
     # Local shell for NixFlake directory
@@ -193,7 +194,6 @@
           [
             inputs.disko.nixosModules.disko
             inputs.impermanence.nixosModules.impermanence
-            inputs.lanzaboote.nixosModules.lanzaboote
           ]
           ++ commonModules;
       };
