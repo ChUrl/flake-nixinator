@@ -49,7 +49,7 @@ in {
             enable_config_hot_reload: true,
             status_update_interval_ms: 1000,
             rewind_to_start_sec: 30,
-            lyrics_dir: "${config.home.homeDirectory}/Music/.lyrics",
+            lyrics_dir: "${config.home.homeDirectory}/Music",
 
             // Keep this on false, otherwise queue changes will be applied to the current playlist
             reflect_changes_to_playlist: false,
