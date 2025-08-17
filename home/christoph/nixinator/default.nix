@@ -126,11 +126,11 @@
 
         # Unity Stuff
         # TODO: Unity module
-        unityhub
-        rider-unity
-        dotnetCore
-        mono
-        steam-run-free # nix-alien doesn't seem to run unity apps, this does...
+        # unityhub
+        # rider-unity
+        # dotnetCore
+        # mono
+        # steam-run-free # nix-alien doesn't seem to run unity apps, this does...
 
         (blender.override {cudaSupport = true;})
         godot_4
@@ -138,28 +138,29 @@
         kdePackages.kdenlive
         krita
         makemkv
+        lrcget
         msty
 
         steam-devices-udev-rules
       ];
 
       file = lib.mkMerge [
-        {
-          ".local/share/applications/jetbrains-rider.desktop".source = let
-            desktopFile = pkgs.makeDesktopItem {
-              name = "jetbrains-rider";
-              desktopName = "Rider";
-              exec = "\"${rider-unity}/bin/rider\"";
-              icon = "rider";
-              type = "Application";
-              # Don't show desktop icon in search or run launcher
-              extraConfig.NoDisplay = "true";
-            };
-          in "${desktopFile}/share/applications/jetbrains-rider.desktop";
-
-          ".var/app/com.valvesoftware.Steam/config/MangoHud/MangoHud.conf".source =
-            ../../../config/mangohud/MangoHud.conf;
-        }
+        # {
+        #   ".local/share/applications/jetbrains-rider.desktop".source = let
+        #     desktopFile = pkgs.makeDesktopItem {
+        #       name = "jetbrains-rider";
+        #       desktopName = "Rider";
+        #       exec = "\"${rider-unity}/bin/rider\"";
+        #       icon = "rider";
+        #       type = "Application";
+        #       # Don't show desktop icon in search or run launcher
+        #       extraConfig.NoDisplay = "true";
+        #     };
+        #   in "${desktopFile}/share/applications/jetbrains-rider.desktop";
+        #
+        #   ".var/app/com.valvesoftware.Steam/config/MangoHud/MangoHud.conf".source =
+        #     ../../../config/mangohud/MangoHud.conf;
+        # }
         (lib.optionalAttrs (mylib.modules.contains config.home.packages pkgs.makemkv) {
           ".MakeMKV/settings.conf".source =
             config.lib.file.mkOutOfStoreSymlink
