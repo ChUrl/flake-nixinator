@@ -242,11 +242,11 @@ in {
               catppuccin-mocha-mauve
               # catppuccin-web-file-icons
               clearurls
-              cookie-autodelete
+              # cookie-autodelete
               dark-background-light-text
               display-_anchors # Easier linking to specific website parts
               don-t-fuck-with-paste
-              enhancer-for-youtube
+              # enhancer-for-youtube # Discontinued, use tweaks-for-youtube
               fastforwardteam # skip URL shorteners
               # faststream # replace video players with a faster one
               frankerfacez # twitch emotes
@@ -254,11 +254,11 @@ in {
               keepassxc-browser
               localcdn
               lovely-forks # Display notable forks on GitHub repos
-              move-unloaded-tabs-for-tst # move tst tabs without them becoming active
+              # move-unloaded-tabs-for-tst # move tst tabs without them becoming active
               native-mathml # native MathML instead of MathJax/MediaWiki
               no-pdf-download # open pdf in browser without downloading
               open-in-freedium
-              # plasma-integration # TODO: Only when Plasma is used
+              # plasma-integration
               privacy-badger
               privacy-settings
               protondb-for-steam
@@ -274,11 +274,12 @@ in {
               # sourcegraph # Code intelligence for GitHub/GitLap for 20+ languages
               sponsorblock
               steam-database
-              tab-session-manager
+              # tab-session-manager
               # to-deepl
               transparent-standalone-image
-              tree-style-tab
-              tst-fade-old-tabs
+              # tree-style-tab
+              # tst-fade-old-tabs
+              tweaks-for-youtube
               twitch-auto-points
               ublacklist
               ublock-origin
