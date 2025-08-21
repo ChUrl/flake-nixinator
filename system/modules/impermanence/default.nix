@@ -105,7 +105,7 @@ in {
             (mkUDir "Pictures" m755)
             (mkUDir "Projects" m755)
             (mkUDir "Public" m755)
-            (mkUDir "Unity" m755)
+            # (mkUDir "Unity" m755)
             (mkUDir "Videos" m755)
 
             # Secrets
@@ -114,15 +114,15 @@ in {
             (mkUDir ".ssh" m755) # m644
 
             # The shit some applications add to ~/ without asking
-            (mkUDir ".android" m755) # Unity
-            (mkUDir ".gradle" m755) # Unity
-            (mkUDir ".java" m755) # Unity/Rider
+            # (mkUDir ".android" m755) # Unity
+            # (mkUDir ".gradle" m755) # Unity
+            # (mkUDir ".java" m755) # Unity/Rider
             (mkUDir ".mozilla/firefox" m755) # TODO: Remove this someday
             (mkUDir ".mozilla/native-messaging-hosts" m755)
             (mkUDir ".nix-package-search" m755)
-            (mkUDir ".nv" m755) # Unity
+            # (mkUDir ".nv" m755) # Unity
             (mkUDir ".ollama" m755)
-            (mkUDir ".plastic4" m755) # Unity
+            # (mkUDir ".plastic4" m755) # Unity
             (mkUDir ".var/app" m755)
             (mkUDir ".vim/undo" m755)
             (mkUDir ".zotero" m755)
@@ -134,14 +134,14 @@ in {
             (mkUDir ".cache/nvim" m755)
 
             # Config
-            (mkUDir ".config/.android" m755) # Unity
+            # (mkUDir ".config/.android" m755) # Unity
             (mkUDir ".config/beets" m755)
             (mkUDir ".config/blender" m755)
             (mkUDir ".config/chromium" m755) # TODO: Remove this someday
             (mkUDir ".config/Ferdium" m755)
             (mkUDir ".config/fish/completions" m755)
             (mkUDir ".config/impermanence" m755)
-            (mkUDir ".config/JetBrains" m755) # Unity/Rider
+            (mkUDir ".config/JetBrains" m755)
             (mkUDir ".config/kdeconnect" m755)
             (mkUDir ".config/keepassxc" m755)
             (mkUDir ".config/Msty" m755)
@@ -149,11 +149,11 @@ in {
             (mkUDir ".config/obsidian" m755)
             (mkUDir ".config/obs-studio" m755)
             (mkUDir ".config/Signal" m755)
-            (mkUDir ".config/singularitygroup-hotreload" m755) # Unity
+            # (mkUDir ".config/singularitygroup-hotreload" m755) # Unity
             (mkUDir ".config/tidal-hifi" m755)
             (mkUDir ".config/tidal_dl_ng" m755)
-            (mkUDir ".config/unity3d" m755) # Unity
-            (mkUDir ".config/unityhub" m755) # Unity
+            # (mkUDir ".config/unity3d" m755) # Unity
+            # (mkUDir ".config/unityhub" m755) # Unity
             (mkUDir ".config/vlc" m755)
             (mkUDir ".config/Zeal" m755)
 
@@ -172,7 +172,7 @@ in {
             (mkUDir ".local/share/nvim" m755)
             (mkUDir ".local/share/qutebrowser" m755)
             (mkUDir ".local/share/systemd" m755)
-            (mkUDir ".local/share/unity3d" m755) # Unity
+            # (mkUDir ".local/share/unity3d" m755) # Unity
             (mkUDir ".local/share/zoxide" m755)
 
             # State
