@@ -205,16 +205,15 @@
 
       flatpak = {
         packages = [
-          "com.valvesoftware.Steam"
-          "com.valvesoftware.Steam.Utility.steamtinkerlaunch"
-          "net.davidotek.pupgui2"
-
-          "org.freedesktop.Platform.VulkanLayer.gamescope/x86_64/24.08"
-          "org.freedesktop.Platform.VulkanLayer.MangoHud/x86_64/24.08"
+          # "com.valvesoftware.Steam"
+          # "com.valvesoftware.Steam.Utility.steamtinkerlaunch"
+          # "net.davidotek.pupgui2"
+          # "org.freedesktop.Platform.VulkanLayer.gamescope/x86_64/24.08"
+          # "org.freedesktop.Platform.VulkanLayer.MangoHud/x86_64/24.08"
 
           "org.prismlauncher.PrismLauncher"
           "com.usebottles.bottles"
-          "io.github.lawstorant.boxflat"
+          # "io.github.lawstorant.boxflat"
 
           # "com.unity.UnityHub"
         ];
