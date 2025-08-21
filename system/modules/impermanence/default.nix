@@ -69,9 +69,12 @@ in {
           # https://github.com/nix-community/impermanence/issues/253
           (mkRDir "/usr/systemd-placeholder" m755)
 
+          (mkRDir "/var/cache/restic-backups-synology" m755)
+
           (mkRDir "/var/db/sudo" m711)
 
           (mkRDir "/var/lib/bluetooth" m755) # m700
+          (mkRDir "/var/lib/btrfs" m755)
           (mkRDir "/var/lib/containers" m755)
           (mkRDir "/var/lib/flatpak" m755)
           (mkRDir "/var/lib/libvirt" m755)
@@ -162,7 +165,9 @@ in {
             (mkUDir ".local/share/JetBrains" m755) # Unity
             (mkUDir ".local/share/hyprland" m755)
             (mkUDir ".local/share/keyrings" m755) # m700
+            (mkUDir ".local/share/LRCGET" m755)
             (mkUDir ".local/share/mime" m755)
+            (mkUDir ".local/share/net.lrclib.lrcget" m755)
             (mkUDir ".local/share/nix" m755)
             (mkUDir ".local/share/nvim" m755)
             (mkUDir ".local/share/qutebrowser" m755)
