@@ -20,6 +20,7 @@
     ../services/heidi.nix
     ../services/formula10.nix
     ../services/formula11.nix
+    ../services/statespaces.nix
 
     # General services
     ../services/authelia.nix
