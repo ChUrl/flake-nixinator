@@ -14,7 +14,7 @@ if g.neovide then
 	g.neovide_padding_bottom = 0
 	g.neovide_padding_right = 0
 	g.neovide_padding_left = 0
-	g.neovide_refresh_rate = 144
+	g.neovide_refresh_rate = 165
 	g.neovide_floating_corner_radius = 0.0
 	-- g.neovide_theme = "light"
 

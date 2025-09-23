@@ -31,12 +31,12 @@ in {
         # TODO: To module option
         # TODO: This should contain battery etc. for laptop
         "bar.layouts" = {
-          "HDMI-A-1" = {
+          "DP-1" = {
             "left" = ["workspaces" "windowtitle"];
             "middle" = ["media"]; # "cava"
             "right" = ["volume" "network" "cpu" "ram" "storage" "clock" "systray" "notifications"]; # "bluetooth"
           };
-          "DP-1" = {
+          "DP-2" = {
             "left" = ["workspaces" "windowtitle"];
             "middle" = ["media"]; # "cava"
             "right" = ["volume" "clock" "notifications"];

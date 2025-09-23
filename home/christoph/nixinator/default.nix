@@ -28,16 +28,16 @@
         };
 
         monitors = {
-          "HDMI-A-1" = {
-            width = 2560;
+          "DP-1" = {
+            width = 3440;
             height = 1440;
-            rate = 144;
+            rate = 165;
             x = 1920;
             y = 0;
             scale = 1;
           };
 
-          "DP-1" = {
+          "DP-2" = {
             width = 1920;
             height = 1080;
             rate = 60;
@@ -48,8 +48,8 @@
         };
 
         workspaces = {
-          "HDMI-A-1" = [1 2 3 4 5 6 7 8 9];
-          "DP-1" = [10];
+          "DP-1" = [1 2 3 4 5 6 7 8 9];
+          "DP-2" = [10];
         };
 
         autostart = {
@@ -65,7 +65,7 @@
         ];
       };
 
-      waybar.monitor = "HDMI-A-1";
+      waybar.monitor = "DP-1";
     };
 
     home = let
