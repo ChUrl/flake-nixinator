@@ -22,8 +22,8 @@ in {
           # fcitx5-configtool
           catppuccin-fcitx5
 
-          libsForQt5.fcitx5-qt # QT5
-          libsForQt5.fcitx5-chinese-addons
+          kdePackages.fcitx5-qt # QT5
+          kdePackages.fcitx5-chinese-addons
 
           qt6Packages.fcitx5-qt # QT6
           qt6Packages.fcitx5-chinese-addons

@@ -15,7 +15,7 @@ in {
   config = lib.mkIf rofi.enable {
     programs.rofi = {
       enable = true;
-      package = pkgs.rofi-wayland;
+      package = pkgs.rofi;
       terminal = "kitty";
       font = "${color.font} 14";
       location = "center";

@@ -365,7 +365,7 @@
           thunderbird # TODO: Email module
           obsidian
           zotero
-          zeal-qt6 # docs browser
+          zeal # docs browser
           helvum
           vlc
           audacity
@@ -376,7 +376,7 @@
           picard
 
           # Office
-          wacomtablet # For xournalpp/krita
+          kdePackages.wacomtablet # For xournalpp/krita
           xournalpp # Write with a pen, like old people
           hunspell # I cna't type
           hunspellDicts.en_US
@@ -666,9 +666,21 @@
 
     ssh = {
       enable = true;
-      compression = true;
+      enableDefaultConfig = false;
 
       matchBlocks = {
+        "*" = {
+          forwardAgent = false;
+          addKeysToAgent = "no";
+          compression = true;
+          serverAliveInterval = 0;
+          serverAliveCountMax = 3;
+          hashKnownHosts = false;
+          userKnownHostsFile = "~/.ssh/known_hosts";
+          controlMaster = "no";
+          controlPath = "~/.ssh/master-%r@%n:%p";
+          controlPersist = "no";
+        };
         "nixinator" = {
           user = "christoph";
           hostname = "192.168.86.50";
