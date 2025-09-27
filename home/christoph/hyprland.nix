@@ -8,7 +8,7 @@
   bars.enable = false;
   dynamicCursor.enable = false;
   trails.enable = true;
-  hyprspace.enable = true;
+  hyprspace.enable = false; # Always broken
 
   keybindings = {
     main-mod = "SUPER";
