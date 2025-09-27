@@ -146,9 +146,9 @@
     new_status = "master";
   };
 
-  gestures = {
-    workspace_swipe = false;
-  };
+  gesture = [
+    "3, horizontal, workspace" # 3 Fingers, horizontal, workspace swipe
+  ];
 
   misc = {
     # Say no to the anime girl
