@@ -10,6 +10,7 @@ _: {
   formatexpr = "v:lua.require('conform').formatexpr()";
   laststatus = 3; # Global statusline
   winblend = 30; # Floating popup transparency
+  winborder = "rounded";
   sessionoptions = ["buffers" "curdir" "folds" "globals" "help" "skiprtp" "tabpages" "winsize"]; # What should be saved when creating a session
   showtabline = 2; # Disable tabline with 0, show for > 1 with 1, always show with 2
   conceallevel = 2;

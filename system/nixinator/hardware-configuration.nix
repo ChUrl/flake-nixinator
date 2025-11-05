@@ -131,7 +131,7 @@
 
       # https://nixos.wiki/wiki/Accelerated_Video_Playback
       extraPackages = with pkgs; [
-        vaapiVdpau # Taken from wiki, this is also part of nixos-hardware/common/gpu/nvidia
+        libva-vdpau-driver # Taken from wiki, this is also part of nixos-hardware/common/gpu/nvidia
         libvdpau-va-gl # Taken from wiki
 
         # https://discourse.nixos.org/t/nvidia-open-breaks-hardware-acceleration/58770/3

@@ -32,7 +32,7 @@
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
 
     # Secure boot
-    lanzaboote.url = "github:nix-community/lanzaboote/v0.4.2";
+    lanzaboote.url = "github:nix-community/lanzaboote/v0.4.3";
     lanzaboote.inputs.nixpkgs.follows = "nixpkgs";
 
     # Nix User Repository (e.g. Firefox addons)

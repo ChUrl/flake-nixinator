@@ -834,19 +834,19 @@ _: let
     {
       mode = "n";
       key = "<leader>tt";
-      action = "<cmd>Trouble diagnostics toggle focus=false win.position=bottom<cr>";
+      action = "<cmd>Trouble diagnostics toggle focus=false win.position=left<cr>";
       options.desc = "Trouble Diagnostics";
     }
     {
       mode = "n";
       key = "<leader>tD";
-      action = "<cmd>Trouble todo toggle focus=false win.position=bottom<cr>";
+      action = "<cmd>Trouble todo toggle focus=false win.position=left<cr>";
       options.desc = "Toggle TODOs";
     }
     {
       mode = "n";
       key = "<leader>ts";
-      action = "<cmd>Trouble symbols toggle focus=false win.position=right<cr>";
+      action = "<cmd>Trouble symbols toggle focus=false win.position=left<cr>";
       options.desc = "Trouble Symbols";
     }
     {

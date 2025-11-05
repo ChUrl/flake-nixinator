@@ -61,7 +61,7 @@ in {
         wl-clipboard
         clipman # Clipboard manager (wl-paste)
         libnotify
-        inotifyTools # Includes inotifywait
+        inotify-tools # Includes inotifywait
 
         ncpamixer # Audio control
         slurp # Region selector for screensharing

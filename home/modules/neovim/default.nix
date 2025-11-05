@@ -820,6 +820,8 @@ in {
           };
 
           # NOTE: This entire thing is rough, I should rewrite...
+          # TODO: Need to rewrite this once lspconfig 3.0 comes around
+          # TODO: LSP servers don't autostart anymore...
           lspconfig = {
             name = "lspconfig";
             pkg = pkgs.vimPlugins.nvim-lspconfig;
@@ -837,14 +839,17 @@ in {
                   extraOptions = {
                     root_dir.__raw = ''
                       function(fname)
-                        return require("lspconfig.util").root_pattern(
+                        -- return require("lspconfig.util").root_pattern(
+                        return vim.lsp.config.util.root_pattern(
                           "Makefile",
                           "CMakeLists.txt",
                           ".clang-format",
                           ".clang-tidy"
-                        )(fname) or require("lspconfig.util").root_pattern(
+                        -- )(fname) or require("lspconfig.util").root_pattern(
+                        )(fname) or vim.lsp.config.util.root_pattern(
                           "compile_commands.json"
-                        )(fname) or require("lspconfig.util").find_git_ancestor(fname)
+                        -- )(fname) or require("lspconfig.util").find_git_ancestor(fname)
+                        )(fname) or vim.lsp.config.util.find_git_ancestor(fname)
                       end
                     '';
 
@@ -941,9 +946,6 @@ in {
               ];
             in ''
               function(_, opts)
-                -- Make LspInfo window border rounded
-                require("lspconfig.ui.windows").default_options.border = "rounded"
-
                 local __lspOnAttach = function(client, bufnr)
 
                   -- NOTE: The ltex-extra package needs to be loaded in ltex's onAttach.
@@ -987,7 +989,8 @@ in {
 
                 for i, server in ipairs(${servers}) do
                   if type(server) == "string" then
-                    require("lspconfig")[server].setup(__setup)
+                    -- require("lspconfig")[server].setup(__setup)
+                    vim.lsp.config(server, __setup)
                   else
                     local options = server.extraOptions
 
@@ -997,7 +1000,8 @@ in {
                       options = vim.tbl_extend("keep", options, __setup)
                     end
 
-                    require("lspconfig")[server.name].setup(options)
+                    -- require("lspconfig")[server.name].setup(options)
+                    vim.lsp.config(server.name, options)
                   end
                 end
               end

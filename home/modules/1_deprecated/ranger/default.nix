@@ -33,7 +33,7 @@ in {
           python310Packages.pillow
           ffmpegthumbnailer
           imagemagick
-          poppler_utils
+          poppler-utils
         ])
       ];
 

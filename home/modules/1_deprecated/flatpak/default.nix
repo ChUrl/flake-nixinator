@@ -81,7 +81,7 @@ with mylib.modules;
             cp -f ${pkgs.lxgw-wenkai}/share/fonts/truetype/LXGWWenKaiMono-Regular.ttf ${config.home.homeDirectory}/.local/share/fonts/
             cp -f ${pkgs.nerdfonts.override {fonts = ["JetBrainsMono"];}}/share/fonts/truetype/NerdFonts/JetBrainsMonoNerdFontMono-Regular.ttf ${config.home.homeDirectory}/.local/share/fonts/
             cp -f ${pkgs.noto-fonts}/share/fonts/noto/NotoSans[wdth,wght].ttf ${config.home.homeDirectory}/.local/share/fonts/
-            cp -f ${pkgs.noto-fonts-emoji}/share/fonts/noto/NotoColorEmoji.ttf ${config.home.homeDirectory}/.local/share/fonts/
+            cp -f ${pkgs.noto-fonts-color-emoji}/share/fonts/noto/NotoColorEmoji.ttf ${config.home.homeDirectory}/.local/share/fonts/
           '';
         })
         (mkElse cfg.fontFix {

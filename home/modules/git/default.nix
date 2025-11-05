@@ -11,30 +11,29 @@ in {
   options.modules.git = import ./options.nix {inherit lib mylib;};
 
   config = lib.mkIf git.enable {
-    programs.git = {
+    programs.diff-so-fancy = {
       enable = true;
+      enableGitIntegration = true;
 
-      # userEmail = "christoph.urlacher@protonmail.com";
-      # userName = "Christoph Urlacher";
-
-      userEmail = git.userEmail;
-      userName = git.userName;
-
-      signing = {
-        signByDefault = git.signCommits;
-        format = "ssh";
-        key = "~/.ssh/id_ed25519.pub";
-      };
-
-      lfs.enable = true;
-      diff-so-fancy = {
-        enable = true;
+      settings = {
         changeHunkIndicators = true;
         markEmptyLines = false;
         stripLeadingSymbols = true;
       };
+    };
 
-      extraConfig = {
+    programs.git = {
+      enable = true;
+
+      # settings.user.email = "christoph.urlacher@protonmail.com";
+      # settings.user.name = "Christoph Urlacher";
+
+      settings = {
+        user = {
+          email = git.userEmail;
+          name = git.userName;
+        };
+
         core = {
           compression = 9;
           # whitespace = "error";
@@ -111,6 +110,14 @@ in {
           };
         };
       };
+
+      signing = {
+        signByDefault = git.signCommits;
+        format = "ssh";
+        key = "~/.ssh/id_ed25519.pub";
+      };
+
+      lfs.enable = true;
     };
   };
 }

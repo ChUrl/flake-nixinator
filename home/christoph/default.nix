@@ -291,7 +291,7 @@
 
           # Hardware/Software info
           pciutils # lspci
-          glxinfo # OpenGL info
+          mesa-demos # OpenGL info
           wayland-utils # wayland-info
           clinfo # OpenCL info
           vulkan-tools # vulkaninfo
@@ -312,7 +312,7 @@
           spotdl
 
           # Document utils
-          poppler_utils # pdfunite
+          poppler-utils # pdfunite
           graphviz # generate graphs from code
           d2 # generate diagrams from code
           plantuml # generate diagrams
@@ -334,8 +334,6 @@
           cifs-utils # Mount samba shares
           nfs-utils # Mount NFS shares
           sshfs # Mount remote directories via SSH
-          protonvpn-cli_2
-          protonmail-bridge # TODO: Enable on startup, email module
 
           # Run unpatched binaries on NixOS
           # Sets NIX_LD_LIBRARY_PATH and NIX_LD variables for nix-ld.
@@ -808,21 +806,22 @@
 
   systemd = {
     user = {
-      tmpfiles.rules = lib.mkMerge [
-        []
-        (lib.mkIf (mylib.modules.contains
-          config.services.flatpak.packages
-          "com.discordapp.Discord") [
-          # Fix Discord rich presence for Flatpak
-          "L %t/discord-ipc-0 - - - - app/com.discordapp.Discord/discord-ipc-0"
-        ])
-        (lib.mkIf (mylib.modules.contains
-          config.services.flatpak.packages
-          "com.discordapp.DiscordCanary") [
-          # Fix Discord rich presence for Flatpak
-          "L %t/discord-ipc-0 - - - - app/com.discordapp.DiscordCanary/discord-ipc-0"
-        ])
-      ];
+      # TODO: This has been deprecated and replaced with a bad alternative in a stupid HM update
+      # tmpfiles.rules = lib.mkMerge [
+      #   []
+      #   (lib.mkIf (mylib.modules.contains
+      #     config.services.flatpak.packages
+      #     "com.discordapp.Discord") [
+      #     # Fix Discord rich presence for Flatpak
+      #     "L %t/discord-ipc-0 - - - - app/com.discordapp.Discord/discord-ipc-0"
+      #   ])
+      #   (lib.mkIf (mylib.modules.contains
+      #     config.services.flatpak.packages
+      #     "com.discordapp.DiscordCanary") [
+      #     # Fix Discord rich presence for Flatpak
+      #     "L %t/discord-ipc-0 - - - - app/com.discordapp.DiscordCanary/discord-ipc-0"
+      #   ])
+      # ];
 
       # Nicely reload system units when changing configs
       startServices = "sd-switch";
