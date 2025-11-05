@@ -6,82 +6,95 @@
   pkgs,
 }: let
   #
-  # Dependencies
+  # Custom Dependencies
   #
-  requests_2_32_4 = pkgs.python3Packages.requests.overridePythonAttrs (old: {
-    version = "2.32.4";
-    src = pkgs.python3Packages.fetchPypi {
-      inherit (old) pname;
-      version = "2.32.4";
-      sha256 = "sha256-J9AxZoLIopg00yZIIAJLYqNpQgg9Usry8UwFkTNtNCI=";
-    };
-    patches =
-      builtins.filter (
-        p: !pkgs.lib.strings.hasInfix "CVE-2024-47081" (toString p)
-      )
-      old.patches;
+  pythonPkgs = pkgs.python313Packages.overrideScope (self: super: {
+    typer = super.typer.overridePythonAttrs (old: {
+      version = "0.20.0";
+      src = super.fetchPypi {
+        inherit (old) pname;
+        version = "0.20.0";
+        sha256 = "sha256-Gq9klAMXk+SHb7C6z6apErVRz0PB5jyADfixqGZyDDc=";
+      };
+    });
+
+    rich = super.rich.overridePythonAttrs (old: {
+      version = "14.2.0";
+      src = super.fetchPypi {
+        inherit (old) pname;
+        version = "14.2.0";
+        sha256 = "sha256-c/9Qx8DBx3yCQweSg/Tts3bw9kQkM67LjOfm0LktH+Q=";
+      };
+      doCheck = false;
+    });
   });
 
-  pycryptodome_3_23_0 = pkgs.python3Packages.pycryptodome.overridePythonAttrs (old: {
-    version = "3.23.0";
-    src = pkgs.python3Packages.fetchPypi {
-      inherit (old) pname;
-      version = "3.23.0";
-      sha256 = "sha256-RHcAplcYLWAzi6sJ/bJ1GPiFauzYCuTGvd22f/XaRO8=";
-    };
-  });
+  # typer_0_20_0 = pkgs.python313Packages.typer.overridePythonAttrs (old: {
+  #   version = "0.20.0";
+  #   src = pkgs.python313Packages.fetchPypi {
+  #     inherit (old) pname;
+  #     version = "0.20.0";
+  #     sha256 = "sha256-Gq9klAMXk+SHb7C6z6apErVRz0PB5jyADfixqGZyDDc=";
+  #   };
+  # });
+  #
+  # rich_14_2_0 = pkgs.python313Packages.rich.overridePythonAttrs (old: {
+  #   version = "14.2.0";
+  #   src = pkgs.python313Packages.fetchPypi {
+  #     inherit (old) pname;
+  #     version = "14.2.0";
+  #     sha256 = "sha256-c/9Qx8DBx3yCQweSg/Tts3bw9kQkM67LjOfm0LktH+Q=";
+  #   };
+  #   doCheck = false;
+  # });
 
-  pathvalidate_3_3_1 = pkgs.python3Packages.pathvalidate.overridePythonAttrs (old: {
-    version = "3.3.1";
-    src = pkgs.python3Packages.fetchPypi {
-      inherit (old) pname;
-      version = "3.3.1";
-      sha256 = "sha256-sYwHISv+rWJDRbuOHWFBzc8Vo5c2mU6guUA1rSsboXc=";
-    };
-  });
+  # rich_14_2_0 = pkgs.python313Packages.rich.overridePythonAttrs (old: {
+  #   version = "14.2.0";
+  #   src = pkgs.fetchFromGitHub {
+  #     owner = "Textualize";
+  #     repo = "rich";
+  #     tag = "v14.2.0";
+  #     hash = "sha256-oQbxRbZnVr/Ln+i/hpBw5FlpUp3gcp/7xsxi6onPkn8=";
+  #   };
+  # });
 
-  typer_0_16_0 = pkgs.python3Packages.typer.overridePythonAttrs (old: {
-    version = "0.16.0";
-    src = pkgs.python3Packages.fetchPypi {
-      inherit (old) pname;
-      version = "0.16.0";
-      sha256 = "sha256-rzd/+u4dvjeulEDLTo8RaG6lzk6brgG4SufGO4fx3Ts=";
-    };
-  });
-
-  tidalDlNg = pkgs.python3Packages.buildPythonApplication rec {
+  tidalDlNg = pythonPkgs.buildPythonApplication rec {
     pname = "tidal-dl-ng";
-    version = "0.26.2";
+    version = "0.31.3";
     format = "pyproject";
 
     src = pkgs.fetchFromGitHub {
       owner = "exislow";
       repo = "tidal-dl-ng";
       rev = "v${version}";
-      sha256 = "sha256-9C7IpLKeR08/nMbePltwGrzIgXfdaVfyOeFQnfCwMKg=";
+      sha256 = "sha256-PUT0anx1yivgXwW21jah7Rv1/BabOT+KPoW446NFNyg=";
     };
 
     doCheck = false;
     catchConflicts = false;
 
-    nativeBuildInputs = with pkgs.python3Packages; [poetry-core setuptools];
+    nativeBuildInputs = with pythonPkgs; [poetry-core setuptools];
 
-    propagatedBuildInputs = with pkgs.python3Packages; [
-      requests_2_32_4
-      coloredlogs
-      dataclasses-json
-      m3u8
-      mpegdash
+    # https://github.com/exislow/tidal-dl-ng/blob/master/pyproject.toml
+    propagatedBuildInputs = with pythonPkgs; [
+      # Nixpkgs
+      requests
       mutagen
-      pathvalidate_3_3_1
-      pycryptodome_3_23_0
-      python-ffmpeg
-      rich
-      tidalapi
-      toml
-      typer_0_16_0
+      dataclasses-json
+      pathvalidate
+      m3u8
+      coloredlogs
       pyside6
       pyqtdarktheme
+      toml
+      pycryptodome
+      tidalapi
+      python-ffmpeg
+      ansi2html
+
+      # Custom Deps
+      typer
+      rich
     ];
 
     # pythonOutputDistPhase = ''
@@ -118,7 +131,7 @@
 
   tidal-dl-ng-gui-desktopfile = pkgs.stdenv.mkDerivation {
     pname = "tdng";
-    version = "0.26.2";
+    version = "0.31.3";
     dontUnpack = true;
 
     nativeBuildInputs = [pkgs.makeWrapper];
