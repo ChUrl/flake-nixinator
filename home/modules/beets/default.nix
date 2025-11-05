@@ -51,6 +51,7 @@ in {
           "fetchart" # pickup local cover art or search online
           "fish" # beet fish generates ~/.config/fish/completions file
           "lyrics" # fetch song lyrics
+          "musicbrainz" # auto tagger data source
           "replaygain" # write replaygain tags for automatic loudness adjustments
         ];
 
