@@ -5,7 +5,7 @@
   ...
 }: let
   # Match this with the portainer-ce version
-  portainerVersion = "2.31.3";
+  portainerVersion = "2.33.3";
 in {
   # Use the agent to connect clients to a main portainer instance
   virtualisation.oci-containers.containers = {

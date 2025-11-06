@@ -5,7 +5,7 @@
   ...
 }: let
   # Match this with the portainer agent version
-  portainerVersion = "2.31.3";
+  portainerVersion = "2.33.3";
 in {
   virtualisation.oci-containers.containers = {
     portainer = {
