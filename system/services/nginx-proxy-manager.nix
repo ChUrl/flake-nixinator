@@ -4,7 +4,7 @@
   pkgs,
   ...
 }: let
-  nginxVersion = "2.12.6";
+  nginxVersion = "2.13.1";
 in {
   virtualisation.oci-containers.containers = {
     nginx-proxy-manager = {
