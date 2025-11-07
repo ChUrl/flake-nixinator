@@ -46,20 +46,21 @@
 
     # SG Exos Mirror Shares
 
-    "/media/Movie" = {
-      device = "192.168.86.20:/mnt/SG Exos Mirror 18TB/Movie";
-      fsType = "nfs";
-      options = ["defaults" "rw" "relatime" "_netdev" "bg" "soft"];
-    };
-
-    "/media/Show" = {
-      device = "192.168.86.20:/mnt/SG Exos Mirror 18TB/Show";
-      fsType = "nfs";
-      options = ["defaults" "rw" "relatime" "_netdev" "bg" "soft"];
-    };
+    # TODO: New HDDs
+    # "/media/Movie" = {
+    #   device = "192.168.86.20:/mnt/SG Exos Mirror 18TB/Movie";
+    #   fsType = "nfs";
+    #   options = ["defaults" "rw" "relatime" "_netdev" "bg" "soft"];
+    # };
+    # "/media/Show" = {
+    #   device = "192.168.86.20:/mnt/SG Exos Mirror 18TB/Show";
+    #   fsType = "nfs";
+    #   options = ["defaults" "rw" "relatime" "_netdev" "bg" "soft"];
+    # };
 
     "/media/TV-Music" = {
-      device = "192.168.86.20:/mnt/SG Exos Mirror 18TB/Music";
+      # device = "192.168.86.20:/mnt/SG Exos Mirror 18TB/Music";
+      device = "192.168.86.20:/mnt/Music/Music";
       fsType = "nfs";
       options = ["defaults" "rw" "relatime" "_netdev" "bg" "soft"];
     };
