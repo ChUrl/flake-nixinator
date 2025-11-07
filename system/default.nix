@@ -143,7 +143,7 @@ with mylib.networking; {
 
   # Bootloader/Kernel stuff
   boot = {
-    kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
+    kernelPackages = lib.mkDefault pkgs.linuxPackages;
     kernelParams = ["mitigations=off"]; # I don't care
 
     # Make /tmp volatile

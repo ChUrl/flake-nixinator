@@ -35,6 +35,10 @@
       "vfat"
     ];
 
+    supportedFilesystems = [
+      # "zfs" # Probably requires LTS kernel + networking.hostId
+    ];
+
     kernelModules = [
       "kvm-amd"
       "sg" # Blu-Ray drive
@@ -60,6 +64,9 @@
     ];
   };
 
+  # Required for supportedFilesystems = ["zfs"];, so pools don't get imported on the wrong machine
+  # networking.hostId = "611e6afb";
+
   fileSystems = {
     # NOTE: Some filesystems are managed by disko (see ./disks.nix)
 
@@ -82,23 +89,22 @@
     # Using  NFS over TCP or increasing the value of the retrans option may mitigate
     # some of the risks of using the soft option.
 
-    "/home/${username}/Movies" = {
-      device = "192.168.86.20:/mnt/SG Exos Mirror 18TB/Movie";
-      fsType = "nfs";
-      options = ["defaults" "rw" "noatime" "_netdev" "bg" "soft"];
-    };
-
-    "/home/${username}/Shows" = {
-      device = "192.168.86.20:/mnt/SG Exos Mirror 18TB/Show";
-      fsType = "nfs";
-      options = ["defaults" "rw" "noatime" "_netdev" "bg" "soft"];
-    };
-
-    "/home/${username}/Music" = {
-      device = "192.168.86.20:/mnt/SG Exos Mirror 18TB/Music";
-      fsType = "nfs";
-      options = ["defaults" "rw" "noatime" "_netdev" "bg" "soft"];
-    };
+    # TODO: New HDDs
+    # "/home/${username}/Movies" = {
+    #   device = "192.168.86.20:/mnt/SG Exos Mirror 18TB/Movie";
+    #   fsType = "nfs";
+    #   options = ["defaults" "rw" "noatime" "_netdev" "bg" "soft"];
+    # };
+    # "/home/${username}/Shows" = {
+    #   device = "192.168.86.20:/mnt/SG Exos Mirror 18TB/Show";
+    #   fsType = "nfs";
+    #   options = ["defaults" "rw" "noatime" "_netdev" "bg" "soft"];
+    # };
+    # "/home/${username}/Music" = {
+    #   device = "192.168.86.20:/mnt/SG Exos Mirror 18TB/Music";
+    #   fsType = "nfs";
+    #   options = ["defaults" "rw" "noatime" "_netdev" "bg" "soft"];
+    # };
 
     "/home/${username}/Restic" = {
       device = "192.168.86.15:/volume1/NixinatorPersistence";
