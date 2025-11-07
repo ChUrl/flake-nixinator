@@ -50,7 +50,7 @@ in {
           "edit" # edit metadata in text editor
           "fetchart" # pickup local cover art or search online
           "fish" # beet fish generates ~/.config/fish/completions file
-          "lyrics" # fetch song lyrics
+          # "lyrics" # fetch song lyrics
           "musicbrainz" # auto tagger data source
           "replaygain" # write replaygain tags for automatic loudness adjustments
         ];
@@ -60,10 +60,10 @@ in {
           sources = "filesystem coverart itunes amazon albumart"; # sources are queried in this order
         };
 
-        lyrics = {
-          auto = "yes"; # only embeds lyrics into metadata, needed for jellyfin but useless for rmpc
-          synced = "yes"; # prefer synced lyrics if provided
-        };
+        # lyrics = {
+        #   auto = "yes"; # only embeds lyrics into metadata, needed for jellyfin but useless for rmpc
+        #   synced = "yes"; # prefer synced lyrics if provided
+        # };
 
         replaygain = {
           auto = "yes"; # analyze on import automatically
