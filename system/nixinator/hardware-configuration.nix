@@ -100,11 +100,13 @@
     #   fsType = "nfs";
     #   options = ["defaults" "rw" "noatime" "_netdev" "bg" "soft"];
     # };
-    # "/home/${username}/Music" = {
-    #   device = "192.168.86.20:/mnt/SG Exos Mirror 18TB/Music";
-    #   fsType = "nfs";
-    #   options = ["defaults" "rw" "noatime" "_netdev" "bg" "soft"];
-    # };
+
+    "/home/${username}/Music" = {
+      # device = "192.168.86.20:/mnt/SG Exos Mirror 18TB/Music";
+      device = "192.168.86.20:/mnt/Music/Music";
+      fsType = "nfs";
+      options = ["defaults" "rw" "noatime" "_netdev" "bg" "soft"];
+    };
 
     "/home/${username}/Restic" = {
       device = "192.168.86.15:/volume1/NixinatorPersistence";
