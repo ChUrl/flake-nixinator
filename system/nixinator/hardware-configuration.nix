@@ -89,27 +89,30 @@
     # Using  NFS over TCP or increasing the value of the retrans option may mitigate
     # some of the risks of using the soft option.
 
-    # TODO: New HDDs
-    # "/home/${username}/Movies" = {
-    #   device = "192.168.86.20:/mnt/SG Exos Mirror 18TB/Movie";
-    #   fsType = "nfs";
-    #   options = ["defaults" "rw" "noatime" "_netdev" "bg" "soft"];
-    # };
-    # "/home/${username}/Shows" = {
-    #   device = "192.168.86.20:/mnt/SG Exos Mirror 18TB/Show";
-    #   fsType = "nfs";
-    #   options = ["defaults" "rw" "noatime" "_netdev" "bg" "soft"];
-    # };
+    # Synology DS223j
 
-    "/home/${username}/Music" = {
-      # device = "192.168.86.20:/mnt/SG Exos Mirror 18TB/Music";
-      device = "192.168.86.20:/mnt/Music/Music";
+    "/home/${username}/Restic" = {
+      device = "192.168.86.15:/volume1/NixinatorPersistence";
       fsType = "nfs";
       options = ["defaults" "rw" "noatime" "_netdev" "bg" "soft"];
     };
 
-    "/home/${username}/Restic" = {
-      device = "192.168.86.15:/volume1/NixinatorPersistence";
+    # TrueNAS
+
+    "/home/${username}/Movies" = {
+      device = "192.168.86.20:/mnt/Seagate4TB/Movies";
+      fsType = "nfs";
+      options = ["defaults" "rw" "noatime" "_netdev" "bg" "soft"];
+    };
+
+    "/home/${username}/Shows" = {
+      device = "192.168.86.20:/mnt/Seagate4TB/Shows";
+      fsType = "nfs";
+      options = ["defaults" "rw" "noatime" "_netdev" "bg" "soft"];
+    };
+
+    "/home/${username}/Music" = {
+      device = "192.168.86.20:/mnt/Seagate4TB/Music";
       fsType = "nfs";
       options = ["defaults" "rw" "noatime" "_netdev" "bg" "soft"];
     };

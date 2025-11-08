@@ -44,23 +44,22 @@
       options = ["defaults" "rw" "relatime" "_netdev" "bg" "soft"];
     };
 
-    # SG Exos Mirror Shares
+    # TrueNAS
 
-    # TODO: New HDDs
-    # "/media/Movie" = {
-    #   device = "192.168.86.20:/mnt/SG Exos Mirror 18TB/Movie";
-    #   fsType = "nfs";
-    #   options = ["defaults" "rw" "relatime" "_netdev" "bg" "soft"];
-    # };
-    # "/media/Show" = {
-    #   device = "192.168.86.20:/mnt/SG Exos Mirror 18TB/Show";
-    #   fsType = "nfs";
-    #   options = ["defaults" "rw" "relatime" "_netdev" "bg" "soft"];
-    # };
+    "/media/Movie" = {
+      device = "192.168.86.20:/mnt/Seagate4TB/Movies";
+      fsType = "nfs";
+      options = ["defaults" "rw" "relatime" "_netdev" "bg" "soft"];
+    };
+
+    "/media/Show" = {
+      device = "192.168.86.20:/mnt/Seagate4TB/Shows";
+      fsType = "nfs";
+      options = ["defaults" "rw" "relatime" "_netdev" "bg" "soft"];
+    };
 
     "/media/TV-Music" = {
-      # device = "192.168.86.20:/mnt/SG Exos Mirror 18TB/Music";
-      device = "192.168.86.20:/mnt/Music/Music";
+      device = "192.168.86.20:/mnt/Seagate4TB/Music";
       fsType = "nfs";
       options = ["defaults" "rw" "relatime" "_netdev" "bg" "soft"];
     };
