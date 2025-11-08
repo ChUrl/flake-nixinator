@@ -372,6 +372,7 @@
           tidal-hifi
           tidal-dl-ng
           picard
+          handbrake
 
           # Office
           kdePackages.wacomtablet # For xournalpp/krita
@@ -457,6 +458,7 @@
       enableFishIntegration = config.modules.fish.enable;
     };
 
+    # TODO: Module
     fastfetch = {
       enable = true;
 
