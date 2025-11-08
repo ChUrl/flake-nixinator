@@ -24,6 +24,7 @@
 
     # General services
     ../services/authelia.nix
+    ../services/fileflows.nix
     ../services/gitea.nix
     ../services/gitea-runner.nix
     ../services/immich.nix
