@@ -117,6 +117,7 @@ in {
             # (mkUDir ".android" m755) # Unity
             # (mkUDir ".gradle" m755) # Unity
             # (mkUDir ".java" m755) # Unity/Rider
+            (mkUDir ".MakeMKV" m755)
             (mkUDir ".mozilla/firefox" m755) # TODO: Remove this someday
             (mkUDir ".mozilla/native-messaging-hosts" m755)
             (mkUDir ".nix-package-search" m755)
