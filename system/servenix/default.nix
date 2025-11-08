@@ -33,6 +33,7 @@
     ../services/nginx-proxy-manager.nix
     ../services/paperless.nix
     ../services/portainer-agent.nix
+    ../services/tinymediamanager.nix
     ../services/whats-up-docker.nix
   ];
 
