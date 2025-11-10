@@ -36,8 +36,8 @@ in {
       ];
 
       environment = {
-        PUID = "1000";
-        PGID = "1000";
+        PUID = "3000";
+        PGID = "3000";
         TZ = "Europe/Berlin";
       };
 
