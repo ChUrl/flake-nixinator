@@ -34,6 +34,7 @@
     ../services/nginx-proxy-manager.nix
     ../services/paperless.nix
     ../services/portainer-agent.nix
+    ../services/teamspeak.nix
     ../services/tinymediamanager.nix
     ../services/whats-up-docker.nix
   ];
@@ -64,12 +65,18 @@
         53 # DNS
         80 # HTTP
         3000 # Gitea runner needs to reach local gitea instance
+        # 9987 # Teamspeak
+        # 30033 # Teamspeak
+        # 10080 # Teamspeak
       ];
 
       allowedUDPPorts = [
         53 # DNS
         67 # DHCP
         3000 # Gitea runner needs to reach local gitea instance
+        # 9987 # Teamspeak
+        # 30033 # Teamspeak
+        # 10080 # Teamspeak
       ];
     };
 

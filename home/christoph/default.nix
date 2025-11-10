@@ -373,6 +373,7 @@
           tidal-dl-ng
           picard
           handbrake
+          teamspeak6-client
 
           # Office
           kdePackages.wacomtablet # For xournalpp/krita
