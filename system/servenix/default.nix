@@ -61,6 +61,8 @@
         };
       };
 
+      # NOTE: Streams: Ports have to be opened in the VPS firewall + VPS UFW and bound in the VPS Nginx compose file.
+
       allowedTCPPorts = [
         53 # DNS (Adguard Home)
         67 # DHCP

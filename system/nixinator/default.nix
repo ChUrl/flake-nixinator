@@ -12,6 +12,9 @@
     ./disks.nix
 
     ../modules
+
+    # General services
+    ../services/fileflows-node.nix
   ];
 
   modules = {
