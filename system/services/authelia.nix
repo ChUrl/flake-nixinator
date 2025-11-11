@@ -20,9 +20,7 @@ in {
         passwordFile = "${config.sops.secrets.docker-password.path}";
       };
 
-      dependsOn = [
-        # "pihole"
-      ];
+      dependsOn = [];
 
       ports = [
         # "9091:9091"

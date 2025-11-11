@@ -72,7 +72,7 @@ in {
       ];
 
       ports = [
-        "3000:3000"
+        "3000:3000" # Bind for VPS
 
         # NOTE: Set .git/config url to ssh://christoph@gitea.local.chriphost.de:222/christoph/<repo>.git
         "222:222" # Gitea SSH

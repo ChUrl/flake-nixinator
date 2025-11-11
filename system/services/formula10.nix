@@ -14,7 +14,7 @@ in {
       dependsOn = [];
 
       ports = [
-        "55555:5000"
+        "55555:5000" # Bind for VPS
       ];
 
       volumes = [

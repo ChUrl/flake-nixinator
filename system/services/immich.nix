@@ -73,7 +73,7 @@ in {
       ];
 
       ports = [
-        "2283:8080"
+        "2283:8080" # Bind for VPS
       ];
 
       volumes = [

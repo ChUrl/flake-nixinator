@@ -23,6 +23,7 @@ in {
       dependsOn = [];
 
       ports = [
+        # Bind for VPS
         "9987:9987/udp" # Voice port
         "30033:30033" # File transfer
         "10080:10080/tcp" # Web query

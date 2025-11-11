@@ -12,12 +12,10 @@ in {
       image = "gitea.vps.chriphost.de/christoph/pocketbase:${pocketbaseVersion}";
       autoStart = true;
 
-      dependsOn = [
-        # "pihole"
-      ];
+      dependsOn = [];
 
       ports = [
-        "8090:8080"
+        "8090:8080" # Bind for VPS
       ];
 
       volumes = [

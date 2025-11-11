@@ -125,7 +125,7 @@ in {
       ];
 
       ports = [
-        "8000:8000"
+        "8000:8000" # Bind for VPS
       ];
 
       volumes = [
