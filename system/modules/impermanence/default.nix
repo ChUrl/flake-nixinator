@@ -151,6 +151,7 @@ in {
             (mkUDir ".config/obs-studio" m755)
             (mkUDir ".config/Signal" m755)
             # (mkUDir ".config/singularitygroup-hotreload" m755) # Unity
+            (mkUDir ".config/TeamSpeak" m755)
             (mkUDir ".config/tidal-hifi" m755)
             (mkUDir ".config/tidal_dl_ng" m755)
             # (mkUDir ".config/unity3d" m755) # Unity
