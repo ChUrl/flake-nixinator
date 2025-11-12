@@ -355,6 +355,7 @@
           protonmail-bridge-gui
 
           # GUI stuff
+          nautilus # Just in case
           signal-desktop
           anki
           font-manager # Previews fonts, but doesn't set them
