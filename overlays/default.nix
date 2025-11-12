@@ -26,6 +26,9 @@
     #     localSystem = {inherit (prev) system;};
     #   }).unityhub;
 
+    # Remove this after jetbrains.jdk builds again (nixpkgs issue 425328)
+    # jetbrains.rider = pkgs-stable.jetbrains.rider;
+
     # neovide = prev.neovide.overrideAttrs (finalAttrs: prevAttrs: {
     #   version = "0.15.1";
     #   src = prev.fetchFromGitHub {
@@ -41,8 +44,20 @@
     #   };
     # });
 
-    # Remove this after jetbrains.jdk builds again (nixpkgs issue 425328)
-    # jetbrains.rider = pkgs-stable.jetbrains.rider;
+    rmpc = prev.rmpc.overrideAttrs (finalAttrs: prevAttrs: {
+      version = "0.10.0";
+      src = prev.fetchFromGitHub {
+        owner = "mierak";
+        repo = "rmpc";
+        rev = "v0.10.0";
+        hash = "sha256-NU8T26oPhm8L7wdO4p65cpNa0pax7/oqHGs98QDoEc0=";
+      };
+      cargoHash = "sha256-d2/4q2s/11HNE18D8d8Y2yWidhT+XsUS4J9ahnxToI0=";
+      cargoDeps = prev.rustPlatform.fetchCargoVendor {
+        inherit (finalAttrs) pname src version;
+        hash = finalAttrs.cargoHash;
+      };
+    });
   };
 in
   # Composes a list of overlays and returns a single overlay function that combines them.
