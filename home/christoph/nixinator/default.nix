@@ -219,6 +219,12 @@
         ];
 
         overrides = {
+          "org.prismlauncher.PrismLauncher".Context = {
+            filesystems = [
+              "/tmp"
+            ];
+          };
+
           "com.valvesoftware.Steam".Context = {
             filesystems = [
               "${config.home.homeDirectory}/Games"
