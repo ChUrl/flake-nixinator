@@ -49,6 +49,35 @@
     # https://github.com/thiagokokada/nix-alien#user-content-nixos-installation-with-flakes
     # nix-alien.inputs.nixpkgs.follows = "nixpkgs";
 
+    # Niri
+    niri.url = "github:sodiboo/niri-flake";
+    niri.inputs.nixpkgs.follows = "nixpkgs";
+
+    # Quickshell
+    quickshell.url = "github:quickshell-mirror/quickshell";
+    quickshell.inputs.nixpkgs.follows = "nixpkgs";
+
+    # Noctalia shell
+    noctalia.url = "github:noctalia-dev/noctalia-shell";
+    noctalia.inputs.nixpkgs.follows = "nixpkgs";
+    noctalia.inputs.quickshell.follows = "quickshell";
+
+    # Caelestia shell
+    # caelestia.url = "github:caelestia-dots/shell";
+    # caelestia.inputs.nixpkgs.follows = "nixpkgs";
+    # caelestia.inputs.quickshell.follows = "quickshell";
+    # caelestia-cli.url = "github:caelestia-dots/cli";
+    # caelestia-cli.inputs.nixpkgs.follows = "nixpkgs";
+
+    # DankMaterialShell
+    # dgop.url = "github:AvengeMedia/dgop";
+    # dgop.inputs.nixpkgs.follows = "nixpkgs";
+    # dms-cli.url = "github:AvengeMedia/danklinux";
+    # dms-cli.inputs.nixpkgs.follows = "nixpkgs";
+    # dankMaterialShell.url = "github:AvengeMedia/DankMaterialShell";
+    # dankMaterialShell.inputs.nixpkgs.follows = "nixpkgs";
+    # dankMaterialShell.inputs.dgop.follows = "dgop";
+
     # Hyprland (use flake so plugins are not built from source)
     hyprland.url = "github:hyprwm/Hyprland";
     hyprland.inputs.nixpkgs.follows = "nixpkgs";
@@ -130,6 +159,7 @@
       in [
         inputs.devshell.overlays.default
         inputs.nur.overlays.default
+        inputs.niri.overlays.niri
         # inputs.emacs-overlay.overlay
 
         # All my own overlays (derivations + modifications)
@@ -194,6 +224,7 @@
         extraModules =
           [
             inputs.disko.nixosModules.disko
+            inputs.niri.nixosModules.niri # This also imports the HM module
           ]
           ++ commonModules;
       };
@@ -203,7 +234,9 @@
         username = "christoph";
         headless = false;
         extraModules =
-          []
+          [
+            inputs.niri.nixosModules.niri
+          ]
           ++ commonModules;
       };
       servenix = mylib.nixos.mkNixosConfigWithHomeManagerModule {

@@ -357,6 +357,10 @@ with mylib.networking; {
       flake = "/home/${username}/NixFlake";
     };
 
+    niri = {
+      enable = !headless;
+    };
+
     ssh.startAgent = true; # Use gnupg
     starship.enable = true;
     xwayland.enable = !headless;
