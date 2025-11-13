@@ -340,6 +340,8 @@ with mylib.networking; {
       enableSSHSupport = true;
     };
 
+    gpu-screen-recorder.enable = !headless;
+
     hyprland = {
       enable = !headless;
 

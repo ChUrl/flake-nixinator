@@ -19,6 +19,12 @@ in {
     ];
 
     home = {
+      sessionVariables = {
+        # For Noctalia
+        # QS_ICON_THEME = "Papirus";
+        QT_QPA_PLATFORMTHEME = "gtk3";
+      };
+
       packages = with pkgs; [
         xwayland-satellite
         ncpamixer # Audio control

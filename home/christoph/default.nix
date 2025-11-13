@@ -90,16 +90,13 @@ in
       lazygit.enable = true;
       mpd.enable = !headless;
 
-      niri = {
-        enable = !headless;
-      };
-
       neovim = {
         enable = true;
         alias = true;
         neovide = !headless;
       };
 
+      niri.enable = !headless;
       nnn.enable = false; # Use yazi
       qutebrowser.enable = !headless;
       rmpc.enable = !headless;

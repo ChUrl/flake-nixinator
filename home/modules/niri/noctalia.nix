@@ -195,17 +195,19 @@
           }
           {
             id = "ActiveWindow";
-            width = 250; # TODO: Doesn't work
+            maxWidth = 250;
           }
         ];
         center = [
           {
             id = "MediaMini";
-            width = 250; # TODO: Doesn't work
+            maxWidth = 250;
+            showAlbumArt = true;
           }
           {
             id = "AudioVisualizer";
-            width = 100; # TODO: Doesn't work
+            width = 100;
+            visualizerType = "mirrored";
           }
         ];
         right = [
@@ -223,10 +225,10 @@
           }
           {
             id = "Tray";
-            drawer = false; # TODO: Doesn't work
+            drawerEnabled = false;
           }
           {
-            formatHorizontal = "yyyy:MM:dd HH:mm";
+            formatHorizontal = "yyyy-MM-dd HH:mm";
             formatVertical = "HH mm";
             id = "Clock";
             useMonospacedFont = true;
