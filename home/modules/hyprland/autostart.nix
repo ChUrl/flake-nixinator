@@ -13,6 +13,7 @@ builtins.concatLists [
 
     "hyprctl setcursor ${config.home.pointerCursor.name} ${builtins.toString config.home.pointerCursor.size}"
     "hyprsunset --identity"
+    "hyprpanel"
 
     # HACK: Hyprland doesn't set the xwayland/x11 keymap correctly
     "setxkbmap -layout ${hyprland.keyboard.layout} -variant ${hyprland.keyboard.variant} -option ${hyprland.keyboard.option} -model pc104"

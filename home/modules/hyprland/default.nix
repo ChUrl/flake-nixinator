@@ -113,20 +113,6 @@ in {
 
     programs = {
       hyprlock = import ./hyprlock.nix {inherit config hyprland color;};
-
-      # TODO: IMV shouldn't be part of the hyprland module
-      imv = {
-        enable = true;
-        settings = {
-          options = {
-            background = "${color.hex.base}";
-            overlay = true;
-            overlay_font = "${color.font}:12";
-            overlay_background_color = "${color.hex.accent}";
-            overlay_text_color = "${color.hex.accentText}";
-          };
-        };
-      };
     };
 
     services = {
@@ -135,6 +121,16 @@ in {
       hypridle = import ./hypridle.nix {inherit config hyprland color;};
       hyprpaper = import ./hyprpaper.nix {inherit config hyprland color;};
     };
+
+    # Make sure the units only start when using Hyprland
+    systemd.user.services.dunst.Unit.After = lib.mkIf hyprland.dunst.enable (lib.mkForce ["hyprland-session.target"]);
+    systemd.user.services.dunst.Unit.PartOf = lib.mkIf hyprland.dunst.enable (lib.mkForce ["hyprland-session.target"]);
+    systemd.user.services.hypridle.Install.WantedBy = lib.mkForce ["hyprland-session.target"];
+    systemd.user.services.hypridle.Unit.After = lib.mkForce ["hyprland-session.target"];
+    systemd.user.services.hypridle.Unit.PartOf = lib.mkForce ["hyprland-session.target"];
+    systemd.user.services.hyprpaper.Install.WantedBy = lib.mkForce ["hyprland-session.target"];
+    systemd.user.services.hyprpaper.Unit.After = lib.mkForce ["hyprland-session.target"];
+    systemd.user.services.hyprpaper.Unit.PartOf = lib.mkForce ["hyprland-session.target"];
 
     wayland.windowManager.hyprland = {
       enable = true;
