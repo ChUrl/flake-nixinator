@@ -41,6 +41,7 @@ with mylib.networking; {
 
       termfilechooser.enable = true;
       hyprland.enable = config.programs.hyprland.enable;
+      niri.enable = config.programs.niri.enable;
     };
 
     docker = {
@@ -324,7 +325,7 @@ with mylib.networking; {
     firejail.enable = true; # Use to run app in network namespace (e.g. through vpn)
     fuse.userAllowOther = true; # Allow users to mount e.g. samba shares (cifs)
     git.enable = true;
-    kdeconnect.enable = !headless; # Use this instead of HM for firewall setup
+    # kdeconnect.enable = !headless; # Use this instead of HM for firewall setup
     neovim.enable = true;
     nix-ld.enable = true; # Load dynamically linked executables
 
@@ -359,10 +360,7 @@ with mylib.networking; {
       flake = "/home/${username}/NixFlake";
     };
 
-    niri = {
-      enable = !headless;
-    };
-
+    niri.enable = !headless;
     ssh.startAgent = true; # Use gnupg
     starship.enable = true;
     xwayland.enable = !headless;
