@@ -5,5 +5,6 @@
 }:
 with lib;
 with mylib.modules; {
-  enable = mkEnableOption "hyprpanel";
+  enable = mkEnableOption "Enable Hyprpanel";
+  systemd.enable = mkEnableOption "Start using systemd";
 }

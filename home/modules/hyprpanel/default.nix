@@ -13,7 +13,7 @@ in {
   config = lib.mkIf hyprpanel.enable {
     programs.hyprpanel = {
       enable = true;
-      systemd.enable = false;
+      systemd.enable = hyprpanel.systemd.enable;
 
       settings = {
         #
