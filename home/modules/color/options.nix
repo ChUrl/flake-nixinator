@@ -1,6 +1,7 @@
 {
   lib,
   mylib,
+  pkgs,
   ...
 }: let
   colorKeys = [
@@ -64,11 +65,25 @@ in rec {
     default = 24;
   };
 
+  cursorPackage = lib.mkOption {
+    type = lib.types.package;
+    description = "The cursor package";
+    example = pkgs.bibata-cursors;
+    default = pkgs.bibata-cursors;
+  };
+
   iconTheme = lib.mkOption {
     type = lib.types.str;
     description = "The icon theme to use";
     example = "Papirus";
     default = "Papirus";
+  };
+
+  iconPackage = lib.mkOption {
+    type = lib.types.package;
+    description = "The icon theme package";
+    example = pkgs.papirus-icon-theme;
+    default = pkgs.papirus-icon-theme;
   };
 
   extraPackages = lib.mkOption {

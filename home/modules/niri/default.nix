@@ -21,7 +21,7 @@ in {
 
     gtk = {
       enable = true;
-      # iconTheme.package = pkgs.papirus-icon-theme;
+      iconTheme.package = color.iconPackage;
       iconTheme.name = color.iconTheme;
     };
 
@@ -34,7 +34,7 @@ in {
       pointerCursor = {
         gtk.enable = true;
         x11.enable = true;
-        # package = inputs.waifu-cursors.packages.${pkgs.system}.all;
+        package = color.cursorPackage;
         name = color.cursor;
         size = color.cursorSize;
       };

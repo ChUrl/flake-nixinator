@@ -7,7 +7,7 @@
 }: let
   inherit (config.modules) color;
 in {
-  options.modules.color = import ./options.nix {inherit lib mylib;};
+  options.modules.color = import ./options.nix {inherit lib mylib pkgs;};
 
   config = {
     home.packages = let
@@ -54,6 +54,8 @@ in {
       [
         applyColors
         printNixColors
+        color.iconPackage
+        color.cursorPackage
       ]
       ++ color.extraPackages;
 

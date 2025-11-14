@@ -6,7 +6,7 @@
 }: {
   enable = hyprland.dunst.enable;
 
-  # iconTheme.package = pkgs.papirus-icon-theme;
+  iconTheme.package = color.iconPackage;
   iconTheme.name = color.iconTheme;
 
   settings = {

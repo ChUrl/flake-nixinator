@@ -63,7 +63,9 @@ in
         font = builtins.head nixosConfig.fonts.fontconfig.defaultFonts.monospace;
         cursor = "miku-cursor-linux";
         cursorSize = 64;
+        cursorPackage = inputs.waifu-cursors.packages.${pkgs.system}.all;
         iconTheme = "Papirus";
+        iconPackage = pkgs.papirus-icon-theme;
         wallpaper = "Windows";
 
         accent = "mauve";
@@ -100,6 +102,7 @@ in
         trails.enable = true;
         hyprspace.enable = false; # Always broken
         hyprpanel.enable = false;
+        caelestia.enable = true;
 
         keybindings = {
           main-mod = "SUPER";

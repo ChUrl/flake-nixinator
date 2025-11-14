@@ -24,7 +24,7 @@ in {
       extraConfig = {
         modi = "run,drun,ssh,filebrowser";
         show-icons = true;
-        icon-theme = "Papirus";
+        icon-theme = color.iconTheme;
         drun-display-format = "{icon} {name}";
         disable-history = false;
         hide-scrollbar = true;

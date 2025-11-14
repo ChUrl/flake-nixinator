@@ -34,11 +34,15 @@ in {
         assertion = builtins.hasAttr "hyprlock" nixosConfig.security.pam.services;
         message = "Can't enable Hyprland module without Hyprlock PAM service!";
       }
+      {
+        assertion = hyprland.hyprpanel.enable != hyprland.caelestia.enable;
+        message = "Can't enable Hyprpanel and Caelestia at the same time!";
+      }
     ];
 
     gtk = {
       enable = true;
-      # iconTheme.package = lib.mkDefault pkgs.papirus-icon-theme;
+      iconTheme.package = lib.mkDefault color.iconPackage;
       iconTheme.name = color.iconTheme;
     };
 
@@ -50,7 +54,7 @@ in {
       pointerCursor = {
         gtk.enable = lib.mkDefault true;
         x11.enable = lib.mkDefault true;
-        # package = lib.mkDefault pkgs.bibata-cursors;
+        package = lib.mkDefault color.cursorPackage;
         name = color.cursor;
         size = color.cursorSize;
       };
