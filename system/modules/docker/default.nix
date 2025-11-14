@@ -2,6 +2,7 @@
   config,
   lib,
   mylib,
+  pkgs,
   ...
 }: let
   inherit (config.modules) docker;
@@ -21,6 +22,8 @@ in {
       docker = {
         enable = !docker.podman;
         autoPrune.enable = true;
+
+        extraPackages = with pkgs; [docker-compose];
 
         rootless = {
           enable = docker.docker.rootless;
@@ -54,7 +57,7 @@ in {
         dockerSocket.enable = true;
         defaultNetwork.settings.dns_enabled = true;
 
-        # extraPackages = with pkgs; [];
+        extraPackages = with pkgs; [podman-compose];
       };
 
       oci-containers.backend =
