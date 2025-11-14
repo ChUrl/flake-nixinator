@@ -33,6 +33,54 @@
         "type": "github"
       }
     },
+    "caelestia": {
+      "inputs": {
+        "caelestia-cli": "caelestia-cli",
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "quickshell": [
+          "quickshell"
+        ]
+      },
+      "locked": {
+        "lastModified": 1762651107,
+        "narHash": "sha256-V++8JREoP1TC6ROYByMAKx/cSyxza0tp1tUNOpq5Z4k=",
+        "owner": "caelestia-dots",
+        "repo": "shell",
+        "rev": "c0ea060ffecd3f38233652556d3085d094082400",
+        "type": "github"
+      },
+      "original": {
+        "owner": "caelestia-dots",
+        "repo": "shell",
+        "type": "github"
+      }
+    },
+    "caelestia-cli": {
+      "inputs": {
+        "caelestia-shell": [
+          "caelestia"
+        ],
+        "nixpkgs": [
+          "caelestia",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1762480719,
+        "narHash": "sha256-TjTMNmndJJIxP/N6owC/CoAPiRuM99fNaQbZqHDtwLw=",
+        "owner": "caelestia-dots",
+        "repo": "cli",
+        "rev": "9323fbf1b497204e17dff103cf412daf04a5c723",
+        "type": "github"
+      },
+      "original": {
+        "owner": "caelestia-dots",
+        "repo": "cli",
+        "type": "github"
+      }
+    },
     "crane": {
       "locked": {
         "lastModified": 1754269165,
@@ -974,6 +1022,22 @@
         "type": "indirect"
       }
     },
+    "nixpkgs_5": {
+      "locked": {
+        "lastModified": 1750776420,
+        "narHash": "sha256-/CG+w0o0oJ5itVklOoLbdn2dGB0wbZVOoDm4np6w09A=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "30a61f056ac492e3b7cdcb69c1e6abdcf00e39cf",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixvim": {
       "inputs": {
         "flake-parts": "flake-parts_2",
@@ -1159,6 +1223,7 @@
     },
     "root": {
       "inputs": {
+        "caelestia": "caelestia",
         "devshell": "devshell",
         "disko": "disko",
         "hardware": "hardware",
@@ -1180,7 +1245,8 @@
         "nur": "nur",
         "quickshell": "quickshell",
         "sops-nix": "sops-nix",
-        "textfox": "textfox"
+        "textfox": "textfox",
+        "waifu-cursors": "waifu-cursors"
       }
     },
     "rust-overlay": {
@@ -1317,6 +1383,24 @@
       "original": {
         "owner": "adriankarlen",
         "repo": "textfox",
+        "type": "github"
+      }
+    },
+    "waifu-cursors": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_5"
+      },
+      "locked": {
+        "lastModified": 1755614728,
+        "narHash": "sha256-FAzG8sav8N+1T5jsJa2gghkKrWnE+qo11rRZx2KX/Oo=",
+        "owner": "kagurazakei",
+        "repo": "waifu-cursors",
+        "rev": "8cb6137997c1a8d59b4b1ab1945ec00de5ad540a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "kagurazakei",
+        "repo": "waifu-cursors",
         "type": "github"
       }
     },

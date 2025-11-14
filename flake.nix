@@ -62,10 +62,13 @@
     noctalia.inputs.nixpkgs.follows = "nixpkgs";
     noctalia.inputs.quickshell.follows = "quickshell";
 
+    # Lol
+    waifu-cursors.url = "github:kagurazakei/waifu-cursors";
+
     # Caelestia shell
-    # caelestia.url = "github:caelestia-dots/shell";
-    # caelestia.inputs.nixpkgs.follows = "nixpkgs";
-    # caelestia.inputs.quickshell.follows = "quickshell";
+    caelestia.url = "github:caelestia-dots/shell";
+    caelestia.inputs.nixpkgs.follows = "nixpkgs";
+    caelestia.inputs.quickshell.follows = "quickshell";
     # caelestia-cli.url = "github:caelestia-dots/cli";
     # caelestia-cli.inputs.nixpkgs.follows = "nixpkgs";
 

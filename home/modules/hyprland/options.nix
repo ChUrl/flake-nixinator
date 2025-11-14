@@ -5,12 +5,13 @@
 }: {
   enable = lib.mkEnableOption "Hyprland Window Manager + Compositor";
 
-  dunst.enable = lib.mkEnableOption "Enable dunst notification daemon";
+  dunst.enable = lib.mkEnableOption "Enable Dunst notification daemon";
   bars.enable = lib.mkEnableOption "Enable window bars";
   dynamicCursor.enable = lib.mkEnableOption "Enable dynamic cursors";
   trails.enable = lib.mkEnableOption "Enable dynamic window trails";
-  hyprspace.enable = lib.mkEnableOption "Enable hyprspace workspace overview";
-  hyprpanel.enable = lib.mkEnableOption "Enable hyprpanel";
+  hyprspace.enable = lib.mkEnableOption "Enable Hyprspace workspace overview";
+  hyprpanel.enable = lib.mkEnableOption "Enable Hyprpanel";
+  caelestia.enable = lib.mkEnableOption "Enable Caelestia";
 
   keyboard = {
     layout = lib.mkOption {
