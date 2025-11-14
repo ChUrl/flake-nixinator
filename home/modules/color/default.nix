@@ -50,10 +50,12 @@ in {
             |> builtins.concatStringsSep "\n")
           ''echo ${lib.concatStrings (lib.replicate 20 "=")}''
         ]);
-    in [
-      applyColors
-      printNixColors
-    ];
+    in
+      [
+        applyColors
+        printNixColors
+      ]
+      ++ color.extraPackages;
 
     # This module sets its own options to the values specified in a colorscheme file.
     modules.color = let

@@ -38,17 +38,21 @@ in {
 
     gtk = {
       enable = true;
-      iconTheme.package = pkgs.papirus-icon-theme;
-      iconTheme.name = "Papirus";
+      # iconTheme.package = lib.mkDefault pkgs.papirus-icon-theme;
+      iconTheme.name = color.iconTheme;
+    };
+
+    modules = {
+      hyprpanel.enable = hyprland.hyprpanel.enable;
     };
 
     home = {
       pointerCursor = {
-        gtk.enable = true;
-        x11.enable = true;
-        package = pkgs.bibata-cursors;
-        name = "Bibata-Modern-Classic";
-        size = 24;
+        gtk.enable = lib.mkDefault true;
+        x11.enable = lib.mkDefault true;
+        # package = lib.mkDefault pkgs.bibata-cursors;
+        name = color.cursor;
+        size = color.cursorSize;
       };
 
       packages = with pkgs; [
@@ -113,10 +117,10 @@ in {
 
     programs = {
       hyprlock = import ./hyprlock.nix {inherit config hyprland color;};
+      caelestia = import ./caelestia.nix {inherit config hyprland color;};
     };
 
     services = {
-      # TODO: Dunst shouldn't be part of the hyprland module
       dunst = import ./dunst.nix {inherit pkgs config hyprland color;};
       hypridle = import ./hypridle.nix {inherit config hyprland color;};
       hyprpaper = import ./hyprpaper.nix {inherit config hyprland color;};

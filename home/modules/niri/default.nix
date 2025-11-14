@@ -3,6 +3,7 @@
   nixosConfig,
   lib,
   mylib,
+  inputs,
   pkgs,
   ...
 }: let
@@ -18,11 +19,24 @@ in {
       }
     ];
 
+    gtk = {
+      enable = true;
+      # iconTheme.package = pkgs.papirus-icon-theme;
+      iconTheme.name = color.iconTheme;
+    };
+
     home = {
       sessionVariables = {
-        # For Noctalia
-        # QS_ICON_THEME = "Papirus";
-        QT_QPA_PLATFORMTHEME = "gtk3";
+        QT_QPA_PLATFORMTHEME = "gtk3"; # For Noctalia
+        GDK_BACKEND = "wayland"; # For screen sharing
+      };
+
+      pointerCursor = {
+        gtk.enable = true;
+        x11.enable = true;
+        # package = inputs.waifu-cursors.packages.${pkgs.system}.all;
+        name = color.cursor;
+        size = color.cursorSize;
       };
 
       packages = with pkgs; [
@@ -132,8 +146,8 @@ in {
 
           cursor = {
             hide-when-typing = true;
-            theme = "Bibata-Modern-Classic";
-            size = 24;
+            theme = color.cursor;
+            size = color.cursorSize;
           };
 
           layout = {

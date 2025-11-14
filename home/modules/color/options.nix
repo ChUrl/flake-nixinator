@@ -50,6 +50,38 @@ in rec {
     default = "JetBrainsMono Nerd Font Mono";
   };
 
+  cursor = lib.mkOption {
+    type = lib.types.str;
+    description = "The cursor to use";
+    example = "Bibata-Modern-Classic";
+    default = "Bibata-Modern-Classic";
+  };
+
+  cursorSize = lib.mkOption {
+    type = lib.types.int;
+    description = "The cursor size";
+    example = 24;
+    default = 24;
+  };
+
+  iconTheme = lib.mkOption {
+    type = lib.types.str;
+    description = "The icon theme to use";
+    example = "Papirus";
+    default = "Papirus";
+  };
+
+  extraPackages = lib.mkOption {
+    type = lib.types.listOf lib.types.package;
+    description = "Extra packages to install";
+    example = ''
+      [
+        pkgs.bibata-cursors
+      ]
+    '';
+    default = [];
+  };
+
   # This option is set automatically
   wallpapers = let
     # Collect all the available wallpapers.
