@@ -70,8 +70,8 @@ with mylib.networking; {
       defaultWebBrowser = "firefox.desktop";
       defaultPdfViewer = "org.pwmt.zathura.desktop";
       defaultImageViewer = "imv-dir.desktop";
-      defaultAudioPlayer = "vlc.desktop";
-      defaultVideoPlayer = "vlc.desktop";
+      defaultAudioPlayer = "mpv.desktop";
+      defaultVideoPlayer = "mpv.desktop";
     };
 
     network = {

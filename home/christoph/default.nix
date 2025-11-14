@@ -832,7 +832,7 @@ in
       };
 
       mpv = {
-        enable = false;
+        enable = true;
         config = {
           gpu-context = "wayland";
         };

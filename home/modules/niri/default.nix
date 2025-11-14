@@ -428,11 +428,11 @@ in {
               hotkey-overlay = {title = "Move column to the left. Equivalent bindings for other directions.";};
             };
             "Mod+Shift+J" = {
-              action = move-window-down;
+              action = move-window-down-or-to-workspace-down;
               hotkey-overlay = {hidden = true;};
             };
             "Mod+Shift+K" = {
-              action = move-window-up;
+              action = move-window-up-or-to-workspace-up;
               hotkey-overlay = {hidden = true;};
             };
             "Mod+Shift+L" = {

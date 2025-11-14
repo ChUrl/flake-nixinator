@@ -68,7 +68,7 @@ in {
         opener = {
           play = [
             {
-              run = ''vlc "$@"'';
+              run = ''mpv "$@"'';
               orphan = true;
               desc = "Play selection";
             }

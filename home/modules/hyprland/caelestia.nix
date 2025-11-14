@@ -174,7 +174,7 @@
       apps = {
         audio = ["kitty" "--title=NcpaMixer" "-e" "ncpamixer"];
         explorer = ["kitty" "--title=Yazi" "-e" "yazi"];
-        playback = ["vlc"];
+        playback = ["mpv"];
         terminal = ["kitty"];
       };
 
