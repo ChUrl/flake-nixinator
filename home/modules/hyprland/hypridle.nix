@@ -3,7 +3,7 @@
   hyprland,
   color,
 }: {
-  enable = true;
+  enable = !hyprland.caelestia.enable;
 
   settings = {
     general = {

@@ -7,6 +7,7 @@
 builtins.concatLists [
   (lib.optionals hyprland.dunst.enable ["dunst"]) # Notifications
   (lib.optionals hyprland.hyprpanel.enable ["hyprpanel"]) # Panel
+  (lib.optionals hyprland.caelestia.enable ["caelestia shell"]) # Panel/Shell # TODO: Crashes on startup
   [
     # Start clipboard management
     "wl-paste -t text --watch clipman store --no-persist"

@@ -389,6 +389,21 @@ with mylib.networking; {
       wacom.enable = true;
     };
 
+    # greetd = {
+    #   enable = !headless;
+    #   restart = false;
+    #   useTextGreeter = true;
+    #
+    #   settings = {
+    #     terminal.vt = 1;
+    #
+    #     default_session = {
+    #       command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --cmd $SHELL";
+    #       user = "greeter";
+    #     };
+    #   };
+    # };
+
     # Enable touchpad support (enabled default in most desktopManager).
     libinput.enable = !headless;
 

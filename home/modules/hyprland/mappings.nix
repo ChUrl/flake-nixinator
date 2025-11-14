@@ -6,14 +6,10 @@
 lib.mergeAttrsList [
   {
     # Hyprland control
-    "$mainMod, a" = ["exec, rofi -drun-show-actions -show drun"];
     "$mainMod, q" = ["killactive"];
     "$mainMod, v" = ["togglefloating"];
     "$mainMod, f" = ["fullscreen"];
-    "$mainMod, c" = ["exec, clipman pick --tool=rofi"];
-    "$mainMod SHIFT, l" = ["exec, loginctl lock-session"];
     "$mainMod, tab" = ["workspace, previous"];
-    "ALT, tab" = ["exec, rofi -show window"];
     # "$mainMod, g" = ["togglegroup"];
     # "ALT, tab" = ["changegroupactive"];
 

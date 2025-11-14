@@ -184,18 +184,19 @@ in {
         (color.wallpapers
           |> builtins.map (setWallpaperOnMonitors monitors)
           |> lib.mergeAttrsList);
-    in {
-      bindings = lib.mergeAttrsList [
-        {
-          "$mainMod, escape" = ["exec, \"${power-menu}/bin/rofi-menu-power\""];
-          "$mainMod, m" = ["exec, \"${keybinds-menu}/bin/rofi-menu-keybinds\""];
-          "$mainMod, w" = ["exec, \"${wallpaper-menu}/bin/rofi-menu-wall\""];
-          # "$mainMod, o" = ["exec, \"${lectures-menu}\""];
-        }
-        (lib.optionalAttrs (!nixosConfig.modules.network.useNetworkManager) {
-          "$mainMod, U" = ["exec, \"${vpn-menu}/rofi-menu-vpn\""];
-        })
-      ];
-    };
+    in
+      lib.mkIf (!config.modules.hyprland.caelestia.enable) {
+        bindings = lib.mergeAttrsList [
+          {
+            "$mainMod, escape" = ["exec, \"${power-menu}/bin/rofi-menu-power\""];
+            "$mainMod, m" = ["exec, \"${keybinds-menu}/bin/rofi-menu-keybinds\""];
+            "$mainMod, w" = ["exec, \"${wallpaper-menu}/bin/rofi-menu-wall\""];
+            # "$mainMod, o" = ["exec, \"${lectures-menu}\""];
+          }
+          (lib.optionalAttrs (!nixosConfig.modules.network.useNetworkManager) {
+            "$mainMod, U" = ["exec, \"${vpn-menu}/rofi-menu-vpn\""];
+          })
+        ];
+      };
   };
 }

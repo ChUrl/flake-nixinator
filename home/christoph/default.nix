@@ -61,9 +61,9 @@ in
 
         scheme = "catppuccin-mocha";
         font = builtins.head nixosConfig.fonts.fontconfig.defaultFonts.monospace;
-        cursor = "miku-cursor-linux";
-        cursorSize = 64;
-        cursorPackage = inputs.waifu-cursors.packages.${pkgs.system}.all;
+        cursor = "Bibata-Modern-Classic";
+        cursorSize = 24;
+        cursorPackage = pkgs.bibata-cursors;
         iconTheme = "Papirus";
         iconPackage = pkgs.papirus-icon-theme;
         wallpaper = "Windows";
@@ -101,58 +101,80 @@ in
         dynamicCursor.enable = false;
         trails.enable = true;
         hyprspace.enable = false; # Always broken
-        hyprpanel.enable = false;
-        caelestia.enable = true;
+        hyprpanel.enable = true;
+        caelestia.enable = false;
 
         keybindings = {
           main-mod = "SUPER";
 
-          bindings = {
-            "$mainMod, t" = ["exec, kitty"];
-            "$mainMod, e" = ["exec, kitty --title=Yazi yazi"];
-            "$mainMod, n" = ["exec, neovide"];
-            # "$mainMod, r" = ["exec, kitty --title=Rmpc rmpc"];
-            "$mainMod CTRL, n" = ["exec, kitty --title=Navi navi"];
-            "$mainMod SHIFT, n" = ["exec, neovide ${config.paths.dotfiles}/navi/christoph.cheat"];
-            "$mainMod SHIFT, f" = ["exec, neovide ${config.paths.dotfiles}/flake.nix"];
+          bindings = lib.mergeAttrsList [
+            # Use Rofi if we don't have caelestia
+            (lib.optionalAttrs (!config.modules.hyprland.caelestia.enable) {
+              "$mainMod, a" = ["exec, rofi -drun-show-actions -show drun"];
+              "$mainMod, c" = ["exec, clipman pick --tool=rofi"];
+              "$mainMod SHIFT, l" = ["exec, loginctl lock-session"];
+            })
 
-            "$mainMod, p" = ["exec, hyprpicker --autocopy --format=hex"];
-            "$mainMod, s" = ["exec, grim -g \"$(slurp)\""];
-            "$mainMod CTRL, s" = ["exec, grim -g \"$(slurp)\" - | wl-copy"];
-            "$mainMod SHIFT, s" = ["exec, grim -g \"$(slurp)\" - | wl-copy"];
+            # Caelestia
+            (lib.optionalAttrs (config.modules.hyprland.caelestia.enable) {
+              "$mainMod, a" = ["exec, caelestia shell drawers toggle launcher"];
+              # "$mainMod, c" = ["exec, caelestia clipboard"];
+              "$mainMod SHIFT, l" = ["exec, caelestia shell lock lock"];
 
-            ", XF86AudioRaiseVolume" = ["exec, wpctl set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 5%+"];
-            ", XF86AudioLowerVolume" = ["exec, wpctl set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 5%-"];
-            ", XF86AudioPlay" = ["exec, playerctl play-pause"];
-            ", XF86AudioPrev" = ["exec, playerctl previous"];
-            ", XF86AudioNext" = ["exec, playerctl next"];
+              "$mainMod, escape" = ["exec, caelestia shell drawers toggle session"];
+            })
 
-            ", XF86MonBrightnessDown" = ["exec, hyprctl hyprsunset gamma -10"];
-            ", XF86MonBrightnessUp" = ["exec, hyprctl hyprsunset gamma +10"];
-            "$mainMod, XF86MonBrightnessDown" = ["exec, hyprctl hyprsunset temperature 5750"];
-            "$mainMod, XF86MonBrightnessUp" = ["exec, hyprctl hyprsunset identity"];
+            {
+              # Applications
+              "$mainMod, t" = ["exec, kitty"];
+              "$mainMod, e" = ["exec, kitty --title=Yazi yazi"];
+              "$mainMod, n" = ["exec, neovide"];
+              # "$mainMod, r" = ["exec, kitty --title=Rmpc rmpc"];
+              "$mainMod CTRL, n" = ["exec, kitty --title=Navi navi"];
+              "$mainMod SHIFT, n" = ["exec, neovide ${config.paths.dotfiles}/navi/christoph.cheat"];
+              "$mainMod SHIFT, f" = ["exec, neovide ${config.paths.dotfiles}/flake.nix"];
+              # "ALT, tab" = ["exec, rofi -show window"];
 
-            "CTRL ALT, f" = let
-              hyprctl = "${config.wayland.windowManager.hyprland.package}/bin/hyprctl";
-              grep = "${pkgs.gnugrep}/bin/grep";
-              awk = "${pkgs.gawk}/bin/gawk";
-              notify = "${pkgs.libnotify}/bin/notify-send";
+              # Screenshots
+              "$mainMod, p" = ["exec, hyprpicker --autocopy --format=hex"];
+              "$mainMod, s" = ["exec, grim -g \"$(slurp)\""];
+              "$mainMod SHIFT, s" = ["exec, grim -g \"$(slurp)\" - | wl-copy"];
 
-              toggleMouseFocus = pkgs.writeScriptBin "hypr-toggle-mouse-focus" ''
-                CURRENT=$(${hyprctl} getoption input:follow_mouse | ${grep} int | ${awk} -F' ' '{print $2}')
+              # Audio
+              ", XF86AudioRaiseVolume" = ["exec, wpctl set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 5%+"];
+              ", XF86AudioLowerVolume" = ["exec, wpctl set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 5%-"];
+              ", XF86AudioPlay" = ["exec, playerctl play-pause"];
+              ", XF86AudioPrev" = ["exec, playerctl previous"];
+              ", XF86AudioNext" = ["exec, playerctl next"];
 
-                if [[ "$CURRENT" == "1" ]]; then
-                  ${hyprctl} keyword input:follow_mouse 0
-                  ${notify} "Disabled Mouse Focus!"
-                else
-                  ${hyprctl} keyword input:follow_mouse 1
-                  ${notify} "Enabled Mouse Focus!"
-                fi
-              '';
-            in ["exec, ${toggleMouseFocus}/bin/hypr-toggle-mouse-focus"];
+              # Brightness
+              ", XF86MonBrightnessDown" = ["exec, hyprctl hyprsunset gamma -10"];
+              ", XF86MonBrightnessUp" = ["exec, hyprctl hyprsunset gamma +10"];
+              "$mainMod, XF86MonBrightnessDown" = ["exec, hyprctl hyprsunset temperature 5750"];
+              "$mainMod, XF86MonBrightnessUp" = ["exec, hyprctl hyprsunset identity"];
 
-            # "CTRL ALT, t" = ["exec, bash -c 'systemctl --user restart hyprpanel.service'"];
-          };
+              "CTRL ALT, f" = let
+                hyprctl = "${config.wayland.windowManager.hyprland.package}/bin/hyprctl";
+                grep = "${pkgs.gnugrep}/bin/grep";
+                awk = "${pkgs.gawk}/bin/gawk";
+                notify = "${pkgs.libnotify}/bin/notify-send";
+
+                toggleMouseFocus = pkgs.writeScriptBin "hypr-toggle-mouse-focus" ''
+                  CURRENT=$(${hyprctl} getoption input:follow_mouse | ${grep} int | ${awk} -F' ' '{print $2}')
+
+                  if [[ "$CURRENT" == "1" ]]; then
+                    ${hyprctl} keyword input:follow_mouse 0
+                    ${notify} "Disabled Mouse Focus!"
+                  else
+                    ${hyprctl} keyword input:follow_mouse 1
+                    ${notify} "Enabled Mouse Focus!"
+                  fi
+                '';
+              in ["exec, ${toggleMouseFocus}/bin/hypr-toggle-mouse-focus"];
+
+              # "CTRL ALT, t" = ["exec, bash -c 'systemctl --user restart hyprpanel.service'"];
+            }
+          ];
 
           ws-bindings = {
             # "<Workspace>" = "<Key>";

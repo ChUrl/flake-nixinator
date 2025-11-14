@@ -133,12 +133,12 @@ in {
     # Make sure the units only start when using Hyprland
     systemd.user.services.dunst.Unit.After = lib.mkIf hyprland.dunst.enable (lib.mkForce ["hyprland-session.target"]);
     systemd.user.services.dunst.Unit.PartOf = lib.mkIf hyprland.dunst.enable (lib.mkForce ["hyprland-session.target"]);
-    systemd.user.services.hypridle.Install.WantedBy = lib.mkForce ["hyprland-session.target"];
-    systemd.user.services.hypridle.Unit.After = lib.mkForce ["hyprland-session.target"];
-    systemd.user.services.hypridle.Unit.PartOf = lib.mkForce ["hyprland-session.target"];
-    systemd.user.services.hyprpaper.Install.WantedBy = lib.mkForce ["hyprland-session.target"];
-    systemd.user.services.hyprpaper.Unit.After = lib.mkForce ["hyprland-session.target"];
-    systemd.user.services.hyprpaper.Unit.PartOf = lib.mkForce ["hyprland-session.target"];
+    systemd.user.services.hypridle.Install.WantedBy = lib.mkIf (!hyprland.caelestia.enable) (lib.mkForce ["hyprland-session.target"]);
+    systemd.user.services.hypridle.Unit.After = lib.mkIf (!hyprland.caelestia.enable) (lib.mkForce ["hyprland-session.target"]);
+    systemd.user.services.hypridle.Unit.PartOf = lib.mkIf (!hyprland.caelestia.enable) (lib.mkForce ["hyprland-session.target"]);
+    systemd.user.services.hyprpaper.Install.WantedBy = lib.mkIf (!hyprland.caelestia.enable) (lib.mkForce ["hyprland-session.target"]);
+    systemd.user.services.hyprpaper.Unit.After = lib.mkIf (!hyprland.caelestia.enable) (lib.mkForce ["hyprland-session.target"]);
+    systemd.user.services.hyprpaper.Unit.PartOf = lib.mkIf (!hyprland.caelestia.enable) (lib.mkForce ["hyprland-session.target"]);
 
     wayland.windowManager.hyprland = {
       enable = true;
