@@ -14,7 +14,7 @@ in {
       portal = {
         enable = true;
         xdgOpenUsePortal = true;
-        wlr.enable = false;
+        wlr.enable = true;
 
         # TODO: Replace lib.optional(s) throughout the config with mkMerge
         config = lib.mkMerge [
@@ -35,6 +35,14 @@ in {
             (desktopportal.hyprland.enable && desktopportal.termfilechooser.enable) {
               hyprland."org.freedesktop.impl.portal.FileChooser" = ["termfilechooser"];
             })
+
+          (lib.mkIf desktopportal.niri.enable {
+            niri.default = ["gtk" "gnome"];
+          })
+
+          (lib.mkIf (desktopportal.niri.enable && desktopportal.termfilechooser.enable) {
+            niri."org.freedesktop.impl.portal.FileChooser" = ["termfilechooser"];
+          })
         ];
 
         extraPortals = with pkgs;
