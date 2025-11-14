@@ -6,6 +6,7 @@
 }:
 builtins.concatLists [
   (lib.optionals hyprland.dunst.enable ["dunst"]) # Notifications
+  (lib.optionals hyprland.hyprpanel.enable ["hyprpanel"]) # Panel
   [
     # Start clipboard management
     "wl-paste -t text --watch clipman store --no-persist"
@@ -13,7 +14,6 @@ builtins.concatLists [
 
     "hyprctl setcursor ${config.home.pointerCursor.name} ${builtins.toString config.home.pointerCursor.size}"
     "hyprsunset --identity"
-    "hyprpanel"
 
     # HACK: Hyprland doesn't set the xwayland/x11 keymap correctly
     "setxkbmap -layout ${hyprland.keyboard.layout} -variant ${hyprland.keyboard.variant} -option ${hyprland.keyboard.option} -model pc104"

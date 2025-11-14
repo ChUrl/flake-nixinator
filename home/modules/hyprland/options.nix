@@ -10,6 +10,7 @@
   dynamicCursor.enable = lib.mkEnableOption "Enable dynamic cursors";
   trails.enable = lib.mkEnableOption "Enable dynamic window trails";
   hyprspace.enable = lib.mkEnableOption "Enable hyprspace workspace overview";
+  hyprpanel.enable = lib.mkEnableOption "Enable hyprpanel";
 
   keyboard = {
     layout = lib.mkOption {
