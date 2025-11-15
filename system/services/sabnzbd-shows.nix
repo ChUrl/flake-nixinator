@@ -32,7 +32,7 @@ in {
 
       volumes = [
         "/media/Show/.sabnzbd:/media/shows/incomplete"
-        "/media/Show/0-MakeMKV:/media/shows"
+        "/media/Show/.sabnzbd-complete:/media/shows/complete"
 
         "sabnzbd-shows_config:/config"
       ];
