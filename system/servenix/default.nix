@@ -36,7 +36,8 @@
     ../services/paperless.nix
     ../services/portainer-agent.nix
     ../services/radarr.nix
-    ../services/sabnzbd.nix
+    ../services/sabnzbd-movies.nix
+    ../services/sabnzbd-shows.nix
     ../services/sonarr.nix
     ../services/teamspeak.nix
     ../services/tinymediamanager.nix

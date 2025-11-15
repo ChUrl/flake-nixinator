@@ -7,7 +7,7 @@
   sabnzbdVersion = "4.5.5";
 in {
   virtualisation.oci-containers.containers = {
-    sabnzbd = {
+    sabnzbd-movies = {
       image = "linuxserver/sabnzbd:${sabnzbdVersion}";
       autoStart = true;
 
@@ -33,10 +33,8 @@ in {
       volumes = [
         "/media/Movie/.sabnzbd:/media/movies/incomplete"
         "/media/Movie/0-MakeMKV:/media/movies"
-        "/media/Show/.sabnzbd:/media/shows/incomplete"
-        "/media/Show/0-MakeMKV:/media/shows"
 
-        "sabnzbd_config:/config"
+        "sabnzbd-movies_config:/config"
       ];
 
       environment = {
