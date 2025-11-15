@@ -53,25 +53,28 @@ in
       };
 
       color = {
+        installPackages = !headless;
         extraPackages = with pkgs; [
           papirus-icon-theme
           bibata-cursors
           inputs.waifu-cursors.packages.${pkgs.system}.all
         ];
 
-        scheme = "catppuccin-mocha";
-        font = builtins.head nixosConfig.fonts.fontconfig.defaultFonts.monospace;
         cursor = "Bibata-Modern-Classic";
         cursorSize = 24;
         cursorPackage = pkgs.bibata-cursors;
+
         iconTheme = "Papirus";
         iconPackage = pkgs.papirus-icon-theme;
-        wallpaper = "Windows";
 
+        scheme = "catppuccin-mocha";
         accent = "mauve";
         accentHl = "pink";
         accentDim = "lavender";
         accentText = "base";
+
+        wallpaper = "Windows";
+        font = builtins.head nixosConfig.fonts.fontconfig.defaultFonts.monospace;
       };
 
       docs.enable = !headless;

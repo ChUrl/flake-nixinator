@@ -54,10 +54,9 @@ in {
       [
         applyColors
         printNixColors
-        color.iconPackage
-        color.cursorPackage
       ]
-      ++ color.extraPackages;
+      ++ (lib.optionals color.installPackages [color.iconPackage color.cursorPackage])
+      ++ (lib.optionals color.installPackages color.extraPackages);
 
     # This module sets its own options to the values specified in a colorscheme file.
     modules.color = let

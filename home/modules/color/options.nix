@@ -97,6 +97,8 @@ in rec {
     default = [];
   };
 
+  installPackages = lib.mkEnableOption "Install cursor and icon themes";
+
   # This option is set automatically
   wallpapers = let
     # Collect all the available wallpapers.
