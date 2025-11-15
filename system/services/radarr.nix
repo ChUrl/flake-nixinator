@@ -27,7 +27,7 @@ in {
       ];
 
       volumes = [
-        "/media/Movie/0-MakeMKV:/media/downloads"
+        "/media/Movie/.sabnzbd-complete:/media/downloads"
         "/media/Movie:/media/movies"
 
         "radarr_config:/config"
