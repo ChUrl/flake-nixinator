@@ -23,7 +23,7 @@ in {
       dependsOn = [];
 
       ports = [
-        # "6767:6766"
+        # "6767:6767"
       ];
 
       volumes = [

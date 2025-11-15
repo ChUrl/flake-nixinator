@@ -23,11 +23,17 @@ in {
       dependsOn = [];
 
       ports = [
+        # NOTE: On initial start, the gui won't be reachable via reverse proxy,
+        #       because the hostname has to be whitelisted.
+        #       Edit the "sabnzbd.ini" in the docker volume and add the reverse-proxy address
+        #       to the host_whitelist variable.
         # "8080:8080"
       ];
 
       volumes = [
+        "/media/Movie/.sabnzbd:/media/movies/incomplete"
         "/media/Movie/0-MakeMKV:/media/movies"
+        "/media/Show/.sabnzbd:/media/shows/incomplete"
         "/media/Show/0-MakeMKV:/media/shows"
 
         "sabnzbd_config:/config"
