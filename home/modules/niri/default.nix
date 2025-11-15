@@ -95,7 +95,7 @@ in {
             {argv = ["zeal"];}
             {argv = ["sleep" "5s" "&&" "nextcloud" "--background"];}
             {argv = ["protonvpn-app"];}
-            {argv = ["sleep" "5s" "&&" "keepassxc"];} # TODO: Delay startup
+            {argv = ["sleep" "5s" "&&" "keepassxc"];}
             {argv = ["fcitx5"];}
 
             # TODO: On certain workspaces

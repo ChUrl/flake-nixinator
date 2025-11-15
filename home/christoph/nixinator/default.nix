@@ -221,7 +221,9 @@
         overrides = {
           "org.prismlauncher.PrismLauncher".Context = {
             filesystems = [
-              "/tmp"
+              "${config.home.homeDirectory}/Downloads"
+
+              "/tmp" # To allow temporary world folder creation for datapack installation
             ];
           };
 
