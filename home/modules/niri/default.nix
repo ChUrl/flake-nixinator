@@ -93,9 +93,9 @@ in {
             {argv = ["noctalia-shell"];}
             {argv = ["kitty" "--hold" "fastfetch"];}
             {argv = ["zeal"];}
-            {argv = ["nextcloud --background"];}
+            {argv = ["sleep" "5s" "&&" "nextcloud" "--background"];}
             {argv = ["protonvpn-app"];}
-            {argv = ["keepassxc"];}
+            {argv = ["sleep" "5s" "&&" "keepassxc"];} # TODO: Delay startup
             {argv = ["fcitx5"];}
 
             # TODO: On certain workspaces
