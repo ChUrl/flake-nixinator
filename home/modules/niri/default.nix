@@ -91,17 +91,14 @@ in {
 
           spawn-at-startup = [
             {argv = ["noctalia-shell"];}
+
             {argv = ["kitty" "--hold" "fastfetch"];}
             {argv = ["zeal"];}
-            {argv = ["sleep" "5s" "&&" "nextcloud" "--background"];}
             {argv = ["protonvpn-app"];}
-            {argv = ["sleep" "5s" "&&" "keepassxc"];}
             {argv = ["fcitx5"];}
 
-            # TODO: On certain workspaces
-            # {argv = ["ferdium"];}
-            # {argv = ["kitty --title=Btop btop"];}
-            # {argv = ["kitty --title=Rmpc rmpc"];}
+            {sh = "sleep 5s && nextcloud --background";}
+            {sh = "sleep 5s && keepassxc";}
           ];
 
           workspaces = {
