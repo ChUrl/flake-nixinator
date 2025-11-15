@@ -35,6 +35,7 @@
     ../services/nginx-proxy-manager.nix
     ../services/paperless.nix
     ../services/portainer-agent.nix
+    ../services/prowlarr.nix
     ../services/radarr.nix
     ../services/sabnzbd-movies.nix
     ../services/sabnzbd-shows.nix
