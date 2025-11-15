@@ -200,6 +200,10 @@
       inputs.sops-nix.nixosModules.sops
       inputs.impermanence.nixosModules.impermanence
       inputs.lanzaboote.nixosModules.lanzaboote
+
+      # We need the niri module also on the headless hosts
+      # so nix can parse the config (although it is disabled...)
+      inputs.niri.nixosModules.niri # This also imports the HM module
     ];
   in {
     # Local shell for NixFlake directory
@@ -227,7 +231,6 @@
         extraModules =
           [
             inputs.disko.nixosModules.disko
-            inputs.niri.nixosModules.niri # This also imports the HM module
           ]
           ++ commonModules;
       };
@@ -236,11 +239,7 @@
         hostname = "nixtop";
         username = "christoph";
         headless = false;
-        extraModules =
-          [
-            inputs.niri.nixosModules.niri
-          ]
-          ++ commonModules;
+        extraModules = [] ++ commonModules;
       };
       servenix = mylib.nixos.mkNixosConfigWithHomeManagerModule {
         inherit system mylib publicKeys;
