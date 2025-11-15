@@ -27,7 +27,7 @@ in {
       ];
 
       volumes = [
-        "/media/Show/0-MakeMKV:/media/downloads"
+        "/media/Show/.sabnzbd-complete:/media/downloads"
         "/media/Show:/media/shows"
 
         "sonarr_config:/config"
