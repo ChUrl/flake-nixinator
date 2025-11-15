@@ -24,6 +24,7 @@
 
     # General services
     ../services/authelia.nix
+    ../services/bazarr.nix
     ../services/fileflows.nix
     ../services/gitea.nix
     ../services/gitea-runner.nix
@@ -34,6 +35,9 @@
     ../services/nginx-proxy-manager.nix
     ../services/paperless.nix
     ../services/portainer-agent.nix
+    ../services/radarr.nix
+    ../services/sabnzbd.nix
+    ../services/sonarr.nix
     ../services/teamspeak.nix
     ../services/tinymediamanager.nix
     ../services/whats-up-docker.nix
