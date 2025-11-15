@@ -835,7 +835,7 @@ in
       };
 
       mpv = {
-        enable = true;
+        enable = !headless;
         config = {
           gpu-context = "wayland";
         };
