@@ -167,7 +167,7 @@ in {
               display = {color = color.hex.accentDim;};
             };
 
-            always-center-single-column = false;
+            always-center-single-column = true;
 
             # Gaps between windows
             gaps = 8;
@@ -188,6 +188,10 @@ in {
           window-rules = [
             # Rules for all windows
             {
+              default-column-width.proportion = 0.5;
+              default-window-height.proportion = 1.0;
+
+              # Rounded corners
               clip-to-geometry = true;
               geometry-corner-radius = {
                 bottom-left = 8.0;
@@ -195,9 +199,19 @@ in {
                 top-left = 8.0;
                 top-right = 8.0;
               };
+
+              # open-floating = false;
+              # open-focused = false;
+              # open-fullscreen = false;
+              # open-maximized = false;
+
+              # open-on-output = "DP-1";
+              # open-on-workspace = "2";
+
+              # opacity = 0.8;
             }
 
-            # Assign to workspaces
+            # Rules for specific windows
             {
               matches = [{app-id = "Zotero";}];
               open-on-workspace = "2";
@@ -205,10 +219,12 @@ in {
             {
               matches = [{app-id = "neovide";}];
               open-on-workspace = "2";
+              open-maximized = true;
             }
             {
               matches = [{app-id = "code-url-handler";}];
               open-on-workspace = "2";
+              open-floating = true;
             }
             {
               matches = [{app-id = "obsidian";}];
@@ -217,6 +233,7 @@ in {
             {
               matches = [{app-id = "firefox";}];
               open-on-workspace = "4";
+              open-maximized = true;
             }
             {
               matches = [{app-id = "Google-chrome";}];
@@ -237,14 +254,18 @@ in {
             {
               matches = [{app-id = "steam_app_(.+)";}];
               open-on-workspace = "6";
+              open-floating = true;
+              open-maximized = true;
             }
             {
               matches = [{app-id = "signal";}];
               open-on-workspace = "7";
+              open-maximized = true;
             }
             {
               matches = [{app-id = "discord";}];
               open-on-workspace = "9";
+              open-maximized = true;
             }
           ];
 
