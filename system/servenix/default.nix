@@ -34,7 +34,7 @@
     ../services/nextcloud.nix
     ../services/nginx-proxy-manager.nix
     ../services/paperless.nix
-    ../services/plex.nix
+    # ../services/plex.nix # Their monetization strategy is absolutely atrocious
     ../services/portainer-agent.nix
     ../services/prowlarr.nix
     ../services/radarr.nix
