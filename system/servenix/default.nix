@@ -34,6 +34,7 @@
     ../services/nextcloud.nix
     ../services/nginx-proxy-manager.nix
     ../services/paperless.nix
+    ../services/plex.nix
     ../services/portainer-agent.nix
     ../services/prowlarr.nix
     ../services/radarr.nix
