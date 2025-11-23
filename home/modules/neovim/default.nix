@@ -824,11 +824,10 @@ in {
 
           # NOTE: This entire thing is rough, I should rewrite...
           # TODO: Need to rewrite this once lspconfig 3.0 comes around
-          # TODO: LSP servers don't autostart anymore...
           lspconfig = {
             name = "lspconfig";
             pkg = pkgs.vimPlugins.nvim-lspconfig;
-            lazy = true;
+            lazy = false;
             cmd = ["LspInfo"];
             event = ["BufReadPost" "BufNewFile"];
             dependencies = [_lazydev];
@@ -998,10 +997,12 @@ in {
                   capabilities = __lspCapabilities(),
                 }
 
+                -- Enable configured servers
                 for i, server in ipairs(${servers}) do
                   if type(server) == "string" then
                     -- require("lspconfig")[server].setup(__setup)
                     vim.lsp.config(server, __setup)
+                    vim.lsp.enable(server)
                   else
                     local options = server.extraOptions
 
@@ -1013,6 +1014,7 @@ in {
 
                     -- require("lspconfig")[server.name].setup(options)
                     vim.lsp.config(server.name, options)
+                    vim.lsp.enable(server.name)
                   end
                 end
               end
