@@ -52,6 +52,7 @@ in {
             tailwindcss-language-server
             tex-fmt
             texlab
+            tinymist
             typescript
             vscode-langservers-extracted # includes nodejs
 
@@ -78,6 +79,7 @@ in {
             # nodePackages_latest.prettier # Use local install as plugins change per project
             rustfmt
             stylua
+            typstyle
           ]
         ];
     };
@@ -512,9 +514,10 @@ in {
                 nix = ["alejandra"];
                 python = ["black"];
                 qml = ["qmlformat"];
+                rust = ["rustfmt"];
                 svelte = ["prettierd" "prettier"];
                 typescript = ["prettierd" "prettier"];
-                rust = ["rustfmt"];
+                typst = ["typstyle"];
               };
 
               default_format_opts = {
@@ -939,6 +942,14 @@ in {
                 {name = "svelte";}
                 {name = "tailwindcss";}
                 {name = "texlab";}
+                {
+                  name = "tinymist";
+                  extraOptions.settings = {
+                    formatterMode = "typstyle";
+                    exportPdf = "onType";
+                    semanticTokens = "disable";
+                  };
+                }
 
                 # {name = "jdtls";} # Don't set up when using nvim-jdtls
                 # {name = "rust_analyzer";} # Don't set up when using rustaceanvim
@@ -1888,6 +1899,24 @@ in {
             config = mkDefaultConfig name;
           };
 
+          typst-preview = rec {
+            name = "typst-preview";
+            pkg = pkgs.vimPlugins.typst-preview-nvim;
+            lazy = true;
+            ft = ["typst"];
+            config = mkDefaultConfig name;
+            opts = {
+              dependencies_bin.__raw = ''
+                {
+                  ['tinymist'] = "${pkgs.tinymist}/bin/tinymist",
+                  ['websocat'] = "${pkgs.websocat}/bin/websocat"
+                }
+              '';
+              # open_cmd = "qutebrowser %s";
+              # open_cmd = "firefox %s -P typst-preview --class typst-preview";
+            };
+          };
+
           _promise = {
             name = "promise";
             pkg = pkgs.vimPlugins.promise-async;
@@ -2104,6 +2133,7 @@ in {
           trouble # Diagnostics window
           ts-autotag # Automatic html tag insertion/updating
           typescript-tools # Typescript tsserver LSP
+          typst-preview # Typst support
           ufo # Code folding
           vimtex # LaTeX support
           # wakatime # Time tracking

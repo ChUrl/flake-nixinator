@@ -14,6 +14,7 @@ in {
       packages = with pkgs; [
         texliveFull
         inkscape
+        typst
       ];
 
       file = {
