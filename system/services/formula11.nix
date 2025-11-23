@@ -4,7 +4,7 @@
   pkgs,
   ...
 }: let
-  pocketbaseVersion = "0.25.0";
+  pocketbaseVersion = "0.33.0";
   f11Version = "latest";
 in {
   virtualisation.oci-containers.containers = {
