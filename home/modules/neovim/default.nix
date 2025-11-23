@@ -1510,6 +1510,8 @@ in {
                 line_length = 1000;
               };
 
+              bufdelete.enabled = false;
+
               dashboard = {
                 enabled = true;
 
@@ -1571,10 +1573,23 @@ in {
                 };
               };
 
+              debug.enabled = false;
+              dim.enabled = false;
+
               explorer = {
                 enabled = false;
                 replace_netrw = false; # Use yazi for that
               };
+
+              gh.enabled = false;
+              git.enabled = false;
+              gitbrowse.enabled = false;
+              image.enabled = false;
+              indent.enabled = false;
+              input.enabled = false;
+              keymap.enabled = false;
+              layout.enabled = false;
+              lazygit.enabled = true;
 
               notifier = {
                 enabled = true;
@@ -1608,6 +1623,20 @@ in {
                   };
                 };
               };
+
+              profiler.enabled = false;
+              quickfile.enabled = false;
+              rename.enabled = false;
+              scope.enabled = false;
+              scratch.enabled = false;
+              scroll.enabled = false;
+              statuscolumn.enabled = false;
+              terminal.enabled = false;
+              toggle.enabled = false;
+              util.enabled = false;
+              win.enabled = false;
+              words.enabled = false;
+              zen.enabled = false;
             };
           };
 
