@@ -1,6 +1,6 @@
 # NixOS Configuration
 
-Modular NixOS configuration, using Hyprland for a lightweight desktop.
+Modular NixOS configuration, using Hyprland (yikes) or Niri for a tiling/scrolling desktop.
 
 ![](FastFetch.png)
 
@@ -10,7 +10,10 @@ Modular NixOS configuration, using Hyprland for a lightweight desktop.
   <img src="/Btop.png" width="33%" />
 </p>
 
+![](Niri.png)
+
 To install, run `nixos-rebuild` with the `--flake` parameter from the `NixFlake` directory: `nixos-rebuild switch --flake .#nixinator`.
+Alternatively, use `nh os switch` or `nh os boot`.
 
 ## NixFlake/system
 
@@ -19,6 +22,7 @@ Contains all the system configurations.
 - There is a common configuration used for all systems: `NixFlake/system/default.nix`
 - Every system has its own special configuration: `NixFlake/system/<hostname>/default.nix`
 - System modules are located in `NixFlake/system/modules`
+- Hosted services are located in `NixFlake/system/services`
 
 When creating a NixOS configuration inside the `NixFlake/flake.nix` the common configuration is imported.
 Because the hostname is propagated to the common configuration, it can import the host-specific config by itself.
@@ -41,6 +45,6 @@ Each derivation is loaded into `NixFlake/derivations/default.nix`.
 
 ## NixFlake/overlays
 
-Contains (not at the moment) all overlays.
-The `NixFlake/overlays/default.nix` imports all of the overlays and all of the derivations.
-It is then imported by the toplevel `NixFlake/flake.nix`, to make everything available to the system/home configurations.
+Contains all overlays, e.g. package version overrides.
+The `NixFlake/overlays/default.nix` imports all overlays and all derivations.
+It is then imported by the top-level `NixFlake/flake.nix`, to make everything available to the system/home configurations.
