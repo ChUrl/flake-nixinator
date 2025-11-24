@@ -212,36 +212,36 @@
           }
         ];
         right = [
-          {
-            id = "SystemMonitor";
-            usePrimaryColor = true;
-            showCpuUsage = true;
-            showCpuTemp = false;
-            showMemoryUsage = true;
-            showMemoryAsPercent = false;
-            showNetworkStats = true;
-            showDiskUsage = true;
-            diskPath = "/";
-          }
+          # {
+          #   id = "SystemMonitor";
+          #   usePrimaryColor = true;
+          #   showCpuUsage = true;
+          #   showCpuTemp = false;
+          #   showMemoryUsage = true;
+          #   showMemoryAsPercent = false;
+          #   showNetworkStats = true;
+          #   showDiskUsage = true;
+          #   diskPath = "/";
+          # }
           {
             id = "Volume";
-            displayMode = "alwaysShow";
+            # displayMode = "alwaysShow";
           }
           {
             id = "Microphone";
-            displayMode = "alwaysShow";
+            # displayMode = "alwaysShow";
           }
           {
             id = "Bluetooth";
-            displayMode = "alwaysShow";
+            # displayMode = "alwaysShow";
           }
           {
             id = "WiFi";
-            displayMode = "alwaysShow";
+            # displayMode = "alwaysShow";
           }
           {
             id = "VPN";
-            displayMode = "alwaysShow";
+            # displayMode = "alwaysShow";
           }
           {
             id = "Tray";
