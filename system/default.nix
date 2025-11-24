@@ -463,6 +463,7 @@ with mylib.networking; {
     services."refresh-nps-cache" = {
       # Make sure `nix` and `nix-env` are findable by systemd.services.
       path = ["/run/current-system/sw/"];
+      after = ["network.target"];
       serviceConfig = {
         Type = "oneshot";
         User = "${username}";
