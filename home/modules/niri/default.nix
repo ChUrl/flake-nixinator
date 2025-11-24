@@ -442,7 +442,7 @@ in {
               hotkey-overlay = {hidden = true;};
             };
             "Mod+Shift+H" = {
-              action = move-column-left;
+              action = move-column-left-or-to-monitor-left;
               hotkey-overlay = {title = "Move column to the left. Equivalent bindings for other directions.";};
             };
             "Mod+Shift+J" = {
@@ -454,7 +454,7 @@ in {
               hotkey-overlay = {hidden = true;};
             };
             "Mod+Shift+L" = {
-              action = move-column-right;
+              action = move-column-right-or-to-monitor-right;
               hotkey-overlay = {hidden = true;};
             };
 
