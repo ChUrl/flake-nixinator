@@ -60,7 +60,7 @@
     # Noctalia shell
     noctalia.url = "github:noctalia-dev/noctalia-shell";
     noctalia.inputs.nixpkgs.follows = "nixpkgs";
-    noctalia.inputs.quickshell.follows = "quickshell";
+    # noctalia.inputs.quickshell.follows = "quickshell";
 
     # Lol
     waifu-cursors.url = "github:kagurazakei/waifu-cursors";
