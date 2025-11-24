@@ -54,6 +54,7 @@ in {
     programs = {
       noctalia-shell = import ./noctalia.nix {inherit color;};
 
+      # TODO: Extract options
       niri = {
         # enable = true; # Enabled in system module
 
@@ -120,7 +121,7 @@ in {
               mode = {
                 width = 3440;
                 height = 1440;
-                refresh = 165.0;
+                refresh = 164.999;
               };
               position = {
                 x = 1920;
