@@ -346,8 +346,8 @@ with mylib.networking; {
     hyprland = {
       enable = !headless;
 
-      package = inputs.hyprland.packages.${system}.hyprland;
-      portalPackage = inputs.hyprland.packages.${system}.xdg-desktop-portal-hyprland;
+      package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
+      portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
 
       xwayland.enable = true;
       withUWSM = true;
@@ -471,7 +471,7 @@ with mylib.networking; {
       script = ''
         set -eu
         echo "Start refreshing nps cache..."
-        ${inputs.nps.packages.${system}.default}/bin/nps -dddd -e -r
+        ${inputs.nps.packages.${pkgs.stdenv.hostPlatform.system}.default}/bin/nps -dddd -e -r
         echo "... finished nps cache with exit code $?."
       '';
     };

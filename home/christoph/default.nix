@@ -57,7 +57,7 @@ in
         extraPackages = with pkgs; [
           papirus-icon-theme
           bibata-cursors
-          inputs.waifu-cursors.packages.${pkgs.system}.all
+          inputs.waifu-cursors.packages.${pkgs.stdenv.hostPlatform.system}.all
         ];
 
         cursor = "Bibata-Modern-Classic";
@@ -537,10 +537,10 @@ in
             # Run unpatched binaries on NixOS
             # Sets NIX_LD_LIBRARY_PATH and NIX_LD variables for nix-ld.
             # Usage: "nix-alien-ld -- <Executable>".
-            inputs.nix-alien.packages.${system}.nix-alien
+            inputs.nix-alien.packages.${pkgs.stdenv.hostPlatform.system}.nix-alien
 
             # Search nixpkgs
-            inputs.nps.packages.${system}.default
+            inputs.nps.packages.${pkgs.stdenv.hostPlatform.system}.default
 
             # Use NixCommunity binary cache
             cachix
@@ -854,7 +854,7 @@ in
       nushell.enable = false;
 
       # spicetify = let
-      #   spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.system};
+      #   spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.stdenv.hostPlatform.system};
       # in {
       #   enable = true;
       #

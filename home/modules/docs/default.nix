@@ -12,9 +12,11 @@ in {
   config = lib.mkIf docs.enable {
     home = {
       packages = with pkgs; [
-        texliveFull
         inkscape
-        typst
+
+        texliveFull # TODO: LaTeX packages
+
+        typst # TODO: Typst packages
       ];
 
       file = {

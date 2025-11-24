@@ -142,8 +142,8 @@ in {
 
     wayland.windowManager.hyprland = {
       enable = true;
-      package = inputs.hyprland.packages.${pkgs.system}.hyprland;
-      portalPackage = inputs.hyprland.packages.${pkgs.system}.xdg-desktop-portal-hyprland;
+      package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
+      portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
 
       systemd.enable = true; # Enable hyprland-session.target
       systemd.variables = ["--all"]; # Import PATH into systemd
@@ -152,16 +152,16 @@ in {
       plugins = builtins.concatLists [
         (lib.optionals
           hyprland.bars.enable
-          [inputs.hyprland-plugins.packages.${pkgs.system}.hyprbars])
+          [inputs.hyprland-plugins.packages.${pkgs.stdenv.hostPlatform.system}.hyprbars])
         (lib.optionals
           hyprland.dynamicCursor.enable
-          [inputs.hypr-dynamic-cursors.packages.${pkgs.system}.hypr-dynamic-cursors])
+          [inputs.hypr-dynamic-cursors.packages.${pkgs.stdenv.hostPlatform.system}.hypr-dynamic-cursors])
         (lib.optionals
           hyprland.trails.enable
-          [inputs.hyprland-plugins.packages.${pkgs.system}.hyprtrails])
+          [inputs.hyprland-plugins.packages.${pkgs.stdenv.hostPlatform.system}.hyprtrails])
         (lib.optionals
           hyprland.hyprspace.enable
-          [inputs.hyprspace.packages.${pkgs.system}.Hyprspace])
+          [inputs.hyprspace.packages.${pkgs.stdenv.hostPlatform.system}.Hyprspace])
       ];
 
       settings = import ./settings.nix {
