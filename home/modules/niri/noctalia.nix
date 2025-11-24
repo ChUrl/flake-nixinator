@@ -129,6 +129,7 @@
       visualizerQuality = "high";
       mprisBlacklist = [];
       preferredPlayer = "";
+      externalMixer = "kitty --title=Ncpamixer ncpamixer";
     };
 
     nightLight = {
@@ -212,16 +213,35 @@
         ];
         right = [
           {
+            id = "SystemMonitor";
+            usePrimaryColor = true;
+            showCpuUsage = true;
+            showCpuTemp = false;
+            showMemoryUsage = true;
+            showMemoryAsPercent = false;
+            showNetworkStats = true;
+            showDiskUsage = true;
+            diskPath = "/";
+          }
+          {
             id = "Volume";
+            displayMode = "alwaysShow";
           }
           {
             id = "Microphone";
-          }
-          {
-            id = "WiFi";
+            displayMode = "alwaysShow";
           }
           {
             id = "Bluetooth";
+            displayMode = "alwaysShow";
+          }
+          {
+            id = "WiFi";
+            displayMode = "alwaysShow";
+          }
+          {
+            id = "VPN";
+            displayMode = "alwaysShow";
           }
           {
             id = "Tray";
