@@ -97,6 +97,7 @@ in {
             {argv = ["zeal"];}
             {argv = ["protonvpn-app"];}
             {argv = ["fcitx5"];}
+            {argv = ["jellyfin-mpv-shim"];}
 
             {sh = "sleep 5s && nextcloud --background";}
             {sh = "sleep 5s && keepassxc";}
