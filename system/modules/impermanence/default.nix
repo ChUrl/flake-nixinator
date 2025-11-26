@@ -142,6 +142,7 @@ in {
             (mkUDir ".config/Ferdium" m755)
             (mkUDir ".config/fish/completions" m755)
             (mkUDir ".config/impermanence" m755)
+            (mkUDir ".config/jellyfin-mpv-shim" m755)
             (mkUDir ".config/JetBrains" m755)
             (mkUDir ".config/kdeconnect" m755)
             (mkUDir ".config/keepassxc" m755)
