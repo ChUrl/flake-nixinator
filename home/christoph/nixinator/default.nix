@@ -140,6 +140,8 @@
         makemkv
         lrcget
         msty
+        # jellyfin-media-player # CVE, can't install
+        jellyfin-mpv-shim
 
         steam-devices-udev-rules
       ];
