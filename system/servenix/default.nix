@@ -35,6 +35,7 @@
     ../services/paperless.nix
     # ../services/plex.nix # Their monetization strategy is absolutely atrocious
     ../services/portainer-agent.nix
+    ../services/pulse-agent-servenix.nix
     ../services/prowlarr.nix
     ../services/radarr.nix
     ../services/sabnzbd-movies.nix
