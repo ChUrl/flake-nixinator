@@ -20,6 +20,7 @@
     ../services/adguard.nix
     ../services/nginx-proxy-manager.nix
     ../services/portainer.nix
+    ../services/pulse.nix
     ../services/whats-up-docker.nix
   ];
 
