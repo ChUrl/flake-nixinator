@@ -20,7 +20,9 @@ in {
         passwordFile = "${config.sops.secrets.docker-password.path}";
       };
 
-      dependsOn = [];
+      dependsOn = [
+        "gitea"
+      ];
 
       ports = [];
 
