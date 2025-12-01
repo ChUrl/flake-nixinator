@@ -27,7 +27,6 @@
     ../services/bazarr.nix
     ../services/fileflows.nix
     ../services/gitea.nix
-    ../services/gitea-runner.nix
     ../services/immich.nix
     ../services/jellyfin.nix
     ../services/kopia.nix
