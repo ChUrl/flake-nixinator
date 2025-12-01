@@ -21,6 +21,7 @@
     ../services/nginx-proxy-manager.nix
     ../services/portainer.nix
     ../services/pulse.nix
+    ../services/pulse-agent-thinknix.nix
     ../services/whats-up-docker.nix
   ];
 
