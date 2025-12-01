@@ -1,6 +1,7 @@
 {
   inputs,
   system,
+  headless,
   username,
   hostname,
   config,
@@ -27,13 +28,7 @@ in {
         builtins.concatLists [
           (lib.optionals neovim.neovide [neovide])
 
-          [
-            (pkgs.ripgrep.override {withPCRE2 = true;})
-
-            # Dependencies
-            lua54Packages.jsregexp # For tree-sitter
-            # nodejs_latest
-
+          (lib.optionals (!headless) [
             # Language servers
             clang-tools
             clojure-lsp
@@ -80,6 +75,14 @@ in {
             rustfmt
             stylua
             typstyle
+          ])
+
+          [
+            (pkgs.ripgrep.override {withPCRE2 = true;})
+
+            # Dependencies
+            lua54Packages.jsregexp # For tree-sitter
+            # nodejs_latest
           ]
         ];
     };
