@@ -25,6 +25,7 @@
     # General services
     ../services/authelia.nix
     ../services/bazarr.nix
+    ../services/box.nix
     ../services/fileflows.nix
     ../services/gitea.nix
     ../services/immich.nix
