@@ -108,7 +108,7 @@
 
   boot = {
     kernelPackages = pkgs.linuxPackages_zen;
-    # kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
+    # kernelPackages = pkgs.linuxPackages_latest;
 
     # kernelParams = [ "quiet" ];
     # plymouth.enable = true;
