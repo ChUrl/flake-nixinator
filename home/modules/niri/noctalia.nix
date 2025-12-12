@@ -1,5 +1,6 @@
 {color}: {
-  enable = true;
+  enable = false;
+
   settings = {
     # configure noctalia here; defaults will
     # be deep merged with these attributes.
