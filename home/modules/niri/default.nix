@@ -11,11 +11,15 @@
 in {
   options.modules.niri = import ./options.nix {inherit lib mylib;};
 
-  config = lib.mkIf niri.enable {
+  config = lib.mkIf niri.enable rec {
     assertions = [
       {
         assertion = nixosConfig.programs.niri.enable;
-        message = "Can't enable Niri module with Niri disabled!";
+        message = "Can't enable Niri config with Niri disabled!";
+      }
+      {
+        assertion = !(programs.noctalia-shell.enable && programs.dankMaterialShell.enable);
+        message = "Can't enable Noctalia and DankMaterialShell at the same time!";
       }
     ];
 
@@ -24,6 +28,9 @@ in {
       iconTheme.package = color.iconPackage;
       iconTheme.name = color.iconTheme;
     };
+
+    # Disable niri polkit if we use DMS, as it has its own
+    systemd.user.services.niri-flake-polkit = lib.mkForce {};
 
     home = {
       sessionVariables = {
@@ -52,7 +59,9 @@ in {
     };
 
     programs = {
+      # TODO: Those should be modules with their own options
       noctalia-shell = import ./noctalia.nix {inherit color;};
+      dankMaterialShell = import ./dankMaterialShell.nix {inherit color;};
 
       # TODO: Extract options
       niri = {
@@ -323,21 +332,39 @@ in {
             };
 
             # Noctalia
+            # "Mod+A" = {
+            #   action = spawn "noctalia-shell" "ipc" "call" "launcher" "toggle";
+            #   hotkey-overlay = {title = "Toggle the application launcher.";};
+            # };
+            # "Mod+Ctrl+L" = {
+            #   action = spawn "noctalia-shell" "ipc" "call" "lockScreen" "lock";
+            #   hotkey-overlay = {title = "Lock the screen.";};
+            # };
+            # "Mod+W" = {
+            #   action = spawn "noctalia-shell" "ipc" "call" "wallpaper" "toggle";
+            #   hotkey-overlay = {title = "Toggle the wallpaper chooser.";};
+            # };
+            # "Mod+Escape" = {
+            #   action = spawn "noctalia-shell" "ipc" "call" "sessionMenu" "toggle";
+            #   hotkey-overlay = {title = "Toggle the session menu.";};
+            # };
+
+            # DankMaterialShell
             "Mod+A" = {
-              action = spawn "noctalia-shell" "ipc" "call" "launcher" "toggle";
+              action = spawn "dms" "ipc" "call" "spotlight" "toggle";
               hotkey-overlay = {title = "Toggle the application launcher.";};
             };
             "Mod+Ctrl+L" = {
-              action = spawn "noctalia-shell" "ipc" "call" "lockScreen" "lock";
+              action = spawn "dms" "ipc" "call" "lock" "lock";
               hotkey-overlay = {title = "Lock the screen.";};
             };
-            "Mod+W" = {
-              action = spawn "noctalia-shell" "ipc" "call" "wallpaper" "toggle";
-              hotkey-overlay = {title = "Toggle the wallpaper chooser.";};
-            };
             "Mod+Escape" = {
-              action = spawn "noctalia-shell" "ipc" "call" "sessionMenu" "toggle";
+              action = spawn "dms" "ipc" "call" "powermenu" "toggle";
               hotkey-overlay = {title = "Toggle the session menu.";};
+            };
+            "Mod+C" = {
+              action = spawn "dms" "ipc" "call" "clipboard" "toggle";
+              hotkey-overlay = {title = "Show clipboard history.";};
             };
 
             # Screenshots
@@ -348,6 +375,12 @@ in {
             "Mod+Shift+S" = {
               action.screenshot = {show-pointer = true;};
               hotkey-overlay = {title = "Take a screenshot of a region.";};
+            };
+
+            # Niri
+            "Mod+Shift+Slash" = {
+              action = show-hotkey-overlay;
+              hotkey-overlay = {hidden = true;};
             };
 
             # Audio
@@ -369,12 +402,6 @@ in {
             };
             "XF86AudioNext" = {
               action = spawn "playerctl" "next";
-              hotkey-overlay = {hidden = true;};
-            };
-
-            # Niri
-            "Mod+Shift+Slash" = {
-              action = show-hotkey-overlay;
               hotkey-overlay = {hidden = true;};
             };
 
