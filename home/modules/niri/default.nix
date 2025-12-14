@@ -100,7 +100,9 @@ in {
           prefer-no-csd = true; # Disable client-side decorations (e.g. window titlebars)
 
           spawn-at-startup = [
-            {argv = ["noctalia-shell"];}
+            # TODO: Depend on options
+            # {argv = ["noctalia-shell"];}
+            {argv = ["dms" "run"];}
 
             {argv = ["kitty" "--hold" "fastfetch"];}
             {argv = ["zeal"];}
@@ -331,6 +333,7 @@ in {
               hotkey-overlay = {title = "Edit the NixFlake.";};
             };
 
+            # TODO: Enable with Noctalia option
             # Noctalia
             # "Mod+A" = {
             #   action = spawn "noctalia-shell" "ipc" "call" "launcher" "toggle";
@@ -349,6 +352,7 @@ in {
             #   hotkey-overlay = {title = "Toggle the session menu.";};
             # };
 
+            # TODO: Enable with DMS option
             # DankMaterialShell
             "Mod+A" = {
               action = spawn "dms" "ipc" "call" "spotlight" "toggle";

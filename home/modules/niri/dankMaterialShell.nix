@@ -2,7 +2,7 @@
   enable = true;
 
   systemd = {
-    enable = true;
+    enable = false;
     restartIfChanged = true;
   };
 
@@ -166,7 +166,7 @@
 
     # Wallpaper
     blurWallpaperOnOverview = true;
-    blurredWallpaperLayer = true;
+    blurredWallpaperLayer = false;
     wallpaperFillMode = "Fill";
 
     # Control center
