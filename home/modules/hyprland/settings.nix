@@ -111,19 +111,19 @@
 
   windowrule = let
     mkWorkspaceRule = workspace: class:
-      "workspace ${workspace}, "
-      + "class:^(${class})$";
+      "match:class ^(${class})$, "
+      + "workspace ${workspace}";
     mkWorkspaceRules = workspace: class-list:
       builtins.map (mkWorkspaceRule workspace) class-list;
 
     mkFloatingRule = attrs:
-      "float"
-      + (lib.optionalString (builtins.hasAttr "class" attrs) ", class:^(${attrs.class})$")
-      + (lib.optionalString (builtins.hasAttr "title" attrs) ", title:^(${attrs.title})$");
+      (lib.optionalString (builtins.hasAttr "class" attrs) "match:class ^(${attrs.class})$, ")
+      + (lib.optionalString (builtins.hasAttr "title" attrs) "match:title ^(${attrs.title})$, ")
+      + "float 1";
 
     mkTranslucentRule = class:
-      "opacity ${hyprland.transparent-opacity} ${hyprland.transparent-opacity}, "
-      + "class:^(${class})$";
+      "match:class ^(${class})$, "
+      + "opacity ${hyprland.transparent-opacity} ${hyprland.transparent-opacity}";
   in
     lib.mkMerge [
       (hyprland.workspacerules
@@ -165,15 +165,15 @@
   # Because those are not windows, but layers,
   # we have to blur them explicitly
   layerrule = [
-    "blur,rofi"
-    "ignorealpha 0.001,rofi" # Fix pixelated corners
-    "xray 0,rofi" # Render on top of other windows
-    "dimaround,rofi"
+    "match:class rofi, blur 1"
+    # "match:class rofi, ignore_alpha 0.001" # Fix pixelated corners
+    # "match:class rofi, xray 0" # Render on top of other windows
+    # "match:class rofi, dim_around 1"
 
-    "blur,waybar"
-    "blur,gtk4-layer-shell"
-    "blur,bar-0"
-    "blur,bar-1"
+    "match:class waybar, blur 1"
+    "match:class gtk4-layer-shell, blur 1"
+    "match:class bar-0, blur 1"
+    "match:class bar-1, blur 1"
   ];
 
   decoration = {
