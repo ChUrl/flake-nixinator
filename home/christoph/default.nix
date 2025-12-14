@@ -98,7 +98,7 @@ in
       };
 
       hyprland = {
-        enable = !headless;
+        enable = false;
         dunst.enable = !config.modules.hyprpanel.enable; # Disable for hyprpanel
         bars.enable = false;
         dynamicCursor.enable = false;
@@ -225,8 +225,8 @@ in
 
         windowrules = [
           # Fix jetbrains tooltip flicker
-          "float,class:^(jetbrains-.*)$,title:^(win[0-9]+)$"
-          "nofocus,class:^(jetbrains-.*)$,title:^(win[0-9]+)$"
+          "match:class ^(jetbrains-.*)$, match:title ^(win[0-9]+)$, float 1"
+          "match:class ^(jetbrains-.*)$, match:title ^(win[0-9]+)$, no_initial_focus 1"
         ];
 
         workspacerules = {
