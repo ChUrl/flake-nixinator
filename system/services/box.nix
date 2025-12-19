@@ -4,7 +4,7 @@
   pkgs,
   ...
 }: let
-  boxVersion = "v0.29.3";
+  boxVersion = "v0.30.1";
 in {
   virtualisation.oci-containers.containers = {
     box = {
