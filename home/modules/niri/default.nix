@@ -18,7 +18,7 @@ in {
         message = "Can't enable Niri config with Niri disabled!";
       }
       {
-        assertion = !(programs.noctalia-shell.enable && programs.dankMaterialShell.enable);
+        assertion = !(programs.noctalia-shell.enable && programs.dank-material-shell.enable);
         message = "Can't enable Noctalia and DankMaterialShell at the same time!";
       }
     ];
@@ -61,7 +61,7 @@ in {
     programs = {
       # TODO: Those should be modules with their own options
       noctalia-shell = import ./noctalia.nix {inherit color;};
-      dankMaterialShell = import ./dankMaterialShell.nix {inherit color;};
+      dank-material-shell = import ./dankMaterialShell.nix {inherit color;};
 
       # TODO: Extract options
       niri = {
@@ -386,6 +386,14 @@ in {
               action = show-hotkey-overlay;
               hotkey-overlay = {hidden = true;};
             };
+            # "Alt+Tab" = {
+            #   action = "next-window";
+            #   hotkey-overlay = {title = "Switch to next window.";};
+            # };
+            # "Alt+Shift+Tab" = {
+            #   action = "previous-window";
+            #   hotkey-overlay = {title = "Switch to previous window.";};
+            # };
 
             # Audio
             "XF86AudioRaiseVolume" = {
