@@ -98,7 +98,7 @@ in
       };
 
       hyprland = {
-        enable = false;
+        enable = nixosConfig.programs.hyprland.enable;
         dunst.enable = !config.modules.hyprpanel.enable; # Disable for hyprpanel
         bars.enable = false;
         dynamicCursor.enable = false;
@@ -291,7 +291,7 @@ in
         neovide = !headless;
       };
 
-      niri.enable = !headless;
+      niri.enable = nixosConfig.programs.niri.enable;
       nnn.enable = false; # Use yazi
       qutebrowser.enable = !headless;
       rmpc.enable = !headless;

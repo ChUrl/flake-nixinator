@@ -131,6 +131,7 @@
     };
 
     # Keep this as a system service because we're backing up /persist as root
+    # TODO: The repository gets corrupted all the time, maybe because the service runs before the repository is mounted?
     restic.backups."synology" = {
       # user = "${username}"; # Keep default (root), so restic can read everything
 
