@@ -77,9 +77,9 @@
     dgop.inputs.nixpkgs.follows = "nixpkgs";
     # dms-cli.url = "github:AvengeMedia/danklinux";
     # dms-cli.inputs.nixpkgs.follows = "nixpkgs";
-    dankMaterialShell.url = "github:AvengeMedia/DankMaterialShell";
-    dankMaterialShell.inputs.nixpkgs.follows = "nixpkgs";
-    dankMaterialShell.inputs.dgop.follows = "dgop";
+    dank-material-shell.url = "github:AvengeMedia/DankMaterialShell";
+    dank-material-shell.inputs.nixpkgs.follows = "nixpkgs";
+    dank-material-shell.inputs.dgop.follows = "dgop";
 
     # Hyprland (use flake so plugins are not built from source)
     hyprland.url = "github:hyprwm/Hyprland";

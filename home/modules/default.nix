@@ -35,8 +35,8 @@
     # inputs.niri.homeModules.niri # Imported by system module
     inputs.noctalia.homeModules.default
     inputs.caelestia.homeManagerModules.default
-    inputs.dankMaterialShell.homeModules.dankMaterialShell.default
-    inputs.dankMaterialShell.homeModules.dankMaterialShell.niri
+    inputs.dank-material-shell.homeModules.dank-material-shell
+    inputs.dank-material-shell.homeModules.niri
 
     # NOTE: Do NOT use this, use the system module (the HM module has to rely on fuse)
     # inputs.impermanence.homeManagerModules.impermanence
