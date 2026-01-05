@@ -32,6 +32,7 @@ in {
         "/media/Show:/data/tvshows"
         "/media/Movie:/data/movies"
         "/media/TV-Music:/data/music"
+        "/media/MusicVideos:/data/musicvideos"
 
         "jellyfin_config:/config"
       ];
