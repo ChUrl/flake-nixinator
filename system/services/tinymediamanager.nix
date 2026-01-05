@@ -29,6 +29,7 @@ in {
 
         "/media/Show:/media/tvshows"
         "/media/Movie:/media/movies"
+        "/media/MusicVideos:/media/musicvideos"
       ];
 
       environment = {

@@ -27,6 +27,7 @@ in {
       volumes = [
         "/home/christoph/Movies:/media/movies"
         "/home/christoph/Shows:/media/tvshows"
+        "/home/christoph/MusicVideos:/media/musicvideos"
 
         "fileflows_temp:/temp"
 

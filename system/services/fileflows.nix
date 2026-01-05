@@ -31,6 +31,7 @@ in {
 
         "/media/Movie:/media/movies"
         "/media/Show:/media/tvshows"
+        "/media/MusicVideos:/media/musicvideos"
 
         "/var/run/docker.sock:/var/run/docker.sock:ro"
       ];
