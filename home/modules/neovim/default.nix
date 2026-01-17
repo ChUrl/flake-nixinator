@@ -1836,9 +1836,7 @@ in {
               # _treesitter-context # Ugly
               # _treesitter-refactor # Ugly
             ];
-            lazy = true;
-            cmd = ["TSModuleInfo"];
-            event = ["BufReadPost" "BufNewFile"];
+            lazy = false;
             init = ''
               function()
                 -- Fix treesitter grammars/parsers on nix
@@ -1848,7 +1846,10 @@ in {
             '';
             config = ''
               function(_, opts)
-                require("nvim-treesitter.configs").setup(opts)
+                -- require("nvim-treesitter.configs").setup(opts)
+                require("nvim-treesitter").setup(opts)
+
+                -- TODO: Why is GLSL filetype in the treesitter setup???
 
                 -- GLSL filetypes
                 vim.filetype.add {
@@ -1866,7 +1867,8 @@ in {
             opts = {
               auto_install = false;
               ensure_installed = [];
-              parser_install_dir = "${treesitter-parsers}";
+              # parser_install_dir = "${treesitter-parsers}";
+              install_dir = "${treesitter-parsers}";
 
               indent = {
                 enable = true;
