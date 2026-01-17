@@ -63,11 +63,19 @@
     version = "0.31.3";
     format = "pyproject";
 
+    # TODO: The official repo was deleted, find the new one once it pops up
+    # src = pkgs.fetchFromGitHub {
+    #   owner = "exislow";
+    #   repo = "tidal-dl-ng";
+    #   rev = "v${version}";
+    #   sha256 = "sha256-PUT0anx1yivgXwW21jah7Rv1/BabOT+KPoW446NFNyg=";
+    # };
+
     src = pkgs.fetchFromGitHub {
-      owner = "exislow";
-      repo = "tidal-dl-ng";
-      rev = "v${version}";
-      sha256 = "sha256-PUT0anx1yivgXwW21jah7Rv1/BabOT+KPoW446NFNyg=";
+      owner = "rodvicj";
+      repo = "tidal_dl_ng-Project";
+      rev = "4573142c76ef045ebf8e80c34657dd2bec96f17d";
+      sha256 = "sha256-3sO2qj8V4KXOWK7vQsFAOYeTZo2rsc/M36SwRnC0oVg=";
     };
 
     doCheck = false;
@@ -96,13 +104,6 @@
       typer
       rich
     ];
-
-    # pythonOutputDistPhase = ''
-    #   echo "⚠️Skipping pythonOutputDistPhase"
-    # '';
-    # pythonCatchConflictsPhase = ''
-    #   echo "🛑 Skipping pythonCatchConflictsPhase"
-    # '';
   };
 
   #
