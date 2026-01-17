@@ -10,11 +10,12 @@
   #
   pythonPkgs = pkgs.python313Packages.overrideScope (self: super: {
     typer = super.typer.overridePythonAttrs (old: {
-      version = "0.20.0";
+      version = "0.20.1";
       src = super.fetchPypi {
         inherit (old) pname;
-        version = "0.20.0";
-        sha256 = "sha256-Gq9klAMXk+SHb7C6z6apErVRz0PB5jyADfixqGZyDDc=";
+        version = "0.20.1";
+        # sha256 = "sha256-Gq9klAMXk+SHb7C6z6apErVRz0PB5jyADfixqGZyDDc="; # v0.20.0
+        sha256 = "sha256-aFhesbASA2icQZm8RA1r5hbwhR6fDrQeSneIRcWg/Vs="; # v0.20.1
       };
     });
 
@@ -37,7 +38,7 @@
   #     sha256 = "sha256-Gq9klAMXk+SHb7C6z6apErVRz0PB5jyADfixqGZyDDc=";
   #   };
   # });
-  #
+
   # rich_14_2_0 = pkgs.python313Packages.rich.overridePythonAttrs (old: {
   #   version = "14.2.0";
   #   src = pkgs.python313Packages.fetchPypi {
@@ -80,6 +81,7 @@
 
     doCheck = false;
     catchConflicts = false;
+    strictDeps = false;
 
     nativeBuildInputs = with pythonPkgs; [poetry-core setuptools];
 
