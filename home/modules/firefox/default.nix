@@ -14,7 +14,7 @@ in {
     textfox = {
       enable = firefox.textfox;
       useLegacyExtensions = false;
-      profile = "default";
+      profiles = ["default"];
 
       config = {
         background = {

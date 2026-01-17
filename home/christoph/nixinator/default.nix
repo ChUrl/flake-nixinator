@@ -125,7 +125,6 @@
         # jetbrains.rider
 
         # Unity Stuff
-        # TODO: Unity module
         # unityhub
         # rider-unity
         # dotnetCore
@@ -139,9 +138,15 @@
         krita
         makemkv
         lrcget
-        msty
+        # msty
         # jellyfin-media-player # CVE, can't install
+        jellyfin-desktop
         jellyfin-mpv-shim
+        # tidal-hifi
+        tidal-dl-ng
+        picard
+        handbrake
+        teamspeak6-client
 
         steam-devices-udev-rules
       ];

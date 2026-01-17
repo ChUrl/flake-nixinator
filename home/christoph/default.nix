@@ -526,7 +526,7 @@ in
             gping # ping with graph
             curlie # curl a'la httpie
             wget # download that shit
-            dogdns # dns client
+            doggo # dns client
             rsync # cp on steroids
             rclone # Rsync for cloud
             httpie # Cool http client
@@ -569,11 +569,6 @@ in
             audacity
             ferdium
             gparted
-            tidal-hifi
-            tidal-dl-ng
-            picard
-            handbrake
-            teamspeak6-client
 
             # Office
             kdePackages.wacomtablet # For xournalpp/krita
