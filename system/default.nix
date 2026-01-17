@@ -363,7 +363,11 @@ with mylib.networking; {
       flake = "/home/${username}/NixFlake";
     };
 
-    niri.enable = !headless;
+    niri = {
+      enable = !headless;
+      package = pkgs.niri-unstable; # TODO: Can remove this again once niri-flake is updated for 25.11
+    };
+
     ssh.startAgent = true; # Use gnupg
     starship.enable = true;
     xwayland.enable = !headless;

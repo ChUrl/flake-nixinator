@@ -61,7 +61,7 @@ in {
     programs = {
       # TODO: Those should be modules with their own options
       noctalia-shell = import ./noctalia.nix {inherit color;};
-      dank-material-shell = import ./dankMaterialShell.nix {inherit color;};
+      dank-material-shell = import ./dankMaterialShell.nix {inherit config color;};
 
       # TODO: Extract options
       niri = {

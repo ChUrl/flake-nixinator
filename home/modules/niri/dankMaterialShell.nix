@@ -1,4 +1,7 @@
-{color}: {
+{
+  config,
+  color,
+}: {
   enable = true;
 
   systemd = {
@@ -221,9 +224,13 @@
       }
     ];
 
+    # Theme
+    currentThemeName = "custom";
+    currentThemeCategory = "registry";
+    customThemeFile = "${config.paths.dotfiles}/dankmaterialshell/catppuccin-mauve.json";
+
     # Styling
     cornerRadius = 10;
-    currentThemeName = "cat-mauve";
     customAnimationDuration = 500;
     fontFamily = "MonoLisa Normal";
     monoFontFamily = "MonoLisa Normal";
@@ -374,7 +381,6 @@
     customPowerActionPowerOff = "";
     customPowerActionReboot = "";
     customPowerActionSuspend = "";
-    customThemeFile = "";
     displayNameMode = "system";
     matugenScheme = "scheme-tonal-spot";
     matugenTargetMonitor = "";

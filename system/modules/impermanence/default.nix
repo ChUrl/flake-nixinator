@@ -148,6 +148,7 @@ in {
             (mkUDir ".config/keepassxc" m755)
             (mkUDir ".config/Msty" m755)
             (mkUDir ".config/Nextcloud" m755)
+            (mkUDir ".config/niri/dms" m755)
             (mkUDir ".config/obsidian" m755)
             (mkUDir ".config/obs-studio" m755)
             (mkUDir ".config/Signal" m755)
