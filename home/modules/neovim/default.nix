@@ -842,21 +842,15 @@ in {
                 {
                   name = "clangd";
                   extraOptions = {
-                    root_dir.__raw = ''
-                      function(fname)
-                        -- return require("lspconfig.util").root_pattern(
-                        return vim.lsp.config.util.root_pattern(
-                          "Makefile",
-                          "CMakeLists.txt",
-                          ".clang-format",
-                          ".clang-tidy"
-                        -- )(fname) or require("lspconfig.util").root_pattern(
-                        )(fname) or vim.lsp.config.util.root_pattern(
-                          "compile_commands.json"
-                        -- )(fname) or require("lspconfig.util").find_git_ancestor(fname)
-                        )(fname) or vim.lsp.config.util.find_git_ancestor(fname)
-                      end
-                    '';
+                    root_markers = [
+                      "Makefile"
+                      "CMakeLists.txt"
+                      ".clang-format"
+                      ".clang-tidy"
+                      "compile_commands.json"
+                    ];
+
+                    workspace_required = true;
 
                     cmd = [
                       "clangd"
