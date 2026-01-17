@@ -842,15 +842,14 @@ in {
                 {
                   name = "clangd";
                   extraOptions = {
-                    root_markers = [
-                      "Makefile"
-                      "CMakeLists.txt"
-                      ".clang-format"
-                      ".clang-tidy"
-                      "compile_commands.json"
-                    ];
-
-                    workspace_required = true;
+                    # root_markers = [
+                    #   "Makefile"
+                    #   "CMakeLists.txt"
+                    #   ".clang-format"
+                    #   ".clang-tidy"
+                    #   "compile_commands.json"
+                    # ];
+                    # workspace_required = true;
 
                     cmd = [
                       "clangd"
