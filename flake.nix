@@ -73,13 +73,13 @@
     # caelestia-cli.inputs.nixpkgs.follows = "nixpkgs";
 
     # DankMaterialShell
-    dgop.url = "github:AvengeMedia/dgop";
-    dgop.inputs.nixpkgs.follows = "nixpkgs";
+    # dgop.url = "github:AvengeMedia/dgop";
+    # dgop.inputs.nixpkgs.follows = "nixpkgs";
     # dms-cli.url = "github:AvengeMedia/danklinux";
     # dms-cli.inputs.nixpkgs.follows = "nixpkgs";
     dank-material-shell.url = "github:AvengeMedia/DankMaterialShell";
     dank-material-shell.inputs.nixpkgs.follows = "nixpkgs";
-    dank-material-shell.inputs.dgop.follows = "dgop";
+    # dank-material-shell.inputs.dgop.follows = "dgop";
 
     # Hyprland (use flake so plugins are not built from source)
     hyprland.url = "github:hyprwm/Hyprland";

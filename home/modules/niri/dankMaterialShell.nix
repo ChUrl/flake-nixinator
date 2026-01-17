@@ -25,7 +25,7 @@
 
   # This is generated from the DMS settings dialog.
   # Run: nix eval --impure --expr 'builtins.fromJSON (builtins.readFile ~/.config/DankMaterialShell/settings.json)'
-  default.settings = {
+  settings = {
     # Bar
     barConfigs = [
       {
@@ -419,7 +419,7 @@
     configVersion = 2;
   };
 
-  default.session = {
+  session = {
     # Settings
     doNotDisturb = false;
     isLightMode = false;
