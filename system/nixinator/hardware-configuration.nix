@@ -70,11 +70,11 @@
   fileSystems = {
     # NOTE: Some filesystems are managed by disko (see ./disks.nix)
 
-    "/home/${username}/Games" = {
-      device = "/dev/disk/by-id/nvme-WD_BLACK_SN850X_2000GB_231623802252-part1";
-      fsType = "ext4";
-      options = ["defaults" "rw" "noatime"];
-    };
+    # "/home/${username}/Games" = {
+    #   device = "/dev/disk/by-id/nvme-WD_BLACK_SN850X_2000GB_231623802252-part1";
+    #   fsType = "ext4";
+    #   options = ["defaults" "rw" "noatime"];
+    # };
 
     # If  the bg option is specified, a timeout or failure causes the mount(8) command
     # to fork a child which continues to attempt to mount the export.
