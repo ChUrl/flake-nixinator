@@ -15,10 +15,20 @@ in {
   config = mkIf cfg.enable {
     services.resolved = {
       enable = true;
-      llmnr = "false";
-      extraConfig = ''
-        DNSStubListener=no
-      '';
+
+      # llmnr = "false";
+      # extraConfig = ''
+      #   DNSStubListener=no
+      # '';
+
+      settings.Resolve = {
+        DNS = config.networking.nameservers;
+        DNSOverTLS = false;
+        DNSSEC = false;
+        Domains = config.networking.search;
+        LLMNR = false;
+        DNSStubListener = false;
+      };
     };
 
     # Use the programs.nm-applet instead

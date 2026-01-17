@@ -310,6 +310,9 @@ with mylib.networking; {
     man-pages
     man-pages-posix
 
+    # Android
+    android-tools
+
     # iPhone tethering + mounting
     libimobiledevice
     ifuse
@@ -320,7 +323,6 @@ with mylib.networking; {
   # as some extra configs are applied.
   # I would prefer to use HomeManager for some of these but the modules don't exist (yet).
   programs = {
-    adb.enable = true;
     dconf.enable = !headless;
     firejail.enable = true; # Use to run app in network namespace (e.g. through vpn)
     fuse.userAllowOther = true; # Allow users to mount e.g. samba shares (cifs)
