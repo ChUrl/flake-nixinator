@@ -161,6 +161,7 @@ in {
             (mkUDir ".config/Zeal" m755)
 
             # Share
+            (mkUDir ".local/share/containers" m755)
             (mkUDir ".local/share/direnv" m755)
             (mkUDir ".local/share/docker" m755)
             (mkUDir ".local/share/fish" m755)
