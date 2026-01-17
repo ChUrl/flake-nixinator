@@ -27,7 +27,7 @@ in {
       volumes = [
         "/home/christoph/Movies:/media/movies"
         "/home/christoph/Shows:/media/tvshows"
-        "/home/christoph/MusicVideos:/media/musicvideos"
+        # "/home/christoph/MusicVideos:/media/musicvideos" # NOTE: Not mounted on Nixinator
 
         "fileflows_temp:/temp"
 
