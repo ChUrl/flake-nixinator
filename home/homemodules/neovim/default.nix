@@ -891,7 +891,7 @@ in {
                   name = "nixd";
                   extraOptions.cmd = [
                     "nixd"
-                    "--inlay-hints=false"
+                    "--inlay-hints=true"
                     "--semantic-tokens=true"
                   ];
                   extraOptions.settings = {
