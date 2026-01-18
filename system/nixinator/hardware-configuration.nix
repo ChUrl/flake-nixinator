@@ -76,7 +76,9 @@
     #   options = ["defaults" "rw" "noatime"];
     # };
 
-    # If  the bg option is specified, a timeout or failure causes the mount(8) command
+    # NOTE: By mounting NFS shares here, we risk the system becoming unusable when they disconnect (unless unmounted).
+
+    # If the bg option is specified, a timeout or failure causes the mount(8) command
     # to fork a child which continues to attempt to mount the export.
     # The parent immediately returns with a zero exit code.
     # This is known as a "background" mount.
@@ -94,7 +96,7 @@
     "/home/${username}/Restic" = {
       device = "192.168.86.15:/volume1/NixinatorPersistence";
       fsType = "nfs";
-      options = ["defaults" "rw" "noatime" "_netdev" "bg" "soft"];
+      options = ["defaults" "rw" "noatime" "_netdev" "bg" "hard"];
     };
 
     # TrueNAS
@@ -102,25 +104,25 @@
     "/home/${username}/Movies" = {
       device = "192.168.86.20:/mnt/Seagate4TB/Movies";
       fsType = "nfs";
-      options = ["defaults" "rw" "noatime" "_netdev" "bg" "soft"];
+      options = ["defaults" "rw" "noatime" "_netdev" "bg" "hard"];
     };
 
     "/home/${username}/Shows" = {
       device = "192.168.86.20:/mnt/Seagate4TB/Shows";
       fsType = "nfs";
-      options = ["defaults" "rw" "noatime" "_netdev" "bg" "soft"];
+      options = ["defaults" "rw" "noatime" "_netdev" "bg" "hard"];
     };
 
     "/home/${username}/Music" = {
       device = "192.168.86.20:/mnt/Seagate4TB/Music";
       fsType = "nfs";
-      options = ["defaults" "rw" "noatime" "_netdev" "bg" "soft"];
+      options = ["defaults" "rw" "noatime" "_netdev" "bg" "hard"];
     };
 
     "/media/Box" = {
       device = "192.168.86.20:/mnt/Seagate4TB/Box";
       fsType = "nfs";
-      options = ["defaults" "rw" "relatime" "_netdev" "bg" "soft"];
+      options = ["defaults" "rw" "relatime" "_netdev" "bg" "hard"];
     };
   };
 
