@@ -132,59 +132,61 @@
 
     # Keep this as a system service because we're backing up /persist as root
     # TODO: The repository gets corrupted all the time, maybe because the service runs before the repository is mounted?
-    # restic.backups."synology" = {
-    #   # user = "${username}"; # Keep default (root), so restic can read everything
-    #
-    #   repository = "/home/${username}/Restic";
-    #   initialize = true;
-    #   passwordFile = config.sops.secrets.restic-repo-key.path;
-    #   createWrapper = true;
-    #
-    #   timerConfig = {
-    #     OnCalendar = "daily";
-    #     Persistent = true;
-    #     RandomizedDelaySec = "5h";
-    #   };
-    #
-    #   runCheck = true;
-    #   checkOpts = [
-    #     "--with-cache"
-    #   ];
-    #
-    #   pruneOpts = [
-    #     "--keep-daily 3"
-    #     "--keep-weekly 2"
-    #     # "--keep-monthly 0"
-    #     # "--keep-yearly 0"
-    #
-    #     "--prune" # Automatically remove dangling files not referenced by any snapshot
-    #     "--repack-uncompressed"
-    #   ];
-    #
-    #   paths = ["/persist"];
-    #   exclude = [
-    #     # The backup is just supposed to allow a system restore
-    #     "/persist/old_homes"
-    #     "/persist/old_roots"
-    #
-    #     # Those are synced by nextcloud, no need to backup them 50 times
-    #     "/persist/home/${username}/Documents"
-    #     "/persist/home/${username}/NixFlake"
-    #     "/persist/home/${username}/Notes"
-    #     "/persist/home/${username}/Projects"
-    #     "/persist/home/${username}/Public"
-    #
-    #     # Some more caches
-    #     ".cache"
-    #     "cache2" # firefox
-    #     "Cache"
-    #   ];
-    #   extraBackupArgs = [
-    #     "--exclude-caches" # Excludes marked cache directories
-    #     "--one-file-system" # Only stay on /persist (in case symlinks lead elsewhere)
-    #     "--cleanup-cache" # Auto remove old cache directories
-    #   ];
-    # };
+    #       - Was this caused by the NFS "soft" option?
+    #       - Might this be caused by the restic service being interrupted by shutdown/rebooting?
+    restic.backups."synology" = {
+      # user = "${username}"; # Keep default (root), so restic can read everything
+
+      repository = "/home/${username}/Restic";
+      initialize = true;
+      passwordFile = config.sops.secrets.restic-repo-key.path;
+      createWrapper = true;
+
+      timerConfig = {
+        OnCalendar = "daily";
+        Persistent = true;
+        RandomizedDelaySec = "5h";
+      };
+
+      runCheck = true;
+      checkOpts = [
+        "--with-cache"
+      ];
+
+      pruneOpts = [
+        "--keep-daily 3"
+        "--keep-weekly 2"
+        # "--keep-monthly 0"
+        # "--keep-yearly 0"
+
+        "--prune" # Automatically remove dangling files not referenced by any snapshot
+        "--repack-uncompressed"
+      ];
+
+      paths = ["/persist"];
+      exclude = [
+        # The backup is just supposed to allow a system restore
+        "/persist/old_homes"
+        "/persist/old_roots"
+
+        # Those are synced by nextcloud, no need to backup them 50 times
+        "/persist/home/${username}/Documents"
+        "/persist/home/${username}/NixFlake"
+        "/persist/home/${username}/Notes"
+        "/persist/home/${username}/Projects"
+        "/persist/home/${username}/Public"
+
+        # Some more caches
+        ".cache"
+        "cache2" # firefox
+        "Cache"
+      ];
+      extraBackupArgs = [
+        "--exclude-caches" # Excludes marked cache directories
+        "--one-file-system" # Only stay on /persist (in case symlinks lead elsewhere)
+        "--cleanup-cache" # Auto remove old cache directories
+      ];
+    };
 
     xserver = {
       # Configure keymap in X11
