@@ -37,7 +37,7 @@
     "/media/synology-syncthing" = {
       device = "192.168.86.15:/volume1/DockerVolumes";
       fsType = "nfs";
-      options = ["defaults" "rw" "relatime" "_netdev" "bg" "soft"];
+      options = ["defaults" "rw" "relatime" "_netdev" "bg" "hard"];
     };
 
     # TrueNAS
@@ -45,19 +45,19 @@
     "/media/Movie" = {
       device = "192.168.86.20:/mnt/Seagate4TB/Movies";
       fsType = "nfs";
-      options = ["defaults" "rw" "relatime" "_netdev" "bg" "soft"];
+      options = ["defaults" "rw" "relatime" "_netdev" "bg" "hard"];
     };
 
     "/media/Show" = {
       device = "192.168.86.20:/mnt/Seagate4TB/Shows";
       fsType = "nfs";
-      options = ["defaults" "rw" "relatime" "_netdev" "bg" "soft"];
+      options = ["defaults" "rw" "relatime" "_netdev" "bg" "hard"];
     };
 
     "/media/TV-Music" = {
       device = "192.168.86.20:/mnt/Seagate4TB/Music";
       fsType = "nfs";
-      options = ["defaults" "rw" "relatime" "_netdev" "bg" "soft"];
+      options = ["defaults" "rw" "relatime" "_netdev" "bg" "hard"];
     };
   };
 
