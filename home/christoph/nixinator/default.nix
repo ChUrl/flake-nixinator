@@ -119,6 +119,8 @@
         # jetbrains.idea-ultimate
         # jetbrains.webstorm
         # jetbrains.rider
+        zed-editor
+        vscode
 
         # Unity Stuff
         # unityhub
