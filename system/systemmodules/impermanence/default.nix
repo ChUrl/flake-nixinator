@@ -115,6 +115,7 @@ in {
 
             # The shit some applications add to ~/ without asking
             # (mkUDir ".android" m755) # Unity
+            (mkUDir ".docker" m755)
             # (mkUDir ".gradle" m755) # Unity
             # (mkUDir ".java" m755) # Unity/Rider
             (mkUDir ".MakeMKV" m755)
@@ -160,6 +161,7 @@ in {
             # (mkUDir ".config/unityhub" m755) # Unity
             (mkUDir ".config/vlc" m755)
             (mkUDir ".config/Zeal" m755)
+            (mkUDir ".config/zed" m755)
 
             # Share
             # (mkUDir ".local/share/containers" m755) # Rootless docker
@@ -167,6 +169,7 @@ in {
             (mkUDir ".local/share/docker" m755)
             (mkUDir ".local/share/fish" m755)
             (mkUDir ".local/share/flatpak" m755)
+            (mkUDir ".local/share/jellyfin-desktop" m755)
             (mkUDir ".local/share/JetBrains" m755) # Unity
             (mkUDir ".local/share/hyprland" m755)
             (mkUDir ".local/share/keyrings" m755) # m700
@@ -178,6 +181,7 @@ in {
             (mkUDir ".local/share/qutebrowser" m755)
             (mkUDir ".local/share/systemd" m755)
             # (mkUDir ".local/share/unity3d" m755) # Unity
+            (mkUDir ".local/share/zed" m755)
             (mkUDir ".local/share/zoxide" m755)
 
             # State
