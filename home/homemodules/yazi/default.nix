@@ -6,14 +6,14 @@
   pkgs,
   ...
 }: let
-  inherit (config.modules) yazi color;
+  inherit (config.homemodules) yazi color;
 in {
-  options.modules.yazi = import ./options.nix {inherit lib mylib;};
+  options.homemodules.yazi = import ./options.nix {inherit lib mylib;};
 
   config = lib.mkIf yazi.enable {
     programs.yazi = {
       enable = true;
-      enableFishIntegration = config.modules.fish.enable;
+      enableFishIntegration = config.homemodules.fish.enable;
       shellWrapperName = "y";
 
       plugins = {

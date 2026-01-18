@@ -4,9 +4,9 @@
   mylib,
   ...
 }: let
-  inherit (config.modules) mime;
+  inherit (config.systemmodules) mime;
 in {
-  options.modules.mime = import ./options.nix {inherit lib mylib;};
+  options.systemmodules.mime = import ./options.nix {inherit lib mylib;};
 
   config = lib.mkIf mime.enable {
     xdg = {

@@ -7,9 +7,9 @@
   nixosConfig,
   ...
 }: let
-  inherit (config.modules) fish color;
+  inherit (config.homemodules) fish color;
 in {
-  options.modules.fish = import ./options.nix {inherit lib mylib;};
+  options.homemodules.fish = import ./options.nix {inherit lib mylib;};
 
   config = lib.mkIf fish.enable {
     # https://github.com/catppuccin/fish/blob/main/themes/Catppuccin%20Mocha.theme
@@ -47,7 +47,7 @@ in {
       generateCompletions = nixosConfig.programs.fish.generateCompletions;
 
       functions = lib.mergeAttrsList [
-        (lib.optionalAttrs config.modules.nnn.enable {
+        (lib.optionalAttrs config.homemodules.nnn.enable {
           nnncd = {
             wraps = "nnn";
             description = "support nnn quit and change directory";
@@ -101,7 +101,7 @@ in {
         # Same as above but with args for bat
         batifyWithArgs = command: args: command + (lib.optionalString config.programs.bat.enable (" | bat " + args));
 
-        # These can be used for my config.modules and for HM config.programs,
+        # These can be used for my config.homemodules and for HM config.programs,
         # as both of these add the package to home.packages
         hasHomePackage = package: (mylib.modules.contains config.home.packages package);
 
@@ -167,15 +167,15 @@ in {
             gcl = "git clone";
           })
 
-          (lib.optionalAttrs config.modules.kitty.enable {ssh = "kitty +kitten ssh";})
+          (lib.optionalAttrs config.homemodules.kitty.enable {ssh = "kitty +kitten ssh";})
 
           (abbrify pkgs.lazygit {lg = "lazygit";})
 
           (abbrify pkgs.nix-search-tv {search = "nix-search-tv print --indexes 'nixos,home-manager,nixpkgs,nur' | fzf --preview 'nix-search-tv preview {}' --scheme history";})
 
           # Doesn't work with abbrify because I have nnn.override...
-          (lib.optionalAttrs config.modules.nnn.enable {n = "nnncd -a";})
-          (lib.optionalAttrs config.modules.nnn.enable {np = "nnncd -a -P p";})
+          (lib.optionalAttrs config.homemodules.nnn.enable {n = "nnncd -a";})
+          (lib.optionalAttrs config.homemodules.nnn.enable {np = "nnncd -a -P p";})
 
           (abbrify pkgs.ranger {r = "ranger --choosedir=$HOME/.rangerdir; set LASTDIR (cat $HOME/.rangerdir); cd $LASTDIR";})
 
@@ -184,7 +184,7 @@ in {
             # grep = rg;
           })
 
-          (lib.optionalAttrs config.modules.rmpc.enable {r = "rcmp";})
+          (lib.optionalAttrs config.homemodules.rmpc.enable {r = "rcmp";})
 
           (abbrify pkgs.rsync rec {
             rsync = "rsync -ahv --inplace --partial --info=progress2";
@@ -197,7 +197,7 @@ in {
 
     programs.starship = {
       enable = true;
-      enableFishIntegration = config.modules.fish.enable;
+      enableFishIntegration = config.homemodules.fish.enable;
       settings = {
         # Other config here
         format = "$all"; # Remove this line to disable the default prompt format

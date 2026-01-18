@@ -6,9 +6,9 @@
   pkgs,
   ...
 }: let
-  inherit (config.modules) mpd;
+  inherit (config.homemodules) mpd;
 in {
-  options.modules.mpd = import ./options.nix {inherit lib mylib;};
+  options.homemodules.mpd = import ./options.nix {inherit lib mylib;};
 
   config = lib.mkIf mpd.enable {
     services = {

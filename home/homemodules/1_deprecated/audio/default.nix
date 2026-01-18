@@ -8,14 +8,14 @@
 }:
 with lib;
 with mylib.modules; let
-  cfg = config.modules.audio;
-  cfgfp = config.modules.flatpak;
+  cfg = config.homemodules.audio;
+  cfgfp = config.homemodules.flatpak;
 in {
   imports = [
     ../flatpak
   ];
 
-  options.modules.audio = import ./options.nix {inherit lib mylib;};
+  options.homemodules.audio = import ./options.nix {inherit lib mylib;};
 
   config = mkIf cfg.enable {
     assertions = [

@@ -6,9 +6,9 @@
   pkgs,
   ...
 }: let
-  inherit (config.modules) beets;
+  inherit (config.homemodules) beets;
 in {
-  options.modules.beets = import ./options.nix {inherit lib mylib;};
+  options.homemodules.beets = import ./options.nix {inherit lib mylib;};
 
   config = lib.mkIf beets.enable {
     programs.beets = {

@@ -6,9 +6,9 @@
   pkgs,
   ...
 }: let
-  inherit (config.modules) qutebrowser color;
+  inherit (config.homemodules) qutebrowser color;
 in {
-  options.modules.qutebrowser = import ./options.nix {inherit lib mylib;};
+  options.homemodules.qutebrowser = import ./options.nix {inherit lib mylib;};
 
   config = lib.mkIf qutebrowser.enable {
     programs.qutebrowser = {

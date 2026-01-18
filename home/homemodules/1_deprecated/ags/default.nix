@@ -6,9 +6,9 @@
   pkgs,
   ...
 }: let
-  inherit (config.modules) ags;
+  inherit (config.homemodules) ags;
 in {
-  options.modules.ags = import ./options.nix {inherit lib mylib;};
+  options.homemodules.ags = import ./options.nix {inherit lib mylib;};
 
   config = lib.mkIf ags.enable {
     programs.ags = {
@@ -68,7 +68,7 @@ in {
       # ".config/ags".source = config.lib.file.mkOutOfStoreSymlink "${config.paths.nixflake}/home/modules/ags/config";
 
       # NOTE: Don't symlink to ~/.config/ags/colors.scss, since that is already used by configDir
-      ".config/_colors.scss".text = with config.modules.color.hex; ''
+      ".config/_colors.scss".text = with config.homemodules.color.hex; ''
         $dark-rosewater: #${dark.rosewater};
         $dark-flamingo: #${dark.flamingo};
         $dark-pink: #${dark.pink};

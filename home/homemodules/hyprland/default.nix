@@ -8,7 +8,7 @@
   username,
   ...
 }: let
-  inherit (config.modules) hyprland color;
+  inherit (config.homemodules) hyprland color;
 
   # Autostart programs
   always-exec = import ./autostart.nix {inherit lib pkgs config hyprland;};
@@ -22,7 +22,7 @@
     "$mainMod, mouse:273" = ["resizewindow"];
   };
 in {
-  options.modules.hyprland = import ./options.nix {inherit lib mylib;};
+  options.homemodules.hyprland = import ./options.nix {inherit lib mylib;};
 
   config = lib.mkIf hyprland.enable {
     assertions = [
@@ -46,7 +46,7 @@ in {
       iconTheme.name = color.iconTheme;
     };
 
-    modules = {
+    homemodules = {
       hyprpanel.enable = hyprland.hyprpanel.enable;
     };
 

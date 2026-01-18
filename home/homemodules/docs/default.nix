@@ -5,9 +5,9 @@
   pkgs,
   ...
 }: let
-  inherit (config.modules) docs;
+  inherit (config.homemodules) docs;
 in {
-  options.modules.docs = import ./options.nix {inherit lib mylib;};
+  options.homemodules.docs = import ./options.nix {inherit lib mylib;};
 
   config = lib.mkIf docs.enable {
     home = {

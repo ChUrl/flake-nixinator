@@ -4,9 +4,9 @@
   mylib,
   ...
 }: let
-  inherit (config.modules) zathura color;
+  inherit (config.homemodules) zathura color;
 in {
-  options.modules.zathura = import ./options.nix {inherit lib mylib;};
+  options.homemodules.zathura = import ./options.nix {inherit lib mylib;};
 
   config = lib.mkIf zathura.enable {
     programs.zathura = {

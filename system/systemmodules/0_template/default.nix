@@ -4,9 +4,9 @@
   mylib,
   ...
 }: let
-  inherit (config.modules) TEMPLATE;
+  inherit (config.systemmodules) TEMPLATE;
 in {
-  options.modules.TEMPLATE = import ./options.nix {inherit lib mylib;};
+  options.systemmodules.TEMPLATE = import ./options.nix {inherit lib mylib;};
 
   config =
     lib.mkIf TEMPLATE.enable {

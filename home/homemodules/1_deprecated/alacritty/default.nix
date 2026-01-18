@@ -5,9 +5,9 @@
   ...
 }:
 with mylib.modules; let
-  cfg = config.modules.alacritty;
+  cfg = config.homemodules.alacritty;
 in {
-  options.modules.alacritty = import ./options.nix {inherit lib mylib;};
+  options.homemodules.alacritty = import ./options.nix {inherit lib mylib;};
 
   config = mkIf cfg.enable {
     programs.alacritty = {

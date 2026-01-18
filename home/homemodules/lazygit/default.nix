@@ -6,9 +6,9 @@
   pkgs,
   ...
 }: let
-  inherit (config.modules) lazygit color;
+  inherit (config.homemodules) lazygit color;
 in {
-  options.modules.lazygit = import ./options.nix {inherit lib mylib;};
+  options.homemodules.lazygit = import ./options.nix {inherit lib mylib;};
 
   config = lib.mkIf lazygit.enable {
     programs.lazygit = {

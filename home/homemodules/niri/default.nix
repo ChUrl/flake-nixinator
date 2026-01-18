@@ -7,9 +7,9 @@
   pkgs,
   ...
 }: let
-  inherit (config.modules) niri color;
+  inherit (config.homemodules) niri color;
 in {
-  options.modules.niri = import ./options.nix {inherit lib mylib;};
+  options.homemodules.niri = import ./options.nix {inherit lib mylib;};
 
   config = lib.mkIf niri.enable rec {
     assertions = [

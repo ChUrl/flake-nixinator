@@ -5,9 +5,9 @@
   mylib,
   ...
 }: let
-  inherit (config.modules) kitty color;
+  inherit (config.homemodules) kitty color;
 in {
-  options.modules.kitty = import ./options.nix {inherit lib mylib;};
+  options.homemodules.kitty = import ./options.nix {inherit lib mylib;};
 
   config = lib.mkIf kitty.enable {
     programs.kitty = {
@@ -15,7 +15,7 @@ in {
       shellIntegration.enableFishIntegration = true;
 
       font = {
-        name = "${config.modules.color.font}";
+        name = "${config.homemodules.color.font}";
         size = 12;
       };
 

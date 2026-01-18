@@ -8,9 +8,9 @@
   pkgs,
   ...
 }: let
-  inherit (config.modules) rofi color;
+  inherit (config.homemodules) rofi color;
 in {
-  options.modules.rofi = import ./options.nix {inherit lib mylib;};
+  options.homemodules.rofi = import ./options.nix {inherit lib mylib;};
 
   config = lib.mkIf rofi.enable {
     programs.rofi = {
@@ -137,7 +137,7 @@ in {
       };
     };
 
-    modules.hyprland.keybindings = let
+    homemodules.hyprland.keybindings = let
       vpn-menu =
         pkgs.writeScriptBin
         "rofi-menu-vpn"
@@ -177,7 +177,7 @@ in {
             |> builtins.concatStringsSep " && ";
         };
 
-        monitors = builtins.attrNames config.modules.hyprland.monitors;
+        monitors = builtins.attrNames config.homemodules.hyprland.monitors;
       in
         mylib.rofi.mkSimpleMenu
         "wall"
@@ -185,7 +185,7 @@ in {
           |> builtins.map (setWallpaperOnMonitors monitors)
           |> lib.mergeAttrsList);
     in
-      lib.mkIf (!config.modules.hyprland.caelestia.enable) {
+      lib.mkIf (!config.homemodules.hyprland.caelestia.enable) {
         bindings = lib.mergeAttrsList [
           {
             "$mainMod, escape" = ["exec, \"${power-menu}/bin/rofi-menu-power\""];
@@ -193,7 +193,7 @@ in {
             "$mainMod, w" = ["exec, \"${wallpaper-menu}/bin/rofi-menu-wall\""];
             # "$mainMod, o" = ["exec, \"${lectures-menu}\""];
           }
-          (lib.optionalAttrs (!nixosConfig.modules.network.useNetworkManager) {
+          (lib.optionalAttrs (!nixosConfig.systemmodules.network.useNetworkManager) {
             "$mainMod, U" = ["exec, \"${vpn-menu}/rofi-menu-vpn\""];
           })
         ];

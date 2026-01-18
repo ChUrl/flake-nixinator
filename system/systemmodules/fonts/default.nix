@@ -5,9 +5,9 @@
   pkgs,
   ...
 }: let
-  inherit (config.modules) fonts;
+  inherit (config.systemmodules) fonts;
 in {
-  options.modules.fonts = import ./options.nix {inherit lib mylib;};
+  options.systemmodules.fonts = import ./options.nix {inherit lib mylib;};
 
   config = lib.mkIf fonts.enable {
     fonts = {

@@ -6,9 +6,9 @@
   pkgs,
   ...
 }: let
-  inherit (config.modules) nnn;
+  inherit (config.homemodules) nnn;
 in {
-  options.modules.nnn = import ./options.nix {inherit lib mylib;};
+  options.homemodules.nnn = import ./options.nix {inherit lib mylib;};
 
   config = lib.mkIf nnn.enable {
     home.sessionVariables = {

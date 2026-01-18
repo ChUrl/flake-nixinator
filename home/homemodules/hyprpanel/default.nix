@@ -6,9 +6,9 @@
   pkgs,
   ...
 }: let
-  inherit (config.modules) hyprpanel color;
+  inherit (config.homemodules) hyprpanel color;
 in {
-  options.modules.hyprpanel = import ./options.nix {inherit lib mylib;};
+  options.homemodules.hyprpanel = import ./options.nix {inherit lib mylib;};
 
   config = lib.mkIf hyprpanel.enable {
     programs.hyprpanel = {

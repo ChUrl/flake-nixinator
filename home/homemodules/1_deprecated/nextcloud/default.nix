@@ -12,9 +12,9 @@
 }:
 with lib;
 with mylib.modules; let
-  cfg = config.modules.nextcloud;
+  cfg = config.homemodules.nextcloud;
 in {
-  options.modules.nextcloud = import ./options.nix {inherit lib mylib;};
+  options.homemodules.nextcloud = import ./options.nix {inherit lib mylib;};
 
   config = mkIf cfg.enable {
     assertions = [

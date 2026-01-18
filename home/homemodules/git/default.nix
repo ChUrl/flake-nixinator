@@ -6,9 +6,9 @@
   pkgs,
   ...
 }: let
-  inherit (config.modules) git;
+  inherit (config.homemodules) git;
 in {
-  options.modules.git = import ./options.nix {inherit lib mylib;};
+  options.homemodules.git = import ./options.nix {inherit lib mylib;};
 
   config = lib.mkIf git.enable {
     programs.diff-so-fancy = {

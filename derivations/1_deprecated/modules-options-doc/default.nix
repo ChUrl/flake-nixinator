@@ -7,7 +7,7 @@
   ...
 }: let
   # create a module that only contains the options, type can be home or system
-  toModule = type: name: {options.modules.${name} = import ../../${type}/modules/${name}/options.nix {inherit lib mylib;};};
+  toModule = type: name: {options.systemmodules.${name} = import ../../${type}/modules/${name}/options.nix {inherit lib mylib;};};
 
   # evaluate a single module
   evalModule = type: name: (lib.evalModules {modules = [(toModule type name)];});

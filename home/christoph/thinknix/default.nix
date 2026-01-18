@@ -6,10 +6,6 @@
   username,
   ...
 }: {
-  imports = [
-    ../../modules
-  ];
-
   config = {
     home.packages = with pkgs; [
       docker-compose

@@ -5,9 +5,9 @@
   mylib,
   ...
 }: let
-  inherit (config.modules) bootloader;
+  inherit (config.systemmodules) bootloader;
 in {
-  options.modules.bootloader = import ./options.nix {inherit lib mylib;};
+  options.systemmodules.bootloader = import ./options.nix {inherit lib mylib;};
 
   config = lib.mkIf bootloader.enable (lib.mkMerge [
     {

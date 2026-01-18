@@ -29,6 +29,13 @@
 
           # Import the toplevel system configuration module.
           ../system
+          ../system/cachix.nix
+
+          # Host specific configuration
+          ../system/${hostname}
+
+          # Import all of my custom system modules
+          ../system/systemmodules
         ]
 
         extraModules
@@ -51,8 +58,22 @@
               # to /etc/profiles instead of ~/.nix-profile.
               useUserPackages = true;
 
-              # Import the user-specific HM toplevel module.
-              users.${username}.imports = [../home/${username}];
+              users.${username}.imports = [
+                # Import the user-specific HM toplevel module.
+                # It will be merged with the main config (like all different modules).
+                # Settings regarding a specific host (e.g. desktop or laptop)
+                # should only be made in the host-specific config.
+                ../home/${username}
+
+                # Host specific configuration
+                ../home/${username}/${hostname}
+              ];
+
+              sharedModules = [
+                # Import all of my custom HM modules.
+                # Putting them into sharedModules enables correct nixd completions.
+                ../home/homemodules
+              ];
             };
           }
         ]

@@ -6,9 +6,9 @@
   pkgs,
   ...
 }: let
-  inherit (config.modules) impermanence;
+  inherit (config.systemmodules) impermanence;
 in {
-  options.modules.impermanence = import ./options.nix {inherit lib mylib;};
+  options.systemmodules.impermanence = import ./options.nix {inherit lib mylib;};
 
   config = let
     # NOTE: Setting user/group/mode only has an effect if the

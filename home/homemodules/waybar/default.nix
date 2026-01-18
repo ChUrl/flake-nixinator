@@ -4,9 +4,9 @@
   mylib,
   ...
 }: let
-  inherit (config.modules) color waybar;
+  inherit (config.homemodules) color waybar;
 in {
-  options.modules.waybar = import ./options.nix {inherit lib mylib;};
+  options.homemodules.waybar = import ./options.nix {inherit lib mylib;};
 
   config = lib.mkIf waybar.enable {
     programs.waybar = {

@@ -12,13 +12,13 @@ with lib;
 with mylib.modules; let
   # This is the current state of the option that this module defines
   # We use it to determine if the config should be changed below
-  cfg = config.modules.emacs;
+  cfg = config.homemodules.emacs;
 in {
   imports = [];
 
   # Options is a vector of options this module defines
   # This module defines only the "emacs" option and suboptions "enable" and "doom"
-  options.modules.emacs = import ./options.nix {inherit lib mylib;};
+  options.homemodules.emacs = import ./options.nix {inherit lib mylib;};
 
   # Config is the merged set of all module configurations
   # Here we define what happens to the config if the module is active (but only if the module is active)

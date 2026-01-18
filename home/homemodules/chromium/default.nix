@@ -5,9 +5,9 @@
   pkgs,
   ...
 }: let
-  inherit (config.modules) chromium;
+  inherit (config.homemodules) chromium;
 in {
-  options.modules.chromium = import ./options.nix {inherit lib mylib;};
+  options.homemodules.chromium = import ./options.nix {inherit lib mylib;};
 
   config = lib.mkIf chromium.enable {
     home.packages = with pkgs;

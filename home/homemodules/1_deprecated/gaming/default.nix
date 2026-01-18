@@ -7,11 +7,11 @@
 }:
 with lib;
 with mylib.modules; let
-  cfg = config.modules.gaming;
-  cfgfp = config.modules.flatpak;
+  cfg = config.homemodules.gaming;
+  cfgfp = config.homemodules.flatpak;
 in {
   imports = [
-    # NOTE: I don't know if this is the right approach or if I should use config.modules.flatpak
+    # NOTE: I don't know if this is the right approach or if I should use config.homemodules.flatpak
     ../flatpak
   ];
 
@@ -19,7 +19,7 @@ in {
   # TODO: SteamTinkerLaunch option
   # TODO: Dolphin + SteamRomManager option
 
-  options.modules.gaming = import ./options.nix {inherit lib mylib;};
+  options.homemodules.gaming = import ./options.nix {inherit lib mylib;};
 
   config = mkIf cfg.enable {
     assertions = [
