@@ -11,17 +11,7 @@
   ...
 }:
 with mylib.networking; {
-  imports = [
-    # Import my system modules
-    ./modules
-
-    # Import the host-specific system config
-    ./${hostname}
-
-    ./cachix.nix
-  ];
-
-  modules = {
+  systemmodules = {
     bootloader = {
       enable = true;
 
@@ -234,7 +224,7 @@ with mylib.networking; {
     # 6 Cyan      14 Cyan
     # 7 White     15 White
     colors = let
-      color = config.home-manager.users.${username}.modules.color;
+      color = config.home-manager.users.${username}.homemodules.color;
     in [
       # 0 - 7
       "000000" # Dark black

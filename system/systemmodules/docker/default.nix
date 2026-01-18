@@ -5,9 +5,9 @@
   pkgs,
   ...
 }: let
-  inherit (config.modules) docker;
+  inherit (config.systemmodules) docker;
 in {
-  options.modules.docker = import ./options.nix {inherit lib mylib;};
+  options.systemmodules.docker = import ./options.nix {inherit lib mylib;};
 
   config = lib.mkIf docker.enable {
     environment.variables = lib.mkMerge [

@@ -12,9 +12,9 @@ with mylib.modules;
 #       It is important that every flatpak interaction is handled through this module
 #       to prevent that anything is removed by a module although it is required by another one
   let
-    cfg = config.modules.flatpak;
+    cfg = config.homemodules.flatpak;
   in {
-    options.modules.flatpak = import ./options.nix {inherit lib mylib;};
+    options.homemodules.flatpak = import ./options.nix {inherit lib mylib;};
 
     config = mkIf cfg.enable {
       assertions = [

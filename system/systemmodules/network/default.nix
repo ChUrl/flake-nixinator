@@ -8,9 +8,9 @@
 with lib;
 with mylib.networking;
 with mylib.modules; let
-  cfg = config.modules.network;
+  cfg = config.systemmodules.network;
 in {
-  options.modules.network = import ./options.nix {inherit lib mylib;};
+  options.systemmodules.network = import ./options.nix {inherit lib mylib;};
 
   config = mkIf cfg.enable {
     services.resolved = {
@@ -59,7 +59,7 @@ in {
       inherit (cfg) networks;
     };
 
-    modules.polkit.allowedActions = mkIf cfg.useNetworkManager [
+    systemmodules.polkit.allowedActions = mkIf cfg.useNetworkManager [
       # List NM permissions by running "nmcli general permissions"
       "org.freedesktop.NetworkManager.settings.modify.system"
     ];

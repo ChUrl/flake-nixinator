@@ -5,9 +5,9 @@
   pkgs,
   ...
 }: let
-  inherit (config.modules) color;
+  inherit (config.homemodules) color;
 in {
-  options.modules.color = import ./options.nix {inherit lib mylib pkgs;};
+  options.homemodules.color = import ./options.nix {inherit lib mylib pkgs;};
 
   config = {
     home.packages = let
@@ -59,7 +59,7 @@ in {
       ++ (lib.optionals color.installPackages color.extraPackages);
 
     # This module sets its own options to the values specified in a colorscheme file.
-    modules.color = let
+    homemodules.color = let
       scheme = import ./schemes/${color.scheme}.nix;
 
       # Add the aliases

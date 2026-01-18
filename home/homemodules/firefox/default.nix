@@ -6,9 +6,9 @@
   hostname,
   ...
 }: let
-  inherit (config.modules) firefox color;
+  inherit (config.homemodules) firefox color;
 in {
-  options.modules.firefox = import ./options.nix {inherit lib mylib;};
+  options.homemodules.firefox = import ./options.nix {inherit lib mylib;};
 
   config = lib.mkIf firefox.enable {
     textfox = {

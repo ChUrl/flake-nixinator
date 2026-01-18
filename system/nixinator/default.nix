@@ -11,13 +11,11 @@
     ./hardware-configuration.nix
     ./disks.nix
 
-    ../modules
-
     # General services
     ../services/fileflows-node.nix
   ];
 
-  modules = {
+  systemmodules = {
     bootloader = {
       # Secure boot
       loader = "lanzaboote";

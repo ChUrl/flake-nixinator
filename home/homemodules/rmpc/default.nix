@@ -6,9 +6,9 @@
   pkgs,
   ...
 }: let
-  inherit (config.modules) rmpc color;
+  inherit (config.homemodules) rmpc color;
 in {
-  options.modules.rmpc = import ./options.nix {inherit lib mylib;};
+  options.homemodules.rmpc = import ./options.nix {inherit lib mylib;};
 
   config = lib.mkIf rmpc.enable {
     assertions = [

@@ -7,9 +7,9 @@
   publicKeys,
   ...
 }: let
-  inherit (config.modules) agenix;
+  inherit (config.systemmodules) agenix;
 in {
-  options.modules.agenix = import ./options.nix {inherit lib mylib;};
+  options.systemmodules.agenix = import ./options.nix {inherit lib mylib;};
 
   config = {
     # NOTE: Add below snippet to home/christoph/default.nix to generate the secrets.nix file
@@ -23,13 +23,13 @@ in {
     #   {
     #     ${lib.optionalString
     #     # If this user defined any secrets...
-    #     (builtins.hasAttr "${username}" nixosConfig.modules.agenix.secrets)
+    #     (builtins.hasAttr "${username}" nixosconfig.systemmodules.agenix.secrets)
     #     # ...we will add them to the current secrets.nix,
     #     # s.t. agenix can be used to encrypt/access them.
     #     (builtins.concatStringsSep "\n"
     #       (builtins.map
     #         (mkSecret publicKeys.${username}.ssh)
-    #         nixosConfig.modules.agenix.secrets.${username}))}
+    #         nixosconfig.systemmodules.agenix.secrets.${username}))}
     #   }
     # '';
 

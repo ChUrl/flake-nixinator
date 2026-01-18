@@ -9,9 +9,9 @@
 # TODO: Remove this module, put protonmail into the email module
 with lib;
 with mylib.modules; let
-  cfg = config.modules.misc;
+  cfg = config.homemodules.misc;
 in {
-  options.modules.misc = import ./options.nix {inherit lib mylib;};
+  options.homemodules.misc = import ./options.nix {inherit lib mylib;};
 
   config = mkIf cfg.enable {
     home.packages = with pkgs;

@@ -20,8 +20,8 @@ in
       (mkMime color.hexS.green "application/pdf")
     ]
 
-    (mkMimes color.hexS.text nixosConfig.modules.mime.textTypes)
-    (mkMimes color.hexS.teal nixosConfig.modules.mime.imageTypes)
-    (mkMimes color.hexS.yellow nixosConfig.modules.mime.videoTypes)
-    (mkMimes color.hexS.sky nixosConfig.modules.mime.audioTypes)
+    (mkMimes color.hexS.text nixosconfig.homemodules.mime.textTypes)
+    (mkMimes color.hexS.teal nixosconfig.homemodules.mime.imageTypes)
+    (mkMimes color.hexS.yellow nixosconfig.homemodules.mime.videoTypes)
+    (mkMimes color.hexS.sky nixosconfig.homemodules.mime.audioTypes)
   ]

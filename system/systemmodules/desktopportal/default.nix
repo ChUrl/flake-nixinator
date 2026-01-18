@@ -5,9 +5,9 @@
   pkgs,
   ...
 }: let
-  inherit (config.modules) desktopportal;
+  inherit (config.systemmodules) desktopportal;
 in {
-  options.modules.desktopportal = import ./options.nix {inherit lib mylib;};
+  options.systemmodules.desktopportal = import ./options.nix {inherit lib mylib;};
 
   config = lib.mkIf desktopportal.enable {
     xdg = {

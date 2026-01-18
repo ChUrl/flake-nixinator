@@ -6,9 +6,9 @@
   pkgs,
   ...
 }: let
-  inherit (config.modules) btop color;
+  inherit (config.homemodules) btop color;
 in {
-  options.modules.btop = import ./options.nix {inherit lib mylib;};
+  options.homemodules.btop = import ./options.nix {inherit lib mylib;};
 
   config = lib.mkIf btop.enable {
     programs.btop = {

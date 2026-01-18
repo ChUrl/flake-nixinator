@@ -1,11 +1,7 @@
 # Here goes the stuff that will only be enabled on the laptop
 {...}: {
-  imports = [
-    ../../modules
-  ];
-
   config = {
-    modules = {
+    homemodules = {
       hyprland = {
         keyboard = {
           layout = "us";

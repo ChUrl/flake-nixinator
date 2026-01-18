@@ -14,8 +14,6 @@
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
 
-    ../modules
-
     # General services
     ../services/adguard.nix
     ../services/nginx-proxy-manager.nix
@@ -25,7 +23,7 @@
     ../services/whats-up-docker.nix
   ];
 
-  modules = {
+  systemmodules = {
     docker.networks = [
       {
         name = "behind-nginx";

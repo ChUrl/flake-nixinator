@@ -6,9 +6,9 @@
   username,
   ...
 }: let
-  inherit (config.modules) sops-nix;
+  inherit (config.systemmodules) sops-nix;
 in {
-  options.modules.sops-nix = import ./options.nix {inherit lib mylib;};
+  options.systemmodules.sops-nix = import ./options.nix {inherit lib mylib;};
 
   config = {
     environment.systemPackages = with pkgs; [

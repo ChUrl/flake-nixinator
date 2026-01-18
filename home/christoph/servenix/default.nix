@@ -6,12 +6,8 @@
   username,
   ...
 }: {
-  imports = [
-    ../../modules
-  ];
-
   config = {
-    modules = {
+    homemodules = {
       btop.cuda = true;
     };
 

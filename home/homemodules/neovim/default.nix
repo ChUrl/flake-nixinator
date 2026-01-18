@@ -10,9 +10,9 @@
   pkgs,
   ...
 }: let
-  inherit (config.modules) neovim color;
+  inherit (config.homemodules) neovim color;
 in {
-  options.modules.neovim = import ./options.nix {inherit lib mylib;};
+  options.homemodules.neovim = import ./options.nix {inherit lib mylib;};
 
   config = lib.mkIf neovim.enable {
     home = {

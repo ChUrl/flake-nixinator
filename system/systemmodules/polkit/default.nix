@@ -7,9 +7,9 @@
 }:
 with lib;
 with mylib.modules; let
-  cfg = config.modules.polkit;
+  cfg = config.systemmodules.polkit;
 in {
-  options.modules.polkit = import ./options.nix {inherit lib mylib;};
+  options.systemmodules.polkit = import ./options.nix {inherit lib mylib;};
 
   config = mkIf cfg.enable {
     security.polkit.enable = true;

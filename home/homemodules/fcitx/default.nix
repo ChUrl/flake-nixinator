@@ -5,9 +5,9 @@
   pkgs,
   ...
 }: let
-  inherit (config.modules) fcitx;
+  inherit (config.homemodules) fcitx;
 in {
-  options.modules.fcitx = import ./options.nix {inherit lib mylib;};
+  options.homemodules.fcitx = import ./options.nix {inherit lib mylib;};
 
   config = lib.mkIf fcitx.enable {
     i18n.inputMethod = {

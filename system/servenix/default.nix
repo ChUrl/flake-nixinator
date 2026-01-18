@@ -14,8 +14,6 @@
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
 
-    ../modules
-
     # My own services
     ../services/heidi.nix
     ../services/formula10.nix
@@ -47,7 +45,7 @@
     ../services/whats-up-docker.nix
   ];
 
-  modules = {
+  systemmodules = {
     docker.networks = [
       {
         name = "behind-nginx";

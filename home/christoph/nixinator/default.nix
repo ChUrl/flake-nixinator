@@ -8,12 +8,8 @@
   username,
   ...
 }: {
-  imports = [
-    ../../modules
-  ];
-
   config = {
-    modules = {
+    homemodules = {
       btop.cuda = true;
 
       # This has been relocated here from the default config,

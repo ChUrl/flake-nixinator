@@ -15,7 +15,7 @@
   headless,
   ...
 }: let
-  inherit (config.modules) color;
+  inherit (config.homemodules) color;
 in
   # This is a HM module.
   # Because no imports/options/config is defined explicitly, everything is treated as config:
@@ -25,16 +25,6 @@ in
     # Every module (/function) is called with the same arguments as this module.
     # Arguments with matching names are "plugged in" into the right slots,
     # the case of different arity is handled by always providing ellipses (...) in module definitions.
-    imports = [
-      # Import the host-specific HM config.
-      # It will be merged with the main config (like all different modules).
-      # Settings regarding a specific host (e.g. desktop or laptop)
-      # should only be made in the host-specific config.
-      ./${hostname}
-
-      # Import all of my custom HM modules.
-      ../modules
-    ];
 
     # Enable and configure my custom HM modules.
     paths = rec {
@@ -42,7 +32,7 @@ in
       dotfiles = "${nixflake}/config";
     };
 
-    modules = {
+    homemodules = {
       beets.enable = !headless;
 
       btop.enable = true;
@@ -99,7 +89,7 @@ in
 
       hyprland = {
         enable = nixosConfig.programs.hyprland.enable;
-        dunst.enable = !config.modules.hyprpanel.enable; # Disable for hyprpanel
+        dunst.enable = !config.homemodules.hyprpanel.enable; # Disable for hyprpanel
         bars.enable = false;
         dynamicCursor.enable = false;
         trails.enable = true;
@@ -112,14 +102,14 @@ in
 
           bindings = lib.mergeAttrsList [
             # Use Rofi if we don't have caelestia
-            (lib.optionalAttrs (!config.modules.hyprland.caelestia.enable) {
+            (lib.optionalAttrs (!config.homemodules.hyprland.caelestia.enable) {
               "$mainMod, a" = ["exec, rofi -drun-show-actions -show drun"];
               "$mainMod, c" = ["exec, clipman pick --tool=rofi"];
               "$mainMod SHIFT, l" = ["exec, loginctl lock-session"];
             })
 
             # Caelestia
-            (lib.optionalAttrs (config.modules.hyprland.caelestia.enable) {
+            (lib.optionalAttrs (config.homemodules.hyprland.caelestia.enable) {
               "$mainMod, a" = ["exec, caelestia shell drawers toggle launcher"];
               # "$mainMod, c" = ["exec, caelestia clipboard"];
               "$mainMod SHIFT, l" = ["exec, caelestia shell lock lock"];
@@ -318,10 +308,10 @@ in
     # as nixosConfig won't be available otherwise.
     xdg = {
       enable = true; # This only does xdg path management
-      mime.enable = nixosConfig.modules.mime.enable;
+      mime.enable = nixosConfig.systemmodules.mime.enable;
 
       mimeApps = {
-        enable = nixosConfig.modules.mime.enable;
+        enable = nixosConfig.systemmodules.mime.enable;
 
         associations.added = nixosConfig.xdg.mime.addedAssociations;
         associations.removed = nixosConfig.xdg.mime.removedAssociations;
@@ -392,7 +382,7 @@ in
             config.lib.file.mkOutOfStoreSymlink
             nixosConfig.sops.templates."nix.conf".path;
         }
-        (lib.mkIf nixosConfig.modules.desktopportal.termfilechooser.enable {
+        (lib.mkIf nixosConfig.systemmodules.desktopportal.termfilechooser.enable {
           ".config/xdg-desktop-portal-termfilechooser/config".text = ''
             [filechooser]
             cmd=${pkgs.xdg-desktop-portal-termfilechooser}/share/xdg-desktop-portal-termfilechooser/yazi-wrapper.sh
@@ -402,7 +392,7 @@ in
             save_mode = last
           '';
         })
-        (lib.mkIf config.modules.git.enable {
+        (lib.mkIf config.homemodules.git.enable {
           ".ssh/allowed_signers".text = "* ${publicKeys.${username}.ssh}";
         })
         (lib.mkIf config.programs.navi.enable {
@@ -649,7 +639,7 @@ in
 
       eza = {
         enable = true;
-        enableFishIntegration = config.modules.fish.enable;
+        enableFishIntegration = config.homemodules.fish.enable;
       };
 
       # TODO: Module
@@ -806,7 +796,7 @@ in
 
       fzf = {
         enable = true;
-        enableFishIntegration = config.modules.fish.enable;
+        enableFishIntegration = config.homemodules.fish.enable;
       };
 
       imv = {
@@ -824,7 +814,7 @@ in
 
       keychain = {
         enable = true;
-        enableFishIntegration = config.modules.fish.enable;
+        enableFishIntegration = config.homemodules.fish.enable;
         enableXsessionIntegration = !headless;
         keys = ["id_ed25519"];
       };
@@ -838,12 +828,12 @@ in
 
       navi = {
         enable = true;
-        enableFishIntegration = config.modules.fish.enable;
+        enableFishIntegration = config.homemodules.fish.enable;
       };
 
       nix-index = {
         enable = true;
-        enableFishIntegration = config.modules.fish.enable;
+        enableFishIntegration = config.homemodules.fish.enable;
       };
 
       nushell.enable = false;
@@ -935,7 +925,7 @@ in
 
       zoxide = {
         enable = true;
-        enableFishIntegration = config.modules.fish.enable;
+        enableFishIntegration = config.homemodules.fish.enable;
       };
     };
 

@@ -10,9 +10,9 @@
 with lib;
 with mylib.virtualisation;
 with mylib.modules; let
-  cfg = config.modules.containers;
+  cfg = config.systemmodules.containers;
 in {
-  options.modules.containers = import ./options.nix {inherit lib mylib;};
+  options.systemmodules.containers = import ./options.nix {inherit lib mylib;};
 
   # TODO: These need config options exposed through the module,
   #       e.g. to set paths/volumes/binds differently per system...

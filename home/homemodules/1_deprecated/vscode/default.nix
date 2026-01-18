@@ -9,9 +9,9 @@
 }:
 with lib;
 with mylib.modules; let
-  cfg = config.modules.vscode;
+  cfg = config.homemodules.vscode;
 in {
-  options.modules.vscode = import ./options.nix {inherit lib mylib;};
+  options.homemodules.vscode = import ./options.nix {inherit lib mylib;};
 
   config = mkIf cfg.enable {
     programs.vscode = {

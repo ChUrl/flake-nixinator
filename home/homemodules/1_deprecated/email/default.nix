@@ -13,9 +13,9 @@
 }:
 with lib;
 with mylib.modules; let
-  cfg = config.modules.email;
+  cfg = config.homemodules.email;
 in {
-  options.modules.email = import ./options.nix {inherit lib mylib;};
+  options.homemodules.email = import ./options.nix {inherit lib mylib;};
 
   # TODO: Add Maildir to nextcloud sync
   config = mkIf cfg.enable {

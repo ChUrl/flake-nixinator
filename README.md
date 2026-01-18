@@ -21,7 +21,7 @@ Contains all the system configurations.
 
 - There is a common configuration used for all systems: `NixFlake/system/default.nix`
 - Every system has its own special configuration: `NixFlake/system/<hostname>/default.nix`
-- System modules are located in `NixFlake/system/modules`
+- System modules are located in `NixFlake/system/systemmodules`
 - Hosted services are located in `NixFlake/system/services`
 
 When creating a NixOS configuration inside the `NixFlake/flake.nix` the common configuration is imported.
@@ -33,7 +33,7 @@ Contains all the home-manager configurations.
 
 - There is a common configuration for each user: `NixFlake/home/<username>/default.nix`
 - There is a configuration for a single system of this user: `NixFlake/home/<username>/<hostname>/default.nix`
-- Home-Manager modules are located in `NixFlake/home/modules`
+- Home-Manager modules are located in `NixFlake/home/homemodules`
 
 When creating a NixOS configuration inside the `NixFlake/flake.nix` the common configuration is imported.
 Because the hostname is propagated to the common configuration, it can import the host-specific config by itself.

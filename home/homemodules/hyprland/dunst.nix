@@ -11,7 +11,7 @@
 
   settings = {
     global = {
-      monitor = config.modules.waybar.monitor;
+      monitor = config.homemodules.waybar.monitor;
       font = "${color.font} 11";
       offset = "10x10";
       background = color.hexS.base;
