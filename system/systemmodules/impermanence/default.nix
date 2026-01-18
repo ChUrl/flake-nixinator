@@ -76,6 +76,7 @@ in {
           (mkRDir "/var/lib/bluetooth" m755) # m700
           (mkRDir "/var/lib/btrfs" m755)
           (mkRDir "/var/lib/containers" m755)
+          (mkRDir "/var/lib/docker" m755)
           (mkRDir "/var/lib/flatpak" m755)
           (mkRDir "/var/lib/libvirt" m755)
           (mkRDir "/var/lib/NetworkManager" m755)
