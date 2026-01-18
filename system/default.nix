@@ -46,12 +46,9 @@ with mylib.networking; {
 
     docker = {
       enable = true;
-
-      # Use podman on the desktops, the servers are
-      # already configured using docker though...
-      # TODO: Use podman on the servers
-      podman = !headless;
-      docker.rootless = true;
+      podman = false;
+      docker.rootless = false;
+      docker.buildkit = true;
     };
 
     fonts = {

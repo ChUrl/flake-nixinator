@@ -18,6 +18,10 @@ in {
 
     networking.firewall.trustedInterfaces = ["docker0" "podman0"];
 
+    # Needed for default bridge network to automatically work
+    # boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
+    # boot.kernel.sysctl."net.ipv6.ip_forward" = 1;
+
     virtualisation = {
       docker = {
         enable = !docker.podman;
@@ -25,6 +29,7 @@ in {
 
         extraPackages = with pkgs; [docker-compose];
 
+        # TODO: Rootless docker has no internet?
         rootless = {
           enable = docker.docker.rootless;
           setSocketVariable = true;
