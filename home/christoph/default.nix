@@ -477,6 +477,7 @@ in
             lazyjournal # Journalctl viewer
             systemctl-tui
             restic # Backups
+            gnumake
 
             # Hardware/Software info
             pciutils # lspci
