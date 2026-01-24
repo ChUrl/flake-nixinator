@@ -19,8 +19,9 @@ in {
     networking.firewall.trustedInterfaces = ["docker0" "podman0"];
 
     # Needed for default bridge network to automatically work
-    # boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
-    # boot.kernel.sysctl."net.ipv6.ip_forward" = 1;
+    boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
+    boot.kernel.sysctl."net.ipv6.ip_forward" = 1;
+    boot.kernel.sysctl."net.ipv6.conf.all.forwarding" = 1;
 
     virtualisation = {
       docker = {
@@ -36,12 +37,14 @@ in {
         };
 
         daemon.settings = {
+          # Enables IPv6 for all networks by default and sets the subnet for the bridge.
+          # We don't need the bridge network and only have 4 IPv6 prefixes, so leave this off.
           # ipv6 = true;
-          # fixed-cidr-v6 = "2001::/80";
+          # fixed-cidr-v6 = "fd00::/80";
 
           dns = [
             "8.8.8.8"
-            # "2001:4860:4860::8888"
+            "2001:4860:4860::8888"
 
             # "127.0.0.1"
             # "192.168.86.25"
@@ -78,6 +81,7 @@ in {
         then "${config.virtualisation.podman.package}/bin/podman"
         else "${config.virtualisation.docker.package}/bin/docker";
 
+      # TODO: This is bugged. Won't create the network even if it doesn't exist...
       mkDockerNetwork = options:
         builtins.concatStringsSep "\n" [
           # Make sure to return true on fail to not crash
