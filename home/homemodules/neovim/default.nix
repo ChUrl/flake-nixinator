@@ -38,7 +38,6 @@ in {
             ltex-ls # TODO: Only enable on-demand
             lua-language-server
             # nil
-            nixd
             basedpyright
             pyrefly
             ty
@@ -64,7 +63,6 @@ in {
             # statix # nix (doesn't recognize pipe operator)
 
             # Formatters
-            alejandra # nix
             cljfmt
             python313Packages.black
             google-java-format
@@ -83,6 +81,9 @@ in {
             # Dependencies
             lua54Packages.jsregexp # For tree-sitter
             # nodejs_latest
+
+            nixd
+            alejandra # nix
           ]
         ];
     };
