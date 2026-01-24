@@ -27,23 +27,65 @@
       useNetworkManager = true;
 
       # Systemd-networkd configs
-      networks = {
+      networks = let
+        # TODO: mylib.networking.mkStaticSystemdNetwork needs improvement to accomodate for this
+        mkConfig = name: routable: rec {
+          enable = true;
+
+          # See man systemd.link, man systemd.netdev, man systemd.network
+          matchConfig = {
+            # This corresponds to the [MATCH] section
+            Name = name; # Match ethernet interface
+          };
+
+          # Static IP + DNS + Gateway
+          address = ["192.168.86.50/24"];
+          gateway = ["192.168.86.5"]; # Don't add "fd00::5", rely on router advertisement instead
+          dns = ["129.168.86.26" "fd00::1a" "8.8.8.8" "8.8.4.4" "2001:4860:4860::8888" "2001:4860:4860::8844"];
+          routes = builtins.map (r: {Gateway = r;}) gateway;
+
+          # See man systemd.network
+          networkConfig = {
+            # This corresponds to the [NETWORK] section
+            DHCP = "no";
+
+            IPv6AcceptRA = "yes"; # Accept Router Advertisements
+            # MulticastDNS = "no";
+            # LLMNR = "no";
+            # LinkLocalAddressing = "ipv6";
+          };
+
+          addresses = [
+            {
+              # Don't add this to address, we don't want to create any routes with this
+              Address = "fd00::32/64"; # IPv6 Unique-Local Address (ULA)
+            }
+          ];
+
+          linkConfig = {
+            # This corresponds to the [LINK] section
+            RequiredForOnline = routable;
+          };
+        };
+      in {
+        # "10-ether-2_5G" = mylib.networking.mkStaticSystemdNetwork {
+        #   interface = "enp8s0";
+        #   ips = ["192.168.86.50/24"];
+        #   routers = ["192.168.86.5"];
+        #   nameservers = ["192.168.86.26" "8.8.8.8"];
+        #   routable = true;
+        # };
+        # "10-ether-1G" = mylib.networking.mkStaticSystemdNetwork {
+        #   interface = "enp5s0";
+        #   ips = ["192.168.86.50/24"];
+        #   routers = ["192.168.86.5"];
+        #   nameservers = ["192.168.86.26" "8.8.8.8"];
+        #   routable = false;
+        # };
+
         # This should override the default network 50-ether
-        "10-ether-2_5G" = mylib.networking.mkStaticSystemdNetwork {
-          interface = "enp8s0";
-          ips = ["192.168.86.50/24"];
-          routers = ["192.168.86.5"];
-          nameservers = ["192.168.86.26" "8.8.8.8"];
-          routable = true;
-        };
-        "10-ether-1G" = mylib.networking.mkStaticSystemdNetwork {
-          interface = "enp5s0";
-          ips = ["192.168.86.50/24"];
-          routers = ["192.168.86.5"];
-          nameservers = ["192.168.86.26" "8.8.8.8"];
-          routable = false;
-        };
-        # "10-ether-1G" = mylib.networking.mkStaticSystemdNetwork {...};
+        "10-ether-1G" = mkConfig "enp5s0" "no";
+        "10-ether-2_5G" = mkConfig "enp8s0" "routable";
       };
 
       # NetworkManager profiles
@@ -56,6 +98,9 @@
           ip = "192.168.86.50/24";
           router = "192.168.86.5";
           nameserver = "192.168.86.26;8.8.8.8;";
+          ip6 = "fd00::32/64";
+          router6 = "fd00::5";
+          nameserver6 = "2001:4860:4860::8888;2001:4860:4860::8844;";
           priority = 10; # Rather connect to 2.5G than to 1G
         };
         "10-ether-1G" = mylib.networking.mkStaticNetworkManagerProfile {
@@ -64,6 +109,9 @@
           ip = "192.168.86.50/24";
           router = "192.168.86.5";
           nameserver = "192.168.86.26;8.8.8.8;";
+          ip6 = "fd00::32/64";
+          router6 = "fd00::5";
+          nameserver6 = "2001:4860:4860::8888;2001:4860:4860::8844;";
         };
       };
 
