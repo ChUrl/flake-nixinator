@@ -38,7 +38,7 @@
   #     sha256 = "sha256-Gq9klAMXk+SHb7C6z6apErVRz0PB5jyADfixqGZyDDc=";
   #   };
   # });
-
+  #
   # rich_14_2_0 = pkgs.python313Packages.rich.overridePythonAttrs (old: {
   #   version = "14.2.0";
   #   src = pkgs.python313Packages.fetchPypi {
@@ -49,22 +49,12 @@
   #   doCheck = false;
   # });
 
-  # rich_14_2_0 = pkgs.python313Packages.rich.overridePythonAttrs (old: {
-  #   version = "14.2.0";
-  #   src = pkgs.fetchFromGitHub {
-  #     owner = "Textualize";
-  #     repo = "rich";
-  #     tag = "v14.2.0";
-  #     hash = "sha256-oQbxRbZnVr/Ln+i/hpBw5FlpUp3gcp/7xsxi6onPkn8=";
-  #   };
-  # });
-
   tidalDlNg = pythonPkgs.buildPythonApplication rec {
-    pname = "tidal-dl-ng";
-    version = "0.31.3";
+    pname = "tidal_dl_ng";
+    version = "0.33.0";
     format = "pyproject";
 
-    # TODO: The official repo was deleted, find the new one once it pops up
+    # The official repo was deleted
     # src = pkgs.fetchFromGitHub {
     #   owner = "exislow";
     #   repo = "tidal-dl-ng";
@@ -72,14 +62,22 @@
     #   sha256 = "sha256-PUT0anx1yivgXwW21jah7Rv1/BabOT+KPoW446NFNyg=";
     # };
 
-    src = pkgs.fetchFromGitHub {
-      owner = "rodvicj";
-      repo = "tidal_dl_ng-Project";
-      rev = "4573142c76ef045ebf8e80c34657dd2bec96f17d";
-      sha256 = "sha256-3sO2qj8V4KXOWK7vQsFAOYeTZo2rsc/M36SwRnC0oVg=";
+    # Alternative repo
+    # src = pkgs.fetchFromGitHub {
+    #   owner = "rodvicj";
+    #   repo = "tidal_dl_ng-Project";
+    #   rev = "4573142c76ef045ebf8e80c34657dd2bec96f17d";
+    #   sha256 = "sha256-3sO2qj8V4KXOWK7vQsFAOYeTZo2rsc/M36SwRnC0oVg=";
+    # };
+
+    # Package is still on PyPi
+    src = pythonPkgs.fetchPypi {
+      inherit pname version;
+      sha256 = "sha256-rOMyxnT7uVnMbn678DFtqAu4+Uc5VFGcqGI0jxplnpc=";
     };
 
     doCheck = false;
+    dontCheckRuntimeDeps = true;
     catchConflicts = false;
     strictDeps = false;
 
