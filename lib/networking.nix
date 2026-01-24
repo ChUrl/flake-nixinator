@@ -56,14 +56,14 @@
     address = ips;
     gateway = routers;
     dns = nameservers;
-    routes = builtins.map (r: {Gateway = r;}) routers;
+    routes = builtins.map (r: {Gateway = r;}) routers; # TODO: We need to add a way to specify addresses without routes (IPv6 ULA)
 
     # See man systemd.network
     networkConfig = {
       # This corresponds to the [NETWORK] section
       DHCP = "no";
 
-      # IPv6AcceptRA = "no";
+      IPv6AcceptRA = "yes"; # Accept Router Advertisements
       # MulticastDNS = "no";
       # LLMNR = "no";
       # LinkLocalAddressing = "ipv6";
