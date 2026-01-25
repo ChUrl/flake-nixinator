@@ -49,6 +49,7 @@ in {
             tinymist
             typescript
             vscode-langservers-extracted # includes nodejs
+            autotools-language-server
 
             # Linters
             checkstyle # java
@@ -887,6 +888,7 @@ in {
                     };
                   };
                 }
+                {name = "autotools-language-server";}
                 # {name = "nil_ls";}
                 {
                   name = "nixd";
