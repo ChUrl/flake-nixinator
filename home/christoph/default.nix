@@ -560,6 +560,7 @@ in
             audacity
             ferdium
             gparted
+            feishin
 
             # Office
             kdePackages.wacomtablet # For xournalpp/krita
