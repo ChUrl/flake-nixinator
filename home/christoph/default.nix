@@ -560,7 +560,8 @@ in
             audacity
             ferdium
             gparted
-            feishin
+            # feishin # electron :(
+            jellyfin-tui
 
             # Office
             kdePackages.wacomtablet # For xournalpp/krita
