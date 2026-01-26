@@ -243,7 +243,7 @@ in {
               # catppuccin-web-file-icons
               clearurls
               # cookie-autodelete
-              dark-background-light-text
+              # dark-background-light-text
               display-_anchors # Easier linking to specific website parts
               don-t-fuck-with-paste
               # enhancer-for-youtube # Discontinued, use tweaks-for-youtube
