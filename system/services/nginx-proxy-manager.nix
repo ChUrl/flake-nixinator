@@ -26,6 +26,9 @@ in {
         "80:80"
         # "81:81" # Web interface
         "443:443"
+
+        # TODO: Should probably split the nginx configs for ServeNix and ThinkNix
+        "5520:5520" # HyTale
       ];
 
       volumes = [
