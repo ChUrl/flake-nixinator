@@ -28,6 +28,7 @@
     ../services/gitea.nix
     ../services/immich.nix
     ../services/jellyfin.nix
+    ../services/kiwix.nix
     ../services/kopia.nix
     ../services/nextcloud.nix
     ../services/nginx-proxy-manager.nix
