@@ -50,8 +50,8 @@
   # });
 
   tidalDlNg = pythonPkgs.buildPythonApplication rec {
-    pname = "tidal_dl_ng";
-    version = "0.33.0";
+    pname = "tidal_dl_ng_for_dj";
+    version = "0.33.2";
     format = "pyproject";
 
     # The official repo was deleted
@@ -62,24 +62,20 @@
     #   sha256 = "sha256-PUT0anx1yivgXwW21jah7Rv1/BabOT+KPoW446NFNyg=";
     # };
 
-    # Alternative repo
-    # src = pkgs.fetchFromGitHub {
-    #   owner = "rodvicj";
-    #   repo = "tidal_dl_ng-Project";
-    #   rev = "4573142c76ef045ebf8e80c34657dd2bec96f17d";
-    #   sha256 = "sha256-3sO2qj8V4KXOWK7vQsFAOYeTZo2rsc/M36SwRnC0oVg=";
+    # Package now also deleted from PyPi
+    # src = pythonPkgs.fetchPypi {
+    #   inherit pname version;
+    #   sha256 = "sha256-rOMyxnT7uVnMbn678DFtqAu4+Uc5VFGcqGI0jxplnpc=";
     # };
 
-    # Package is still on PyPi
+    # TODO: Borked
+    # "For DJ"-Fork
     src = pythonPkgs.fetchPypi {
       inherit pname version;
-      sha256 = "sha256-rOMyxnT7uVnMbn678DFtqAu4+Uc5VFGcqGI0jxplnpc=";
+      sha256 = "sha256-605cgBqZV6L7sxWtEa4Ki+9hBqX4m3Rk+X5oY5bv/FQ=";
     };
 
-    doCheck = false;
     dontCheckRuntimeDeps = true;
-    catchConflicts = false;
-    strictDeps = false;
 
     nativeBuildInputs = with pythonPkgs; [poetry-core setuptools];
 
@@ -132,7 +128,7 @@
 
   tidal-dl-ng-gui-desktopfile = pkgs.stdenv.mkDerivation {
     pname = "tdng";
-    version = "0.31.3";
+    version = "0.33.2";
     dontUnpack = true;
 
     nativeBuildInputs = [pkgs.makeWrapper];

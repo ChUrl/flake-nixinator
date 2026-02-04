@@ -499,7 +499,7 @@ in
             imagemagick # Convert image (magic)
             mp3val # Validate mp3 files
             flac # Validate flac files
-            spotdl
+            # spotdl
 
             # Document utils
             poppler-utils # pdfunite

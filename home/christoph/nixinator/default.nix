@@ -141,7 +141,8 @@
         jellyfin-desktop
         jellyfin-mpv-shim
         # tidal-hifi
-        tidal-dl-ng # TODO: Borked
+        # tidal-dl-ng # TODO: Borked
+        tiddl
         picard
         handbrake
         teamspeak6-client
