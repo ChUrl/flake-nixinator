@@ -9,4 +9,5 @@
   msty = pkgs.callPackage ./msty {};
   unityhub = pkgs.callPackage ./unityhub {};
   tidal-dl-ng = pkgs.callPackage ./tidal-dl-ng {};
+  tiddl = pkgs.callPackage ./tiddl {};
 }
