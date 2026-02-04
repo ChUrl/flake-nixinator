@@ -210,6 +210,10 @@ Convert line endings to dos format
 unix2dos <file>
 $ file: eza -1
 
+% tiddl
+Download stuff from tidal
+tiddl download --track-quality max --path ~/Downloads/Beet/Albums --videos none url "<url>"
+
 ; ===========================
 ; SECRETS
 ; ===========================
