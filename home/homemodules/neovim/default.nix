@@ -74,6 +74,7 @@ in {
             rustfmt
             stylua
             typstyle
+            mbake
           ])
 
           [
@@ -515,6 +516,7 @@ in {
                 javascript = ["prettierd" "prettier"];
                 latex = ["tex-fmt"];
                 lua = ["stylua"];
+                make = ["bake"];
                 markdown = ["prettierd" "prettier"];
                 nix = ["alejandra"];
                 python = ["black"];
