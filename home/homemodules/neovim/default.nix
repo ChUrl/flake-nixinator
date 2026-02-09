@@ -1989,6 +1989,39 @@ in {
             '';
           };
 
+          visual-whitespace = rec {
+            name = "visual-whitespace";
+            pkg = pkgs.vimPlugins.visual-whitespace-nvim;
+            event = ["ModeChanged *:[vV\22]"];
+            config = mkDefaultConfig name;
+            opts = {
+              enabled = true;
+              highlight = {
+                link = "Visual";
+                default = true;
+              };
+              match_types = {
+                space = true;
+                tab = true;
+                nbsp = true;
+                lead = false;
+                trail = false;
+              };
+              list_chars = {
+                space = "·";
+                tab = "↦";
+                nbsp = "␣";
+                lead = "‹";
+                trail = "›";
+              };
+              fileformat_chars = {
+                unix = "↲";
+                mac = "←";
+                dos = "↙";
+              };
+            };
+          };
+
           # wakatime = {
           #   name = "wakatime";
           #   pkg = pkgs.vimPlugins.vim-wakatime;
@@ -2170,6 +2203,7 @@ in {
           typst-preview # Typst support
           ufo # Code folding
           vimtex # LaTeX support
+          visual-whitespace
           # wakatime # Time tracking
           web-devicons # Icons for many plugins
           which-key # Live keybinding help
