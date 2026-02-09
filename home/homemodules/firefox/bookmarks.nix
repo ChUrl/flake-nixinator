@@ -69,6 +69,7 @@ in [
           (mkBm "Rust" "https://doc.rust-lang.org/stable/book/ch03-00-common-programming-concepts.html")
           (mkBm "RustOS" "https://os.phil-opp.com/")
           (mkBm "Interpreters" "https://craftinginterpreters.com/contents.html")
+          (mkBm "Godbolt" "https://godbolt.org")
         ];
       }
       {
