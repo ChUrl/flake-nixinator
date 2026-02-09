@@ -50,6 +50,7 @@ in {
             typescript
             vscode-langservers-extracted # includes nodejs
             autotools-language-server
+            just-lsp
 
             # Linters
             checkstyle # java
@@ -75,6 +76,7 @@ in {
             stylua
             typstyle
             mbake
+            just-formatter
           ])
 
           [
@@ -514,6 +516,7 @@ in {
                 html = ["prettierd" "prettier"];
                 java = ["google-java-format"];
                 javascript = ["prettierd" "prettier"];
+                just = ["just"];
                 latex = ["tex-fmt"];
                 lua = ["stylua"];
                 make = ["bake"];
@@ -880,6 +883,7 @@ in {
                 {name = "cmake";}
                 {name = "cssls";}
                 {name = "html";} # vscode-langservers-extracted
+                {name = "just-lsp";} # TODO: Doesn't autostart?
                 {name = "lua_ls";}
                 {
                   name = "ltex";

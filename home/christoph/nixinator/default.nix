@@ -133,6 +133,7 @@
         godot_4
         (obs-studio.override {cudaSupport = true;})
         kdePackages.kdenlive
+        # davinci-resolve
         krita
         makemkv
         lrcget

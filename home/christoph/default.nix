@@ -478,6 +478,7 @@ in
             systemctl-tui
             restic # Backups
             gnumake
+            just
 
             # Hardware/Software info
             pciutils # lspci
