@@ -11,3 +11,4 @@ config/neovim/store
 home/modules/ags/config/types
 home/modules/ags/config/tsconfig.json
 system/modules/agenix/secrets.nix
+config/neovim/nvim_bundle
