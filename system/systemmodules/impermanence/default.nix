@@ -126,6 +126,7 @@ in {
             # (mkUDir ".nv" m755) # Unity
             (mkUDir ".ollama" m755)
             # (mkUDir ".plastic4" m755) # Unity
+            (mkUDir ".tiddl" m755)
             (mkUDir ".var/app" m755)
             (mkUDir ".vim/undo" m755)
             (mkUDir ".zotero" m755)
