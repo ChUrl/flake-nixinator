@@ -68,7 +68,7 @@ rec {
       #   bintools = pkgs.bintools.bintools; # Unwrapped bintools
       #   libc = pkgs.glibc;
       # };
-      # gcc = pkgs.hiPrio (pkgs.wrapCCWith {
+      # gcc = lib.hiPrio (pkgs.wrapCCWith {
       #   cc = pkgs.gcc.cc; # Unwrapped gcc
       #   libc = pkgs.glibc;
       #   bintools = bintools;
@@ -84,7 +84,7 @@ rec {
       #   bintools = pkgs.bintools.bintools; # Unwrapped bintools
       #   libc = pkgs.glibc_multi;
       # };
-      # gcc_multilib = pkgs.hiPrio (pkgs.wrapCCWith {
+      # gcc_multilib = lib.hiPrio (pkgs.wrapCCWith {
       #   cc = pkgs.gcc.cc; # Unwrapped gcc
       #   libc = pkgs.glibc_multi;
       #   bintools = bintools_multilib;
