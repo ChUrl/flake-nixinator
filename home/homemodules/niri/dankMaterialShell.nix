@@ -72,6 +72,10 @@
           }
           {
             enabled = true;
+            id = "colorPicker";
+          }
+          {
+            enabled = true;
             id = "clipboard";
           }
           {
