@@ -8,6 +8,7 @@
   system,
   username,
   headless,
+  publicKeys,
   ...
 }:
 with mylib.networking; {
@@ -273,6 +274,10 @@ with mylib.networking; {
     ];
     shell = pkgs.fish;
 
+    openssh.authorizedKeys.keys = [
+      publicKeys.christoph.ssh
+    ];
+
     # We do this with HomeManager
     # packages = with pkgs; [];
   };
@@ -418,7 +423,9 @@ with mylib.networking; {
     };
 
     # Enable the OpenSSH daemon.
-    openssh.enable = true;
+    openssh = {
+      enable = true;
+    };
 
     # Trims the journal if too large
     journald.extraConfig = ''

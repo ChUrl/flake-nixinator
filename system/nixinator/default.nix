@@ -176,6 +176,22 @@
       fileSystems = ["/"];
     };
 
+    # Temporarily ban IPs for SSH after failed login attempts
+    fail2ban = {
+      enable = true;
+    };
+
+    openssh = {
+      ports = [5432];
+      settings = {
+        PasswordAuthentication = false;
+        KbdInteractiveAuthentication = false;
+        PermitRootLogin = "no";
+        AllowUsers = [username];
+        LogLevel = "VERBOSE"; # For fail2ban
+      };
+    };
+
     # Keep this as a system service because we're backing up /persist as root
     # TODO: The repository gets corrupted all the time, maybe because the service runs before the repository is mounted?
     #       - Was this caused by the NFS "soft" option?
