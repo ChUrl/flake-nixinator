@@ -354,7 +354,7 @@ in {
           clangd-extensions = rec {
             name = "clangd_extensions";
             pkg = pkgs.vimPlugins.clangd_extensions-nvim;
-            lazy = true;
+            lazy = false;
             config = mkDefaultConfig name;
             opts = {
               inlay_hints = {
