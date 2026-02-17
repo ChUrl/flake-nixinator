@@ -285,8 +285,13 @@ in {
 
           layer-rules = [
             {
-              # Set the overview wallpaper on the backdrop.
+              # Set the overview wallpaper on the backdrop (Noctalia).
               matches = [{namespace = "^noctalia-overview*";}];
+              place-within-backdrop = true;
+            }
+            {
+              # Set the overview wallpaper on the backdrop (DMS).
+              matches = [{namespace = "^dms:blurwallpaper$";}];
               place-within-backdrop = true;
             }
           ];
