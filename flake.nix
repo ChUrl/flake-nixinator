@@ -80,6 +80,8 @@
     dank-material-shell.url = "github:AvengeMedia/DankMaterialShell";
     dank-material-shell.inputs.nixpkgs.follows = "nixpkgs";
     # dank-material-shell.inputs.dgop.follows = "dgop";
+    danksearch.url = "github:AvengeMedia/danksearch";
+    danksearch.inputs.nixpkgs.follows = "nixpkgs";
 
     # Hyprland (use flake so plugins are not built from source)
     hyprland.url = "github:hyprwm/Hyprland";
