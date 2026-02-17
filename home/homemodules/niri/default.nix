@@ -62,6 +62,7 @@ in {
       # TODO: Those should be modules with their own options
       noctalia-shell = import ./noctalia.nix {inherit color;};
       dank-material-shell = import ./dankMaterialShell.nix {inherit config color;};
+      dsearch.enable = true;
 
       # TODO: Extract options
       niri = {
