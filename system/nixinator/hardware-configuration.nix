@@ -76,6 +76,9 @@
     #   options = ["defaults" "rw" "noatime"];
     # };
 
+    # Can't set this in disko
+    "/home".neededForBoot = true;
+
     # NOTE: By mounting NFS shares here, we risk the system becoming unusable when they disconnect (unless unmounted).
 
     # If the bg option is specified, a timeout or failure causes the mount(8) command
