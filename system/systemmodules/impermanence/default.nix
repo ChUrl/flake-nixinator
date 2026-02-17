@@ -298,10 +298,8 @@ in {
           unitConfig.DefaultDependencies = "no";
           serviceConfig.Type = "oneshot";
 
-          # NOTE: If any single line of this script fails
-          #       the entire system might be bricked.
-          #       NixOS automatically sets "-e", so if unlucky,
-          #       the subvolumes won'e exist for mounting...
+          # NOTE: If any single line of this script fails the entire system might be bricked.
+          #       NixOS automatically sets "-e", so if unlucky, the subvolumes won'e exist for mounting...
           script = let
             mvSubvolToPersist = subvol: ''
               if [[ -e ${mountDir}/${subvol} ]]; then
