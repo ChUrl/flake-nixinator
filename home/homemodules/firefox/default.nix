@@ -13,7 +13,7 @@ in {
   config = lib.mkIf firefox.enable {
     textfox = {
       enable = firefox.textfox;
-      useLegacyExtensions = false;
+      # useLegacyExtensions = false;
       profiles = ["default"];
 
       config = {
@@ -54,7 +54,9 @@ in {
       };
     };
 
-    home.packages = with pkgs; [vdhcoapp];
+    home.packages = with pkgs; [
+      # vdhcoapp # No longer required since VDH >= 10
+    ];
 
     home.sessionVariables = lib.mkMerge [
       {

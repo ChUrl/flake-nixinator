@@ -238,6 +238,7 @@ in {
         newhome
       ];
 
+      # TODO: Is this fixed with filesystems."/home".neededForBoot = true?
       # NOTE: This is REQUIRED for HM activation!
       #       Otherwise the home directory won't be writable!
       systemd.services."impermanence-fix-home-ownership" = let
