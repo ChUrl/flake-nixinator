@@ -448,6 +448,10 @@ in {
               action = maximize-column;
               hotkey-overlay = {title = "Maximize column.";};
             };
+            "Mod+Comma" = {
+              action = reset-window-height;
+              hotkey-overlay = {title = "Reset window height.";};
+            };
             "Mod+V" = {
               action = toggle-window-floating;
               hotkey-overlay = {title = "Toggle between floating and tiled window.";};
