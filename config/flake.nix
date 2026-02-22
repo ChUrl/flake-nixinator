@@ -190,128 +190,131 @@ rec {
       #   drv = defaultPackage;
       # };
 
-      # Provide environment for "nix develop"
-      devShell = pkgs.mkShell {
-        inherit nativeBuildInputs buildInputs;
-        name = description;
+      devShells = {
+        # Provide default environment for "nix develop".
+        # Other environments can be added below.
+        default = pkgs.mkShell {
+          inherit nativeBuildInputs buildInputs;
+          name = description;
 
-        # =========================================================================================
-        # Define environment variables
-        # =========================================================================================
+          # =========================================================================================
+          # Define environment variables
+          # =========================================================================================
 
-        # Rust stdlib source:
-        # RUST_SRC_PATH = "${rust}/lib/rustlib/src/rust/library";
+          # Rust stdlib source:
+          # RUST_SRC_PATH = "${rust}/lib/rustlib/src/rust/library";
 
-        # Custom dynamic libraries:
-        # LD_LIBRARY_PATH = builtins.concatStringsSep ":" [
-        #   # Rust Bevy GUI app:
-        #   # "${pkgs.xorg.libX11}/lib"
-        #   # "${pkgs.xorg.libXcursor}/lib"
-        #   # "${pkgs.xorg.libXrandr}/lib"
-        #   # "${pkgs.xorg.libXi}/lib"
-        #   # "${pkgs.libGL}/lib"
-        #
-        #   # JavaFX app:
-        #   # "${pkgs.libGL}/lib"
-        #   # "${pkgs.gtk3}/lib"
-        #   # "${pkgs.glib.out}/lib"
-        #   # "${pkgs.xorg.libXtst}/lib"
-        # ];
+          # Custom dynamic libraries:
+          # LD_LIBRARY_PATH = builtins.concatStringsSep ":" [
+          #   # Rust Bevy GUI app:
+          #   # "${pkgs.xorg.libX11}/lib"
+          #   # "${pkgs.xorg.libXcursor}/lib"
+          #   # "${pkgs.xorg.libXrandr}/lib"
+          #   # "${pkgs.xorg.libXi}/lib"
+          #   # "${pkgs.libGL}/lib"
+          #
+          #   # JavaFX app:
+          #   # "${pkgs.libGL}/lib"
+          #   # "${pkgs.gtk3}/lib"
+          #   # "${pkgs.glib.out}/lib"
+          #   # "${pkgs.xorg.libXtst}/lib"
+          # ];
 
-        # Dynamic libraries from buildinputs:
-        # LD_LIBRARY_PATH = nixpkgs.lib.makeLibraryPath buildInputs;
+          # Dynamic libraries from buildinputs:
+          # LD_LIBRARY_PATH = nixpkgs.lib.makeLibraryPath buildInputs;
 
-        # QT imports to use with "qmlls -E"
-        # QML_IMPORT_PATH = "${pkgs.qt6.full}/lib/qt-6/qml";
+          # QT imports to use with "qmlls -E"
+          # QML_IMPORT_PATH = "${pkgs.qt6.full}/lib/qt-6/qml";
 
-        # Set PYTHONPATH
-        # PYTHONPATH = ".";
+          # Set PYTHONPATH
+          # PYTHONPATH = ".";
 
-        # Set matplotlib backend
-        # MPLBACKEND = "TkAgg";
+          # Set matplotlib backend
+          # MPLBACKEND = "TkAgg";
 
-        # =========================================================================================
-        # Define shell environment
-        # =========================================================================================
+          # =========================================================================================
+          # Define shell environment
+          # =========================================================================================
 
-        # Setup the shell when entering the "nix develop" environment (bash script).
-        shellHook = let
-          mkCmakeScript = type: let
-            typeLower = lib.toLower type;
-          in
-            pkgs.writers.writeFish "cmake-${typeLower}.fish" ''
-              cd $FLAKE_PROJECT_ROOT
+          # Setup the shell when entering the "nix develop" environment (bash script).
+          shellHook = let
+            mkCmakeScript = type: let
+              typeLower = lib.toLower type;
+            in
+              pkgs.writers.writeFish "cmake-${typeLower}.fish" ''
+                cd $FLAKE_PROJECT_ROOT
 
-              echo "Removing build directory ./cmake-build-${typeLower}/"
-              rm -rf ./cmake-build-${typeLower}
+                echo "Removing build directory ./cmake-build-${typeLower}/"
+                rm -rf ./cmake-build-${typeLower}
 
-              echo "Creating build directory"
-              mkdir cmake-build-${typeLower}
-              cd cmake-build-${typeLower}
+                echo "Creating build directory"
+                mkdir cmake-build-${typeLower}
+                cd cmake-build-${typeLower}
 
-              echo "Running cmake"
-              cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE="${type}" -DCMAKE_EXPORT_COMPILE_COMMANDS="On" ..
+                echo "Running cmake"
+                cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE="${type}" -DCMAKE_EXPORT_COMPILE_COMMANDS="On" ..
 
-              echo "Linking compile_commands.json"
-              cd ..
-              ln -sf ./cmake-build-${typeLower}/compile_commands.json ./compile_commands.json
+                echo "Linking compile_commands.json"
+                cd ..
+                ln -sf ./cmake-build-${typeLower}/compile_commands.json ./compile_commands.json
+              '';
+
+            cmakeDebug = mkCmakeScript "Debug";
+            cmakeRelease = mkCmakeScript "Release";
+
+            mkBuildScript = type: let
+              typeLower = lib.toLower type;
+            in
+              pkgs.writers.writeFish "cmake-build.fish" ''
+                cd $FLAKE_PROJECT_ROOT/cmake-build-${typeLower}
+
+                echo "Running cmake"
+                cmake --build .
+              '';
+
+            buildDebug = mkBuildScript "Debug";
+            buildRelease = mkBuildScript "Release";
+
+            # Use this to specify commands that should be ran after entering fish shell
+            initProjectShell = pkgs.writers.writeFish "init-shell.fish" ''
+              echo "Entering \"${description}\" environment..."
+
+              # Determine the project root, used e.g. in cmake scripts
+              set -g -x FLAKE_PROJECT_ROOT (git rev-parse --show-toplevel)
+
+              # Rust Bevy:
+              # abbr -a build-release-windows "CARGO_FEATURE_PURE=1 cargo xwin build --release --target x86_64-pc-windows-msvc"
+
+              # C/C++:
+              # abbr -a cmake-debug "${cmakeDebug}"
+              # abbr -a cmake-release "${cmakeRelease}"
+              # abbr -a build-debug "${buildDebug}"
+              # abbr -a build-release "${buildRelease}"
+
+              # Clojure:
+              # abbr -a clojure-deps "deps-lock --lein"
+
+              # Python:
+              # abbr -a run "python ./app/main.py"
+              # abbr -a profile "py-spy record -o profile.svg -- python ./app/main.py && firefox profile.svg"
+              # abbr -a ptop "py-spy top -- python ./app/main.py"
             '';
-
-          cmakeDebug = mkCmakeScript "Debug";
-          cmakeRelease = mkCmakeScript "Release";
-
-          mkBuildScript = type: let
-            typeLower = lib.toLower type;
           in
-            pkgs.writers.writeFish "cmake-build.fish" ''
-              cd $FLAKE_PROJECT_ROOT/cmake-build-${typeLower}
+            builtins.concatStringsSep "\n" [
+              # Launch into pure fish shell
+              ''
+                exec "$(type -p fish)" -C "source ${initProjectShell} && abbr -a menu '${pkgs.bat}/bin/bat "${initProjectShell}"'"
+              ''
 
-              echo "Running cmake"
-              cmake --build .
-            '';
-
-          buildDebug = mkBuildScript "Debug";
-          buildRelease = mkBuildScript "Release";
-
-          # Use this to specify commands that should be ran after entering fish shell
-          initProjectShell = pkgs.writers.writeFish "init-shell.fish" ''
-            echo "Entering \"${description}\" environment..."
-
-            # Determine the project root, used e.g. in cmake scripts
-            set -g -x FLAKE_PROJECT_ROOT (git rev-parse --show-toplevel)
-
-            # Rust Bevy:
-            # abbr -a build-release-windows "CARGO_FEATURE_PURE=1 cargo xwin build --release --target x86_64-pc-windows-msvc"
-
-            # C/C++:
-            # abbr -a cmake-debug "${cmakeDebug}"
-            # abbr -a cmake-release "${cmakeRelease}"
-            # abbr -a build-debug "${buildDebug}"
-            # abbr -a build-release "${buildRelease}"
-
-            # Clojure:
-            # abbr -a clojure-deps "deps-lock --lein"
-
-            # Python:
-            # abbr -a run "python ./app/main.py"
-            # abbr -a profile "py-spy record -o profile.svg -- python ./app/main.py && firefox profile.svg"
-            # abbr -a ptop "py-spy top -- python ./app/main.py"
-          '';
-        in
-          builtins.concatStringsSep "\n" [
-            # Launch into pure fish shell
-            ''
-              exec "$(type -p fish)" -C "source ${initProjectShell} && abbr -a menu '${pkgs.bat}/bin/bat "${initProjectShell}"'"
-            ''
-
-            # Qt: Launch into wrapped fish shell
-            # https://nixos.org/manual/nixpkgs/stable/#sec-language-qt
-            # ''
-            #   fishdir=$(mktemp -d)
-            #   makeWrapper "$(type -p fish)" "$fishdir/fish" "''${qtWrapperArgs[@]}"
-            #   exec "$fishdir/fish" -C "source ${initProjectShell} && abbr -a menu '${pkgs.bat}/bin/bat "${initProjectShell}"'"
-            # ''
-          ];
+              # Qt: Launch into wrapped fish shell
+              # https://nixos.org/manual/nixpkgs/stable/#sec-language-qt
+              # ''
+              #   fishdir=$(mktemp -d)
+              #   makeWrapper "$(type -p fish)" "$fishdir/fish" "''${qtWrapperArgs[@]}"
+              #   exec "$fishdir/fish" -C "source ${initProjectShell} && abbr -a menu '${pkgs.bat}/bin/bat "${initProjectShell}"'"
+              # ''
+            ];
+        };
       };
     });
 }
