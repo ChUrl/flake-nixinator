@@ -106,13 +106,13 @@ in {
             {argv = ["dms" "run"];}
 
             {argv = ["kitty" "--hold" "fastfetch"];}
-            {argv = ["zeal"];}
-            {argv = ["protonvpn-app"];}
             {argv = ["fcitx5"];}
-            {argv = ["jellyfin-mpv-shim"];}
+            # {argv = ["zeal"];}
+            # {argv = ["protonvpn-app"];}
+            # {argv = ["jellyfin-mpv-shim"];}
 
             {sh = "sleep 5s && nextcloud --background";}
-            {sh = "sleep 5s && keepassxc";}
+            # {sh = "sleep 5s && keepassxc";}
           ];
 
           workspaces = {
