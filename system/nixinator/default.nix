@@ -153,11 +153,26 @@
   };
 
   boot = {
-    kernelPackages = pkgs.linuxPackages_zen;
-    # kernelPackages = pkgs.linuxPackages_latest;
+    # kernelPackages = pkgs.linuxPackages_zen;
+    kernelPackages = pkgs.linuxPackages_latest;
 
-    # kernelParams = [ "quiet" ];
-    # plymouth.enable = true;
+    # Why do I need to know if something fails during boot???
+    # consoleLogLevel = 3;
+    # initrd.verbose = false;
+    # initrd.systemd.enable = true;
+    # kernelParams = [
+    #   "quiet"
+    #   "splash"
+    #   "intremap=on"
+    #   "boot.shell_on_fail"
+    #   "udev.log_priority=3"
+    #   "rd.systemd.show_status=auto"
+    # ];
+    # plymouth = {
+    #   enable = false;
+    #   font = "${pkgs.monolisa}/share/fonts/truetype/MonoLisa-AltPars-Straight.ttf";
+    #   logo = "${pkgs.nixos-icons}/share/icons/hicolor/128x128/apps/nix-snowflake.png";
+    # };
   };
 
   # environment.systemPackages = with pkgs; [];

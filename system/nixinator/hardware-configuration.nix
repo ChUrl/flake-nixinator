@@ -145,10 +145,10 @@
     nvidia-container-toolkit.enable = true;
 
     nvidia = {
-      # package = config.boot.kernelPackages.nvidiaPackages.stable;
-      package = config.boot.kernelPackages.nvidiaPackages.beta;
+      package = config.boot.kernelPackages.nvidiaPackages.stable;
+      # package = config.boot.kernelPackages.nvidiaPackages.beta;
 
-      open = true;
+      open = false;
       nvidiaSettings = false; # Those are for x-server
       modesetting.enable = true; # Required for wayland
     };
