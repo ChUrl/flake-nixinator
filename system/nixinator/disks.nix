@@ -34,7 +34,7 @@
 
                 settings = {
                   allowDiscards = true;
-                  crypttabExtraOpts = ["fido2-device=auto" "token-timeout=10"];
+                  crypttabExtraOpts = ["fido2-device=auto" "token-timeout=10" "tries=5"];
 
                   # Disable for interactive password entry
                   # keyFile = "/tmp/secret.key";
