@@ -207,10 +207,10 @@ rec {
           # Custom dynamic libraries:
           # LD_LIBRARY_PATH = builtins.concatStringsSep ":" [
           #   # Rust Bevy GUI app:
-          #   # "${pkgs.xorg.libX11}/lib"
-          #   # "${pkgs.xorg.libXcursor}/lib"
-          #   # "${pkgs.xorg.libXrandr}/lib"
-          #   # "${pkgs.xorg.libXi}/lib"
+          #   # "${pkgs.libx11}/lib"
+          #   # "${pkgs.libxcursor}/lib"
+          #   # "${pkgs.libxrandr}/lib"
+          #   # "${pkgs.libxi}/lib"
           #   # "${pkgs.libGL}/lib"
           #
           #   # JavaFX app:
