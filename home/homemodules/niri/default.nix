@@ -33,6 +33,11 @@ in {
     systemd.user.services.niri-flake-polkit = lib.mkForce {};
 
     home = {
+      # Mute the stupid DMS popups
+      # TODO: Is there a DMS option to disable those?
+      file.".config/DankMaterialShell/.firstlaunch".text = "";
+      file.".config/DankMaterialShell/.changelog-1.4".text = "";
+
       sessionVariables = {
         QT_QPA_PLATFORMTHEME = "gtk3"; # For Noctalia
         GDK_BACKEND = "wayland"; # For screen sharing
