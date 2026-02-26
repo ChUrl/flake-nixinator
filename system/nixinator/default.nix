@@ -154,24 +154,37 @@
 
   boot = {
     # kernelPackages = pkgs.linuxPackages_zen;
-    kernelPackages = pkgs.linuxPackages_latest;
+    # kernelPackages = pkgs.linuxPackages_latest;
 
     # Why do I need to know if something fails during boot???
     # consoleLogLevel = 3;
     # initrd.verbose = false;
     # initrd.systemd.enable = true;
-    # kernelParams = [
-    #   "quiet"
-    #   "splash"
-    #   "intremap=on"
-    #   "boot.shell_on_fail"
-    #   "udev.log_priority=3"
-    #   "rd.systemd.show_status=auto"
-    # ];
+    kernelParams = [
+      # Doesn't work, there is only a single framebuffer,
+      # so the smallest monitor determines the size
+      # "video=DP-1:3440x1440"
+      # "video=DP-2:1920x1080"
+
+      # "quiet"
+      # "splash"
+      # "intremap=on"
+      # "boot.shell_on_fail"
+      # "udev.log_priority=3"
+      # "rd.systemd.show_status=auto"
+    ];
     # plymouth = {
     #   enable = false;
     #   font = "${pkgs.monolisa}/share/fonts/truetype/MonoLisa-AltPars-Straight.ttf";
     #   logo = "${pkgs.nixos-icons}/share/icons/hicolor/128x128/apps/nix-snowflake.png";
+    #
+    #   theme = "colorful_sliced";
+    #   themePackages = with pkgs; [
+    #     # By default we would install all themes
+    #     (adi1090x-plymouth-themes.override {
+    #       selected_themes = ["colorful_sliced"];
+    #     })
+    #   ];
     # };
   };
 
@@ -194,6 +207,73 @@
     # Temporarily ban IPs for SSH after failed login attempts
     fail2ban = {
       enable = true;
+    };
+
+    greetd = {
+      enable = false;
+      restart = false;
+      useTextGreeter = true;
+
+      settings = {
+        terminal.vt = 1;
+
+        default_session = {
+          # command = "${pkgs.tuigreet}/bin/tuigreet --time --cmd $SHELL";
+          command = "${pkgs.tuigreet}/bin/tuigreet --time --cmd niri-session";
+          user = "greeter";
+        };
+      };
+    };
+
+    kmscon = {
+      enable = false;
+      hwRender = true;
+      useXkbConfig = true;
+      # autologinUser = username;
+
+      fonts = [
+        {
+          name = "MonoLisa Alt Script";
+          package = pkgs.monolisa;
+        }
+      ];
+
+      # NOTE: Do NOT use multline strings here!
+      #       This will create a linebreak in the systemd service and break login!
+      extraOptions = "";
+
+      extraConfig = let
+        color = config.home-manager.users.${username}.homemodules.color;
+      in ''
+        # term=xterm-256color
+        font-size=14
+        mode=3440x1440
+        palette=custom
+
+        palette-black=0,0,0
+        pallette-white=255,255,255
+
+        palette-red=${color.rgbS.red}
+        palette-light-red=${color.rgbS.red}
+
+        palette-green=${color.rgbS.green}
+        palette-light-green=${color.rgbS.green}
+
+        palette-yellow=${color.rgbS.yellow}
+        palette-light-yellow=${color.rgbS.yellow}
+
+        palette-blue=${color.rgbS.blue}
+        palette-light-blue=${color.rgbS.blue}
+
+        palette-magenta=${color.rgbS.pink}
+        palette-light-magenta=${color.rgbS.pink}
+
+        palette-cyan=${color.rgbS.teal}
+        palette-light-cyan=${color.rgbS.teal}
+
+        palette-foreground=${color.rgbS.text}
+        palette-background=0,0,0
+      '';
     };
 
     openssh = {

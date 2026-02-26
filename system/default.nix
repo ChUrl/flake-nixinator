@@ -208,6 +208,7 @@ with mylib.networking; {
     supportedLocales = ["${en}/UTF-8" "${de}/UTF-8"];
   };
 
+  # console = lib.mkIf headless {
   console = {
     earlySetup = true;
     useXkbConfig = true;
@@ -301,6 +302,7 @@ with mylib.networking; {
     wireguard-tools
     man-pages
     man-pages-posix
+    kmscon # needed in addition to services.kmscon for kmscon-launch-gui
 
     # Android
     android-tools
@@ -387,21 +389,6 @@ with mylib.networking; {
 
       wacom.enable = true;
     };
-
-    # greetd = {
-    #   enable = !headless;
-    #   restart = false;
-    #   useTextGreeter = true;
-    #
-    #   settings = {
-    #     terminal.vt = 1;
-    #
-    #     default_session = {
-    #       command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --cmd $SHELL";
-    #       user = "greeter";
-    #     };
-    #   };
-    # };
 
     # Enable touchpad support (enabled default in most desktopManager).
     libinput.enable = !headless;

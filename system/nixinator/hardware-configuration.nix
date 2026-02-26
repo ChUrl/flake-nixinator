@@ -148,7 +148,7 @@
       package = config.boot.kernelPackages.nvidiaPackages.stable;
       # package = config.boot.kernelPackages.nvidiaPackages.beta;
 
-      open = false;
+      open = true;
       nvidiaSettings = false; # Those are for x-server
       modesetting.enable = true; # Required for wayland
     };
