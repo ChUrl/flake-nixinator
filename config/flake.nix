@@ -30,6 +30,15 @@ rec {
       };
       inherit (pkgs) lib stdenv;
 
+      # Package set for cross-compilation
+      # windowsPkgs = import nixpkgs {
+      #   inherit system;
+      #   crossSystem = {
+      #     config = "x86_64-w64-mingw32";
+      #   };
+      #   config.allowUnfree = true;
+      # };
+
       # ===========================================================================================
       # Define custom dependencies
       # ===========================================================================================
@@ -163,7 +172,29 @@ rec {
       #
       #   installPhase = ''
       #     mkdir -p $out/bin
-      #     mv ./BINARY $out/bin
+      #     cp ./${pname} $out/bin/
+      #   '';
+      # };
+      # windowsPackage = windowsPkgs.stdenv.mkDerivation rec {
+      #   pname = "";
+      #   version = "1.0.0";
+      #   src = ./.;
+      #
+      #   # nativeBuildInputs must be from the build-platform (not cross)
+      #   # so we use "pkgs" here, not "windowsPkgs"
+      #   nativeBuildInputs = with pkgs; [
+      #     cmake
+      #   ];
+      #
+      #   buildInputs = with windowsPkgs; [];
+      #
+      #   cmakeFlags = [
+      #     "-DCMAKE_SYSTEM_NAME=Windows"
+      #   ];
+      #
+      #   installPhase = ''
+      #     mkdir -p $out/bin
+      #     cp ./${pname}.exe $out/bin/
       #   '';
       # };
       # package = clj-nix.lib.mkCljApp {
@@ -185,10 +216,11 @@ rec {
       # };
     in rec {
       # Provide package for "nix build"
-      # defaultPackage = package;
-      # defaultApp = flake-utils.lib.mkApp {
-      #   drv = defaultPackage;
+      # packages = {
+      #   default = package;
+      #   windows = windowsPackage;
       # };
+      # apps.default = flake-utils.lib.mkApp {drv = package;};
 
       devShells = {
         # Provide default environment for "nix develop".
