@@ -241,6 +241,11 @@ in {
               open-maximized = true;
             }
             {
+              matches = [{app-id = "jetbrains-clion";}];
+              open-on-workspace = "2";
+              open-maximized = true;
+            }
+            {
               matches = [{app-id = "code-url-handler";}];
               open-on-workspace = "2";
               open-floating = true;

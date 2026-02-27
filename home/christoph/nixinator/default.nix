@@ -113,7 +113,7 @@
         # Intel FPGA design software
         # quartus-prime-lite
 
-        # jetbrains.clion
+        jetbrains.clion
         # jetbrains.rust-rover
         # jetbrains.pycharm-professional
         # jetbrains.idea-ultimate
