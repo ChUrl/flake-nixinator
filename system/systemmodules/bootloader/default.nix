@@ -20,7 +20,7 @@ in {
     (lib.mkIf (bootloader.loader == "systemd-boot") {
       boot.loader.systemd-boot = {
         enable = true;
-        configurationLimit = 5;
+        configurationLimit = 3; # 3 initrds fit into 512MB /boot
         editor = false;
         consoleMode = "max";
       };
