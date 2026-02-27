@@ -563,6 +563,7 @@ in
             gparted
             # feishin # electron :(
             jellyfin-tui
+            czkawka-full # file deduplicator
 
             # Office
             kdePackages.wacomtablet # For xournalpp/krita
