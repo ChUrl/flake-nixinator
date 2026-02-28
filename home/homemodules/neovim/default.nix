@@ -860,12 +860,15 @@ in {
 
                     cmd = [
                       "clangd"
+                      "--all-scopes-completion"
                       "--background-index"
                       "--clang-tidy"
-                      "--header-insertion=iwyu"
                       "--completion-style=detailed"
-                      "--function-arg-placeholders"
                       "--fallback-style=llvm"
+                      "--function-arg-placeholders=0"
+                      "--header-insertion=iwyu"
+                      "--header-insertion-decorators"
+                      "--pch-storage=memory"
                     ];
 
                     capabilities = {
