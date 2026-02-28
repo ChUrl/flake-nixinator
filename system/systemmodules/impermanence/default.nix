@@ -118,7 +118,7 @@ in {
             # (mkUDir ".android" m755) # Unity
             (mkUDir ".docker" m755)
             # (mkUDir ".gradle" m755) # Unity
-            # (mkUDir ".java" m755) # Unity/Rider
+            (mkUDir ".java" m755) # JetBrains
             (mkUDir ".MakeMKV" m755)
             (mkUDir ".mozilla/firefox" m755) # TODO: Remove this someday
             (mkUDir ".mozilla/native-messaging-hosts" m755)
@@ -136,6 +136,7 @@ in {
             (mkUDir ".cache/nix-index" m755)
             (mkUDir ".cache/nix-search-tv" m755)
             (mkUDir ".cache/nvim" m755)
+            (mkUDir ".cache/JetBrains" m755)
 
             # Config
             # (mkUDir ".config/.android" m755) # Unity
@@ -173,11 +174,12 @@ in {
             (mkUDir ".local/share/docker" m755)
             (mkUDir ".local/share/fish" m755)
             (mkUDir ".local/share/flatpak" m755)
+            (mkUDir ".local/share/hyprland" m755)
             (mkUDir ".local/share/jellyfin-desktop" m755)
             (mkUDir ".local/share/jellyfin-tui" m755)
             (mkUDir ".local/share/JetBrains" m755) # Unity
-            (mkUDir ".local/share/hyprland" m755)
             (mkUDir ".local/share/keyrings" m755) # m700
+            (mkUDir ".local/share/IsolatedStorage" m755) # JetBrains license data
             (mkUDir ".local/share/LRCGET" m755)
             (mkUDir ".local/share/mime" m755)
             (mkUDir ".local/share/net.lrclib.lrcget" m755)
