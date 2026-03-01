@@ -29,6 +29,35 @@
     # Remove this after jetbrains.jdk builds again (nixpkgs issue 425328)
     # jetbrains.rider = pkgs-stable.jetbrains.rider;
 
+    jetbrains =
+      prev.jetbrains
+      // {
+        clion = prev.jetbrains.clion.overrideAttrs (oldAttrs: rec {
+          version = "2026.1-EAP";
+
+          src = prev.fetchurl {
+            url = "https://download-cdn.jetbrains.com/cpp/CLion-261.21849.6.tar.gz";
+            hash = "sha256-h6tnemVnV1YEsvIndwrq2sMsRZYuvTWMU5oqj/hkjdY=";
+          };
+
+          # autoPatchelfIgnoreMissingDeps = [
+          #   "libcrypto.so.1.1"
+          #   "libssl.so.1.1"
+          # ];
+
+          postFixup = ''
+            # Patch python3.12 shared libs that the upstream glob (python3.8) misses
+            find $out -path '*/python3.*/lib-dynload/*.so' -exec patchelf \
+              --replace-needed libssl.so.1.1 libssl.so \
+              --replace-needed libcrypto.so.1.1 libcrypto.so \
+              --replace-needed libcrypt.so.1 libcrypt.so \
+              {} +
+
+            ${oldAttrs.postFixup or ""}
+          '';
+        });
+      };
+
     # Now in Nixpkgs
     # neovide = prev.neovide.overrideAttrs (finalAttrs: prevAttrs: {
     #   version = "0.15.1";
