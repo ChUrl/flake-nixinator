@@ -131,6 +131,7 @@ in {
             nd = "nix develop";
             nb = "nix build -L";
             ns = "nix shell nixpkgs#";
+            nr = "nix run";
           }
 
           # Abbrs only available if package is installed
