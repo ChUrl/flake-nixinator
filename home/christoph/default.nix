@@ -430,6 +430,15 @@ in
                 "start_app_minimized": true
             }
           '';
+
+          # KeePassXC
+          ".config/QtProject.conf".text = ''
+            [FileDialog]
+            history=@Invalid()
+            lastVisited=file:///home/christoph/Documents/KeePass
+            qtVersion=5.15.18
+            viewMode=Detail
+          '';
         })
       ];
 
