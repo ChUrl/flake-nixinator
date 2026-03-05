@@ -580,6 +580,8 @@ in
             hunspell # I cna't type
             hunspellDicts.en_US
             hunspellDicts.de_DE
+
+            inputs.masssprings.packages.${stdenv.hostPlatform.system}.default
           ])
         ];
     };
