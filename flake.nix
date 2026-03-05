@@ -117,6 +117,9 @@
     # Realtime audio
     # musnix.url = "github:musnix/musnix";
     # musnix.inputs.nixpkgs.follows = "nixpkgs";
+
+    masssprings.url = "git+https://gitea.local.chriphost.de/christoph/cpp-masssprings";
+    masssprings.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   # Outputs is a function that takes the inputs as arguments.
