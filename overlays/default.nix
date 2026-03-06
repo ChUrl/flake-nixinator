@@ -33,11 +33,13 @@
       prev.jetbrains
       // {
         clion = prev.jetbrains.clion.overrideAttrs (oldAttrs: rec {
-          version = "2026.1-EAP";
+          version = "261.22158.47"; # March 6, 2026
 
           src = prev.fetchurl {
-            url = "https://download-cdn.jetbrains.com/cpp/CLion-261.21849.6.tar.gz";
-            hash = "sha256-h6tnemVnV1YEsvIndwrq2sMsRZYuvTWMU5oqj/hkjdY=";
+            url = "https://download-cdn.jetbrains.com/cpp/CLion-${version}.tar.gz";
+
+            # hash = "sha256-h6tnemVnV1YEsvIndwrq2sMsRZYuvTWMU5oqj/hkjdY="; # 261.21849.6
+            hash = "sha256-FUHNRioJvjwOWN+FkXEr3+NWR+QVxaZUOkJ0egQkcCQ="; # 261.22158.47
           };
 
           # autoPatchelfIgnoreMissingDeps = [
