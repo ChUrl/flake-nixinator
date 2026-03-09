@@ -565,7 +565,8 @@ in
             obsidian
             zotero
             zeal # docs browser
-            helvum
+            # helvum # unmaintained
+            crosspipe
             vlc
             audacity
             ferdium
