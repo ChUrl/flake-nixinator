@@ -12,7 +12,7 @@
     };
   };
 
-  programs.light.enable = true;
+  # programs.light.enable = true; # Unmaintained
 
   services.xserver = {
     # Configure keymap in X11
