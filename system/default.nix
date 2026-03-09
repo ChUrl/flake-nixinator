@@ -169,7 +169,7 @@ with mylib.networking; {
     # NOTE: Disable this while configuring stuff, it's slow
     enable = true;
     man.enable = config.documentation.enable;
-    man.generateCaches = true; # Slow but needed for neovim man picker
+    man.cache.enable = true; # Slow but needed for neovim man picker
     info.enable = config.documentation.enable;
     dev.enable = config.documentation.enable;
     doc.enable = config.documentation.enable;
