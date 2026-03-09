@@ -69,6 +69,7 @@ in {
           # https://github.com/nix-community/impermanence/issues/253
           (mkRDir "/usr/systemd-placeholder" m755)
 
+          (mkRDir "/var/cache/man" m755)
           (mkRDir "/var/cache/restic-backups-synology" m755)
 
           (mkRDir "/var/db/sudo" m711)
