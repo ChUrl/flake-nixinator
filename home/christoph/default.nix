@@ -453,7 +453,7 @@ in
       };
 
       # Add stuff for your user as you see fit:
-      # TODO: Make the headless installations smaller
+      # TODO: Make the headless installations smaller. Don't install stuff here if !headless but in nixinator config.
       packages = with pkgs;
         lib.mkMerge [
           [
@@ -487,7 +487,11 @@ in
             systemctl-tui
             restic # Backups
             gnumake
-            just
+            just # make alternative
+            binsider # .elf analyzer
+            jujutsu # git-like vcs
+            lurk # strace analysis
+            radare2
 
             # Hardware/Software info
             pciutils # lspci
@@ -910,6 +914,10 @@ in
           "vps" = {
             user = "root";
             hostname = "vps.chriphost.de";
+          };
+          "mars" = {
+            user = "smchurla";
+            hostname = "mars.cs.tu-dortmund.de";
           };
         };
       };
