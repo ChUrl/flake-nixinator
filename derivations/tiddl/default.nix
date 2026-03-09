@@ -11,6 +11,9 @@
         version = "0.20.0";
         sha256 = "sha256-Gq9klAMXk+SHb7C6z6apErVRz0PB5jyADfixqGZyDDc=";
       };
+      propagatedBuildInputs = with pythonPkgs; [
+        typing-extensions
+      ];
     });
 
     aiofiles = super.aiofiles.overridePythonAttrs (old: {
