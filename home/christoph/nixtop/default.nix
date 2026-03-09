@@ -1,5 +1,5 @@
 # Here goes the stuff that will only be enabled on the laptop
-{...}: {
+{pkgs, ...}: {
   config = {
     homemodules = {
       hyprland = {
@@ -29,7 +29,9 @@
     };
 
     home = {
-      # packages = with pkgs; [];
+      packages = with pkgs; [
+        brightnessctl
+      ];
 
       # Do not change.
       # This marks the version when NixOS was installed for backwards-compatibility.
