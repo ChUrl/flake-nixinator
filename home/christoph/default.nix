@@ -553,6 +553,7 @@ in
           (lib.mkIf (!headless) [
             ripdrag # drag & drop from terminal
             veracrypt
+            wl-clipboard
 
             # Proton
             protonvpn-gui
