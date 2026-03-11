@@ -21,6 +21,9 @@ rec {
   }:
   # Create a shell (and possibly package) for each possible system, not only x86_64-linux
     flake-utils.lib.eachDefaultSystem (system: let
+      # =========================================================================================
+      # Define pkgs/stdenvs
+      # =========================================================================================
       pkgs = import nixpkgs {
         inherit system;
         config.allowUnfree = true;
@@ -28,7 +31,18 @@ rec {
           rust-overlay.overlays.default
         ];
       };
-      inherit (pkgs) lib stdenv;
+
+      # clangPkgs = import nixpkgs {
+      #   inherit system;
+      #   config.allowUnfree = true;
+      #   overlays = [];
+      #
+      #   # Use this to change the compiler:
+      #   # - GCC: pkgs.stdenv
+      #   # - Clang: pkgs.clangStdenv
+      #   # NixOS packages are built using GCC by default. Using clang requires a full rebuild/redownload.
+      #   config.replaceStdenv = {pkgs}: pkgs.clangStdenv;
+      # };
 
       # Package set for cross-compilation
       # windowsPkgs = import nixpkgs {
@@ -38,6 +52,91 @@ rec {
       #   };
       #   config.allowUnfree = true;
       # };
+
+      inherit (pkgs) lib stdenv;
+
+      # =========================================================================================
+      # Define shell environment
+      # =========================================================================================
+
+      # Setup the shell when entering the "nix develop" environment (bash script).
+      shellHook = let
+        mkCmakeScript = type: let
+          typeLower = lib.toLower type;
+        in
+          pkgs.writers.writeFish "cmake-${typeLower}.fish" ''
+            cd $FLAKE_PROJECT_ROOT
+
+            echo "Removing build directory ./cmake-build-${typeLower}/"
+            rm -rf ./cmake-build-${typeLower}
+
+            echo "Creating build directory"
+            mkdir cmake-build-${typeLower}
+            cd cmake-build-${typeLower}
+
+            echo "Running cmake"
+            cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE="${type}" -DCMAKE_EXPORT_COMPILE_COMMANDS="On" ..
+
+            echo "Linking compile_commands.json"
+            cd ..
+            ln -sf ./cmake-build-${typeLower}/compile_commands.json ./compile_commands.json
+          '';
+
+        cmakeDebug = mkCmakeScript "Debug";
+        cmakeRelease = mkCmakeScript "Release";
+
+        mkBuildScript = type: let
+          typeLower = lib.toLower type;
+        in
+          pkgs.writers.writeFish "cmake-build.fish" ''
+            cd $FLAKE_PROJECT_ROOT/cmake-build-${typeLower}
+
+            echo "Running cmake"
+            cmake --build .
+          '';
+
+        buildDebug = mkBuildScript "Debug";
+        buildRelease = mkBuildScript "Release";
+
+        # Use this to specify commands that should be ran after entering fish shell
+        initProjectShell = pkgs.writers.writeFish "init-shell.fish" ''
+          echo "Entering \"${description}\" environment..."
+
+          # Determine the project root, used e.g. in cmake scripts
+          set -g -x FLAKE_PROJECT_ROOT (git rev-parse --show-toplevel)
+
+          # Rust Bevy:
+          # abbr -a build-release-windows "CARGO_FEATURE_PURE=1 cargo xwin build --release --target x86_64-pc-windows-msvc"
+
+          # C/C++:
+          # abbr -a cmake-debug "${cmakeDebug}"
+          # abbr -a cmake-release "${cmakeRelease}"
+          # abbr -a build-debug "${buildDebug}"
+          # abbr -a build-release "${buildRelease}"
+
+          # Clojure:
+          # abbr -a clojure-deps "deps-lock --lein"
+
+          # Python:
+          # abbr -a run "python ./app/main.py"
+          # abbr -a profile "py-spy record -o profile.svg -- python ./app/main.py && firefox profile.svg"
+          # abbr -a ptop "py-spy top -- python ./app/main.py"
+        '';
+      in
+        builtins.concatStringsSep "\n" [
+          # Launch into pure fish shell
+          ''
+            exec "$(type -p fish)" -C "source ${initProjectShell} && abbr -a menu '${pkgs.bat}/bin/bat "${initProjectShell}"'"
+          ''
+
+          # Qt: Launch into wrapped fish shell
+          # https://nixos.org/manual/nixpkgs/stable/#sec-language-qt
+          # ''
+          #   fishdir=$(mktemp -d)
+          #   makeWrapper "$(type -p fish)" "$fishdir/fish" "''${qtWrapperArgs[@]}"
+          #   exec "$fishdir/fish" -C "source ${initProjectShell} && abbr -a menu '${pkgs.bat}/bin/bat "${initProjectShell}"'"
+          # ''
+        ];
 
       # ===========================================================================================
       # Define custom dependencies
@@ -128,11 +227,15 @@ rec {
         # jdk
 
         # C/C++:
+        # pkg-config
+        # cmake
+        # gnumake
+        # ninja
         # gdb
         # valgrind
-        # gnumake
-        # cmake
-        # pkg-config
+        # kdePackages.kcachegrind
+        # perf
+        # hotspot
 
         # Clojure:
         # leiningen
@@ -156,6 +259,8 @@ rec {
         # C/C++:
         # boost
         # sfml
+        # raylib
+        # backward-cpp
 
         # Qt:
         # qt6.qtbase
@@ -171,8 +276,12 @@ rec {
       #   src = ./.;
       #
       #   installPhase = ''
+      #     runHook preInstall
+      #
       #     mkdir -p $out/bin
-      #     cp ./${pname} $out/bin/
+      #     cp -rv ./${pname} $out/bin/
+      #
+      #     runHook postInstall
       #   '';
       # };
       # windowsPackage = windowsPkgs.stdenv.mkDerivation rec {
@@ -193,8 +302,12 @@ rec {
       #   ];
       #
       #   installPhase = ''
+      #     runHook preInstall
+      #
       #     mkdir -p $out/bin
       #     cp ./${pname}.exe $out/bin/
+      #
+      #     runHook postInstall
       #   '';
       # };
       # package = clj-nix.lib.mkCljApp {
@@ -220,13 +333,15 @@ rec {
       #   default = package;
       #   windows = windowsPackage;
       # };
-      # apps.default = flake-utils.lib.mkApp {drv = package;};
+      # apps = {
+      #   default = flake-utils.lib.mkApp {drv = package;};
+      # };
 
       devShells = {
         # Provide default environment for "nix develop".
         # Other environments can be added below.
         default = pkgs.mkShell {
-          inherit nativeBuildInputs buildInputs;
+          inherit nativeBuildInputs buildInputs shellHook;
           name = description;
 
           # =========================================================================================
@@ -263,90 +378,27 @@ rec {
 
           # Set matplotlib backend
           # MPLBACKEND = "TkAgg";
-
-          # =========================================================================================
-          # Define shell environment
-          # =========================================================================================
-
-          # Setup the shell when entering the "nix develop" environment (bash script).
-          shellHook = let
-            mkCmakeScript = type: let
-              typeLower = lib.toLower type;
-            in
-              pkgs.writers.writeFish "cmake-${typeLower}.fish" ''
-                cd $FLAKE_PROJECT_ROOT
-
-                echo "Removing build directory ./cmake-build-${typeLower}/"
-                rm -rf ./cmake-build-${typeLower}
-
-                echo "Creating build directory"
-                mkdir cmake-build-${typeLower}
-                cd cmake-build-${typeLower}
-
-                echo "Running cmake"
-                cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE="${type}" -DCMAKE_EXPORT_COMPILE_COMMANDS="On" ..
-
-                echo "Linking compile_commands.json"
-                cd ..
-                ln -sf ./cmake-build-${typeLower}/compile_commands.json ./compile_commands.json
-              '';
-
-            cmakeDebug = mkCmakeScript "Debug";
-            cmakeRelease = mkCmakeScript "Release";
-
-            mkBuildScript = type: let
-              typeLower = lib.toLower type;
-            in
-              pkgs.writers.writeFish "cmake-build.fish" ''
-                cd $FLAKE_PROJECT_ROOT/cmake-build-${typeLower}
-
-                echo "Running cmake"
-                cmake --build .
-              '';
-
-            buildDebug = mkBuildScript "Debug";
-            buildRelease = mkBuildScript "Release";
-
-            # Use this to specify commands that should be ran after entering fish shell
-            initProjectShell = pkgs.writers.writeFish "init-shell.fish" ''
-              echo "Entering \"${description}\" environment..."
-
-              # Determine the project root, used e.g. in cmake scripts
-              set -g -x FLAKE_PROJECT_ROOT (git rev-parse --show-toplevel)
-
-              # Rust Bevy:
-              # abbr -a build-release-windows "CARGO_FEATURE_PURE=1 cargo xwin build --release --target x86_64-pc-windows-msvc"
-
-              # C/C++:
-              # abbr -a cmake-debug "${cmakeDebug}"
-              # abbr -a cmake-release "${cmakeRelease}"
-              # abbr -a build-debug "${buildDebug}"
-              # abbr -a build-release "${buildRelease}"
-
-              # Clojure:
-              # abbr -a clojure-deps "deps-lock --lein"
-
-              # Python:
-              # abbr -a run "python ./app/main.py"
-              # abbr -a profile "py-spy record -o profile.svg -- python ./app/main.py && firefox profile.svg"
-              # abbr -a ptop "py-spy top -- python ./app/main.py"
-            '';
-          in
-            builtins.concatStringsSep "\n" [
-              # Launch into pure fish shell
-              ''
-                exec "$(type -p fish)" -C "source ${initProjectShell} && abbr -a menu '${pkgs.bat}/bin/bat "${initProjectShell}"'"
-              ''
-
-              # Qt: Launch into wrapped fish shell
-              # https://nixos.org/manual/nixpkgs/stable/#sec-language-qt
-              # ''
-              #   fishdir=$(mktemp -d)
-              #   makeWrapper "$(type -p fish)" "$fishdir/fish" "''${qtWrapperArgs[@]}"
-              #   exec "$fishdir/fish" -C "source ${initProjectShell} && abbr -a menu '${pkgs.bat}/bin/bat "${initProjectShell}"'"
-              # ''
-            ];
         };
+
+        # Provide environment with clang stdenv for "nix develop .#clang"
+        # clang =
+        #   pkgs.mkShell.override {
+        #     stdenv = pkgs.clangStdenv;
+        #   } {
+        #     inherit shellHook;
+        #     name = description;
+        #
+        #     # If not required, use pkgs instead of clangPkgs for a lighter build
+        #     nativeBuildInputs = with pkgs; [];
+        #     buildInputs = with pkgs; [];
+        #
+        #     # =========================================================================================
+        #     # Define environment variables
+        #     # =========================================================================================
+        #
+        #     # Dynamic libraries from buildinputs:
+        #     LD_LIBRARY_PATH = nixpkgs.lib.makeLibraryPath buildInputs;
+        #   };
       };
     });
 }
