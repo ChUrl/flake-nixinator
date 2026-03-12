@@ -536,19 +536,19 @@ _: let
     {
       mode = "n";
       key = "<leader>sl";
-      action = "<cmd>lua require('persisted').select()<cr>";
+      action = "<cmd>Persisted select<cr>";
       options.desc = "Restore Session";
     }
     {
       mode = "n";
       key = "<leader>ss";
-      action = "<cmd>SessionSave<cr>";
+      action = "<cmd>Persisted save<cr>";
       options.desc = "Save Session";
     }
     {
       mode = "n";
       key = "<leader>sd";
-      action = "<cmd>SessionDelete<cr>";
+      action = "<cmd>Persisted delete<cr>";
       options.desc = "Delete Session";
     }
   ];
