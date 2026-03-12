@@ -157,6 +157,10 @@ in {
             storage = "gdu";
           })
 
+          (abbrify pkgs.ghidra {
+            ghidra = "_JAVA_AWT_WM_NONREPARENTING=1 ghidra";
+          })
+
           (abbrify pkgs.git {
             gs = "git status";
             gd = "git diff --output-indicator-new=' ' --output-indicator-old=' '";
