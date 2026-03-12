@@ -121,6 +121,7 @@
         # jetbrains.rider
         zed-editor
         vscode
+        ghidra # launch with _JAVA_AWT_WM_NONREPARENTING=1
 
         # Unity Stuff
         # unityhub
