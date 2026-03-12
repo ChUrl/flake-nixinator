@@ -1555,7 +1555,7 @@ in {
                       icon = " ";
                       key = "s";
                       desc = "Restore Session";
-                      action = "<cmd>lua require('persisted').select()<cr>";
+                      action = "<cmd>Persisted select<cr>";
                     }
                     {
                       icon = "󰒲 ";
