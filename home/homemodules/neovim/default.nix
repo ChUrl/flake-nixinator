@@ -886,7 +886,7 @@ in {
                 {name = "cmake";}
                 {name = "cssls";}
                 {name = "html";} # vscode-langservers-extracted
-                {name = "just-lsp";} # TODO: Doesn't autostart?
+                {name = "just";}
                 {name = "lua_ls";}
                 {
                   name = "ltex";
