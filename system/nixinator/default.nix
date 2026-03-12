@@ -116,21 +116,23 @@
       };
 
       allowedTCPPorts = [
-        7777 # AvaTalk
-        12777 # AvaTalk
+        1111 # FAIL*
+        # 4242 # Lan-Mouse
+        # 7777 # AvaTalk
+        # 12777 # AvaTalk
         # 31431 # Parsec
         5173 # SvelteKit
         8090 # PocketBase
-        4242 # Lan-Mouse
       ];
 
       allowedUDPPorts = [
-        7777 # AvaTalk
-        12777 # AvaTalk
+        1111 # FAIL*
+        # 4242 # Lan-Mouse
+        # 7777 # AvaTalk
+        # 12777 # AvaTalk
         # 31431 # Parsec
         5173 # SvelteKit
         8090 # PocketBase
-        4242 # Lan-Mouse
       ];
     };
 
