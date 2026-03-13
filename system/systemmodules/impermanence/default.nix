@@ -69,8 +69,8 @@ in {
           # https://github.com/nix-community/impermanence/issues/253
           (mkRDir "/usr/systemd-placeholder" m755)
 
-          (mkRDir "/var/cache/man" m755)
-          (mkRDir "/var/cache/restic-backups-synology" m755)
+          (mkDir "mandb" "/var/cache/man" m755)
+          # (mkRDir "/var/cache/restic-backups-synology" m755)
 
           (mkRDir "/var/db/sudo" m711)
 
@@ -147,6 +147,7 @@ in {
             (mkUDir ".config/Ferdium" m755)
             (mkUDir ".config/feishin" m755)
             (mkUDir ".config/fish/completions" m755)
+            (mkUDir ".config/ghidra" m755)
             (mkUDir ".config/impermanence" m755)
             (mkUDir ".config/jellyfin-mpv-shim" m755)
             (mkUDir ".config/jellyfin-tui" m755) # TODO: Generate this config file, have to use sops because it includes the password in cleartext
