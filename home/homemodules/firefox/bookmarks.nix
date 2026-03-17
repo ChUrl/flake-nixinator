@@ -15,7 +15,7 @@ in [
           (mkBm "Package Search" "https://search.nixos.org/packages")
           (mkBm "Option Search" "https://search.nixos.org/options?")
           (mkBm "Function Search" "https://noogle.dev/")
-          (mkBm "HM Search" "https://mipmip.github.io/home-manager-option-search/")
+          (mkBm "HM Search" "https://home-manager-options.extranix.com/")
           (mkBm "NUR Search" "https://nur.nix-community.org/")
           (mkBm "Nixpkgs Version Search" "https://lazamar.co.uk/nix-versions/")
           (mkBm "Nixpkgs PR Tracker" "https://nixpk.gs/pr-tracker.html")
