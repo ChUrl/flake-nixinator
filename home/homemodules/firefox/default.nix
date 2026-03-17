@@ -163,12 +163,19 @@ in {
               "google"
             ];
 
-            engines = {
+            engines = let
+              mkMan = section: page: p: {
+                name = "Man Pages - ${section}";
+                urls = [{template = "https://man7.org/linux/man-pages/man${page}/{searchTerms}.${page}${p}.html";}];
+                iconMapObj."16" = "https://man7.org/favicon.ico";
+                definedAliases = ["@man${page}"];
+              };
+            in {
               kagi = {
                 name = "Kagi";
                 urls = [{template = "https://kagi.com/search?q={searchTerms}";}];
                 iconMapObj."16" = "https://kagi.com/favicon.ico";
-                definedAliases = ["@k"];
+                definedAliases = ["@kg"];
               };
 
               wiki = {
@@ -178,11 +185,32 @@ in {
                 definedAliases = ["@w"];
               };
 
-              nixos-packages = {
-                name = "NixOS Packages";
+              searchix = {
+                name = "Searchix";
                 urls = [{template = "https://searchix.ovh/?query={searchTerms}";}];
                 iconMapObj."16" = "https://nixos.org/favicon.ico";
+                definedAliases = ["@ns"];
+              };
+
+              nixos-packages = {
+                name = "Nix Packages";
+                urls = [{template = "https://search.nixos.org/packages?channel=unstable?query={searchTerms}";}];
+                iconMapObj."16" = "https://nixos.org/favicon.ico";
                 definedAliases = ["@np"];
+              };
+
+              nixos-options = {
+                name = "NixOS Options";
+                urls = [{template = "https://search.nixos.org/options?channel=unstable?query={searchTerms}";}];
+                iconMapObj."16" = "https://nixos.org/favicon.ico";
+                definedAliases = ["@no"];
+              };
+
+              home-manager-options = {
+                name = "Home Manager Options";
+                urls = [{template = "https://home-manager-options.extranix.com/?query={searchTerms}";}];
+                iconMapObj."16" = "https://nixos.org/favicon.ico";
+                definedAliases = ["@hm"];
               };
 
               nixos-functions = {
@@ -190,6 +218,13 @@ in {
                 urls = [{template = "https://noogle.dev/q?term={searchTerms}";}];
                 iconMapObj."16" = "https://nixos.org/favicon.ico";
                 definedAliases = ["@nf"];
+              };
+
+              nixpkgs-issues = {
+                name = "Nixpkgs Issues";
+                urls = [{template = "https://github.com/NixOS/nixpkgs/issues?q=is%3Aissue%20{searchTerms}";}];
+                iconMapObj."16" = "https://github.com/favicon.ico";
+                definedAliases = ["@ni"];
               };
 
               nixos-wiki = {
@@ -206,18 +241,37 @@ in {
                 definedAliases = ["@aw"];
               };
 
-              nixpkgs-issues = {
-                name = "Nixpkgs Issues";
-                urls = [{template = "https://github.com/NixOS/nixpkgs/issues?q=is%3Aissue%20{searchTerms}";}];
-                iconMapObj."16" = "https://github.com/favicon.ico";
-                definedAliases = ["@i"];
-              };
-
               github = {
                 name = "GitHub";
                 urls = [{template = "https://github.com/search?q={searchTerms}&type=repositories";}];
                 iconMapObj."16" = "https://github.com/favicon.ico";
                 definedAliases = ["@gh"];
+              };
+
+              man0 = mkMan "POSIX" "0" "p";
+              man1 = mkMan "Commands" "1" "";
+              man2 = mkMan "Syscalls" "2" "";
+              man3 = mkMan "C Functions" "3" "";
+
+              stackoverflow = {
+                name = "Stack Overflow";
+                urls = [{template = "https://stackoverflow.com/search?q={searchTerms}";}];
+                iconMapObj."16" = "https://stackoverflow.com/favicon.ico";
+                definedAliases = ["@so"];
+              };
+
+              x86 = {
+                name = "x86 Ref";
+                urls = [{template = "https://www.felixcloutier.com/x86/{searchTerms}";}];
+                iconMapObj."16" = "https://www.felixcloutier.com/favicon.ico";
+                definedAliases = ["@x86"];
+              };
+
+              youtube = {
+                name = "YouTube";
+                urls = [{template = "https://www.youtube.com/results?search_query={searchTerms}";}];
+                iconMapObj."16" = "https://www.youtube.com/favicon.ico";
+                definedAliases = ["@yt"];
               };
 
               google.metaData.alias = "@g";
