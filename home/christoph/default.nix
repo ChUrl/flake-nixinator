@@ -919,6 +919,14 @@ in
           "mars" = {
             user = "smchurla";
             hostname = "mars.cs.tu-dortmund.de";
+            serverAliveInterval = 60;
+            localForwards = [
+              {
+                bind.port = 22941;
+                host.address = "127.0.0.1";
+                host.port = 22941;
+              }
+            ];
           };
         };
       };
