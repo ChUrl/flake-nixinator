@@ -118,6 +118,10 @@
     # musnix.url = "github:musnix/musnix";
     # musnix.inputs.nixpkgs.follows = "nixpkgs";
 
+    # ComfyUI
+    # nixified-ai.url = "github:nixified-ai/flake";
+    # comfyui-nix.url = "github:utensils/comfyui-nix";
+
     masssprings.url = "git+https://gitea.local.chriphost.de/christoph/cpp-masssprings";
     masssprings.inputs.nixpkgs.follows = "nixpkgs";
   };
@@ -169,6 +173,7 @@
         inputs.nur.overlays.default
         inputs.niri.overlays.niri
         # inputs.emacs-overlay.overlay
+        # inputs.comfyui-nix.overlays.default
 
         # All my own overlays (derivations + modifications)
         (import ./overlays {inherit inputs nixpkgs pkgs-stable;})
@@ -236,6 +241,8 @@
         extraModules =
           [
             inputs.disko.nixosModules.disko
+            # inputs.nixified-ai.nixosModules.comfyui
+            # inputs.comfyui-nix.nixosModules.default
           ]
           ++ commonModules;
       };
