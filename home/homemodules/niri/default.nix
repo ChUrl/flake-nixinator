@@ -27,6 +27,28 @@ in {
       enable = true;
       iconTheme.package = color.iconPackage;
       iconTheme.name = color.iconTheme;
+
+      colorScheme = "dark";
+      gtk3.colorScheme = "dark";
+      gtk4.colorScheme = "dark";
+
+      theme = {
+        name = "adw-gtk3-dark";
+        package = pkgs.adw-gtk3;
+      };
+
+      gtk3.extraConfig = {
+        gtk-application-prefer-dark-theme = 1;
+      };
+    };
+
+    dconf = {
+      enable = true;
+      settings = {
+        "org/gnome/desktop/interface" = {
+          color-scheme = "prefer-dark";
+        };
+      };
     };
 
     # Disable niri polkit if we use DMS, as it has its own
