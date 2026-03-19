@@ -117,6 +117,7 @@ in {
 
             # The shit some applications add to ~/ without asking
             # (mkUDir ".android" m755) # Unity
+            # (mkUDir ".comfy" m755)
             (mkUDir ".docker" m755)
             # (mkUDir ".gradle" m755) # Unity
             (mkUDir ".java" m755) # JetBrains
@@ -125,7 +126,7 @@ in {
             (mkUDir ".mozilla/native-messaging-hosts" m755)
             (mkUDir ".nix-package-search" m755)
             # (mkUDir ".nv" m755) # Unity
-            (mkUDir ".ollama" m755)
+            # (mkUDir ".ollama" m755)
             # (mkUDir ".plastic4" m755) # Unity
             (mkUDir ".tiddl" m755)
             (mkUDir ".var/app" m755)
