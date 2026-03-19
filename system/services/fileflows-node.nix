@@ -9,7 +9,7 @@ in {
   virtualisation.oci-containers.containers = {
     fileflows-node = {
       image = "revenz/fileflows:${fileflowsVersion}";
-      autoStart = true;
+      autoStart = false;
 
       login = {
         # Uses DockerHub by default
