@@ -197,6 +197,11 @@
       enable = true;
       openFirewall = true; # Directly set port in firewall
     };
+
+    ghidra = {
+      enable = true;
+      gdb = true;
+    };
   };
 
   services = {
