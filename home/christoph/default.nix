@@ -922,9 +922,16 @@ in
             serverAliveInterval = 60;
             localForwards = [
               {
+                # Resultbrowser
                 bind.port = 22941;
                 host.address = "127.0.0.1";
                 host.port = 22941;
+              }
+              {
+                # Mysql
+                bind.port = 3306;
+                host.address = "127.0.0.1";
+                host.port = 3306;
               }
             ];
           };
