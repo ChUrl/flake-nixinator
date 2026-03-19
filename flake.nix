@@ -122,6 +122,9 @@
     # nixified-ai.url = "github:nixified-ai/flake";
     # comfyui-nix.url = "github:utensils/comfyui-nix";
 
+    # HyTale
+    hytale-launcher.url = "github:JPyke3/hytale-launcher-nix";
+
     masssprings.url = "git+https://gitea.local.chriphost.de/christoph/cpp-masssprings";
     masssprings.inputs.nixpkgs.follows = "nixpkgs";
   };

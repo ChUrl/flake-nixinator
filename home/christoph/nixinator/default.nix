@@ -6,6 +6,7 @@
   lib,
   mylib,
   username,
+  inputs,
   ...
 }: {
   config = {
@@ -123,9 +124,6 @@
         vscode
         # ghidra # launch with _JAVA_AWT_WM_NONREPARENTING=1 (use programs.ghidra)
 
-        # AI stuff
-        # comfy-ui-cuda # Use module
-
         # Unity Stuff
         # unityhub
         # rider-unity
@@ -133,6 +131,7 @@
         # mono
         # steam-run-free # nix-alien doesn't seem to run unity apps, this does...
 
+        inputs.hytale-launcher.packages.${pkgs.stdenv.hostPlatform.system}.default
         (blender.override {cudaSupport = true;})
         godot_4
         (obs-studio.override {cudaSupport = true;})
@@ -156,22 +155,22 @@
       ];
 
       file = lib.mkMerge [
-        # {
-        #   ".local/share/applications/jetbrains-rider.desktop".source = let
-        #     desktopFile = pkgs.makeDesktopItem {
-        #       name = "jetbrains-rider";
-        #       desktopName = "Rider";
-        #       exec = "\"${rider-unity}/bin/rider\"";
-        #       icon = "rider";
-        #       type = "Application";
-        #       # Don't show desktop icon in search or run launcher
-        #       extraConfig.NoDisplay = "true";
-        #     };
-        #   in "${desktopFile}/share/applications/jetbrains-rider.desktop";
-        #
-        #   ".var/app/com.valvesoftware.Steam/config/MangoHud/MangoHud.conf".source =
-        #     ../../../config/mangohud/MangoHud.conf;
-        # }
+        {
+          # ".local/share/applications/jetbrains-rider.desktop".source = let
+          #   desktopFile = pkgs.makeDesktopItem {
+          #     name = "jetbrains-rider";
+          #     desktopName = "Rider";
+          #     exec = "\"${rider-unity}/bin/rider\"";
+          #     icon = "rider";
+          #     type = "Application";
+          #     # Don't show desktop icon in search or run launcher
+          #     extraConfig.NoDisplay = "true";
+          #   };
+          # in "${desktopFile}/share/applications/jetbrains-rider.desktop";
+
+          ".var/app/com.valvesoftware.Steam/config/MangoHud/MangoHud.conf".source =
+            ../../../config/mangohud/MangoHud.conf;
+        }
         (lib.optionalAttrs (mylib.modules.contains config.home.packages pkgs.makemkv) {
           ".MakeMKV/settings.conf".source =
             config.lib.file.mkOutOfStoreSymlink
@@ -187,15 +186,17 @@
     services = {
       flatpak = {
         packages = [
-          # "com.valvesoftware.Steam"
-          # "com.valvesoftware.Steam.Utility.steamtinkerlaunch"
+          "com.valvesoftware.Steam"
+          "com.valvesoftware.Steam.Utility.steamtinkerlaunch"
+          "org.freedesktop.Platform.VulkanLayer.gamescope/x86_64/24.08"
+          "org.freedesktop.Platform.VulkanLayer.MangoHud/x86_64/24.08"
+          "io.github.Foldex.AdwSteamGtk"
+          "com.vysp3r.ProtonPlus"
           # "net.davidotek.pupgui2"
-          # "org.freedesktop.Platform.VulkanLayer.gamescope/x86_64/24.08"
-          # "org.freedesktop.Platform.VulkanLayer.MangoHud/x86_64/24.08"
 
           "org.prismlauncher.PrismLauncher"
           "com.usebottles.bottles"
-          # "io.github.lawstorant.boxflat"
+          "io.github.lawstorant.boxflat"
 
           # "com.unity.UnityHub"
         ];
@@ -219,6 +220,13 @@
           };
 
           "net.davidotek.pupgui2".Context = {
+            filesystems = [
+              "${config.home.homeDirectory}/.var/app/com.valvesoftware.Steam"
+              "${config.home.homeDirectory}/Games"
+            ];
+          };
+
+          "com.vysp3r.ProtonPlus".Context = {
             filesystems = [
               "${config.home.homeDirectory}/.var/app/com.valvesoftware.Steam"
               "${config.home.homeDirectory}/Games"
