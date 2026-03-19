@@ -27,7 +27,7 @@ in {
       ];
 
       volumes = let
-        rootDir = "/home/christoph/Downloads/Comfy";
+        rootDir = "/home/christoph/Games/ComfyUI";
       in [
         "${rootDir}/storage:/root"
         "${rootDir}/storage-models/models:/root/ComfyUI/models"
