@@ -12,6 +12,7 @@
     ./disks.nix
 
     # General services
+    ../services/comfyui.nix
     ../services/fileflows-node.nix
   ];
 
