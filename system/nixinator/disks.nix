@@ -91,6 +91,102 @@
           };
         };
       };
+
+      games = {
+        type = "disk";
+        device = "/dev/disk/by-id/nvme-WD_BLACK_SN850X_2000GB_231623802252";
+        content = {
+          type = "gpt";
+          partitions = {
+            luks = {
+              label = "LUKS_GAMES";
+              size = "100%";
+              content = {
+                type = "luks";
+                name = "crypted_games";
+
+                extraOpenArgs = [
+                  "--perf-no_read_workqueue"
+                  "--perf-no_write_workqueue"
+                ];
+
+                settings = {
+                  allowDiscards = true;
+                  crypttabExtraOpts = ["fido2-device=auto" "token-timeout=10" "tries=5"];
+
+                  # Disable for interactive password entry
+                  # This is contained on the main disk, so by unlocking the main disk with the password,
+                  # the second disk can unlock automatically
+                  keyFile = "/persist/home/christoph/.secrets/luks.keyfile";
+                  fallbackToPassword = false;
+                };
+
+                content = {
+                  type = "btrfs";
+                  extraArgs = ["-L" "GAMES" "-f"];
+                  subvolumes = {
+                    "data" = {
+                      mountpoint = "/home/christoph/Games";
+                      mountOptions = [
+                        "compress=zstd"
+                        "noatime"
+                      ];
+                    };
+                  };
+                };
+              };
+            };
+          };
+        };
+      };
+
+      ssd = {
+        type = "disk";
+        device = "/dev/disk/by-id/nvme-eui.00253857019ebd67";
+        content = {
+          type = "gpt";
+          partitions = {
+            luks = {
+              label = "LUKS_SSD";
+              size = "100%";
+              content = {
+                type = "luks";
+                name = "crypted_ssd";
+
+                extraOpenArgs = [
+                  "--perf-no_read_workqueue"
+                  "--perf-no_write_workqueue"
+                ];
+
+                settings = {
+                  allowDiscards = true;
+                  crypttabExtraOpts = ["fido2-device=auto" "token-timeout=10" "tries=5"];
+
+                  # Disable for interactive password entry
+                  # This is contained on the main disk, so by unlocking the main disk with the password,
+                  # the second disk can unlock automatically
+                  keyFile = "/persist/home/christoph/.secrets/luks.keyfile";
+                  fallbackToPassword = false;
+                };
+
+                content = {
+                  type = "btrfs";
+                  extraArgs = ["-L" "SSD" "-f"];
+                  subvolumes = {
+                    "data" = {
+                      mountpoint = "/home/christoph/SSD";
+                      mountOptions = [
+                        "compress=zstd"
+                        "noatime"
+                      ];
+                    };
+                  };
+                };
+              };
+            };
+          };
+        };
+      };
     };
   };
 
