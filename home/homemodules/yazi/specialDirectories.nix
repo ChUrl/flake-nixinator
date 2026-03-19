@@ -18,6 +18,7 @@ in [
   (mkIcon "Public" "󰒗")
   (mkIcon "Restic" "󰁯")
   (mkIcon "Shows" "󰿎")
+  (mkIcon "SSD" "󰉉")
   (mkIcon "Unity" "󰚯")
   (mkIcon "Videos" "")
 ]
