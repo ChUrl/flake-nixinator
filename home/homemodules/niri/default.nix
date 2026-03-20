@@ -29,8 +29,14 @@ in {
       gtk4.colorScheme = "dark";
 
       theme = {
-        name = "adw-gtk3-dark";
-        package = pkgs.adw-gtk3;
+        # name = "adw-gtk3-dark";
+        # package = pkgs.adw-gtk3;
+        name = "catppuccin-mocha-mauve-standard";
+        package = pkgs.catppuccin-gtk.override {
+          variant = "mocha";
+          accents = ["mauve"];
+          size = "standard";
+        };
       };
 
       gtk3.extraConfig = {
@@ -56,6 +62,9 @@ in {
       file.".config/DankMaterialShell/.firstlaunch".text = "";
       file.".config/DankMaterialShell/.changelog-1.4".text = "";
 
+      # Link theme for flatpak
+      file.".themes/${config.gtk.theme.name}".source = "${config.gtk.theme.package}/share/themes/${config.gtk.theme.name}";
+
       sessionVariables = {
         QT_QPA_PLATFORMTHEME = "gtk3"; # For Noctalia
         GDK_BACKEND = "wayland"; # For screen sharing
@@ -75,7 +84,12 @@ in {
 
         nautilus # Fallback file chooser used by xdg-desktop-portal-gnome
 
-        # In case we fallback to the default config
+        # Catppuccin-GTK theme
+        sassc
+        gtk-engine-murrine
+        gnome-themes-extra
+
+        # In case we fallback to the default niri config/keybindings
         alacritty
         fuzzel
       ];
