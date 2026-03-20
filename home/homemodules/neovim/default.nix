@@ -77,6 +77,7 @@ in {
             typstyle
             mbake
             just-formatter
+            tombi
           ])
 
           [
@@ -526,6 +527,7 @@ in {
                 qml = ["qmlformat"];
                 rust = ["rustfmt"];
                 svelte = ["prettierd" "prettier"];
+                toml = ["tombi"];
                 typescript = ["prettierd" "prettier"];
                 typst = ["typstyle"];
               };
