@@ -140,7 +140,7 @@ in {
           # Abbrs only available if package is installed
 
           (abbrify pkgs.duf {
-            disks = "duf --hide-mp '/var/*,/etc/*,/usr/*,/home/christoph/.*'";
+            disks = "duf --hide-mp '/var/*,/etc/*,/usr/*,/home/christoph/.*' -width 120";
             alldisks = "duf";
           })
 

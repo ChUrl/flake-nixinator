@@ -23,9 +23,9 @@ in {
           fixed-center = true;
           output = waybar.monitors;
 
-          modules-left = ["custom/launcher" "user" "hyprland/window"];
-          modules-center = ["hyprland/workspaces"];
-          modules-right = ["pulseaudio" "network" "cpu" "memory" "temperature" "clock" "tray"];
+          modules-left = ["custom/launcher" "niri/workspaces" "niri/window"]; # "user"
+          modules-center = ["systemd-failed-units" "mpris"];
+          modules-right = ["privacy" "pulseaudio" "network" "disk" "cpu" "memory" "clock" "tray"];
 
           "custom/launcher" = {
             format = "<span></span>";
@@ -33,45 +33,129 @@ in {
             on-click = "rofi -drun-show-actions -show drun";
           };
 
-          "hyprland/workspaces" = {
-            all-outputs = false;
-            format = "{name}";
-            on-click = "activate";
-            sort-by-coordinates = false;
-            sort-by-name = true;
-            sort-by-number = false;
+          systemd-failed-units = {
+            hide-on-ok = true;
+            format = " {nr_failed}";
+            format-ok = "✔️";
+            system = true;
+            user = true;
           };
 
-          "pulseaudio" = {
+          "niri/workspaces" = {
+            all-outputs = false;
+            format = "{icon}";
+            format-icons = {
+              default = "";
+              focused = "";
+              active = "";
+            };
+          };
+
+          "niri/window" = {
+            format = "{title}";
+            separate-outputs = false;
+            icon = true;
+            icon-size = 22;
+          };
+
+          mpris = {
+            format = "<span>󰎇</span> {dynamic}";
+            format-paused = "<span>{status_icon}</span> <i>{dynamic}</i>";
+            dynamic-order = ["artist" "title"];
+            status-icons = {
+              paused = "󰏤";
+            };
+          };
+
+          privacy = {
+            icon-spacing = 4;
+            icon-size = 16;
+            transition-duration = 250;
+            modules = [
+              {
+                type = "screenshare";
+                tooltip = true;
+                tooltip-icon-size = 24;
+              }
+              {
+                type = "audio-out";
+                tooltip = true;
+                tooltip-icon-size = 24;
+              }
+              {
+                type = "audio-in";
+                tooltip = true;
+                tooltip-icon-size = 24;
+              }
+            ];
+            ignore-monitor = true;
+          };
+
+          pulseaudio = {
             format = "<span>󰕾</span> {volume}%";
             format-muted = "<span>󰝟</span> ";
-            on-click = "kitty ncpamixer -t o";
+            on-click = "kitty --title=WireMix wiremix";
           };
 
-          "network" = {
+          network = {
             format = "<span>󰌀</span> {ipaddr}";
             format-disconnected = "<span></span> ";
             interface = "enp8s0";
-            tooltip-format = "{ifname} via {gwaddr}";
+            tooltip = false;
+          };
+
+          disk = {
+            format = "<span>󰋊</span> {percentage_used}%";
+            on-click = "kitty --hold --title=Duf duf --hide-mp '/var/*,/etc/*,/usr/*,/home/christoph/.*' -width 120";
           };
 
           cpu = {
+            states = {
+              "warning" = 65;
+              "critical" = 85;
+            };
             format = "<span></span> {load}%";
+            format-warning = "<span color='#${color.hex.yellow}'><span></span> {load}%</span>";
+            format-critical = "<span color='#${color.hex.red}'><span></span> {load}%</span>";
+            on-click = "kitty --title=Btop btop";
+            tooltip = false;
           };
 
           memory = {
+            states = {
+              "warning" = 65;
+              "critical" = 85;
+            };
             format = "<span></span> {percentage}%";
-          };
-
-          temperature = {
-            format = "<span></span> {temperatureC}°C";
-            thermal-zone = 3;
+            format-warning = "<span color='#${color.hex.yellow}'><span></span> {percentage}%</span>";
+            format-critical = "<span color='#${color.hex.red}'><span></span> {percentage}%</span>";
+            on-click = "kitty --title=Btop btop";
+            tooltip = true;
+            tooltip-format = "RAM:  {used}GiB / {total}GiB\nSwap: {swapUsed}GiB / {swapTotal}GiB";
           };
 
           clock = {
             format = "<span>󰥔</span> {:%H:%M}";
             timezone = "Europe/Berlin";
             tooltip-format = "<tt><small>{calendar}</small></tt>";
+            calendar = {
+              mode = "month";
+              weeks-pos = "right";
+              mode-mon-col = 3;
+              on-scroll = -1;
+              format = {
+                months = "<span color='#${color.hex.yellow}'><b>{}</b></span>";
+                days = "<span color='#${color.hex.flamingo}'><b>{}</b></span>";
+                weeks = "<span color='#${color.hex.teal}'><b>W{}</b></span>";
+                weekdays = "<span color='#${color.hex.lavender}'><b>{}</b></span>";
+                today = "<span color='#${color.hex.accent}'><b><u>{}</u></b></span>";
+              };
+            };
+            actions = {
+              on-click-right = "mode";
+              on-scroll-up = "shift_up";
+              on-scroll-down = "shift_down";
+            };
           };
 
           tray = {
@@ -111,21 +195,24 @@ in {
 
         /* Background colors */
         #custom-launcher          {background-color: #${color.hex.accent};}
-        #user                     {background-color: #${color.hex.pink};}
-        #window                   {background-color: #${color.hex.mauve};}
         #workspaces button        {background-color: #${color.hex.lavender};}
         #workspaces button.active {background-color: #${color.hex.pink};}
+        #window                   {background-color: #${color.hex.maroon};}
+        #systemd-failed-units     {background-color: #${color.hex.red};}
+        #mpris                    {background-color: #${color.hex.accent};}
+        #privacy                  {background-color: #${color.hex.red};}
         #pulseaudio               {background-color: #${color.hex.maroon};}
         #network                  {background-color: #${color.hex.peach};}
-        #cpu                      {background-color: #${color.hex.yellow};}
-        #memory                   {background-color: #${color.hex.green};}
-        #temperature              {background-color: #${color.hex.teal};}
+        #disk                     {background-color: #${color.hex.yellow};}
+        #cpu                      {background-color: #${color.hex.green};}
+        #memory                   {background-color: #${color.hex.teal};}
         #clock                    {background-color: #${color.hex.sky};}
         #tray                     {background-color: #${color.hex.accent};}
 
         /* Square Widgets */
         #custom-launcher,
-        #workspaces button,
+        #systemd-failed-units,
+        #mpris,
         #tray {
           color: #${color.hex.mantle};
           font-weight: bold;
@@ -133,14 +220,24 @@ in {
           border-radius: ${border-radius};
         }
 
+        /* Workspaces */
+        #workspaces button {
+          color: #${color.hex.mantle};
+          font-weight: bold;
+          padding: 0px 2px 0px 2px;
+          margin: 8px 2px 8px 2px;
+          border-radius: ${border-radius};
+        }
+
         /* Rectangle Widgets */
         #user,
         #window,
         #pulseaudio,
+        #privacy,
         #network,
+        #disk,
         #cpu,
         #memory,
-        #temperature,
         #clock {
           color: #${color.hex.mantle};
           font-weight: bold;
@@ -159,12 +256,12 @@ in {
         /* Tux Icon */
         #custom-launcher {
           font-size: 26px;
-          padding-right: 10px;
+          padding-right: 13px;
           margin: 0px 5px 0px 0px;
         }
 
-        #workspaces button {
-          margin: 0px 5px 0px 5px;
+        #systemd-failed-units {
+          margin: 0px 5px 0px 0px;
         }
 
         #tray {
