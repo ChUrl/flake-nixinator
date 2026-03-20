@@ -489,7 +489,7 @@ in
         settings = {
           logo = {
             padding = {
-              top = 3;
+              top = 4;
               left = 1;
               right = 2;
             };

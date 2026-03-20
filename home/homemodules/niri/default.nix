@@ -115,6 +115,215 @@ in {
       walker = {
         enable = true;
         runAsService = true;
+
+        # https://github.com/abenz1267/walker/blob/master/resources/config.toml
+        config = {
+          theme = "cattpuccin-mocha";
+
+          providers = {
+            default = ["desktopapplications"];
+          };
+          empty = ["desktopapplications"];
+        };
+
+        themes."cattpuccin-mocha" = let
+          border-radius = "8px";
+        in {
+          style = ''
+            @define-color rosewater #${color.hex.rosewater};
+            @define-color flamingo #${color.hex.flamingo};
+            @define-color pink #${color.hex.pink};
+            @define-color mauve #${color.hex.mauve};
+            @define-color red #${color.hex.red};
+            @define-color maroon #${color.hex.maroon};
+            @define-color peach #${color.hex.peach};
+            @define-color yellow #${color.hex.yellow};
+            @define-color green #${color.hex.green};
+            @define-color teal #${color.hex.teal};
+            @define-color sky #${color.hex.sky};
+            @define-color sapphire #${color.hex.sapphire};
+            @define-color blue #${color.hex.blue};
+            @define-color lavender #${color.hex.lavender};
+            @define-color text #${color.hex.text};
+            @define-color subtext1 #${color.hex.subtext1};
+            @define-color subtext0 #${color.hex.subtext0};
+            @define-color overlay2 #${color.hex.overlay2};
+            @define-color overlay1 #${color.hex.overlay1};
+            @define-color overlay0 #${color.hex.overlay0};
+            @define-color surface2 #${color.hex.surface2};
+            @define-color surface1 #${color.hex.surface1};
+            @define-color surface0 #${color.hex.surface0};
+            @define-color base #${color.hex.base};
+            @define-color mantle #${color.hex.mantle};
+            @define-color crust #${color.hex.crust};
+
+            @define-color accent #${color.hex.accent};
+
+            * {
+              all: unset;
+            }
+
+            .normal-icons {
+              -gtk-icon-size: 16px;
+            }
+
+            .large-icons {
+              -gtk-icon-size: 32px;
+            }
+
+            scrollbar {
+              opacity: 0;
+            }
+
+            .box-wrapper {
+              box-shadow:
+                0 19px 38px rgba(0, 0, 0, 0.3),
+                0 15px 12px rgba(0, 0, 0, 0.22);
+              background: @base;
+              padding: 20px;
+              border-radius: ${border-radius};
+              border: 2px solid @accent;
+            }
+
+            .preview-box,
+            .elephant-hint,
+            .placeholder {
+              color: @text;
+            }
+
+            .search-container {
+              border-radius: ${border-radius};
+              background: @mantle;
+              padding: 8px;
+            }
+
+            .input placeholder {
+              opacity: 0.5;
+            }
+
+            .input selection {
+              background: @surface1;
+            }
+
+            .input {
+              caret-color: @text;
+              background: none;
+              padding: 10px;
+              color: @text;
+            }
+
+            .list {
+              color: @text;
+            }
+
+            .item-box {
+              border-radius: ${border-radius};
+              padding: 10px;
+            }
+
+            .item-quick-activation {
+              background: alpha(@mauve, 0.25);
+              border-radius: ${border-radius};
+              padding: 10px;
+            }
+
+            child:selected .item-box,
+            row:selected .item-box {
+              background: alpha(@surface0, 0.6);
+            }
+
+            .item-subtext {
+              font-size: 12px;
+              opacity: 0.5;
+            }
+
+            .providerlist .item-subtext {
+              font-size: unset;
+              opacity: 0.75;
+            }
+
+            .item-image-text {
+              font-size: 28px;
+            }
+
+            .preview {
+              border: 1px solid alpha(@mauve, 0.25);
+              border-radius: ${border-radius};
+              color: @text;
+            }
+
+            .calc .item-text {
+              font-size: 24px;
+            }
+
+            .symbols .item-image {
+              font-size: 24px;
+            }
+
+            .todo.done .item-text-box {
+              opacity: 0.25;
+            }
+
+            .todo.urgent {
+              font-size: 24px;
+            }
+
+            .todo.active {
+              font-weight: bold;
+            }
+
+            .bluetooth.disconnected {
+              opacity: 0.5;
+            }
+
+            .preview .large-icons {
+              -gtk-icon-size: 64px;
+            }
+
+            .keybinds {
+              padding-top: 10px;
+              border-top: 1px solid @surface0;
+              font-size: 12px;
+              color: @text;
+            }
+
+            .keybind-button {
+              opacity: 0.5;
+            }
+
+            .keybind-button:hover {
+              opacity: 0.75;
+            }
+
+            .keybind-bind {
+              text-transform: lowercase;
+              opacity: 0.35;
+            }
+
+            .keybind-label {
+              padding: 2px 4px;
+              border-radius: ${border-radius};
+              border: 1px solid @text;
+            }
+
+            .error {
+              padding: 10px;
+              background: @red;
+              color: @base;
+            }
+
+            :not(.calc).current {
+              font-style: italic;
+            }
+
+            .preview-content.archlinuxpkgs,
+            .preview-content.dnfpackages {
+              font-family: monospace;
+            }
+          '';
+
+          # layouts = {};
+        };
       };
 
       # TODO: Extract options
@@ -389,27 +598,21 @@ in {
             };
 
             "Mod+A" = {
-              action = spawn "walker";
+              action = spawn "walker" "-m" "desktopapplications";
               hotkey-overlay = {title = "Toggle the application launcher.";};
             };
-
-            # DankMaterialShell
-            # "Mod+A" = {
-            #   action = spawn "dms" "ipc" "call" "spotlight" "toggle";
-            #   hotkey-overlay = {title = "Toggle the application launcher.";};
-            # };
-            # "Mod+Ctrl+L" = {
-            #   action = spawn "dms" "ipc" "call" "lock" "lock";
-            #   hotkey-overlay = {title = "Lock the screen.";};
-            # };
-            # "Mod+Escape" = {
-            #   action = spawn "dms" "ipc" "call" "powermenu" "toggle";
-            #   hotkey-overlay = {title = "Toggle the session menu.";};
-            # };
-            # "Mod+C" = {
-            #   action = spawn "dms" "ipc" "call" "clipboard" "toggle";
-            #   hotkey-overlay = {title = "Show clipboard history.";};
-            # };
+            "Mod+Shift+A" = {
+              action = spawn "walker" "-m" "providerlist";
+              hotkey-overlay = {title = "Toggle the launcher.";};
+            };
+            "Mod+Escape" = {
+              action = spawn "walker";
+              hotkey-overlay = {title = "Toggle the session menu.";};
+            };
+            "Mod+C" = {
+              action = spawn "walker" "-m" "clipboard";
+              hotkey-overlay = {title = "Show clipboard history.";};
+            };
 
             # Screenshots
             "Mod+S" = {
