@@ -161,6 +161,7 @@ in {
 
             * {
               all: unset;
+              font-family: ${color.font};
             }
 
             .normal-icons {
@@ -605,8 +606,21 @@ in {
               action = spawn "walker" "-m" "providerlist";
               hotkey-overlay = {title = "Toggle the launcher.";};
             };
-            "Mod+Escape" = {
-              action = spawn "walker";
+            "Mod+Escape" = let
+              powerMenu = mylib.rofi.mkSimpleMenu rec {
+                prompt = "Session";
+                attrs = {
+                  "󰤂  Poweroff" = "poweroff";
+                  "󰜉  Reboot" = "reboot";
+                  "󰌾  Lock" = "loginctl lock-session";
+                  # "  Reload Hyprpanel" = "systemctl --user restart hyprpanel.service";
+                  # "  Reload Hyprland" = "hyprctl reload";
+                  # "  Exit Hyprland" = "hyprctl dispatch exit";
+                };
+                command = "walker -d -p ${prompt}";
+              };
+            in {
+              action = spawn "${powerMenu}/bin/rofi-menu-Session";
               hotkey-overlay = {title = "Toggle the session menu.";};
             };
             "Mod+C" = {
