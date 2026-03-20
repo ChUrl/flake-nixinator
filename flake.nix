@@ -54,21 +54,21 @@
     niri.inputs.nixpkgs.follows = "nixpkgs";
 
     # Quickshell
-    quickshell.url = "github:quickshell-mirror/quickshell";
-    quickshell.inputs.nixpkgs.follows = "nixpkgs";
+    # quickshell.url = "github:quickshell-mirror/quickshell";
+    # quickshell.inputs.nixpkgs.follows = "nixpkgs";
 
     # Noctalia shell
-    noctalia.url = "github:noctalia-dev/noctalia-shell";
-    noctalia.inputs.nixpkgs.follows = "nixpkgs";
+    # noctalia.url = "github:noctalia-dev/noctalia-shell";
+    # noctalia.inputs.nixpkgs.follows = "nixpkgs";
     # noctalia.inputs.quickshell.follows = "quickshell";
 
     # Lol
-    waifu-cursors.url = "github:kagurazakei/waifu-cursors";
+    # waifu-cursors.url = "github:kagurazakei/waifu-cursors";
 
     # Caelestia shell
-    caelestia.url = "github:caelestia-dots/shell";
-    caelestia.inputs.nixpkgs.follows = "nixpkgs";
-    caelestia.inputs.quickshell.follows = "quickshell";
+    # caelestia.url = "github:caelestia-dots/shell";
+    # caelestia.inputs.nixpkgs.follows = "nixpkgs";
+    # caelestia.inputs.quickshell.follows = "quickshell";
     # caelestia-cli.url = "github:caelestia-dots/cli";
     # caelestia-cli.inputs.nixpkgs.follows = "nixpkgs";
 
@@ -84,19 +84,19 @@
     danksearch.inputs.nixpkgs.follows = "nixpkgs";
 
     # Hyprland (use flake so plugins are not built from source)
-    hyprland.url = "github:hyprwm/Hyprland";
-    hyprland.inputs.nixpkgs.follows = "nixpkgs";
+    # hyprland.url = "github:hyprwm/Hyprland";
+    # hyprland.inputs.nixpkgs.follows = "nixpkgs";
 
     # HyprPlugins
-    hyprland-plugins.url = "github:hyprwm/hyprland-plugins";
-    hyprland-plugins.inputs.nixpkgs.follows = "nixpkgs";
-    hyprland-plugins.inputs.hyprland.follows = "hyprland";
-    hypr-dynamic-cursors.url = "github:VirtCode/hypr-dynamic-cursors";
-    hypr-dynamic-cursors.inputs.nixpkgs.follows = "nixpkgs";
-    hypr-dynamic-cursors.inputs.hyprland.follows = "hyprland";
-    hyprspace.url = "github:KZDKM/Hyprspace";
+    # hyprland-plugins.url = "github:hyprwm/hyprland-plugins";
+    # hyprland-plugins.inputs.nixpkgs.follows = "nixpkgs";
+    # hyprland-plugins.inputs.hyprland.follows = "hyprland";
+    # hypr-dynamic-cursors.url = "github:VirtCode/hypr-dynamic-cursors";
+    # hypr-dynamic-cursors.inputs.nixpkgs.follows = "nixpkgs";
+    # hypr-dynamic-cursors.inputs.hyprland.follows = "hyprland";
+    # hyprspace.url = "github:KZDKM/Hyprspace";
     # hyprspace.inputs.nixpkgs.follows = "nixpkgs";
-    hyprspace.inputs.hyprland.follows = "hyprland";
+    # hyprspace.inputs.hyprland.follows = "hyprland";
 
     # NeoVim <3
     nixvim.url = "github:nix-community/nixvim";
