@@ -836,14 +836,18 @@ in
             # Force Wayland by default
             # Context.sockets = ["wayland" "!x11" "!fallback-x11"]; # NOTE: Makes discord + steam crash
 
-            Context.filesystems = ["/nix/store:ro"];
+            Context.filesystems = [
+              "/nix/store:ro"
+              "${config.home.homeDirectory}/.themes:ro"
+              "${config.home.homeDirectory}/.config/gtk-4.0:ro"
+            ];
 
             Environment = {
               # Fix un-themed cursor in some Wayland apps
               XCURSOR_PATH = "/run/host/user-share/icons:/run/host/share/icons";
 
               # Force correct theme for some GTK apps
-              GTK_THEME = "Adwaita:light";
+              GTK_THEME = config.gtk.theme.name;
             };
           };
 
