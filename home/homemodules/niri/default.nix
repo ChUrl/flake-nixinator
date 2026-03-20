@@ -96,6 +96,8 @@ in {
         xwayland-satellite
         # ncpamixer # Audio control
         wiremix # Audio control
+        swaybg
+        waypaper
 
         # GTK apps (look good and work well with xdg portals)
         nautilus # Fallback file chooser used by xdg-desktop-portal-gnome
@@ -365,6 +367,7 @@ in {
 
           spawn-at-startup = [
             {argv = ["ashell" "-c" "${config.paths.dotfiles}/ashell/config.toml"];}
+            {argv = ["waypaper" "--backend" "swaybg" "--fill" "fill" "--monitor" "All" "--folder" "${config.paths.nixflake}/wallpapers" "--random"];}
 
             {argv = ["kitty" "--hold" "fastfetch"];}
             {argv = ["fcitx5"];}
