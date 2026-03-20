@@ -107,7 +107,7 @@ in
         enable = !headless;
       };
 
-      waybar.enable = false;
+      waybar.enable = !headless;
       yazi.enable = true;
       zathura.enable = !headless;
     };

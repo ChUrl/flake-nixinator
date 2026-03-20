@@ -28,7 +28,7 @@ in {
           modules-right = ["pulseaudio" "network" "cpu" "memory" "temperature" "clock" "tray"];
 
           "custom/launcher" = {
-            format = "<span></span>";
+            format = "<span></span>";
             interval = "once";
             on-click = "rofi -drun-show-actions -show drun";
           };
@@ -43,90 +43,94 @@ in {
           };
 
           "pulseaudio" = {
-            format = "<span></span> {volume}%";
-            format-muted = "<span></span> ";
+            format = "<span>󰕾</span> {volume}%";
+            format-muted = "<span>󰝟</span> ";
             on-click = "kitty ncpamixer -t o";
           };
 
           "network" = {
-            format = "<span></span> {ipaddr}";
+            format = "<span>󰌀</span> {ipaddr}";
             format-disconnected = "<span></span> ";
             interface = "enp8s0";
             tooltip-format = "{ifname} via {gwaddr}";
           };
 
           cpu = {
-            format = "<span></span> {load}%";
+            format = "<span></span> {load}%";
           };
 
           memory = {
-            format = "<span></span> {percentage}%";
+            format = "<span></span> {percentage}%";
           };
 
           temperature = {
-            format = "<span></span> {temperatureC}°C";
+            format = "<span></span> {temperatureC}°C";
             thermal-zone = 3;
           };
 
           clock = {
-            format = "<span></span> {:%H:%M}";
+            format = "<span>󰥔</span> {:%H:%M}";
             timezone = "Europe/Berlin";
             tooltip-format = "<tt><small>{calendar}</small></tt>";
           };
 
           tray = {
-            icon-size = 20;
+            icon-size = 22;
             show-passive-items = true;
             spacing = 5;
           };
         };
       };
 
-      style = ''
+      style = let
+        border-width = "2px";
+        border-radius = "10px";
+      in ''
         /* Order is Top-Right-Bottom-Left for combined properties */
         * {
-          color: #${color.hex.dark.base};
           font-family: ${color.font};
-          font-weight: bold;
         }
 
         window#waybar {
           border-style: solid;
-          border-width: 2px;
-          border-radius: 6px;
-          border-color: #${color.hex.dark.lavender};
-          background-color: rgba(${color.rgbString.light.base}, 0.3);
+          border-width: ${border-width};
+          border-radius: ${border-radius};
+          border-color: #${color.hex.accent};
+          background-color: rgba(${color.rgbS.mantle}, 1.0);
         }
 
         tooltip {
-          border-style: solid;
-          border-width: 2px;
-          border-radius: 6px;
-          border-color: #${color.hex.dark.lavender};
-          background-color: rgba(${color.rgbString.light.base}, 0.7);
+          color: #${color.hex.text};
           font-weight: normal;
+          border-style: solid;
+          border-width: ${border-width};
+          border-radius: ${border-radius};
+          border-color: #${color.hex.accent};
+          background-color: rgba(${color.rgbS.mantle}, 1.0);
         }
 
         /* Background colors */
-        #custom-launcher          {background-color: #${color.hex.dark.lavender};}
-        #user                     {background-color: #${color.hex.dark.pink};}
-        #window                   {background-color: #${color.hex.dark.mauve};}
-        #workspaces button        {background-color: #${color.hex.dark.lavender};}
-        #workspaces button.active {background-color: #${color.hex.dark.pink};}
-        #pulseaudio               {background-color: #${color.hex.dark.maroon};}
-        #network                  {background-color: #${color.hex.dark.peach};}
-        #cpu                      {background-color: #${color.hex.dark.yellow};}
-        #memory                   {background-color: #${color.hex.dark.green};}
-        #temperature              {background-color: #${color.hex.dark.teal};}
-        #clock                    {background-color: #${color.hex.dark.sky};}
-        #tray                     {background-color: #${color.hex.dark.lavender};}
+        #custom-launcher          {background-color: #${color.hex.accent};}
+        #user                     {background-color: #${color.hex.pink};}
+        #window                   {background-color: #${color.hex.mauve};}
+        #workspaces button        {background-color: #${color.hex.lavender};}
+        #workspaces button.active {background-color: #${color.hex.pink};}
+        #pulseaudio               {background-color: #${color.hex.maroon};}
+        #network                  {background-color: #${color.hex.peach};}
+        #cpu                      {background-color: #${color.hex.yellow};}
+        #memory                   {background-color: #${color.hex.green};}
+        #temperature              {background-color: #${color.hex.teal};}
+        #clock                    {background-color: #${color.hex.sky};}
+        #tray                     {background-color: #${color.hex.accent};}
 
         /* Square Widgets */
         #custom-launcher,
         #workspaces button,
         #tray {
+          color: #${color.hex.mantle};
+          font-weight: bold;
           padding: 0px 10px 0px 10px;
-          border-radius: 6px;
+          border-radius: ${border-radius};
         }
 
         /* Rectangle Widgets */
@@ -138,9 +142,11 @@ in {
         #memory,
         #temperature,
         #clock {
+          color: #${color.hex.mantle};
+          font-weight: bold;
           padding: 0px 10px 0px 10px;
           margin: 8px 5px 8px 5px;
-          border-radius: 6px;
+          border-radius: ${border-radius};
         }
 
         /* Make window module transparent when no windows present */
