@@ -17,10 +17,6 @@ in {
         assertion = nixosConfig.programs.niri.enable;
         message = "Can't enable Niri config with Niri disabled!";
       }
-      {
-        assertion = !(programs.noctalia-shell.enable && programs.dank-material-shell.enable);
-        message = "Can't enable Noctalia and DankMaterialShell at the same time!";
-      }
     ];
 
     gtk = {
@@ -87,7 +83,6 @@ in {
 
     programs = {
       # TODO: Those should be modules with their own options
-      noctalia-shell = import ./noctalia.nix {inherit color;};
       dank-material-shell = import ./dankMaterialShell.nix {inherit config color;};
       dsearch.enable = false;
 

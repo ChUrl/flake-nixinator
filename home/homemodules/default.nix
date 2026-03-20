@@ -12,8 +12,6 @@
     ./firefox
     ./fish
     ./git
-    ./hyprland
-    ./hyprpanel
     ./kitty
     ./lazygit
     ./mpd
@@ -33,8 +31,8 @@
     inputs.nixvim.homeModules.nixvim
     inputs.textfox.homeManagerModules.default
     # inputs.niri.homeModules.niri # Imported by system module
-    inputs.noctalia.homeModules.default
-    inputs.caelestia.homeManagerModules.default
+    # inputs.noctalia.homeModules.default
+    # inputs.caelestia.homeManagerModules.default
     inputs.dank-material-shell.homeModules.dank-material-shell
     inputs.dank-material-shell.homeModules.niri
     inputs.danksearch.homeModules.default
