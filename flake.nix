@@ -53,6 +53,11 @@
     niri.url = "github:sodiboo/niri-flake";
     niri.inputs.nixpkgs.follows = "nixpkgs";
 
+    # Walker
+    elephant.url = "github:abenz1267/elephant";
+    walker.url = "github:abenz1267/walker";
+    walker.inputs.elephant.follows = "elephant";
+
     # Quickshell
     # quickshell.url = "github:quickshell-mirror/quickshell";
     # quickshell.inputs.nixpkgs.follows = "nixpkgs";
@@ -77,11 +82,11 @@
     # dgop.inputs.nixpkgs.follows = "nixpkgs";
     # dms-cli.url = "github:AvengeMedia/danklinux";
     # dms-cli.inputs.nixpkgs.follows = "nixpkgs";
-    dank-material-shell.url = "github:AvengeMedia/DankMaterialShell";
-    dank-material-shell.inputs.nixpkgs.follows = "nixpkgs";
+    # dank-material-shell.url = "github:AvengeMedia/DankMaterialShell";
+    # dank-material-shell.inputs.nixpkgs.follows = "nixpkgs";
     # dank-material-shell.inputs.dgop.follows = "dgop";
-    danksearch.url = "github:AvengeMedia/danksearch";
-    danksearch.inputs.nixpkgs.follows = "nixpkgs";
+    # danksearch.url = "github:AvengeMedia/danksearch";
+    # danksearch.inputs.nixpkgs.follows = "nixpkgs";
 
     # Hyprland (use flake so plugins are not built from source)
     # hyprland.url = "github:hyprwm/Hyprland";

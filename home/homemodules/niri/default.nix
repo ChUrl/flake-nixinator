@@ -57,13 +57,12 @@ in {
     systemd.user.services.niri-flake-polkit = lib.mkForce {};
 
     home = {
-      # Mute the stupid DMS popups
-      # TODO: Is there a DMS option to disable those?
-      file.".config/DankMaterialShell/.firstlaunch".text = "";
-      file.".config/DankMaterialShell/.changelog-1.4".text = "";
+      file = {
+        # Link theme for flatpak
+        ".themes/${config.gtk.theme.name}".source = "${config.gtk.theme.package}/share/themes/${config.gtk.theme.name}";
 
-      # Link theme for flatpak
-      file.".themes/${config.gtk.theme.name}".source = "${config.gtk.theme.package}/share/themes/${config.gtk.theme.name}";
+        ".config/ashell/config.toml".source = config.lib.file.mkOutOfStoreSymlink "${config.paths.dotfiles}/ashell/config.toml";
+      };
 
       sessionVariables = {
         QT_QPA_PLATFORMTHEME = "gtk3"; # For Noctalia
@@ -80,8 +79,12 @@ in {
 
       packages = with pkgs; [
         xwayland-satellite
-        ncpamixer # Audio control
+        # ncpamixer # Audio control
+        wiremix # Audio control
 
+        ashell # Wayland bar
+
+        # GTK apps (look good and work well with xdg portals)
         nautilus # Fallback file chooser used by xdg-desktop-portal-gnome
 
         # Catppuccin-GTK theme
@@ -96,9 +99,10 @@ in {
     };
 
     programs = {
-      # TODO: Those should be modules with their own options
-      dank-material-shell = import ./dankMaterialShell.nix {inherit config color;};
-      dsearch.enable = false;
+      walker = {
+        enable = true;
+        runAsService = true;
+      };
 
       # TODO: Extract options
       niri = {
@@ -380,43 +384,28 @@ in {
               hotkey-overlay = {title = "Edit the NixFlake.";};
             };
 
-            # TODO: Enable with Noctalia option
-            # Noctalia
+            "Mod+A" = {
+              action = spawn "walker";
+              hotkey-overlay = {title = "Toggle the application launcher.";};
+            };
+
+            # DankMaterialShell
             # "Mod+A" = {
-            #   action = spawn "noctalia-shell" "ipc" "call" "launcher" "toggle";
+            #   action = spawn "dms" "ipc" "call" "spotlight" "toggle";
             #   hotkey-overlay = {title = "Toggle the application launcher.";};
             # };
             # "Mod+Ctrl+L" = {
-            #   action = spawn "noctalia-shell" "ipc" "call" "lockScreen" "lock";
+            #   action = spawn "dms" "ipc" "call" "lock" "lock";
             #   hotkey-overlay = {title = "Lock the screen.";};
             # };
-            # "Mod+W" = {
-            #   action = spawn "noctalia-shell" "ipc" "call" "wallpaper" "toggle";
-            #   hotkey-overlay = {title = "Toggle the wallpaper chooser.";};
-            # };
             # "Mod+Escape" = {
-            #   action = spawn "noctalia-shell" "ipc" "call" "sessionMenu" "toggle";
+            #   action = spawn "dms" "ipc" "call" "powermenu" "toggle";
             #   hotkey-overlay = {title = "Toggle the session menu.";};
             # };
-
-            # TODO: Enable with DMS option
-            # DankMaterialShell
-            "Mod+A" = {
-              action = spawn "dms" "ipc" "call" "spotlight" "toggle";
-              hotkey-overlay = {title = "Toggle the application launcher.";};
-            };
-            "Mod+Ctrl+L" = {
-              action = spawn "dms" "ipc" "call" "lock" "lock";
-              hotkey-overlay = {title = "Lock the screen.";};
-            };
-            "Mod+Escape" = {
-              action = spawn "dms" "ipc" "call" "powermenu" "toggle";
-              hotkey-overlay = {title = "Toggle the session menu.";};
-            };
-            "Mod+C" = {
-              action = spawn "dms" "ipc" "call" "clipboard" "toggle";
-              hotkey-overlay = {title = "Show clipboard history.";};
-            };
+            # "Mod+C" = {
+            #   action = spawn "dms" "ipc" "call" "clipboard" "toggle";
+            #   hotkey-overlay = {title = "Show clipboard history.";};
+            # };
 
             # Screenshots
             "Mod+S" = {
