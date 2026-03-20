@@ -466,6 +466,7 @@ in
             tealdeer # Very fast tldr (so readable man)
             killall
             atool # Archive preview
+            exiftool
             ouch # Unified compression/decompression
             ffmpegthumbnailer # Video thumbnails
             mediainfo # Media meta information
