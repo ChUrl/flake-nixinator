@@ -194,14 +194,14 @@ in {
 
               nixos-packages = {
                 name = "Nix Packages";
-                urls = [{template = "https://search.nixos.org/packages?channel=unstable?query={searchTerms}";}];
+                urls = [{template = "https://search.nixos.org/packages?channel=unstable&query={searchTerms}";}];
                 iconMapObj."16" = "https://nixos.org/favicon.ico";
                 definedAliases = ["@np"];
               };
 
               nixos-options = {
                 name = "NixOS Options";
-                urls = [{template = "https://search.nixos.org/options?channel=unstable?query={searchTerms}";}];
+                urls = [{template = "https://search.nixos.org/options?channel=unstable&query={searchTerms}";}];
                 iconMapObj."16" = "https://nixos.org/favicon.ico";
                 definedAliases = ["@no"];
               };
