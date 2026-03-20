@@ -53,15 +53,30 @@ in {
       };
     };
 
-    # Disable niri polkit if we use DMS, as it has its own
+    # Disable Niri's kde auth agent and start gnome auth agent instead
     systemd.user.services.niri-flake-polkit = lib.mkForce {};
+    systemd.user.services.polkit-gnome-authentication-agent-1 = {
+      Unit = {
+        Description = "polkit-gnome-authentication-agent-1";
+        Wants = ["graphical-session.target"];
+        After = ["graphical-session.target"];
+      };
+      Install = {
+        WantedBy = ["graphical-session.target"];
+      };
+      Service = {
+        Type = "simple";
+        ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
+        Restart = "on-failure";
+        RestartSec = 1;
+        TimeoutStopSec = 10;
+      };
+    };
 
     home = {
       file = {
         # Link theme for flatpak
         ".themes/${config.gtk.theme.name}".source = "${config.gtk.theme.package}/share/themes/${config.gtk.theme.name}";
-
-        ".config/ashell/config.toml".source = config.lib.file.mkOutOfStoreSymlink "${config.paths.dotfiles}/ashell/config.toml";
       };
 
       sessionVariables = {
@@ -81,8 +96,6 @@ in {
         xwayland-satellite
         # ncpamixer # Audio control
         wiremix # Audio control
-
-        ashell # Wayland bar
 
         # GTK apps (look good and work well with xdg portals)
         nautilus # Fallback file chooser used by xdg-desktop-portal-gnome
@@ -141,9 +154,7 @@ in {
           prefer-no-csd = true; # Disable client-side decorations (e.g. window titlebars)
 
           spawn-at-startup = [
-            # TODO: Depend on options
-            # {argv = ["noctalia-shell"];}
-            {argv = ["dms" "run"];}
+            {argv = ["ashell" "-c" "${config.paths.dotfiles}/ashell/config.toml"];}
 
             {argv = ["kitty" "--hold" "fastfetch"];}
             {argv = ["fcitx5"];}
@@ -330,14 +341,9 @@ in {
 
           layer-rules = [
             {
-              # Set the overview wallpaper on the backdrop (Noctalia).
-              matches = [{namespace = "^noctalia-overview*";}];
-              place-within-backdrop = true;
-            }
-            {
-              # Set the overview wallpaper on the backdrop (DMS).
-              matches = [{namespace = "^dms:blurwallpaper$";}];
-              place-within-backdrop = true;
+              # Waybar rounded corners background clipping fix
+              matches = [{namespace = "waybar";}];
+              opacity = 0.99;
             }
           ];
 
@@ -345,8 +351,6 @@ in {
             # Allows notification actions and window activation from Noctalia.
             honor-xdg-activation-with-invalid-serial = [];
           };
-
-          # TODO: Only start hypr... stuff with hyprland, not systemd (hypridle, hyprpaper currently)
 
           # TODO: Move values to config option and set in home/christoph/niri.nix
           binds = with config.lib.niri.actions; {
