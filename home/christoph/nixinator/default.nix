@@ -17,7 +17,7 @@
       # because it forces en-US keyboard layout.
       fcitx.enable = true;
 
-      waybar.monitor = "DP-1";
+      waybar.monitors = ["DP-1" "DP-2"];
     };
 
     home = let

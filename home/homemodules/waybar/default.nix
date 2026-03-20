@@ -21,7 +21,7 @@ in {
           spacing = 0;
           margin = "10px 10px 0px 10px";
           fixed-center = true;
-          output = ["${waybar.monitor}"];
+          output = waybar.monitors;
 
           modules-left = ["custom/launcher" "user" "hyprland/window"];
           modules-center = ["hyprland/workspaces"];
