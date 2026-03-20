@@ -21,7 +21,11 @@
       |> builtins.attrValues
       |> builtins.concatStringsSep "\n";
   in
-    prompt: attrs:
+    {
+      prompt,
+      attrs,
+      command ? ''rofi -dmenu -p " ${prompt} " -i'',
+    }:
       pkgs.writeScriptBin "rofi-menu-${prompt}" ''
         #! ${pkgs.fish}/bin/fish
 
@@ -29,7 +33,7 @@
         set OPTIONS ${unpack-options attrs}
 
         # We choose a single OPTION using Rofi
-        set OPTION (echo -e (string join "\n" $OPTIONS) | rofi -dmenu -p " ${prompt} " -i)
+        set OPTION (echo -e (string join "\n" $OPTIONS) | ${command})
 
         # Check if the chosen OPTION is a valid choice from OPTIONS
         if not contains $OPTION $OPTIONS
