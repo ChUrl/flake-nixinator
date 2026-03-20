@@ -132,6 +132,9 @@ in {
             nb = "nix build -L";
             ns = "nix shell nixpkgs#";
             nr = "nix run";
+
+            ghidra = "_JAVA_AWT_WM_NONREPARENTING=1 ghidra"; # env var for wayland
+            sy = "sudo -E -u ${username} yazi";
           }
 
           # Abbrs only available if package is installed
@@ -155,10 +158,6 @@ in {
           (abbrify pkgs.gdu {
             # du = "gdu";
             storage = "gdu";
-          })
-
-          (abbrify pkgs.ghidra {
-            ghidra = "_JAVA_AWT_WM_NONREPARENTING=1 ghidra";
           })
 
           (abbrify pkgs.git {
