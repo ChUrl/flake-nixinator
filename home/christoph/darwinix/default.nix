@@ -55,6 +55,13 @@
       homeDirectory = "/Users/${config.home.username}";
       enableNixpkgsReleaseCheck = true;
 
+      sessionVariables = {
+        LANG = "en_US.UTF-8";
+        EDITOR = "nvim";
+        MANPAGER = "nvim +Man!";
+        TERMINAL = "kitty";
+      };
+
       packages = with pkgs; [
         (ripgrep.override {withPCRE2 = true;})
         gdu
