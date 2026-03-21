@@ -1,4 +1,4 @@
-{config}: {
+{config, ...}: {
   showmode = false; # Status line already shows this
   backspace = ["indent" "eol" "start"];
   termguicolors = true; # Required by multiple plugins

@@ -152,7 +152,17 @@
       config.allowUnfree = true;
       config.allowUnfreePredicate = pkg: true;
 
-      overlays = [];
+      overlays = let
+        pkgs-stable = import inputs.nixpkgs-stable {
+          system = darwinSystem;
+
+          config.allowUnfree = true;
+          config.allowUnfreePredicate = pkg: true;
+        };
+      in [
+        # All my own overlays (derivations + modifications)
+        (import ./overlays {inherit inputs nixpkgs pkgs-stable;})
+      ];
     };
 
     # My own library functions are imported here.

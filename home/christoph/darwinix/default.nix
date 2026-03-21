@@ -87,7 +87,6 @@
 
         dig
         tcpdump
-        traceroute
         gping
         curlie
         wget
