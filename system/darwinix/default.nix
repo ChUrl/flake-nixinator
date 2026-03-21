@@ -52,6 +52,11 @@
     wget
   ];
 
+  fonts.packages = with pkgs; [
+    nerd-fonts.jetbrains-mono
+    monolisa
+  ];
+
   programs = {
     fish.enable = true;
   };
