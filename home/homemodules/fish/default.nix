@@ -55,7 +55,9 @@ in {
         in
           lib.mkMerge [
             {
+              rebuild = "sudo darwin-rebuild switch --flake .#darwinix";
             }
+
             (abbrify pkgs.nix-search-tv {search = "nix-search-tv print --indexes 'darwin,home-manager,nixpkgs,nur' | fzf --preview 'nix-search-tv preview {}' --scheme history";})
           ];
       })
