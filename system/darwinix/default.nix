@@ -46,6 +46,11 @@
       blockAllIncoming = false;
     };
 
+    knownNetworkServices = [
+      "Wi-Fi"
+      "Thunderbold Bridge"
+    ];
+
     dns = [
       "192.168.86.26"
       "8.8.8.8"
