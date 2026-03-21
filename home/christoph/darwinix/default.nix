@@ -58,8 +58,48 @@
         gdu
         duf
         sd
+        fclones
+        tealdeer
+        killall
+        atool
+        exiftool
+        ouch
+        ffmpegthumbnailer
+        mediainfo
+        file
+        unrar
+        p7zip
+        unzip
+        progress
+        tokei
+        nix-tree
+        just
+
+        ffmpeg-full
+        imagemagick
+
+        poppler-utils
+        pdf2svg
+        pandoc
+
+        dig
+        tcpdump
+        traceroute
+        gping
+        curlie
+        wget
+        doggo
+        rsync
+        rclone
+        httpie
+
+        inputs.nps.packages.${pkgs.stdenv.hostPlatform.system}.default
 
         cachix
+
+        # GUI
+        ripdrag
+        jellyfin-tui
       ];
 
       stateVersion = "25.11";
