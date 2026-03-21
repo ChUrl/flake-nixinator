@@ -147,6 +147,41 @@ in {
       ];
     };
 
+    services = {
+      dunst = {
+        enable = true;
+
+        iconTheme.package = color.iconPackage;
+        iconTheme.name = color.iconTheme;
+
+        settings = {
+          global = {
+            # monitor = config.homemodules.waybar.monitor;
+            follow = "keyboard";
+            font = "${color.font} 11";
+            offset = "9x11";
+            background = color.hexS.base;
+            foreground = color.hexS.text;
+            frame_width = 2;
+            corner_radius = 8;
+            separator_color = "frame";
+          };
+
+          urgency_low = {
+            frame_color = color.hexS.green;
+          };
+
+          urgency_normal = {
+            frame_color = color.hexS.green;
+          };
+
+          urgency_critical = {
+            frame_color = color.hexS.red;
+          };
+        };
+      };
+    };
+
     programs = {
       walker = {
         enable = true;
@@ -491,6 +526,11 @@ in {
               top = 4; # Somehow the bar eclusivity doesn't work as expected
               bottom = 2;
             };
+
+            shadow = {
+              enable = true;
+              draw-behind-window = true;
+            };
           };
 
           gestures = {
@@ -591,6 +631,10 @@ in {
               # Waybar rounded corners background clipping fix
               matches = [{namespace = "waybar";}];
               opacity = 0.99;
+              shadow = {
+                enable = true;
+                draw-behind-window = true;
+              };
             }
           ];
 
