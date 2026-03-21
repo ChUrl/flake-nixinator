@@ -1,4 +1,4 @@
-_: {
+{config}: {
   showmode = false; # Status line already shows this
   backspace = ["indent" "eol" "start"];
   termguicolors = true; # Required by multiple plugins
@@ -37,7 +37,7 @@ _: {
   # swapfile = true;
   # backup = false;
   undofile = true;
-  undodir = "/home/christoph/.vim/undo";
+  undodir = "${config.home.homeDirectory}/.vim/undo";
   undolevels = 10000;
   # autochdir = true;
   confirm = true;
