@@ -210,6 +210,7 @@
         mylib = darwinMylib;
         hostname = "darwinix";
         username = "christoph";
+        headless = false;
         extraModules = [];
       };
     };

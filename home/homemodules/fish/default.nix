@@ -42,162 +42,181 @@ in {
       fish_pager_color_description ${color.hex.overlay0}
     '';
 
-    programs.fish = {
-      enable = true;
-      generateCompletions = nixosConfig.programs.fish.generateCompletions;
+    programs.fish = lib.mkMerge [
+      # Linux exclusive config
+      (lib.mkIf pkgs.stdenv.isLinux {
+        generateCompletions = nixosConfig.programs.fish.generateCompletions;
 
-      functions = lib.mergeAttrsList [
-        (lib.optionalAttrs config.homemodules.nnn.enable {
-          nnncd = {
-            wraps = "nnn";
-            description = "support nnn quit and change directory";
-            body = ''
-              # Block nesting of nnn in subshells
-              if test -n "$NNNLVL" -a "$NNNLVL" -ge 1
-                  echo "nnn is already running"
-                  return
-              end
+        functions = lib.mergeAttrsList [
+          (lib.optionalAttrs config.homemodules.nnn.enable {
+            nnncd = {
+              wraps = "nnn";
+              description = "support nnn quit and change directory";
+              body = ''
+                # Block nesting of nnn in subshells
+                if test -n "$NNNLVL" -a "$NNNLVL" -ge 1
+                    echo "nnn is already running"
+                    return
+                end
 
-              # The behaviour is set to cd on quit (nnn checks if NNN_TMPFILE is set)
-              # If NNN_TMPFILE is set to a custom path, it must be exported for nnn to
-              # see. To cd on quit only on ^G, remove the "-x" from both lines below,
-              # without changing the paths.
-              if test -n "$XDG_CONFIG_HOME"
-                  set -x NNN_TMPFILE "$XDG_CONFIG_HOME/nnn/.lastd"
-              else
-                  set -x NNN_TMPFILE "$HOME/.config/nnn/.lastd"
-              end
+                # The behaviour is set to cd on quit (nnn checks if NNN_TMPFILE is set)
+                # If NNN_TMPFILE is set to a custom path, it must be exported for nnn to
+                # see. To cd on quit only on ^G, remove the "-x" from both lines below,
+                # without changing the paths.
+                if test -n "$XDG_CONFIG_HOME"
+                    set -x NNN_TMPFILE "$XDG_CONFIG_HOME/nnn/.lastd"
+                else
+                    set -x NNN_TMPFILE "$HOME/.config/nnn/.lastd"
+                end
 
-              # Unmask ^Q (, ^V etc.) (if required, see `stty -a`) to Quit nnn
-              # stty start undef
-              # stty stop undef
-              # stty lwrap undef
-              # stty lnext undef
+                # Unmask ^Q (, ^V etc.) (if required, see `stty -a`) to Quit nnn
+                # stty start undef
+                # stty stop undef
+                # stty lwrap undef
+                # stty lnext undef
 
-              # The command function allows one to alias this function to `nnn` without
-              # making an infinitely recursive alias
-              command nnn $argv
+                # The command function allows one to alias this function to `nnn` without
+                # making an infinitely recursive alias
+                command nnn $argv
 
-              if test -e $NNN_TMPFILE
-                  source $NNN_TMPFILE
-                  rm $NNN_TMPFILE
-              end
-            '';
-          };
-        })
-      ];
-
-      plugins = [];
-
-      shellInit = ''
-        set fish_greeting
-        yes | fish_config theme save "system-theme"
-      '';
-
-      shellAbbrs = let
-        # Only add " | bat" if bat is installed
-        batify = command: command + (lib.optionalString config.programs.bat.enable " | bat");
-
-        # Same as above but with args for bat
-        batifyWithArgs = command: args: command + (lib.optionalString config.programs.bat.enable (" | bat " + args));
-
-        # These can be used for my config.homemodules and for HM config.programs,
-        # as both of these add the package to home.packages
-        hasHomePackage = package: (mylib.modules.contains config.home.packages package);
-
-        # Only add fish abbr if package is installed
-        abbrify = package: abbr: (lib.optionalAttrs (hasHomePackage package) abbr);
-      in
-        lib.mkMerge [
-          # Abbrs that are always available are defined here.
-          {
-            # Shell basics
-            c = "clear";
-            q = "exit";
-
-            # Fish
-            h = batifyWithArgs "history" "-l fish"; # -l fish sets syntax highlighting to fish
-            abbrs = batifyWithArgs "abbr" "-l fish";
-
-            # Tools
-            cd = "z"; # zoxide for quickjump to previously visited locations
-            cdd = "zi";
-            b = "z -"; # jump to previous dir
-            mkdir = "mkdir -p"; # also create parents (-p)
-            blk = batify "lsblk -o NAME,LABEL,PARTLABEL,FSTYPE,SIZE,FSUSE%,MOUNTPOINT";
-            blkids = batify "lsblk -o NAME,LABEL,FSTYPE,SIZE,PARTLABEL,MODEL,ID,UUID";
-            watch = "watch -d -c -n 0.5";
-            nps = "nps -e";
-            nd = "nix develop";
-            nb = "nix build -L";
-            ns = "nix shell nixpkgs#";
-            nr = "nix run";
-
-            ghidra = "_JAVA_AWT_WM_NONREPARENTING=1 ghidra"; # env var for wayland
-            sy = "sudo -u ${username} yazi";
-          }
-
-          # Abbrs only available if package is installed
-
-          (abbrify pkgs.duf {
-            disks = "duf --hide-mp '/var/*,/etc/*,/usr/*,/home/christoph/.*' -width 120";
-            alldisks = "duf";
+                if test -e $NNN_TMPFILE
+                    source $NNN_TMPFILE
+                    rm $NNN_TMPFILE
+                end
+              '';
+            };
           })
-
-          (abbrify pkgs.eza {
-            ls = "eza --color=always --group-directories-first -F --git --icons=always --octal-permissions";
-            lsl = "eza --color=always --group-directories-first -F --git --icons=always --octal-permissions -l";
-            lsa = "eza --color=always --group-directories-first -F --git --icons=always --octal-permissions -l -a";
-            tre = "eza --color=always --group-directories-first -F --git --icons=always --octal-permissions -T -L 2";
-          })
-
-          (abbrify pkgs.fd {find = "fd";})
-
-          (abbrify pkgs.fzf {fuzzy = "fzf --preview 'bat --color=always --style=numbers --line-range=:500 {}'";})
-
-          (abbrify pkgs.gdu {
-            # du = "gdu";
-            storage = "gdu";
-          })
-
-          (abbrify pkgs.git {
-            gs = "git status";
-            gd = "git diff --output-indicator-new=' ' --output-indicator-old=' '";
-            gl = "git log --all --graph --pretty=format:'%C(magenta)%h %C(white) %an  %ar%C(auto)  %D%n%s%n'";
-            ga = "git add";
-            gap = "git add --patch";
-            gc = "git commit --verbose";
-            gcm = "git commit -m";
-            gcl = "git clone";
-          })
-
-          (lib.optionalAttrs config.homemodules.kitty.enable {ssh = "kitty +kitten ssh";})
-
-          (abbrify pkgs.lazygit {lg = "lazygit";})
-
-          (abbrify pkgs.nix-search-tv {search = "nix-search-tv print --indexes 'nixos,home-manager,nixpkgs,nur' | fzf --preview 'nix-search-tv preview {}' --scheme history";})
-
-          # Doesn't work with abbrify because I have nnn.override...
-          (lib.optionalAttrs config.homemodules.nnn.enable {n = "nnncd -a";})
-          (lib.optionalAttrs config.homemodules.nnn.enable {np = "nnncd -a -P p";})
-
-          (abbrify pkgs.ranger {r = "ranger --choosedir=$HOME/.rangerdir; set LASTDIR (cat $HOME/.rangerdir); cd $LASTDIR";})
-
-          (abbrify pkgs.ripgrep rec {
-            rg = "rg --trim --pretty";
-            # grep = rg;
-          })
-
-          (lib.optionalAttrs config.homemodules.rmpc.enable {r = "rcmp";})
-
-          (abbrify pkgs.rsync rec {
-            rsync = "rsync -ahv --inplace --partial --info=progress2";
-            copy = rsync;
-          })
-
-          # (abbrify pkgs.sd {sed = "sd";})
         ];
-    };
+
+        shellAbbrs = let
+          # Only add " | bat" if bat is installed
+          batify = command: command + (lib.optionalString config.programs.bat.enable " | bat");
+
+          # Same as above but with args for bat
+          batifyWithArgs = command: args: command + (lib.optionalString config.programs.bat.enable (" | bat " + args));
+
+          # These can be used for my config.homemodules and for HM config.programs,
+          # as both of these add the package to home.packages
+          hasHomePackage = package: (mylib.modules.contains config.home.packages package);
+
+          # Only add fish abbr if package is installed
+          abbrify = package: abbr: (lib.optionalAttrs (hasHomePackage package) abbr);
+        in
+          lib.mkMerge [
+            # Abbrs that are always available are defined here.
+            {
+              # Fish
+              h = batifyWithArgs "history" "-l fish"; # -l fish sets syntax highlighting to fish
+              abbrs = batifyWithArgs "abbr" "-l fish";
+
+              # Tools
+              cd = "z"; # zoxide for quickjump to previously visited locations
+              cdd = "zi";
+              b = "z -"; # jump to previous dir
+              blk = batify "lsblk -o NAME,LABEL,PARTLABEL,FSTYPE,SIZE,FSUSE%,MOUNTPOINT";
+              blkids = batify "lsblk -o NAME,LABEL,FSTYPE,SIZE,PARTLABEL,MODEL,ID,UUID";
+              nps = "nps -e";
+              nd = "nix develop";
+              nb = "nix build -L";
+              ns = "nix shell nixpkgs#";
+              nr = "nix run";
+
+              ghidra = "_JAVA_AWT_WM_NONREPARENTING=1 ghidra"; # env var for wayland
+            }
+
+            (abbrify pkgs.nix-search-tv {search = "nix-search-tv print --indexes 'nixos,home-manager,nixpkgs,nur' | fzf --preview 'nix-search-tv preview {}' --scheme history";})
+
+            # Doesn't work with abbrify because I have nnn.override...
+            (lib.optionalAttrs config.homemodules.nnn.enable {n = "nnncd -a";})
+            (lib.optionalAttrs config.homemodules.nnn.enable {np = "nnncd -a -P p";})
+
+            (abbrify pkgs.ranger {r = "ranger --choosedir=$HOME/.rangerdir; set LASTDIR (cat $HOME/.rangerdir); cd $LASTDIR";})
+
+            (lib.optionalAttrs config.homemodules.rmpc.enable {r = "rcmp";})
+
+            (abbrify pkgs.rsync rec {
+              rsync = "rsync -ahv --inplace --partial --info=progress2";
+              copy = rsync;
+            })
+
+            # (abbrify pkgs.sd {sed = "sd";})
+          ];
+      })
+
+      # Common config
+      {
+        enable = true;
+
+        shellAbbrs = let
+          # These can be used for my config.homemodules and for HM config.programs,
+          # as both of these add the package to home.packages
+          hasHomePackage = package: (mylib.modules.contains config.home.packages package);
+
+          # Only add fish abbr if package is installed
+          abbrify = package: abbr: (lib.optionalAttrs (hasHomePackage package) abbr);
+        in
+          lib.mkMerge [
+            {
+              # Shell basics
+              c = "clear";
+              q = "exit";
+              mkdir = "mkdir -p"; # also create parents (-p)
+              watch = "watch -d -c -n 0.5";
+              sy = "sudo -u ${username} yazi";
+            }
+
+            # Abbrs only available if package is installed
+
+            (abbrify pkgs.duf {
+              disks = "duf --hide-mp '/var/*,/etc/*,/usr/*,/home/christoph/.*' -width 120";
+              alldisks = "duf";
+            })
+
+            (abbrify pkgs.ripgrep {
+              rg = "rg --trim --pretty";
+              # grep = rg;
+            })
+
+            (abbrify pkgs.eza {
+              ls = "eza --color=always --group-directories-first -F --git --icons=always --octal-permissions";
+              lsl = "eza --color=always --group-directories-first -F --git --icons=always --octal-permissions -l";
+              lsa = "eza --color=always --group-directories-first -F --git --icons=always --octal-permissions -l -a";
+              tre = "eza --color=always --group-directories-first -F --git --icons=always --octal-permissions -T -L 2";
+            })
+
+            (abbrify pkgs.fd {find = "fd";})
+
+            (abbrify pkgs.fzf {fuzzy = "fzf --preview 'bat --color=always --style=numbers --line-range=:500 {}'";})
+
+            (abbrify pkgs.gdu {
+              # du = "gdu";
+              storage = "gdu";
+            })
+
+            (abbrify pkgs.git {
+              gs = "git status";
+              gd = "git diff --output-indicator-new=' ' --output-indicator-old=' '";
+              gl = "git log --all --graph --pretty=format:'%C(magenta)%h %C(white) %an  %ar%C(auto)  %D%n%s%n'";
+              ga = "git add";
+              gap = "git add --patch";
+              gc = "git commit --verbose";
+              gcm = "git commit -m";
+              gcl = "git clone";
+            })
+
+            (lib.optionalAttrs config.homemodules.kitty.enable {ssh = "kitty +kitten ssh";})
+
+            (abbrify pkgs.lazygit {lg = "lazygit";})
+          ];
+
+        plugins = [];
+
+        shellInit = ''
+          set fish_greeting
+          yes | fish_config theme save "system-theme"
+        '';
+      }
+    ];
 
     programs.starship = {
       enable = true;

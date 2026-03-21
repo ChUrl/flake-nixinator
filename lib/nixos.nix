@@ -87,13 +87,14 @@
     username,
     publicKeys,
     extraModules ? [],
+    headless ? false,
   }:
     inputs.nix-darwin.lib.darwinSystem {
       inherit system;
 
       # Values in "specialArgs" are propagated to all system modules.
       specialArgs = {
-        inherit inputs system hostname mylib username publicKeys;
+        inherit inputs system hostname mylib username publicKeys headless;
       };
 
       modules = builtins.concatLists [
@@ -121,7 +122,7 @@
             home-manager = {
               # Values in "extraSpecialArgs" are propagated to all HM modules.
               extraSpecialArgs = {
-                inherit inputs system hostname mylib username publicKeys;
+                inherit inputs system hostname mylib username publicKeys headless;
               };
 
               # Use the "pkgs" from the system configuration.
