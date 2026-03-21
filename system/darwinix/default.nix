@@ -7,9 +7,12 @@
   config,
   inputs,
   publicKeys,
+  hostname,
   ...
 }: {
   nix = {
+    enable = true;
+
     package = pkgs.nixVersions.stable;
     extraOptions = ''
       experimental-features = nix-command flakes pipe-operators
@@ -30,6 +33,57 @@
     ];
   };
 
+  networking = {
+    hostname = "${hostname}";
+    localHostName = "${hostname}";
+    computerName = "${hostname}";
+
+    applicationFirewall = {
+      enable = true;
+      enableStealthMode = false;
+      allowSigned = true;
+      allowSignedApp = true;
+      blockAllIncoming = false;
+    };
+
+    dns = [
+      "192.168.86.26"
+      "8.8.8.8"
+      "8.8.4.4"
+    ];
+
+    # wg-quick = {};
+  };
+
+  power = {
+    restartAfterFreeze = false;
+    restartAfterPowerFailure = false;
+
+    sleep = {
+      computer = 10; # 10 minutes until sleep
+      display = 5;
+      harddisk = 5;
+    };
+  };
+
+  system = {
+    # TODO:
+    defaults = {
+      # dock = {};
+
+      trackpad = {
+        ActuateDetents = true;
+        ActuationStrength = 1;
+      };
+    };
+
+    keyboard = {
+      enableKeyMapping = true;
+      swapLeftCtrlAndFn = true;
+      swapLeftCommandAndLeftAlt = true;
+    };
+  };
+
   users.users.${username} = {
     isHidden = false;
     description = "Christoph";
@@ -46,6 +100,8 @@
     # packages = with pkgs; [];
   };
 
+  environment.shells = with pkgs; [pkgs.fish];
+
   environment.systemPackages = with pkgs; [
     alejandra
     neovim
@@ -59,6 +115,17 @@
 
   programs = {
     fish.enable = true;
+  };
+
+  services = {
+    # aerospace = {};
+  };
+
+  # NOTE: Not installed automatically
+  homebrew = {
+    enable = true;
+    enableFishIntegration = true;
+    # brews = [];
   };
 
   # Set Git commit hash for darwin-version.
