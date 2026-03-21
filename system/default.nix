@@ -276,7 +276,7 @@ with mylib.networking; {
     shell = pkgs.fish;
 
     openssh.authorizedKeys.keys = [
-      publicKeys.christoph.ssh
+      publicKeys.${username}.ssh
     ];
 
     # We do this with HomeManager

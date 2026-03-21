@@ -12,8 +12,12 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     hardware.url = "github:nixos/nixos-hardware";
 
+    # Darwin
+    nix-darwin.url = "github:nix-darwin/nix-darwin/master";
+    nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
+
     # NOTE: Update this after May and November
-    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.05";
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.11";
 
     # Home Manager
     home-manager.url = "github:nix-community/home-manager";
@@ -91,12 +95,14 @@
   outputs = {
     self,
     nixpkgs,
+    nix-darwin,
     ...
   } @ inputs: let
     # Our configuration is buildable on the following system/platform.
     # Configs can support more than a single system simultaneously,
     # e.g. NixOS (linux) and MacOS (darwin) or Arm.
     system = "x86_64-linux";
+    darwinSystem = "aarch64-darwin";
 
     # We configure our global packages here.
     # Usually, "nixpkgs.legacyPackages.${system}" is used (and more efficient),
@@ -139,6 +145,16 @@
       ];
     };
 
+    darwinPkgs = import nixpkgs {
+      system = darwinSystem;
+
+      hostPlatform = darwinSystem;
+      config.allowUnfree = true;
+      config.allowUnfreePredicate = pkg: true;
+
+      overlays = [];
+    };
+
     # My own library functions are imported here.
     # They are made available to the system and HM configs by inheriting mylib.
     mylib = import ./lib {
@@ -151,6 +167,14 @@
       # Equal to "lib = nixpkgs.lib;".
       # This is required because mylib also uses the default nixpkgs lib.
       inherit (nixpkgs) lib;
+    };
+
+    darwinMylib = import ./lib {
+      inherit inputs darwinPkgs;
+
+      inherit (nixpkgs) lib;
+
+      pkgs = darwinPkgs;
     };
 
     # NOTE: Keep public keys here so they're easy to rotate
@@ -176,6 +200,19 @@
   in {
     # Local shell for NixFlake directory
     devShells.${system}.default = import ./shell.nix {inherit pkgs;};
+
+    # Usage: sudo darwin-rebuild switch --flake .#darwinix
+    darwinConfigurations = {
+      darwinix = darwinMylib.nixos.mkDarwinConfigWithHomeManagerModule {
+        inherit publicKeys;
+
+        system = darwinSystem;
+        mylib = darwinMylib;
+        hostname = "darwinix";
+        username = "christoph";
+        extraModules = [];
+      };
+    };
 
     # We give each configuration a (host)name to choose a configuration when rebuilding.
     # This makes it easy to add different configurations (e.g. for a laptop).
