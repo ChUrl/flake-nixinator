@@ -126,7 +126,7 @@ in {
         maplocalleader = ",";
       };
 
-      opts = import ./vim_opts.nix {inherit lib mylib;};
+      opts = import ./vim_opts.nix {inherit config lib mylib;};
       extraConfigLuaPost = builtins.readFile ./extraConfigLuaPost.lua;
       extraConfigLua = builtins.readFile ./extraConfigLua.lua;
 
