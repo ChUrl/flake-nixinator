@@ -30,7 +30,7 @@ in {
           "custom/launcher" = {
             format = "<span></span>";
             interval = "once";
-            on-click = "rofi -drun-show-actions -show drun";
+            on-click = "walker -m desktopapplications";
           };
 
           systemd-failed-units = {
