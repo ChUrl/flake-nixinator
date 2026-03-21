@@ -8,7 +8,9 @@
   inputs,
   ...
 }: {
-  config = {
+  config = let
+    inherit (config.homemodules) color;
+  in {
     paths = rec {
       nixflake = "${config.home.homeDirectory}/NixFlake";
       dotfiles = "${nixflake}/config";
@@ -72,6 +74,7 @@
         unzip
         progress
         tokei
+        nix-search-tv
         nix-tree
         just
 
@@ -105,10 +108,74 @@
       stateVersion = "25.11";
     };
 
+    # TODO: Deduplicate with other configs
     programs = {
       home-manager.enable = true;
 
-      # TODO: Module
+      bat = {
+        enable = true;
+
+        themes = {
+          catppuccin-latte = {
+            src = pkgs.fetchFromGitHub {
+              owner = "catppuccin";
+              repo = "bat";
+              rev = "ba4d16880d63e656acced2b7d4e034e4a93f74b1";
+              sha256 = "sha256-6WVKQErGdaqb++oaXnY3i6/GuH2FhTgK0v4TN4Y0Wbw=";
+            };
+            file = "Catppuccin-latte.tmTheme";
+          };
+        };
+
+        config = {
+          theme = "catppuccin-latte";
+        };
+      };
+
+      cava = {
+        enable = true;
+
+        settings = {
+          general = {
+            framerate = 60; # default 60
+            autosens = 1; # default 1
+            sensitivity = 100; # default 100
+            lower_cutoff_freq = 50; # not passed to cava if not provided
+            higher_cutoff_freq = 10000; # not passed to cava if not provided
+          };
+
+          smoothing = {
+            noise_reduction = 77; # default 77
+            monstercat = false; # default false
+            waves = false; # default false
+          };
+
+          color = {
+            # https://github.com/catppuccin/cava/blob/main/themes/latte-transparent.cava
+            gradient = 1;
+
+            gradient_color_1 = "'${color.hexS.teal}'";
+            gradient_color_2 = "'${color.hexS.sky}'";
+            gradient_color_3 = "'${color.hexS.sapphire}'";
+            gradient_color_4 = "'${color.hexS.blue}'";
+            gradient_color_5 = "'${color.hexS.mauve}'";
+            gradient_color_6 = "'${color.hexS.pink}'";
+            gradient_color_7 = "'${color.hexS.maroon}'";
+            gradient_color_8 = "'${color.hexS.red}'";
+          };
+        };
+      };
+
+      direnv = {
+        enable = true;
+        nix-direnv.enable = true;
+      };
+
+      eza = {
+        enable = true;
+        enableFishIntegration = config.homemodules.fish.enable;
+      };
+
       fastfetch = {
         enable = true;
 
@@ -256,6 +323,111 @@
             }
           ];
         };
+      };
+
+      fd.enable = true;
+
+      fzf = {
+        enable = true;
+        enableFishIntegration = config.homemodules.fish.enable;
+      };
+
+      keychain = {
+        enable = true;
+        enableFishIntegration = config.homemodules.fish.enable;
+        enableXsessionIntegration = false;
+        keys = ["id_ed25519"];
+      };
+
+      navi = {
+        enable = true;
+        enableFishIntegration = config.homemodules.fish.enable;
+      };
+
+      ssh = {
+        enable = true;
+        enableDefaultConfig = false;
+
+        matchBlocks = {
+          "*" = {
+            forwardAgent = false;
+            addKeysToAgent = "no";
+            compression = true;
+            serverAliveInterval = 0;
+            serverAliveCountMax = 3;
+            hashKnownHosts = false;
+            userKnownHostsFile = "~/.ssh/known_hosts";
+            controlMaster = "no";
+            controlPath = "~/.ssh/master-%r@%n:%p";
+            controlPersist = "no";
+          };
+          "nixinator" = {
+            user = "christoph";
+            hostname = "192.168.86.50";
+          };
+          "servenix" = {
+            user = "christoph";
+            hostname = "local.chriphost.de";
+          };
+          "thinknix" = {
+            user = "christoph";
+            hostname = "think.chriphost.de";
+          };
+          "vps" = {
+            user = "root";
+            hostname = "vps.chriphost.de";
+          };
+          "mars" = {
+            user = "smchurla";
+            hostname = "mars.cs.tu-dortmund.de";
+            serverAliveInterval = 60;
+            localForwards = [
+              {
+                # Resultbrowser
+                bind.port = 22941;
+                host.address = "127.0.0.1";
+                host.port = 22941;
+              }
+              {
+                # Mysql
+                bind.port = 3306;
+                host.address = "127.0.0.1";
+                host.port = 3306;
+              }
+            ];
+          };
+        };
+      };
+
+      tmux = {
+        enable = true;
+
+        clock24 = true;
+        escapeTime = 0; # Delay after pressing escape
+        # keyMode = "vi";
+        terminal = "xterm-256color";
+
+        plugins = with pkgs; [
+          {
+            plugin = tmuxPlugins.catppuccin;
+            extraConfig = ''
+              set -g @plugin 'catppuccin/tmux'
+              set -g @catppuccin_flavour 'latte' # or frappe, macchiato, mocha
+            '';
+          }
+        ];
+
+        extraConfig = ''
+          set -g default-terminal "xterm-256color"
+          set-option -ga terminal-overrides ",xterm-256color:Tc"
+        '';
+      };
+
+      yt-dlp.enable = true;
+
+      zoxide = {
+        enable = true;
+        enableFishIntegration = config.homemodules.fish.enable;
       };
     };
 

@@ -300,7 +300,6 @@ in
             nix-tree # Browse the nix store sorted by size (gdu for closures)
             nurl # Generate nix fetcher sections based on URLs
             python313 # Nicer scripting than bash
-            binsider # Analyze binaries
             lazyjournal # Journalctl viewer
             systemctl-tui
             restic # Backups
@@ -757,7 +756,7 @@ in
       };
 
       tmux = {
-        enable = false;
+        enable = true;
 
         clock24 = true;
         escapeTime = 0; # Delay after pressing escape
