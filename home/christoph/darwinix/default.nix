@@ -332,13 +332,6 @@
         enableFishIntegration = config.homemodules.fish.enable;
       };
 
-      keychain = {
-        enable = true;
-        enableFishIntegration = config.homemodules.fish.enable;
-        enableXsessionIntegration = false;
-        keys = ["id_ed25519"];
-      };
-
       navi = {
         enable = true;
         enableFishIntegration = config.homemodules.fish.enable;
@@ -351,7 +344,7 @@
         matchBlocks = {
           "*" = {
             forwardAgent = false;
-            addKeysToAgent = "no";
+            addKeysToAgent = "yes";
             compression = true;
             serverAliveInterval = 0;
             serverAliveCountMax = 3;
