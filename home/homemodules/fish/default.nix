@@ -43,6 +43,23 @@ in {
     '';
 
     programs.fish = lib.mkMerge [
+      # Darwin exclusive config
+      (lib.mkIf pkgs.stdenv.isDarwin {
+        shellAbbrs = let
+          # These can be used for my config.homemodules and for HM config.programs,
+          # as both of these add the package to home.packages
+          hasHomePackage = package: (mylib.modules.contains config.home.packages package);
+
+          # Only add fish abbr if package is installed
+          abbrify = package: abbr: (lib.optionalAttrs (hasHomePackage package) abbr);
+        in
+          lib.mkMerge [
+            {
+            }
+            (abbrify pkgs.nix-search-tv {search = "nix-search-tv print --indexes 'darwin,home-manager,nixpkgs,nur' | fzf --preview 'nix-search-tv preview {}' --scheme history";})
+          ];
+      })
+
       # Linux exclusive config
       (lib.mkIf pkgs.stdenv.isLinux {
         generateCompletions = nixosConfig.programs.fish.generateCompletions;
@@ -110,12 +127,8 @@ in {
               abbrs = batifyWithArgs "abbr" "-l fish";
 
               # Tools
-              cd = "z"; # zoxide for quickjump to previously visited locations
-              cdd = "zi";
-              b = "z -"; # jump to previous dir
               blk = batify "lsblk -o NAME,LABEL,PARTLABEL,FSTYPE,SIZE,FSUSE%,MOUNTPOINT";
               blkids = batify "lsblk -o NAME,LABEL,FSTYPE,SIZE,PARTLABEL,MODEL,ID,UUID";
-              nps = "nps -e";
               nd = "nix develop";
               nb = "nix build -L";
               ns = "nix shell nixpkgs#";
@@ -133,11 +146,6 @@ in {
             (abbrify pkgs.ranger {r = "ranger --choosedir=$HOME/.rangerdir; set LASTDIR (cat $HOME/.rangerdir); cd $LASTDIR";})
 
             (lib.optionalAttrs config.homemodules.rmpc.enable {r = "rcmp";})
-
-            (abbrify pkgs.rsync rec {
-              rsync = "rsync -ahv --inplace --partial --info=progress2";
-              copy = rsync;
-            })
 
             # (abbrify pkgs.sd {sed = "sd";})
           ];
@@ -163,9 +171,17 @@ in {
               mkdir = "mkdir -p"; # also create parents (-p)
               watch = "watch -d -c -n 0.5";
               sy = "sudo -u ${username} yazi";
+              cd = "z"; # zoxide for quickjump to previously visited locations
+              cdd = "zi";
+              b = "z -"; # jump to previous dir
+              nps = "nps -e";
             }
 
             # Abbrs only available if package is installed
+            (abbrify pkgs.rsync rec {
+              rsync = "rsync -ahv --inplace --partial --info=progress2";
+              copy = rsync;
+            })
 
             (abbrify pkgs.duf {
               disks = "duf --hide-mp '/var/*,/etc/*,/usr/*,/home/christoph/.*' -width 120";
