@@ -367,7 +367,7 @@ in {
 
           spawn-at-startup = [
             {argv = ["ashell" "-c" "${config.paths.dotfiles}/ashell/config.toml"];}
-            {argv = ["waypaper" "--backend" "swaybg" "--fill" "fill" "--monitor" "All" "--folder" "${config.paths.nixflake}/wallpapers" "--random"];}
+            {argv = ["waypaper" "--backend" "swaybg" "--fill" "fill" "--monitor" "All" "--folder" "${config.paths.nixflake}/wallpapers" "--restore"];}
 
             {argv = ["kitty" "--hold" "fastfetch"];}
             {argv = ["fcitx5"];}
@@ -599,6 +599,14 @@ in {
             "Mod+Shift+F" = {
               action = spawn "neovide" "${config.paths.dotfiles}/flake.nix";
               hotkey-overlay = {title = "Edit the NixFlake.";};
+            };
+            "Mod+W" = {
+              action = spawn "waypaper" "--backend" "swaybg" "--fill" "fill";
+              hotkey-overlay = {title = "Open wallpaper chooser.";};
+            };
+            "Mod+Shift+W" = {
+              action = spawn "waypaper" "--backend" "swaybg" "--fill" "fill" "--monitor" "All";
+              hotkey-overlay = {title = "Switch wallpaper.";};
             };
 
             "Mod+A" = {
