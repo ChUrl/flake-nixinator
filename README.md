@@ -3,6 +3,7 @@
 Modular NixOS configuration, using [Niri](https://github.com/niri-wm/niri) and [Waybar](https://github.com/Alexays/Waybar) for a light desktop.
 
 ![](FastFetch.png)
+![](Darwin.png)
 
 To install, run `nixos-rebuild` with the `--flake` parameter from the `NixFlake` directory: `nixos-rebuild switch --flake .#nixinator`.
 Alternatively, use `nh os switch` or `nh os boot`.
