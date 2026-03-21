@@ -1,16 +1,8 @@
 # NixOS Configuration
 
-Modular NixOS configuration, using Hyprland (yikes) or Niri for a tiling/scrolling desktop.
+Modular NixOS configuration, using [Niri](https://github.com/niri-wm/niri) and [Waybar](https://github.com/Alexays/Waybar) for a light desktop.
 
 ![](FastFetch.png)
-
-<p float="left" align="middle">
-  <img src="/NeoVim.png" width="33%" />
-  <img src="/Rmpc.png" width="33%" />
-  <img src="/Btop.png" width="33%" />
-</p>
-
-![](Niri.png)
 
 To install, run `nixos-rebuild` with the `--flake` parameter from the `NixFlake` directory: `nixos-rebuild switch --flake .#nixinator`.
 Alternatively, use `nh os switch` or `nh os boot`.
