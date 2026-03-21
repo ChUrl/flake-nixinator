@@ -104,7 +104,7 @@ in
       rmpc.enable = !headless;
 
       rofi = {
-        enable = !headless;
+        enable = false;
       };
 
       waybar.enable = !headless;

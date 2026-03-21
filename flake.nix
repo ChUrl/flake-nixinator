@@ -58,51 +58,6 @@
     walker.url = "github:abenz1267/walker";
     walker.inputs.elephant.follows = "elephant";
 
-    # Quickshell
-    # quickshell.url = "github:quickshell-mirror/quickshell";
-    # quickshell.inputs.nixpkgs.follows = "nixpkgs";
-
-    # Noctalia shell
-    # noctalia.url = "github:noctalia-dev/noctalia-shell";
-    # noctalia.inputs.nixpkgs.follows = "nixpkgs";
-    # noctalia.inputs.quickshell.follows = "quickshell";
-
-    # Lol
-    # waifu-cursors.url = "github:kagurazakei/waifu-cursors";
-
-    # Caelestia shell
-    # caelestia.url = "github:caelestia-dots/shell";
-    # caelestia.inputs.nixpkgs.follows = "nixpkgs";
-    # caelestia.inputs.quickshell.follows = "quickshell";
-    # caelestia-cli.url = "github:caelestia-dots/cli";
-    # caelestia-cli.inputs.nixpkgs.follows = "nixpkgs";
-
-    # DankMaterialShell
-    # dgop.url = "github:AvengeMedia/dgop";
-    # dgop.inputs.nixpkgs.follows = "nixpkgs";
-    # dms-cli.url = "github:AvengeMedia/danklinux";
-    # dms-cli.inputs.nixpkgs.follows = "nixpkgs";
-    # dank-material-shell.url = "github:AvengeMedia/DankMaterialShell";
-    # dank-material-shell.inputs.nixpkgs.follows = "nixpkgs";
-    # dank-material-shell.inputs.dgop.follows = "dgop";
-    # danksearch.url = "github:AvengeMedia/danksearch";
-    # danksearch.inputs.nixpkgs.follows = "nixpkgs";
-
-    # Hyprland (use flake so plugins are not built from source)
-    # hyprland.url = "github:hyprwm/Hyprland";
-    # hyprland.inputs.nixpkgs.follows = "nixpkgs";
-
-    # HyprPlugins
-    # hyprland-plugins.url = "github:hyprwm/hyprland-plugins";
-    # hyprland-plugins.inputs.nixpkgs.follows = "nixpkgs";
-    # hyprland-plugins.inputs.hyprland.follows = "hyprland";
-    # hypr-dynamic-cursors.url = "github:VirtCode/hypr-dynamic-cursors";
-    # hypr-dynamic-cursors.inputs.nixpkgs.follows = "nixpkgs";
-    # hypr-dynamic-cursors.inputs.hyprland.follows = "hyprland";
-    # hyprspace.url = "github:KZDKM/Hyprspace";
-    # hyprspace.inputs.nixpkgs.follows = "nixpkgs";
-    # hyprspace.inputs.hyprland.follows = "hyprland";
-
     # NeoVim <3
     nixvim.url = "github:nix-community/nixvim";
     nixvim.inputs.nixpkgs.follows = "nixpkgs";
@@ -122,10 +77,6 @@
     # Realtime audio
     # musnix.url = "github:musnix/musnix";
     # musnix.inputs.nixpkgs.follows = "nixpkgs";
-
-    # ComfyUI
-    # nixified-ai.url = "github:nixified-ai/flake";
-    # comfyui-nix.url = "github:utensils/comfyui-nix";
 
     # HyTale
     hytale-launcher.url = "github:JPyke3/hytale-launcher-nix";
@@ -203,7 +154,6 @@
     };
 
     # NOTE: Keep public keys here so they're easy to rotate
-
     publicKeys.christoph = {
       # /home/christoph/.ssh/id_ed25519.pub
       ssh = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJAoJac+GdGtzblCMA0lBfMdSR6aQ4YyovrNglCFGIny christoph.urlacher@protonmail.com";
