@@ -134,7 +134,7 @@ in {
             nr = "nix run";
 
             ghidra = "_JAVA_AWT_WM_NONREPARENTING=1 ghidra"; # env var for wayland
-            sy = "sudo -E -u ${username} yazi";
+            sy = "sudo -u ${username} yazi";
           }
 
           # Abbrs only available if package is installed

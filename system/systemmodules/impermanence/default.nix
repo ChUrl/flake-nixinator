@@ -97,6 +97,7 @@ in {
             #       which leads to /home not being unmounted correctly during shutdown...
           ];
 
+          # TODO: I need something that lists stale folders in /persist (folders that are no longer mounted into the system)
           directories = [
             # Home directory
             (mkUDir "Downloads" m755)
@@ -168,7 +169,6 @@ in {
             # (mkUDir ".config/unity3d" m755) # Unity
             # (mkUDir ".config/unityhub" m755) # Unity
             (mkUDir ".config/vlc" m755)
-            (mkUDir ".config/waypaper" m755)
             (mkUDir ".config/Zeal" m755)
             (mkUDir ".config/zed" m755)
 
@@ -203,6 +203,7 @@ in {
             (mkUDir ".local/state/lazygit" m755)
             (mkUDir ".local/state/nix" m755)
             (mkUDir ".local/state/nvim" m755)
+            (mkUDir ".local/state/waypaper" m755)
             (mkUDir ".local/state/wireplumber" m755)
           ];
         };

@@ -77,6 +77,40 @@ in {
       file = {
         # Link theme for flatpak
         ".themes/${config.gtk.theme.name}".source = "${config.gtk.theme.package}/share/themes/${config.gtk.theme.name}";
+
+        ".config/waypaper/config.ini".text = lib.generators.toINI {} {
+          Settings = {
+            use_xdg_state = true;
+
+            # Those are contained in the statefile (.local/state/waypaper/state.ini):
+            # backend = "swww";
+            # folder = "~/NixFlake/wallpapers";
+            # monitors = "All";
+            # wallpaper =
+
+            language = "en";
+            show_path_in_tooltip = true;
+            fill = "fill";
+            sort = "name";
+            color = "#ffffff";
+            subfolders = false;
+            all_subfolders = false;
+            show_hidden = false;
+            show_gifs_only = false;
+            zen_mode = false;
+            number_of_columns = 3;
+            swww_transition_type = "wipe";
+            swww_transition_step = 90;
+            swww_transition_angle = 30;
+            swww_transition_duration = 1;
+            swww_transition_fps = 60;
+            mpvpaper_sound = false;
+            # mpvpaper_options = "";
+            # post_command =
+            # stylesheet = /home/christoph/.config/waypaper/style.css
+            # keybindings = ~/.config/waypaper/keybindings.ini
+          };
+        };
       };
 
       sessionVariables = {
@@ -96,7 +130,7 @@ in {
         xwayland-satellite
         # ncpamixer # Audio control
         wiremix # Audio control
-        swaybg
+        swww
         waypaper
 
         # GTK apps (look good and work well with xdg portals)
@@ -367,7 +401,7 @@ in {
 
           spawn-at-startup = [
             {argv = ["ashell" "-c" "${config.paths.dotfiles}/ashell/config.toml"];}
-            {argv = ["waypaper" "--backend" "swaybg" "--fill" "fill" "--monitor" "All" "--folder" "${config.paths.nixflake}/wallpapers" "--restore"];}
+            {argv = ["waypaper" "--restore"];}
 
             {argv = ["kitty" "--hold" "fastfetch"];}
             {argv = ["fcitx5"];}
@@ -601,12 +635,12 @@ in {
               hotkey-overlay = {title = "Edit the NixFlake.";};
             };
             "Mod+W" = {
-              action = spawn "waypaper" "--backend" "swaybg" "--fill" "fill";
+              action = spawn "waypaper";
               hotkey-overlay = {title = "Open wallpaper chooser.";};
             };
             "Mod+Shift+W" = {
-              action = spawn "waypaper" "--backend" "swaybg" "--fill" "fill" "--monitor" "All";
-              hotkey-overlay = {title = "Switch wallpaper.";};
+              action = spawn "waypaper" "--random";
+              hotkey-overlay = {title = "Select random wallpaper.";};
             };
 
             "Mod+A" = {
