@@ -61,8 +61,8 @@
   };
 
   power = {
-    restartAfterFreeze = false;
-    restartAfterPowerFailure = false;
+    # restartAfterFreeze = false;
+    # restartAfterPowerFailure = false;
 
     sleep = {
       computer = 10; # 10 minutes until sleep
