@@ -34,7 +34,7 @@
   };
 
   networking = {
-    hostname = "${hostname}";
+    hostName = "${hostname}";
     localHostName = "${hostname}";
     computerName = "${hostname}";
 
@@ -67,13 +67,18 @@
   };
 
   system = {
+    primaryUser = "${username}";
+
     # TODO:
     defaults = {
       # dock = {};
 
       trackpad = {
-        ActuateDetents = true;
+        ActuateDetents = true; # Haptic feedback
         ActuationStrength = 1;
+        Clicking = true; # Tap to click
+        Dragging = true; # Double tap to drag
+        TrackpadRightClick = true;
       };
     };
 
