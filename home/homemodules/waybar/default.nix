@@ -24,7 +24,7 @@ in {
           output = waybar.monitors;
 
           modules-left = ["custom/launcher" "niri/workspaces" "niri/window"]; # "user"
-          modules-center = ["systemd-failed-units" "mpris"];
+          modules-center = ["mpris"]; # "systemd-failed-units"
           modules-right = ["privacy" "pulseaudio" "network" "disk" "cpu" "memory" "clock" "tray"];
 
           "custom/launcher" = {
