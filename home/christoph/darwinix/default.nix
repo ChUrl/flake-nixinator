@@ -153,10 +153,6 @@
       };
     };
 
-    services = {
-      sketchybar = {
-        enable = true;
-      };
-    };
+    services = {};
   };
 }
