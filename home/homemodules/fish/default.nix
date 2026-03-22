@@ -42,116 +42,100 @@ in {
       fish_pager_color_description ${color.hex.overlay0}
     '';
 
-    programs.fish = lib.mkMerge [
-      # Darwin exclusive config
-      (lib.mkIf pkgs.stdenv.isDarwin {
-        shellInit = ''
-          set fish_greeting
-          yes | fish_config theme save "system-theme"
+    programs.fish = let
+      # Only add " | bat" if bat is installed
+      batify = command: command + (lib.optionalString config.programs.bat.enable " | bat");
 
-          set --global --export HOMEBREW_PREFIX "/opt/homebrew"
-          set --global --export HOMEBREW_CELLAR "/opt/homebrew/Cellar"
-          set --global --export HOMEBREW_REPOSITORY "/opt/homebrew"
-          fish_add_path --global --move --path "/opt/homebrew/bin" "/opt/homebrew/sbin"
-          if test -n "$MANPATH[1]"; set --global --export MANPATH ''' $MANPATH; end;
-          if not contains "/opt/homebrew/share/info" $INFOPATH; set --global --export INFOPATH "/opt/homebrew/share/info" $INFOPATH; end;
-        '';
+      # Same as above but with args for bat
+      batifyWithArgs = command: args: command + (lib.optionalString config.programs.bat.enable (" | bat " + args));
 
-        shellAbbrs = let
-          # These can be used for my config.homemodules and for HM config.programs,
-          # as both of these add the package to home.packages
-          hasHomePackage = package: (mylib.modules.contains config.home.packages package);
+      # These can be used for my config.homemodules and for HM config.programs,
+      # as both of these add the package to home.packages
+      hasHomePackage = package: (mylib.modules.contains config.home.packages package);
 
-          # Only add fish abbr if package is installed
-          abbrify = package: abbr: (lib.optionalAttrs (hasHomePackage package) abbr);
-        in
-          lib.mkMerge [
+      # Only add fish abbr if package is installed
+      abbrify = package: abbr: (lib.optionalAttrs (hasHomePackage package) abbr);
+    in
+      lib.mkMerge [
+        # Darwin exclusive config
+        (lib.mkIf pkgs.stdenv.isDarwin {
+          shellInit = ''
+            set fish_greeting
+            yes | fish_config theme save "system-theme"
+
+            set --global --export HOMEBREW_PREFIX "/opt/homebrew"
+            set --global --export HOMEBREW_CELLAR "/opt/homebrew/Cellar"
+            set --global --export HOMEBREW_REPOSITORY "/opt/homebrew"
+            fish_add_path --global --move --path "/opt/homebrew/bin" "/opt/homebrew/sbin"
+            if test -n "$MANPATH[1]"; set --global --export MANPATH ''' $MANPATH; end;
+            if not contains "/opt/homebrew/share/info" $INFOPATH; set --global --export INFOPATH "/opt/homebrew/share/info" $INFOPATH; end;
+          '';
+
+          shellAbbrs = lib.mkMerge [
             {
               rebuild = "sudo darwin-rebuild switch --flake .#darwinix";
             }
 
             (abbrify pkgs.nix-search-tv {search = "nix-search-tv print --indexes 'darwin,home-manager,nixpkgs,nur' | fzf --preview 'nix-search-tv preview {}' --scheme history";})
           ];
-      })
+        })
 
-      # Linux exclusive config
-      (lib.mkIf pkgs.stdenv.isLinux {
-        generateCompletions = nixosConfig.programs.fish.generateCompletions;
+        # Linux exclusive config
+        (lib.mkIf pkgs.stdenv.isLinux {
+          generateCompletions = nixosConfig.programs.fish.generateCompletions;
 
-        shellInit = ''
-          set fish_greeting
-          yes | fish_config theme save "system-theme"
-        '';
+          shellInit = ''
+            set fish_greeting
+            yes | fish_config theme save "system-theme"
+          '';
 
-        functions = lib.mergeAttrsList [
-          (lib.optionalAttrs config.homemodules.nnn.enable {
-            nnncd = {
-              wraps = "nnn";
-              description = "support nnn quit and change directory";
-              body = ''
-                # Block nesting of nnn in subshells
-                if test -n "$NNNLVL" -a "$NNNLVL" -ge 1
-                    echo "nnn is already running"
-                    return
-                end
+          functions = lib.mergeAttrsList [
+            (lib.optionalAttrs config.homemodules.nnn.enable {
+              nnncd = {
+                wraps = "nnn";
+                description = "support nnn quit and change directory";
+                body = ''
+                  # Block nesting of nnn in subshells
+                  if test -n "$NNNLVL" -a "$NNNLVL" -ge 1
+                      echo "nnn is already running"
+                      return
+                  end
 
-                # The behaviour is set to cd on quit (nnn checks if NNN_TMPFILE is set)
-                # If NNN_TMPFILE is set to a custom path, it must be exported for nnn to
-                # see. To cd on quit only on ^G, remove the "-x" from both lines below,
-                # without changing the paths.
-                if test -n "$XDG_CONFIG_HOME"
-                    set -x NNN_TMPFILE "$XDG_CONFIG_HOME/nnn/.lastd"
-                else
-                    set -x NNN_TMPFILE "$HOME/.config/nnn/.lastd"
-                end
+                  # The behaviour is set to cd on quit (nnn checks if NNN_TMPFILE is set)
+                  # If NNN_TMPFILE is set to a custom path, it must be exported for nnn to
+                  # see. To cd on quit only on ^G, remove the "-x" from both lines below,
+                  # without changing the paths.
+                  if test -n "$XDG_CONFIG_HOME"
+                      set -x NNN_TMPFILE "$XDG_CONFIG_HOME/nnn/.lastd"
+                  else
+                      set -x NNN_TMPFILE "$HOME/.config/nnn/.lastd"
+                  end
 
-                # Unmask ^Q (, ^V etc.) (if required, see `stty -a`) to Quit nnn
-                # stty start undef
-                # stty stop undef
-                # stty lwrap undef
-                # stty lnext undef
+                  # Unmask ^Q (, ^V etc.) (if required, see `stty -a`) to Quit nnn
+                  # stty start undef
+                  # stty stop undef
+                  # stty lwrap undef
+                  # stty lnext undef
 
-                # The command function allows one to alias this function to `nnn` without
-                # making an infinitely recursive alias
-                command nnn $argv
+                  # The command function allows one to alias this function to `nnn` without
+                  # making an infinitely recursive alias
+                  command nnn $argv
 
-                if test -e $NNN_TMPFILE
-                    source $NNN_TMPFILE
-                    rm $NNN_TMPFILE
-                end
-              '';
-            };
-          })
-        ];
+                  if test -e $NNN_TMPFILE
+                      source $NNN_TMPFILE
+                      rm $NNN_TMPFILE
+                  end
+                '';
+              };
+            })
+          ];
 
-        shellAbbrs = let
-          # Only add " | bat" if bat is installed
-          batify = command: command + (lib.optionalString config.programs.bat.enable " | bat");
-
-          # Same as above but with args for bat
-          batifyWithArgs = command: args: command + (lib.optionalString config.programs.bat.enable (" | bat " + args));
-
-          # These can be used for my config.homemodules and for HM config.programs,
-          # as both of these add the package to home.packages
-          hasHomePackage = package: (mylib.modules.contains config.home.packages package);
-
-          # Only add fish abbr if package is installed
-          abbrify = package: abbr: (lib.optionalAttrs (hasHomePackage package) abbr);
-        in
-          lib.mkMerge [
+          shellAbbrs = lib.mkMerge [
             # Abbrs that are always available are defined here.
             {
-              # Fish
-              h = batifyWithArgs "history" "-l fish"; # -l fish sets syntax highlighting to fish
-              abbrs = batifyWithArgs "abbr" "-l fish";
-
               # Tools
               blk = batify "lsblk -o NAME,LABEL,PARTLABEL,FSTYPE,SIZE,FSUSE%,MOUNTPOINT";
               blkids = batify "lsblk -o NAME,LABEL,FSTYPE,SIZE,PARTLABEL,MODEL,ID,UUID";
-              nd = "nix develop";
-              nb = "nix build -L";
-              ns = "nix shell nixpkgs#";
-              nr = "nix run";
 
               ghidra = "_JAVA_AWT_WM_NONREPARENTING=1 ghidra"; # env var for wayland
             }
@@ -168,23 +152,15 @@ in {
 
             # (abbrify pkgs.sd {sed = "sd";})
           ];
-      })
+        })
 
-      # Common config
-      {
-        enable = true;
+        # Common config
+        {
+          enable = true;
 
-        shellAbbrs = let
-          # These can be used for my config.homemodules and for HM config.programs,
-          # as both of these add the package to home.packages
-          hasHomePackage = package: (mylib.modules.contains config.home.packages package);
-
-          # Only add fish abbr if package is installed
-          abbrify = package: abbr: (lib.optionalAttrs (hasHomePackage package) abbr);
-        in
-          lib.mkMerge [
+          shellAbbrs = lib.mkMerge [
             {
-              # Shell basics
+              # Shell
               c = "clear";
               q = "exit";
               mkdir = "mkdir -p"; # also create parents (-p)
@@ -193,6 +169,16 @@ in {
               cd = "z"; # zoxide for quickjump to previously visited locations
               cdd = "zi";
               b = "z -"; # jump to previous dir
+
+              # Fish
+              h = batifyWithArgs "history" "-l fish"; # -l fish sets syntax highlighting to fish
+              abbrs = batifyWithArgs "abbr" "-l fish";
+
+              # Nix
+              nd = "nix develop";
+              nb = "nix build -L";
+              ns = "nix shell nixpkgs#";
+              nr = "nix run";
               nps = "nps -e";
             }
 
@@ -244,9 +230,9 @@ in {
             (abbrify pkgs.lazygit {lg = "lazygit";})
           ];
 
-        plugins = [];
-      }
-    ];
+          plugins = [];
+        }
+      ];
 
     programs.starship = {
       enable = true;
