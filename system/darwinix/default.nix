@@ -84,13 +84,14 @@
         Clicking = true; # Tap to click
         Dragging = true; # Double tap to drag
         TrackpadRightClick = true;
+        TrackpadPinch = true;
       };
     };
 
     keyboard = {
       enableKeyMapping = true;
-      swapLeftCtrlAndFn = true;
-      swapLeftCommandAndLeftAlt = true;
+      swapLeftCtrlAndFn = false;
+      swapLeftCommandAndLeftAlt = false;
     };
   };
 
