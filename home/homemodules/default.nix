@@ -3,11 +3,14 @@
     # Obsolete modules are kept in "1_deprecated" for reference.
 
     # My own HM modules
+    ./bat
     ./beets
     ./btop
+    ./cava
     ./chromium
     ./color
     ./docs
+    ./fastfetch
     ./fcitx
     ./firefox
     ./fish
@@ -23,6 +26,8 @@
     ./rmpc
     ./rofi
     ./waybar
+    ./ssh
+    ./tmux
     ./yazi
     ./zathura
 
