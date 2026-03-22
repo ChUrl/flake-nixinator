@@ -115,7 +115,7 @@ in {
               "critical" = 85;
             };
             format = "<span></span> {load}%";
-            format-warning = "<span color='#${color.hex.yellow}'><span></span> {load}%</span>";
+            format-warning = "<span color='#${color.hex.peach}'><span></span> {load}%</span>";
             format-critical = "<span color='#${color.hex.red}'><span></span> {load}%</span>";
             on-click = "kitty --title=Btop btop";
             tooltip = false;
@@ -127,7 +127,7 @@ in {
               "critical" = 85;
             };
             format = "<span></span> {percentage}%";
-            format-warning = "<span color='#${color.hex.yellow}'><span></span> {percentage}%</span>";
+            format-warning = "<span color='#${color.hex.peach}'><span></span> {percentage}%</span>";
             format-critical = "<span color='#${color.hex.red}'><span></span> {percentage}%</span>";
             on-click = "kitty --title=Btop btop";
             tooltip = true;
@@ -144,7 +144,7 @@ in {
               mode-mon-col = 3;
               on-scroll = -1;
               format = {
-                months = "<span color='#${color.hex.yellow}'><b>{}</b></span>";
+                months = "<span color='#${color.hex.peach}'><b>{}</b></span>";
                 days = "<span color='#${color.hex.flamingo}'><b>{}</b></span>";
                 weeks = "<span color='#${color.hex.teal}'><b>W{}</b></span>";
                 weekdays = "<span color='#${color.hex.lavender}'><b>{}</b></span>";
