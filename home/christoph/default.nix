@@ -718,8 +718,9 @@ in
             controlPersist = "no";
           };
           "nixinator" = {
+            port = 5432;
             user = "christoph";
-            hostname = "192.168.86.50";
+            hostname = "vps.chriphost.de";
           };
           "servenix" = {
             user = "christoph";
