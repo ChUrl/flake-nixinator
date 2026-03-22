@@ -154,6 +154,9 @@
     };
 
     services = {
+      sketchybar = {
+        enable = true;
+      };
     };
   };
 }
