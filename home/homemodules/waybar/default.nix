@@ -111,11 +111,9 @@ in {
 
           cpu = {
             states = {
-              "warning" = 65;
               "critical" = 85;
             };
             format = "<span></span> {load}%";
-            format-warning = "<span color='#${color.hex.peach}'><span></span> {load}%</span>";
             format-critical = "<span color='#${color.hex.red}'><span></span> {load}%</span>";
             on-click = "kitty --title=Btop btop";
             tooltip = false;
@@ -123,11 +121,9 @@ in {
 
           memory = {
             states = {
-              "warning" = 65;
               "critical" = 85;
             };
             format = "<span></span> {percentage}%";
-            format-warning = "<span color='#${color.hex.peach}'><span></span> {percentage}%</span>";
             format-critical = "<span color='#${color.hex.red}'><span></span> {percentage}%</span>";
             on-click = "kitty --title=Btop btop";
             tooltip = true;
@@ -194,24 +190,26 @@ in {
         }
 
         /* Background colors */
-        #custom-launcher          {background-color: #${color.hex.accent};}
-        #workspaces button        {background-color: #${color.hex.lavender};}
-        #workspaces button.active {background-color: #${color.hex.pink};}
-        #window                   {background-color: #${color.hex.maroon};}
-        #systemd-failed-units     {background-color: #${color.hex.red};}
-        #mpris                    {background-color: #${color.hex.accent};}
-        #privacy                  {background-color: #${color.hex.red};}
-        #pulseaudio               {background-color: #${color.hex.maroon};}
-        #network                  {background-color: #${color.hex.peach};}
-        #disk                     {background-color: #${color.hex.yellow};}
-        #cpu                      {background-color: #${color.hex.green};}
-        #memory                   {background-color: #${color.hex.teal};}
-        #clock                    {background-color: #${color.hex.sky};}
-        #tray                     {background-color: #${color.hex.accent};}
+        #custom-launcher           {background-color: #${color.hex.accent};}
+        #workspaces button         {background-color: #${color.hex.blue};}
+        #workspaces button.empty   {background-color: #${color.hex.lavender};}
+        #workspaces button.active  {background-color: #${color.hex.green};}
+        #workspaces button.urgent  {background-color: #${color.hex.red};}
+        #window                    {background-color: #${color.hex.maroon};}
+
+        #mpris                     {background-color: #${color.hex.accent};}
+
+        #privacy                   {background-color: #${color.hex.red};}
+        #pulseaudio                {background-color: #${color.hex.maroon};}
+        #network                   {background-color: #${color.hex.peach};}
+        #disk                      {background-color: #${color.hex.yellow};}
+        #cpu                       {background-color: #${color.hex.green};}
+        #memory                    {background-color: #${color.hex.teal};}
+        #clock                     {background-color: #${color.hex.sky};}
+        #tray                      {background-color: #${color.hex.accent};}
 
         /* Square Widgets */
         #custom-launcher,
-        #systemd-failed-units,
         #mpris,
         #tray {
           color: #${color.hex.mantle};
@@ -257,10 +255,6 @@ in {
         #custom-launcher {
           font-size: 26px;
           padding-right: 13px;
-          margin: 0px 5px 0px 0px;
-        }
-
-        #systemd-failed-units {
           margin: 0px 5px 0px 0px;
         }
 
