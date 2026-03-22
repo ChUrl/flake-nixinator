@@ -129,7 +129,10 @@
   };
 
   services = {
-    # aerospace = {};
+    # For another time maybe
+    # sketchybar = {};
+    # skhd = {};
+    # yabai = {};
   };
 
   # NOTE: Not installed automatically
