@@ -124,6 +124,7 @@
         # 31431 # Parsec
         5173 # SvelteKit
         8090 # PocketBase
+        8188 # ComfyUI
       ];
 
       allowedUDPPorts = [
@@ -134,6 +135,7 @@
         # 31431 # Parsec
         5173 # SvelteKit
         8090 # PocketBase
+        8188 # ComfyUI
       ];
     };
 

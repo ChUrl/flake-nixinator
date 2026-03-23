@@ -4,7 +4,8 @@
   pkgs,
   ...
 }: let
-  comfyuiVersion = "cu128-slim-20260316";
+  # comfyuiVersion = "cu128-slim-20260316";
+  comfyuiVersion = "cu128-megapak-pt29-20260221";
 in {
   virtualisation.oci-containers.containers = {
     comfyui = {
@@ -42,6 +43,13 @@ in {
         PUID = "1000";
         PGID = "1000";
         TZ = "Europe/Berlin";
+
+        # https://github.com/Comfy-Org/ComfyUI/blob/master/comfy/cli_args.py
+        # --use-sage-attention
+        # --lowvram
+        # --disable-pinned-memory
+        # --cache-none
+        CLI_ARGS = "--use-sage-attention";
       };
 
       extraOptions = [
