@@ -360,6 +360,7 @@ in
             cifs-utils # Mount samba shares
             nfs-utils # Mount NFS shares
             sshfs # Mount remote directories via SSH
+            speedtest-cli
 
             # Run unpatched binaries on NixOS
             # Sets NIX_LD_LIBRARY_PATH and NIX_LD variables for nix-ld.
