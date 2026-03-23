@@ -107,13 +107,22 @@
         rclone
         httpie
 
+        jellyfin-tui
+
         inputs.nps.packages.${pkgs.stdenv.hostPlatform.system}.default
 
         cachix
 
         # GUI
         ripdrag
-        jellyfin-tui
+
+        # Darwin
+        # alt-tab-macos
+        # discord # HomeBrew
+        # obsidian # HomeBrew
+        # nextcloud-client # HomeBrew
+        # protonvpn-gui # HomeBrew
+        # iina
       ];
 
       stateVersion = "25.11";
