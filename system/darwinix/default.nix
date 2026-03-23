@@ -155,6 +155,7 @@
       "nextcloud"
       "obsidian"
       "protonvpn"
+      "signal"
     ];
   };
 
