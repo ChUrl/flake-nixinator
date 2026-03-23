@@ -139,7 +139,23 @@
   homebrew = {
     enable = true;
     enableFishIntegration = true;
-    # brews = [];
+
+    onActivation = {
+      autoUpdate = true;
+      cleanup = "zap"; # Uninstall unlisted casks and associated files on rebuild
+      upgrade = true;
+    };
+
+    brews = [];
+
+    casks = [
+      "alt-tab"
+      "discord"
+      "iina"
+      "nextcloud"
+      "obsidian"
+      "protonvpn"
+    ];
   };
 
   # Set Git commit hash for darwin-version.
