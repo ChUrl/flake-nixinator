@@ -106,6 +106,7 @@
         rsync
         rclone
         httpie
+        speedtest-cli
 
         jellyfin-tui
 
