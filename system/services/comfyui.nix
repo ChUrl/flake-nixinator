@@ -45,11 +45,11 @@ in {
         TZ = "Europe/Berlin";
 
         # https://github.com/Comfy-Org/ComfyUI/blob/master/comfy/cli_args.py
-        # --use-sage-attention
+        # --use-sage-attention # => OOM
         # --lowvram
         # --disable-pinned-memory
         # --cache-none
-        CLI_ARGS = "--use-sage-attention --cache-none --disable-pinned-memory";
+        # CLI_ARGS = "--use-sage-attention";
       };
 
       extraOptions = [
