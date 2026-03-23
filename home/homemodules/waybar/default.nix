@@ -77,11 +77,11 @@ in {
                 tooltip = true;
                 tooltip-icon-size = 24;
               }
-              {
-                type = "audio-out";
-                tooltip = true;
-                tooltip-icon-size = 24;
-              }
+              # {
+              #   type = "audio-out";
+              #   tooltip = true;
+              #   tooltip-icon-size = 24;
+              # }
               {
                 type = "audio-in";
                 tooltip = true;
@@ -105,26 +105,29 @@ in {
           };
 
           disk = {
+            interval = 5;
             format = "<span>󰋊</span> {percentage_used}%";
             on-click = "kitty --hold --title=Duf duf --hide-mp '/var/*,/etc/*,/usr/*,/home/christoph/.*' -width 120";
           };
 
           cpu = {
-            states = {
-              "critical" = 85;
-            };
+            interval = 1;
+            # states = {
+            #   "critical" = 85;
+            # };
             format = "<span></span> {load}%";
-            format-critical = "<span color='#${color.hex.red}'><span></span> {load}%</span>";
+            # format-critical = "<span color='#${color.hex.red}'><span></span> {load}%</span>";
             on-click = "kitty --title=Btop btop";
             tooltip = false;
           };
 
           memory = {
-            states = {
-              "critical" = 85;
-            };
+            interval = 1;
+            # states = {
+            #   "critical" = 85;
+            # };
             format = "<span></span> {percentage}%";
-            format-critical = "<span color='#${color.hex.red}'><span></span> {percentage}%</span>";
+            # format-critical = "<span color='#${color.hex.red}'><span></span> {percentage}%</span>";
             on-click = "kitty --title=Btop btop";
             tooltip = true;
             tooltip-format = "RAM:  {used}GiB / {total}GiB\nSwap: {swapUsed}GiB / {swapTotal}GiB";
