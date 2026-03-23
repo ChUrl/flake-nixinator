@@ -165,7 +165,7 @@ in {
               q = "exit";
               mkdir = "mkdir -p"; # also create parents (-p)
               watch = "watch -d -c -n 0.5";
-              sy = "sudo -u ${username} yazi";
+              sy = "sudo yazi";
               cd = "z"; # zoxide for quickjump to previously visited locations
               cdd = "zi";
               b = "z -"; # jump to previous dir
