@@ -5,7 +5,7 @@
   ...
 }: let
   # comfyuiVersion = "cu128-slim-20260316";
-  comfyuiVersion = "cu128-megapak-pt29-20260221";
+  comfyuiVersion = "cu128-megapak-20260323";
 in {
   virtualisation.oci-containers.containers = {
     comfyui = {
@@ -49,7 +49,7 @@ in {
         # --lowvram
         # --disable-pinned-memory
         # --cache-none
-        CLI_ARGS = "--use-sage-attention";
+        CLI_ARGS = "--use-sage-attention --cache-none --disable-pinned-memory";
       };
 
       extraOptions = [
