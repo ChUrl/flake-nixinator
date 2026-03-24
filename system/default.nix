@@ -104,31 +104,7 @@ with mylib.networking; {
   };
 
   # Enable flakes
-  nix = {
-    package = pkgs.nixVersions.stable;
-    extraOptions = ''
-      experimental-features = nix-command flakes pipe-operators
-    '';
-
-    settings.trusted-users = ["root" "${username}"];
-
-    # Auto garbage-collect and optimize store
-    gc.automatic = false; #  Done by nh.clean.enable;
-    gc.options = "--delete-older-than 5d";
-    settings.auto-optimise-store = true;
-    optimise.automatic = true;
-
-    # This will add your inputs as registries, making operations with them (such
-    # as nix shell nixpkgs#name) consistent with your flake inputs.
-    # (Registry contains flakes)
-    registry = lib.mapAttrs' (n: v: lib.nameValuePair n {flake = v;}) inputs;
-
-    # Set NIX_PATH to find nixpgks
-    nixPath = [
-      "nixpkgs=${inputs.nixpkgs.outPath}"
-      "home-manager=${inputs.home-manager.outPath}"
-    ];
-  };
+  nix = mylib.nixos.mkCommonNixSettings username;
 
   # Bootloader/Kernel stuff
   boot = {
