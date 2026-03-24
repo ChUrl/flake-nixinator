@@ -1,4 +1,5 @@
 {
+  mylib,
   config,
   lib,
   pkgs,
@@ -16,14 +17,7 @@ in {
       image = "flor1der/paperless-nextcloud-sync:${paperlessNCVersion}";
       autoStart = true;
 
-      login = {
-        # Uses DockerHub by default
-        # registry = "";
-
-        # DockerHub Credentials
-        username = "christoph.urlacher@protonmail.com";
-        passwordFile = "${config.sops.secrets.docker-password.path}";
-      };
+      login = mylib.containers.mkDockerLogin config;
 
       dependsOn = [];
 
@@ -59,14 +53,7 @@ in {
       image = "redis:7";
       autoStart = true;
 
-      login = {
-        # Uses DockerHub by default
-        # registry = "";
-
-        # DockerHub Credentials
-        username = "christoph.urlacher@protonmail.com";
-        passwordFile = "${config.sops.secrets.docker-password.path}";
-      };
+      login = mylib.containers.mkDockerLogin config;
 
       dependsOn = [];
 
@@ -87,14 +74,7 @@ in {
       image = "postgres:15";
       autoStart = true;
 
-      login = {
-        # Uses DockerHub by default
-        # registry = "";
-
-        # DockerHub Credentials
-        username = "christoph.urlacher@protonmail.com";
-        passwordFile = "${config.sops.secrets.docker-password.path}";
-      };
+      login = mylib.containers.mkDockerLogin config;
 
       dependsOn = [];
 

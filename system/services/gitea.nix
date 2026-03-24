@@ -1,4 +1,5 @@
 {
+  mylib,
   config,
   lib,
   pkgs,
@@ -27,14 +28,7 @@ in {
       image = "postgres:14";
       autoStart = true;
 
-      login = {
-        # Uses DockerHub by default
-        # registry = "";
-
-        # DockerHub Credentials
-        username = "christoph.urlacher@protonmail.com";
-        passwordFile = "${config.sops.secrets.docker-password.path}";
-      };
+      login = mylib.containers.mkDockerLogin config;
 
       dependsOn = [];
 
@@ -59,14 +53,7 @@ in {
       image = "gitea/gitea:${giteaVersion}";
       autoStart = true;
 
-      login = {
-        # Uses DockerHub by default
-        # registry = "";
-
-        # DockerHub Credentials
-        username = "christoph.urlacher@protonmail.com";
-        passwordFile = "${config.sops.secrets.docker-password.path}";
-      };
+      login = mylib.containers.mkDockerLogin config;
 
       dependsOn = [
         "gitea-db"
@@ -107,14 +94,7 @@ in {
       image = "gitea/act_runner:${runnerVersion}"; # NOTE: vegardit has other runner images
       autoStart = true;
 
-      login = {
-        # Uses DockerHub by default
-        # registry = "";
-
-        # DockerHub Credentials
-        username = "christoph.urlacher@protonmail.com";
-        passwordFile = "${config.sops.secrets.docker-password.path}";
-      };
+      login = mylib.containers.mkDockerLogin config;
 
       dependsOn = [
         "gitea"

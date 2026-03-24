@@ -1,4 +1,5 @@
 {
+  mylib,
   config,
   lib,
   pkgs,
@@ -18,14 +19,7 @@ in {
       image = "kopia/kopia:${kopiaVersion}";
       autoStart = true;
 
-      login = {
-        # Uses DockerHub by default
-        # registry = "";
-
-        # DockerHub Credentials
-        username = "christoph.urlacher@protonmail.com";
-        passwordFile = "${config.sops.secrets.docker-password.path}";
-      };
+      login = mylib.containers.mkDockerLogin config;
 
       dependsOn = [];
 
