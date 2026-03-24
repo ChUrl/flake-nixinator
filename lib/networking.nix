@@ -43,6 +43,8 @@
     routers,
     nameservers,
     routable,
+    # Extra addresses declared without creating routes (e.g. IPv6 ULA).
+    extraAddresses ? [],
   }: {
     enable = true;
 
@@ -56,7 +58,8 @@
     address = ips;
     gateway = routers;
     dns = nameservers;
-    routes = builtins.map (r: {Gateway = r;}) routers; # TODO: We need to add a way to specify addresses without routes (IPv6 ULA)
+    routes = builtins.map (r: {Gateway = r;}) routers;
+    addresses = builtins.map (a: {Address = a;}) extraAddresses;
 
     # See man systemd.network
     networkConfig = {
