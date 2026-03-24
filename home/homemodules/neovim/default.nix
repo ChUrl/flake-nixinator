@@ -552,6 +552,21 @@ in {
             };
           };
 
+          devdocs = rec {
+            name = "devdocs";
+            pkg = pkgs.vimPlugins.devdocs-nvim;
+            lazy = true;
+            cmd = ["DevDocs"];
+            dependencies = [snacks];
+            config = mkDefaultConfig name;
+            # opts = {
+            #   ensure_installed = [
+            #     "c"
+            #     "cpp"
+            #   ];
+            # };
+          };
+
           direnv = {
             name = "direnv";
             pkg = pkgs.vimPlugins.direnv-vim;
@@ -2160,6 +2175,7 @@ in {
 
           # dap # Debug adapter protocol # TODO:
           # dap-ui # Debugger UI # TODO:
+          devdocs
           diffview # Git diff # TODO: Check the keybindings
 
           direnv # Automatically load local environments
