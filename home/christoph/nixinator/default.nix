@@ -101,6 +101,7 @@
         jellyfin-mpv-shim
         # tidal-hifi
         # tidal-dl-ng # TODO: Borked
+        # spotdl
         tiddl
         picard
         handbrake
