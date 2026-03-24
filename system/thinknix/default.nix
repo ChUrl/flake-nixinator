@@ -46,52 +46,13 @@
       useNetworkManager = false;
 
       networks = {
-        # "10-ether-1G" = mylib.networking.mkStaticSystemdNetwork {
-        #   interface = "ens18";
-        #   ips = ["192.168.86.26/24" "fd00::1a/64"];
-        #   routers = ["192.168.86.5" "fd00::5"];
-        #   nameservers = ["8.8.8.8" "2001:4860:4860::8888"]; # NOTE: Use reliable DNS for servers instead of 127.0.0.1
-        #   routable = true;
-        # };
-
-        # TODO: mylib.networking.mkStaticSystemdNetwork needs improvement to accomodate for this
-        "10-ether-1G" = rec {
-          enable = true;
-
-          # See man systemd.link, man systemd.netdev, man systemd.network
-          matchConfig = {
-            # This corresponds to the [MATCH] section
-            Name = "ens18"; # Match ethernet interface
-          };
-
-          # Static IP + DNS + Gateway
-          address = ["192.168.86.26/24"];
-          gateway = ["192.168.86.5"]; # Don't add "fd00::5", rely on router advertisement instead
-          dns = ["8.8.8.8" "8.8.4.4" "2001:4860:4860::8888" "2001:4860:4860::8844"];
-          routes = builtins.map (r: {Gateway = r;}) gateway;
-
-          # See man systemd.network
-          networkConfig = {
-            # This corresponds to the [NETWORK] section
-            DHCP = "no";
-
-            IPv6AcceptRA = "yes"; # Accept Router Advertisements
-            # MulticastDNS = "no";
-            # LLMNR = "no";
-            # LinkLocalAddressing = "ipv6";
-          };
-
-          addresses = [
-            {
-              # Don't add this to address, we don't want to create any routes with this
-              Address = "fd00::1a/64"; # IPv6 Unique-Local Address (ULA)
-            }
-          ];
-
-          linkConfig = {
-            # This corresponds to the [LINK] section
-            RequiredForOnline = "routable";
-          };
+        "10-ether-1G" = mylib.networking.mkStaticSystemdNetwork {
+          interface = "ens18";
+          ips = ["192.168.86.26/24"];
+          routers = ["192.168.86.5"]; # Don't add "fd00::5", rely on router advertisement instead
+          nameservers = ["8.8.8.8" "8.8.4.4" "2001:4860:4860::8888" "2001:4860:4860::8844"]; # NOTE: Use reliable DNS for servers instead of 127.0.0.1
+          routable = true;
+          extraAddresses = ["fd00::1a/64"]; # IPv6 ULA — declared without creating a route
         };
       };
 
