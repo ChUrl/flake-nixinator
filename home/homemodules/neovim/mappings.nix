@@ -505,6 +505,48 @@ _: let
       action = "<cmd>lua Snacks.picker.help()<cr>";
       options.desc = "Helptags Picker";
     }
+    {
+      mode = "n";
+      key = "<leader>hd";
+      action = "+devdocs";
+    }
+    # {
+    #   mode = "n";
+    #   key = "<leader>hdd";
+    #   action.__raw = ''
+    #     function()
+    #       local devdocs = require("devdocs")
+    #       local installedDocs = devdocs.GetInstalledDocs()
+    #       vim.ui.select(installedDocs, {}, function(selected)
+    #         if not selected then
+    #           return
+    #         end
+    #         local docDir = devdocs.GetDocDir(selected)
+    #         -- prettify the filename as you wish
+    #         Snacks.picker.files({ cwd = docDir })
+    #       end)
+    #     end
+    #   '';
+    #   options.desc = "Open Devdocs";
+    # }
+    {
+      mode = "n";
+      key = "<leader>hdd";
+      action = "<cmd>DevDocs get<cr>";
+      options.desc = "Open Devdocs in Split";
+    }
+    {
+      mode = "n";
+      key = "<leader>hdi";
+      action = "<cmd>DevDocs install<cr>";
+      options.desc = "Install Devdocs";
+    }
+    {
+      mode = "n";
+      key = "<leader>hdD";
+      action = "<cmd>DevDocs delete<cr>";
+      options.desc = "Delete Devdocs";
+    }
   ];
 
   leader-quit = [
