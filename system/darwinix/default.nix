@@ -10,28 +10,7 @@
   hostname,
   ...
 }: {
-  nix = {
-    enable = true;
-
-    package = pkgs.nixVersions.stable;
-    extraOptions = ''
-      experimental-features = nix-command flakes pipe-operators
-    '';
-
-    settings.trusted-users = ["root" "${username}"];
-
-    gc.automatic = false;
-    gc.options = "--delete-older-than 5d";
-    settings.auto-optimise-store = true;
-    optimise.automatic = true;
-
-    registry = lib.mapAttrs' (n: v: lib.nameValuePair n {flake = v;}) inputs;
-
-    nixPath = [
-      "nixpkgs=${inputs.nixpkgs.outPath}"
-      "home-manager=${inputs.home-manager.outPath}"
-    ];
-  };
+  nix = mylib.nixos.mkCommonNixSettings username;
 
   networking = {
     hostName = "${hostname}";
