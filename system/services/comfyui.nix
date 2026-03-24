@@ -1,4 +1,5 @@
 {
+  mylib,
   config,
   lib,
   pkgs,
@@ -12,14 +13,7 @@ in {
       image = "yanwk/comfyui-boot:${comfyuiVersion}";
       autoStart = false;
 
-      login = {
-        # Uses DockerHub by default
-        # registry = "";
-
-        # DockerHub Credentials
-        username = "christoph.urlacher@protonmail.com";
-        passwordFile = "${config.sops.secrets.docker-password.path}";
-      };
+      login = mylib.containers.mkDockerLogin config;
 
       dependsOn = [];
 

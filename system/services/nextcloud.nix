@@ -1,4 +1,5 @@
 {
+  mylib,
   config,
   lib,
   pkgs,
@@ -33,14 +34,7 @@ in {
       image = "postgres:alpine";
       autoStart = true;
 
-      login = {
-        # Uses DockerHub by default
-        # registry = "";
-
-        # DockerHub Credentials
-        username = "christoph.urlacher@protonmail.com";
-        passwordFile = "${config.sops.secrets.docker-password.path}";
-      };
+      login = mylib.containers.mkDockerLogin config;
 
       dependsOn = [];
 
@@ -67,14 +61,7 @@ in {
       image = "redis:alpine";
       autoStart = true;
 
-      login = {
-        # Uses DockerHub by default
-        # registry = "";
-
-        # DockerHub Credentials
-        username = "christoph.urlacher@protonmail.com";
-        passwordFile = "${config.sops.secrets.docker-password.path}";
-      };
+      login = mylib.containers.mkDockerLogin config;
 
       dependsOn = [];
 
@@ -97,14 +84,7 @@ in {
       image = "nextcloud:${nextcloudVersion}";
       autoStart = true;
 
-      login = {
-        # Uses DockerHub by default
-        # registry = "";
-
-        # DockerHub Credentials
-        username = "christoph.urlacher@protonmail.com";
-        passwordFile = "${config.sops.secrets.docker-password.path}";
-      };
+      login = mylib.containers.mkDockerLogin config;
 
       dependsOn = [
         "nextcloud-db"
