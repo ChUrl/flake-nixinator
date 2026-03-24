@@ -21,12 +21,14 @@
     ./neovim
     ./niri
     ./nnn
+    ./packages
     ./paths
     ./qutebrowser
     ./rmpc
     ./rofi
     ./waybar
     ./ssh
+    ./terminal
     ./tmux
     ./yazi
     ./zathura

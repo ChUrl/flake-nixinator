@@ -2,6 +2,7 @@
   imports = [
     # My own HM modules
     ./bat
+    ./btop
     ./color
     ./fastfetch
     ./fish
@@ -9,8 +10,10 @@
     ./kitty
     ./lazygit
     ./neovim
+    ./packages
     ./paths
     ./ssh
+    ./terminal
     ./tmux
     ./yazi
 

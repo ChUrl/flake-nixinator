@@ -8,17 +8,13 @@
   inputs,
   ...
 }: {
-  config = let
-    inherit (config.homemodules) color;
-  in {
+  config = {
     paths = rec {
       nixflake = "${config.home.homeDirectory}/NixFlake";
       dotfiles = "${nixflake}/config";
     };
 
     homemodules = {
-      bat.enable = true;
-
       color = {
         scheme = "catppuccin-mocha";
         accent = "mauve";
@@ -29,29 +25,8 @@
         font = "MonoLisa Alt Script";
       };
 
-      fastfetch.enable = true;
-      fish.enable = true;
-
-      git = {
-        enable = true;
-
-        userName = "Christoph Urlacher";
-        userEmail = "christoph.urlacher@protonmail.com";
-        signCommits = true;
-      };
-
-      kitty.enable = true;
-      lazygit.enable = true;
-
-      neovim = {
-        enable = true;
-        alias = true;
-        neovide = true;
-      };
-
-      ssh.enable = true;
-      tmux.enable = true;
-      yazi.enable = true;
+      packages.enable = true;
+      terminal.enable = true;
     };
 
     home = {
@@ -67,101 +42,12 @@
         TERMINAL = "kitty";
       };
 
-      packages = with pkgs; [
-        (ripgrep.override {withPCRE2 = true;})
-        gdu
-        duf
-        sd
-        fclones
-        tealdeer
-        killall
-        atool
-        exiftool
-        ouch
-        ffmpegthumbnailer
-        mediainfo
-        file
-        unrar
-        p7zip
-        unzip
-        progress
-        tokei
-        nix-search-tv
-        nix-tree
-        just
-
-        ffmpeg-full
-        imagemagick
-
-        poppler-utils
-        pdf2svg
-        pandoc
-
-        dig
-        tcpdump
-        gping
-        curlie
-        wget
-        doggo
-        rsync
-        rclone
-        httpie
-        speedtest-cli
-
-        jellyfin-tui
-
-        inputs.nps.packages.${pkgs.stdenv.hostPlatform.system}.default
-
-        cachix
-
-        # GUI
-        ripdrag
-
-        # Darwin
-        # alt-tab-macos
-        # discord # HomeBrew
-        # obsidian # HomeBrew
-        # nextcloud-client # HomeBrew
-        # protonvpn-gui # HomeBrew
-        # iina
-      ];
+      # packages = with pkgs; []; # Configured in homemodules/packages
 
       stateVersion = "25.11";
     };
 
-    # TODO: Deduplicate with other configs
-    programs = {
-      home-manager.enable = true;
-
-      direnv = {
-        enable = true;
-        nix-direnv.enable = true;
-      };
-
-      eza = {
-        enable = true;
-        enableFishIntegration = config.homemodules.fish.enable;
-      };
-
-      fd.enable = true;
-
-      fzf = {
-        enable = true;
-        enableFishIntegration = config.homemodules.fish.enable;
-      };
-
-      navi = {
-        enable = true;
-        enableFishIntegration = config.homemodules.fish.enable;
-      };
-
-      yt-dlp.enable = true;
-
-      zoxide = {
-        enable = true;
-        enableFishIntegration = config.homemodules.fish.enable;
-      };
-    };
+    programs = {};
 
     services = {};
   };
