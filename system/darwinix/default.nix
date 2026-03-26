@@ -84,10 +84,13 @@
   };
 
   users.users.${username} = {
-    isHidden = false;
+    name = "${username}";
     description = "Christoph";
-    home = "/Users/${username}";
+    uid = 501;
+    gid = 20;
     createHome = false;
+    home = "/Users/${username}";
+    isHidden = false;
 
     # NOTE: Not set if the user already exists on darwin, so use chsh for the root user
     shell = pkgs.fish;
