@@ -136,7 +136,7 @@ in {
           wl-clipboard
 
           # Proton
-          protonvpn-gui
+          proton-vpn
           protonmail-bridge-gui
 
           # GUI stuff
@@ -178,7 +178,7 @@ in {
           # discord
           # obsidian
           # nextcloud-client
-          # protonvpn-gui
+          # proton-vpn
           # iina
         ])
       ];
