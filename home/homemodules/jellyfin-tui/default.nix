@@ -23,10 +23,15 @@ in {
       ];
 
       file = let
+        jellyfinUrl =
+          if pkgs.stdenv.isLinux
+          then "https://jellyfin.local.chriphost.de"
+          else "https://jellyfin.vps.chriphost.de";
+
         configFile = ''
           servers:
           - name: Mafia Dortmund
-            url: https://jellyfin.local.chriphost.de
+            url: ${jellyfinUrl}
             username: root
             password_file: ${systemConfig.sops.secrets.jellyfin-password.path}
             default: true
