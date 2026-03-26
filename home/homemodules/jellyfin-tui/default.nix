@@ -1,12 +1,18 @@
 {
   config,
   nixosConfig,
+  darwinConfig,
   lib,
   mylib,
   pkgs,
   ...
 }: let
   inherit (config.homemodules) jellyfin-tui color;
+
+  systemConfig =
+    if pkgs.stdenv.isLinux
+    then nixosConfig
+    else darwinConfig;
 in {
   options.homemodules.jellyfin-tui = import ./options.nix {inherit lib mylib;};
 
@@ -22,7 +28,7 @@ in {
           - name: Mafia Dortmund
             url: https://jellyfin.local.chriphost.de
             username: root
-            password_file: ${nixosConfig.sops.secrets.jellyfin-password.path}
+            password_file: ${systemConfig.sops.secrets.jellyfin-password.path}
             default: true
 
           # All following settings are OPTIONAL. What you see here are the defaults.
