@@ -36,6 +36,8 @@ in {
           unzip # Unzip stuff
           progress # Find coreutils processes and show their progress
           tokei # Text file statistics in a project
+          ttyper
+          wiki-tui
 
           # Nix
           nix-search-tv # Search nixpkgs, nur, nixos options and homemanager options
@@ -62,6 +64,8 @@ in {
           rclone # Rsync for cloud
           httpie # Cool http client
           speedtest-cli
+          bandwhich
+          snitch
 
           # Use NixCommunity binary cache
           cachix
