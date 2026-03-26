@@ -26,7 +26,7 @@ in {
       defaultSopsFile = ./secrets.yaml;
 
       age = {
-        keyFile = lib.mkDefault "/home/${username}/.secrets/age/age.key";
+        keyFile = lib.mkDefault "${config.users.users.${username}.home}/.secrets/age/age.key";
         generateKey = false;
         sshKeyPaths = [];
       };

@@ -235,6 +235,7 @@ with mylib.networking; {
     description = "Christoph";
     group = "users";
     uid = 1000;
+    home = "/home/${username}";
     extraGroups = [
       "networkmanager"
       "wheel"
