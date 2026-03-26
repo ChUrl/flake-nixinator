@@ -238,11 +238,11 @@ $ mode: echo -e "--export            \tExport public key\n--export-secret-keys\t
 
 % sops
 # Edit secrets.yaml
-sops ~/NixFlake/system/modules/sops-nix/secrets.yaml
+sops ~/NixFlake/system/systemmodules/sops-nix/secrets.yaml
 
 % sops
 # Rekey secrets.yaml
-sops updatekeys ~/NixFlake/system/modules/sops-nix/secrets.yaml
+sops updatekeys ~/NixFlake/system/systemmodules/sops-nix/secrets.yaml
 
 % ssh
 # Generate a new SSH key
