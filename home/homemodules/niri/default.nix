@@ -19,30 +19,43 @@ in {
       }
     ];
 
-    gtk = {
-      enable = true;
-      iconTheme.package = color.iconPackage;
-      iconTheme.name = color.iconTheme;
+    gtk = let
+      gtkConfig = {
+        enable = true;
 
-      colorScheme = "dark";
-      gtk3.colorScheme = "dark";
-      gtk4.colorScheme = "dark";
+        colorScheme = "dark";
 
-      theme = {
-        # name = "adw-gtk3-dark";
-        # package = pkgs.adw-gtk3;
-        name = "catppuccin-mocha-mauve-standard";
-        package = pkgs.catppuccin-gtk.override {
-          variant = "mocha";
-          accents = ["mauve"];
-          size = "standard";
+        iconTheme = {
+          package = color.iconPackage;
+          name = color.iconTheme;
+        };
+
+        cursorTheme = {
+          name = color.cursor;
+          package = color.cursorPackage;
+        };
+
+        theme = {
+          # name = "adw-gtk3-dark";
+          # package = pkgs.adw-gtk3;
+          name = "catppuccin-mocha-mauve-standard";
+          package = pkgs.catppuccin-gtk.override {
+            variant = "mocha";
+            accents = ["mauve"];
+            size = "standard";
+          };
         };
       };
 
-      gtk3.extraConfig = {
+      gtkExtraConfig = {
         gtk-application-prefer-dark-theme = 1;
       };
-    };
+    in
+      gtkConfig
+      // {
+        gtk3 = gtkConfig // {extraConfig = gtkExtraConfig;};
+        gtk4 = gtkConfig // {extraConfig = gtkExtraConfig;};
+      };
 
     dconf = {
       enable = true;
