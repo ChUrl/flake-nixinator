@@ -11,6 +11,10 @@
   ...
 }: {
   systemmodules = {
+    sops-nix.bootSecrets.${username} = [
+      "user-password"
+    ];
+
     sops-nix.secrets.${username} = [
       "ssh-private-key"
       "nix-github-token"
