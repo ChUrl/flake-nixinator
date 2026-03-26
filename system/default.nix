@@ -91,6 +91,7 @@ with mylib.networking; {
       "ssh-private-key"
       "nix-github-token"
       "docker-password"
+      "jellyfin-password"
     ];
   };
 

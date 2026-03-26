@@ -26,6 +26,7 @@ in {
         signCommits = true;
       };
 
+      jellyfin-tui.enable = true;
       kitty.enable = true;
       lazygit.enable = true;
 
