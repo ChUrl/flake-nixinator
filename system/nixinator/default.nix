@@ -158,7 +158,7 @@
   };
 
   boot = {
-    # kernelPackages = pkgs.linuxPackages_zen;
+    kernelPackages = pkgs.linuxPackages_zen;
     # kernelPackages = pkgs.linuxPackages_latest;
 
     # Why do I need to know if something fails during boot???
