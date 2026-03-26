@@ -130,7 +130,7 @@
           ../system/${hostname}
 
           # Import all of my custom system modules
-          # ../system/systemmodules # TODO:
+          ../system/systemmodules/darwin.nix
         ]
 
         extraModules
