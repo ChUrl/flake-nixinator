@@ -22,8 +22,8 @@ in {
         pkgs.jellyfin-tui
       ];
 
-      file = {
-        ".config/jellyfin-tui/config.yaml".text = ''
+      file = let
+        configFile = ''
           servers:
           - name: Mafia Dortmund
             url: https://jellyfin.local.chriphost.de
@@ -72,7 +72,15 @@ in {
             prefetch-playlist: yes
             replaygain: no
         '';
-      };
+      in
+        lib.mkMerge [
+          (lib.optionalAttrs pkgs.stdenv.isLinux {
+            ".config/jellyfin-tui/config.yaml".text = configFile;
+          })
+          (lib.optionalAttrs pkgs.stdenv.isDarwin {
+            "Library/Application Support/jellyfin-tui/config.yaml".text = configFile;
+          })
+        ];
     };
   };
 }
