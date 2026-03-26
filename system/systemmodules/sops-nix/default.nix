@@ -33,10 +33,16 @@ in {
 
       secrets = let
         mkSecret = name: {
-          ${name} = {
-            owner = config.users.users.${username}.name;
-            group = config.users.users.${username}.group;
-          };
+          ${name} = lib.mkMerge [
+            (lib.optionalAttrs pkgs.stdenv.isLinux {
+              owner = config.users.users.${username}.name;
+              group = config.users.users.${username}.group;
+            })
+            (lib.optionalAttrs pkgs.stdenv.isDarwin {
+              owner = config.users.users.${username}.name;
+              group = "staff"; # Apparently there's no way to get the primary group?
+            })
+          ];
         };
 
         mkBootSecret = name: {
