@@ -10,6 +10,15 @@
   hostname,
   ...
 }: {
+  systemmodules = {
+    sops-nix.secrets.${username} = [
+      "ssh-private-key"
+      "nix-github-token"
+      "docker-password"
+      "jellyfin-password"
+    ];
+  };
+
   nix = mylib.nixos.mkCommonNixSettings username;
 
   networking = {
