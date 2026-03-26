@@ -221,7 +221,9 @@
         hostname = "darwinix";
         username = "christoph";
         headless = false;
-        extraModules = [];
+        extraModules = [
+          inputs.sops-nix.darwinModules.sops
+        ];
       };
     };
 
