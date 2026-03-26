@@ -7,6 +7,7 @@
     ./fastfetch
     ./fish
     ./git
+    ./jellyfin-tui
     ./kitty
     ./lazygit
     ./neovim

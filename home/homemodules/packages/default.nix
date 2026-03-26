@@ -74,7 +74,7 @@ in {
         # Common !headless packages
         (lib.optionals (!headless) [
           ripdrag # drag & drop from terminal
-          jellyfin-tui
+          # jellyfin-tui # Use module
         ])
 
         # Linux exclusive packages
@@ -157,7 +157,6 @@ in {
           ferdium
           gparted
           # feishin # electron :(
-          jellyfin-tui
           playerctl # Media player control
           czkawka-full # file deduplicator
 

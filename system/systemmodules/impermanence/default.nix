@@ -152,7 +152,7 @@ in {
             (mkUDir ".config/ghidra" m755)
             (mkUDir ".config/impermanence" m755)
             (mkUDir ".config/jellyfin-mpv-shim" m755)
-            (mkUDir ".config/jellyfin-tui" m755) # TODO: Generate this config file, have to use sops because it includes the password in cleartext
+            # (mkUDir ".config/jellyfin-tui" m755) # Configured using nix
             (mkUDir ".config/JetBrains" m755)
             (mkUDir ".config/kdeconnect" m755)
             (mkUDir ".config/keepassxc" m755)
@@ -182,7 +182,7 @@ in {
             (mkUDir ".local/share/hytale-launcher" m755)
             (mkUDir ".local/share/Hytale" m755)
             (mkUDir ".local/share/jellyfin-desktop" m755)
-            (mkUDir ".local/share/jellyfin-tui" m755)
+            # (mkUDir ".local/share/jellyfin-tui" m755) # Configured using nix
             (mkUDir ".local/share/JetBrains" m755) # Unity
             (mkUDir ".local/share/keyrings" m755) # m700
             (mkUDir ".local/share/IsolatedStorage" m755) # JetBrains license data

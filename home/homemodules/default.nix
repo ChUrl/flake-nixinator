@@ -15,6 +15,7 @@
     ./firefox
     ./fish
     ./git
+    ./jellyfin-tui
     ./kitty
     ./lazygit
     ./mpd
