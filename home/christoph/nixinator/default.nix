@@ -109,7 +109,7 @@
 
         # virt-manager # use system program option
         virt-viewer
-        # gnome-boxes # doesn't list VMs imported using virsh
+        gnome-boxes # doesn't list VMs imported using virsh
 
         steam-devices-udev-rules
       ];
