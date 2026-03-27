@@ -107,6 +107,10 @@
         handbrake
         teamspeak6-client
 
+        # virt-manager # use system program option
+        virt-viewer
+        # gnome-boxes # doesn't list VMs imported using virsh
+
         steam-devices-udev-rules
       ];
 

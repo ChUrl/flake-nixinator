@@ -13,6 +13,7 @@ in {
   options.homemodules.packages = import ./options.nix {inherit lib mylib;};
 
   config = lib.mkIf packages.enable {
+    # TODO: Add extra packages option and use that from host-specific configs
     home.packages = with pkgs;
       lib.mkMerge [
         # Common packages

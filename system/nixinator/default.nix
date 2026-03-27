@@ -193,7 +193,25 @@
     # };
   };
 
-  # environment.systemPackages = with pkgs; [];
+  environment.systemPackages = with pkgs; [
+    spice
+    spice-gtk
+  ];
+
+  virtualisation = {
+    libvirtd = {
+      enable = true;
+      qemu = {
+        package = pkgs.qemu_kvm;
+        # ovmf.enable = true; # deprecated
+        swtpm.enable = true;
+        runAsRoot = true;
+      };
+    };
+    spiceUSBRedirection.enable = true;
+  };
+
+  networking.firewall.trustedInterfaces = ["virbr0"]; # libvirt
 
   programs = {
     ausweisapp = {
@@ -205,6 +223,8 @@
       enable = true;
       gdb = true;
     };
+
+    virt-manager.enable = true;
   };
 
   services = {

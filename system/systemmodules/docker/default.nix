@@ -72,7 +72,6 @@ in {
         if docker.podman
         then "podman"
         else "docker"; # "docker" or "podman"
-      libvirtd.enable = true;
     };
 
     systemd.services = let
