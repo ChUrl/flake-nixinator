@@ -689,6 +689,22 @@ in {
               command = "waypaper --wallpaper ${config.paths.nixflake}/wallpapers/$OPTION0";
               rofiCmd = "walker -d";
             };
+            # No lectures anymore :) - Kept as example
+            lecturesMenu = mylib.rofi.mkMenu {
+              prompt = "Lecture";
+              layers = [
+                "eza -1 -D ~/Notes/TU"
+                "eza -1 -D ~/Notes/TU/$OPTION0"
+                "eza -1 ~/Notes/TU/$OPTION0/$OPTION1 | grep '.pdf'"
+              ];
+              prompts = [
+                "Select Lecture"
+                "Select Subfolder"
+                "Select Deck"
+              ];
+              command = "xdg-open ~/Notes/TU/$OPTION0/$OPTION1/$OPTION2";
+              rofiCmd = "walker -d";
+            };
             # niriMenu = mylib.rofi.mkMenu {
             #   prompt = "Niri";
             #   layers = [
@@ -707,28 +723,15 @@ in {
                 {
                   "  Control Session" = "${sessionMenu}/bin/rofi-menu-Session";
                   "󰸉  Change Wallpaper" = "${wallpaperMenu}/bin/rofi-menu-Wallpaper";
-                  # "  Niri Actions" = "${niriMenu}/bin/rofi-menu-Niri";
                   "󰋗  View Keybindings" = "niri msg action show-hotkey-overlay";
+                  "  Open Lecture Material" = "${lecturesMenu}/bin/rofi-menu-Lecture";
+                  # "  Niri Actions" = "${niriMenu}/bin/rofi-menu-Niri";
                   # TODO: What else? SSH menu?
                 }
               ];
               prompts = ["Select Action"];
               rofiCmd = "walker -d";
             };
-            # No lectures anymore :) - Kept as example
-            # lecturesMenu = mylib.rofi.mkMenu {
-            #   prompt = "Lecture";
-            #   layers = [
-            #     "eza -1 -D ~/Notes/TU"
-            #     "eza -1 ~/Notes/TU/$OPTION0/Lecture | grep '.pdf'"
-            #   ];
-            #   prompts = [
-            #     "Select Lecture"
-            #     "Select Deck"
-            #   ];
-            #   command = "xdg-open ~/Notes/TU/$OPTION0/Lecture/$OPTION1";
-            #   rofiCmd = "walker -d";
-            # };
           in {
             # DMenu
             "Mod+Shift+A" = {
