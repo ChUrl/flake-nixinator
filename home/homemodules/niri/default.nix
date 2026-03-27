@@ -145,6 +145,7 @@ in {
         wiremix # Audio control
         swww
         waypaper
+        wtype # For elephant
 
         # GTK apps (look good and work well with xdg portals)
         nautilus # Fallback file chooser used by xdg-desktop-portal-gnome
@@ -208,6 +209,10 @@ in {
             default = ["desktopapplications"];
           };
           empty = ["desktopapplications"];
+
+          selection_wrap = true;
+          hide_quick_activation = true;
+          actions_as_menu = true;
         };
 
         themes."cattpuccin-mocha" = let
@@ -657,8 +662,109 @@ in {
           };
 
           # TODO: Move values to config option and set in home/christoph/niri.nix
-          binds = with config.lib.niri.actions; {
+          binds = with config.lib.niri.actions; let
+            sessionMenu = mylib.rofi.mkMenu {
+              prompt = "Session";
+              layers = [
+                {
+                  "󰤂  Poweroff" = "poweroff";
+                  "󰜉  Reboot" = "reboot";
+                  "󰌾  Lock" = "loginctl lock-session";
+                  # "  Reload Hyprpanel" = "systemctl --user restart hyprpanel.service";
+                  # "  Reload Hyprland" = "hyprctl reload";
+                  # "  Exit Hyprland" = "hyprctl dispatch exit";
+                  "  Exit Niri" = "niri msg action quit";
+                }
+              ];
+              prompts = ["Select Session Action"];
+              rofiCmd = "walker -d";
+            };
+            wallpaperMenu = mylib.rofi.mkMenu {
+              prompt = "Wallpaper";
+              layers = [
+                "eza -1 ${config.paths.nixflake}/wallpapers"
+              ];
+              prompts = ["Select Wallpaper"];
+              # Use waypaper instead of swww directly, so the chosen wallpaper will be restored after reboot
+              command = "waypaper --wallpaper ${config.paths.nixflake}/wallpapers/$OPTION0";
+              rofiCmd = "walker -d";
+            };
+            # niriMenu = mylib.rofi.mkMenu {
+            #   prompt = "Niri";
+            #   layers = [
+            #     {
+            #       "󰹑  Take Region Screenshot" = "niri msg action screenshot -p false";
+            #       "󰹑  Take Window Screenshot" = "niri msg action screenshot-window -p false -d true";
+            #       "󰹑  Take Full-Screen Screenshot" = "niri msg action screenshot-screen -p false -d true";
+            #     }
+            #   ];
+            #   prompts = ["Execute Niri Action"];
+            #   rofiCmd = "walker -d";
+            # };
+            globalMenu = mylib.rofi.mkMenu {
+              prompt = "Global";
+              layers = [
+                {
+                  "  Control Session" = "${sessionMenu}/bin/rofi-menu-Session";
+                  "󰸉  Change Wallpaper" = "${wallpaperMenu}/bin/rofi-menu-Wallpaper";
+                  # "  Niri Actions" = "${niriMenu}/bin/rofi-menu-Niri";
+                  "󰋗  View Keybindings" = "niri msg action show-hotkey-overlay";
+                  # TODO: What else? SSH menu?
+                }
+              ];
+              prompts = ["Select Action"];
+              rofiCmd = "walker -d";
+            };
+            # No lectures anymore :) - Kept as example
+            # lecturesMenu = mylib.rofi.mkMenu {
+            #   prompt = "Lecture";
+            #   layers = [
+            #     "eza -1 -D ~/Notes/TU"
+            #     "eza -1 ~/Notes/TU/$OPTION0/Lecture | grep '.pdf'"
+            #   ];
+            #   prompts = [
+            #     "Select Lecture"
+            #     "Select Deck"
+            #   ];
+            #   command = "xdg-open ~/Notes/TU/$OPTION0/Lecture/$OPTION1";
+            #   rofiCmd = "walker -d";
+            # };
+          in {
+            # DMenu
+            "Mod+Shift+A" = {
+              action = spawn "walker" "-m" "providerlist";
+              hotkey-overlay = {title = "Toggle the launcher.";};
+            };
+            "Mod+A" = {
+              action = spawn "walker" "-m" "desktopapplications";
+              hotkey-overlay = {title = "Toggle the application launcher.";};
+            };
+            "Mod+C" = {
+              action = spawn "walker" "-m" "clipboard";
+              hotkey-overlay = {title = "Show clipboard history.";};
+            };
+            "Mod+Escape" = {
+              action = spawn "${sessionMenu}/bin/rofi-menu-Session";
+              hotkey-overlay = {title = "Toggle the session menu.";};
+            };
+            "Mod+W" = {
+              action = spawn "${wallpaperMenu}/bin/rofi-menu-Wallpaper";
+              hotkey-overlay = {title = "Open wallpaper menu.";};
+            };
+            "Mod+D" = {
+              action = spawn "${globalMenu}/bin/rofi-menu-Global";
+              hotkey-overlay = {title = "Open global menu.";};
+            };
+
             # Applications
+            "Mod+Ctrl+W" = {
+              action = spawn "waypaper";
+              hotkey-overlay = {title = "Open waypaper.";};
+            };
+            "Mod+Shift+W" = {
+              action = spawn "waypaper" "--random";
+              hotkey-overlay = {title = "Select random wallpaper.";};
+            };
             "Mod+T" = {
               action = spawn "kitty";
               hotkey-overlay = {title = "Spawn Kitty.";};
@@ -691,52 +797,24 @@ in {
               action = spawn "neovide" "${config.paths.dotfiles}/flake.nix";
               hotkey-overlay = {title = "Edit the NixFlake.";};
             };
-            "Mod+W" = {
-              action = spawn "waypaper";
-              hotkey-overlay = {title = "Open wallpaper chooser.";};
-            };
-            "Mod+Shift+W" = {
-              action = spawn "waypaper" "--random";
-              hotkey-overlay = {title = "Select random wallpaper.";};
-            };
-
-            "Mod+A" = {
-              action = spawn "walker" "-m" "desktopapplications";
-              hotkey-overlay = {title = "Toggle the application launcher.";};
-            };
-            "Mod+Shift+A" = {
-              action = spawn "walker" "-m" "providerlist";
-              hotkey-overlay = {title = "Toggle the launcher.";};
-            };
-            "Mod+Escape" = let
-              powerMenu = mylib.rofi.mkSimpleMenu rec {
-                prompt = "Session";
-                attrs = {
-                  "󰤂  Poweroff" = "poweroff";
-                  "󰜉  Reboot" = "reboot";
-                  "󰌾  Lock" = "loginctl lock-session";
-                  # "  Reload Hyprpanel" = "systemctl --user restart hyprpanel.service";
-                  # "  Reload Hyprland" = "hyprctl reload";
-                  # "  Exit Hyprland" = "hyprctl dispatch exit";
-                };
-                command = "walker -d -p ${prompt}";
-              };
-            in {
-              action = spawn "${powerMenu}/bin/rofi-menu-Session";
-              hotkey-overlay = {title = "Toggle the session menu.";};
-            };
-            "Mod+C" = {
-              action = spawn "walker" "-m" "clipboard";
-              hotkey-overlay = {title = "Show clipboard history.";};
-            };
 
             # Screenshots
             "Mod+S" = {
-              action.screenshot-window = {write-to-disk = true;};
+              action.screenshot-window = {
+                write-to-disk = true;
+                show-pointer = false;
+              };
               hotkey-overlay = {title = "Take a screenshot of the current window.";};
             };
+            "Mod+Ctrl+S" = {
+              action.screenshot-screen = {
+                write-to-disk = true;
+                show-pointer = false;
+              };
+              hotkey-overlay = {title = "Take a screenshot of the current screen.";};
+            };
             "Mod+Shift+S" = {
-              action.screenshot = {show-pointer = true;};
+              action.screenshot = {show-pointer = false;};
               hotkey-overlay = {title = "Take a screenshot of a region.";};
             };
 
