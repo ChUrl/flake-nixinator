@@ -18,7 +18,10 @@ in {
       matchBlocks = {
         "*" = {
           forwardAgent = false;
-          addKeysToAgent = "no";
+          addKeysToAgent =
+            if pkgs.stdenv.isLinux
+            then "no"
+            else "yes"; # Don't have keychain on darwin
           compression = true;
           serverAliveInterval = 0;
           serverAliveCountMax = 3;
