@@ -76,6 +76,8 @@ in {
         (lib.optionals (!headless) [
           ripdrag # drag & drop from terminal
           # jellyfin-tui # Use module
+
+          inputs.masssprings.packages.${stdenv.hostPlatform.system}.default
         ])
 
         # Linux exclusive packages
@@ -166,8 +168,6 @@ in {
           hunspell # I cna't type
           hunspellDicts.en_US
           hunspellDicts.de_DE
-
-          inputs.masssprings.packages.${stdenv.hostPlatform.system}.default
         ])
 
         # Darwin exclusive packages
