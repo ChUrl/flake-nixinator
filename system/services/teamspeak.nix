@@ -5,7 +5,7 @@
   pkgs,
   ...
 }: let
-  teamspeakVersion = "v6.0.0-beta7";
+  teamspeakVersion = "v6.0.0-beta8";
 in {
   virtualisation.oci-containers.containers = {
     teamspeak = {
@@ -24,7 +24,8 @@ in {
       ];
 
       volumes = [
-        "teamspeak_data:/var/tsserver"
+        # "teamspeak_data:/var/tsserver"
+        "teamspeak_data2:/var/tsserver"
       ];
 
       environment = {
