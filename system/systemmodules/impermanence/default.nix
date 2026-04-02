@@ -182,7 +182,7 @@ in {
             (mkUDir ".local/share/hytale-launcher" m755)
             (mkUDir ".local/share/Hytale" m755)
             (mkUDir ".local/share/jellyfin-desktop" m755)
-            # (mkUDir ".local/share/jellyfin-tui" m755) # Configured using nix
+            (mkUDir ".local/share/jellyfin-tui" m755)
             (mkUDir ".local/share/JetBrains" m755) # Unity
             (mkUDir ".local/share/keyrings" m755) # m700
             (mkUDir ".local/share/IsolatedStorage" m755) # JetBrains license data
