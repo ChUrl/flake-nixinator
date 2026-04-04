@@ -179,6 +179,11 @@ in {
           # nextcloud-client
           # proton-vpn
           # iina
+
+          # TODO: Update the docs module to be darwinix compatible
+          #       - The filepaths need to be adapted
+          texliveFull
+          typst
         ])
       ];
 

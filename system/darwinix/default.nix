@@ -141,6 +141,10 @@
       upgrade = true;
     };
 
+    # taps = [
+    #   "homebrew-zathura/zathura"
+    # ];
+
     brews = [];
 
     casks = [
@@ -151,6 +155,9 @@
       "obsidian"
       "protonvpn"
       "signal"
+      # "zathura"
+      # "zathura-pdf-mupdf"
+      "zotero"
     ];
   };
 
