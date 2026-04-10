@@ -131,8 +131,9 @@
 
   swapDevices = [
     {
-      device = "/var/swap";
-      size = 1024 * 16; # Without hibernation 4.0 GB to 0.5 x RAM
+      device = "/swap/swapfile";
+      size = 1024 * 64; # Without hibernation 4.0 GB to 0.5 x RAM
+      randomEncryption.enable = false; # The disk is already encrypted. Useless and might lead to system freeze.
     }
   ];
 
