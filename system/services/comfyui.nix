@@ -43,7 +43,8 @@ in {
         # --lowvram
         # --disable-pinned-memory
         # --cache-none
-        # CLI_ARGS = "--use-sage-attention";
+        # --reserve-vram 1 # (1 or 2) => Assume less vram is available to mitigate OOM due to wrong vram estimation
+        # CLI_ARGS = "--lowvram --disable-pinned-memory --cache-none --reserve-vram 2";
       };
 
       extraOptions = [
