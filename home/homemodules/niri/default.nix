@@ -583,10 +583,6 @@ in {
 
             # Rules for specific windows
             {
-              matches = [{app-id = "Zotero";}];
-              open-on-workspace = "2";
-            }
-            {
               matches = [{app-id = "neovide";}];
               open-on-workspace = "2";
               open-maximized = true;
@@ -603,6 +599,10 @@ in {
             }
             {
               matches = [{app-id = "obsidian";}];
+              open-on-workspace = "3";
+            }
+            {
+              matches = [{app-id = "Zotero";}];
               open-on-workspace = "3";
             }
             {
