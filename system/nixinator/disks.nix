@@ -82,7 +82,8 @@
                     };
                     "swap" = {
                       mountpoint = "/swap";
-                      swap.swapfile.size = "16G";
+                      # Configured in hardware-configuration.nix
+                      # swap.swapfile.size = "64G";
                     };
                   };
                 };
