@@ -39,6 +39,7 @@ in {
           tokei # Text file statistics in a project
           ttyper
           wiki-tui
+          disktui
 
           # Nix
           nix-search-tv # Search nixpkgs, nur, nixos options and homemanager options
