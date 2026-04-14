@@ -143,22 +143,17 @@ in {
           protonmail-bridge-gui
 
           # GUI stuff
-          nautilus # Just in case
           signal-desktop
           anki
-          font-manager # Previews fonts, but doesn't set them
           nextcloud-client
           keepassxc
           thunderbird # TODO: Email module
           obsidian
           zotero
           zeal # docs browser
-          # helvum # unmaintained
-          crosspipe
           vlc
           audacity
-          ferdium
-          gparted
+          # ferdium
           # feishin # electron :(
           playerctl # Media player control
           czkawka-full # file deduplicator
@@ -169,6 +164,18 @@ in {
           hunspell # I cna't type
           hunspellDicts.en_US
           hunspellDicts.de_DE
+
+          # GTK-Apps
+          # gnome-calculator
+          # gnome-calendar
+          # helvum # unmaintained
+          crosspipe
+          nautilus # Just in case
+          font-manager # Previews fonts, but doesn't set them
+          gparted
+          resources
+          # celluloid
+          cine
         ])
 
         # Darwin exclusive packages
