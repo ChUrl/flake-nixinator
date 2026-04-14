@@ -581,6 +581,13 @@ in {
               # opacity = 0.8;
             }
 
+            # Floating + unmaximized windows
+            {
+              matches = [{app-id = "com.github.finefindus.eyedropper";}];
+              open-floating = true;
+              open-maximized = false;
+            }
+
             # Rules for specific windows
             {
               matches = [{app-id = "neovide";}];
