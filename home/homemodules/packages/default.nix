@@ -176,6 +176,7 @@ in {
           resources
           # celluloid
           cine
+          eyedropper
         ])
 
         # Darwin exclusive packages
