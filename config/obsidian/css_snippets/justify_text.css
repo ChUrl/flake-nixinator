@@ -1,0 +1,5 @@
+.justify-text.cm-s-obsidian,
+.justify-text.markdown-preview-view {
+  text-align: justify;
+  hyphens: auto;
+}

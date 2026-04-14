@@ -33,6 +33,7 @@ in {
         "Notes/Obsidian/Chriphost/.obsidian/snippets/latex_preview.css".source = ../../../config/obsidian/css_snippets/latex_preview.css;
         "Notes/Obsidian/Chriphost/.obsidian/snippets/center_image.css".source = ../../../config/obsidian/css_snippets/center_image.css;
         "Notes/Obsidian/Chriphost/.obsidian/snippets/fullwidth_image.css".source = ../../../config/obsidian/css_snippets/fullwidth_image.css;
+        "Notes/Obsidian/Chriphost/.obsidian/snippets/justify_text.css".source = ../../../config/obsidian/css_snippets/justify_text.css;
       };
     };
   };
