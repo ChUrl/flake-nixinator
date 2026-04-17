@@ -32,6 +32,7 @@
     ../services/kiwix.nix
     ../services/kopia.nix
     ../services/nextcloud.nix
+    ../services/ntfy.nix
     ../services/nginx-proxy-manager.nix
     ../services/paperless.nix
     # ../services/plex.nix # Their monetization strategy is absolutely atrocious
@@ -110,6 +111,8 @@
       "kopia-server-password"
       "kopia-user-password"
       "paperless-nextcloud-sync-password"
+      "ntfy-auth-users"
+      "ntfy-auth-tokens"
     ];
   };
 
