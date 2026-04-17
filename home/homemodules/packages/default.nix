@@ -177,6 +177,7 @@ in {
           # celluloid
           cine
           eyedropper
+          junction
         ])
 
         # Darwin exclusive packages
