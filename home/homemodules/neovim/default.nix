@@ -39,6 +39,7 @@ in {
             lua-language-server
             # nil
             basedpyright
+            perl5Packages.PLS
             pyrefly
             ty
             rust-analyzer
@@ -70,6 +71,7 @@ in {
             google-java-format
             html-tidy
             jq # json
+            perl5Packages.PerlTidy
             # prettierd # Use prettier instead because of plugins
             # nodePackages_latest.prettier # Use local install as plugins change per project
             rustfmt
@@ -523,6 +525,7 @@ in {
                 make = ["bake"];
                 markdown = ["prettierd" "prettier"];
                 nix = ["alejandra"];
+                perl = ["perltidy"];
                 python = ["black"];
                 qml = ["qmlformat"];
                 rust = ["rustfmt"];
@@ -956,6 +959,7 @@ in {
                     };
                   };
                 }
+                {name = "perlpls";}
                 {
                   name = "qmlls";
                   extraOptions.cmd = [
