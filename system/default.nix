@@ -144,7 +144,7 @@ with mylib.networking; {
 
   documentation = {
     # NOTE: Disable this while configuring stuff, it's slow
-    enable = true;
+    enable = false;
     man.enable = config.documentation.enable;
     man.cache.enable = true; # Slow but needed for neovim man picker
     info.enable = config.documentation.enable;
