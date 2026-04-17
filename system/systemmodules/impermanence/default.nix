@@ -69,7 +69,10 @@ in {
           # https://github.com/nix-community/impermanence/issues/253
           (mkRDir "/usr/systemd-placeholder" m755)
 
-          (mkDir "mandb" "/var/cache/man" m755)
+          # TODO: Why does this use the mandb user?
+          # TODO: Why does this apparently conflict with comfyui-nix?
+          # (mkDir "mandb" "/var/cache/man" m755)
+
           # (mkRDir "/var/cache/restic-backups-synology" m755)
 
           (mkRDir "/var/db/sudo" m711)
