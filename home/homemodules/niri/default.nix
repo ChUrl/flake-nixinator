@@ -583,9 +583,35 @@ in {
 
             # Floating + unmaximized windows
             {
-              matches = [{app-id = "com.github.finefindus.eyedropper";}];
-              open-floating = true;
+              matches = [
+                {app-id = "com.github.finefindus.eyedropper";}
+                {app-id = "re.sonny.Junction";}
+              ];
+
               open-maximized = false;
+              open-floating = true;
+
+              # default-floating-position = {
+              #   x = 0;
+              #   y = 0;
+              #   relative-to = "center";
+              # };
+            }
+
+            # Specific floating windows
+            {
+              matches = [
+                {app-id = "re.sonny.Junction";}
+              ];
+              default-column-width.fixed = 500;
+              default-window-height.fixed = 250;
+            }
+            {
+              matches = [
+                {app-id = "com.github.finefindus.eyedropper";}
+              ];
+              default-column-width.fixed = 250;
+              default-window-height.fixed = 500;
             }
 
             # Rules for specific windows
