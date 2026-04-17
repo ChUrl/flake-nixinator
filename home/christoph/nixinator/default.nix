@@ -158,6 +158,8 @@
           "com.usebottles.bottles"
           "io.github.lawstorant.boxflat"
 
+          "org.onlyoffice.desktopeditors"
+
           # "com.unity.UnityHub"
         ];
 
