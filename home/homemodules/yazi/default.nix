@@ -86,6 +86,7 @@ in {
               desc = "Open selection";
             }
             {
+              # TODO: For some reason, junction does not exit after choosing an application...
               run = ''junction "$@"'';
               desc = "Open selection in chosen application";
             }
