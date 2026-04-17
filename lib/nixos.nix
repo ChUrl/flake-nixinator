@@ -9,14 +9,40 @@
   mkCommonNixSettings = username: {
     enable = true;
     package = pkgs.nixVersions.stable;
+
     extraOptions = ''
       experimental-features = nix-command flakes pipe-operators
     '';
-    settings.trusted-users = ["root" username];
-    gc.automatic = false;
-    gc.options = "--delete-older-than 5d";
-    settings.auto-optimise-store = true;
-    optimise.automatic = true;
+
+    settings = {
+      trusted-users = ["root" username];
+      auto-optimise-store = true;
+
+      substituters = [
+        "https://cache.nixos.org"
+        "https://nix-community.cachix.org"
+        "https://comfyui.cachix.org"
+        # "https://ai.cachix.org"
+        # "https://app.cachix.org/cache/nixos-rocm"
+      ];
+      trusted-public-keys = [
+        "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+        "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+        "comfyui.cachix.org-1:33mf9VzoIjzVbp0zwj+fT51HG0y31ZTK3nzYZAX0rec="
+        # "ai.cachix.org-1:N9dzRK+alWwoKXQlnn0H6aUx0lU/mspIoz8hMvGvbbc="
+        # "nixos-rocm.cachix.org-1:VEpsf7pRIijjd8csKjFNBGzkBqOmw8H9PRmgAq14LnE="
+      ];
+    };
+
+    gc = {
+      automatic = false;
+      options = "--delete-older-than 5d";
+    };
+
+    optimise = {
+      automatic = true;
+    };
+
     registry = lib.mapAttrs' (n: v: lib.nameValuePair n {flake = v;}) inputs;
     nixPath = [
       "nixpkgs=${inputs.nixpkgs.outPath}"
@@ -49,7 +75,6 @@
 
           # Import the toplevel system configuration module.
           ../system
-          ../system/cachix.nix
 
           # Host specific configuration
           ../system/${hostname}
@@ -122,9 +147,6 @@
           # Replace the default "pkgs" with my configured version
           # to allow installation of unfree software and my own overlays.
           {nixpkgs.pkgs = pkgs;}
-
-          # Import the toplevel system configuration module.
-          ../system/cachix.nix
 
           # Host specific configuration
           ../system/${hostname}
