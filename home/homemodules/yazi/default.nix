@@ -85,6 +85,10 @@ in {
               run = ''xdg-open "$@"'';
               desc = "Open selection";
             }
+            {
+              run = ''junction "$@"'';
+              desc = "Open selection in chosen application";
+            }
           ];
           extract = [
             {
