@@ -30,28 +30,29 @@ in {
 
           (lib.optionals (!headless) [
             # Language servers
+            autotools-language-server
+            basedpyright
             clang-tools
             clojure-lsp
             cmake-language-server
             haskell-language-server
             jdt-language-server
+            just-lsp
             ltex-ls # TODO: Only enable on-demand
             lua-language-server
             # nil
-            basedpyright
-            perl5Packages.PLS
+            # perl5Packages.PLS
             pyrefly
-            ty
+            rPackages.languageserver
             rust-analyzer
             svelte-language-server
             tailwindcss-language-server
             tex-fmt
             texlab
             tinymist
+            ty
             typescript
             vscode-langservers-extracted # includes nodejs
-            autotools-language-server
-            just-lsp
 
             # Linters
             checkstyle # java
@@ -66,20 +67,21 @@ in {
             # statix # nix (doesn't recognize pipe operator)
 
             # Formatters
+            air-formatter
             cljfmt
-            python313Packages.black
             google-java-format
             html-tidy
             jq # json
-            perl5Packages.PerlTidy
-            # prettierd # Use prettier instead because of plugins
+            just-formatter
+            mbake
             # nodePackages_latest.prettier # Use local install as plugins change per project
+            # perl5Packages.PerlTidy
+            # prettierd # Use prettier instead because of plugins
+            python313Packages.black
             rustfmt
             stylua
-            typstyle
-            mbake
-            just-formatter
             tombi
+            typstyle
           ])
 
           [
@@ -88,6 +90,19 @@ in {
             # Dependencies
             lua54Packages.jsregexp # For tree-sitter
             # nodejs_latest
+
+            # TODO: Create a perl module where I can add packages to, so I don't end up with multiple perl installations
+            # TODO: The same is required for python
+            (perl.withPackages (p:
+              with p; [
+                PLS
+                PerlTidy
+                NetOpenSSH
+                DateTime
+                DBI
+                DBDMariaDB
+                CursesUI
+              ]))
 
             nixd
             alejandra # nix
@@ -528,6 +543,7 @@ in {
                 perl = ["perltidy"];
                 python = ["black"];
                 qml = ["qmlformat"];
+                r = ["air"];
                 rust = ["rustfmt"];
                 svelte = ["prettierd" "prettier"];
                 toml = ["tombi"];
@@ -863,9 +879,8 @@ in {
             dependencies = [_lazydev];
             config = let
               servers = mylib.generators.toLuaObject [
+                {name = "autotools-language-server";}
                 {name = "basedpyright";}
-                # {name = "pyrefly";} # TODO: Config
-                # {name = "ty";} # TODO: Config
                 {
                   name = "clangd";
                   extraOptions = {
@@ -917,7 +932,6 @@ in {
                     };
                   };
                 }
-                {name = "autotools-language-server";}
                 # {name = "nil_ls";}
                 {
                   name = "nixd";
@@ -967,6 +981,8 @@ in {
                     "-E" # Use QML_IMPORT_PATH env variable
                   ];
                 }
+                # {name = "pyrefly";} # TODO: Config
+                {name = "r_language_server";}
                 {name = "svelte";}
                 {name = "tailwindcss";}
                 {name = "texlab";}
@@ -978,6 +994,7 @@ in {
                     semanticTokens = "disable";
                   };
                 }
+                # {name = "ty";} # TODO: Config
 
                 # {name = "jdtls";} # Don't set up when using nvim-jdtls
                 # {name = "rust_analyzer";} # Don't set up when using rustaceanvim
