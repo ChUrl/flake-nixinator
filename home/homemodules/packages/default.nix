@@ -39,7 +39,6 @@ in {
           tokei # Text file statistics in a project
           ttyper
           wiki-tui
-          disktui
 
           # Nix
           nix-search-tv # Search nixpkgs, nur, nixos options and homemanager options
@@ -86,7 +85,7 @@ in {
           pastel # Color tools
           nvd # Nix rebuild diff
           nurl # Generate nix fetcher sections based on URLs
-          python313 # Nicer scripting than bash
+          # python313 # Nicer scripting than bash
           lazyjournal # Journalctl viewer
           systemctl-tui
           restic # Backups
@@ -96,6 +95,7 @@ in {
           jujutsu # git-like vcs
           lurk # strace analysis
           radare2
+          disktui
 
           # Hardware/Software info
           pciutils # lspci
