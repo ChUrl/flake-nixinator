@@ -87,6 +87,40 @@ in {
           shellInit = ''
             set fish_greeting
             yes | fish_config theme save "system-theme"
+
+            # Because we can't source that in a project flake's shellHook (is POSIX), source it here
+            function __project_shell_reload --on-variable INIT_PROJECT_SHELL
+                # Leaving the environment
+                if not set -q INIT_PROJECT_SHELL; or test -z "$INIT_PROJECT_SHELL"
+                    if test -n "$__last_unload_project_shell"; and test -f "$__last_unload_project_shell"
+                        source "$__last_unload_project_shell"
+                    end
+                    set -e __last_init_project_shell
+                    set -e __last_unload_project_shell
+                    return
+                end
+
+                # Entering or switching environments
+                if test "$INIT_PROJECT_SHELL" != "$__last_init_project_shell"
+                    # Cleanup the previous environment
+                    if test -n "$__last_unload_project_shell"; and test -f "$__last_unload_project_shell"
+                        source "$__last_unload_project_shell"
+                    end
+
+                    # Store into variables to persist until next environment switch in the same shell
+                    set -g __last_init_project_shell "$INIT_PROJECT_SHELL"
+                    if set -q UNLOAD_PROJECT_SHELL; and test -f "$UNLOAD_PROJECT_SHELL"
+                        set -g __last_unload_project_shell "$UNLOAD_PROJECT_SHELL"
+                    else
+                        set -e __last_unload_project_shell
+                    end
+
+                    # Source the new environment
+                    if test -f "$INIT_PROJECT_SHELL"
+                        source "$INIT_PROJECT_SHELL"
+                    end
+                end
+            end
           '';
 
           functions = lib.mergeAttrsList [

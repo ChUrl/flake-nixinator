@@ -204,8 +204,18 @@ in {
 
       direnv = {
         enable = true;
+        enableFishIntegration = !config.programs.direnv-instant.enable;
+        silent = true;
         nix-direnv.enable = true;
       };
+
+      # This replaces the normal direnv.enableFishIntegration.
+      # direnv-instant = {
+      #   enable = true;
+      #   enableFishIntegration = true;
+      #   enableKittyIntegration = true;
+      #   settings.use_cache = true;
+      # };
 
       eza = {
         enable = true;

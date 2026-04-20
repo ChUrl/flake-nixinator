@@ -78,9 +78,16 @@
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
     # nix-flatpak.inputs.nixpkgs.follows = "nixpkgs"; # nix-flatpak doesn't have this
 
+    # Instant Direnv (load environment in background)
+    direnv-instant.url = "github:Mic92/direnv-instant";
+    direnv-instant.inputs.nixpkgs.follows = "nixpkgs";
+
     # Realtime audio
     # musnix.url = "github:musnix/musnix";
     # musnix.inputs.nixpkgs.follows = "nixpkgs";
+
+    # ComfyUI
+    comfyui-nix.url = "github:utensils/comfyui-nix";
 
     # HyTale
     hytale-launcher.url = "github:JPyke3/hytale-launcher-nix";
@@ -138,7 +145,7 @@
         inputs.nur.overlays.default
         inputs.niri.overlays.niri
         # inputs.emacs-overlay.overlay
-        # inputs.comfyui-nix.overlays.default
+        inputs.comfyui-nix.overlays.default
 
         # All my own overlays (derivations + modifications)
         (import ./overlays {inherit inputs nixpkgs pkgs-stable;})
@@ -250,7 +257,7 @@
           [
             inputs.disko.nixosModules.disko
             # inputs.nixified-ai.nixosModules.comfyui
-            # inputs.comfyui-nix.nixosModules.default
+            inputs.comfyui-nix.nixosModules.default
           ]
           ++ commonModules;
       };
