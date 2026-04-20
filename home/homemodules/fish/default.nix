@@ -84,6 +84,12 @@ in {
         (lib.mkIf pkgs.stdenv.isLinux {
           generateCompletions = nixosConfig.programs.fish.generateCompletions;
 
+          # TODO: There's a bug with the direnv mechanism:
+          #       - When leaving an env, it unloads (good)
+          #       - When entering another env, it loads (good)
+          #       - When leaving this one, it doesn't unload (bad)
+          #       - When entering leaving it again, it works...
+          #       This only happens sometimes, is there a race condition?
           shellInit = ''
             set fish_greeting
             yes | fish_config theme save "system-theme"

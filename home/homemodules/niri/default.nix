@@ -633,10 +633,12 @@ in {
             {
               matches = [{app-id = "obsidian";}];
               open-on-workspace = "3";
+              open-maximized = true;
             }
             {
               matches = [{app-id = "Zotero";}];
               open-on-workspace = "3";
+              open-maximized = true;
             }
             {
               matches = [{app-id = "firefox";}];
