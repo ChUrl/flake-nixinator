@@ -102,6 +102,7 @@ in {
                 DBI
                 DBDMariaDB
                 CursesUI
+                TextCSV_XS
               ]))
 
             (python314.withPackages (p:
