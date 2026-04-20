@@ -43,7 +43,7 @@ in {
             # nil
             # perl5Packages.PLS
             pyrefly
-            rPackages.languageserver
+            # rPackages.languageserver
             rust-analyzer
             svelte-language-server
             tailwindcss-language-server
@@ -59,9 +59,9 @@ in {
             clippy # rust
             clj-kondo # clojure
             eslint_d # javascript
-            python313Packages.ruff
-            python313Packages.flake8
-            python313Packages.pylint
+            # python313Packages.ruff
+            # python313Packages.flake8
+            # python313Packages.pylint
             lua54Packages.luacheck
             vale # text
             # statix # nix (doesn't recognize pipe operator)
@@ -77,7 +77,7 @@ in {
             # nodePackages_latest.prettier # Use local install as plugins change per project
             # perl5Packages.PerlTidy
             # prettierd # Use prettier instead because of plugins
-            python313Packages.black
+            # python313Packages.black
             rustfmt
             stylua
             tombi
@@ -92,7 +92,7 @@ in {
             # nodejs_latest
 
             # TODO: Create a perl module where I can add packages to, so I don't end up with multiple perl installations
-            # TODO: The same is required for python
+            # TODO: The same is required for python and R (below)
             (perl.withPackages (p:
               with p; [
                 PLS
@@ -103,6 +103,33 @@ in {
                 DBDMariaDB
                 CursesUI
               ]))
+
+            (python314.withPackages (p:
+              with p; [
+                # Linters
+                ruff
+                flake8
+                pylint
+
+                # Formatters
+                black
+
+                numpy
+                matplotlib
+                requests
+              ]))
+
+            (rWrapper.override {
+              packages = with rPackages; [
+                languageserver
+                ggplot2
+                plotly
+                shiny
+                readr
+                tibble
+                svglite
+              ];
+            })
 
             nixd
             alejandra # nix
