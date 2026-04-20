@@ -98,38 +98,65 @@ rec {
         buildDebug = mkBuildScript "Debug";
         buildRelease = mkBuildScript "Release";
 
-        # Use this to specify commands that should be ran after entering fish shell
-        initProjectShell = pkgs.writers.writeFish "init-shell.fish" ''
-          echo "Entering \"${description}\" environment..."
-
-          # Determine the project root, used e.g. in cmake scripts
-          set -g -x FLAKE_PROJECT_ROOT (git rev-parse --show-toplevel)
-
+        # Add project-local fish abbrs here
+        abbrs = {
           # Rust Bevy:
-          # abbr -a build-release-windows "CARGO_FEATURE_PURE=1 cargo xwin build --release --target x86_64-pc-windows-msvc"
+          # build-release-windows = "CARGO_FEATURE_PURE=1 cargo xwin build --release --target x86_64-pc-windows-msvc";
 
           # C/C++:
-          # abbr -a cmake-debug "${cmakeDebug}"
-          # abbr -a cmake-release "${cmakeRelease}"
-          # abbr -a build-debug "${buildDebug}"
-          # abbr -a build-release "${buildRelease}"
+          # cmake-debug = "${cmakeDebug}";
+          # cmake-release = "${cmakeRelease}";
+          # build-debug = "${buildDebug}";
+          # build-release = "${buildRelease}";
 
           # Clojure:
-          # abbr -a clojure-deps "deps-lock --lein"
+          # clojure-deps = "deps-lock --lein";
 
           # Python:
-          # abbr -a run "python ./app/main.py"
-          # abbr -a profile "py-spy record -o profile.svg -- python ./app/main.py && firefox profile.svg"
-          # abbr -a ptop "py-spy top -- python ./app/main.py"
+          # run = "python ./app/main.py";
+          # profile = "py-spy record -o profile.svg -- python ./app/main.py && firefox profile.svg";
+          # ptop = "py-spy top -- python ./app/main.py";
+        };
+
+        eraseAbbr = name: value: ''abbr --erase ${name} 2>/dev/null'';
+        createAbbr = name: value: ''abbr -a ${name} "${value}"'';
+
+        # This will be sourced by the global fish config if INIT_PROJECT_SHELL gets unset
+        unloadProjectShell = pkgs.writers.writeFish "unload-shell.fish" ''
+          echo "Unloading \"${description}\" environment..."
+
+          ${builtins.concatStringsSep "\n" (lib.mapAttrsToList eraseAbbr abbrs)}
+        '';
+
+        # This will be sourced by the global fish config if INIT_PROJECT_SHELL gets set
+        initProjectShell = pkgs.writers.writeFish "init-shell.fish" ''
+          # Unload just in case, to not have redefinition errors
+          source ${unloadProjectShell}
+
+          echo "Sourcing \"${description}\" environment..."
+
+          ${builtins.concatStringsSep "\n" (lib.mapAttrsToList createAbbr abbrs)}
         '';
       in
         builtins.concatStringsSep "\n" [
           # Launch into pure fish shell
           ''
-            exec "$(type -p fish)" -C "source ${initProjectShell} && abbr -a menu '${pkgs.bat}/bin/bat "${initProjectShell}"'"
+            # Determine the project root, used e.g. in cmake scripts
+            export FLAKE_PROJECT_ROOT="$(git rev-parse --show-toplevel)"
+
+            # Can't do the "exec" with nix-direnv
+            # - The "exec fish" would call direnv again => Infinite loop
+            # - The shellHook is Bash/POSIX, so fish syntax doesn't work
+
+            # Use this for "nix develop" without direnv
+            # exec "$(type -p fish)" -C "source ${initProjectShell} && abbr -a menu '${pkgs.bat}/bin/bat "${initProjectShell}"'"
+
+            # Use this for direnv without "nix develop"
+            export INIT_PROJECT_SHELL="${initProjectShell}"
+            export UNLOAD_PROJECT_SHELL="${unloadProjectShell}"
           ''
 
-          # Qt: Launch into wrapped fish shell
+          # Qt: Launch into wrapped fish shell (direnv incompatible)
           # https://nixos.org/manual/nixpkgs/stable/#sec-language-qt
           # ''
           #   fishdir=$(mktemp -d)
