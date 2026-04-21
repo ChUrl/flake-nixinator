@@ -619,6 +619,7 @@ in {
               matches = [{app-id = "neovide";}];
               open-on-workspace = "2";
               open-maximized = true;
+              open-focused = true;
             }
             {
               matches = [{app-id = "jetbrains-clion";}];
@@ -631,14 +632,21 @@ in {
               open-floating = true;
             }
             {
-              matches = [{app-id = "obsidian";}];
+              matches = [
+                {
+                  app-id = "electron";
+                  title = ".*Chriphost - Obsidian.*";
+                }
+              ];
               open-on-workspace = "3";
-              open-maximized = true;
+              # open-maximized = true;
+              open-focused = true;
             }
             {
               matches = [{app-id = "Zotero";}];
               open-on-workspace = "3";
-              open-maximized = true;
+              # open-maximized = true;
+              open-focused = true;
             }
             {
               matches = [{app-id = "firefox";}];
