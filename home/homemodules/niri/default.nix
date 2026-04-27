@@ -676,6 +676,12 @@ in {
               open-maximized = true;
             }
             {
+              matches = [{app-id = "factorio";}];
+              open-on-workspace = "6";
+              # open-floating = true;
+              open-maximized = true;
+            }
+            {
               matches = [{app-id = "signal";}];
               open-on-workspace = "7";
               open-maximized = true;

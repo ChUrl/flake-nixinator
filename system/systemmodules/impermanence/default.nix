@@ -132,6 +132,7 @@ in {
             # (mkUDir ".nv" m755) # Unity
             # (mkUDir ".ollama" m755)
             # (mkUDir ".plastic4" m755) # Unity
+            # (mkUDir ".tableplus" m755)
             (mkUDir ".tiddl" m755)
             (mkUDir ".var/app" m755)
             (mkUDir ".vim/undo" m755)
@@ -146,6 +147,7 @@ in {
 
             # Config
             # (mkUDir ".config/.android" m755) # Unity
+            # (mkUDir ".config/beekeeper-studio" m755)
             (mkUDir ".config/beets" m755)
             (mkUDir ".config/blender" m755)
             (mkUDir ".config/chromium" m755) # TODO: Remove this someday
