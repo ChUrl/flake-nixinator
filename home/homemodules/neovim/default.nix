@@ -124,6 +124,7 @@ in {
               packages = with rPackages; [
                 languageserver
                 ggplot2
+                ggalluvial
                 plotly
                 shiny
                 readr
