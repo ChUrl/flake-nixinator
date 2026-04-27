@@ -340,6 +340,13 @@ _: let
       action = "<cmd>lua vim.g.toggle_rmpc()<cr>"; # Defined in extraConfigLua.lua
       options.desc = "Show Rmpc";
     }
+    # TODO: Something with the environment activation doesn't work
+    # {
+    #   mode = "n";
+    #   key = "<leader>.";
+    #   action = "<cmd>lua vim.g.toggle_failnix()<cr>"; # Defined in extraConfigLua.lua
+    #   options.desc = "Show FailNix";
+    # }
     {
       mode = "n";
       key = "<leader>i";

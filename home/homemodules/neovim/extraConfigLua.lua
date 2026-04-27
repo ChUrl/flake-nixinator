@@ -66,3 +66,16 @@ local rmpc =
 vim.g.toggle_rmpc = function()
 	rmpc:toggle()
 end
+
+-- Toggle FailNix UI
+local failnix = Terminal:new({
+	cmd = "cd /home/christoph/Notes/TU/MastersThesis/FailNix && nix develop --command bash -c 'perl ./scripts/menu.pl'",
+	hidden = true,
+	close_on_exit = true,
+	auto_scroll = false,
+	direction = "float",
+})
+
+vim.g.toggle_failnix = function()
+	failnix:toggle()
+end
