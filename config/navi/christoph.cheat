@@ -308,27 +308,33 @@ mkdir -p "<name>" && cd "<name>" && spotdl --client-id (cat /home/christoph/.sec
 
 % ffmpeg
 # Create a slow motion version of a video with interpolated/blended frames
-ffmpeg -i "<input>" -filter:v "minterpolate='mi_mode=mci:mc_mode=aobmc:vsbmc=1:fps=<doublefps>',setpts=2*PTS" output.mp4
+ffmpeg -i <input> -filter:v "minterpolate='mi_mode=mci:mc_mode=aobmc:vsbmc=1:fps=<doublefps>',setpts=2*PTS" output.mp4
 $ input: eza -f -1
 
 % ffmpeg
 # Detect black bar dimensions automatically by looking at the first 10 frames
-ffmpeg -i "<input>" -vframes 10 -vf cropdetect -f null -
+ffmpeg -i <input> -vframes 10 -vf cropdetect -f null -
 $ input: eza -f -1
 
 % ffmpeg
 # Preview video with applied crop settings
-ffplay -vf crop=<width>:<height>:<x>:<y> "<input>"
+ffplay -vf crop=<width>:<height>:<x>:<y> <input>
 $ input: eza -f -1
 
 % ffmpeg
 # Re-encode the video with applied crop settings
-ffmpeg -i "<input>" -vf crop=<width>:<height>:<x>:<y> -c:a copy output.mp4
+ffmpeg -i <input> -vf crop=<width>:<height>:<x>:<y> -c:a copy output.mp4
 $ input: eza -f -1
 
 % ffmpeg
 # Reencode and compress the video using the h265 codec
-ffmpeg -i "<input>" -vcodec libx265 -crf <quality> "out_<input>"
+ffmpeg -i <input> -vcodec libx265 -crf <quality> out_<input>
+$ input: eza -f -1
+$ quality: echo -e "24\n25\n26\n27\n28\n29\n30\n"
+
+% ffmpeg
+# Reencode, compress and scale the video using the h265 codec
+ffmpeg -i <input> -vcodec libx265 -crf <quality> -vf scale=<width>:-2,setsar=1:1 out_<input>
 $ input: eza -f -1
 $ quality: echo -e "24\n25\n26\n27\n28\n29\n30\n"
 
