@@ -157,6 +157,8 @@ in {
           # feishin # electron :(
           playerctl # Media player control
           czkawka-full # file deduplicator
+          binaryninja-free # reverse engineering
+          tableplus # database explorer
 
           # Office
           kdePackages.wacomtablet # For xournalpp/krita
