@@ -132,7 +132,7 @@ in {
             # (mkUDir ".nv" m755) # Unity
             # (mkUDir ".ollama" m755)
             # (mkUDir ".plastic4" m755) # Unity
-            # (mkUDir ".tableplus" m755)
+            (mkUDir ".tableplus" m755)
             (mkUDir ".tiddl" m755)
             (mkUDir ".var/app" m755)
             (mkUDir ".vim/undo" m755)
@@ -173,6 +173,7 @@ in {
             (mkUDir ".config/tidal_dl_ng" m755)
             # (mkUDir ".config/unity3d" m755) # Unity
             # (mkUDir ".config/unityhub" m755) # Unity
+            (mkUDir ".config/Vector 35" m755)
             (mkUDir ".config/vlc" m755)
             (mkUDir ".config/Zeal" m755)
             (mkUDir ".config/zed" m755)
