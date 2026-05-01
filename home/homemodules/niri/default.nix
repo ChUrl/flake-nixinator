@@ -143,7 +143,7 @@ in {
         xwayland-satellite
         # ncpamixer # Audio control
         wiremix # Audio control
-        swww
+        awww
         waypaper
         wtype # For elephant
 
