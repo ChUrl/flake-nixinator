@@ -177,7 +177,7 @@ in {
           gparted
           resources
           # celluloid
-          cine
+          # cine
           eyedropper
           junction
         ])
