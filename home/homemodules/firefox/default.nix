@@ -86,6 +86,8 @@ in {
     programs.firefox = {
       enable = true;
 
+      configPath = "${config.xdg.configHome}/mozilla/firefox";
+
       # firefox-unwrapped is the pure firefox browser, wrapFirefox adds configuration ontop
       package = pkgs.wrapFirefox pkgs.firefox-unwrapped {
         # About policies: https://github.com/mozilla/policy-templates#enterprisepoliciesenabled
