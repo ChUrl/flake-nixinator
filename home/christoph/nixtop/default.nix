@@ -2,30 +2,32 @@
 {pkgs, ...}: {
   config = {
     homemodules = {
-      hyprland = {
-        keyboard = {
-          layout = "us";
-          variant = "altgr-intl";
-          option = "nodeadkeys";
-        };
+      # TODO: Niri config (needs to modularize niri module)
 
-        monitors = {
-          "eDP-1" = {
-            width = 1920;
-            height = 1080;
-            rate = 60;
-            x = 0;
-            y = 0;
-            scale = 1;
-          };
-        };
+      # hyprland = {
+      #   keyboard = {
+      #     layout = "us";
+      #     variant = "altgr-intl";
+      #     option = "nodeadkeys";
+      #   };
+      #
+      #   monitors = {
+      #     "eDP-1" = {
+      #       width = 1920;
+      #       height = 1080;
+      #       rate = 60;
+      #       x = 0;
+      #       y = 0;
+      #       scale = 1;
+      #     };
+      #   };
+      #
+      #   workspaces = {
+      #     "eDP-1" = [1 2 3 4 5 6 7 8 9];
+      #   };
+      # };
 
-        workspaces = {
-          "eDP-1" = [1 2 3 4 5 6 7 8 9];
-        };
-      };
-
-      waybar.monitor = "eDP-1";
+      waybar.monitors = ["eDP-1"];
     };
 
     home = {
