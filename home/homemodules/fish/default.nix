@@ -93,6 +93,7 @@ in {
           shellInit = ''
             set fish_greeting
             yes | fish_config theme save "system-theme"
+            fish_vi_key_bindings
 
             # Because we can't source that in a project flake's shellHook (is POSIX), source it here
             function __project_shell_reload --on-variable INIT_PROJECT_SHELL
