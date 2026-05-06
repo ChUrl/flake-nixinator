@@ -42,6 +42,7 @@ in {
           window_padding_width = 10; # Looks stupid with editors if bg doesn't match
           # hide_window_decorations = "yes";
           enabled_layouts = "grid,vertical,horizontal";
+          cursor_trail = 3;
 
           tab_bar_min_tabs = 2; # Don't show a single tab
           tab_bar_edge = "bottom";
