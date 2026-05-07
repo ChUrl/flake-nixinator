@@ -42,6 +42,7 @@ in {
             lua-language-server
             # nil
             # perl5Packages.PLS
+            perlnavigator
             pyrefly
             # rPackages.languageserver
             rust-analyzer
@@ -1003,6 +1004,7 @@ in {
                   };
                 }
                 {name = "perlpls";}
+                {name = "perlnavigator";}
                 {
                   name = "qmlls";
                   extraOptions.cmd = [
