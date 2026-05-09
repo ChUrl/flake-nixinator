@@ -79,8 +79,8 @@
     # nix-flatpak.inputs.nixpkgs.follows = "nixpkgs"; # nix-flatpak doesn't have this
 
     # Instant Direnv (load environment in background)
-    direnv-instant.url = "github:Mic92/direnv-instant";
-    direnv-instant.inputs.nixpkgs.follows = "nixpkgs";
+    # direnv-instant.url = "github:Mic92/direnv-instant";
+    # direnv-instant.inputs.nixpkgs.follows = "nixpkgs";
 
     # Realtime audio
     # musnix.url = "github:musnix/musnix";
