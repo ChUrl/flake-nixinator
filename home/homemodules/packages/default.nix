@@ -206,7 +206,7 @@ in {
 
       direnv = {
         enable = true;
-        enableFishIntegration = !config.programs.direnv-instant.enable;
+        enableFishIntegration = true;
         silent = true;
         nix-direnv.enable = true;
       };
