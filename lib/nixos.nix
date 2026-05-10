@@ -18,6 +18,8 @@
       trusted-users = ["root" username];
       auto-optimise-store = true;
 
+      download-buffer-size = 524288000; # 500MB
+
       substituters = [
         "https://cache.nixos.org"
         "https://nix-community.cachix.org"
