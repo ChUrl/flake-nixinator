@@ -47,6 +47,8 @@ in {
             wrap_navigation: false,
             enable_mouse: true,
             enable_config_hot_reload: true,
+            enable_lyrics_hot_reload: true,
+            enable_lyrics_index: true,
             status_update_interval_ms: 1000,
             rewind_to_start_sec: 30,
             lyrics_dir: "${config.home.homeDirectory}/Music",
@@ -88,24 +90,37 @@ in {
                 (
                     name: "Queue (1)",
                     pane: Split(
-                        borders: "NONE",
                         direction: Horizontal,
                         panes: [
                             // Left Column (Queue + Cava)
                             (
                                 size: "70%",
-                                borders: "NONE",
                                 pane: Split(
                                     direction: Vertical,
                                     panes: [
                                         (
                                             size: "75%",
                                             borders: "ALL",
-                                            pane: Pane(Queue),
+                                            border_symbols: Rounded,
+                                            pane: Split(
+                                                direction: Vertical,
+                                                panes: [
+                                                    (
+                                                        size: "2",
+                                                        pane: Pane(QueueHeader()),
+                                                    ),
+                                                    (
+                                                        size: "100%",
+                                                        pane: Pane(Queue),
+                                                    ),
+
+                                                ],
+                                            ),
                                         ),
                                         (
                                             size: "25%",
                                             borders: "ALL",
+                                            border_symbols: Rounded,
                                             pane: Pane(Cava),
                                         )
                                     ]
@@ -115,18 +130,19 @@ in {
                             // Right Column (AlbumArt + Lyrics)
                             (
                                 size: "30%",
-                                borders: "NONE",
                                 pane: Split(
                                     direction: Vertical,
                                     panes: [
                                         (
                                             size: "75%",
                                             borders: "ALL",
+                                            border_symbols: Rounded,
                                             pane: Pane(AlbumArt),
                                         ),
                                         (
                                             size: "25%",
                                             borders: "ALL",
+                                            border_symbols: Rounded,
                                             pane: Pane(Lyrics),
                                         ),
                                     ]
@@ -137,31 +153,59 @@ in {
                 ),
                 (
                     name: "Albums (2)",
-                    pane: Pane(Albums),
+                    pane: Split(
+                        size: "100%",
+                        direction: Vertical,
+                        panes: [(size: "100%", borders: "ALL", border_symbols: Rounded, pane: Pane(Albums))],
+                    )
                 ),
                 (
                     name: "Album Artists (3)",
-                    pane: Pane(AlbumArtists),
+                    pane: Split(
+                        size: "100%",
+                        direction: Vertical,
+                        panes: [(size: "100%", borders: "ALL", border_symbols: Rounded, pane: Pane(AlbumArtists))],
+                    )
                 ),
                 (
                     name: "Artists (4)",
-                    pane: Pane(Artists),
+                    pane: Split(
+                        size: "100%",
+                        direction: Vertical,
+                        panes: [(size: "100%", borders: "ALL", border_symbols: Rounded, pane: Pane(Artists))],
+                    )
                 ),
                 (
                     name: "Playlists (5)",
-                    pane: Pane(Playlists),
+                    pane: Split(
+                        size: "100%",
+                        direction: Vertical,
+                        panes: [(size: "100%", borders: "ALL", border_symbols: Rounded, pane: Pane(Playlists))],
+                    )
                 ),
                 // (
                 //     name: "Directories (6)",
-                //     pane: Pane(Directories),
+                //     pane: Split(
+                //         size: "100%",
+                //         direction: Vertical,
+                //         panes: [(size: "100%", borders: "ALL", border_symbols: Rounded, pane: Pane(Directories))],
+                //     )
                 // ),
                 (
                     name: "Search (6)",
-                    pane: Pane(Search),
+                    pane: Split(
+                        size: "100%",
+                        direction: Vertical,
+                        panes: [(size: "100%", borders: "ALL", border_symbols: Rounded, pane: Pane(Search))],
+                    )
                 ),
                 // (
                 //     name: "Visualizer (8)",
-                //     pane: Pane(Cava),
+                //     pane: Split(
+                //         size: "100%",
+                //         direction: Vertical,
+                //         panes: [(size: "100%", borders: "ALL", border_symbols: Rounded, pane: Pane(Cava))],
+                //     )
                 // ),
             ],
 
@@ -287,8 +331,6 @@ in {
         #![enable(unwrap_variant_newtypes)]
         (
             default_album_art_path: None,
-            show_song_table_header: true,
-            draw_borders: true,
             format_tag_separator: " | ",
             browser_column_widths: [20, 38, 42],
             modal_backdrop: false,
@@ -395,6 +437,8 @@ in {
                     ),
                     (
                         pane: Pane(Tabs),
+                        borders: "ALL",
+                        border_symbols: Rounded,
                         size: "3",
                     ),
                     (
