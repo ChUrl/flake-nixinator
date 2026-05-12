@@ -96,6 +96,7 @@ in {
           lurk # strace analysis
           radare2
           disktui
+          lldb
 
           # Hardware/Software info
           pciutils # lspci
