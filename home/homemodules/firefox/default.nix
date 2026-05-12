@@ -86,7 +86,8 @@ in {
     programs.firefox = {
       enable = true;
 
-      configPath = "${config.xdg.configHome}/mozilla/firefox";
+      # configPath = "${config.xdg.configHome}/mozilla/firefox";
+      configPath = "${config.home.homeDirectory}/.mozilla/firefox";
 
       # firefox-unwrapped is the pure firefox browser, wrapFirefox adds configuration ontop
       package = pkgs.wrapFirefox pkgs.firefox-unwrapped {
