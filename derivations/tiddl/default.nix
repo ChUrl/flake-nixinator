@@ -34,12 +34,12 @@
 in
   pythonPkgs.buildPythonApplication rec {
     pname = "tiddl";
-    version = "3.2.0";
+    version = "3.4.3";
     format = "pyproject";
 
     src = pythonPkgs.fetchPypi {
       inherit pname version;
-      sha256 = "sha256-uLkGyIScYPqFgQdPAOYJDJG0jp+nDAwIl2kFkaJZFco=";
+      sha256 = "sha256-45KHNS1IP59DsH8i2uQ7sua6T21vW/Yw1PQg55jzLGs=";
     };
 
     dontCheckRuntimeDeps = true;
