@@ -12,7 +12,7 @@
     ./disks.nix
 
     # General services
-    # ../services/comfyui.nix
+    ../services/comfyui.nix
     ../services/fileflows-node.nix
   ];
 
@@ -124,7 +124,6 @@
         # 31431 # Parsec
         5173 # SvelteKit
         8090 # PocketBase
-        8188 # ComfyUI
       ];
 
       allowedUDPPorts = [
@@ -135,7 +134,6 @@
         # 31431 # Parsec
         5173 # SvelteKit
         8090 # PocketBase
-        8188 # ComfyUI
       ];
     };
 
@@ -232,27 +230,6 @@
       enable = true;
       interval = "weekly";
       fileSystems = ["/"];
-    };
-
-    # Temporarily ban IPs for SSH after failed login attempts
-    fail2ban = {
-      enable = true;
-    };
-
-    greetd = {
-      enable = false;
-      restart = false;
-      useTextGreeter = true;
-
-      settings = {
-        terminal.vt = 1;
-
-        default_session = {
-          # command = "${pkgs.tuigreet}/bin/tuigreet --time --cmd $SHELL";
-          command = "${pkgs.tuigreet}/bin/tuigreet --time --cmd niri-session";
-          user = "greeter";
-        };
-      };
     };
 
     kmscon = {

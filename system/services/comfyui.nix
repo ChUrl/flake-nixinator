@@ -7,8 +7,8 @@
 }: let
   # comfyuiVersion = "cu128-slim-20260316";
   # comfyuiVersion = "cu128-megapak-20260413";
-  # comfyuiVersion = "cu130-megapak-pt211-20260330";
-  comfyuiVersion = "cu130-megapak-pt211-20260413";
+  # comfyuiVersion = "cu130-megapak-pt211-20260413";
+  comfyuiVersion = "cu130-megapak-pt211-20260508";
 in {
   virtualisation.oci-containers.containers = {
     comfyui = {
@@ -58,11 +58,11 @@ in {
         # https://github.com/Comfy-Org/ComfyUI/blob/master/comfy/cli_args.py
         CLI_ARGS = lib.concatStringsSep " " [
           # "--cache-none" # Leads to single nodes being executed multiple times for each output connection :/
-          "--lowvram"
-          "--disable-smart-memory"
-          "--disable-pinned-memory"
-          "--disable-xformers"
-          "--use-sage-attention" # Crashes
+          # "--lowvram"
+          # "--disable-smart-memory"
+          # "--disable-pinned-memory"
+          # "--disable-xformers"
+          # "--use-sage-attention" # Crashes
           # "--reserve-vram 1" # (1 or 2) => Assume less vram is available to mitigate OOM due to wrong vram estimation
         ];
       };
