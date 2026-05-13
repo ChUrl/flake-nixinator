@@ -136,6 +136,7 @@ in {
             (mkUDir ".tiddl" m755)
             (mkUDir ".var/app" m755)
             (mkUDir ".vim/undo" m755)
+            # (mkUDir ".vscode" m755)
             (mkUDir ".zotero" m755)
 
             # Cache that's actually useful
@@ -176,7 +177,7 @@ in {
             (mkUDir ".config/Vector 35" m755)
             (mkUDir ".config/vlc" m755)
             (mkUDir ".config/Zeal" m755)
-            (mkUDir ".config/zed" m755)
+            # (mkUDir ".config/zed" m755)
 
             # Share
             # (mkUDir ".local/share/containers" m755) # Rootless docker
@@ -200,7 +201,7 @@ in {
             (mkUDir ".local/share/qutebrowser" m755)
             (mkUDir ".local/share/systemd" m755)
             # (mkUDir ".local/share/unity3d" m755) # Unity
-            (mkUDir ".local/share/zed" m755)
+            # (mkUDir ".local/share/zed" m755)
             (mkUDir ".local/share/zoxide" m755)
 
             # State

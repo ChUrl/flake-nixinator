@@ -34,6 +34,7 @@
     ./vscode
     ./yazi
     ./zathura
+    ./zed
 
     # HM modules imported from the flake inputs
     inputs.nix-flatpak.homeManagerModules.nix-flatpak
