@@ -18,6 +18,7 @@
       fcitx.enable = true;
 
       waybar.monitors = ["DP-1" "DP-2"];
+      vscode.enable = true;
     };
 
     home = let
@@ -75,9 +76,9 @@
         # jetbrains.idea-ultimate
         # jetbrains.webstorm
         # jetbrains.rider
-        zed-editor
-        vscode
         # ghidra # launch with _JAVA_AWT_WM_NONREPARENTING=1 (use programs.ghidra)
+        zed-editor # TODO: Module
+        # vscode # Using module
 
         # Unity Stuff
         # unityhub
