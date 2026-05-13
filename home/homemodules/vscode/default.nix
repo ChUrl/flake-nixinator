@@ -73,7 +73,9 @@ in {
           "workbench.colorTheme" = "Catppuccin Mocha";
           "workbench.iconTheme" = "catppuccin-mocha";
           "remote.SSH.configFile" = "~/.ssh/custom-config";
+          "workbench.welcomePage.walkthroughs.openOnInstall" = false;
           "security.workspace.trust.enabled" = false;
+          "chat.disableAIFeatures" = true;
 
           # C++
           # "C_Cpp.intelliSenseEngine" = "disabled"; # IntelliSense conflics with Clangd
