@@ -19,6 +19,7 @@
 
       waybar.monitors = ["DP-1" "DP-2"];
       vscode.enable = true;
+      zed.enable = true;
     };
 
     home = let
@@ -77,7 +78,7 @@
         # jetbrains.webstorm
         # jetbrains.rider
         # ghidra # launch with _JAVA_AWT_WM_NONREPARENTING=1 (use programs.ghidra)
-        zed-editor # TODO: Module
+        # zed-editor # Using module
         # vscode # Using module
 
         # Unity Stuff
