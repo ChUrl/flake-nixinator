@@ -31,6 +31,7 @@
     ./ssh
     ./terminal
     ./tmux
+    ./vscode
     ./yazi
     ./zathura
 
