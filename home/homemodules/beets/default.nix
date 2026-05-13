@@ -57,7 +57,7 @@ in {
 
         fetchart = {
           auto = "yes";
-          sources = "filesystem coverart itunes amazon albumart"; # sources are queried in this order
+          sources = "*"; # sources are queried in this order
         };
 
         # lyrics = {
