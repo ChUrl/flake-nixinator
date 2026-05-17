@@ -14,6 +14,7 @@ in {
     programs.zed-editor = {
       enable = true;
       package = pkgs.zed-editor;
+      enableMcpIntegration = true;
       mutableUserKeymaps = false;
       mutableUserSettings = false;
       mutableUserTasks = false;
@@ -27,7 +28,8 @@ in {
 
         # "html"
         # "make"
-        # "nix"
+        "sql"
+        "nix"
         "just"
         "perl"
         "assembly"
@@ -58,10 +60,25 @@ in {
         outline_panel.dock = "left";
         collaboration_panel.dock = "left";
         git_panel.dock = "left";
-        agent.dock = "right";
 
-        disable_ai = true;
         auto_signature_help = true;
+
+        disable_ai = false;
+        agent.dock = "right";
+        agent_servers = {
+          claude-acp = {
+            type = "registry";
+          };
+          codex-acp = {
+            type = "registry";
+          };
+          mistral-vibe = {
+            type = "registry";
+          };
+          gemini = {
+            type = "registry";
+          };
+        };
 
         telemetry = {
           diagnostics = false;
@@ -69,7 +86,7 @@ in {
         };
 
         vim_mode = true;
-        whick_key = {
+        which_key = {
           enabled = true;
           delay_ms = 10;
         };
