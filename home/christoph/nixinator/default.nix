@@ -22,6 +22,13 @@
       zed.enable = true;
     };
 
+    programs = {
+      mcp = {
+        enable = true;
+        servers = {};
+      };
+    };
+
     home = let
       # Extra config to make Rider Unity integration work
       dotnetCore = with pkgs.dotnetCorePackages;
