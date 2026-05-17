@@ -22,7 +22,7 @@ in {
       profiles.default = {
         enableUpdateCheck = false;
         enableExtensionUpdateCheck = false;
-        enableMcpIntegration = false;
+        enableMcpIntegration = true;
 
         extensions = with pkgs.vscode-extensions; [
           # Theme
@@ -75,7 +75,7 @@ in {
           "remote.SSH.configFile" = "~/.ssh/custom-config";
           "workbench.welcomePage.walkthroughs.openOnInstall" = false;
           "security.workspace.trust.enabled" = false;
-          "chat.disableAIFeatures" = true;
+          "chat.disableAIFeatures" = false;
 
           # C++
           # "C_Cpp.intelliSenseEngine" = "disabled"; # IntelliSense conflics with Clangd
