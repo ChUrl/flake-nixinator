@@ -40,7 +40,7 @@ in {
             just-lsp
             ltex-ls # TODO: Only enable on-demand
             lua-language-server
-            # nil
+            nil
             # perl5Packages.PLS
             perlnavigator
             pyrefly
