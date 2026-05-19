@@ -23,6 +23,11 @@
     };
 
     programs = {
+      claude-code = {
+        enable = true;
+        enableMcpIntegration = true;
+      };
+
       mcp = {
         enable = true;
         servers = {};
