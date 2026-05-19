@@ -28,12 +28,14 @@ in {
 
         # "html"
         # "make"
+        "rainbow-csv"
         "sql"
         "nix"
         "just"
         "perl"
         "assembly"
         "wat"
+        "neocmake"
       ];
 
       themes = {};
@@ -59,12 +61,18 @@ in {
         project_panel.dock = "left";
         outline_panel.dock = "left";
         collaboration_panel.dock = "left";
-        git_panel.dock = "left";
+        git_panel = {
+          dock = "left";
+          tree_view = true;
+        };
 
         auto_signature_help = true;
 
         disable_ai = false;
-        agent.dock = "right";
+        agent = {
+          dock = "right";
+          sidebar_side = "right";
+        };
         agent_servers = {
           claude-acp = {
             type = "registry";
