@@ -121,6 +121,7 @@ in {
 
             # The shit some applications add to ~/ without asking
             # (mkUDir ".android" m755) # Unity
+            (mkUDir ".claude" m755)
             # (mkUDir ".comfy" m755)
             (mkUDir ".docker" m755)
             # (mkUDir ".gradle" m755) # Unity
@@ -140,11 +141,13 @@ in {
             (mkUDir ".zotero" m755)
 
             # Cache that's actually useful
+            (mkUDir ".cache/claude-cli-nodejs" m755)
             (mkUDir ".cache/fish/generated_completions" m755)
             (mkUDir ".cache/nix-index" m755)
             (mkUDir ".cache/nix-search-tv" m755)
             (mkUDir ".cache/nvim" m755)
             (mkUDir ".cache/JetBrains" m755)
+            (mkUDir ".cache/keepassxc" m755)
 
             # Config
             # (mkUDir ".config/.android" m755) # Unity
