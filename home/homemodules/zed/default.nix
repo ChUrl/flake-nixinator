@@ -26,8 +26,11 @@ in {
         "dockerfile"
         "docker-compose"
 
-        # "html"
-        # "make"
+        "html"
+        "svelte"
+        "svelte-mcp"
+
+        "make"
         "rainbow-csv"
         "sql"
         "nix"
@@ -36,6 +39,7 @@ in {
         "assembly"
         "wat"
         "neocmake"
+        "linkerscript"
       ];
 
       themes = {};
@@ -67,6 +71,22 @@ in {
         };
 
         auto_signature_help = true;
+        lsp = {
+          nil = {
+            initialization_options = {
+              formatting = {
+                command = null;
+              };
+            };
+          };
+          nixd = {
+            initialization_options = {
+              formatting = {
+                command = ["${pkgs.alejandra}/bin/alejandra"];
+              };
+            };
+          };
+        };
 
         disable_ai = false;
         agent = {
