@@ -30,7 +30,17 @@
 
       mcp = {
         enable = true;
-        servers = {};
+        servers = {
+          svelte = {
+            # claude mcp add -t stdio -s [scope] svelte -- npx -y @sveltejs/mcp
+            args = [
+              "-y"
+              "@sveltejs/mcp"
+            ];
+            command = "npx";
+            # type = "stdio";
+          };
+        };
       };
     };
 
