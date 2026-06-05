@@ -15,44 +15,44 @@ in {
       enable = true;
       enableDefaultConfig = false;
 
-      matchBlocks = {
+      settings = {
         "*" = {
-          forwardAgent = false;
-          addKeysToAgent =
+          ForwardAgent = false;
+          AddKeysToAgent =
             if pkgs.stdenv.isLinux
             then "no"
             else "yes"; # Don't have keychain on darwin
-          compression = true;
-          serverAliveInterval = 0;
-          serverAliveCountMax = 3;
-          hashKnownHosts = false;
-          userKnownHostsFile = "~/.ssh/known_hosts";
-          controlMaster = "no";
-          controlPath = "~/.ssh/master-%r@%n:%p";
-          controlPersist = "no";
+          Compression = true;
+          ServerAliveInterval = 0;
+          ServerAliveCountMax = 3;
+          HashKnownHosts = false;
+          UserKnownHostsFile = "~/.ssh/known_hosts";
+          ControlMaster = "no";
+          ControlPath = "~/.ssh/master-%r@%n:%p";
+          ControlPersist = "no";
         };
         "nixinator" = {
-          port = 5432;
-          user = "christoph";
-          hostname = "vps.chriphost.de";
+          Port = 5432;
+          User = "christoph";
+          HostName = "vps.chriphost.de";
         };
         "servenix" = {
-          user = "christoph";
-          hostname = "local.chriphost.de";
+          User = "christoph";
+          HostName = "local.chriphost.de";
         };
         "thinknix" = {
-          user = "christoph";
-          hostname = "think.chriphost.de";
+          User = "christoph";
+          HostName = "think.chriphost.de";
         };
         "vps" = {
-          user = "root";
-          hostname = "vps.chriphost.de";
+          User = "root";
+          HostName = "vps.chriphost.de";
         };
         "mars" = {
-          user = "smchurla";
-          hostname = "mars.cs.tu-dortmund.de";
-          serverAliveInterval = 60;
-          localForwards = [
+          User = "smchurla";
+          HostName = "mars.cs.tu-dortmund.de";
+          ServerAliveInterval = 60;
+          LocalForward = [
             {
               # Resultbrowser
               bind.port = 22941;
