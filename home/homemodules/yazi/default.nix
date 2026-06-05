@@ -5,10 +5,12 @@
   mylib,
   pkgs,
   ...
-}: let
+}:
+let
   inherit (config.homemodules) yazi color;
-in {
-  options.homemodules.yazi = import ./options.nix {inherit lib mylib;};
+in
+{
+  options.homemodules.yazi = import ./options.nix { inherit lib mylib; };
 
   config = lib.mkIf yazi.enable {
     programs.yazi = {
@@ -17,7 +19,18 @@ in {
       shellWrapperName = "y";
 
       plugins = {
-        inherit (pkgs.yaziPlugins) chmod diff full-border git lazygit mount ouch rsync starship sudo; # smart-paste
+        inherit (pkgs.yaziPlugins)
+          chmod
+          diff
+          full-border
+          git
+          lazygit
+          mount
+          ouch
+          rsync
+          starship
+          sudo
+          ; # smart-paste
       };
 
       initLua = ''
@@ -70,7 +83,12 @@ in {
             {
               run = ''mpv "$@"'';
               orphan = true;
-              desc = "Play selection";
+              desc = "Play selection with mpv";
+            }
+            {
+              run = ''vlc "$@"'';
+              orphan = true;
+              desc = "Play selection with vlc";
             }
           ];
           edit = [
@@ -82,13 +100,17 @@ in {
           ];
           open = [
             {
+              run = ''imv "$@"'';
+              desc = "Open selection with imv";
+            }
+            {
               run = ''xdg-open "$@"'';
-              desc = "Open selection";
+              desc = "Open selection with xdg-open";
             }
             {
               # TODO: For some reason, junction does not exit after choosing an application...
               run = ''junction "$@"'';
-              desc = "Open selection in chosen application";
+              desc = "Open selection with junction";
             }
           ];
           extract = [
@@ -106,13 +128,13 @@ in {
 
         plugin.prepend_fetchers = [
           {
-            id = "git";
-            name = "*";
+            group = "git";
+            url = "*";
             run = "git";
           }
           {
-            id = "git";
-            name = "*/";
+            group = "git";
+            url = "*/";
             run = "git";
           }
         ];
@@ -162,42 +184,66 @@ in {
 
         mgr.prepend_keymap = [
           {
-            on = ["<C-p>" "m"];
+            on = [
+              "<C-p>"
+              "m"
+            ];
             run = "plugin mount";
             desc = "Manage device mounts";
           }
           {
-            on = ["<C-p>" "c"];
+            on = [
+              "<C-p>"
+              "c"
+            ];
             run = "plugin chmod";
             desc = "Chmod selection";
           }
           {
-            on = ["<C-p>" "g"];
+            on = [
+              "<C-p>"
+              "g"
+            ];
             run = "plugin lazygit";
             desc = "Run LazyGit";
           }
           {
-            on = ["<C-p>" "a"];
+            on = [
+              "<C-p>"
+              "a"
+            ];
             run = "plugin ouch";
             desc = "Add selection to archive";
           }
           {
-            on = ["<C-p>" "d"];
+            on = [
+              "<C-p>"
+              "d"
+            ];
             run = ''shell -- ripdrag -a -n "$@"'';
             desc = "Drag & drop selection";
           }
           {
-            on = ["<C-p>" "D"];
+            on = [
+              "<C-p>"
+              "D"
+            ];
             run = "plugin diff";
             desc = "Diff the selected with the hovered file";
           }
           {
-            on = ["<C-p>" "r"];
+            on = [
+              "<C-p>"
+              "r"
+            ];
             run = "plugin rsync";
             desc = "Copy files using rsync";
           }
           {
-            on = ["<C-p>" "w"];
+            on = [
+              "<C-p>"
+              "w"
+            ];
             run = ''wl-copy < "$0"'';
             desc = "Copy hovered file contents using wl-copy";
           }
@@ -209,7 +255,10 @@ in {
           }
           {
             on = "y";
-            run = [''shell -- for path in "$@"; do echo "file://$path"; done | wl-copy -t text/uri-list'' "yank"];
+            run = [
+              ''shell -- for path in "$@"; do echo "file://$path"; done | wl-copy -t text/uri-list''
+              "yank"
+            ];
             desc = "Copy files to system clipboard on yank";
           }
           # {
@@ -228,7 +277,9 @@ in {
       # https://github.com/catppuccin/yazi/blob/main/themes/mocha/catppuccin-mocha-lavender.toml
       theme = {
         mgr = {
-          cwd = {fg = color.hexS.teal;};
+          cwd = {
+            fg = color.hexS.teal;
+          };
 
           hovered = {
             fg = color.hexS.accentText;
@@ -285,7 +336,9 @@ in {
           };
 
           border_symbol = "│";
-          border_style = {fg = color.hexS.overlay0;};
+          border_style = {
+            fg = color.hexS.overlay0;
+          };
         };
 
         tabs = {
@@ -354,58 +407,104 @@ in {
             bg = color.hexS.surface0;
           };
 
-          perm_type = {fg = color.hexS.blue;};
-          perm_read = {fg = color.hexS.yellow;};
-          perm_write = {fg = color.hexS.red;};
-          perm_exec = {fg = color.hexS.green;};
-          perm_sep = {fg = color.hexS.overlay0;};
+          perm_type = {
+            fg = color.hexS.blue;
+          };
+          perm_read = {
+            fg = color.hexS.yellow;
+          };
+          perm_write = {
+            fg = color.hexS.red;
+          };
+          perm_exec = {
+            fg = color.hexS.green;
+          };
+          perm_sep = {
+            fg = color.hexS.overlay0;
+          };
         };
 
         input = {
-          border = {fg = color.hexS.accentDim;};
-          title = {};
-          value = {};
-          selected = {reversed = true;};
+          border = {
+            fg = color.hexS.accentDim;
+          };
+          title = { };
+          value = { };
+          selected = {
+            reversed = true;
+          };
         };
 
         pick = {
-          border = {fg = color.hexS.accentDim;};
-          active = {fg = color.hexS.accentHl;};
-          inactive = {};
+          border = {
+            fg = color.hexS.accentDim;
+          };
+          active = {
+            fg = color.hexS.accentHl;
+          };
+          inactive = { };
         };
 
         confirm = {
-          border = {fg = color.hexS.accentDim;};
-          title = {fg = color.hexS.accentDim;};
-          content = {};
-          list = {};
-          btn_yes = {reversed = true;};
-          btn_no = {};
+          border = {
+            fg = color.hexS.accentDim;
+          };
+          title = {
+            fg = color.hexS.accentDim;
+          };
+          content = { };
+          list = { };
+          btn_yes = {
+            reversed = true;
+          };
+          btn_no = { };
         };
 
         cmp = {
-          border = {fg = color.hexS.accentDim;};
+          border = {
+            fg = color.hexS.accentDim;
+          };
         };
 
         tasks = {
-          border = {fg = color.hexS.accentDim;};
-          title = {};
-          hovered = {underline = true;};
+          border = {
+            fg = color.hexS.accentDim;
+          };
+          title = { };
+          hovered = {
+            underline = true;
+          };
         };
 
         which = {
-          cand = {fg = color.hexS.accent;};
-          desc = {fg = color.hexS.accentHl;};
-          mask = {bg = color.hexS.surface0;};
-          rest = {fg = color.hexS.surface0;};
+          cand = {
+            fg = color.hexS.accent;
+          };
+          desc = {
+            fg = color.hexS.accentHl;
+          };
+          mask = {
+            bg = color.hexS.surface0;
+          };
+          rest = {
+            fg = color.hexS.surface0;
+          };
           separator = "  ";
-          separator_style = {fg = color.hexS.text;};
+          separator_style = {
+            fg = color.hexS.text;
+          };
         };
 
         help = {
-          on = {fg = color.hexS.accent;};
-          run = {fg = color.hexS.accentHl;};
-          desc = {fg = color.hexS.text;};
+          on = {
+            fg = color.hexS.accent;
+          };
+          run = {
+            fg = color.hexS.accentHl;
+          };
+          desc = {
+            fg = color.hexS.text;
+          };
           hovered = {
             fg = color.hexS.accentText; # TODO: This is not applied
 
@@ -420,19 +519,31 @@ in {
         };
 
         notify = {
-          title_info = {fg = color.hexS.teal;};
-          title_warn = {fg = color.hexS.yellow;};
-          title_error = {fg = color.hexS.red;};
+          title_info = {
+            fg = color.hexS.teal;
+          };
+          title_warn = {
+            fg = color.hexS.yellow;
+          };
+          title_error = {
+            fg = color.hexS.red;
+          };
         };
 
         spot = {
-          border = {fg = color.hexS.lavender;};
-          title = {fg = color.hexS.lavender;};
+          border = {
+            fg = color.hexS.lavender;
+          };
+          title = {
+            fg = color.hexS.lavender;
+          };
           tbl_cell = {
             fg = color.hexS.lavender;
             reversed = true;
           };
-          tbl_col = {bold = true;};
+          tbl_col = {
+            bold = true;
+          };
         };
 
         # Default rules good enough
@@ -442,9 +553,9 @@ in {
 
         # Prepend to override default config
         icon = {
-          prepend_dirs = import ./specialDirectories.nix {inherit color;};
-          prepend_files = import ./specialFiles.nix {inherit color;};
-          prepend_exts = import ./specialExtensions.nix {inherit color;};
+          prepend_dirs = import ./specialDirectories.nix { inherit color; };
+          prepend_files = import ./specialFiles.nix { inherit color; };
+          prepend_exts = import ./specialExtensions.nix { inherit color; };
         };
       };
     };
