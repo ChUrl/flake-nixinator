@@ -18,8 +18,7 @@ in {
       ];
 
       volumes = [
-        # TODO: Add network location for .zim files
-        "kiwix_data:/data"
+        "/home/christoph/ssd/kiwix:/data"
       ];
 
       environment = {
