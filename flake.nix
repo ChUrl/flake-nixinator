@@ -64,7 +64,7 @@
 
     # NeoVim <3
     nixvim.url = "github:nix-community/nixvim";
-    nixvim.inputs.nixpkgs.follows = "nixpkgs";
+    # nixvim.inputs.nixpkgs.follows = "nixpkgs";
 
     # Emacs nightly
     # emacs-overlay.url = "github:nix-community/emacs-overlay";
