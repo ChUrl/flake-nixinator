@@ -5,12 +5,10 @@
   mylib,
   pkgs,
   ...
-}:
-let
+}: let
   inherit (config.homemodules) yazi color;
-in
-{
-  options.homemodules.yazi = import ./options.nix { inherit lib mylib; };
+in {
+  options.homemodules.yazi = import ./options.nix {inherit lib mylib;};
 
   config = lib.mkIf yazi.enable {
     programs.yazi = {
@@ -19,7 +17,8 @@ in
       shellWrapperName = "y";
 
       plugins = {
-        inherit (pkgs.yaziPlugins)
+        inherit
+          (pkgs.yaziPlugins)
           chmod
           diff
           full-border
@@ -100,12 +99,12 @@ in
           ];
           open = [
             {
-              run = ''imv "$@"'';
-              desc = "Open selection with imv";
-            }
-            {
               run = ''xdg-open "$@"'';
               desc = "Open selection with xdg-open";
+            }
+            {
+              run = ''imv "$@"'';
+              desc = "Open selection with imv";
             }
             {
               # TODO: For some reason, junction does not exit after choosing an application...
@@ -428,8 +427,8 @@ in
           border = {
             fg = color.hexS.accentDim;
           };
-          title = { };
-          value = { };
+          title = {};
+          value = {};
           selected = {
             reversed = true;
           };
@@ -442,7 +441,7 @@ in
           active = {
             fg = color.hexS.accentHl;
           };
-          inactive = { };
+          inactive = {};
         };
 
         confirm = {
@@ -452,12 +451,12 @@ in
           title = {
             fg = color.hexS.accentDim;
           };
-          content = { };
-          list = { };
+          content = {};
+          list = {};
           btn_yes = {
             reversed = true;
           };
-          btn_no = { };
+          btn_no = {};
         };
 
         cmp = {
@@ -470,7 +469,7 @@ in
           border = {
             fg = color.hexS.accentDim;
           };
-          title = { };
+          title = {};
           hovered = {
             underline = true;
           };
@@ -553,9 +552,9 @@ in
 
         # Prepend to override default config
         icon = {
-          prepend_dirs = import ./specialDirectories.nix { inherit color; };
-          prepend_files = import ./specialFiles.nix { inherit color; };
-          prepend_exts = import ./specialExtensions.nix { inherit color; };
+          prepend_dirs = import ./specialDirectories.nix {inherit color;};
+          prepend_files = import ./specialFiles.nix {inherit color;};
+          prepend_exts = import ./specialExtensions.nix {inherit color;};
         };
       };
     };
