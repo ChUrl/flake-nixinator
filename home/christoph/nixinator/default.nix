@@ -31,14 +31,15 @@
       mcp = {
         enable = true;
         servers = {
+          nixos = {
+            command = "uvx";
+            args = ["mcp-nixos"];
+          };
           svelte = {
             # claude mcp add -t stdio -s [scope] svelte -- npx -y @sveltejs/mcp
-            args = [
-              "-y"
-              "@sveltejs/mcp"
-            ];
             command = "npx";
-            # type = "stdio";
+            args = ["-y" "@sveltejs/mcp"];
+            type = "stdio";
           };
         };
       };
