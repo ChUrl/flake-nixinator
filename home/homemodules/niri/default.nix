@@ -53,8 +53,16 @@ in {
     in
       gtkConfig
       // {
-        gtk3 = gtkConfig // {extraConfig = gtkExtraConfig;};
-        gtk4 = gtkConfig // {extraConfig = gtkExtraConfig;};
+        gtk3 =
+          gtkConfig
+          // {
+            extraConfig = gtkExtraConfig;
+          };
+        gtk4 =
+          gtkConfig
+          // {
+            extraConfig = gtkExtraConfig;
+          };
       };
 
     dconf = {
@@ -453,10 +461,27 @@ in {
           prefer-no-csd = true; # Disable client-side decorations (e.g. window titlebars)
 
           spawn-at-startup = [
-            {argv = ["ashell" "-c" "${config.paths.dotfiles}/ashell/config.toml"];}
-            {argv = ["waypaper" "--restore"];}
+            {
+              argv = [
+                "ashell"
+                "-c"
+                "${config.paths.dotfiles}/ashell/config.toml"
+              ];
+            }
+            {
+              argv = [
+                "waypaper"
+                "--restore"
+              ];
+            }
 
-            {argv = ["kitty" "--hold" "fastfetch"];}
+            {
+              argv = [
+                "kitty"
+                "--hold"
+                "fastfetch"
+              ];
+            }
             {argv = ["fcitx5"];}
             # {argv = ["zeal"];}
             # {argv = ["protonvpn-app"];}
@@ -467,16 +492,36 @@ in {
           ];
 
           workspaces = {
-            "1" = {open-on-output = "DP-1";};
-            "2" = {open-on-output = "DP-1";};
-            "3" = {open-on-output = "DP-1";};
-            "4" = {open-on-output = "DP-1";};
-            "5" = {open-on-output = "DP-1";};
-            "6" = {open-on-output = "DP-1";};
-            "7" = {open-on-output = "DP-1";};
-            "8" = {open-on-output = "DP-1";};
-            "9" = {open-on-output = "DP-1";};
-            "10" = {open-on-output = "DP-2";};
+            "1" = {
+              open-on-output = "DP-1";
+            };
+            "2" = {
+              open-on-output = "DP-1";
+            };
+            "3" = {
+              open-on-output = "DP-1";
+            };
+            "4" = {
+              open-on-output = "DP-1";
+            };
+            "5" = {
+              open-on-output = "DP-1";
+            };
+            "6" = {
+              open-on-output = "DP-1";
+            };
+            "7" = {
+              open-on-output = "DP-1";
+            };
+            "8" = {
+              open-on-output = "DP-1";
+            };
+            "9" = {
+              open-on-output = "DP-1";
+            };
+            "10" = {
+              open-on-output = "DP-2";
+            };
           };
 
           outputs = {
@@ -517,8 +562,12 @@ in {
             border = {
               enable = true;
               width = 2;
-              active = {color = color.hex.accent;};
-              inactive = {color = color.hex.base;};
+              active = {
+                color = color.hex.accent;
+              };
+              inactive = {
+                color = color.hex.base;
+              };
             };
 
             # This border is drawn OUTSIDE of the focused window
@@ -529,7 +578,9 @@ in {
             # Hint where a dragged window will be inserted
             insert-hint = {
               enable = true;
-              display = {color = color.hex.accentDim;};
+              display = {
+                color = color.hex.accentDim;
+              };
             };
 
             always-center-single-column = true;
@@ -552,7 +603,9 @@ in {
           };
 
           gestures = {
-            hot-corners = {enable = false;};
+            hot-corners = {
+              enable = false;
+            };
           };
 
           window-rules = [
@@ -616,15 +669,15 @@ in {
 
             # Rules for specific windows
             {
-              matches = [{app-id = "neovide";}];
+              matches = [
+                {app-id = "neovide";}
+                {app-id = "dev.zed.Zed";}
+                {app-id = "code";}
+                {app-id = "jetbrains-clion";}
+              ];
               open-on-workspace = "2";
               open-maximized = true;
               open-focused = true;
-            }
-            {
-              matches = [{app-id = "jetbrains-clion";}];
-              open-on-workspace = "2";
-              open-maximized = true;
             }
             {
               matches = [{app-id = "code-url-handler";}];
@@ -703,6 +756,14 @@ in {
                 draw-behind-window = true;
               };
             }
+            # TODO: Missing niri-flake update
+            # {
+            #   matches = [{namespace = "walker";}];
+            #
+            #   background-effect = {
+            #     blur = true;
+            #   };
+            # }
           ];
 
           debug = {
@@ -785,69 +846,101 @@ in {
             # DMenu
             "Mod+Shift+A" = {
               action = spawn "walker" "-m" "providerlist";
-              hotkey-overlay = {title = "Toggle the launcher.";};
+              hotkey-overlay = {
+                title = "Toggle the launcher.";
+              };
             };
             "Mod+A" = {
               action = spawn "walker" "-m" "desktopapplications";
-              hotkey-overlay = {title = "Toggle the application launcher.";};
+              hotkey-overlay = {
+                title = "Toggle the application launcher.";
+              };
             };
             "Mod+C" = {
               action = spawn "walker" "-m" "clipboard";
-              hotkey-overlay = {title = "Show clipboard history.";};
+              hotkey-overlay = {
+                title = "Show clipboard history.";
+              };
             };
             "Mod+Escape" = {
               action = spawn "${sessionMenu}/bin/rofi-menu-Session";
-              hotkey-overlay = {title = "Toggle the session menu.";};
+              hotkey-overlay = {
+                title = "Toggle the session menu.";
+              };
             };
             "Mod+W" = {
               action = spawn "${wallpaperMenu}/bin/rofi-menu-Wallpaper";
-              hotkey-overlay = {title = "Open wallpaper menu.";};
+              hotkey-overlay = {
+                title = "Open wallpaper menu.";
+              };
             };
             "Mod+D" = {
               action = spawn "${globalMenu}/bin/rofi-menu-Global";
-              hotkey-overlay = {title = "Open global menu.";};
+              hotkey-overlay = {
+                title = "Open global menu.";
+              };
             };
 
             # Applications
             "Mod+Ctrl+W" = {
               action = spawn "waypaper";
-              hotkey-overlay = {title = "Open waypaper.";};
+              hotkey-overlay = {
+                title = "Open waypaper.";
+              };
             };
             "Mod+Shift+W" = {
               action = spawn "waypaper" "--random";
-              hotkey-overlay = {title = "Select random wallpaper.";};
+              hotkey-overlay = {
+                title = "Select random wallpaper.";
+              };
             };
             "Mod+T" = {
               action = spawn "kitty";
-              hotkey-overlay = {title = "Spawn Kitty.";};
+              hotkey-overlay = {
+                title = "Spawn Kitty.";
+              };
             };
             "Mod+E" = {
               action = spawn "kitty" "--title=Yazi" "yazi";
-              hotkey-overlay = {title = "Spawn Yazi.";};
+              hotkey-overlay = {
+                title = "Spawn Yazi.";
+              };
             };
             "Mod+B" = {
               action = spawn "kitty" "--title=Btop" "btop";
-              hotkey-overlay = {title = "Spawn Btop.";};
+              hotkey-overlay = {
+                title = "Spawn Btop.";
+              };
             };
             "Mod+R" = {
               action = spawn "kitty" "--title=Rmpc" "rmpc";
-              hotkey-overlay = {title = "Spawn Rmpc.";};
+              hotkey-overlay = {
+                title = "Spawn Rmpc.";
+              };
             };
             "Mod+N" = {
               action = spawn "neovide";
-              hotkey-overlay = {title = "Spawn Neovide.";};
+              hotkey-overlay = {
+                title = "Spawn Neovide.";
+              };
             };
             "Mod+Ctrl+N" = {
               action = spawn "kitty" "--title=Navi" "navi";
-              hotkey-overlay = {title = "Call Navi for help.";};
+              hotkey-overlay = {
+                title = "Call Navi for help.";
+              };
             };
             "Mod+Shift+N" = {
               action = spawn "neovide" "${config.paths.dotfiles}/navi/christoph.cheat";
-              hotkey-overlay = {title = "Edit the Navi cheats.";};
+              hotkey-overlay = {
+                title = "Edit the Navi cheats.";
+              };
             };
             "Mod+Shift+F" = {
               action = spawn "neovide" "${config.paths.dotfiles}/flake.nix";
-              hotkey-overlay = {title = "Edit the NixFlake.";};
+              hotkey-overlay = {
+                title = "Edit the NixFlake.";
+              };
             };
 
             # Screenshots
@@ -856,24 +949,34 @@ in {
                 write-to-disk = true;
                 show-pointer = false;
               };
-              hotkey-overlay = {title = "Take a screenshot of the current window.";};
+              hotkey-overlay = {
+                title = "Take a screenshot of the current window.";
+              };
             };
             "Mod+Ctrl+S" = {
               action.screenshot-screen = {
                 write-to-disk = true;
                 show-pointer = false;
               };
-              hotkey-overlay = {title = "Take a screenshot of the current screen.";};
+              hotkey-overlay = {
+                title = "Take a screenshot of the current screen.";
+              };
             };
             "Mod+Shift+S" = {
-              action.screenshot = {show-pointer = false;};
-              hotkey-overlay = {title = "Take a screenshot of a region.";};
+              action.screenshot = {
+                show-pointer = false;
+              };
+              hotkey-overlay = {
+                title = "Take a screenshot of a region.";
+              };
             };
 
             # Niri
             "Mod+Shift+Slash" = {
               action = show-hotkey-overlay;
-              hotkey-overlay = {hidden = true;};
+              hotkey-overlay = {
+                hidden = true;
+              };
             };
             # "Alt+Tab" = {
             #   action = "next-window";
@@ -887,191 +990,283 @@ in {
             # Audio
             "XF86AudioRaiseVolume" = {
               action = spawn "wpctl" "set-volume" "-l" "1.5" "@DEFAULT_AUDIO_SINK@" "5%+";
-              hotkey-overlay = {hidden = true;};
+              hotkey-overlay = {
+                hidden = true;
+              };
             };
             "XF86AudioLowerVolume" = {
               action = spawn "wpctl" "set-volume" "-l" "1.5" "@DEFAULT_AUDIO_SINK@" "5%-";
-              hotkey-overlay = {hidden = true;};
+              hotkey-overlay = {
+                hidden = true;
+              };
             };
             "XF86AudioPlay" = {
               action = spawn "playerctl" "play-pause";
-              hotkey-overlay = {hidden = true;};
+              hotkey-overlay = {
+                hidden = true;
+              };
             };
             "XF86AudioPrev" = {
               action = spawn "playerctl" "previous";
-              hotkey-overlay = {hidden = true;};
+              hotkey-overlay = {
+                hidden = true;
+              };
             };
             "XF86AudioNext" = {
               action = spawn "playerctl" "next";
-              hotkey-overlay = {hidden = true;};
+              hotkey-overlay = {
+                hidden = true;
+              };
             };
 
             # Niri windows
             "Mod+Q" = {
               action = close-window;
-              hotkey-overlay = {title = "Close the current window.";};
+              hotkey-overlay = {
+                title = "Close the current window.";
+              };
             };
             "Mod+F" = {
               action = fullscreen-window;
-              hotkey-overlay = {title = "Toggle between fullscreen and tiled window.";};
+              hotkey-overlay = {
+                title = "Toggle between fullscreen and tiled window.";
+              };
             };
             "Mod+Equal" = {
               action = set-column-width "+10%";
-              hotkey-overlay = {title = "Increase column width";};
+              hotkey-overlay = {
+                title = "Increase column width";
+              };
             };
             "Mod+Minus" = {
               action = set-column-width "-10%";
-              hotkey-overlay = {title = "Decrease column width";};
+              hotkey-overlay = {
+                title = "Decrease column width";
+              };
             };
             "Mod+Shift+M" = {
               action = set-column-width "50%";
-              hotkey-overlay = {title = "Set column width to 50%";};
+              hotkey-overlay = {
+                title = "Set column width to 50%";
+              };
             };
             "Mod+M" = {
               action = maximize-column;
-              hotkey-overlay = {title = "Maximize column.";};
+              hotkey-overlay = {
+                title = "Maximize column.";
+              };
             };
             "Mod+Comma" = {
               action = reset-window-height;
-              hotkey-overlay = {title = "Reset window height.";};
+              hotkey-overlay = {
+                title = "Reset window height.";
+              };
             };
             "Mod+V" = {
               action = toggle-window-floating;
-              hotkey-overlay = {title = "Toggle between floating and tiled window.";};
+              hotkey-overlay = {
+                title = "Toggle between floating and tiled window.";
+              };
             };
             "Mod+O" = {
               action = toggle-overview;
-              hotkey-overlay = {title = "Toggle overlay.";};
+              hotkey-overlay = {
+                title = "Toggle overlay.";
+              };
             };
             "Mod+H" = {
               action = focus-column-or-monitor-left;
-              hotkey-overlay = {title = "Focus column on the left. Equivalent bindings for other directions.";};
+              hotkey-overlay = {
+                title = "Focus column on the left. Equivalent bindings for other directions.";
+              };
             };
             "Mod+J" = {
               action = focus-window-or-workspace-down;
-              hotkey-overlay = {hidden = true;};
+              hotkey-overlay = {
+                hidden = true;
+              };
             };
             "Mod+K" = {
               action = focus-window-or-workspace-up;
-              hotkey-overlay = {hidden = true;};
+              hotkey-overlay = {
+                hidden = true;
+              };
             };
             "Mod+L" = {
               action = focus-column-or-monitor-right;
-              hotkey-overlay = {hidden = true;};
+              hotkey-overlay = {
+                hidden = true;
+              };
             };
             "Mod+WheelScrollUp" = {
               action = focus-column-left;
-              hotkey-overlay = {title = "Focus column on the left. Equivalent binding for other direction.";};
+              hotkey-overlay = {
+                title = "Focus column on the left. Equivalent binding for other direction.";
+              };
             };
             "Mod+WheelScrollDown" = {
               action = focus-column-right;
-              hotkey-overlay = {hidden = true;};
+              hotkey-overlay = {
+                hidden = true;
+              };
             };
             "Mod+Shift+WheelScrollUp" = {
               action = focus-workspace-up;
-              hotkey-overlay = {title = "Focus previous workspace. Equivalent binding for other direction.";};
+              hotkey-overlay = {
+                title = "Focus previous workspace. Equivalent binding for other direction.";
+              };
             };
             "Mod+Shift+WheelScrollDown" = {
               action = focus-workspace-down;
-              hotkey-overlay = {hidden = true;};
+              hotkey-overlay = {
+                hidden = true;
+              };
             };
             "Mod+Shift+H" = {
               action = move-column-left-or-to-monitor-left;
-              hotkey-overlay = {title = "Move column to the left. Equivalent bindings for other directions.";};
+              hotkey-overlay = {
+                title = "Move column to the left. Equivalent bindings for other directions.";
+              };
             };
             "Mod+Shift+J" = {
               action = move-window-down-or-to-workspace-down;
-              hotkey-overlay = {hidden = true;};
+              hotkey-overlay = {
+                hidden = true;
+              };
             };
             "Mod+Shift+K" = {
               action = move-window-up-or-to-workspace-up;
-              hotkey-overlay = {hidden = true;};
+              hotkey-overlay = {
+                hidden = true;
+              };
             };
             "Mod+Shift+L" = {
               action = move-column-right-or-to-monitor-right;
-              hotkey-overlay = {hidden = true;};
+              hotkey-overlay = {
+                hidden = true;
+              };
             };
 
             # Niri workspaces
             "Mod+1" = {
               action = focus-workspace 1;
-              hotkey-overlay = {title = "Focus workspace 1. Equivalent bindings for other workspaces.";};
+              hotkey-overlay = {
+                title = "Focus workspace 1. Equivalent bindings for other workspaces.";
+              };
             };
             "Mod+2" = {
               action = focus-workspace 2;
-              hotkey-overlay = {hidden = true;};
+              hotkey-overlay = {
+                hidden = true;
+              };
             };
             "Mod+3" = {
               action = focus-workspace 3;
-              hotkey-overlay = {hidden = true;};
+              hotkey-overlay = {
+                hidden = true;
+              };
             };
             "Mod+4" = {
               action = focus-workspace 4;
-              hotkey-overlay = {hidden = true;};
+              hotkey-overlay = {
+                hidden = true;
+              };
             };
             "Mod+5" = {
               action = focus-workspace 5;
-              hotkey-overlay = {hidden = true;};
+              hotkey-overlay = {
+                hidden = true;
+              };
             };
             "Mod+6" = {
               action = focus-workspace 6;
-              hotkey-overlay = {hidden = true;};
+              hotkey-overlay = {
+                hidden = true;
+              };
             };
             "Mod+7" = {
               action = focus-workspace 7;
-              hotkey-overlay = {hidden = true;};
+              hotkey-overlay = {
+                hidden = true;
+              };
             };
             "Mod+8" = {
               action = focus-workspace 8;
-              hotkey-overlay = {hidden = true;};
+              hotkey-overlay = {
+                hidden = true;
+              };
             };
             "Mod+9" = {
               action = focus-workspace 9;
-              hotkey-overlay = {hidden = true;};
+              hotkey-overlay = {
+                hidden = true;
+              };
             };
             "Mod+0" = {
               action = focus-workspace 10;
-              hotkey-overlay = {hidden = true;};
+              hotkey-overlay = {
+                hidden = true;
+              };
             };
             "Mod+Shift+1" = {
               action.move-window-to-workspace = 1;
-              hotkey-overlay = {title = "Move current window to workspace 1. Equivalent bindings for other workspaces.";};
+              hotkey-overlay = {
+                title = "Move current window to workspace 1. Equivalent bindings for other workspaces.";
+              };
             };
             "Mod+Shift+2" = {
               action.move-window-to-workspace = 2;
-              hotkey-overlay = {hidden = true;};
+              hotkey-overlay = {
+                hidden = true;
+              };
             };
             "Mod+Shift+3" = {
               action.move-window-to-workspace = 3;
-              hotkey-overlay = {hidden = true;};
+              hotkey-overlay = {
+                hidden = true;
+              };
             };
             "Mod+Shift+4" = {
               action.move-window-to-workspace = 4;
-              hotkey-overlay = {hidden = true;};
+              hotkey-overlay = {
+                hidden = true;
+              };
             };
             "Mod+Shift+5" = {
               action.move-window-to-workspace = 5;
-              hotkey-overlay = {hidden = true;};
+              hotkey-overlay = {
+                hidden = true;
+              };
             };
             "Mod+Shift+6" = {
               action.move-window-to-workspace = 6;
-              hotkey-overlay = {hidden = true;};
+              hotkey-overlay = {
+                hidden = true;
+              };
             };
             "Mod+Shift+7" = {
               action.move-window-to-workspace = 7;
-              hotkey-overlay = {hidden = true;};
+              hotkey-overlay = {
+                hidden = true;
+              };
             };
             "Mod+Shift+8" = {
               action.move-window-to-workspace = 8;
-              hotkey-overlay = {hidden = true;};
+              hotkey-overlay = {
+                hidden = true;
+              };
             };
             "Mod+Shift+9" = {
               action.move-window-to-workspace = 9;
-              hotkey-overlay = {hidden = true;};
+              hotkey-overlay = {
+                hidden = true;
+              };
             };
             "Mod+Shift+0" = {
               action.move-window-to-workspace = 10;
-              hotkey-overlay = {hidden = true;};
+              hotkey-overlay = {
+                hidden = true;
+              };
             };
           };
         };
