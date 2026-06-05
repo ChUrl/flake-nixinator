@@ -83,6 +83,9 @@ in {
             stylua
             tombi
             typstyle
+
+            nodejs_latest
+            uv
           ])
 
           [
@@ -97,6 +100,7 @@ in {
             (perl.withPackages (p:
               with p; [
                 PLS
+                PerlCritic
                 PerlTidy
                 NetOpenSSH
                 DateTime
@@ -141,6 +145,8 @@ in {
     };
 
     programs.nixvim = {
+      # nixpkgs.pkgs = pkgs;
+
       defaultEditor = true;
       enable = true;
       enableMan = false; # Nixvim man pages
@@ -163,7 +169,7 @@ in {
       performance.byteCompileLua = {
         enable = true;
         configs = true;
-        initLua = false; # When debugging init.lua turn this off
+        initLua = true; # When debugging init.lua turn this off
         nvimRuntime = true;
         plugins = true;
       };
