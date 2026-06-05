@@ -5,10 +5,12 @@
   mylib,
   pkgs,
   ...
-}: let
+}:
+let
   inherit (config.homemodules) zed color;
-in {
-  options.homemodules.zed = import ./options.nix {inherit lib mylib;};
+in
+{
+  options.homemodules.zed = import ./options.nix { inherit lib mylib; };
 
   config = lib.mkIf zed.enable {
     programs.zed-editor = {
@@ -23,33 +25,74 @@ in {
       extensions = [
         "catppuccin"
         "catppuccin-icons"
+        "comment"
+        "git-firefly"
+
+        "nix"
+        "perl"
+        "fish"
+        "lua"
+        "toml"
+        "csharp"
+        "java"
+        "latex"
+        "typst"
+        "haskell"
+        "glsl"
+        "mermaid"
+        "clojure"
+        "verilog"
+        "qml"
+        "plantuml"
+        "graphviz"
+
         "dockerfile"
         "docker-compose"
 
         "html"
-        "svelte"
-        "svelte-mcp"
-
-        "make"
+        "xml"
+        "scss"
         "rainbow-csv"
         "sql"
-        "nix"
+        "svelte"
+        "svelte-mcp"
+        "jinja2"
+
         "just"
-        "perl"
+        "make"
+        "neocmake"
         "assembly"
         "wat"
-        "neocmake"
         "linkerscript"
+        "r"
       ];
 
-      themes = {};
-      userDebug = [];
+      themes = { };
+      userDebug = [ ];
 
+      # TODO: Add neovim keymaps
       userKeymaps = [
         {
           context = "Workspace";
           bindings = {
-            ctrl-shift-t = "workspace::NewTerminal";
+            "ctrl-/" = "terminal_panel::Toggle";
+          };
+        }
+        {
+          context = "Editor";
+          unbind = {
+            "ctrl-/" = [
+              "editor::ToggleComments"
+              {
+                advance_downwards = false;
+              }
+            ];
+          };
+        }
+        {
+          context = "(vim_mode == normal || vim_mode == visual) && !menu";
+          bindings = {
+            "ctrl-c" = "editor::ToggleComments";
           };
         }
       ];
@@ -70,6 +113,13 @@ in {
           tree_view = true;
         };
 
+        # TODO: Doesn't work, although perlnavigator advertises Perl::Tidy autoformatting...
+        languages = {
+          Perl = {
+            formatter = "language_server";
+          };
+        };
+
         auto_signature_help = true;
         lsp = {
           nil = {
@@ -82,10 +132,31 @@ in {
           nixd = {
             initialization_options = {
               formatting = {
-                command = ["${pkgs.alejandra}/bin/alejandra"];
+                command = [ "${pkgs.alejandra}/bin/alejandra" ];
               };
             };
           };
+          # No idea how to configure the formatter
+          # perlnavigator-server = let
+          #   # TODO: Duplicated in neovim/default.nix. Need Perl module.
+          #   perl = pkgs.perl.withPackages (p:
+          #     with p; [
+          #       PLS
+          #       PerlCritic
+          #       PerlTidy
+          #       NetOpenSSH
+          #       DateTime
+          #       DBI
+          #       DBDMariaDB
+          #       CursesUI
+          #       TextCSV_XS
+          #     ]);
+          # in {
+          #   initialization_options = {
+          #     "perlnavigator.perlPath" = "${perl}/bin";
+          #     "perlnavigator.includePaths" = ["${perl}/lib/perl5"];
+          #   };
+          # };
         };
 
         disable_ai = false;
@@ -120,7 +191,7 @@ in {
         };
       };
 
-      userTasks = [];
+      userTasks = [ ];
     };
   };
 }
