@@ -5,7 +5,7 @@
   pkgs,
   ...
 }: let
-  teamspeakVersion = "v6.0.0-beta8";
+  teamspeakVersion = "6.0.0-beta10";
 in {
   virtualisation.oci-containers.containers = {
     teamspeak = {
