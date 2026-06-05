@@ -92,7 +92,7 @@
     nvidia-container-toolkit.enable = true;
 
     nvidia = {
-      package = config.boot.kernelPackages.nvidiaPackages.stable;
+      package = config.boot.kernelPackages.nvidiaPackages.legacy_580;
 
       modesetting.enable = false;
       open = false; # GTX 1070 is too old for open drivers
