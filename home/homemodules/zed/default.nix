@@ -5,12 +5,10 @@
   mylib,
   pkgs,
   ...
-}:
-let
+}: let
   inherit (config.homemodules) zed color;
-in
-{
-  options.homemodules.zed = import ./options.nix { inherit lib mylib; };
+in {
+  options.homemodules.zed = import ./options.nix {inherit lib mylib;};
 
   config = lib.mkIf zed.enable {
     programs.zed-editor = {
@@ -67,8 +65,8 @@ in
         "r"
       ];
 
-      themes = { };
-      userDebug = [ ];
+      themes = {};
+      userDebug = [];
 
       # TODO: Add neovim keymaps
       userKeymaps = [
@@ -125,14 +123,15 @@ in
           nil = {
             initialization_options = {
               formatting = {
-                command = null;
+                # command = null;
+                command = ["${pkgs.alejandra}/bin/alejandra"];
               };
             };
           };
           nixd = {
             initialization_options = {
               formatting = {
-                command = [ "${pkgs.alejandra}/bin/alejandra" ];
+                command = ["${pkgs.alejandra}/bin/alejandra"];
               };
             };
           };
@@ -191,7 +190,7 @@ in
         };
       };
 
-      userTasks = [ ];
+      userTasks = [];
     };
   };
 }
