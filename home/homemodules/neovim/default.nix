@@ -135,6 +135,9 @@ in {
                 readr
                 tibble
                 svglite
+                dplyr
+                tidyr
+                scales
               ];
             })
 
