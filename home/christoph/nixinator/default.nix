@@ -41,6 +41,11 @@
             args = ["-y" "@sveltejs/mcp"];
             type = "stdio";
           };
+          # npx shadcn@latest mcp init --client claude
+          shadcn = {
+            command = "npx";
+            args = ["-y" "shadcn@latest" "mcp"];
+          };
         };
       };
     };
