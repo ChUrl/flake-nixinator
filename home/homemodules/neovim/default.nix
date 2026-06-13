@@ -1461,21 +1461,23 @@ in {
             };
           };
 
-          # opencode = {
-          #   name = "opencode";
-          #   pkg = pkgs.vimPlugins.opencode-nvim;
-          #   lazy = false;
-          #   config = ''
-          #     function()
-          #       ---@type opencode.Opts
-          #       vim.g.opencode_opts = {
-          #         -- Your configuration, if any; goto definition on the type or field for details
-          #       }
-          #
-          #       vim.o.autoread = true -- Required for `vim.g.opencode_opts.events.reload`
-          #     end
-          #   '';
-          # };
+          opencode = {
+            name = "opencode";
+            pkg = pkgs.vimPlugins.opencode-nvim;
+            lazy = false;
+            config = ''
+              function()
+                vim.g.opencode_opts = {
+                  server = {
+                    url = "http://localhost:12345",
+                    start = false,
+                  },
+                }
+
+                vim.o.autoread = true -- Required for `vim.g.opencode_opts.events.reload`
+              end
+            '';
+          };
 
           # obsidian = rec {
           #   name = "obsidian";
@@ -2307,7 +2309,7 @@ in {
           noice # Modern UI overhaul, e.g. floating cmdline
           # obsidian # Integration with Obsidian.md
 
-          # opencode # TODO: Doesn't work, can't find "opencode --port" process
+          opencode # TODO: Doesn't work, can't find "opencode --port" process
           # overseer # Run tasks from within neovim (e.g. cargo) # TODO:
 
           persisted # Session management

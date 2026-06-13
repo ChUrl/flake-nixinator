@@ -415,51 +415,57 @@ _: let
     }
   ];
 
-  # leader-opencode = [
-  #   {
-  #     mode = "n";
-  #     key = "<leader>o";
-  #     action = "+opencode";
-  #   }
-  #   {
-  #     mode = ["n" "v"];
-  #     key = "<leader>oa";
-  #     action.__raw = ''function() require("opencode").ask("@this: ") end'';
-  #     options.desc = "Ask";
-  #   }
-  #   {
-  #     mode = ["n" "v"];
-  #     key = "<leader>os";
-  #     action.__raw = ''function() require("opencode").select() end'';
-  #     options.desc = "Select";
-  #   }
-  #   {
-  #     mode = "n";
-  #     key = "<leader>ol";
-  #     action.__raw = ''function() return require("opencode").operator("@this ") .. "_" end'';
-  #     options.desc = "Append Line";
-  #     options.expr = true;
-  #   }
-  #   {
-  #     mode = ["n" "v"];
-  #     key = "<leader>or";
-  #     action.__raw = ''function() return require("opencode").operator("@this ") end'';
-  #     options.desc = "Append Range";
-  #     options.expr = true;
-  #   }
-  #   {
-  #     mode = "n";
-  #     key = "<S-C-u>";
-  #     action.__raw = ''function() require("opencode").command("session.half.page.up") end'';
-  #     options.desc = "Scroll OpenCode Up";
-  #   }
-  #   {
-  #     mode = "n";
-  #     key = "<S-C-d>";
-  #     action.__raw = ''function() require("opencode").command("session.half.page.down") end'';
-  #     options.desc = "Scroll OpenCode Down";
-  #   }
-  # ];
+  leader-opencode = [
+    {
+      mode = ["n" "v"];
+      key = "<leader>o";
+      action = "+opencode";
+    }
+    {
+      mode = ["n" "v"];
+      key = "<leader>oo";
+      action.__raw = ''function() require("opencode").ask("@this: ") end'';
+      options.desc = "Ask about @this";
+    }
+    {
+      mode = ["n" "v"];
+      key = "<leader>od";
+      action.__raw = ''function() require("opencode").prompt("Explain @diagnostics") end'';
+      options.desc = "Explain @diagnostics";
+    }
+    {
+      mode = ["n" "v"];
+      key = "<leader>oe";
+      action.__raw = ''function() require("opencode").prompt("Explain @this and its context") end'';
+      options.desc = "Explain @this";
+    }
+    {
+      mode = ["n" "v"];
+      key = "<leader>or";
+      action.__raw = ''function() require("opencode").prompt("Review @this for correctness and readability") end'';
+      options.desc = "Review @this";
+    }
+    {
+      mode = ["n" "v"];
+      key = "<leader>os";
+      action.__raw = ''function() require("opencode").select() end'';
+      options.desc = "Select Action";
+    }
+    {
+      mode = "n";
+      key = "<leader>oa";
+      action.__raw = ''function() return require("opencode").operator("@this ") .. "_" end'';
+      options.desc = "Append Line to Prompt";
+      options.expr = true;
+    }
+    {
+      mode = "v";
+      key = "<leader>oa";
+      action.__raw = ''function() return require("opencode").operator("@this ") end'';
+      options.desc = "Append Range to Prompt";
+      options.expr = true;
+    }
+  ];
 
   leader-file = [
     {
@@ -1051,7 +1057,7 @@ in
     no-leader
 
     leader
-    # leader-opencode
+    leader-opencode
     leader-file
     leader-help
     leader-quit
