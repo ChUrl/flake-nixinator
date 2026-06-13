@@ -130,6 +130,7 @@ in {
             (mkUDir ".mozilla/firefox" m755) # TODO: Remove this someday
             (mkUDir ".mozilla/native-messaging-hosts" m755)
             (mkUDir ".nix-package-search" m755)
+            (mkUDir ".npm" m755) # Contains mcp servers :/
             # (mkUDir ".nv" m755) # Unity
             # (mkUDir ".ollama" m755)
             # (mkUDir ".plastic4" m755) # Unity
