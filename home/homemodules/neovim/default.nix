@@ -308,6 +308,15 @@ in {
             require("${name}").setup(opts)
           end
         '';
+
+        # Like mkDefaultConfig but takes the Lua module name explicitly.
+        # Use when the Lua module name (e.g. "noice") differs from what
+        # lazy.nvim expects as the plugin name (e.g. "noice.nvim").
+        mkDefaultConfigFor = moduleName: ''
+          function(_, opts)
+            require("${moduleName}").setup(opts)
+          end
+        '';
       in {
         enable = true;
 
@@ -1378,19 +1387,19 @@ in {
           };
 
           _nui = {
-            name = "nui"; # For noice
+            name = "nui.nvim";
             pkg = pkgs.vimPlugins.nui-nvim;
             lazy = true;
           };
 
           noice = rec {
-            name = "noice";
+            name = "noice.nvim";
             pkg = pkgs.vimPlugins.noice-nvim;
             lazy = false;
             dependencies = [
               _nui
             ];
-            config = mkDefaultConfig name;
+            config = mkDefaultConfigFor "noice";
             opts = {
               presets = {
                 bottom_search = false;
@@ -1812,7 +1821,7 @@ in {
           };
 
           _plenary = {
-            name = "plenary";
+            name = "plenary.nvim";
             pkg = pkgs.vimPlugins.plenary-nvim;
             lazy = true;
           };
@@ -2231,12 +2240,12 @@ in {
           };
 
           yazi = rec {
-            name = "yazi";
+            name = "yazi.nvim";
             pkg = pkgs.vimPlugins.yazi-nvim;
             lazy = true;
             event = ["VeryLazy"];
             dependencies = [_plenary];
-            config = mkDefaultConfig name;
+            config = mkDefaultConfigFor "yazi";
             opts = {
               open_for_directories = true;
               highlight_hovered_buffers_in_same_directory = false;
