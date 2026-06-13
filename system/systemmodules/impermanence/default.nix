@@ -171,6 +171,7 @@ in {
             # (mkUDir ".config/niri/dms" m755)
             (mkUDir ".config/obsidian" m755)
             (mkUDir ".config/obs-studio" m755)
+            (mkUDir ".config/opencode" m755)
             (mkUDir ".config/Signal" m755)
             # (mkUDir ".config/singularitygroup-hotreload" m755) # Unity
             (mkUDir ".config/TeamSpeak" m755)
@@ -202,6 +203,7 @@ in {
             (mkUDir ".local/share/net.lrclib.lrcget" m755)
             (mkUDir ".local/share/nix" m755)
             (mkUDir ".local/share/nvim" m755)
+            (mkUDir ".local/share/opencode" m755)
             (mkUDir ".local/share/qutebrowser" m755)
             (mkUDir ".local/share/systemd" m755)
             # (mkUDir ".local/share/unity3d" m755) # Unity
@@ -214,6 +216,7 @@ in {
             (mkUDir ".local/state/lazygit" m755)
             (mkUDir ".local/state/nix" m755)
             (mkUDir ".local/state/nvim" m755)
+            (mkUDir ".local/state/opencode" m755)
             (mkUDir ".local/state/waypaper" m755)
             (mkUDir ".local/state/wireplumber" m755)
           ];
