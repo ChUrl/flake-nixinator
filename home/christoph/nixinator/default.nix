@@ -58,14 +58,69 @@
 
         # Writes opencode.json
         settings = {
-          plugin = [
-            # https://github.com/griffinmartin/opencode-claude-auth
-            "opencode-claude-auth@latest"
+          attachment = {
+            image = {
+              auto_resize = true;
+              max_width = 2000;
+              max_height = 2000;
+              max_base64_bytes = 5242880;
+            };
+          };
+          autoupdate = false;
+          compaction = {
+            auto = true;
+            prune = true;
+            reserved = 10000;
+          };
+          default_agent = "plan";
+          enabled_providers = [
+            "opencode"
+            "opencode-go"
+            "anthropic"
           ];
+          formatter = {
+            nixfmt = {
+              disabled = true;
+            };
+            alejandra = {
+              command = ["alejandra" "$FILE"];
+              extensions = [".nix"];
+            };
+          };
+          lsp = true;
+          permission = {
+            "*" = "ask";
+            "read" = "allow";
+            "grep" = "allow";
+            "glob" = "allow";
+            "lsp" = "allow";
+            "question" = "allow";
+          };
+          plugin = [
+            "opencode-claude-auth@latest" # https://github.com/griffinmartin/opencode-claude-auth
+            "@tarquinen/opencode-dcp@latest" # better compacting
+            "@slkiser/opencode-quota"
+          ];
+          share = "disabled";
+          shell = "fish";
+          snapshot = false;
+          watcher = {
+            ignore = ["node_modules/**" "dist/**" ".git/**"];
+          };
         };
 
         # Writes tui.json
-        tui = {};
+        tui = {
+          theme = "system";
+          diff_style = "auto";
+          mouse = true;
+          attention = {
+            enabled = true;
+            notifications = true;
+            sound = true;
+            volume = "0.3";
+          };
+        };
 
         agents = {};
         commands = {};
