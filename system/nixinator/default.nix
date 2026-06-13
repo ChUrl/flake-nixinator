@@ -234,53 +234,50 @@
 
     kmscon = {
       enable = false;
-      hwRender = true;
       useXkbConfig = true;
       # autologinUser = username;
 
-      fonts = [
-        {
-          name = "MonoLisa Alt Script";
-          package = pkgs.monolisa;
-        }
-      ];
+      config = let
+        color = config.home-manager.users.${username}.homemodules.color;
+      in {
+        # term=xterm-256color
+
+        hwaccel = true;
+
+        font-name = color.font;
+        font-size = 14;
+
+        mode = "3440x1440";
+        palette = "custom";
+
+        palette-black = "0,0,0";
+        pallette-white = "255,255,255";
+
+        palette-red = color.rgbS.red;
+        palette-light-red = color.rgbS.red;
+
+        palette-green = color.rgbS.green;
+        palette-light-green = color.rgbS.green;
+
+        palette-yellow = color.rgbS.yellow;
+        palette-light-yellow = color.rgbS.yellow;
+
+        palette-blue = color.rgbS.blue;
+        palette-light-blue = color.rgbS.blue;
+
+        palette-magenta = color.rgbS.pink;
+        palette-light-magenta = color.rgbS.pink;
+
+        palette-cyan = color.rgbS.teal;
+        palette-light-cyan = color.rgbS.teal;
+
+        palette-foreground = color.rgbS.text;
+        palette-background = "0,0,0";
+      };
 
       # NOTE: Do NOT use multline strings here!
       #       This will create a linebreak in the systemd service and break login!
       extraOptions = "";
-
-      extraConfig = let
-        color = config.home-manager.users.${username}.homemodules.color;
-      in ''
-        # term=xterm-256color
-        font-size=14
-        mode=3440x1440
-        palette=custom
-
-        palette-black=0,0,0
-        pallette-white=255,255,255
-
-        palette-red=${color.rgbS.red}
-        palette-light-red=${color.rgbS.red}
-
-        palette-green=${color.rgbS.green}
-        palette-light-green=${color.rgbS.green}
-
-        palette-yellow=${color.rgbS.yellow}
-        palette-light-yellow=${color.rgbS.yellow}
-
-        palette-blue=${color.rgbS.blue}
-        palette-light-blue=${color.rgbS.blue}
-
-        palette-magenta=${color.rgbS.pink}
-        palette-light-magenta=${color.rgbS.pink}
-
-        palette-cyan=${color.rgbS.teal}
-        palette-light-cyan=${color.rgbS.teal}
-
-        palette-foreground=${color.rgbS.text}
-        palette-background=0,0,0
-      '';
     };
 
     openssh = {
