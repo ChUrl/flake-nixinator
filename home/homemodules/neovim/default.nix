@@ -1112,6 +1112,7 @@ in {
             pkg = pkgs.vimPlugins.lualine-nvim;
             lazy = true;
             event = ["BufReadPost" "BufNewFile"];
+            # dependencies = [opencode];
             config = ''
               function(_, opts)
                 local lualine = require("lualine")
@@ -1211,6 +1212,7 @@ in {
                 lualine_c.__raw = ''{}''; # Use __raw: Nixvim does nothing with "[]", so the default config would be used
 
                 lualine_x.__raw = ''{}'';
+                # lualine_x.__raw = ''{ { require("opencode").statusline, }, }'';
                 lualine_y = ["filetype" "encoding" "fileformat"];
                 lualine_z.__raw = ''{ { "location", separator = {}, } }'';
               };
@@ -1450,6 +1452,22 @@ in {
             };
           };
 
+          # opencode = {
+          #   name = "opencode";
+          #   pkg = pkgs.vimPlugins.opencode-nvim;
+          #   lazy = false;
+          #   config = ''
+          #     function()
+          #       ---@type opencode.Opts
+          #       vim.g.opencode_opts = {
+          #         -- Your configuration, if any; goto definition on the type or field for details
+          #       }
+          #
+          #       vim.o.autoread = true -- Required for `vim.g.opencode_opts.events.reload`
+          #     end
+          #   '';
+          # };
+
           # obsidian = rec {
           #   name = "obsidian";
           #   pkg = pkgs.vimPlugins.obsidian-nvim;
@@ -1674,7 +1692,7 @@ in {
               gitbrowse.enabled = false;
               image.enabled = false;
               indent.enabled = false;
-              input.enabled = false;
+              input.enabled = true;
               keymap.enabled = false;
               layout.enabled = false;
               lazygit.enabled = true;
@@ -1709,6 +1727,20 @@ in {
                     filename_first = true;
                     truncate = 80;
                   };
+                };
+
+                actions = {
+                  opencode_send.__raw = ''
+                    function(picker)
+                      local items = vim.tbl_map(function(item)
+                        return item.file
+                          and require("opencode").format({ path = item.file, from = item.pos, to = item.end_pos })
+                          or item.text
+                      end, picker:selected({ fallback = true }))
+
+                      require("opencode").prompt(table.concat(items, ", ") .. " ")
+                    end
+                  '';
                 };
               };
 
@@ -2266,6 +2298,7 @@ in {
           noice # Modern UI overhaul, e.g. floating cmdline
           # obsidian # Integration with Obsidian.md
 
+          # opencode # TODO: Doesn't work, can't find "opencode --port" process
           # overseer # Run tasks from within neovim (e.g. cargo) # TODO:
 
           persisted # Session management

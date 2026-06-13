@@ -41,12 +41,37 @@
             args = ["-y" "@sveltejs/mcp"];
             type = "stdio";
           };
-          # npx shadcn@latest mcp init --client claude
           shadcn = {
+            # npx shadcn@latest mcp init --client claude
             command = "npx";
             args = ["-y" "shadcn@latest" "mcp"];
           };
         };
+      };
+
+      opencode = {
+        enable = true;
+        enableMcpIntegration = true;
+        extraPackages = [
+          # pkgs.opencode-claude-auth # Installed using npm
+        ];
+
+        # Writes opencode.json
+        settings = {
+          plugin = [
+            # https://github.com/griffinmartin/opencode-claude-auth
+            "opencode-claude-auth@latest"
+          ];
+        };
+
+        # Writes tui.json
+        tui = {};
+
+        agents = {};
+        commands = {};
+        context = '''';
+        skills = {};
+        tools = {};
       };
     };
 

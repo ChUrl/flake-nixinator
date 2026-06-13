@@ -170,10 +170,13 @@ in {
           codex-acp = {
             type = "registry";
           };
+          gemini = {
+            type = "registry";
+          };
           mistral-vibe = {
             type = "registry";
           };
-          gemini = {
+          opencode = {
             type = "registry";
           };
         };
