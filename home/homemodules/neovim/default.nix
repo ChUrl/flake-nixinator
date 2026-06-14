@@ -1472,6 +1472,14 @@ in {
                     url = "http://localhost:12345",
                     start = false,
                   },
+                  events = {
+                    permissions = {
+                      edits = {
+                        -- Disable neovim diff popup tab
+                        enabled = false,
+                      },
+                    },
+                  },
                 }
 
                 vim.o.autoread = true -- Required for `vim.g.opencode_opts.events.reload`
