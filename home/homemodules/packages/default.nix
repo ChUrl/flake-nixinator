@@ -160,6 +160,8 @@ in {
           czkawka-full # file deduplicator
           binaryninja-free # reverse engineering
           tableplus # database explorer
+          # opencode-desktop
+          lmstudio # TODO: Ollama
 
           # Office
           kdePackages.wacomtablet # For xournalpp/krita
