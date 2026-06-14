@@ -3,6 +3,7 @@
   pkgs,
   nixosConfig,
   config,
+  hostname,
   lib,
   mylib,
   username,
@@ -52,8 +53,8 @@
       opencode = {
         enable = true;
         enableMcpIntegration = true;
-        extraPackages = [
-          # pkgs.opencode-claude-auth # Installed using npm
+        extraPackages = with pkgs; [
+          # opencode-claude-auth # Installed using npm
         ];
 
         # Writes opencode.json
@@ -86,8 +87,54 @@
               command = ["alejandra" "$FILE"];
               extensions = [".nix"];
             };
+            perltidy = {
+              command = ["perltidy" "$FILE"];
+              extensions = [".pl"];
+            };
           };
-          lsp = true;
+          lsp = {
+            nixd = {
+              command = ["nixd"];
+              extensions = [".nix"];
+              initialization = {
+                preferences = {
+                  nixd = {
+                    nixpkgs = {expr = "import <nixpkgs> {}";};
+                    options = {
+                      nixos = {expr = "(builtins.getFlake \"/home/${username}/NixFlake\").nixosConfigurations.${hostname}.options";};
+                      home-manager = {expr = "(builtins.getFlake \"/home/${username}/NixFlake\").nixosConfigurations.\"${hostname}\".options.home-manager.users.type.getSubOptions []";};
+                    };
+                    diagnostic = {
+                      suppress = ["sema-escaping-with" "var-bind-to-this" "escaping-this-with"];
+                    };
+                  };
+                };
+              };
+            };
+            perlnavigator = {
+              command = ["perlnavigator"];
+              extensions = [".pl"];
+              initialization = {
+                preferences = {};
+              };
+            };
+            # perlpls = {
+            #   command = ["pls"];
+            #   extensions = [".pl"];
+            #   initialization = {
+            #     preferences = {
+            #       perl = {
+            #         perlcritic = {enabled = false;};
+            #         syntax = {enabled = true;};
+            #       };
+            #     };
+            #   };
+            # };
+            r-language-server = {
+              command = ["R" "--no-echo" "-e" "languageserver::run()"];
+              extensions = [".r" ".rmd" ".quarto"];
+            };
+          };
           permission = {
             "*" = "ask";
             "read" = "allow";
@@ -99,7 +146,7 @@
           plugin = [
             "opencode-claude-auth@latest" # https://github.com/griffinmartin/opencode-claude-auth
             "@tarquinen/opencode-dcp@latest" # better compacting
-            "@slkiser/opencode-quota"
+            # "@slkiser/opencode-quota"
           ];
           share = "disabled";
           shell = "fish";
