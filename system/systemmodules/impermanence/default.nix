@@ -126,6 +126,7 @@ in {
             (mkUDir ".docker" m755)
             # (mkUDir ".gradle" m755) # Unity
             (mkUDir ".java" m755) # JetBrains
+            (mkUDir ".lmstudio" m755)
             (mkUDir ".MakeMKV" m755)
             (mkUDir ".mozilla/firefox" m755) # TODO: Remove this someday
             (mkUDir ".mozilla/native-messaging-hosts" m755)
@@ -143,12 +144,16 @@ in {
 
             # Cache that's actually useful
             (mkUDir ".cache/claude-cli-nodejs" m755)
+            (mkUDir ".cache/elephant" m755)
             (mkUDir ".cache/fish/generated_completions" m755)
+            (mkUDir ".cache/nix" m755)
             (mkUDir ".cache/nix-index" m755)
             (mkUDir ".cache/nix-search-tv" m755)
             (mkUDir ".cache/nvim" m755)
             (mkUDir ".cache/JetBrains" m755)
             (mkUDir ".cache/keepassxc" m755)
+            (mkUDir ".cache/opencode" m755)
+            (mkUDir ".cache/uv" m755)
 
             # Config
             # (mkUDir ".config/.android" m755) # Unity
@@ -167,6 +172,7 @@ in {
             (mkUDir ".config/JetBrains" m755)
             (mkUDir ".config/kdeconnect" m755)
             (mkUDir ".config/keepassxc" m755)
+            (mkUDir ".config/LM Studio" m755)
             (mkUDir ".config/Msty" m755)
             (mkUDir ".config/Nextcloud" m755)
             # (mkUDir ".config/niri/dms" m755)
