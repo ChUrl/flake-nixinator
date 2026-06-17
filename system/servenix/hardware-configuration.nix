@@ -69,12 +69,6 @@
       fsType = "nfs";
       options = ["defaults" "rw" "relatime" "_netdev" "bg" "hard"];
     };
-
-    "/media/Box" = {
-      device = "192.168.86.20:/mnt/Seagate4TB/Box";
-      fsType = "nfs";
-      options = ["defaults" "rw" "relatime" "_netdev" "bg" "hard"];
-    };
   };
 
   swapDevices = [
