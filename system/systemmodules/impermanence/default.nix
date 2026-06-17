@@ -70,7 +70,6 @@ in {
           (mkRDir "/usr/systemd-placeholder" m755)
 
           # TODO: Why does this use the mandb user?
-          # TODO: Why does this apparently conflict with comfyui-nix?
           # (mkDir "mandb" "/var/cache/man" m755)
 
           # (mkRDir "/var/cache/restic-backups-synology" m755)
