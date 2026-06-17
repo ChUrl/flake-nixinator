@@ -137,10 +137,60 @@
           };
           permission = {
             "*" = "ask";
-            "read" = "allow";
+            "bash" = {
+              "*" = "ask";
+              "ls *" = "allow";
+              "find *" = "ask"; # Don't want find -exec
+              "file *" = "allow";
+              "wc *" = "allow";
+              "grep *" = "allow";
+              "rg *" = "allow";
+              "test *" = "allow";
+              "echo *" = "allow";
+              "which *" = "allow";
+              "pwd *" = "allow";
+              "dirname *" = "allow";
+              "basename *" = "allow";
+              "readlink *" = "allow";
+
+              "cat *.env" = "deny";
+              "cat *.env.*" = "deny";
+              "cat *.env.example" = "allow";
+              "printenv *" = "deny";
+              "env *" = "deny";
+
+              "nix eval *" = "allow";
+              "nix flake metadata *" = "allow";
+              "nix flake show *" = "allow";
+              "nix path-info *" = "allow";
+              "nix why-depends *" = "allow";
+              "nix derivation show *" = "allow";
+              "nix store ping *" = "allow";
+              "nix stire diff-closures *" = "allow";
+
+              "git status *" = "allow";
+              "git log *" = "allow";
+              "git diff *" = "allow";
+            };
+            "external_directory" = {
+              "/nix/store/**" = "allow";
+              "/tmp" = "allow";
+              "/tmp/*" = "allow";
+            };
+            "read" = {
+              "*" = "allow";
+              "*.env" = "deny";
+              "*.env.*" = "deny";
+              "*.env.example" = "allow";
+            };
             "grep" = "allow";
             "glob" = "allow";
             "lsp" = "allow";
+            "skill" = "allow";
+            "task" = "ask";
+            "todowrite" = "allow";
+            "webfetch" = "allow";
+            "websearch" = "allow";
             "question" = "allow";
           };
           plugin = [
