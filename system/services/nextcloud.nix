@@ -5,7 +5,7 @@
   pkgs,
   ...
 }: let
-  nextcloudVersion = "32.0.11-apache";
+  nextcloudVersion = "33.0.5-apache";
 in {
   systemd.services.nextcloud-cron = {
     enable = true;
