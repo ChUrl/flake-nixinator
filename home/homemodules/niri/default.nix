@@ -432,7 +432,7 @@ in {
           input = {
             focus-follows-mouse = {
               enable = true;
-              max-scroll-amount = "0%"; # Skip partial windows that would scroll the viewport on focus
+              max-scroll-amount = "10%"; # Skip partial windows that would scroll the viewport on focus
             };
 
             keyboard = {
