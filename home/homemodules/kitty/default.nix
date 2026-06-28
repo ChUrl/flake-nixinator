@@ -26,6 +26,12 @@ in {
         "kitty_mod+j" = "next_window";
         "kitty_mod+k" = "previous_window";
         "kitty_mod+l" = "next_layout";
+        "kitty_mod+p" = "command_palette";
+
+        "kitty_mod+c" = "copy_to_clipboard";
+        "ctrl+c" = "copy_or_interrupt";
+        "kitty_mod+v" = "paste_from_clipboard";
+        "ctrl+v" = "paste_from_clipboard";
       };
 
       settings = lib.mkMerge [
