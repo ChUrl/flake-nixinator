@@ -29,6 +29,54 @@
         enableMcpIntegration = true;
       };
 
+      ghostty = {
+        enable = true;
+        enableFishIntegration = true;
+        systemd.enable = true;
+
+        settings = {
+          theme = "catppuccin-mocha";
+          font-family = config.homemodules.color.font;
+          font-size = 12;
+          window-padding-x = 10;
+          window-padding-y = 10;
+          adjust-cursor-thickness = 1;
+
+          cursor-click-to-move = true;
+          # link-previews = true;
+        };
+
+        themes = let
+          color = config.homemodules.color;
+        in {
+          catppuccin-mocha = {
+            background = color.hex.base;
+            cursor-color = color.hex.rosewater;
+            foreground = color.hex.text;
+            palette = [
+              "0=#${color.hex.surface1}"
+              "1=#${color.hex.red}"
+              "2=#${color.hex.green}"
+              "3=#${color.hex.yellow}"
+              "4=#${color.hex.blue}"
+              "5=#${color.hex.pink}"
+              "6=#${color.hex.teal}"
+              "7=#${color.hex.subtext1}"
+              "8=#${color.hex.surface2}"
+              "9=#${color.hex.red}"
+              "10=#${color.hex.green}"
+              "11=#${color.hex.yellow}"
+              "12=#${color.hex.blue}"
+              "13=#${color.hex.pink}"
+              "14=#${color.hex.teal}"
+              "15=#${color.hex.subtext0}"
+            ];
+            selection-background = color.hex.surface1;
+            selection-foreground = color.hex.text;
+          };
+        };
+      };
+
       mcp = {
         enable = true;
         servers = {
