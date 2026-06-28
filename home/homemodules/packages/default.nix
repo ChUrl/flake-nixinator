@@ -138,6 +138,7 @@ in {
         # Linux exclusive packages (!headless)
         (lib.optionals (pkgs.stdenv.isLinux && (!headless)) [
           wl-clipboard
+          asciicam
 
           # Proton
           proton-vpn
