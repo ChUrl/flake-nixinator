@@ -63,7 +63,7 @@ in [
       # Coding
 
       {
-        name = "Coding";
+        name = "Code";
         bookmarks = [
           (mkBm "C++Ref" "https://en.cppreference.com/w/")
           (mkBm "Rust" "https://doc.rust-lang.org/stable/book/ch03-00-common-programming-concepts.html")
@@ -72,21 +72,21 @@ in [
           (mkBm "Godbolt" "https://godbolt.org")
         ];
       }
-      {
-        name = "\"AI\"";
-        bookmarks = [
-          (mkBm "Mistral Chat" "https://chat.mistral.ai/chat")
-          (mkBm "DeepSeek Chat" "https://chat.deepseek.com/")
-          (mkBm "Claude Chat" "https://claude.ai/new")
-          (mkBm "ChatGPT" "https://chatgpt.com/")
-          (mkBm "DeepWiki" "https://deepwiki.com/")
-          "separator"
-          (mkBm "Mistral API" "https://console.mistral.ai/usage")
-          (mkBm "DeepSeek API" "https://platform.deepseek.com/usage")
-          (mkBm "Claude API" "https://console.anthropic.com/usage")
-          (mkBm "OpenRouter API" "https://openrouter.ai/activity")
-        ];
-      }
+      # {
+      #   name = "AI";
+      #   bookmarks = [
+      #     (mkBm "Mistral Chat" "https://chat.mistral.ai/chat")
+      #     (mkBm "DeepSeek Chat" "https://chat.deepseek.com/")
+      #     (mkBm "Claude Chat" "https://claude.ai/new")
+      #     (mkBm "ChatGPT" "https://chatgpt.com/")
+      #     (mkBm "DeepWiki" "https://deepwiki.com/")
+      #     "separator"
+      #     (mkBm "Mistral API" "https://console.mistral.ai/usage")
+      #     (mkBm "DeepSeek API" "https://platform.deepseek.com/usage")
+      #     (mkBm "Claude API" "https://console.anthropic.com/usage")
+      #     (mkBm "OpenRouter API" "https://openrouter.ai/activity")
+      #   ];
+      # }
       (mkBm "GH" "https://github.com/churl")
       (mkBm "GL" "https://gitlab.com/churl")
       (mkBm "SO" "https://stackoverflow.com/users/saves/17337508/all")
