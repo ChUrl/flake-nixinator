@@ -123,6 +123,7 @@ in {
                 numpy
                 matplotlib
                 requests
+                pygments
               ]))
 
             (rWrapper.override {
@@ -971,15 +972,15 @@ in {
                 {name = "html";} # vscode-langservers-extracted
                 {name = "just";}
                 {name = "lua_ls";}
-                {
-                  name = "ltex";
-                  extraOptions.settings = {
-                    ltex = {
-                      checkFrequency = "save";
-                      enabled = ["markdown" "org" "tex" "latex" "plaintext"];
-                    };
-                  };
-                }
+                # {
+                #   name = "ltex";
+                #   extraOptions.settings = {
+                #     ltex = {
+                #       checkFrequency = "save";
+                #       enabled = ["markdown" "org" "tex" "latex" "plaintext"];
+                #     };
+                #   };
+                # }
                 # {name = "nil_ls";}
                 {
                   name = "nixd";
