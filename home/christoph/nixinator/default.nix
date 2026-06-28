@@ -78,6 +78,7 @@
             "opencode"
             "opencode-go"
             "anthropic"
+            "lmstudio"
           ];
           formatter = {
             nixfmt = {
@@ -196,6 +197,7 @@
           plugin = [
             "opencode-claude-auth@latest" # https://github.com/griffinmartin/opencode-claude-auth
             "@tarquinen/opencode-dcp@latest" # better compacting
+            "opencode-lmstudio@0.3.1"
             # "@slkiser/opencode-quota"
           ];
           share = "disabled";
