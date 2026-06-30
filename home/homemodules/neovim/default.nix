@@ -158,6 +158,15 @@ in {
       viAlias = neovim.alias;
       vimAlias = neovim.alias;
 
+      # extraPackages = let
+      #   yazi-termfix = pkgs.writeShellScriptBin "yazi" ''
+      #     export TERM=xterm-kitty
+      #     exec ${pkgs.yazi}/bin/yazi "@$"
+      #   '';
+      # in [
+      #   yazi-termfix
+      # ];
+
       # Configured using plugin
       # colorschemes.catppuccin = {
       #   enable = true;
@@ -367,6 +376,7 @@ in {
                 light = "latte";
                 dark = "mocha";
               };
+              term_colors = true;
               # https://github.com/catppuccin/nvim/tree/main?tab=readme-ov-file#integrations
               default_integrations = true;
               integrations = {
@@ -403,6 +413,7 @@ in {
                   # custom_bg = "crust";
                 };
                 notify = true;
+                terminal = true;
                 treesitter = true;
                 ufo = true;
                 rainbow_delimiters = true;
@@ -435,6 +446,7 @@ in {
             # pkg = inputs.blink-cmp.packages.${system}.default;
             pkg = pkgs.vimPlugins.blink-cmp;
             lazy = true;
+            dependencies = [luasnip];
             event = ["InsertEnter"];
             config = mkDefaultConfig name;
 
@@ -480,6 +492,10 @@ in {
                 window = {
                   border = "rounded";
                 };
+              };
+
+              snippets = {
+                preset = "luasnip";
               };
 
               fuzzy = {
@@ -1933,6 +1949,7 @@ in {
               shell = "fish";
               direction = "horizontal"; # 'vertical' | 'horizontal' | 'window' | 'float'
               auto_scroll = true;
+              clear_env = false;
 
               float_opts = {
                 border = "curved"; # 'single' | 'double' | 'shadow' | 'curved'
@@ -2110,18 +2127,24 @@ in {
             pkg = pkgs.vimPlugins.vimtex;
             init = ''
               function()
-                vim.g.vimtex_mappings_enabled = false
+                vim.g.vimtex_mappings_enabled = true
                 vim.g.vimtex_view_method = "zathura"
+                vim.g.vimtex_syntax_conceal_disable = true;
+
+                vim.g.vimtex_compiler_method = "latexmk"
+                vim.g.vimtex_compiler_clean_paths = {"_minted*", "svg-inkscape*"}
                 vim.g.vimtex_compiler_latexmk = {
                   options = {
-                    "-shell-escape",
+                    "-verbose",
                     "-file-line-error",
                     "-synctex=1",
                     "-interaction=nonstopmode",
+                    "-shell-escape",
                   },
                   aux_dir = ".aux",
                   out_dir = ".out",
                 }
+
               end
             '';
           };
