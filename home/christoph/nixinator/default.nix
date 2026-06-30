@@ -29,6 +29,7 @@
         enableMcpIntegration = true;
       };
 
+      # NOTE: Starts extremely slow
       ghostty = {
         enable = true;
         enableFishIntegration = true;
@@ -43,6 +44,7 @@
           adjust-cursor-thickness = 1;
 
           cursor-click-to-move = true;
+          gtk-single-instance = true;
           # link-previews = true;
         };
 
