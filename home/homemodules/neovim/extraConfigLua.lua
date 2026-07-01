@@ -60,8 +60,13 @@ end, {
 
 -- Toggle Rmpc
 local Terminal = require("toggleterm.terminal").Terminal
-local rmpc =
-	Terminal:new({ cmd = "rmpc", hidden = true, close_on_exit = true, auto_scroll = false, direction = "float" })
+local rmpc = Terminal:new({
+	cmd = "rmpc",
+	hidden = true,
+	close_on_exit = true,
+	auto_scroll = false,
+	direction = "float",
+})
 
 vim.g.toggle_rmpc = function()
 	rmpc:toggle()

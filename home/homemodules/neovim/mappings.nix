@@ -340,13 +340,12 @@ _: let
       action = "<cmd>lua vim.g.toggle_rmpc()<cr>"; # Defined in extraConfigLua.lua
       options.desc = "Show Rmpc";
     }
-    # TODO: Something with the environment activation doesn't work
-    # {
-    #   mode = "n";
-    #   key = "<leader>.";
-    #   action = "<cmd>lua vim.g.toggle_failnix()<cr>"; # Defined in extraConfigLua.lua
-    #   options.desc = "Show FailNix";
-    # }
+    {
+      mode = "n";
+      key = "<leader>.";
+      action = "<cmd>lua vim.g.toggle_failnix()<cr>"; # Defined in extraConfigLua.lua
+      options.desc = "Show FailNix";
+    }
     {
       mode = "n";
       key = "<leader>i";
@@ -937,6 +936,12 @@ _: let
       key = "<leader>tt";
       action = "<cmd>Trouble diagnostics toggle focus=false win.position=bottom<cr>";
       options.desc = "Trouble Diagnostics";
+    }
+    {
+      mode = "n";
+      key = "<leader>tT";
+      action = "<cmd>ToggleTerm direction=float<cr>";
+      options.desc = "Floating Terminal";
     }
     {
       mode = "n";

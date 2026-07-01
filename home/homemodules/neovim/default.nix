@@ -1969,12 +1969,12 @@ in {
               shell = "fish";
               direction = "horizontal"; # 'vertical' | 'horizontal' | 'window' | 'float'
               auto_scroll = true;
-              clear_env = false;
+              # clear_env = false;
 
               float_opts = {
                 border = "curved"; # 'single' | 'double' | 'shadow' | 'curved'
-                width = 80;
-                height = 80;
+                width.__raw = "function() return math.floor(vim.o.columns * 0.95) end";
+                height.__raw = "function() return math.floor(vim.o.lines * 0.85) end";
                 winblend = 0;
               };
             };
