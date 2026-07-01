@@ -1827,6 +1827,7 @@ in {
                 function(line)
                   local base = { fg = "#${color.hex.base}", bg = "#${color.hex.base}" }
                   local crust = { fg = "#${color.hex.crust}", bg = "#${color.hex.crust}" }
+                  local mantle = { fg = "#${color.hex.mantle}", bg = "#${color.hex.mantle}" }
                   local text = { fg = "#${color.hex.text}", bg = "#${color.hex.crust}" }
                   local accent = { fg = "#${color.hex.accent}", bg = "#${color.hex.accent}" }
 
@@ -1852,14 +1853,14 @@ in {
                         line.sep(sep_start, accent, crust),
                         tab.number(),
                         tab.name(),
-                        line.sep(sep_end, crust, base),
+                        line.sep(sep_end, crust, mantle),
                         hl = hl,
                         margin = " ",
                       }
                     end),
 
                     -- Background
-                    hl = bg,
+                    hl = mantle,
                   }
                 end
               '';
