@@ -225,6 +225,16 @@ in {
         #   fg = "#${color.hex.dark.text}";
         #   bold = false;
         # };
+        # NeoTreeNormal = {bg = "#${color.hex.base}";};
+        # NeoTreeNormalNC = {bg = "#${color.hex.base}";};
+        # NeoTreeWinSeparator = {
+        #   fg = "#${color.hex.crust}";
+        #   bg = "#${color.hex.base}";
+        # };
+        # NeoTreeVertSplit = {
+        #   fg = "#${color.hex.crust}";
+        #   bg = "#${color.hex.base}";
+        # };
       };
 
       # extraLuaPackages = with pkgs.lua51Packages; [];
@@ -242,7 +252,7 @@ in {
         #       local renderer = require("neo-tree.ui.renderer")
         #       local state = manager.get_state("filesystem")
         #       local window_exists = renderer.window_exists(state)
-
+        #
         #       if window_exists then
         #         require("neo-tree.sources.filesystem.commands").refresh(state)
         #       end
@@ -425,6 +435,15 @@ in {
                 };
                 which_key = true;
               };
+
+              highlight_overrides.mocha.__raw = ''
+                function(colors)
+                  return {
+                    NeoTreeWinSeparator = { fg = colors.crust, bg = colors.base, },
+                    NeoTreeVertSplit = { fg = colors.crust, bg = colors.base, },
+                  }
+                end
+              '';
             };
           };
 
