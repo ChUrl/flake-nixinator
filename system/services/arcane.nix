@@ -42,7 +42,7 @@ in {
       };
 
       environmentFiles = [
-        config.sops.templates."TEMPLATE_secrets.env".path
+        config.sops.templates."arcane_secrets.env".path
       ];
 
       extraOptions = [
