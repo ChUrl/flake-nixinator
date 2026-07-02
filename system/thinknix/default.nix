@@ -16,6 +16,7 @@
 
     # General services
     ../services/adguard.nix
+    ../services/arcane.nix
     ../services/nginx-proxy-manager.nix
     # ../services/portainer.nix
     # ../services/pulse.nix
@@ -59,15 +60,20 @@
       allowedTCPPorts = [
         53 # DNS
         80 # HTTP
+
+        3553 # Arcane
       ];
       allowedUDPPorts = [
         53 # DNS
         67 # DHCP
+
+        3553 # Arcane
       ];
     };
 
     sops-nix.secrets.${username} = [
-      # "wireguard-vps-private-key"
+      "arcane-encryption-key"
+      "arcane-jwt-secret"
     ];
   };
 
