@@ -60,14 +60,10 @@
       allowedTCPPorts = [
         53 # DNS
         80 # HTTP
-
-        3553 # Arcane
       ];
       allowedUDPPorts = [
         53 # DNS
         67 # DHCP
-
-        3553 # Arcane
       ];
     };
 
