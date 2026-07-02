@@ -15,10 +15,10 @@ in {
   options.homemodules.helix = import ./options.nix {inherit lib mylib;};
 
   config = mkIf cfg.enable {
-    home.sessionVariables = {
-      EDITOR = "hx";
-      VISUAL = "hx";
-    };
+    # home.sessionVariables = {
+    #   EDITOR = "hx";
+    #   VISUAL = "hx";
+    # };
 
     programs.helix = {
       enable = true;
@@ -40,11 +40,11 @@ in {
 
       # https://docs.helix-editor.com/configuration.html
       settings = {
-        theme = "catppuccin_latte";
+        theme = "catppuccin_mocha";
         editor = {
           scrolloff = 10;
-          mouse = false; # Default true
-          middle-click-paste = false; # Default true
+          mouse = true;
+          middle-click-paste = true;
           line-number = "relative";
           cursorline = true;
           color-modes = true;

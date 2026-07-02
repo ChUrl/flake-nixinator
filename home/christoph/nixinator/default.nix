@@ -18,6 +18,7 @@
       # because it forces en-US keyboard layout.
       fcitx.enable = true;
 
+      helix.enable = true;
       waybar.monitors = ["DP-1" "DP-2"];
       vscode.enable = true;
       zed.enable = true;
