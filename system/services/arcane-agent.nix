@@ -9,7 +9,7 @@
 in {
   # If we need to pass secrets to containers we can't use plain env variables.
   sops.templates."arcane-agent_secrets.env".content = ''
-    AGENT_TOKEN=${config.sops.placeholder.agent-token}
+    AGENT_TOKEN=${config.sops.placeholder.arcane-agent-key}
   '';
 
   virtualisation.oci-containers.containers = {
