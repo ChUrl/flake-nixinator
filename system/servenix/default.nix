@@ -22,7 +22,7 @@
     # ../services/statespaces.nix
 
     # General services
-    ../services/arcane.nix
+    ../services/arcane-agent.nix
     ../services/authelia.nix
     ../services/bazarr.nix
     ../services/fileflows.nix
@@ -113,8 +113,7 @@
       "paperless-nextcloud-sync-password"
       "ntfy-auth-users"
       "ntfy-auth-tokens"
-      "arcane-encryption-key"
-      "arcane-jwt-secret"
+      "arcane-agent-key"
     ];
   };
 
