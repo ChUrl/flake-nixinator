@@ -30,7 +30,7 @@
     ../services/immich.nix
     ../services/jellyfin.nix
     ../services/kiwix.nix
-    # ../services/kopia.nix
+    ../services/kopia.nix
     ../services/nextcloud.nix
     ../services/ntfy.nix
     ../services/nginx-proxy-manager.nix
