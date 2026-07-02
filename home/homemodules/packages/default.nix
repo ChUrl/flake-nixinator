@@ -98,6 +98,7 @@ in {
           disktui
           lldb
           inotify-tools
+          xdotool
 
           # Hardware/Software info
           pciutils # lspci
