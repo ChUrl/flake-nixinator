@@ -22,6 +22,7 @@
     ../services/statespaces.nix
 
     # General services
+    ../services/arcane.nix
     ../services/authelia.nix
     ../services/bazarr.nix
     ../services/fileflows.nix
