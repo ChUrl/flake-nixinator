@@ -33,7 +33,7 @@ in {
 
       environment = {
         MANAGER_API_URL = "https://arcane.think.chriphost.de";
-        AGENT_MODE = "true";
+        EDGE_AGENT = "true";
         EDGE_TRANSPORT = "poll";
 
         PUID = "1000";
