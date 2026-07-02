@@ -30,20 +30,24 @@ in {
       volumes = let
         # TODO: Setup on ThinkNix: adguard_config, adguard_work, portainer_config
         backup = [
+          "arcane-agent_data"
           "authelia_config"
-          "formula10_cache"
+          "bazarr_config"
+          "fileflows_data"
           "formula10_data"
           "formula11_pb_data"
+          "formula12_pb_data"
           "gitea-db_data"
-          "gitea_data"
           "gitea-runner_config"
           "gitea-runner_data"
+          "gitea_data"
           "heidi_config"
           "immich-database_data"
           "immich_config"
           "immich_data"
           "immich_machine-learning"
           "jellyfin_config"
+          "kopia_config"
           "nextcloud-db_data"
           "nextcloud_data"
           "nginx_config"
@@ -51,6 +55,13 @@ in {
           "nginx_snippets"
           "paperless-postgres_data"
           "paperless_data"
+          "prowlarr_config"
+          "radarr_config"
+          "sabnzbd-movies_config"
+          "sabnzbd-shows_config"
+          "sonarr_config"
+          "teamspeak_data2"
+          "tinymediamanager_data"
         ];
 
         mkVolume = name: "${name}:/data/${name}:ro";
