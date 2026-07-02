@@ -221,6 +221,10 @@ in {
               ns = "nix shell nixpkgs#";
               nr = "nix run";
               nps = "nps -e";
+
+              # Systemctl
+              st = "sudo systemctl-tui";
+              sf = "systemctl --failed";
             }
 
             # Abbrs only available if package is installed
@@ -237,11 +241,6 @@ in {
             (abbrify pkgs.ripgrep {
               rg = "rg --trim --pretty";
               # grep = rg;
-            })
-
-            (abbrify pkgs.systemctl-tui {
-              st = "systemctl-tui";
-              sf = "systemctl --failed";
             })
 
             (abbrify pkgs.eza {
