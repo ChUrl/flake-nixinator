@@ -239,6 +239,11 @@ in {
               # grep = rg;
             })
 
+            (abbrify pkgs.systemctl-tui {
+              st = "systemctl-tui";
+              sf = "systemctl --failed";
+            })
+
             (abbrify pkgs.eza {
               ls = "eza --color=always --group-directories-first -F --git --icons=always --octal-permissions";
               lsl = "eza --color=always --group-directories-first -F --git --icons=always --octal-permissions -l";
