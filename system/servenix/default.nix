@@ -113,6 +113,8 @@
       "paperless-nextcloud-sync-password"
       "ntfy-auth-users"
       "ntfy-auth-tokens"
+      "arcane-encryption-key"
+      "arcane-jwt-secret"
     ];
   };
 
