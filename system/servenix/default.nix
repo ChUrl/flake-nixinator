@@ -19,7 +19,7 @@
     ../services/formula10.nix
     ../services/formula11.nix
     ../services/formula12.nix
-    ../services/statespaces.nix
+    # ../services/statespaces.nix
 
     # General services
     ../services/arcane.nix
@@ -36,8 +36,8 @@
     ../services/nginx-proxy-manager.nix
     ../services/paperless.nix
     # ../services/plex.nix # Their monetization strategy is absolutely atrocious
-    ../services/portainer-agent.nix
-    ../services/pulse-agent-servenix.nix
+    # ../services/portainer-agent.nix
+    # ../services/pulse-agent-servenix.nix
     ../services/prowlarr.nix
     ../services/radarr.nix
     ../services/sabnzbd-movies.nix
@@ -45,7 +45,7 @@
     ../services/sonarr.nix
     ../services/teamspeak.nix
     ../services/tinymediamanager.nix
-    ../services/whats-up-docker.nix
+    # ../services/whats-up-docker.nix
   ];
 
   systemmodules = {
