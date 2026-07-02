@@ -39,7 +39,6 @@ in {
           tokei # Text file statistics in a project
           ttyper
           wiki-tui
-          inotify-tools
 
           # Nix
           nix-search-tv # Search nixpkgs, nur, nixos options and homemanager options
@@ -98,6 +97,7 @@ in {
           radare2
           disktui
           lldb
+          inotify-tools
 
           # Hardware/Software info
           pciutils # lspci
