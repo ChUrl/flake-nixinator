@@ -7,7 +7,7 @@
 }: let
   vectorchordVersion = "0.4.2";
   pgvectorsVersion = "0.2.0";
-  immichVersion = "2.7.5-cuda";
+  immichVersion = "3.0.1-cuda";
 in {
   virtualisation.oci-containers.containers = {
     immich-database = {
