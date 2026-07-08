@@ -815,18 +815,38 @@ in {
               command = "xdg-open ~/Notes/TU/$OPTION0/$OPTION1/$OPTION2";
               rofiCmd = "walker -d";
             };
-            # niriMenu = mylib.rofi.mkMenu {
-            #   prompt = "Niri";
-            #   layers = [
-            #     {
-            #       "󰹑  Take Region Screenshot" = "niri msg action screenshot -p false";
-            #       "󰹑  Take Window Screenshot" = "niri msg action screenshot-window -p false -d true";
-            #       "󰹑  Take Full-Screen Screenshot" = "niri msg action screenshot-screen -p false -d true";
-            #     }
-            #   ];
-            #   prompts = ["Execute Niri Action"];
-            #   rofiCmd = "walker -d";
-            # };
+            screenshotMenu = mylib.rofi.mkMenu {
+              prompt = "Screenshot";
+              layers = [
+                {
+                  # -p: Show pointer
+                  # -d: Write to disk
+                  "󰹑  Take Region Screenshot" = "niri msg action screenshot -p false";
+                  "󰹑  Take Window Screenshot" = "niri msg action screenshot-window -p false -d true";
+                  "󰹑  Take Full-Screen Screenshot" = "niri msg action screenshot-screen -p false -d true";
+                }
+              ];
+              prompts = ["Execute Screenshot Action"];
+              rofiCmd = "walker -d";
+            };
+            sshMenu = mylib.rofi.mkMenu {
+              prompt = "SSH";
+              layers = [
+                "grep -E '^Host ' ~/.ssh/config | awk '{print $2}'"
+              ];
+              prompts = ["Select Host"];
+              command = "kitty ssh $OPTION0";
+              rofiCmd = "walker -d";
+            };
+            projectMenu = mylib.rofi.mkMenu {
+              prompt = "Project";
+              layers = [
+                "eza -1 -D ~/Projects"
+              ];
+              prompts = ["Select Project"];
+              command = "neovide ~/Projects/$OPTION0";
+              rofiCmd = "walker -d";
+            };
             globalMenu = mylib.rofi.mkMenu {
               prompt = "Global";
               layers = [
@@ -835,8 +855,11 @@ in {
                   "󰸉  Change Wallpaper" = "${wallpaperMenu}/bin/rofi-menu-Wallpaper";
                   "󰋗  View Keybindings" = "niri msg action show-hotkey-overlay";
                   "  Open Lecture Material" = "${lecturesMenu}/bin/rofi-menu-Lecture";
-                  # "  Niri Actions" = "${niriMenu}/bin/rofi-menu-Niri";
-                  # TODO: What else? SSH menu?
+                  "󰹑  Screenshot" = "${screenshotMenu}/bin/rofi-menu-Screenshot";
+                  # "🤪 Pick Symbols" = "walker -m symbols";
+                  "  Color Picker" = "hyprpicker --autocopy";
+                  "󰣀  SSH" = "${sshMenu}/bin/rofi-menu-SSH";
+                  "  Open Project" = "${projectMenu}/bin/rofi-menu-Project";
                 }
               ];
               prompts = ["Select Action"];
@@ -945,31 +968,37 @@ in {
 
             # Screenshots
             "Mod+S" = {
-              action.screenshot-window = {
-                write-to-disk = true;
-                show-pointer = false;
-              };
+              action = spawn "${screenshotMenu}/bin/rofi-menu-Screenshot";
               hotkey-overlay = {
-                title = "Take a screenshot of the current window.";
+                title = "Screenshot menu.";
               };
             };
-            "Mod+Ctrl+S" = {
-              action.screenshot-screen = {
-                write-to-disk = true;
-                show-pointer = false;
-              };
-              hotkey-overlay = {
-                title = "Take a screenshot of the current screen.";
-              };
-            };
-            "Mod+Shift+S" = {
-              action.screenshot = {
-                show-pointer = false;
-              };
-              hotkey-overlay = {
-                title = "Take a screenshot of a region.";
-              };
-            };
+            # "Mod+S" = {
+            #   action.screenshot-window = {
+            #     write-to-disk = true;
+            #     show-pointer = false;
+            #   };
+            #   hotkey-overlay = {
+            #     title = "Take a screenshot of the current window.";
+            #   };
+            # };
+            # "Mod+Ctrl+S" = {
+            #   action.screenshot-screen = {
+            #     write-to-disk = true;
+            #     show-pointer = false;
+            #   };
+            #   hotkey-overlay = {
+            #     title = "Take a screenshot of the current screen.";
+            #   };
+            # };
+            # "Mod+Shift+S" = {
+            #   action.screenshot = {
+            #     show-pointer = false;
+            #   };
+            #   hotkey-overlay = {
+            #     title = "Take a screenshot of a region.";
+            #   };
+            # };
 
             # Niri
             "Mod+Shift+Slash" = {

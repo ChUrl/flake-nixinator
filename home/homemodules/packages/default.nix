@@ -184,7 +184,8 @@ in {
           resources
           # celluloid
           # cine
-          eyedropper
+          # eyedropper
+          hyprpicker
           junction
         ])
 
