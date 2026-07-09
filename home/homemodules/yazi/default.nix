@@ -270,6 +270,11 @@ in {
             run = "remove --permanently";
             desc = "Delete selection";
           }
+          {
+            on = ["g" "m"];
+            run = ''cd ~/Notes/TU/MastersThesis'';
+            desc = "Go to MastersThesis";
+          }
         ];
       };
 
