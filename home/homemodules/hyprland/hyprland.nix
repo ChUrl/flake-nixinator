@@ -10,7 +10,7 @@
   dynamicCursor.enable = false;
   trails.enable = true;
   hyprspace.enable = false; # Always broken
-  hyprpanel.enable = true;
+  hyprpanel.enable = false;
   caelestia.enable = false;
 
   keybindings = {

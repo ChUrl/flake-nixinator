@@ -17,6 +17,7 @@
     ./git
     ./helix
     ./hyprland
+    ./hyprpanel
     ./jellyfin-tui
     ./kitty
     ./lazygit
