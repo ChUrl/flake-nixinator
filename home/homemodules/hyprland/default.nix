@@ -24,6 +24,11 @@
 in {
   options.homemodules.hyprland = import ./options.nix {inherit lib mylib;};
 
+  # TODO: Extract common niri/hyprland stuff to modules (e.g., dunst), so no configs are duplicated
+  # TODO: Remove unnecessary bullshit
+  # TODO: Switch to lua config
+  # TODO: Synchronize with niri mappings
+
   config = lib.mkIf hyprland.enable {
     assertions = [
       {
@@ -33,10 +38,6 @@ in {
       {
         assertion = builtins.hasAttr "hyprlock" nixosConfig.security.pam.services;
         message = "Can't enable Hyprland module without Hyprlock PAM service!";
-      }
-      {
-        assertion = hyprland.hyprpanel.enable != hyprland.caelestia.enable;
-        message = "Can't enable Hyprpanel and Caelestia at the same time!";
       }
     ];
 
@@ -60,18 +61,17 @@ in {
       };
 
       packages = with pkgs; [
-        hyprpaper # Wallpaper setter
         hyprpicker # Color picker
         # hyprpolkitagent # Ugly polkit authentication GUI
         hyprland-qt-support
         hyprsunset # Blue light filter
 
         wl-clipboard
-        clipman # Clipboard manager (wl-paste)
+        # clipman # Clipboard manager (wl-paste)
         libnotify
         inotify-tools # Includes inotifywait
 
-        ncpamixer # Audio control
+        # ncpamixer # Audio control
         slurp # Region selector for screensharing
         grim # Grab images from compositor
 
@@ -121,48 +121,26 @@ in {
 
     programs = {
       hyprlock = import ./hyprlock.nix {inherit config hyprland color;};
-      caelestia = import ./caelestia.nix {inherit config hyprland color;};
     };
 
     services = {
-      dunst = import ./dunst.nix {inherit pkgs config hyprland color;};
       hypridle = import ./hypridle.nix {inherit config hyprland color;};
-      hyprpaper = import ./hyprpaper.nix {inherit config hyprland color;};
     };
 
     # Make sure the units only start when using Hyprland
-    systemd.user.services.dunst.Unit.After = lib.mkIf hyprland.dunst.enable (lib.mkForce ["hyprland-session.target"]);
-    systemd.user.services.dunst.Unit.PartOf = lib.mkIf hyprland.dunst.enable (lib.mkForce ["hyprland-session.target"]);
-    systemd.user.services.hypridle.Install.WantedBy = lib.mkIf (!hyprland.caelestia.enable) (lib.mkForce ["hyprland-session.target"]);
-    systemd.user.services.hypridle.Unit.After = lib.mkIf (!hyprland.caelestia.enable) (lib.mkForce ["hyprland-session.target"]);
-    systemd.user.services.hypridle.Unit.PartOf = lib.mkIf (!hyprland.caelestia.enable) (lib.mkForce ["hyprland-session.target"]);
-    systemd.user.services.hyprpaper.Install.WantedBy = lib.mkIf (!hyprland.caelestia.enable) (lib.mkForce ["hyprland-session.target"]);
-    systemd.user.services.hyprpaper.Unit.After = lib.mkIf (!hyprland.caelestia.enable) (lib.mkForce ["hyprland-session.target"]);
-    systemd.user.services.hyprpaper.Unit.PartOf = lib.mkIf (!hyprland.caelestia.enable) (lib.mkForce ["hyprland-session.target"]);
+    systemd.user.services.hypridle.Install.WantedBy = lib.mkForce ["hyprland-session.target"];
+    systemd.user.services.hypridle.Unit.After = lib.mkForce ["hyprland-session.target"];
+    systemd.user.services.hypridle.Unit.PartOf = lib.mkForce ["hyprland-session.target"];
 
     wayland.windowManager.hyprland = {
       enable = true;
       package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
       portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
+      configType = "hyprlang"; # TODO: lua
 
       systemd.enable = true; # Enable hyprland-session.target
       systemd.variables = ["--all"]; # Import PATH into systemd
       xwayland.enable = true;
-
-      plugins = builtins.concatLists [
-        (lib.optionals
-          hyprland.bars.enable
-          [inputs.hyprland-plugins.packages.${pkgs.stdenv.hostPlatform.system}.hyprbars])
-        (lib.optionals
-          hyprland.dynamicCursor.enable
-          [inputs.hypr-dynamic-cursors.packages.${pkgs.stdenv.hostPlatform.system}.hypr-dynamic-cursors])
-        (lib.optionals
-          hyprland.trails.enable
-          [inputs.hyprland-plugins.packages.${pkgs.stdenv.hostPlatform.system}.hyprtrails])
-        (lib.optionals
-          hyprland.hyprspace.enable
-          [inputs.hyprspace.packages.${pkgs.stdenv.hostPlatform.system}.Hyprspace])
-      ];
 
       settings = import ./settings.nix {
         inherit

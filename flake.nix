@@ -57,6 +57,12 @@
     niri.url = "github:sodiboo/niri-flake";
     niri.inputs.nixpkgs.follows = "nixpkgs";
 
+    # Hyprland
+    hyprland.url = "github:hyprwm/Hyprland";
+    # hyprland.inputs.nixpkgs.follows = "nixpkgs";
+    hyprland-plugins.url = "github:hyprwm/hyprland-plugins";
+    hyprland-plugins.inputs.hyprland.follows = "hyprland";
+
     # Walker
     elephant.url = "github:abenz1267/elephant";
     walker.url = "github:abenz1267/walker";

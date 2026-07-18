@@ -79,34 +79,13 @@ in
 
       hyprland = {
         enable = nixosConfig.programs.hyprland.enable;
-        dunst.enable = !config.homemodules.hyprpanel.enable; # Disable for hyprpanel
         bars.enable = false;
-        dynamicCursor.enable = false;
-        trails.enable = true;
-        hyprspace.enable = false; # Always broken
         hyprpanel.enable = false;
-        caelestia.enable = false;
 
         keybindings = {
           main-mod = "SUPER";
 
           bindings = lib.mergeAttrsList [
-            # Use Rofi if we don't have caelestia
-            (lib.optionalAttrs (!config.homemodules.hyprland.caelestia.enable) {
-              "$mainMod, a" = ["exec, rofi -drun-show-actions -show drun"];
-              "$mainMod, c" = ["exec, clipman pick --tool=rofi"];
-              "$mainMod SHIFT, l" = ["exec, loginctl lock-session"];
-            })
-
-            # Caelestia
-            (lib.optionalAttrs (config.homemodules.hyprland.caelestia.enable) {
-              "$mainMod, a" = ["exec, caelestia shell drawers toggle launcher"];
-              # "$mainMod, c" = ["exec, caelestia clipboard"];
-              "$mainMod SHIFT, l" = ["exec, caelestia shell lock lock"];
-
-              "$mainMod, escape" = ["exec, caelestia shell drawers toggle session"];
-            })
-
             {
               # Applications
               "$mainMod, t" = ["exec, kitty"];
