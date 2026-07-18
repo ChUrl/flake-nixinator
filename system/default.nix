@@ -318,7 +318,7 @@ with mylib.networking; {
     gpu-screen-recorder.enable = !headless;
 
     hyprland = {
-      enable = false;
+      enable = true;
       # enable = !headless;
 
       package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;

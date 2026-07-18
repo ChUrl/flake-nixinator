@@ -19,6 +19,54 @@
       fcitx.enable = true;
 
       helix.enable = true;
+
+      hyprland = {
+        keyboard = {
+          layout = "us";
+          variant = "altgr-intl";
+          option = "nodeadkeys";
+        };
+
+        monitors = {
+          "DP-1" = {
+            width = 3440;
+            height = 1440;
+            rate = 165;
+            x = 1920;
+            y = 0;
+            scale = 1;
+            bitdepth = 10;
+            cm = "hdr";
+          };
+
+          "DP-2" = {
+            width = 1920;
+            height = 1080;
+            rate = 60;
+            x = 0;
+            y = 0;
+            scale = 1;
+          };
+        };
+
+        workspaces = {
+          "DP-1" = [1 2 3 4 5 6 7 8 9];
+          "DP-2" = [10];
+        };
+
+        autostart = {
+          delayed = [
+            "fcitx5"
+          ];
+        };
+
+        floating = [
+          {
+            class = "fcitx";
+          }
+        ];
+      };
+
       waybar.monitors = ["DP-1" "DP-2"];
       vscode.enable = true;
       zed.enable = true;
@@ -408,10 +456,11 @@
         packages = [
           "com.valvesoftware.Steam"
           "com.valvesoftware.Steam.Utility.steamtinkerlaunch"
-          "org.freedesktop.Platform.VulkanLayer.gamescope/x86_64/24.08"
-          "org.freedesktop.Platform.VulkanLayer.MangoHud/x86_64/24.08"
+          "org.freedesktop.Platform.VulkanLayer.gamescope/x86_64/25.08" # TODO: Doesn't work
+          "org.freedesktop.Platform.VulkanLayer.MangoHud/x86_64/25.08"
           "io.github.Foldex.AdwSteamGtk"
           "com.vysp3r.ProtonPlus"
+          "com.github.Matoking.protontricks"
           # "net.davidotek.pupgui2"
 
           "org.prismlauncher.PrismLauncher"
@@ -432,13 +481,28 @@
             ];
           };
 
-          "com.valvesoftware.Steam".Context = {
+          "com.github.Matoking.protontricks".Context = {
             filesystems = [
+              "${config.home.homeDirectory}/.var/app/com.valvesoftware.Steam"
               "${config.home.homeDirectory}/Games"
-
-              # This is Proton-GE installed from flatpak. ProtonUpQT doesn't require it.
-              "/var/lib/flatpak/runtime/com.valvesoftware.Steam.CompatibilityTool.Proton-GE"
             ];
+          };
+
+          "com.valvesoftware.Steam" = {
+            Environment = {
+              PATH = "/app/bin:/app/utils/bin:/usr/bin:/usr/lib/extensions/vulkan/gamescope/bin";
+            };
+            Context = {
+              filesystems = [
+                "${config.home.homeDirectory}/Games"
+
+                # This is Proton-GE installed from flatpak. ProtonUpQT doesn't require it.
+                "/var/lib/flatpak/runtime/com.valvesoftware.Steam.CompatibilityTool.Proton-GE"
+
+                # This is gamescope installed from flatpak
+                "/usr/lib/extensions/vulkan/gamescope/bin"
+              ];
+            };
           };
 
           "net.davidotek.pupgui2".Context = {

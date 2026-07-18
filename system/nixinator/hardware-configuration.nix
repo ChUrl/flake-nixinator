@@ -160,6 +160,9 @@
 
         # https://discourse.nixos.org/t/nvidia-open-breaks-hardware-acceleration/58770/3
         nvidia-vaapi-driver # Experimental, doesn't work with chromium
+
+        # Hdr in games with DXVK_HDR=1 ENABLE_HDR_WSI=1
+        vulkan-hdr-layer-kwin6
       ];
     };
 

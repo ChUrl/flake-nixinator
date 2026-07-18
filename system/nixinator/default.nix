@@ -216,6 +216,12 @@
       openFirewall = true; # Directly set port in firewall
     };
 
+    # TODO: Doesn't work with steam flatpak
+    # gamescope = {
+    #   enable = true;
+    #   enableWsi = true;
+    # };
+
     ghidra = {
       enable = true;
       gdb = true;

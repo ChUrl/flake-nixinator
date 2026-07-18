@@ -16,6 +16,7 @@
     ./fish
     ./git
     ./helix
+    ./hyprland
     ./jellyfin-tui
     ./kitty
     ./lazygit

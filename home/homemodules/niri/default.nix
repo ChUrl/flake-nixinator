@@ -136,7 +136,7 @@ in {
 
       sessionVariables = {
         QT_QPA_PLATFORMTHEME = "gtk3"; # For Noctalia
-        GDK_BACKEND = "wayland"; # For screen sharing
+        GDK_BACKEND = "wayland,x11"; # For screen sharing
       };
 
       pointerCursor = {
