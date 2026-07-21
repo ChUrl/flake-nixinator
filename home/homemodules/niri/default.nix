@@ -117,8 +117,40 @@ in {
       "qt5ct/colors/catppuccin-mocha-mauve.conf".source = "${pkgs.catppuccin-qt5ct}/share/qt5ct/colors/catppuccin-mocha-mauve.conf";
       "qt6ct/colors/catppuccin-mocha-mauve.conf".source = "${pkgs.catppuccin-qt5ct}/share/qt6ct/colors/catppuccin-mocha-mauve.conf";
       "dolphinrc".source = (pkgs.formats.ini {}).generate "dolphinrc" {
+        General = {
+          BrowseThroughArchives = true;
+          ConfirmClosingMultipleTabs = false;
+          OpenExternallyCalledFolderInNewTab = false;
+          RememberOpenedTabs = false;
+          ShowSelectionToggle = false;
+          ShowToolTips = true;
+        };
+
+        CompactMode.PreviewSize = 32;
+        ContextMenu.ShowViewMode = false;
+        DetailsMode.PreviewSize = 32;
         Icons.Theme = color.iconTheme;
+        "KFileDialog Settings"."Places Icons Static Size" = 32;
+        MainWindow.MenuBar = "Disabled";
+        PlacesPanel.IconSize = 32;
         UiSettings.ColorScheme = "*";
+      };
+      "kdeglobals".source = (pkgs.formats.ini {}).generate "kdeglobals" {
+        KDE.ShowDeleteCommand = true;
+        PreviewSettings.EnableRemoteFolderThumbnail = true;
+      };
+      "kservicemenurc".source = (pkgs.formats.ini {}).generate "kservicemenurc" {
+        Show = {
+          forgetfileitemaction = true;
+          hidefileitemaction = false;
+          kactivitymanagerd_fileitem_linking_plugin = false;
+          makefileactions = true;
+          mountisoaction = true;
+          movetonewfolderaitemaction = false;
+          nextclouddolphinactionplugin = true;
+          setfoldericonitemaction = false;
+          tagsfileitemaction = false;
+        };
       };
     };
 
@@ -218,6 +250,7 @@ in {
         kdePackages.qtstyleplugin-kvantum
         libsForQt5.qt5ct
         kdePackages.qt6ct
+        kdePackages.ark
         kdePackages.dolphin
         kdePackages.dolphin-plugins
         kdePackages.qtsvg
