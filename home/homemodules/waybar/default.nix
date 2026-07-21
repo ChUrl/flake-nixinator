@@ -23,7 +23,7 @@ in {
           fixed-center = true;
           output = waybar.monitors;
 
-          modules-left = ["custom/launcher" "niri/workspaces" "niri/window"]; # "user"
+          modules-left = ["custom/launcher" "niri/workspaces" "niri/window" "hyprland/workspaces" "hyprland/window"]; # "user"
           modules-center = ["mpris"]; # "systemd-failed-units"
           modules-right = ["privacy" "pulseaudio" "network" "disk" "cpu" "memory" "clock" "tray"];
 
@@ -52,6 +52,27 @@ in {
           };
 
           "niri/window" = {
+            format = "{title}";
+            separate-outputs = false;
+            icon = true;
+            icon-size = 22;
+          };
+
+          "hyprland/workspaces" = {
+            all-outputs = false;
+            format = "{icon}";
+            format-icons = {
+              default = "";
+              focused = "";
+              active = "";
+            };
+            persistent-workspaces = {
+              DP-1 = [1 2 3 4 5 6 7 8 9];
+              DP-2 = [0];
+            };
+          };
+
+          "hyprland/window" = {
             format = "{title}";
             separate-outputs = false;
             icon = true;
