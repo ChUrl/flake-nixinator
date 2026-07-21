@@ -178,7 +178,7 @@ in {
           # gnome-calendar
           # helvum # unmaintained
           crosspipe
-          nautilus # Just in case
+          # nautilus # This is the worst file manager I've ever used
           font-manager # Previews fonts, but doesn't set them
           gparted
           resources
