@@ -30,6 +30,7 @@ in {
         # Sans/Serif fonts
         noto-fonts
         noto-fonts-color-emoji
+        noto-fonts-cjk-serif
         noto-fonts-cjk-sans
         lxgw-wenkai
       ];

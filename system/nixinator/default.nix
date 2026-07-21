@@ -195,6 +195,34 @@
     spice-gtk
   ];
 
+  stylix = {
+    enable = true;
+    autoEnable = false;
+    base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-mocha.yaml";
+
+    # TODO: Duplicated from fonts module (set this inside fonts module?)
+    fonts = {
+      serif = {
+        package = pkgs.noto-fonts-cjk-serif;
+        name = "Noto Serif CJK SC";
+      };
+      sansSerif = {
+        package = pkgs.noto-fonts-cjk-sans;
+        name = "Noto Sans CJK SC";
+      };
+      monospace = {
+        package = pkgs.monolisa;
+        name = "MonoLisa Alt Script";
+      };
+      emoji = {
+        package = pkgs.noto-fonts-color-emoji;
+        name = "Noto Color Emoji";
+      };
+    };
+
+    targets = {};
+  };
+
   virtualisation = {
     libvirtd = {
       enable = true;
@@ -231,6 +259,9 @@
   };
 
   services = {
+    # desktopManager.plasma6.enable = true;
+    # displayManager.gdm.enable = true; # Somehow, Plasma's own manager didn't work
+
     btrfs.autoScrub = {
       enable = true;
       interval = "weekly";
