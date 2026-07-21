@@ -54,7 +54,7 @@ in
         cursorSize = 24;
         cursorPackage = pkgs.bibata-cursors;
 
-        iconTheme = "Papirus";
+        iconTheme = "Papirus-Dark";
         iconPackage = pkgs.papirus-icon-theme;
 
         scheme = "catppuccin-mocha";
@@ -85,58 +85,83 @@ in
         keybindings = {
           main-mod = "SUPER";
 
-          bindings = lib.mergeAttrsList [
-            {
-              # Applications
-              "$mainMod, t" = ["exec, kitty"];
-              "$mainMod, e" = ["exec, kitty --title=Yazi yazi"];
-              "$mainMod, n" = ["exec, neovide"];
-              # "$mainMod, r" = ["exec, kitty --title=Rmpc rmpc"];
-              "$mainMod CTRL, n" = ["exec, kitty --title=Navi navi"];
-              "$mainMod SHIFT, n" = ["exec, neovide ${config.paths.dotfiles}/navi/christoph.cheat"];
-              "$mainMod SHIFT, f" = ["exec, neovide ${config.paths.dotfiles}/flake.nix"];
-              # "ALT, tab" = ["exec, rofi -show window"];
+          bindings = let
+            sessionMenu = mylib.rofi.mkMenu {
+              prompt = "Session2";
+              layers = [
+                {
+                  "󰤂  Poweroff" = "poweroff";
+                  "󰜉  Reboot" = "reboot";
+                  "󰌾  Lock" = "loginctl lock-session";
+                  # "  Reload Hyprpanel" = "systemctl --user restart hyprpanel.service";
+                  "  Reload Hyprland" = "hyprctl reload";
+                  "  Exit Hyprland" = "hyprctl dispatch exit";
+                  # "  Exit Niri" = "niri msg action quit";
+                }
+              ];
+              prompts = ["Select Session Action"];
+              rofiCmd = "walker -d";
+            };
+          in
+            lib.mergeAttrsList [
+              {
+                "$mainMod SHIFT, a" = ["exec, walker -m providerlist"];
+                "$mainMod, a" = ["exec, walker -m desktopapplications"];
+                "$mainMod, c" = ["exec, walker -m clipboard"];
+                "$mainMod, Escape" = ["exec, ${sessionMenu}/bin/rofi-menu-Session2"];
+                "$mainMod CTRL, w" = ["exec, waypaper"];
+              }
+              {
+                # Applications
+                "$mainMod, t" = ["exec, kitty"];
+                "$mainMod, e" = ["exec, kitty --title=Yazi yazi"];
+                "$mainMod, n" = ["exec, neovide"];
+                # "$mainMod, r" = ["exec, kitty --title=Rmpc rmpc"];
+                "$mainMod CTRL, n" = ["exec, kitty --title=Navi navi"];
+                "$mainMod SHIFT, n" = ["exec, neovide ${config.paths.dotfiles}/navi/christoph.cheat"];
+                "$mainMod SHIFT, f" = ["exec, neovide ${config.paths.dotfiles}/flake.nix"];
+                # "ALT, tab" = ["exec, rofi -show window"];
 
-              # Screenshots
-              "$mainMod, p" = ["exec, hyprpicker --autocopy --format=hex"];
-              "$mainMod, s" = ["exec, grim -g \"$(slurp)\""];
-              "$mainMod SHIFT, s" = ["exec, grim -g \"$(slurp)\" - | wl-copy"];
+                # Screenshots
+                "$mainMod, p" = ["exec, hyprpicker --autocopy --format=hex"];
+                "$mainMod, s" = ["exec, grim -g \"$(slurp)\""];
+                "$mainMod SHIFT, s" = ["exec, grim -g \"$(slurp)\" - | wl-copy"];
 
-              # Audio
-              ", XF86AudioRaiseVolume" = ["exec, wpctl set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 5%+"];
-              ", XF86AudioLowerVolume" = ["exec, wpctl set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 5%-"];
-              ", XF86AudioPlay" = ["exec, playerctl play-pause"];
-              ", XF86AudioPrev" = ["exec, playerctl previous"];
-              ", XF86AudioNext" = ["exec, playerctl next"];
+                # Audio
+                ", XF86AudioRaiseVolume" = ["exec, wpctl set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 5%+"];
+                ", XF86AudioLowerVolume" = ["exec, wpctl set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 5%-"];
+                ", XF86AudioPlay" = ["exec, playerctl play-pause"];
+                ", XF86AudioPrev" = ["exec, playerctl previous"];
+                ", XF86AudioNext" = ["exec, playerctl next"];
 
-              # Brightness
-              ", XF86MonBrightnessDown" = ["exec, hyprctl hyprsunset gamma -10"];
-              ", XF86MonBrightnessUp" = ["exec, hyprctl hyprsunset gamma +10"];
-              "$mainMod, XF86MonBrightnessDown" = ["exec, hyprctl hyprsunset temperature 5750"];
-              "$mainMod, XF86MonBrightnessUp" = ["exec, hyprctl hyprsunset identity"];
+                # Brightness
+                ", XF86MonBrightnessDown" = ["exec, hyprctl hyprsunset gamma -10"];
+                ", XF86MonBrightnessUp" = ["exec, hyprctl hyprsunset gamma +10"];
+                "$mainMod, XF86MonBrightnessDown" = ["exec, hyprctl hyprsunset temperature 5750"];
+                "$mainMod, XF86MonBrightnessUp" = ["exec, hyprctl hyprsunset identity"];
 
-              "CTRL ALT, f" = let
-                hyprctl = "${config.wayland.windowManager.hyprland.package}/bin/hyprctl";
-                grep = "${pkgs.gnugrep}/bin/grep";
-                awk = "${pkgs.gawk}/bin/gawk";
-                notify = "${pkgs.libnotify}/bin/notify-send";
+                "CTRL ALT, f" = let
+                  hyprctl = "${config.wayland.windowManager.hyprland.package}/bin/hyprctl";
+                  grep = "${pkgs.gnugrep}/bin/grep";
+                  awk = "${pkgs.gawk}/bin/gawk";
+                  notify = "${pkgs.libnotify}/bin/notify-send";
 
-                toggleMouseFocus = pkgs.writeScriptBin "hypr-toggle-mouse-focus" ''
-                  CURRENT=$(${hyprctl} getoption input:follow_mouse | ${grep} int | ${awk} -F' ' '{print $2}')
+                  toggleMouseFocus = pkgs.writeScriptBin "hypr-toggle-mouse-focus" ''
+                    CURRENT=$(${hyprctl} getoption input:follow_mouse | ${grep} int | ${awk} -F' ' '{print $2}')
 
-                  if [[ "$CURRENT" == "1" ]]; then
-                    ${hyprctl} keyword input:follow_mouse 0
-                    ${notify} "Disabled Mouse Focus!"
-                  else
-                    ${hyprctl} keyword input:follow_mouse 1
-                    ${notify} "Enabled Mouse Focus!"
-                  fi
-                '';
-              in ["exec, ${toggleMouseFocus}/bin/hypr-toggle-mouse-focus"];
+                    if [[ "$CURRENT" == "1" ]]; then
+                      ${hyprctl} keyword input:follow_mouse 0
+                      ${notify} "Disabled Mouse Focus!"
+                    else
+                      ${hyprctl} keyword input:follow_mouse 1
+                      ${notify} "Enabled Mouse Focus!"
+                    fi
+                  '';
+                in ["exec, ${toggleMouseFocus}/bin/hypr-toggle-mouse-focus"];
 
-              # "CTRL ALT, t" = ["exec, bash -c 'systemctl --user restart hyprpanel.service'"];
-            }
-          ];
+                # "CTRL ALT, t" = ["exec, bash -c 'systemctl --user restart hyprpanel.service'"];
+              }
+            ];
 
           ws-bindings = {
             # "<Workspace>" = "<Key>";
@@ -152,19 +177,18 @@ in
             "10" = "0";
           };
 
-          special-ws-bindings = {
-            "ferdium" = "x";
-            "msty" = "z";
-            "btop" = "b";
-            "rmpc" = "r";
-          };
+          # special-ws-bindings = {
+          #   "ferdium" = "x";
+          #   "msty" = "z";
+          #   "btop" = "b";
+          #   "rmpc" = "r";
+          # };
         };
 
         autostart = {
           immediate = [
             "kitty --hold fastfetch"
             # "zeal"
-            "nextcloud --background"
             # "protonvpn-app"
 
             # "kdeconnect-indicator" # started by services.kdeconnect.indicator
@@ -172,6 +196,7 @@ in
 
           delayed = [
             # "keepassxc" # The tray doesn't work when started too early
+            "nextcloud --background"
           ];
 
           special-silent = {
@@ -190,15 +215,15 @@ in
 
         workspacerules = {
           "1" = [];
-          "2" = ["neovide" "code-url-handler"];
+          "2" = ["neovide" "code-url-handler" "dev.zed.Zed" "code" "jetbrains-(.+)"];
           "3" = ["obsidian" "Zotero"];
           "4" = ["firefox" "Google-chrome" "chromium-browser" "org.qutebrowser.qutebrowser"];
           "5" = ["steam"];
-          "6" = ["steam_app_(.+)"];
+          "6" = ["steam_app_(.+)" "factorio"];
           "7" = ["signal"];
-          "8" = ["tidal-hifi"];
+          "8" = [];
           "9" = ["discord"];
-          "10" = ["python3"];
+          "10" = [];
         };
 
         floating = [
@@ -209,9 +234,10 @@ in
           }
           {class = "ffplay";}
           {class = "Unity";}
+          {class = "code-url-handler";}
         ];
 
-        transparent-opacity = "0.75";
+        transparent-opacity = "0.85";
 
         transparent = [
           "kitty"
@@ -297,9 +323,11 @@ in
 
           # Enable wayland
           XDG_SESSION_TYPE = "wayland";
-          QT_QPA_PLATFORM = "wayland;xcb";
+          # QT_QPA_PLATFORM = "wayland;xcb";
+          QT_QPA_PLATFORM = "wayland";
           NIXOS_OZONE_WL = "1";
-          # SDL_VIDEODRIVER = "wayland"; # Leave unset as gamescope uses xwayland
+          # ELECTRON_OZONE_PLATFORM_HINT = "auto";
+          SDL_VIDEODRIVER = "wayland"; # Leave unset as gamescope uses xwayland
 
           # Run SSH_ASKPASS as GUI, not TTY for Obsidian git
           SSH_ASKPASS_REQUIRE = "prefer";

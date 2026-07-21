@@ -24,11 +24,6 @@
 in {
   options.homemodules.hyprland = import ./options.nix {inherit lib mylib;};
 
-  # TODO: Extract common niri/hyprland stuff to modules (e.g., dunst), so no configs are duplicated
-  # TODO: Remove unnecessary bullshit
-  # TODO: Switch to lua config
-  # TODO: Synchronize with niri mappings
-
   config = lib.mkIf hyprland.enable {
     assertions = [
       {
@@ -78,45 +73,10 @@ in {
         # Deps for Qt5 and Qt6 apps (e.g., Nextcloud)
         qt5.qtwayland
         qt6.qtwayland
+
+        # xwayland
+        # wayland-protocols
       ];
-
-      file = {
-        ".config/hypr/keybindings.info".text = let
-          fixupHomeDir = key:
-            builtins.replaceStrings ["/home/${username}"] ["~"] key;
-
-          fixupNixStore = key: let
-            # The pattern has to match the entire string, otherwise it won't work
-            matches = builtins.match ".*/nix/store/(.*)/.*" key;
-          in
-            if (matches == null)
-            then key
-            else builtins.replaceStrings matches ["..."] key;
-
-          fixupNoMod = key:
-            builtins.replaceStrings ["<-"] ["<"] key;
-
-          mkBindHelpKey = key:
-            builtins.replaceStrings ["$mainMod" " " ","] ["${hyprland.keybindings.main-mod}" "-" ""] key;
-
-          mkBindHelpAction = action:
-            builtins.replaceStrings [","] [""] action;
-
-          mkBindHelp = key: action: "<${mkBindHelpKey key}>: ${mkBindHelpAction action}";
-
-          mkBindsHelp = key: actions:
-            actions
-            |> builtins.map (mkBindHelp key)
-            |> builtins.map fixupNoMod
-            |> builtins.map fixupNixStore
-            |> builtins.map fixupHomeDir;
-        in
-          (hyprland.keybindings.bindings // always-bind)
-          |> builtins.mapAttrs mkBindsHelp
-          |> builtins.attrValues
-          |> builtins.concatLists
-          |> builtins.concatStringsSep "\n";
-      };
     };
 
     programs = {
@@ -131,12 +91,15 @@ in {
     systemd.user.services.hypridle.Install.WantedBy = lib.mkForce ["hyprland-session.target"];
     systemd.user.services.hypridle.Unit.After = lib.mkForce ["hyprland-session.target"];
     systemd.user.services.hypridle.Unit.PartOf = lib.mkForce ["hyprland-session.target"];
+    systemd.user.services.elephant.Install.WantedBy = lib.mkForce ["hyprland-session.target" "graphical-session.target"];
+    systemd.user.services.elephant.Unit.After = lib.mkForce ["hyprland-session.target" "graphical-session.target"];
+    systemd.user.services.elephant.Unit.PartOf = lib.mkForce ["hyprland-session.target" "graphical-session.target"];
 
     wayland.windowManager.hyprland = {
       enable = true;
       package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
       portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
-      configType = "hyprlang"; # TODO: lua
+      configType = "hyprlang";
 
       systemd.enable = true; # Enable hyprland-session.target
       systemd.variables = ["--all"]; # Import PATH into systemd

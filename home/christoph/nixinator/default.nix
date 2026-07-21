@@ -36,7 +36,7 @@
             y = 0;
             scale = 1;
             bitdepth = 10;
-            cm = "hdr";
+            cm = "auto"; # with render:cm_auto_hdr, we don't need hdr here
           };
 
           "DP-2" = {

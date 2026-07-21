@@ -137,8 +137,12 @@
       hyprland.windowrules
     ];
 
+  render = {
+    cm_enabled = true;
+    cm_auto_hdr = true;
+  };
+
   dwindle = {
-    pseudotile = true;
     preserve_split = true;
   };
 
