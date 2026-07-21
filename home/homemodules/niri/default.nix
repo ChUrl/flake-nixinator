@@ -74,8 +74,58 @@ in {
       };
     };
 
+    qt = let
+      qtConfig = qtct: {
+        Appearance = {
+          icon_theme = color.iconTheme;
+          standard_dialogs = "xdgdesktopportal";
+          style = "kvantum";
+          custom_palette = true;
+          color_scheme_path = "${config.home.homeDirectory}/.config/${qtct}/colors/catppuccin-mocha-mauve.conf";
+          # color_scheme_path = "${pkgs.catppuccin-qt5ct}/share/${qtct}/colors/catppuccin-mocha-mauve.conf";
+        };
+        Fonts = {
+          fixed = color.font;
+          general = nixosConfig.fonts.fontconfig.defaultFonts.sansSerif;
+        };
+      };
+    in {
+      enable = true;
+      platformTheme.name = "qtct";
+      # style.name = "kvantum";
+
+      kvantum = {
+        enable = true;
+
+        themes = with pkgs; [
+          (catppuccin-kvantum.override {
+            variant = "mocha";
+            accent = "mauve";
+          })
+        ];
+
+        settings = {
+          General.theme = "catppuccin-mocha-mauve";
+        };
+      };
+
+      qt5ctSettings = qtConfig "qt5ct";
+      qt6ctSettings = qtConfig "qt6ct";
+    };
+
+    xdg.configFile = {
+      "qt5ct/colors/catppuccin-mocha-mauve.conf".source = "${pkgs.catppuccin-qt5ct}/share/qt5ct/colors/catppuccin-mocha-mauve.conf";
+      "qt6ct/colors/catppuccin-mocha-mauve.conf".source = "${pkgs.catppuccin-qt5ct}/share/qt6ct/colors/catppuccin-mocha-mauve.conf";
+      "dolphinrc".source = (pkgs.formats.ini {}).generate "dolphinrc" {
+        Icons.Theme = color.iconTheme;
+        UiSettings.ColorScheme = "*";
+      };
+    };
+
     # Disable Niri's kde auth agent and start gnome auth agent instead
     systemd.user.services.niri-flake-polkit = lib.mkForce {};
+
+    # TODO: Module
     systemd.user.services.polkit-gnome-authentication-agent-1 = {
       Unit = {
         Description = "polkit-gnome-authentication-agent-1";
@@ -99,6 +149,7 @@ in {
         # Link theme for flatpak
         ".themes/${config.gtk.theme.name}".source = "${config.gtk.theme.package}/share/themes/${config.gtk.theme.name}";
 
+        # TODO: Module
         ".config/waypaper/config.ini".text = lib.generators.toINI {} {
           Settings = {
             use_xdg_state = true;
@@ -135,8 +186,9 @@ in {
       };
 
       sessionVariables = {
-        QT_QPA_PLATFORMTHEME = "gtk3"; # For Noctalia
-        GDK_BACKEND = "wayland,x11"; # For screen sharing
+        # QT_QPA_PLATFORMTHEME = "gtk3"; # For Noctalia
+        # GDK_BACKEND = "wayland,x11"; # For screen sharing
+        GDK_BACKEND = "wayland";
       };
 
       pointerCursor = {
@@ -155,13 +207,23 @@ in {
         waypaper
         wtype # For elephant
 
-        # GTK apps (look good and work well with xdg portals)
+        # GTK
         nautilus # Fallback file chooser used by xdg-desktop-portal-gnome
-
-        # Catppuccin-GTK theme
         sassc
         gtk-engine-murrine
         gnome-themes-extra
+
+        # Qt
+        libsForQt5.qtstyleplugin-kvantum
+        kdePackages.qtstyleplugin-kvantum
+        libsForQt5.qt5ct
+        kdePackages.qt6ct
+        kdePackages.dolphin
+        kdePackages.dolphin-plugins
+        kdePackages.qtsvg
+        kdePackages.kio
+        kdePackages.kio-fuse
+        kdePackages.kio-extras
 
         # In case we fallback to the default niri config/keybindings
         alacritty
@@ -170,6 +232,7 @@ in {
     };
 
     services = {
+      # TODO: Module
       dunst = {
         enable = true;
 
@@ -205,6 +268,7 @@ in {
     };
 
     programs = {
+      # TODO: Module
       walker = {
         enable = true;
         runAsService = true;
@@ -461,13 +525,13 @@ in {
           prefer-no-csd = true; # Disable client-side decorations (e.g. window titlebars)
 
           spawn-at-startup = [
-            {
-              argv = [
-                "ashell"
-                "-c"
-                "${config.paths.dotfiles}/ashell/config.toml"
-              ];
-            }
+            # {
+            #   argv = [
+            #     "ashell"
+            #     "-c"
+            #     "${config.paths.dotfiles}/ashell/config.toml"
+            #   ];
+            # }
             {
               argv = [
                 "waypaper"
@@ -773,6 +837,7 @@ in {
 
           # TODO: Move values to config option and set in home/christoph/niri.nix
           binds = with config.lib.niri.actions; let
+            # TODO: Module
             sessionMenu = mylib.rofi.mkMenu {
               prompt = "Session";
               layers = [
@@ -982,23 +1047,23 @@ in {
             #     title = "Take a screenshot of the current window.";
             #   };
             # };
-            # "Mod+Ctrl+S" = {
-            #   action.screenshot-screen = {
-            #     write-to-disk = true;
-            #     show-pointer = false;
-            #   };
-            #   hotkey-overlay = {
-            #     title = "Take a screenshot of the current screen.";
-            #   };
-            # };
-            # "Mod+Shift+S" = {
-            #   action.screenshot = {
-            #     show-pointer = false;
-            #   };
-            #   hotkey-overlay = {
-            #     title = "Take a screenshot of a region.";
-            #   };
-            # };
+            "Mod+Ctrl+S" = {
+              action.screenshot-screen = {
+                write-to-disk = true;
+                show-pointer = false;
+              };
+              hotkey-overlay = {
+                title = "Take a screenshot of the current screen.";
+              };
+            };
+            "Mod+Shift+S" = {
+              action.screenshot = {
+                show-pointer = false;
+              };
+              hotkey-overlay = {
+                title = "Take a screenshot of a region.";
+              };
+            };
 
             # Niri
             "Mod+Shift+Slash" = {
