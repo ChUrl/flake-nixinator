@@ -92,6 +92,9 @@
     # musnix.url = "github:musnix/musnix";
     # musnix.inputs.nixpkgs.follows = "nixpkgs";
 
+    stylix.url = "github:nix-community/stylix";
+    stylix.inputs.nixpkgs.follows = "nixpkgs";
+
     # HyTale
     hytale-launcher.url = "github:JPyke3/hytale-launcher-nix";
 
@@ -211,6 +214,7 @@
       inputs.sops-nix.nixosModules.sops
       inputs.impermanence.nixosModules.impermanence
       inputs.lanzaboote.nixosModules.lanzaboote
+      inputs.stylix.nixosModules.stylix
 
       # We need the niri module also on the headless hosts
       # so nix can parse the config (although it is disabled...)
@@ -232,6 +236,7 @@
         headless = false;
         extraModules = [
           inputs.sops-nix.darwinModules.sops
+          inputs.stylix.darwinModules.stylix
         ];
       };
     };
