@@ -200,7 +200,7 @@ in {
           border-width: ${border-width};
           border-radius: ${border-radius};
           border-color: #${color.hex.accent};
-          background-color: rgba(${color.rgbS.mantle}, 1.0);
+          background-color: rgba(${color.rgbS.mantle}, 0.7);
         }
 
         tooltip {
