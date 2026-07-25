@@ -54,7 +54,8 @@
     # nix-alien.inputs.nixpkgs.follows = "nixpkgs";
 
     # Niri
-    niri.url = "github:sodiboo/niri-flake";
+    # niri.url = "github:sodiboo/niri-flake";
+    niri.url = "github:epireyn/niri-flake"; # NOTE: Updated fork of sodiboo's
     niri.inputs.nixpkgs.follows = "nixpkgs";
 
     # Hyprland
