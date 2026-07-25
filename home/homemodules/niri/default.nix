@@ -731,6 +731,32 @@ in {
               # opacity = 0.8;
             }
 
+            # Blurred windows
+            {
+              matches = [
+                # {app-id = "code";}
+                # {app-id = "code-url-handler";}
+                # {app-id = "dev.zed.Zed";}
+                # {app-id = "discord";}
+                # {app-id = "firefox";}
+                # {app-id = "jetbrains-clion";}
+                # {app-id = "jetbrains-idea";}
+                # {app-id = "jetbrains-pycharm";}
+                # {app-id = "jetbrains-rustrover";}
+                # {app-id = "jetbrains-rider";}
+                # {app-id = "jetbrains-webstorm";}
+                {app-id = "kitty";}
+                {app-id = "neovide";}
+                # {app-id = "obsidian";}
+                # {app-id = "org.qutebrowser.qutebrowser";}
+                # {app-id = "signal";}
+                # {app-id = "steam";}
+              ];
+
+              opacity = 0.9;
+              background-effect.blur = true;
+            }
+
             # Floating + unmaximized windows
             {
               matches = [
@@ -852,14 +878,15 @@ in {
                 enable = true;
                 draw-behind-window = true;
               };
+
+              background-effect.blur = true;
             }
-            # TODO: Missing niri-flake update
+            # TODO: Makes entire screen blank and blurred?
             # {
             #   matches = [{namespace = "walker";}];
             #
-            #   background-effect = {
-            #     blur = true;
-            #   };
+            #   opacity = 0.0;
+            #   background-effect.blur = true;
             # }
           ];
 
