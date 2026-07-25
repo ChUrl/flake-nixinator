@@ -176,7 +176,7 @@
           enabled_providers = [
             "opencode"
             "opencode-go"
-            "anthropic"
+            # "anthropic"
             "lmstudio"
           ];
           formatter = {
@@ -294,7 +294,7 @@
             "question" = "allow";
           };
           plugin = [
-            "opencode-claude-auth@latest" # https://github.com/griffinmartin/opencode-claude-auth
+            # "opencode-claude-auth@latest" # https://github.com/griffinmartin/opencode-claude-auth
             "@tarquinen/opencode-dcp@latest" # better compacting
             "opencode-lmstudio@0.3.1"
             # "@slkiser/opencode-quota"
