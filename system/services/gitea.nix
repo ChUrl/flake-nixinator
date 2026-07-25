@@ -5,8 +5,8 @@
   pkgs,
   ...
 }: let
-  giteaVersion = "1.24.2";
-  runnerVersion = "0.2.12";
+  giteaVersion = "1.27.0";
+  runnerVersion = "0.6.1";
 in {
   users = {
     groups.git = {};
