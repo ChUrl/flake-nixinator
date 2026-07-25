@@ -215,7 +215,6 @@
       inputs.sops-nix.nixosModules.sops
       inputs.impermanence.nixosModules.impermanence
       inputs.lanzaboote.nixosModules.lanzaboote
-      inputs.stylix.nixosModules.stylix
 
       # We need the niri module also on the headless hosts
       # so nix can parse the config (although it is disabled...)
@@ -264,6 +263,7 @@
         extraModules =
           [
             inputs.disko.nixosModules.disko
+            inputs.stylix.nixosModules.stylix
           ]
           ++ commonModules;
       };
