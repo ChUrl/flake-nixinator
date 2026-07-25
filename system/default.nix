@@ -337,7 +337,8 @@ with mylib.networking; {
 
     niri = {
       enable = !headless;
-      package = pkgs.niri-unstable; # TODO: Can remove this again once niri-flake is updated for 25.11
+      package = pkgs.niri;
+      # package = pkgs.niri-unstable; # TODO: Can remove this again once niri-flake is updated for 25.11
     };
 
     ssh.startAgent = true; # Use gnupg
