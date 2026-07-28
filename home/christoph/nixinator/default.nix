@@ -176,7 +176,7 @@
           enabled_providers = [
             "opencode"
             "opencode-go"
-            # "anthropic"
+            "anthropic"
             "lmstudio"
           ];
           formatter = {
@@ -294,9 +294,9 @@
             "question" = "allow";
           };
           plugin = [
-            # "opencode-claude-auth@latest" # https://github.com/griffinmartin/opencode-claude-auth
+            "opencode-claude-auth@latest" # https://github.com/griffinmartin/opencode-claude-auth
             "@tarquinen/opencode-dcp@latest" # better compacting
-            "opencode-lmstudio@0.3.1"
+            # "opencode-lmstudio@0.3.1"
             # "@slkiser/opencode-quota"
           ];
           share = "disabled";
@@ -449,6 +449,27 @@
       # Do not change.
       # This marks the version when NixOS was installed for backwards-compatibility.
       stateVersion = "22.05";
+    };
+
+    # Cyberpunk 2077 NXM handler
+    xdg.desktopEntries."modorganizer2-nxm-handler-cyberpunk" = {
+      type = "Application";
+      categories = ["Game"];
+      name = "Mod Organizer 2 NXM Handler (Cyberpunk 2077)";
+      mimeType = ["x-scheme-handler/nxm"];
+      exec = let
+        steam = "${config.home.homeDirectory}/.var/app/com.valvesoftware.Steam/.steam/steam";
+        steamapps = "${config.home.homeDirectory}/Games/SteamLibrary/steamapps";
+        proton = "Proton 11.0";
+
+        nxmHandler = pkgs.writeShellScript "cyberpunk-nxm-handler" ''
+          export STEAM_COMPAT_CLIENT_INSTALL_PATH="${steam}"
+          export STEAM_COMPAT_DATA_PATH="${steamapps}/compatdata/1091500"
+
+          exec "${steam}/steamapps/common/${proton}/proton" run \
+            "${steamapps}/compatdata/1091500/pfx/drive_c/Modding/MO2/nxmhandler.exe" "$1"
+        '';
+      in "${nxmHandler} %u";
     };
 
     services = {
