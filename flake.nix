@@ -47,6 +47,10 @@
     nps.url = "github:OleMussmann/nps";
     nps.inputs.nixpkgs.follows = "nixpkgs";
 
+    # Nix Gaming
+    nix-gaming.url = "github:fufexan/nix-gaming";
+    nix-gaming.inputs.nixpkgs.follows = "nixpkgs";
+
     # Run unpatched binaries on NixOS
     nix-alien.url = "github:thiagokokada/nix-alien";
     # Don't follow nixpkgs:
@@ -264,6 +268,7 @@
           [
             inputs.disko.nixosModules.disko
             inputs.stylix.nixosModules.stylix
+            inputs.nix-gaming.nixosModules.platformOptimizations
           ]
           ++ commonModules;
       };
