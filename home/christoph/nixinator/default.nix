@@ -458,16 +458,22 @@
       name = "Mod Organizer 2 NXM Handler (Cyberpunk 2077)";
       mimeType = ["x-scheme-handler/nxm"];
       exec = let
-        steam = "${config.home.homeDirectory}/.var/app/com.valvesoftware.Steam/.steam/steam";
-        steamapps = "${config.home.homeDirectory}/Games/SteamLibrary/steamapps";
+        # Paths seen from inside the Flatpak Steam sandbox
+        steam = "$HOME/.steam/steam";
+        steamapps = "$HOME/Games/SteamLibrary/steamapps";
         proton = "Proton 11.0";
 
-        nxmHandler = pkgs.writeShellScript "cyberpunk-nxm-handler" ''
+        # Runs inside flatpak's sandbox
+        innerCommand = ''
           export STEAM_COMPAT_CLIENT_INSTALL_PATH="${steam}"
           export STEAM_COMPAT_DATA_PATH="${steamapps}/compatdata/1091500"
-
           exec "${steam}/steamapps/common/${proton}/proton" run \
-            "${steamapps}/compatdata/1091500/pfx/drive_c/Modding/MO2/nxmhandler.exe" "$1"
+            "$HOME/Games/CyberpunkMO2/nxmhandler.exe" "$1"
+        '';
+
+        # Important: Run through flatpak's/steam's runtimes
+        nxmHandler = pkgs.writeShellScript "cyberpunk-nxm-handler" ''
+          exec flatpak run --command=sh com.valvesoftware.Steam -c ${lib.escapeShellArg innerCommand} _ "$1"
         '';
       in "${nxmHandler} %u";
     };
@@ -524,6 +530,13 @@
                 "/usr/lib/extensions/vulkan/gamescope/bin"
               ];
             };
+          };
+
+          "com.valvesoftware.Steam.Utility.steamtinkerlaunch".Context = {
+            filesystems = [
+              "${config.home.homeDirectory}/.var/app/com.valvesoftware.Steam"
+              "${config.home.homeDirectory}/Games"
+            ];
           };
 
           "net.davidotek.pupgui2".Context = {
