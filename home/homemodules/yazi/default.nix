@@ -211,7 +211,7 @@ in {
               "<C-p>"
               "a"
             ];
-            run = "plugin ouch";
+            run = "plugin ouch 7z";
             desc = "Add selection to archive";
           }
           {
