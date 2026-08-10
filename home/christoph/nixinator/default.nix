@@ -461,7 +461,7 @@
         # Paths seen from inside the Flatpak Steam sandbox
         steam = "$HOME/.steam/steam";
         steamapps = "$HOME/Games/SteamLibrary/steamapps";
-        proton = "Proton 11.0";
+        proton = "Proton - Experimental";
 
         # Runs inside flatpak's sandbox
         innerCommand = ''
@@ -528,6 +528,9 @@
 
                 # This is gamescope installed from flatpak
                 "/usr/lib/extensions/vulkan/gamescope/bin"
+
+                # So ModOrganizer2 can load this plugin symlinked from here
+                "${config.home.homeDirectory}/Projects/ModOrganizer2_Cyberpunk_Plugin"
               ];
             };
           };
