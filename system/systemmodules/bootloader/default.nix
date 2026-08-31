@@ -42,6 +42,13 @@ in {
 
       boot.lanzaboote = {
         enable = true;
+        autoGenerateKeys.enable = true;
+
+        # WARN: Needs persistent /var/lib/auto-cryptenroll
+        autoEnrollKeys = {
+          enable = true;
+          includeMicrosoftKeys = true;
+        };
 
         # WARN: Make sure to persist this if using impermanence!
         pkiBundle = "/var/lib/sbctl";
