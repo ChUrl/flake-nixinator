@@ -159,7 +159,8 @@ in {
             # (mkUDir ".config/beekeeper-studio" m755)
             (mkUDir ".config/beets" m755)
             (mkUDir ".config/blender" m755)
-            (mkUDir ".config/chromium" m755) # TODO: Remove this someday
+            (mkUDir ".config/chromium" m755)
+            (mkUDir ".config/Claude" m755) # Claude desktop
             (mkUDir ".config/Code" m755)
             (mkUDir ".config/Ferdium" m755)
             (mkUDir ".config/feishin" m755)
