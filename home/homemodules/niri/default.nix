@@ -242,7 +242,7 @@ in {
         # GTK
         nautilus # Fallback file chooser used by xdg-desktop-portal-gnome
         sassc
-        gtk-engine-murrine
+        # gtk-engine-murrine # No longer in nixpkgs
         gnome-themes-extra
 
         # Qt
@@ -304,6 +304,7 @@ in {
       # TODO: Module
       walker = {
         enable = true;
+        package = pkgs.walker; # NOTE: The flake package was broken on 2026-08-31
         runAsService = true;
 
         # https://github.com/abenz1267/walker/blob/master/resources/config.toml

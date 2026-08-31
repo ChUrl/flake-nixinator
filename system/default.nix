@@ -418,29 +418,30 @@ with mylib.networking; {
 
   systemd = {
     # TODO: Technically this should be a user service if it runs as ${username}?
-    timers."refresh-nps-cache" = {
-      wantedBy = ["timers.target"];
-      timerConfig = {
-        OnCalendar = "weekly"; # or however often you'd like
-        Persistent = true;
-        Unit = "refresh-nps-cache.service";
-      };
-    };
 
-    services."refresh-nps-cache" = {
-      # Make sure `nix` and `nix-env` are findable by systemd.services.
-      path = ["/run/current-system/sw/"];
-      after = ["network.target"];
-      serviceConfig = {
-        Type = "oneshot";
-        User = "${username}";
-      };
-      script = ''
-        set -eu
-        echo "Start refreshing nps cache..."
-        ${inputs.nps.packages.${pkgs.stdenv.hostPlatform.system}.default}/bin/nps -dddd -e -r
-        echo "... finished nps cache with exit code $?."
-      '';
-    };
+    # timers."refresh-nps-cache" = {
+    #   wantedBy = ["timers.target"];
+    #   timerConfig = {
+    #     OnCalendar = "weekly"; # or however often you'd like
+    #     Persistent = true;
+    #     Unit = "refresh-nps-cache.service";
+    #   };
+    # };
+
+    # services."refresh-nps-cache" = {
+    #   # Make sure `nix` and `nix-env` are findable by systemd.services.
+    #   path = ["/run/current-system/sw/"];
+    #   after = ["network.target"];
+    #   serviceConfig = {
+    #     Type = "oneshot";
+    #     User = "${username}";
+    #   };
+    #   script = ''
+    #     set -eu
+    #     echo "Start refreshing nps cache..."
+    #     ${inputs.nps.packages.${pkgs.stdenv.hostPlatform.system}.default}/bin/nps -dddd -e -r
+    #     echo "... finished nps cache with exit code $?."
+    #   '';
+    # };
   };
 }

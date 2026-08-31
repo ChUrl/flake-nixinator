@@ -43,7 +43,9 @@ in {
           # Nix
           nix-search-tv # Search nixpkgs, nur, nixos options and homemanager options
           nix-tree # Browse the nix store sorted by size (gdu for closures)
-          inputs.nps.packages.${pkgs.stdenv.hostPlatform.system}.default # Search nixpkgs
+
+          # TODO: Broken on 2026-08-31 (also re-enable services after fixing!)
+          # inputs.nps.packages.${pkgs.stdenv.hostPlatform.system}.default # Search nixpkgs
 
           # Video/Image/Audio utils
           ffmpeg-full # I love ffmpeg (including ffplay)
@@ -167,6 +169,7 @@ in {
           # opencode-desktop
           lmstudio # TODO: Ollama
           claude-desktop
+          upscayl
 
           # Office
           kdePackages.wacomtablet # For xournalpp/krita
@@ -175,13 +178,13 @@ in {
           hunspellDicts.en_US
           hunspellDicts.de_DE
 
-          # GTK-Apps
+          # GTK-Apps because I hate nice software
           # gnome-calculator
           # gnome-calendar
           # helvum # unmaintained
           crosspipe
           # nautilus # This is the worst file manager I've ever used
-          font-manager # Previews fonts, but doesn't set them
+          # font-manager # Previews fonts, but doesn't set them # TODO: Broken on 2026-08-31
           gparted
           resources
           # celluloid
