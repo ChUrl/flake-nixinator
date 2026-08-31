@@ -4,17 +4,19 @@
   pkgs,
 }: let
   pythonPkgs = pkgs.python314Packages.overrideScope (self: super: {
-    typer = super.typer.overridePythonAttrs (old: {
-      version = "0.20.1";
-      src = pkgs.fetchPypi {
-        pname = "typer";
-        version = "0.20.0";
-        sha256 = "sha256-Gq9klAMXk+SHb7C6z6apErVRz0PB5jyADfixqGZyDDc=";
-      };
-      propagatedBuildInputs = with pythonPkgs; [
-        typing-extensions
-      ];
-    });
+    # NOTE: Typer override apparently no longer required on 2026-08-31
+    #
+    # typer = super.typer.overridePythonAttrs (old: {
+    #   version = "0.20.1";
+    #   src = pkgs.fetchPypi {
+    #     pname = "typer";
+    #     version = "0.20.0";
+    #     sha256 = "sha256-Gq9klAMXk+SHb7C6z6apErVRz0PB5jyADfixqGZyDDc=";
+    #   };
+    #   propagatedBuildInputs = with pythonPkgs; [
+    #     typing-extensions
+    #   ];
+    # });
 
     aiofiles = super.aiofiles.overridePythonAttrs (old: {
       version = "25.1.0";
