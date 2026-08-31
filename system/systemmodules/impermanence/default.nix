@@ -76,6 +76,7 @@ in {
 
           (mkRDir "/var/db/sudo" m711)
 
+          (mkRDir "/var/lib/auto-cryptenroll" m755) # Lanzaboote
           (mkRDir "/var/lib/bluetooth" m755) # m700
           (mkRDir "/var/lib/btrfs" m755)
           (mkRDir "/var/lib/containers" m755)
@@ -84,7 +85,7 @@ in {
           (mkRDir "/var/lib/libvirt" m755)
           (mkRDir "/var/lib/NetworkManager" m755)
           (mkRDir "/var/lib/nixos" m755)
-          (mkRDir "/var/lib/sbctl" m755)
+          (mkRDir "/var/lib/sbctl" m755) # Lanzaboote
           (mkRDir "/var/lib/systemd" m755)
 
           (mkRDir "/var/tmp" m777)
