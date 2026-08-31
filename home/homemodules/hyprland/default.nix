@@ -48,6 +48,7 @@ in {
 
     home = {
       pointerCursor = {
+        enable = true;
         gtk.enable = lib.mkDefault true;
         x11.enable = lib.mkDefault true;
         package = lib.mkDefault color.cursorPackage;
