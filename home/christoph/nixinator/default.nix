@@ -401,7 +401,7 @@
         kdePackages.kdenlive
         # davinci-resolve
         krita
-        makemkv
+        # makemkv # TODO: Broken on 2026-08-31
         lrcget
         # msty
         # jellyfin-media-player # CVE, can't install
