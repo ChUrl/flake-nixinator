@@ -99,6 +99,7 @@ in {
           lldb
           inotify-tools
           xdotool
+          gnome-keyring
 
           # Hardware/Software info
           pciutils # lspci
@@ -165,6 +166,7 @@ in {
           tableplus # database explorer
           # opencode-desktop
           lmstudio # TODO: Ollama
+          claude-desktop
 
           # Office
           kdePackages.wacomtablet # For xournalpp/krita
