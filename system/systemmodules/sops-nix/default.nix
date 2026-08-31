@@ -34,11 +34,11 @@ in {
       secrets = let
         mkSecret = name: {
           ${name} = lib.mkMerge [
-            (lib.optionalAttrs pkgs.stdenv.isLinux {
+            (lib.optionalAttrs pkgs.stdenv.hostPlatform.isLinux {
               owner = config.users.users.${username}.name;
               group = config.users.users.${username}.group;
             })
-            (lib.optionalAttrs pkgs.stdenv.isDarwin {
+            (lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin {
               owner = config.users.users.${username}.name;
               group = "staff"; # Apparently there's no way to get the primary group?
             })

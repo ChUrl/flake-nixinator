@@ -58,7 +58,7 @@ in {
     in
       lib.mkMerge [
         # Darwin exclusive config
-        (lib.mkIf pkgs.stdenv.isDarwin {
+        (lib.mkIf pkgs.stdenv.hostPlatform.isDarwin {
           shellInit = ''
             set fish_greeting
             yes | fish_config theme save "system-theme"
@@ -81,7 +81,7 @@ in {
         })
 
         # Linux exclusive config
-        (lib.mkIf pkgs.stdenv.isLinux {
+        (lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
           generateCompletions = nixosConfig.programs.fish.generateCompletions;
 
           # TODO: There's a bug with the direnv mechanism:

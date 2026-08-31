@@ -10,7 +10,7 @@
   inherit (config.homemodules) jellyfin-tui color;
 
   systemConfig =
-    if pkgs.stdenv.isLinux
+    if pkgs.stdenv.hostPlatform.isLinux
     then nixosConfig
     else darwinConfig;
 in {
@@ -24,7 +24,7 @@ in {
 
       file = let
         jellyfinUrl =
-          if pkgs.stdenv.isLinux
+          if pkgs.stdenv.hostPlatform.isLinux
           then "https://jellyfin.local.chriphost.de"
           else "https://jellyfin.vps.chriphost.de";
 
@@ -79,10 +79,10 @@ in {
         '';
       in
         lib.mkMerge [
-          (lib.optionalAttrs pkgs.stdenv.isLinux {
+          (lib.optionalAttrs pkgs.stdenv.hostPlatform.isLinux {
             ".config/jellyfin-tui/config.yaml".text = configFile;
           })
-          (lib.optionalAttrs pkgs.stdenv.isDarwin {
+          (lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin {
             "Library/Application Support/jellyfin-tui/config.yaml".text = configFile;
           })
         ];

@@ -81,7 +81,7 @@ in {
         ])
 
         # Linux exclusive packages
-        (lib.optionals (pkgs.stdenv.isLinux) [
+        (lib.optionals (pkgs.stdenv.hostPlatform.isLinux) [
           pastel # Color tools
           nvd # Nix rebuild diff
           nurl # Generate nix fetcher sections based on URLs
@@ -139,7 +139,7 @@ in {
         ])
 
         # Linux exclusive packages (!headless)
-        (lib.optionals (pkgs.stdenv.isLinux && (!headless)) [
+        (lib.optionals (pkgs.stdenv.hostPlatform.isLinux && (!headless)) [
           wl-clipboard
           asciicam
 
@@ -192,7 +192,7 @@ in {
         ])
 
         # Darwin exclusive packages
-        (lib.optionals pkgs.stdenv.isDarwin [
+        (lib.optionals pkgs.stdenv.hostPlatform.isDarwin [
           # Use homebrew instead
           # alt-tab-macos
           # discord

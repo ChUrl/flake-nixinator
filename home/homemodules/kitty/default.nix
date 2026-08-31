@@ -36,7 +36,7 @@ in {
 
       settings = lib.mkMerge [
         # Linux config
-        (lib.mkIf pkgs.stdenv.isLinux {
+        (lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
           allow_remote_control = true; # For nnn file preview or nvim scrollback
           listen_on = lib.mkDefault "unix:@mykitty"; # This conflicts with direnv-instant
         })

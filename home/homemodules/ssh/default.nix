@@ -19,7 +19,7 @@ in {
         "*" = {
           ForwardAgent = false;
           AddKeysToAgent =
-            if pkgs.stdenv.isLinux
+            if pkgs.stdenv.hostPlatform.isLinux
             then "no"
             else "yes"; # Don't have keychain on darwin
           Compression = true;
