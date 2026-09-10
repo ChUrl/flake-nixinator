@@ -44,7 +44,7 @@ in {
           nix-search-tv # Search nixpkgs, nur, nixos options and homemanager options
           nix-tree # Browse the nix store sorted by size (gdu for closures)
 
-          # TODO: Broken on 2026-08-31 (also re-enable services after fixing!)
+          # TODO: Still broken on 2026-09-09
           # inputs.nps.packages.${pkgs.stdenv.hostPlatform.system}.default # Search nixpkgs
 
           # Video/Image/Audio utils
@@ -161,7 +161,7 @@ in {
           vlc
           audacity
           # ferdium
-          # feishin # electron :(
+          feishin # electron :(
           playerctl # Media player control
           czkawka-full # file deduplicator
           binaryninja-free # reverse engineering
@@ -184,7 +184,7 @@ in {
           # helvum # unmaintained
           crosspipe
           # nautilus # This is the worst file manager I've ever used
-          # font-manager # Previews fonts, but doesn't set them # TODO: Broken on 2026-08-31
+          font-manager # Previews fonts, but doesn't set them
           gparted
           resources
           # celluloid
