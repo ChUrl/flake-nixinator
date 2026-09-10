@@ -394,9 +394,9 @@ with mylib.networking; {
     };
 
     # Trims the journal if too large
-    journald.extraConfig = ''
-      SystemMaxUse=50M
-    '';
+    journald.settings.Journal = {
+      SystemMaxUse = "50M";
+    };
 
     acpid.enable = true;
     dbus.enable = true;
