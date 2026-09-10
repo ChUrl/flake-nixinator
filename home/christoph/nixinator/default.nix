@@ -412,15 +412,11 @@
         kdePackages.kdenlive
         # davinci-resolve
         krita
-        # makemkv # TODO: Broken on 2026-08-31
+        makemkv
         lrcget
         # msty
-        # jellyfin-media-player # CVE, can't install
         jellyfin-desktop
         jellyfin-mpv-shim
-        # tidal-hifi
-        # tidal-dl-ng # TODO: Borked
-        # spotdl
         tiddl
         picard
         handbrake
