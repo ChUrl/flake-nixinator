@@ -29,36 +29,36 @@
     # Remove this after jetbrains.jdk builds again (nixpkgs issue 425328)
     # jetbrains.rider = pkgs-stable.jetbrains.rider;
 
-    jetbrains =
-      prev.jetbrains
-      // {
-        clion = prev.jetbrains.clion.overrideAttrs (oldAttrs: rec {
-          version = "261.22158.47"; # March 6, 2026
-
-          src = prev.fetchurl {
-            url = "https://download-cdn.jetbrains.com/cpp/CLion-${version}.tar.gz";
-
-            # hash = "sha256-h6tnemVnV1YEsvIndwrq2sMsRZYuvTWMU5oqj/hkjdY="; # 261.21849.6
-            hash = "sha256-FUHNRioJvjwOWN+FkXEr3+NWR+QVxaZUOkJ0egQkcCQ="; # 261.22158.47
-          };
-
-          # autoPatchelfIgnoreMissingDeps = [
-          #   "libcrypto.so.1.1"
-          #   "libssl.so.1.1"
-          # ];
-
-          postFixup = ''
-            # Patch python3.12 shared libs that the upstream glob (python3.8) misses
-            find $out -path '*/python3.*/lib-dynload/*.so' -exec patchelf \
-              --replace-needed libssl.so.1.1 libssl.so \
-              --replace-needed libcrypto.so.1.1 libcrypto.so \
-              --replace-needed libcrypt.so.1 libcrypt.so \
-              {} +
-
-            ${oldAttrs.postFixup or ""}
-          '';
-        });
-      };
+    # jetbrains =
+    #   prev.jetbrains
+    #   // {
+    #     clion = prev.jetbrains.clion.overrideAttrs (oldAttrs: rec {
+    #       version = "261.22158.47"; # March 6, 2026
+    #
+    #       src = prev.fetchurl {
+    #         url = "https://download-cdn.jetbrains.com/cpp/CLion-${version}.tar.gz";
+    #
+    #         # hash = "sha256-h6tnemVnV1YEsvIndwrq2sMsRZYuvTWMU5oqj/hkjdY="; # 261.21849.6
+    #         hash = "sha256-FUHNRioJvjwOWN+FkXEr3+NWR+QVxaZUOkJ0egQkcCQ="; # 261.22158.47
+    #       };
+    #
+    #       # autoPatchelfIgnoreMissingDeps = [
+    #       #   "libcrypto.so.1.1"
+    #       #   "libssl.so.1.1"
+    #       # ];
+    #
+    #       postFixup = ''
+    #         # Patch python3.12 shared libs that the upstream glob (python3.8) misses
+    #         find $out -path '*/python3.*/lib-dynload/*.so' -exec patchelf \
+    #           --replace-needed libssl.so.1.1 libssl.so \
+    #           --replace-needed libcrypto.so.1.1 libcrypto.so \
+    #           --replace-needed libcrypt.so.1 libcrypt.so \
+    #           {} +
+    #
+    #         ${oldAttrs.postFixup or ""}
+    #       '';
+    #     });
+    #   };
 
     # Now in Nixpkgs
     # neovide = prev.neovide.overrideAttrs (finalAttrs: prevAttrs: {
@@ -94,4 +94,10 @@
   };
 in
   # Composes a list of overlays and returns a single overlay function that combines them.
-  nixpkgs.lib.composeManyExtensions [additions modifications]
+  nixpkgs.lib.composeManyExtensions [
+    additions
+    modifications
+
+    # This is already a complete overlay with final: prev:, so it must be composed directly
+    (import ./latexminted.nix)
+  ]
