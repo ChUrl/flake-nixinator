@@ -122,6 +122,7 @@ in {
             # The shit some applications add to ~/ without asking
             # (mkUDir ".android" m755) # Unity
             (mkUDir ".claude" m755)
+            (mkUDir ".codex" m755)
             # (mkUDir ".comfy" m755)
             (mkUDir ".docker" m755)
             # (mkUDir ".gradle" m755) # Unity
@@ -163,6 +164,7 @@ in {
             (mkUDir ".config/chromium" m755)
             (mkUDir ".config/Claude" m755) # Claude desktop
             (mkUDir ".config/Code" m755)
+            (mkUDir ".config/Codex" m755)
             (mkUDir ".config/Ferdium" m755)
             (mkUDir ".config/feishin" m755)
             (mkUDir ".config/fish/completions" m755)
