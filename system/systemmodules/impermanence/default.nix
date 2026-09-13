@@ -158,6 +158,7 @@ in {
 
             # Config
             # (mkUDir ".config/.android" m755) # Unity
+            (mkUDir ".config/ai.opencode.desktop" m755)
             # (mkUDir ".config/beekeeper-studio" m755)
             (mkUDir ".config/beets" m755)
             (mkUDir ".config/blender" m755)
