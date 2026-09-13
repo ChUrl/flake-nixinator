@@ -124,6 +124,7 @@ in {
                 matplotlib
                 requests
                 pygments
+                pyyaml
               ]))
 
             (rWrapper.override {
