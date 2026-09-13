@@ -21,7 +21,7 @@ in {
               ${mime.defaultTextEditor} = mime.textTypes;
               ${mime.defaultFileBrowser} = ["inode/directory"];
               ${mime.defaultWebBrowser} = mime.webTypes;
-              ${mime.defaultPdfViewer} = ["application/pdf"];
+              ${mime.defaultPdfViewer} = ["application/pdf" "application/epub+zip"];
               ${mime.defaultImageViewer} = mime.imageTypes;
 
               # If audio and video player are equal, we assign all types to the audio player,
@@ -75,6 +75,11 @@ in {
                 "chromium-browser.desktop"
                 "com.google.Chrome.desktop"
                 "firefox.desktop"
+                "org.onlyoffice.desktopeditors.desktop"
+                "calibre-ebook-edit.desktop"
+                "calibre-ebook-viewer.desktop"
+                "calibre-gui.desktop"
+                "calibre-lrfviewer.desktop"
               ];
               "text/plain" = [
                 "firefox.desktop"
