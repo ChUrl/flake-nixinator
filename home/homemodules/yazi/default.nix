@@ -65,9 +65,10 @@ in {
       '';
 
       # https://yazi-rs.github.io/docs/configuration/yazi
-      # "$n": The n-th selected file (1...n)
-      # "$@": All selected files
-      # "$0": The hovered file
+      # %sN: The N-th selected file (1...n)
+      # %s: All selected files
+      # %h: The hovered file (shell keybindings)
+      # File placeholders are shell-escaped by Yazi; do not quote them.
       settings = {
         mgr = {
           show_hidden = false;
@@ -80,41 +81,43 @@ in {
         opener = {
           play = [
             {
-              run = ''mpv "$@"'';
+              run = ''mpv %s'';
               orphan = true;
               desc = "Play selection with mpv";
             }
             {
-              run = ''vlc "$@"'';
+              run = ''vlc %s'';
               orphan = true;
               desc = "Play selection with vlc";
             }
           ];
           edit = [
             {
-              run = ''$EDITOR "$@"'';
+              run = ''$EDITOR %s'';
               block = true;
               desc = "Edit selection";
             }
           ];
           open = [
             {
-              run = ''xdg-open "$@"'';
-              desc = "Open selection with xdg-open";
+              run = ''xdg-open %s1'';
+              orphan = true;
+              desc = "Open first selected file with xdg-open";
             }
             {
-              run = ''imv "$@"'';
+              run = ''imv %s'';
+              orphan = true;
               desc = "Open selection with imv";
             }
             {
-              # TODO: For some reason, junction does not exit after choosing an application...
-              run = ''junction "$@"'';
+              run = ''junction %s'';
+              orphan = true;
               desc = "Open selection with junction";
             }
           ];
           extract = [
             {
-              run = ''ouch decompress -y "$@"'';
+              run = ''ouch decompress -y %s'';
               desc = "Extract selection";
             }
           ];
@@ -219,7 +222,7 @@ in {
               "<C-p>"
               "d"
             ];
-            run = ''shell -- ripdrag -a -n "$@"'';
+            run = ''shell --orphan -- ripdrag -a -n %s'';
             desc = "Drag & drop selection";
           }
           {
@@ -243,7 +246,7 @@ in {
               "<C-p>"
               "w"
             ];
-            run = ''wl-copy < "$0"'';
+            run = ''shell -- wl-copy < %h'';
             desc = "Copy hovered file contents using wl-copy";
           }
 
@@ -255,7 +258,7 @@ in {
           {
             on = "y";
             run = [
-              ''shell -- for path in "$@"; do echo "file://$path"; done | wl-copy -t text/uri-list''
+              ''shell -- for path in %s; do echo "file://$path"; done | wl-copy -t text/uri-list''
               "yank"
             ];
             desc = "Copy files to system clipboard on yank";
