@@ -170,6 +170,7 @@ in {
           lmstudio # TODO: Ollama
           claude-desktop
           upscayl
+          calibre
 
           # Office
           kdePackages.wacomtablet # For xournalpp/krita
