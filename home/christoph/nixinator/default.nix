@@ -142,6 +142,17 @@
       mcp = {
         enable = true;
         servers = {
+          deepwiki = {
+            # https://mcpservers.org/servers/devin/deepwiki
+            url = "https://mcp.deepwiki.com/mcp";
+          };
+          # github = {
+          #   # https://mcpservers.org/servers/github-mcp-server
+          #   url = "https://api.githubcopilot.com/mcp/";
+          #   headers = {
+          #     Authorization = "Bearer ${input:github_mcp_pat}"; # TODO: How to get the token from sops-nix into here?
+          #   };
+          # };
           nixos = {
             command = "uvx";
             args = ["mcp-nixos"];
