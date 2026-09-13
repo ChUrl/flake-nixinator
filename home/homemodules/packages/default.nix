@@ -169,6 +169,7 @@ in {
           # opencode-desktop
           lmstudio # TODO: Ollama
           claude-desktop
+          opencode-desktop
           upscayl
           calibre
 
