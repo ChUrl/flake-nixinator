@@ -142,20 +142,36 @@
       mcp = {
         enable = true;
         servers = {
-          deepwiki = {
-            # https://mcpservers.org/servers/devin/deepwiki
-            url = "https://mcp.deepwiki.com/mcp";
+          context7 = {
+            command = "npx";
+            args = ["-y" "@upstash/context7-mcp"];
+            env = {
+              CONTEXT7_API_KEY.file = nixosConfig.sops.secrets.context7-api-key.path;
+            };
           };
+          # deepwiki = {
+          #   # https://mcpservers.org/servers/devin/deepwiki
+          #   url = "https://mcp.deepwiki.com/mcp";
+          # };
           # github = {
           #   # https://mcpservers.org/servers/github-mcp-server
           #   url = "https://api.githubcopilot.com/mcp/";
           #   headers = {
-          #     Authorization = "Bearer ${input:github_mcp_pat}"; # TODO: How to get the token from sops-nix into here?
+          #     Authorization = "Bearer ${input:github_mcp_pat}";
           #   };
           # };
           nixos = {
             command = "uvx";
             args = ["mcp-nixos"];
+          };
+          obsidian = {
+            command = "uvx";
+            args = ["mcp-obsidian"];
+            env = {
+              OBSIDIAN_API_KEY.file = nixosConfig.sops.secrets.obsidian-rest-api-key.path;
+              OBSIDIAN_HOST = "127.0.0.1";
+              OBSIDIAN_PORT = "27124";
+            };
           };
           svelte = {
             # claude mcp add -t stdio -s [scope] svelte -- npx -y @sveltejs/mcp
@@ -167,6 +183,10 @@
             # npx shadcn@latest mcp init --client claude
             command = "npx";
             args = ["-y" "shadcn@latest" "mcp"];
+          };
+          zotero = {
+            command = "uvx";
+            args = ["zotero-mcp-server"];
           };
         };
       };
@@ -316,7 +336,7 @@
             "question" = "allow";
           };
           plugin = [
-            "opencode-claude-auth@latest" # https://github.com/griffinmartin/opencode-claude-auth
+            # "opencode-claude-auth@latest" # https://github.com/griffinmartin/opencode-claude-auth
             "@tarquinen/opencode-dcp@latest" # better compacting
             # "opencode-lmstudio@0.3.1"
             # "@slkiser/opencode-quota"
