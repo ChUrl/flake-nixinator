@@ -139,6 +139,8 @@
     sops-nix.secrets.${username} = [
       "makemkv-app-key"
       "restic-repo-key"
+      "context7-api-key"
+      "obsidian-rest-api-key"
     ];
   };
 
