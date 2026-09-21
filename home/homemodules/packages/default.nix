@@ -102,6 +102,7 @@ in {
           inotify-tools
           xdotool
           gnome-keyring
+          superfile
 
           # Hardware/Software info
           pciutils # lspci
