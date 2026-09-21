@@ -363,15 +363,16 @@
           };
           plugin = [
             # "opencode-claude-auth@latest" # https://github.com/griffinmartin/opencode-claude-auth
-            # "@tarquinen/opencode-dcp@latest" # better compacting
+            # "@tarquinen/opencode-dcp@latest" # auto compacting
             # "opencode-lmstudio@0.3.1"
             # "@slkiser/opencode-quota"
+            "opencode-mem"
           ];
           share = "disabled";
           shell = "fish";
           snapshot = false;
           watcher = {
-            ignore = ["node_modules/**" "dist/**" ".git/**"];
+            ignore = ["node_modules/**" "dist/**" ".git/**" ".direnv/**"];
           };
         };
 
