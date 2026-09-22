@@ -363,7 +363,7 @@
           };
           plugin = [
             # "opencode-claude-auth@latest" # https://github.com/griffinmartin/opencode-claude-auth
-            # "@tarquinen/opencode-dcp@latest" # auto compacting
+            "@tarquinen/opencode-dcp@latest" # auto compacting
             # "opencode-lmstudio@0.3.1"
             # "@slkiser/opencode-quota"
             "opencode-mem"
