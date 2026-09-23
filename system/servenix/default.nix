@@ -25,6 +25,7 @@
     ../services/arcane-agent.nix
     ../services/authelia.nix
     ../services/bazarr.nix
+    ../services/bento_pdf.nix
     ../services/fileflows.nix
     ../services/gitea.nix
     ../services/immich.nix
