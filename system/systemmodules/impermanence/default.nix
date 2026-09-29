@@ -135,6 +135,7 @@ in {
             (mkUDir ".npm" m755) # Contains mcp servers :/
             # (mkUDir ".nv" m755) # Unity
             # (mkUDir ".ollama" m755)
+            (mkUDir ".opencode-mem" m755)
             # (mkUDir ".plastic4" m755) # Unity
             (mkUDir ".tableplus" m755)
             (mkUDir ".tiddl" m755)
