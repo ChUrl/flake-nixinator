@@ -279,8 +279,13 @@ $ file: eza -f -1
 
 % docs
 # Extract svg figure from pdf page
-pdftocairo -f <page> -l <page> -svg "<input>" "<output>"
-$ input: eza -f -1
+pdftocairo -f <page> -l <page> -svg "<input>" "<output>.svg"
+$ input: eza -f -1 | rg "\.pdf"
+
+$ docs
+# Extract pages from pdf and join
+pdfseparate -f <firstpage> -l <lastpage> "<input>" "page-%d.pdf" && pdfunite page-*.pdf "<output>.pdf" && rm page-*.pdf
+$ input: eza -f -1 | rg "\.pdf"
 
 ; ===========================
 ; YT-DLP
