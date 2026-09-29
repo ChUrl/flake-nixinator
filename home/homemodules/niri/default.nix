@@ -736,23 +736,25 @@ in {
             # Blurred windows
             {
               matches = [
-                # {app-id = "code";}
-                # {app-id = "code-url-handler";}
-                # {app-id = "dev.zed.Zed";}
-                # {app-id = "discord";}
-                # {app-id = "firefox";}
-                # {app-id = "jetbrains-clion";}
-                # {app-id = "jetbrains-idea";}
-                # {app-id = "jetbrains-pycharm";}
-                # {app-id = "jetbrains-rustrover";}
-                # {app-id = "jetbrains-rider";}
-                # {app-id = "jetbrains-webstorm";}
-                {app-id = "kitty";}
-                {app-id = "neovide";}
-                # {app-id = "obsidian";}
-                # {app-id = "org.qutebrowser.qutebrowser";}
-                # {app-id = "signal";}
-                # {app-id = "steam";}
+                {app-id = "^ai.opencode.desktop";}
+                {app-id = "^code";}
+                # {app-id = "^code-url-handler";}
+                {app-id = "^dev.zed.Zed";}
+                {app-id = "^discord";}
+                # {app-id = "^firefox";}
+                {app-id = "^feishin";}
+                {app-id = "^jetbrains-clion";}
+                {app-id = "^jetbrains-idea";}
+                {app-id = "^jetbrains-pycharm";}
+                {app-id = "^jetbrains-rustrover";}
+                {app-id = "^jetbrains-rider";}
+                {app-id = "^jetbrains-webstorm";}
+                {app-id = "^kitty";}
+                {app-id = "^neovide";}
+                {app-id = "^md.obsidian.Obsidian";}
+                # {app-id = "^org.qutebrowser.qutebrowser";}
+                {app-id = "^signal";}
+                {app-id = "^steam";}
               ];
 
               opacity = 0.9;
@@ -762,8 +764,8 @@ in {
             # Floating + unmaximized windows
             {
               matches = [
-                {app-id = "com.github.finefindus.eyedropper";}
-                {app-id = "re.sonny.Junction";}
+                {app-id = "^com.github.finefindus.eyedropper";}
+                {app-id = "^re.sonny.Junction";}
               ];
 
               open-maximized = false;
@@ -779,14 +781,14 @@ in {
             # Specific floating windows
             {
               matches = [
-                {app-id = "re.sonny.Junction";}
+                {app-id = "^re.sonny.Junction";}
               ];
               default-column-width.fixed = 500;
               default-window-height.fixed = 250;
             }
             {
               matches = [
-                {app-id = "com.github.finefindus.eyedropper";}
+                {app-id = "^com.github.finefindus.eyedropper";}
               ];
               default-column-width.fixed = 250;
               default-window-height.fixed = 500;
@@ -795,77 +797,85 @@ in {
             # Rules for specific windows
             {
               matches = [
-                {app-id = "neovide";}
-                {app-id = "dev.zed.Zed";}
-                {app-id = "code";}
-                {app-id = "jetbrains-clion";}
+                # {app-id = "^ai.opencode.desktop";}
+                {app-id = "^code";}
+                {app-id = "^dev.zed.Zed";}
+                {app-id = "^jetbrains-clion";}
+                {app-id = "^jetbrains-idea";}
+                {app-id = "^jetbrains-pycharm";}
+                {app-id = "^jetbrains-rustrover";}
+                {app-id = "^jetbrains-rider";}
+                {app-id = "^jetbrains-webstorm";}
+                {app-id = "^neovide";}
               ];
               open-on-workspace = "2";
               open-maximized = true;
               open-focused = true;
             }
             {
-              matches = [{app-id = "code-url-handler";}];
+              matches = [{app-id = "^code-url-handler";}];
               open-on-workspace = "2";
               open-floating = true;
             }
             {
               matches = [
-                {
-                  app-id = "electron";
-                  title = ".*Chriphost - Obsidian.*";
-                }
+                {app-id = "^md.obsidian.Obsidian";}
               ];
               open-on-workspace = "3";
               # open-maximized = true;
               open-focused = true;
             }
             {
-              matches = [{app-id = "Zotero";}];
+              matches = [{app-id = "^Zotero";}];
               open-on-workspace = "3";
               # open-maximized = true;
               open-focused = true;
             }
             {
-              matches = [{app-id = "firefox";}];
+              matches = [{app-id = "^firefox";}];
               open-on-workspace = "4";
               open-maximized = true;
             }
             {
-              matches = [{app-id = "Google-chrome";}];
+              matches = [{app-id = "^Google-chrome";}];
               open-on-workspace = "4";
             }
             {
-              matches = [{app-id = "chromium-browser";}];
+              matches = [{app-id = "^chromium-browser";}];
               open-on-workspace = "4";
             }
             {
-              matches = [{app-id = "org.qutebrowser.qutebrowser";}];
+              matches = [{app-id = "^org.qutebrowser.qutebrowser";}];
               open-on-workspace = "4";
             }
             {
-              matches = [{app-id = "steam";}];
+              matches = [{app-id = "^steam";}];
               open-on-workspace = "5";
             }
             {
-              matches = [{app-id = "steam_app_(.+)";}];
+              matches = [{app-id = "^steam_app_(.+)";}];
               open-on-workspace = "6";
               open-floating = true;
               open-maximized = true;
             }
             {
-              matches = [{app-id = "factorio";}];
+              matches = [{app-id = "^factorio";}];
               open-on-workspace = "6";
               # open-floating = true;
               open-maximized = true;
             }
             {
-              matches = [{app-id = "signal";}];
+              matches = [{app-id = "^signal";}];
               open-on-workspace = "7";
               open-maximized = true;
             }
             {
-              matches = [{app-id = "discord";}];
+              matches = [{app-id = "^feishin";}];
+              open-on-workspace = "8";
+              open-maximized = true;
+            }
+            {
+              matches = [{app-id = "^discord";}];
               open-on-workspace = "9";
               open-maximized = true;
             }
