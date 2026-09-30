@@ -17,6 +17,7 @@
     ./terminal
     ./tmux
     ./yazi
+    ./zathura
 
     # HM modules imported from the flake inputs
     inputs.nixvim.homeModules.nixvim

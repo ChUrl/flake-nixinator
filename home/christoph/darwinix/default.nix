@@ -27,6 +27,7 @@
 
       packages.enable = true;
       terminal.enable = true;
+      zathura.enable = true;
     };
 
     home = {
