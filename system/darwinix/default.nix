@@ -158,6 +158,7 @@
       # "zathura"
       # "zathura-pdf-mupdf"
       "zotero"
+      "opencode-desktop"
     ];
   };
 
