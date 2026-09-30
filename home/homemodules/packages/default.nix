@@ -69,9 +69,6 @@ in {
           speedtest-cli
           bandwhich
           snitch
-
-          # Use NixCommunity binary cache
-          cachix
         ]
 
         # Common !headless packages
@@ -84,6 +81,9 @@ in {
 
         # Linux exclusive packages
         (lib.optionals (pkgs.stdenv.hostPlatform.isLinux) [
+          # Use NixCommunity binary cache
+          cachix
+
           pastel # Color tools
           nvd # Nix rebuild diff
           nurl # Generate nix fetcher sections based on URLs
