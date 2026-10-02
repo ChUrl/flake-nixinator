@@ -220,6 +220,7 @@ in {
             (mkUDir ".local/share/Rack2" m755)
             (mkUDir ".local/share/systemd" m755)
             # (mkUDir ".local/share/unity3d" m755) # Unity
+            (mkUDir ".local/share/xemu-lgb" m755)
             (mkUDir ".local/share/zed" m755)
             (mkUDir ".local/share/zoxide" m755)
 
