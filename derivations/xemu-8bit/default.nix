@@ -3,9 +3,12 @@
   stdenv,
   fetchurl,
   dpkg,
+  makeWrapper,
+  wrapGAppsHook3,
   autoPatchelfHook,
   SDL2,
   gtk3,
+  gsettings-desktop-schemas,
   readline,
 }:
 # For the xmega65 rom (https://github.com/lgblgblgb/xemu/wiki/MEGA65-ROM-%22how-to-get-it%22-tutorial-for-Xemu):
@@ -28,12 +31,15 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     dpkg
+    makeWrapper
+    wrapGAppsHook3
     autoPatchelfHook
   ];
 
   buildInputs = [
     SDL2
     gtk3
+    gsettings-desktop-schemas
     readline
   ];
 
@@ -52,6 +58,10 @@ stdenv.mkDerivation {
     cp -r usr/* $out/
 
     runHook postInstall
+  '';
+
+  preFixup = ''
+    gappsWrapperArgs+=(--set SDL_VIDEODRIVER x11)
   '';
 
   passthru.updateScript = ./update.sh;
