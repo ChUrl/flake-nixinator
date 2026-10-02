@@ -484,6 +484,7 @@
         virt-viewer
         gnome-boxes # doesn't list VMs imported using virsh
 
+        xemu-8bit
         steam-devices-udev-rules
       ];
 
