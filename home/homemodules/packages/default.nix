@@ -173,6 +173,8 @@ in {
           opencode-desktop
           upscayl
           calibre
+          vcv-rack
+          # bitwig-studio5 # My license doesn't cover this version :/
 
           # Office
           kdePackages.wacomtablet # For xournalpp/krita
@@ -195,6 +197,7 @@ in {
           # eyedropper
           hyprpicker
           junction
+          footage
         ])
 
         # Darwin exclusive packages
