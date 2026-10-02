@@ -217,6 +217,7 @@ in {
             (mkUDir ".local/share/nvim" m755)
             (mkUDir ".local/share/opencode" m755)
             (mkUDir ".local/share/qutebrowser" m755)
+            (mkUDir ".local/share/Rack2" m755)
             (mkUDir ".local/share/systemd" m755)
             # (mkUDir ".local/share/unity3d" m755) # Unity
             (mkUDir ".local/share/zed" m755)
