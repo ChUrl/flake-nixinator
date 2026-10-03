@@ -859,7 +859,10 @@ in {
               open-maximized = true;
             }
             {
-              matches = [{app-id = "^factorio";}];
+              matches = [
+                {app-id = "^factorio";}
+                {app-id = "^RimworldLinux";}
+              ];
               open-on-workspace = "6";
               # open-floating = true;
               open-maximized = true;
