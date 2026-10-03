@@ -79,7 +79,7 @@
       };
 
       codexDesktopLinux = {
-        enable = true;
+        enable = false;
         linuxFeatures = [
           "frameless-titlebar"
           "global-dictation"

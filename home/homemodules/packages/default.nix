@@ -167,9 +167,8 @@ in {
           czkawka-full # file deduplicator
           binaryninja-free # reverse engineering
           tableplus # database explorer
-          # opencode-desktop
           lmstudio # TODO: Ollama
-          claude-desktop
+          # claude-desktop
           opencode-desktop
           upscayl
           calibre
