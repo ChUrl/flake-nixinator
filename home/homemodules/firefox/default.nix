@@ -101,7 +101,7 @@ in {
           DisableFirefoxStudies = true;
           DisableSetDesktopBackground = true;
           DisableTelemetry = true;
-          DisplayBookmarksToolbar = true;
+          DisplayBookmarksToolbar = false;
           EnableTrackingProtection = {
             Value = true;
             Cryptomining = true;

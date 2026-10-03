@@ -37,7 +37,10 @@
       "addon_fastforward_team-browser-action",
       "firefox-extension_steamdb_info-browser-action",
       "_cb31ec5d-c49a-4e5a-b240-16c767444f62_-browser-action",
-      "_bbb880ce-43c9-47ae-b746-c3e0096c5b76_-browser-action"
+      "_bbb880ce-43c9-47ae-b746-c3e0096c5b76_-browser-action",
+      "search_kagi_com-browser-action",
+      "_84c8edb0-65ca-43a5-bc53-0e80f41486e1_-browser-action",
+      "lm-civitai-extension_willmiao_shop-browser-action"
     ],
     "nav-bar": [
       "back-button",
@@ -45,7 +48,6 @@
       "vertical-spacer",
       "downloads-button",
       "urlbar-container",
-      "save-to-pocket-button",
       "_3c078156-979c-498b-8990-85f7987dd929_-browser-action",
       "fxa-toolbar-menu-button",
       "treestyletab_piro_sakura_ne_jp-browser-action",
@@ -68,10 +70,11 @@
       "menubar-items"
     ],
     "TabsToolbar": [
-      "firefox-view-button",
       "tabbrowser-tabs",
       "new-tab-button",
-      "alltabs-button"
+      "customizableui-special-spring10",
+      "alltabs-button",
+      "ai-window-toggle"
     ],
     "vertical-tabs": [],
     "PersonalToolbar": [
@@ -130,7 +133,12 @@
     "screenshot-button",
     "_bbb880ce-43c9-47ae-b746-c3e0096c5b76_-browser-action",
     "jid1-qofqdk4qzufgwq_jetpack-browser-action",
-    "_3c078156-979c-498b-8990-85f7987dd929_-browser-action"
+    "_3c078156-979c-498b-8990-85f7987dd929_-browser-action",
+    "reset-pbm-toolbar-button",
+    "search_kagi_com-browser-action",
+    "_84c8edb0-65ca-43a5-bc53-0e80f41486e1_-browser-action",
+    "lm-civitai-extension_willmiao_shop-browser-action",
+    "ai-window-toggle"
   ],
   "dirtyAreaCache": [
     "nav-bar",
@@ -141,6 +149,6 @@
     "unified-extensions-area",
     "vertical-tabs"
   ],
-  "currentVersion": 22,
-  "newElementCount": 9
+  "currentVersion": 26,
+  "newElementCount": 10
 }
