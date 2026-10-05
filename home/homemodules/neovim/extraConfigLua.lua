@@ -5,6 +5,50 @@ require("lazy.core.config").options.ui.border = "rounded"
 -- "Install" in the Lazy menu once to disable rocks completely.
 require("lazy.core.config").options.rocks.enabled = false
 
+-- Work around diagnostics published past EOF (texlab emits one on the line
+-- after the last line, e.g. line index 457 of a 457-line preamble.tex).
+-- vim.diagnostic's underline handler then calls nvim_buf_get_lines out of
+-- range and throws "Index out of bounds", which also sets BF_READERR on the
+-- buffer and makes every :w prompt "Overwrite existing file ...?".
+do
+	local diagnostic = require("vim.diagnostic")
+	local orig_set = diagnostic.set
+
+	diagnostic.set = function(namespace, bufnr, diagnostics, opts)
+		if bufnr == nil or bufnr == 0 then
+			bufnr = vim.api.nvim_get_current_buf()
+		end
+		if not vim.api.nvim_buf_is_valid(bufnr) then
+			return orig_set(namespace, bufnr, diagnostics, opts)
+		end
+
+		local last = vim.api.nvim_buf_line_count(bufnr) - 1
+		local filtered = {}
+
+		for _, d in ipairs(diagnostics or {}) do
+			local lnum = d.lnum
+			if type(lnum) == "number" and lnum >= 0 and lnum <= last then
+				local end_lnum = math.max(lnum, math.min(d.end_lnum or lnum, last))
+
+				local start_line = vim.api.nvim_buf_get_lines(bufnr, lnum, lnum + 1, true)[1] or ""
+				local end_line = start_line
+				if end_lnum ~= lnum then
+					end_line = vim.api.nvim_buf_get_lines(bufnr, end_lnum, end_lnum + 1, true)[1] or ""
+				end
+
+				d.lnum = lnum
+				d.col = math.max(0, math.min(d.col or 0, #start_line))
+				d.end_lnum = end_lnum
+				d.end_col = math.max(d.col, math.min(d.end_col or d.col, #end_line))
+
+				filtered[#filtered + 1] = d
+			end
+		end
+
+		return orig_set(namespace, bufnr, filtered, opts)
+	end
+end
+
 -- Default filetype to tex instead of plaintex
 vim.g.tex_flavor = "latex"
 
