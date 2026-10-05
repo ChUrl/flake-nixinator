@@ -131,6 +131,7 @@ in {
               packages = with rPackages; [
                 languageserver
                 ggplot2
+                ggnewscale
                 ggalluvial
                 plotly
                 shiny
