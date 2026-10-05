@@ -319,6 +319,21 @@
       extraOptions = "";
     };
 
+    mysql = {
+      enable = true;
+      package = pkgs.mariadb;
+      dataDir = "/persist/var/lib/mysql";
+      settings.mysqld = {
+        bind-address = "127.0.0.1";
+        port = 3307; # 3306 is taken by the Mars SSH tunnel
+      };
+      initialScript = pkgs.writeText "mysql-initial.sql" ''
+        CREATE USER IF NOT EXISTS 'smchurla'@'127.0.0.1' IDENTIFIED BY 'abcdefg';
+        GRANT ALL PRIVILEGES ON *.* TO 'smchurla'@'127.0.0.1';
+        FLUSH PRIVILEGES;
+      '';
+    };
+
     openssh = {
       ports = [5432];
       settings = {
