@@ -33,6 +33,7 @@ in {
         noto-fonts-cjk-serif
         noto-fonts-cjk-sans
         lxgw-wenkai
+        cm_unicode
       ];
 
       fontconfig = {
