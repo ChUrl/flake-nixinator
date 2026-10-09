@@ -10,6 +10,7 @@ in [
   (mkIcon "Games" "󰓓")
   (mkIcon "GitRepos" "")
   (mkIcon "Movies" "󰿎")
+  (mkIcon "Mount" "󰧯")
   (mkIcon "Music" "󰎄")
   (mkIcon "NixFlake" "")
   (mkIcon "Notes" "󰠮")
