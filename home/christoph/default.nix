@@ -467,6 +467,8 @@ in
         enable = !headless;
         config = {
           gpu-context = "wayland";
+          # loop-file = "inf";
+          loop-playlist = "inf";
         };
       };
 
