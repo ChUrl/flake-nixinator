@@ -132,6 +132,7 @@ in {
                 languageserver
                 ggplot2
                 ggnewscale
+                ggh4x
                 ggalluvial
                 plotly
                 shiny
