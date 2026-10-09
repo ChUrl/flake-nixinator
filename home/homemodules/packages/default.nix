@@ -174,6 +174,7 @@ in {
           calibre
           vcv-rack
           # bitwig-studio5 # My license doesn't cover this version :/
+          gajim
 
           # Office
           kdePackages.wacomtablet # For xournalpp/krita
@@ -197,6 +198,7 @@ in {
           hyprpicker
           junction
           footage
+          cryptomator
         ])
 
         # Darwin exclusive packages
