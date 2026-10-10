@@ -4,6 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   llvm,
+  makeWrapper,
   freetype,
   libX11,
   libXext,
@@ -25,6 +26,7 @@ clangStdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     llvm
+    makeWrapper
   ];
 
   buildInputs = [
@@ -54,10 +56,20 @@ clangStdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    install -Dm755 build/raddbg $out/bin/raddbg
-    install -Dm755 build/raddbg_non_graphical $out/bin/raddbg_non_graphical
-    install -Dm755 build/radbin $out/bin/radbin
-    install -Dm755 build/radlink $out/bin/radlink
+    # raddbg shells out to `llvm-symbolizer` for crash callstack reports, and
+    # derives the module path it feeds it from argv[0]; point argv[0] at the
+    # real ELF (not this wrapper) so the symbolizer accepts it.
+    #
+    # EGL_PLATFORM=x11: raddbg is an X11 (Xlib/XWayland) application, but with
+    # WAYLAND_DISPLAY set, libglvnd auto-selects the NVIDIA EGL Wayland platform
+    # and segfaults in libnvidia-egl-wayland. Force the X11 EGL platform.
+    for exe in raddbg raddbg_non_graphical radbin radlink; do
+      install -Dm755 build/$exe $out/bin/$exe
+      wrapProgram $out/bin/$exe \
+        --argv0 "$out/bin/.''${exe}-wrapped" \
+        --prefix PATH : ${lib.getBin llvm}/bin \
+        --set EGL_PLATFORM x11
+    done
 
     runHook postInstall
   '';
