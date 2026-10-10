@@ -167,6 +167,7 @@ in {
             (mkUDir ".config/Claude" m755) # Claude desktop
             (mkUDir ".config/Code" m755)
             (mkUDir ".config/Codex" m755)
+            (mkUDir ".config/Cryptomator" m755)
             (mkUDir ".config/Ferdium" m755)
             (mkUDir ".config/feishin" m755)
             (mkUDir ".config/fish/completions" m755)
