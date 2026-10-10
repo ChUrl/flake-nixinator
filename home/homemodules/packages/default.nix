@@ -166,6 +166,7 @@ in {
           playerctl # Media player control
           czkawka-full # file deduplicator
           binaryninja-free # reverse engineering
+          raddbg # RAD debugger (custom derivation)
           tableplus # database explorer
           lmstudio # TODO: Ollama
           # claude-desktop
