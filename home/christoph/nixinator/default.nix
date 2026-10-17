@@ -464,7 +464,6 @@
         # mono
         # steam-run-free # nix-alien doesn't seem to run unity apps, this does...
 
-        inputs.hytale-launcher.packages.${pkgs.stdenv.hostPlatform.system}.default
         (blender.override {cudaSupport = true;})
         godot_4
         (obs-studio.override {cudaSupport = true;})
@@ -486,6 +485,8 @@
         # virt-viewer
         # gnome-boxes # doesn't list VMs imported using virsh
 
+        rimstack
+        inputs.hytale-launcher.packages.${pkgs.stdenv.hostPlatform.system}.default
         xemu-8bit # Commodore/Mega65 emulator
         steam-devices-udev-rules
       ];
