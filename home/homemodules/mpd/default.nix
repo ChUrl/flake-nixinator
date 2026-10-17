@@ -70,7 +70,7 @@ in {
       # We want to use mpris as it also supports other players (e.g. Spotify) or browsers.
       mpd-mpris = {
         enable = true;
-        mpd.useLocal = true;
+        # mpd.useLocal = true; # Deprecated. Just don't configure network settings and it should connect automatically
       };
 
       mpd-discord-rpc = {
