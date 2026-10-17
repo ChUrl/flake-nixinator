@@ -206,6 +206,7 @@ in {
             (mkUDir ".local/share/hyprland" m755)
             (mkUDir ".local/share/hytale-launcher" m755)
             (mkUDir ".local/share/Hytale" m755)
+            (mkUDir ".local/share/io.github.CyberTimon.RapidRAW" m755)
             (mkUDir ".local/share/jellyfin-desktop" m755)
             (mkUDir ".local/share/jellyfin-tui" m755)
             (mkUDir ".local/share/JetBrains" m755) # Unity
