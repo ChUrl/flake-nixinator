@@ -157,8 +157,8 @@ in {
           keepassxc
           thunderbird # TODO: Email module
           obsidian
-          zotero
           zeal # docs browser
+          # zotero # NOTE: Depends on firefox version no longer in nixpkgs. Use flatpak
           vlc
           audacity
           # ferdium

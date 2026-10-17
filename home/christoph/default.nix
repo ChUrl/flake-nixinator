@@ -527,6 +527,8 @@ in
           (lib.mkIf (!headless) [
             "com.github.tchx84.Flatseal"
 
+            "org.zotero.Zotero"
+
             # "com.spotify.Client" # Don't need this when spicetify is enabled
 
             "com.discordapp.Discord"
@@ -573,6 +575,12 @@ in
           };
 
           "com.discordapp.Discord".Context = {
+            filesystems = [
+              "${config.home.homeDirectory}"
+            ];
+          };
+
+          "org.zotero.Zotero".Context = {
             filesystems = [
               "${config.home.homeDirectory}"
             ];
