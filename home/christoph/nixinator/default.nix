@@ -485,7 +485,7 @@
         # virt-viewer
         # gnome-boxes # doesn't list VMs imported using virsh
 
-        rimstack
+        rimstack # Rimworld mod manager (custom derivation)
         inputs.hytale-launcher.packages.${pkgs.stdenv.hostPlatform.system}.default
         xemu-8bit # Commodore/Mega65 emulator
         steam-devices-udev-rules
