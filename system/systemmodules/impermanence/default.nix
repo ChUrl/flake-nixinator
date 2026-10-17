@@ -127,6 +127,7 @@ in {
             (mkUDir ".docker" m755)
             # (mkUDir ".gradle" m755) # Unity
             (mkUDir ".java" m755) # JetBrains
+            (mkUDir ".keychain" m755)
             (mkUDir ".lmstudio" m755)
             (mkUDir ".MakeMKV" m755)
             (mkUDir ".mozilla/firefox" m755) # TODO: Remove this someday
@@ -185,6 +186,7 @@ in {
             (mkUDir ".config/obsidian" m755)
             (mkUDir ".config/obs-studio" m755)
             (mkUDir ".config/opencode" m755)
+            (mkUDir ".config/RimStack" m755)
             (mkUDir ".config/Signal" m755)
             # (mkUDir ".config/singularitygroup-hotreload" m755) # Unity
             (mkUDir ".config/TeamSpeak" m755)
@@ -207,22 +209,25 @@ in {
             (mkUDir ".local/share/hytale-launcher" m755)
             (mkUDir ".local/share/Hytale" m755)
             (mkUDir ".local/share/io.github.CyberTimon.RapidRAW" m755)
+            (mkUDir ".local/share/IsolatedStorage" m755) # JetBrains license data
             (mkUDir ".local/share/jellyfin-desktop" m755)
             (mkUDir ".local/share/jellyfin-tui" m755)
             (mkUDir ".local/share/JetBrains" m755) # Unity
             (mkUDir ".local/share/keyrings" m755) # m700
-            (mkUDir ".local/share/IsolatedStorage" m755) # JetBrains license data
             (mkUDir ".local/share/LRCGET" m755)
             (mkUDir ".local/share/mime" m755)
             (mkUDir ".local/share/net.lrclib.lrcget" m755)
+            (mkUDir ".local/share/Nextcloud" m755)
             (mkUDir ".local/share/nix" m755)
             (mkUDir ".local/share/nvim" m755)
             (mkUDir ".local/share/opencode" m755)
             (mkUDir ".local/share/qutebrowser" m755)
             (mkUDir ".local/share/Rack2" m755)
+            (mkUDir ".local/share/RimStack" m755)
             (mkUDir ".local/share/systemd" m755)
             # (mkUDir ".local/share/unity3d" m755) # Unity
             (mkUDir ".local/share/xemu-lgb" m755)
+            (mkUDir ".local/share/zathura" m755)
             (mkUDir ".local/share/zed" m755)
             (mkUDir ".local/share/zoxide" m755)
 
