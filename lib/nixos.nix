@@ -20,6 +20,11 @@
 
       download-buffer-size = 524288000; # 500MB
 
+      nix-path = [
+        "nixpkgs=${inputs.nixpkgs.outPath}"
+        "home-manager=${inputs.home-manager.outPath}"
+      ];
+
       substituters = [
         "https://cache.nixos.org"
         "https://nix-community.cachix.org"
@@ -46,10 +51,6 @@
     };
 
     registry = lib.mapAttrs' (n: v: lib.nameValuePair n {flake = v;}) inputs;
-    nixPath = [
-      "nixpkgs=${inputs.nixpkgs.outPath}"
-      "home-manager=${inputs.home-manager.outPath}"
-    ];
   };
 
   mkNixosConfigWithHomeManagerModule = {
