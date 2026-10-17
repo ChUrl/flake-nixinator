@@ -20,8 +20,8 @@ in {
         [
           # Shell utils
           (ripgrep.override {withPCRE2 = true;}) # fast as fuck
-          gdu # Alternative to du-dust (I like it better)
-          duf # Disk usage analyzer (for all disk overview)
+          gdu # Disk usage analyzer
+          duf # Total disk usage viewer (for all disk overview)
           sd # Sed alternative
           fclones # Duplicate file finder
           tealdeer # Very fast tldr (so readable man)
@@ -37,8 +37,8 @@ in {
           unzip # Unzip stuff
           progress # Find coreutils processes and show their progress
           tokei # Text file statistics in a project
-          ttyper
-          wiki-tui
+          ttyper # Typing test
+          wiki-tui # Wikipedia
 
           # Nix
           nix-search-tv # Search nixpkgs, nur, nixos options and homemanager options
@@ -66,9 +66,9 @@ in {
           rsync # cp on steroids
           rclone # Rsync for cloud
           httpie # Cool http client
-          speedtest-cli
-          bandwhich
-          snitch
+          bandwhich # Network utilization
+          snitch # Better netstat
+          # speedtest-cli
         ]
 
         # Common !headless packages
@@ -76,7 +76,7 @@ in {
           ripdrag # drag & drop from terminal
           # jellyfin-tui # Use module
 
-          inputs.masssprings.packages.${stdenv.hostPlatform.system}.default
+          inputs.masssprings.packages.${stdenv.hostPlatform.system}.default # TODO: Broken 2026-10-03 (tracy)
         ])
 
         # Linux exclusive packages
@@ -87,7 +87,6 @@ in {
           pastel # Color tools
           nvd # Nix rebuild diff
           nurl # Generate nix fetcher sections based on URLs
-          # python313 # Nicer scripting than bash
           lazyjournal # Journalctl viewer
           systemctl-tui
           restic # Backups
@@ -96,13 +95,13 @@ in {
           binsider # .elf analyzer
           jujutsu # git-like vcs
           lurk # strace analysis
-          radare2
+          radare2 # disassembly analyzer
           disktui
           lldb
           inotify-tools
           xdotool
           gnome-keyring
-          superfile
+          superfile # File manager
 
           # Hardware/Software info
           pciutils # lspci
@@ -148,7 +147,7 @@ in {
 
           # Proton
           proton-vpn
-          protonmail-bridge-gui
+          protonmail-bridge-gui # TODO: Set this up for thunderbird (email module)
 
           # GUI stuff
           signal-desktop
@@ -168,14 +167,14 @@ in {
           binaryninja-free # reverse engineering
           raddbg # RAD debugger (custom derivation)
           tableplus # database explorer
-          lmstudio # TODO: Ollama
           # claude-desktop
+          lmstudio # TODO: Ollama
           opencode-desktop
           upscayl
-          calibre
+          # calibre # Sometimes I need to convert ebooks
           vcv-rack
+          # gajim # XMPP client
           # bitwig-studio5 # My license doesn't cover this version :/
-          gajim
 
           # Office
           kdePackages.wacomtablet # For xournalpp/krita
