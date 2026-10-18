@@ -2,20 +2,17 @@
   lib,
   appimageTools,
   fetchurl,
-  makeWrapper,
 }: let
   pname = "rimstack";
-  version = "1.0.1";
+  version = "1.0.2";
   src = fetchurl {
     url = "https://github.com/TheForgotten69/RimStack/releases/download/v${version}/RimStack-${version}-x86_64.AppImage";
-    hash = "sha256-ClgMNU4sxdGey2lOeLfJldNyybXLJYM3N+U693fUKhM=";
+    hash = "sha256-lLXVyNGHtGligXmgA7tP9uAydUdRv3yBLV3E9wIRoYU=";
   };
   appimageContents = appimageTools.extract {inherit pname version src;};
 in
   appimageTools.wrapType2 {
     inherit pname version src;
-
-    nativeBuildInputs = [makeWrapper];
 
     extraInstallCommands = ''
       install -m 444 -D ${appimageContents}/rimstack.desktop \
@@ -24,12 +21,6 @@ in
         --replace-fail 'Exec=rimstack' 'Exec=${pname}'
       install -m 444 -D ${appimageContents}/rimstack.svg \
         $out/share/icons/hicolor/scalable/apps/rimstack.svg
-
-      # The bundled Qt lacks the Wayland shell-integration plugins, so the
-      # AppImage's wayland platform plugin fails to initialize. Force xcb
-      # (works via XWayland on Wayland sessions).
-      wrapProgram $out/bin/${pname} \
-        --set QT_QPA_PLATFORM xcb
     '';
 
     meta = with lib; {
