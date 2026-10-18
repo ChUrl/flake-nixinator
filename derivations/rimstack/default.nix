@@ -14,11 +14,15 @@ in
   appimageTools.wrapType2 {
     inherit pname version src;
 
+    extraBwrapArgs = [
+      "--setenv"
+      "APPIMAGE"
+      (placeholder "out")
+    ];
+
     extraInstallCommands = ''
       install -m 444 -D ${appimageContents}/rimstack.desktop \
         -t $out/share/applications
-      substituteInPlace $out/share/applications/rimstack.desktop \
-        --replace-fail 'Exec=rimstack' 'Exec=${pname}'
       install -m 444 -D ${appimageContents}/rimstack.svg \
         $out/share/icons/hicolor/scalable/apps/rimstack.svg
     '';
