@@ -241,6 +241,7 @@ with mylib.networking; {
       "wheel"
       "audio"
       "video"
+      "camera"
       "pipewire"
       "realtime"
       "gamemode"
