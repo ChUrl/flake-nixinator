@@ -257,6 +257,8 @@
       gdb = true;
     };
 
+    gphoto2.enable = true;
+
     steam.platformOptimizations.enable = true; # From nix-gaming module
     virt-manager.enable = true;
   };

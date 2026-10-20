@@ -480,6 +480,7 @@
         handbrake # FFMPEG frontend
         # teamspeak6-client
         rapidraw
+        go-mtpfs
 
         # virt-manager # use system program option
         # virt-viewer
