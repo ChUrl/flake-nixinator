@@ -214,6 +214,10 @@ $ file: eza -1
 # Download stuff from tidal
 tiddl download --track-quality max --path ~/Downloads/Beet/Albums --videos none url "<url>"
 
+% mkdir
+# Create a directory with today's date
+mkdir (date --iso-8601)
+
 ; ===========================
 ; SECRETS
 ; ===========================
@@ -347,6 +351,24 @@ $ quality: echo -e "24\n25\n26\n27\n28\n29\n30\n"
 # Reencode and compress multiple videos using the h265 codec
 fish -c "for name in <files>; ffmpeg -i '$name' -vcodec libx265 -crf <quality> 'out_$name'; end"
 $ quality: echo -e "24\n25\n26\n27\n28\n29\n30\n"
+
+; ===========================
+; PHOTOS
+; ===========================
+
+% gphoto2
+# Show folders on camera
+gphoto2 --list-folders
+
+% gphoto2
+# List files in folder
+gphoto2 --list-files --quiet --folder=<folder>
+$ folder: gphoto2 --list-folders --quiet
+
+% gphoto2
+# Download all files in folder
+gphoto2 --get-all-files --folder=<folder>
+$ folder: gphoto2 --list-folders --quiet
 
 ; ===========================
 ; DISKS
