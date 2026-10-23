@@ -31,15 +31,8 @@
         disable_masquerade = false;
 
         ipv6.enable = true;
+        ipv6.subnet = "fd00:1::/64";
         # ipv6.gateway = "fd00::5";
-
-        # We have to put an actual prefix from the ISP here.
-        # OPNSense: Interfaces > Overview > WAN > Details > Dynamic IPv6 Prefix Received.
-        # With /64, we don't have a prefix to spare for docker.
-        # Glasfaser Ruhr gives us /62, meaning 4 prefixes.
-        # The first one is used for the main LAN, so use the second one for docker.
-        # This also requires a route in OPNSense that specifies ThinkNix as the gateway to this subnet.
-        ipv6.subnet = "2001:7d8:8023:a009::/64";
       }
     ];
 
