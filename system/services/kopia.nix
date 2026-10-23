@@ -5,7 +5,7 @@
   pkgs,
   ...
 }: let
-  kopiaVersion = "0.20.1";
+  kopiaVersion = "0.23.1";
 in {
   # If we need to pass secrets to containers we can't use plain env variables.
   sops.templates."kopia_secrets.env".content = ''
