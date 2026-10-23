@@ -97,11 +97,12 @@
           interface = "enp8s0";
           ip = "192.168.86.50/24";
           router = "192.168.86.5";
-          # nameserver = "192.168.86.26;8.8.8.8;";
+          # nameserver = "192.168.86.26;8.8.8.8;"; # Google fallback
           nameserver = "192.168.86.26";
           ip6 = "fd00::32/64";
           # router6 = "fd00::5"; # Should be configured automatically
-          # nameserver6 = "2001:4860:4860::8888;2001:4860:4860::8844;";
+          # nameserver6 = "2001:4860:4860::8888;2001:4860:4860::8844;"; # Google
+          nameserver6 = "fd00::1a";
           priority = 10; # Rather connect to 2.5G than to 1G
         };
         "10-ether-1G" = mylib.networking.mkStaticNetworkManagerProfile {
@@ -109,11 +110,12 @@
           interface = "enp5s0";
           ip = "192.168.86.50/24";
           router = "192.168.86.5";
-          # nameserver = "192.168.86.26;8.8.8.8;";
+          # nameserver = "192.168.86.26;8.8.8.8;"; # Google fallback
           nameserver = "192.168.86.26";
           ip6 = "fd00::32/64";
           # router6 = "fd00::5"; # Should be configured automatically
-          # nameserver6 = "2001:4860:4860::8888;2001:4860:4860::8844;";
+          # nameserver6 = "2001:4860:4860::8888;2001:4860:4860::8844;"; # Google
+          nameserver6 = "fd00::1a";
         };
       };
 
