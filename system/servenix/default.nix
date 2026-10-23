@@ -57,11 +57,9 @@
         name = "behind-nginx";
         disable_masquerade = false;
 
-        # We have 4 IPv6 prefixes, one is used for LAN, one is used for ThinkNix behind-nginx docker network (for DNS).
-        # Questionable if we should enable it here aswell...
-        ipv6.enable = false;
+        ipv6.enable = true;
+        ipv6.subnet = "fd00:1::/64";
         # ipv6.gateway = "fd00::5";
-        # ipv6.subnet = "2001:7d8:8023:a00a::/64";
       }
     ];
 
