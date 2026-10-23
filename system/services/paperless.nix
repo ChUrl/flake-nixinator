@@ -14,6 +14,10 @@ in {
     WEBDRIVE_PASSWORD=${config.sops.placeholder.paperless-nextcloud-sync-password}
   '';
 
+  sops.templates."paperless_secrets.env".content = ''
+    PAPERLESS_SECRET_KEY=${config.sops.placeholder.paperless-secret-key}
+  '';
+
   virtualisation.oci-containers.containers = {
     paperless-nextcloud-sync = {
       image = "flor1der/paperless-nextcloud-sync:${paperlessNCVersion}";
@@ -117,11 +121,16 @@ in {
         "/media/paperless-consume:/usr/src/paperless/consume"
       ];
 
+      environmentFiles = [
+        config.sops.templates."paperless_secrets.env".path
+      ];
+
       environment = {
         PAPERLESS_FILENAME_FORMAT = "{{ created_year }}/{{ correspondent }}/{{ title }}";
 
         PAPERLESS_REDIS = "redis://paperless-redis:6379";
         PAPERLESS_DBHOST = "paperless-postgres";
+        PAPERLESS_DBENGINE = "postgresql";
 
         # PAPERLESS_ADMIN_USER = "root";
         # PAPERLESS_ADMIN_PASSWORD = "admin";

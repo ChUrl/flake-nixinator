@@ -114,6 +114,7 @@
       "kopia-server-password"
       "kopia-user-password"
       "paperless-nextcloud-sync-password"
+      "paperless-secret-key"
       "ntfy-auth-users"
       "ntfy-auth-tokens"
       "arcane-agent-key"
