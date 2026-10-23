@@ -5,7 +5,7 @@
   pkgs,
   ...
 }: let
-  arcaneVersion = "v2.3.0";
+  arcaneVersion = "v2.17.0";
 in {
   # If we need to pass secrets to containers we can't use plain env variables.
   sops.templates."arcane_secrets.env".content = ''
