@@ -22,7 +22,8 @@ in {
         "443:443"
 
         # TODO: Should probably split the nginx configs for ServeNix and ThinkNix
-        "5520:5520" # HyTale
+        "5520:5520/tcp" # HyTale
+        "5520:5520/udp" # HyTale
       ];
 
       volumes = [
