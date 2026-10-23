@@ -99,7 +99,7 @@
           router = "192.168.86.5";
           nameserver = "192.168.86.26;8.8.8.8;";
           ip6 = "fd00::32/64";
-          router6 = "fd00::5";
+          # router6 = "fd00::5"; # Should be configured automatically
           nameserver6 = "2001:4860:4860::8888;2001:4860:4860::8844;";
           priority = 10; # Rather connect to 2.5G than to 1G
         };
@@ -110,7 +110,7 @@
           router = "192.168.86.5";
           nameserver = "192.168.86.26;8.8.8.8;";
           ip6 = "fd00::32/64";
-          router6 = "fd00::5";
+          # router6 = "fd00::5"; # Should be configured automatically
           nameserver6 = "2001:4860:4860::8888;2001:4860:4860::8844;";
         };
       };
