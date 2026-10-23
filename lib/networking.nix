@@ -89,7 +89,7 @@
     router,
     nameserver ? "8.8.8.8;8.8.4.4;",
     ip6,
-    router6,
+    router6 ? null,
     nameserver6 ? "2001:4860:4860::8888;2001:4860:4860::8844;",
     autoconnect ? true,
     priority ? 0,
@@ -108,13 +108,16 @@
       dns = nameserver;
     };
 
-    ipv6 = {
-      method = "auto";
-      addr-gen-mode = "stable-privacy";
-      ignore-auto-dns = "true";
-      address1 = ip6;
-      gateway = router6;
-      dns = nameserver6;
-    };
+    ipv6 =
+      {
+        method = "auto";
+        addr-gen-mode = "stable-privacy";
+        ignore-auto-dns = "true";
+        address1 = ip6;
+        dns = nameserver6;
+      }
+      // lib.optionalAttrs (router6 != null) {
+        gateway = router6;
+      };
   };
 }
