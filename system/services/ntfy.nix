@@ -5,7 +5,7 @@
   pkgs,
   ...
 }: let
-  ntfyVersion = "v2.21";
+  ntfyVersion = "v2.33";
 in {
   # If we need to pass secrets to containers we can't use plain env variables.
   sops.templates."ntfy_secrets.env".content = ''
