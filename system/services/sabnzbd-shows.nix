@@ -5,7 +5,7 @@
   pkgs,
   ...
 }: let
-  sabnzbdVersion = "4.5.5";
+  sabnzbdVersion = "5.1.3";
 in {
   virtualisation.oci-containers.containers = {
     sabnzbd-shows = {
