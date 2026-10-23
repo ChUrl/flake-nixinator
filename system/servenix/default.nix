@@ -44,7 +44,7 @@
     ../services/sabnzbd-movies.nix
     ../services/sabnzbd-shows.nix
     ../services/sonarr.nix
-    ../services/teamspeak.nix
+    # ../services/teamspeak.nix
     ../services/tinymediamanager.nix
     # ../services/whats-up-docker.nix
   ];
