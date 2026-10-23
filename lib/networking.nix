@@ -114,7 +114,6 @@
         addr-gen-mode = "stable-privacy";
         ignore-auto-dns = "true";
         address1 = ip6;
-        dns = nameserver6;
       }
       // lib.optionalAttrs (nameserver6 != null) {
         dns = nameserver6;
