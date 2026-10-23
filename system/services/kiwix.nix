@@ -4,7 +4,7 @@
   pkgs,
   ...
 }: let
-  kiwixVersion = "3.8.1";
+  kiwixVersion = "3.8.2";
 in {
   virtualisation.oci-containers.containers = {
     kiwix = {
