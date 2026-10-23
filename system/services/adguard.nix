@@ -5,7 +5,7 @@
   pkgs,
   ...
 }: let
-  adguardVersion = "v0.107.63";
+  adguardVersion = "v0.107.79";
 in {
   virtualisation.oci-containers.containers = {
     adguard = {
