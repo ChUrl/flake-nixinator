@@ -5,8 +5,8 @@
   pkgs,
   ...
 }: let
-  paperlessVersion = "2.20.15";
-  paperlessNCVersion = "1.0.1";
+  paperlessVersion = "3.3.4";
+  paperlessNCVersion = "1.2.0";
   redisVersion = "7";
   postgresVersion = "15";
 in {
