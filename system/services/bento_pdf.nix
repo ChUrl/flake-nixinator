@@ -5,7 +5,7 @@
   pkgs,
   ...
 }: let
-  bentoVersion = "2.8.8";
+  bentoVersion = "2.8.10";
 in {
   virtualisation.oci-containers.containers = {
     bento = {
