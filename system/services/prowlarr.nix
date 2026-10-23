@@ -5,7 +5,7 @@
   pkgs,
   ...
 }: let
-  prowlarrVersion = "2.1.5";
+  prowlarrVersion = "2.6.5";
 in {
   virtualisation.oci-containers.containers = {
     prowlarr = {
