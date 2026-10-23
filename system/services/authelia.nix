@@ -5,7 +5,7 @@
   pkgs,
   ...
 }: let
-  autheliaVersion = "4.39.4";
+  autheliaVersion = "4.39.28";
 in {
   virtualisation.oci-containers.containers = {
     authelia = {
