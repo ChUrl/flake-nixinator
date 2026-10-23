@@ -19,7 +19,9 @@ in {
       ports = [
         # DNS server
         "53:53/tcp"
+        "[::]:53:53/tcp"
         "53:53/udp"
+        "[::]:53:53/udp"
         # "853:853/tcp" # DNS over TLS
         # "853:853/udp" # DNS over QUIC
 
