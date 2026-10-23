@@ -5,7 +5,7 @@
   pkgs,
   ...
 }: let
-  bazarrVersion = "1.5.3";
+  bazarrVersion = "1.6.2";
 in {
   virtualisation.oci-containers.containers = {
     bazarr = {
