@@ -5,8 +5,10 @@
   pkgs,
   ...
 }: let
-  paperlessVersion = "2.17.1";
+  paperlessVersion = "2.20.15";
   paperlessNCVersion = "1.0.1";
+  redisVersion = "7";
+  postgresVersion = "15";
 in {
   sops.templates."paperless-nextcloud-sync_secrets.env".content = ''
     WEBDRIVE_PASSWORD=${config.sops.placeholder.paperless-nextcloud-sync-password}
@@ -50,7 +52,7 @@ in {
     };
 
     paperless-redis = {
-      image = "redis:7";
+      image = "redis:${redisVersion}";
       autoStart = true;
 
       login = mylib.containers.mkDockerLogin config;
@@ -71,7 +73,7 @@ in {
     };
 
     paperless-postgres = {
-      image = "postgres:15";
+      image = "postgres:${postgresVersion}";
       autoStart = true;
 
       login = mylib.containers.mkDockerLogin config;
