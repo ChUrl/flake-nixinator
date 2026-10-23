@@ -5,7 +5,7 @@
   pkgs,
   ...
 }: let
-  sonarrVersion = "4.0.16";
+  sonarrVersion = "4.0.20";
 in {
   virtualisation.oci-containers.containers = {
     sonarr = {
