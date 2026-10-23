@@ -85,6 +85,7 @@
         80 # HTTP (Nginx Proxy Manager)
         443 # HTTPS (Nginx Proxy Manager)
 
+        222 # Gitea SSH
         3000 # Gitea (runner needs to reach local gitea instance)
         3553 # Arcane
 
