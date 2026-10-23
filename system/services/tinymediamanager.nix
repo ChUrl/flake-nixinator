@@ -5,7 +5,7 @@
   pkgs,
   ...
 }: let
-  version = "5.2.3";
+  version = "5.3.4";
 in {
   virtualisation.oci-containers.containers = {
     tinymediamanager = {
