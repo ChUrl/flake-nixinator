@@ -45,11 +45,11 @@ in {
           nix-tree # Browse the nix store sorted by size (gdu for closures)
 
           # TODO: Still broken on 2026-09-09
-          # inputs.nps.packages.${pkgs.stdenv.hostPlatform.system}.default # Search nixpkgs
+          inputs.nps.packages.${pkgs.stdenv.hostPlatform.system}.default # Search nixpkgs
 
           # Video/Image/Audio utils
-          ffmpeg-full # I love ffmpeg (including ffplay)
           ffmpeg-normalize # Normalize audio
+          ffmpeg-full # I love ffmpeg
 
           # Document utils
           poppler-utils # pdfunite
@@ -159,7 +159,7 @@ in {
           zeal # docs browser
           # zotero # NOTE: Depends on firefox version no longer in nixpkgs. Use flatpak
           vlc
-          audacity
+          # audacity # NOTE: Broken on 2026-10-23
           # ferdium
           feishin # electron :(
           playerctl # Media player control
@@ -177,11 +177,12 @@ in {
           # bitwig-studio5 # My license doesn't cover this version :/
 
           # Office
-          kdePackages.wacomtablet # For xournalpp/krita
           xournalpp # Write with a pen, like old people
           hunspell # I cna't type
           hunspellDicts.en_US
           hunspellDicts.de_DE
+
+          # kdePackages.wacomtablet # NOTE: Deprecated, only works on X11
 
           # GTK-Apps because I hate nice software
           # gnome-calculator
