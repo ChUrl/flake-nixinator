@@ -464,9 +464,9 @@
         # mono
         # steam-run-free # nix-alien doesn't seem to run unity apps, this does...
 
-        (blender.override {cudaSupport = true;})
-        godot_4
-        (obs-studio.override {cudaSupport = true;})
+        # (blender.override {cudaSupport = true;}) # Installed through steam
+        # godot_4
+        # (obs-studio.override {cudaSupport = true;})
         kdePackages.kdenlive
         # davinci-resolve
         krita
@@ -477,7 +477,7 @@
         # jellyfin-mpv-shim
         tiddl # Tidal downloader
         picard # Musicbrainz tagger
-        handbrake # FFMPEG frontend
+        # handbrake # FFMPEG frontend # TODO: Broken on 2026-10-23
         # teamspeak6-client
         rapidraw
         go-mtpfs
