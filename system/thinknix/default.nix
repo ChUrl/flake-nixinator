@@ -24,6 +24,8 @@
     # ../services/whats-up-docker.nix
   ];
 
+  networking.tempAddresses = "disabled";
+
   systemmodules = {
     docker.networks = [
       {
@@ -46,6 +48,7 @@
           routers = ["192.168.86.5"]; # Don't add "fd00::5", rely on router advertisement instead
           nameservers = ["8.8.8.8" "8.8.4.4" "2001:4860:4860::8888" "2001:4860:4860::8844"]; # NOTE: Use reliable DNS for servers instead of 127.0.0.1
           routable = true;
+          privacy = "no";
           extraAddresses = ["fd00::1a/64"]; # IPv6 ULA — declared without creating a route
         };
       };
