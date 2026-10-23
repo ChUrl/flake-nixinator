@@ -5,7 +5,7 @@
   pkgs,
   ...
 }: let
-  jellyfinVersion = "version-12.1ubu2604";
+  jellyfinVersion = "version-12.3ubu2604";
 in {
   virtualisation.oci-containers.containers = {
     jellyfin = {
