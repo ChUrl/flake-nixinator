@@ -132,6 +132,9 @@ in {
         PAPERLESS_DBHOST = "paperless-postgres";
         PAPERLESS_DBENGINE = "postgresql";
 
+        # For nextcloud sync
+        PAPERLESS_ARCHIVE_FILE_GENERATION = "always";
+
         # PAPERLESS_ADMIN_USER = "root";
         # PAPERLESS_ADMIN_PASSWORD = "admin";
 
