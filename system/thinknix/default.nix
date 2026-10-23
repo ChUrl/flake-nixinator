@@ -56,6 +56,8 @@
       allowedTCPPorts = [
         53 # DNS
         80 # HTTP
+        443 # HTTPS
+        5520
       ];
       allowedUDPPorts = [
         53 # DNS
