@@ -5,7 +5,7 @@
   pkgs,
   ...
 }: let
-  giteaVersion = "1.27.0";
+  giteaVersion = "28.2.0";
   runnerVersion = "0.6.1";
 in {
   users = {
