@@ -41,7 +41,7 @@
           # Static IP + DNS + Gateway
           address = ["192.168.86.50/24"];
           gateway = ["192.168.86.5"]; # Don't add "fd00::5", rely on router advertisement instead
-          dns = ["129.168.86.26" "fd00::1a" "8.8.8.8" "8.8.4.4" "2001:4860:4860::8888" "2001:4860:4860::8844"];
+          dns = ["192.168.86.26" "fd00::1a" "8.8.8.8" "8.8.4.4" "2001:4860:4860::8888" "2001:4860:4860::8844"];
           routes = builtins.map (r: {Gateway = r;}) gateway;
 
           # See man systemd.network
@@ -98,11 +98,11 @@
           ip = "192.168.86.50/24";
           router = "192.168.86.5";
           # nameserver = "192.168.86.26;8.8.8.8;"; # Google fallback
-          nameserver = "192.168.86.26";
+          nameserver = "192.168.86.26;";
           ip6 = "fd00::32/64";
           # router6 = "fd00::5"; # Should be configured automatically
           # nameserver6 = "2001:4860:4860::8888;2001:4860:4860::8844;"; # Google
-          nameserver6 = "fd00::1a";
+          nameserver6 = "fd00::1a;";
           priority = 10; # Rather connect to 2.5G than to 1G
         };
         "10-ether-1G" = mylib.networking.mkStaticNetworkManagerProfile {
@@ -111,11 +111,11 @@
           ip = "192.168.86.50/24";
           router = "192.168.86.5";
           # nameserver = "192.168.86.26;8.8.8.8;"; # Google fallback
-          nameserver = "192.168.86.26";
+          nameserver = "192.168.86.26;";
           ip6 = "fd00::32/64";
           # router6 = "fd00::5"; # Should be configured automatically
           # nameserver6 = "2001:4860:4860::8888;2001:4860:4860::8844;"; # Google
-          nameserver6 = "fd00::1a";
+          nameserver6 = "fd00::1a;";
         };
       };
 
