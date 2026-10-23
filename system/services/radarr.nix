@@ -5,7 +5,7 @@
   pkgs,
   ...
 }: let
-  radarrVersion = "5.28.0";
+  radarrVersion = "6.4.4";
 in {
   virtualisation.oci-containers.containers = {
     radarr = {
