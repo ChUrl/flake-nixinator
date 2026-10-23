@@ -7,7 +7,7 @@
 }: let
   vectorchordVersion = "0.4.2";
   pgvectorsVersion = "0.2.0";
-  immichVersion = "3.2.0-cuda";
+  immichVersion = "3.3.5-cuda";
 in {
   virtualisation.oci-containers.containers = {
     immich-database = {
@@ -94,6 +94,7 @@ in {
 
         MACHINE_LEARNING_WORKERS = "1";
         MACHINE_LEARNING_WORKER_TIMEOUT = "120";
+        MACHINE_LEARNING_MODEL_REVISION = "v2";
       };
 
       extraOptions = [
