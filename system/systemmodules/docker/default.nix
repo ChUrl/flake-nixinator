@@ -80,13 +80,11 @@ in {
         then "${config.virtualisation.podman.package}/bin/podman"
         else "${config.virtualisation.docker.package}/bin/docker";
 
-      # TODO: This is bugged. Won't create the network even if it doesn't exist...
       mkDockerNetwork = options:
         builtins.concatStringsSep "\n" [
           # Make sure to return true on fail to not crash
           ''
-            check=$(${cli} network inspect ${options.name} || true)
-            if [ -z "$check" ]; then
+            if ! ${cli} network inspect ${options.name} >/dev/null 2>&1; then
           ''
 
           (builtins.concatStringsSep " " [
