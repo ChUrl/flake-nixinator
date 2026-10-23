@@ -59,8 +59,8 @@
 
     # Specific to used kernel (currently linux_zen)
     extraModulePackages = with config.boot.kernelPackages; [
-      v4l2loopback
-      zenpower
+      # v4l2loopback # NOTE: Broken on 2026-10-23
+      # zenpower # NOTE: Borken on 2026-10-23
     ];
   };
 
