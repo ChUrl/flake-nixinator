@@ -32,7 +32,7 @@ in {
       ];
 
       environment = {
-        DISABLE_IPV6 = "true";
+        # DISABLE_IPV6 = "true";
       };
 
       extraOptions = [
