@@ -200,6 +200,7 @@ in {
             (mkUDir ".config/zed" m755)
 
             # Share
+            (mkUDir ".local/share/Anki2" m755)
             # (mkUDir ".local/share/containers" m755) # Rootless docker
             (mkUDir ".local/share/direnv" m755)
             (mkUDir ".local/share/docker" m755)
