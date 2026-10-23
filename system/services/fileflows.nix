@@ -5,7 +5,7 @@
   pkgs,
   ...
 }: let
-  version = "26.06";
+  version = "26.10";
 in {
   virtualisation.oci-containers.containers = {
     fileflows = {
