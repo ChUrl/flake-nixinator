@@ -43,6 +43,7 @@
     routers,
     nameservers,
     routable,
+    privacy ? "default",
     # Extra addresses declared without creating routes (e.g. IPv6 ULA).
     extraAddresses ? [],
   }: {
@@ -70,6 +71,7 @@
       # MulticastDNS = "no";
       # LLMNR = "no";
       # LinkLocalAddressing = "ipv6";
+      IPv6PrivacyExtensions = privacy;
     };
 
     linkConfig = {
