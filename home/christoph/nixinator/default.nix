@@ -480,7 +480,11 @@
         # handbrake # FFMPEG frontend # TODO: Broken on 2026-10-23
         # teamspeak6-client
         rapidraw
+        # darktable # Doesn't support nikon high compressed
+        # rawtherapee # Doesn't support nikon high compressed
+        # art # Doesn't support nikon high compressed
         go-mtpfs
+        # comfyui-desktop # Custom derivation
 
         # virt-manager # use system program option
         # virt-viewer

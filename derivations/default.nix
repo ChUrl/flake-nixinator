@@ -5,6 +5,7 @@
 }: {
   # Obsolete derivations are kept in "1_deprecated" for reference.
 
+  comfyui-desktop = pkgs.callPackage ./comfyui-desktop {};
   monolisa = pkgs.callPackage ./monolisa {};
   raddbg = pkgs.callPackage ./raddbg {};
   rimstack = pkgs.callPackage ./rimstack {};
