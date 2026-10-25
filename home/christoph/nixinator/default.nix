@@ -201,11 +201,11 @@
         # Writes opencode.json
         settings = {
           plugin = [
+            # "@tarquinen/opencode-dcp@3.2.0" # auto compacting # NOTE: Doesn't work with v2.0
+            "opencode-mem@2.33.0"
+            "@slkiser/opencode-quota@5.0.3"
+            # "opencode-lmstudio@0.3.1"
             # "opencode-claude-auth@latest" # https://github.com/griffinmartin/opencode-claude-auth
-            "@tarquinen/opencode-dcp@latest" # auto compacting
-            "opencode-lmstudio@0.3.1"
-            # "@slkiser/opencode-quota"
-            "opencode-mem"
           ];
 
           attachment = {
