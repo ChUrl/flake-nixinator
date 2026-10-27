@@ -22,6 +22,7 @@
     # ../services/statespaces.nix
 
     # General services
+    ../services/actual-budget.nix
     ../services/arcane-agent.nix
     ../services/authelia.nix
     ../services/bazarr.nix
