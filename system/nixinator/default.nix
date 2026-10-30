@@ -127,6 +127,7 @@
         # 31431 # Parsec
         5173 # SvelteKit
         8090 # PocketBase
+        53317 # LocalSend
       ];
 
       allowedUDPPorts = [
@@ -137,6 +138,7 @@
         # 31431 # Parsec
         5173 # SvelteKit
         8090 # PocketBase
+        53317 # LocalSend
       ];
     };
 
