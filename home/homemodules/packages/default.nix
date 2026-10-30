@@ -175,6 +175,7 @@ in {
           vcv-rack
           # gajim # XMPP client
           # bitwig-studio5 # My license doesn't cover this version :/
+          localsend
 
           # Office
           xournalpp # Write with a pen, like old people
