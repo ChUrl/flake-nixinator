@@ -136,6 +136,7 @@ in {
             (mkUDir ".npm" m755) # Contains mcp servers :/
             # (mkUDir ".nv" m755) # Unity
             # (mkUDir ".ollama" m755)
+            (mkUDir ".opencode" m755)
             (mkUDir ".opencode-mem" m755)
             # (mkUDir ".plastic4" m755) # Unity
             (mkUDir ".tableplus" m755)
@@ -222,6 +223,7 @@ in {
             (mkUDir ".local/share/nix" m755)
             (mkUDir ".local/share/nvim" m755)
             (mkUDir ".local/share/opencode" m755)
+            (mkUDir ".local/share/org.localsend.localsend_app" m755)
             (mkUDir ".local/share/qutebrowser" m755)
             (mkUDir ".local/share/Rack2" m755)
             (mkUDir ".local/share/RimStack" m755)
