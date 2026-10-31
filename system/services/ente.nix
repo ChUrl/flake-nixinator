@@ -78,8 +78,9 @@ in {
       autoStart = true;
       cmd = ["server" "/data" "--address" ":3200" "--console-address" ":3201"];
       environmentFiles = [config.sops.templates."ente-env".path];
-      # Browser uploads go straight to this bucket, so CORS must allow the web app.
-      environment.MINIO_API_CORS_ALLOW_ORIGIN = "https://${webHost},https://${albumsHost}";
+      # Browser and desktop uploads go straight to this bucket, so CORS must
+      # allow the web app, the albums app and the desktop app (ente://app).
+      environment.MINIO_API_CORS_ALLOW_ORIGIN = "https://${webHost},https://${albumsHost},ente://app";
       volumes = ["ente-minio_data:/data"];
       networks = ["behind-nginx"];
     };
