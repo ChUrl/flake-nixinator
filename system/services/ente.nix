@@ -46,6 +46,9 @@ in {
     ENTE_DB_PASSWORD=${config.sops.placeholder."ente-db-password"}
     ENTE_DB_SSLMODE=disable
 
+    ENTE_SMTP_HOST=mailpit
+    ENTE_SMTP_PORT=1025
+
     ENTE_S3_ARE_LOCAL_BUCKETS=false
     ENTE_S3_USE_PATH_STYLE_URLS=true
     ENTE_S3_B2_EU_CEN_KEY=${config.sops.placeholder."ente-s3-user"}
