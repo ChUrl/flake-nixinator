@@ -38,7 +38,7 @@ in {
             haskell-language-server
             jdt-language-server
             just-lsp
-            ltex-ls # TODO: Only enable on-demand
+            ltex-ls-plus # TODO: Only enable on-demand
             lua-language-server
             nil
             # perl5Packages.PLS
@@ -152,7 +152,10 @@ in {
     };
 
     programs.nixvim = {
-      # nixpkgs.pkgs = pkgs;
+      # Use the host's package set instead of letting nixvim import its own
+      # (also silences the "follows affected nixpkgs.source" warning and makes
+      # CPU-tuned hosts build nvim with their tuned stdenv).
+      nixpkgs.pkgs = pkgs;
 
       defaultEditor = true;
       enable = true;
