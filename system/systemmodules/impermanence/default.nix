@@ -65,6 +65,7 @@ in {
           (mkRDir "/etc/NetworkManager" m755)
           (mkRDir "/etc/secureboot" m755)
           (mkRDir "/etc/ssh" m755)
+          (mkRDir "/root/.ssh" m700) # Restic's ssh key
 
           # https://github.com/nix-community/impermanence/issues/253
           (mkRDir "/usr/systemd-placeholder" m755)
@@ -72,10 +73,8 @@ in {
           # TODO: Why does this use the mandb user?
           # (mkDir "mandb" "/var/cache/man" m755)
 
-          # (mkRDir "/var/cache/restic-backups-synology" m755)
-
+          (mkRDir "/var/cache/restic-backups-synology" m700) # Resitc's cache
           (mkRDir "/var/db/sudo" m711)
-
           (mkRDir "/var/lib/auto-cryptenroll" m755) # Lanzaboote
           (mkRDir "/var/lib/bluetooth" m755) # m700
           (mkRDir "/var/lib/btrfs" m755)
@@ -288,6 +287,11 @@ in {
       # TODO: Is this fixed with filesystems."/home".neededForBoot = true?
       # NOTE: This is REQUIRED for HM activation!
       #       Otherwise the home directory won't be writable!
+      #       The home subvolume is recreated on every boot, so it belongs
+      #       to root. The directory itself needs the ownership fix, everything
+      #       below it is a bind mount whose ownership comes from /persist.
+      #       NOT recursive, so chown -R doesn't walk through every bind
+      #       mount in /persist and into the network mounts.
       systemd.services."impermanence-fix-home-ownership" = let
         homeDir = "/home/${username}";
         homeUser =
@@ -305,21 +309,8 @@ in {
         serviceConfig.Type = "oneshot";
 
         script = ''
-          # Don't chown if NFS shares are already mounted.
-          # This can happen outside of regular booting (e.g. nixos-rebuild switch),
-          # so we don't return an error.
-          # NOTE: Use || true as NixOS sets the damn -e, otherwise this unit fails on boot!
-          nfs_mounts=$(grep ' nfs4 ' /proc/mounts || true)
-          if [[ -n "$nfs_mounts" ]]; then
-            echo "NFS shares are mounted into the home directory, aborting:"
-            echo "$nfs_mounts"
-            exit 0
-          else
-            echo "No NFS shares are mounted into the home directory, continuing..."
-          fi
-
           if [[ -d ${homeDir} ]]; then
-            chown -R ${homeUser}:${homeGroup} ${homeDir}
+            chown ${homeUser}:${homeGroup} ${homeDir}
             echo "Set ownership for ${homeDir} to ${homeUser}:${homeGroup}"
           else
             echo "ERROR: Home ${homeDir} does not exist!"
@@ -328,111 +319,125 @@ in {
         '';
       };
 
-      # Because we have a LUKS encrypted drive
-      # we use a systemd service to cleanup the volumes
-      boot.initrd.systemd = {
-        # enable = true; # Option no longer exists
+      # Because we have a LUKS encrypted drive we retire the previous root and
+      # home subvolumes from the initrd. Nothing is deleted here.
+      boot.initrd.systemd.services.impermanence-btrfs-cleanup = let
+        mountDir = "/btrfs_tmp";
+        btrfsDevice = "/dev/mapper/crypted";
+        cryptsetupUnit = "systemd-cryptsetup@crypted.service";
 
-        services.impermanence-btrfs-cleanup = let
-          backupDuration = "7"; # Days
-          mountDir = "/btrfs_tmp";
-          persistDir = "${mountDir}/persist";
-        in {
-          description = "Clean impermanent btrfs subvolumes";
-          wantedBy = ["initrd.target"];
-          after = ["systemd-cryptsetup@crypted.service"];
-          before = ["sysroot.mount"];
-          unitConfig.DefaultDependencies = "no";
-          serviceConfig.Type = "oneshot";
+        # Retire one ephemeral subvolume and create a fresh one in its place.
+        recordGeneration = subvol: ''
+          if [[ -e ${mountDir}/${subvol} ]]; then
+            mkdir -p ${mountDir}/old_${subvol}s
 
-          # NOTE: If any single line of this script fails the entire system might be bricked.
-          #       NixOS automatically sets "-e", so if unlucky, the subvolumes won'e exist for mounting...
-          script = let
-            mvSubvolToPersist = subvol: ''
-              if [[ -e ${mountDir}/${subvol} ]]; then
-                mkdir -p ${persistDir}/old_${subvol}s
-                timestamp=$(date --date="@$(stat -c %Y ${mountDir}/${subvol})" "+%Y-%m-%-d_%H:%M:%S")
-                mv ${mountDir}/${subvol} "${persistDir}/old_${subvol}s/$timestamp"
+            timestamp=$(date -u --date="@$(stat -c %Y ${mountDir}/${subvol})" +%Y-%m-%dT%H:%M:%SZ)
+            target="${mountDir}/old_${subvol}s/$timestamp"
+            # A generation that was never written to can share a timestamp with
+            # the next one, so make the name unique instead of failing.
+            n=1
+            while [[ -e $target ]]; do
+              target="${mountDir}/old_${subvol}s/$timestamp.$n"
+              n=$((n + 1))
+            done
 
-                # Make the backup mutable (in case it is not, e.g. /var/empty)
-                # chattr -R -i -f "${persistDir}/old_${subvol}s/$timestamp"
+            mv ${mountDir}/${subvol} "$target"
+            # Best effort: never fail the boot over a cosmetic attribute.
+            btrfs property set -ts "$target" ro true \
+              || echo "WARNING: could not mark $target read-only"
+            echo "Archived previous ${subvol} subvolume as $target"
+          fi
 
-                echo "Backed up previous ${subvol} subvolume to ${persistDir}/old_${subvol}s/$timestamp"
+          btrfs subvolume create ${mountDir}/${subvol}
+          echo "Created new ${subvol} subvolume"
+        '';
+      in {
+        description = "Retire ephemeral btrfs subvolumes (impermanence)";
+        wantedBy = ["initrd.target"];
+        requires = [cryptsetupUnit];
+        after = [cryptsetupUnit "local-fs-pre.target"];
+        before = ["sysroot.mount"];
+        unitConfig.DefaultDependencies = false;
+        serviceConfig = {
+          Type = "oneshot";
+          # Creating a subvolume on a multi-TB filesystem can take longer than
+          # the default 90s.
+          TimeoutStartSec = "10min";
+        };
+
+        script = ''
+          mkdir -p ${mountDir}
+          mount -o subvol=/ ${btrfsDevice} ${mountDir}
+          trap 'umount -l ${mountDir} || true' EXIT
+
+          if [[ ! -e ${mountDir}/persist ]]; then
+            echo "${mountDir}/persist doesn't exist, aborting..."
+            exit 0
+          fi
+
+          ${recordGeneration "root"}
+          ${recordGeneration "home"}
+        '';
+      };
+
+      # Pruning the old subvolumes happens later in boot. Deleting a retired
+      # home/root subvolume can take a while, and a failure here shouldn't
+      # cause a boot failure.
+      systemd.services."impermanence-prune-generations" = {
+        description = "Prune retired impermanence btrfs subvolumes";
+        unitConfig.RequiresMountsFor = ["/btrfs"];
+        path = [pkgs.btrfs-progs pkgs.coreutils];
+        serviceConfig = {
+          Type = "oneshot";
+          Nice = 19;
+          IOSchedulingClass = "idle";
+        };
+
+        script = let
+          retention = toString impermanence.generationRetentionDays;
+        in ''
+          retention_days=${retention}
+          cutoff=$(( $(date +%s) - retention_days * 86400 ))
+
+          # /btrfs is the current location. The /persist paths are where older
+          # generations were archived before this layout existed - drop them
+          # from this list once they are empty.
+          for dir in /btrfs/old_roots /btrfs/old_homes \
+                     /persist/old_roots /persist/old_homes; do
+            [[ -d $dir ]] || continue
+
+            for entry in "$dir"/*; do
+              [[ -e $entry ]] || continue
+
+              # Only touch entries we created ourselves (timestamped names).
+              # New names are 2026-10-31T12:34:56Z[.N], older ones (archived
+              # under /persist) are 2026-10-9_12:34:56.
+              name=$(basename "$entry")
+              stamp=''${name%%.*}
+              stamp=''${stamp//_/ }
+              created=$(date -d "$stamp" +%s 2>/dev/null) || continue
+              (( created < cutoff )) || continue
+
+              # Never recurse into anything that is not a subvolume, see
+              # https://github.com/nix-community/impermanence/issues/258
+              if [[ $(stat -c %i "$entry") -ne 256 ]]; then
+                echo "WARNING: $entry is not a btrfs subvolume, skipping"
+                continue
               fi
-            '';
 
-            mkNewSubvol = subvol: ''
-              if [[ ! -e ${mountDir}/${subvol} ]]; then
-                btrfs subvolume create ${mountDir}/${subvol}
-                echo "Created new subvolume ${mountDir}/${subvol}"
-              else
-                echo "Failed to move ${mountDir}/${subvol} (${mountDir}/${subvol} still exists), not creating new subvolume..."
-              fi
-            '';
+              echo "Deleting $entry"
+              btrfs subvolume delete --recursive "$entry"
+            done
+          done
+        '';
+      };
 
-            # TODO: This fails and bricks the system
-            deleteOldBackups = subvol: ''
-              for old_${subvol} in $(find ${persistDir}/old_${subvol}s/ -maxdepth 1 -mtime +${backupDuration}); do
-                delete_subvolume_recursively "$old_${subvol}"
-              done
-            '';
-          in ''
-            # This dir will be created in the initrd ramdisk
-            mkdir -p ${mountDir}
-
-            # We mount the root subvolume. Because we're using a flat btrfs layout,
-            # "/" contains the subfolders (-volumes) home, log, nix, persist, root, swap, ...
-            mount -o subvol=/ /dev/mapper/crypted ${mountDir}
-
-            # Check if the persist dir exists so we can move stuff to it
-            if [[ ! -e ${persistDir} ]]; then
-              echo "${persistDir} doesn't exist, aborting..."
-              umount ${mountDir}
-              rmdir ${mountDir}
-              exit 0
-            fi
-
-            # Move root subvolume to backup location
-            ${mvSubvolToPersist "root"}
-
-            # Move home subvolume to backup location
-            ${mvSubvolToPersist "home"}
-
-            # Create new root subvolume
-            ${mkNewSubvol "root"}
-
-            # Create new home subvolume
-            ${mkNewSubvol "home"}
-
-            # TODO: Did this removal of old backups always brick the system?
-            # Delete a backed up subvolume
-            # delete_subvolume_recursively() {
-            #   IFS=$'\n'
-
-            #   # https://github.com/nix-community/impermanence/issues/258#issuecomment-2733383737
-            #   # If we accidentally end up with a file or directory under old_roots,
-            #   # the code will enumerate all subvolumes under the main volume.
-            #   # We don't want to remove everything under true main volume. Only
-            #   # proceed if this path is a btrfs subvolume (inode=256).
-            #   if [ $(stat -c %i "$1") -ne 256 ]; then return; fi
-
-            #   for subvol in $(btrfs subvolume list -o "$1" | cut -f 9- -d ' '); do
-            #     delete_subvolume_recursively "${persistDir}/$subvol"
-            #   done
-
-            #   btrfs subvolume delete "$1"
-            #   echo "Deleted old subvolume $1"
-            # }
-
-            # Delete old root backups
-            # $ {deleteOldBackups "root"}
-
-            # Delete old home backups
-            # $ {deleteOldBackups "home"}
-
-            umount ${mountDir}
-            rmdir ${mountDir}
-          '';
+      systemd.timers."impermanence-prune-generations" = {
+        wantedBy = ["timers.target"];
+        timerConfig = {
+          OnCalendar = "daily";
+          Persistent = true;
+          RandomizedDelaySec = "1h";
         };
       };
     };
