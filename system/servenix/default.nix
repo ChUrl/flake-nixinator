@@ -27,6 +27,7 @@
     ../services/authelia.nix
     ../services/bazarr.nix
     ../services/bento_pdf.nix
+    ../services/ente.nix
     ../services/fileflows.nix
     ../services/gitea.nix
     ../services/immich.nix
