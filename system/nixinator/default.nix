@@ -364,64 +364,52 @@
       };
     };
 
-    # Keep this as a system service because we're backing up /persist as root
-    # TODO: The repository gets corrupted all the time, maybe because the service runs before the repository is mounted?
-    #       - Was this caused by the NFS "soft" option?
-    #       - Might this be caused by the restic service being interrupted by shutdown/rebooting?
-    #
-    # restic.backups."synology" = {
-    #   # user = "${username}"; # Keep default (root), so restic can read everything
-    #
-    #   repository = "/home/${username}/Restic";
-    #   initialize = true;
-    #   passwordFile = config.sops.secrets.restic-repo-key.path;
-    #   createWrapper = true;
-    #
-    #   timerConfig = {
-    #     OnCalendar = "daily";
-    #     Persistent = true;
-    #     RandomizedDelaySec = "5h";
-    #   };
-    #
-    #   runCheck = true;
-    #   checkOpts = [
-    #     "--with-cache"
-    #   ];
-    #
-    #   pruneOpts = [
-    #     "--keep-daily 3"
-    #     "--keep-weekly 2"
-    #     # "--keep-monthly 0"
-    #     # "--keep-yearly 0"
-    #
-    #     "--prune" # Automatically remove dangling files not referenced by any snapshot
-    #     "--repack-uncompressed"
-    #   ];
-    #
-    #   paths = ["/persist"];
-    #   exclude = [
-    #     # The backup is just supposed to allow a system restore
-    #     "/persist/old_homes"
-    #     "/persist/old_roots"
-    #
-    #     # Those are synced by nextcloud, no need to backup them 50 times
-    #     "/persist/home/${username}/Documents"
-    #     "/persist/home/${username}/NixFlake"
-    #     "/persist/home/${username}/Notes"
-    #     "/persist/home/${username}/Projects"
-    #     "/persist/home/${username}/Public"
-    #
-    #     # Some more caches
-    #     ".cache"
-    #     "cache2" # firefox
-    #     "Cache"
-    #   ];
-    #   extraBackupArgs = [
-    #     "--exclude-caches" # Excludes marked cache directories
-    #     "--one-file-system" # Only stay on /persist (in case symlinks lead elsewhere)
-    #     "--cleanup-cache" # Auto remove old cache directories
-    #   ];
-    # };
+    # Backups onto the NAS over SFTP. The repo password comes from sops
+    # (restic-repo-key), the ssh key lives in /persist/root/.ssh via
+    # impermanence, and the host settings are declared below.
+    restic.backups."synology" = {
+      # Keep the default user (root), so restic can read everything
+      repository = "sftp:backup@192.168.86.15:/NixinatorPersistence/restic";
+      initialize = true;
+      passwordFile = config.sops.secrets.restic-repo-key.path;
+      createWrapper = true;
+
+      paths = ["/persist"];
+
+      extraBackupArgs = [
+        "--one-file-system" # Nothing outside /persist
+        "--exclude-caches" # Excludes marked cache directories
+        "--cleanup-cache" # Auto remove old cache directories
+        "--exclude=/persist/home/${username}/.var/app" # flatpak
+        "--exclude=/persist/home/${username}/.lmstudio/models"
+        "--exclude=/persist/home/${username}/.cache"
+        "--exclude=/persist/var/cache"
+      ];
+
+      # Could help to enforce consistent dumps
+      # backupPrepareCommand = ''
+      #   mkdir -p /persist/var/backup/mysql
+      #   ${pkgs.mariadb}/bin/mariadb-dump --all-databases --single-transaction \
+      #     > /persist/var/backup/mysql/all-databases.sql
+      # '';
+
+      pruneOpts = [
+        "--keep-daily 7"
+        "--keep-weekly 5"
+        "--keep-monthly 12"
+      ];
+
+      runCheck = true;
+      checkOpts = [
+        "--read-data-subset=5%"
+      ];
+
+      timerConfig = {
+        OnCalendar = "daily";
+        Persistent = true;
+        RandomizedDelaySec = "5h";
+      };
+    };
 
     xserver = {
       # Configure keymap in X11
@@ -430,6 +418,20 @@
 
       videoDrivers = ["nvidia"]; # NVIDIA
     };
+  };
+
+  # The ssh settings for the restic backup.
+  # In this case, "localuser" is root, because the restic unit runs as root.
+  programs.ssh = {
+    extraConfig = ''
+      Match host 192.168.86.15 localuser root
+        IdentityFile /root/.ssh/restic
+        IdentitiesOnly yes
+        BatchMode yes
+    '';
+
+    # Synology: ssh-keyscan -t ed25519 192.168.86.15
+    knownHosts."192.168.86.15".publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFFOJqeggEhZxg4iJq4dN34TPjDBjqherMxqiBGC7gwI";
   };
 
   # The current system was installed on 22.05, do not change.
