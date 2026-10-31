@@ -331,7 +331,7 @@ in {
       # Because we have a LUKS encrypted drive
       # we use a systemd service to cleanup the volumes
       boot.initrd.systemd = {
-        enable = true;
+        # enable = true; # Option no longer exists
 
         services.impermanence-btrfs-cleanup = let
           backupDuration = "7"; # Days
