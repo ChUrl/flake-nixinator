@@ -15,6 +15,17 @@
     ../services/fileflows-node.nix
   ];
 
+  # Append this to the default config set from mkCommonNixSettings
+  # in lib/nixos. The gccarch-znver4 is required for the host-specific
+  # platform config (gcc.arch = znver4) in flake.nix
+  nix.settings.system-features = [
+    "nixos-test"
+    "benchmark"
+    "big-parallel"
+    "kvm"
+    "gccarch-znver4"
+  ];
+
   systemmodules = {
     bootloader = {
       # Secure boot
