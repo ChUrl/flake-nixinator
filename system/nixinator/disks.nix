@@ -193,4 +193,13 @@
 
   fileSystems."/persist".neededForBoot = true;
   fileSystems."/var/log".neededForBoot = true;
+
+  # The btrfs top level, mounted too keep old impermanence snapshots
+  # out of /persist (and out of the restic backup).
+  # Add nofail to not prevent successfull booting if this fails.
+  fileSystems."/btrfs" = {
+    device = "/dev/mapper/crypted";
+    fsType = "btrfs";
+    options = ["subvol=/" "noatime" "nofail" "x-gvfs-hide"];
+  };
 }
