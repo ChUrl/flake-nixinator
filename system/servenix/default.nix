@@ -111,6 +111,7 @@
       ];
     };
 
+    # TODO: Fold those into the respective service files
     sops-nix.secrets.${username} = [
       "heidi-discord-token"
       "kopia-server-username"
@@ -121,6 +122,12 @@
       "ntfy-auth-users"
       "ntfy-auth-tokens"
       "arcane-agent-key"
+      "ente-db-password"
+      "ente-s3-user"
+      "ente-s3-password"
+      "ente-key-encryption"
+      "ente-key-hash"
+      "ente-jwt-secret"
     ];
   };
 
