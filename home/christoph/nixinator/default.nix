@@ -194,6 +194,7 @@
       opencode = {
         enable = true;
         enableMcpIntegration = true;
+        mutableSettings = false;
         extraPackages = with pkgs; [
           # opencode-claude-auth # Installed using npm
         ];
@@ -377,9 +378,9 @@
           };
         };
 
-        # Writes tui.json
-        tui = {
-          theme = "system";
+        # Writes cli.json
+        cli = {
+          theme.name = "system";
           diff_style = "auto";
           mouse = true;
           attention = {
