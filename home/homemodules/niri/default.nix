@@ -701,12 +701,6 @@ in {
             };
           };
 
-          gestures = {
-            hot-corners = {
-              enable = false;
-            };
-          };
-
           window-rules = [
             # Rules for all windows
             {
