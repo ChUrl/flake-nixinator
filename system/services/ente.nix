@@ -12,6 +12,11 @@
   siloVersion = "RELEASE.2026-10-26T00-00-00Z";
 
   domain = "local.chriphost.de";
+  webHost = "duck.${domain}";
+  apiHost = "duck-api.${domain}";
+  albumsHost = "duck-albums.${domain}";
+  s3Host = "duck-s3.${domain}";
+
   dataDir = "/var/lib/ente";
 in {
   # NOTE: Init the secrets with
@@ -48,12 +53,12 @@ in {
       b2-eu-cen:
         key: "${config.sops.placeholder."ente-s3-user"}"
         secret: "${config.sops.placeholder."ente-s3-password"}"
-        endpoint: s3.${domain}
+        endpoint: ${s3Host}
         region: eu-central-2
         bucket: b2-eu-cen
 
     apps:
-      public-albums: https://albums.${domain}
+      public-albums: https://${albumsHost}
 
     key:
       encryption: "${config.sops.placeholder."ente-key-encryption"}"
@@ -86,7 +91,7 @@ in {
       cmd = ["server" "/data" "--address" ":3200" "--console-address" ":3201"];
       environmentFiles = [config.sops.templates."ente-env".path];
       # Browser uploads go straight to this bucket, so CORS must allow the web app.
-      environment.MINIO_API_CORS_ALLOW_ORIGIN = "https://photos.${domain}";
+      environment.MINIO_API_CORS_ALLOW_ORIGIN = "https://${webHost},https://${albumsHost}";
       volumes = ["${dataDir}/minio:/data"];
       networks = ["behind-nginx"];
     };
@@ -104,7 +109,7 @@ in {
     ente-web = {
       image = "ghcr.io/ente/web:${enteWebVersion}";
       autoStart = true;
-      environment.ENTE_API_ORIGIN = "https://api.${domain}";
+      environment.ENTE_API_ORIGIN = "https://${apiHost}";
       networks = ["behind-nginx"];
     };
   };
