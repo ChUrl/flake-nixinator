@@ -176,6 +176,7 @@ in {
           # gajim # XMPP client
           # bitwig-studio5 # My license doesn't cover this version :/
           localsend
+          ente-desktop
 
           # Office
           xournalpp # Write with a pen, like old people
