@@ -10,14 +10,13 @@
   enteServerVersion = "20fb6316bd98b1af613ef771c684d5cd46fbf371"; # 2026-10-15
   enteWebVersion = "4a3e62d47796abadf61c2717a6eb7022bbcbd072"; # 2026-10-28
   siloVersion = "RELEASE.2026-10-26T00-00-00Z";
+  postgresVersion = "15";
 
   domain = "local.chriphost.de";
   webHost = "duck.${domain}";
   apiHost = "duck-api.${domain}";
   albumsHost = "duck-albums.${domain}";
   s3Host = "duck-s3.${domain}";
-
-  dataDir = "/var/lib/ente";
 in {
   # NOTE: Init the secrets with
   # openssl rand -base64 32                    # ente-key-encryption (32 bytes, std b64)
@@ -36,52 +35,38 @@ in {
     MINIO_ROOT_PASSWORD=${config.sops.placeholder."ente-s3-password"}
   '';
 
-  # This replaces server/config/museum.yaml. Don't put these in the Nix store!
-  sops.templates."ente-museum-yaml".content = ''
-    db:
-      host: ente-postgres
-      port: 5432
-      name: ente_db
-      user: ente
-      password: "${config.sops.placeholder."ente-db-password"}"
-      sslmode: disable
+  # Museum reads `ENTE_*` environment variables as its config source
+  # (see configurations/local.yaml in the server image), so no
+  # museum.yaml needs to be mounted into the container.
+  sops.templates."ente-museum-env".content = ''
+    ENTE_DB_HOST=ente-postgres
+    ENTE_DB_PORT=5432
+    ENTE_DB_NAME=ente_db
+    ENTE_DB_USER=ente
+    ENTE_DB_PASSWORD=${config.sops.placeholder."ente-db-password"}
+    ENTE_DB_SSLMODE=disable
 
-    s3:
-      # HTTPS via nginx => must be false, and MinIO needs path-style URLs.
-      are_local_buckets: false
-      use_path_style_urls: true
-      b2-eu-cen:
-        key: "${config.sops.placeholder."ente-s3-user"}"
-        secret: "${config.sops.placeholder."ente-s3-password"}"
-        endpoint: ${s3Host}
-        region: eu-central-2
-        bucket: b2-eu-cen
+    ENTE_S3_ARE_LOCAL_BUCKETS=false
+    ENTE_S3_USE_PATH_STYLE_URLS=true
+    ENTE_S3_B2_EU_CEN_KEY=${config.sops.placeholder."ente-s3-user"}
+    ENTE_S3_B2_EU_CEN_SECRET=${config.sops.placeholder."ente-s3-password"}
+    ENTE_S3_B2_EU_CEN_ENDPOINT=${s3Host}
+    ENTE_S3_B2_EU_CEN_REGION=eu-central-2
+    ENTE_S3_B2_EU_CEN_BUCKET=b2-eu-cen
 
-    apps:
-      public-albums: https://${albumsHost}
+    ENTE_APPS_PUBLIC_ALBUMS=https://${albumsHost}
 
-    key:
-      encryption: "${config.sops.placeholder."ente-key-encryption"}"
-      hash: "${config.sops.placeholder."ente-key-hash"}"
-
-    jwt:
-      secret: "${config.sops.placeholder."ente-jwt-secret"}"
+    ENTE_KEY_ENCRYPTION=${config.sops.placeholder."ente-key-encryption"}
+    ENTE_KEY_HASH=${config.sops.placeholder."ente-key-hash"}
+    ENTE_JWT_SECRET=${config.sops.placeholder."ente-jwt-secret"}
   '';
-
-  systemd.tmpfiles.rules = [
-    "d ${dataDir} 0750 root root -"
-    "d ${dataDir}/postgres 0700 root root -"
-    "d ${dataDir}/minio 0750 root root -"
-    # replaces the compose `post_start: mc mb`
-    "d ${dataDir}/minio/b2-eu-cen 0750 root root -"
-  ];
 
   virtualisation.oci-containers.containers = {
     ente-postgres = {
-      image = "docker.io/library/postgres:15";
+      image = "docker.io/library/postgres:${postgresVersion}";
       autoStart = true;
       environmentFiles = [config.sops.templates."ente-env".path];
-      volumes = ["${dataDir}/postgres:/var/lib/postgresql/data"];
+      volumes = ["ente-postgres_data:/var/lib/postgresql/data"];
       networks = ["ente-internal"];
     };
 
@@ -92,7 +77,7 @@ in {
       environmentFiles = [config.sops.templates."ente-env".path];
       # Browser uploads go straight to this bucket, so CORS must allow the web app.
       environment.MINIO_API_CORS_ALLOW_ORIGIN = "https://${webHost},https://${albumsHost}";
-      volumes = ["${dataDir}/minio:/data"];
+      volumes = ["ente-minio_data:/data"];
       networks = ["behind-nginx"];
     };
 
@@ -100,9 +85,7 @@ in {
       image = "ghcr.io/ente/server:${enteServerVersion}";
       autoStart = true;
       dependsOn = ["ente-postgres"];
-      volumes = [
-        "${config.sops.templates."ente-museum-yaml".path}:/museum.yaml:ro"
-      ];
+      environmentFiles = [config.sops.templates."ente-museum-env".path];
       networks = ["ente-internal" "behind-nginx"];
     };
 
@@ -126,6 +109,22 @@ in {
         script = ''
           ${pkgs.docker}/bin/docker network inspect ente-internal >/dev/null 2>&1 ||
             ${pkgs.docker}/bin/docker network create ente-internal
+        '';
+      };
+
+      # Docker initializes a fresh named volume empty, but museum expects the
+      # bucket to already exist (example compose does this with `mc mb`).
+      ente-minio-init = {
+        wantedBy = ["multi-user.target"];
+        requires = ["docker.service"];
+        after = ["docker.service"];
+        before = ["docker-ente-minio.service"];
+        serviceConfig.Type = "oneshot";
+        script = ''
+          ${pkgs.docker}/bin/docker run --rm \
+            -v ente-minio_data:/data \
+            docker.io/library/alpine:3.22 \
+            sh -c 'mkdir -p /data/b2-eu-cen && chmod 0750 /data/b2-eu-cen'
         '';
       };
     }
