@@ -7,17 +7,19 @@
   inputs = {
     # Just for shell.nix
     devshell.url = "github:numtide/devshell";
+    devshell.inputs.nixpkgs.follows = "nixpkgs";
 
     # Nixpkgs
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     hardware.url = "github:nixos/nixos-hardware";
+    hardware.inputs.nixpkgs.follows = "nixpkgs";
 
     # Darwin
     nix-darwin.url = "github:nix-darwin/nix-darwin/master";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
 
     # NOTE: Update this after May and November
-    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.11";
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-26.05";
 
     # Home Manager
     home-manager.url = "github:nix-community/home-manager";
@@ -29,7 +31,7 @@
 
     # Opt-in state
     impermanence.url = "github:nix-community/impermanence";
-    # impermanence.inputs.nixpkgs.follows = "nixpkgs";
+    impermanence.inputs.nixpkgs.follows = "nixpkgs";
 
     # Manage secrets with sops
     sops-nix.url = "github:Mic92/sops-nix";
@@ -70,12 +72,14 @@
 
     # Walker
     elephant.url = "github:abenz1267/elephant";
+    elephant.inputs.nixpkgs.follows = "nixpkgs";
     walker.url = "github:abenz1267/walker";
+    walker.inputs.nixpkgs.follows = "nixpkgs";
     walker.inputs.elephant.follows = "elephant";
 
     # NeoVim <3
     nixvim.url = "github:nix-community/nixvim";
-    # nixvim.inputs.nixpkgs.follows = "nixpkgs";
+    nixvim.inputs.nixpkgs.follows = "nixpkgs";
 
     # Emacs nightly
     # emacs-overlay.url = "github:nix-community/emacs-overlay";
@@ -109,6 +113,7 @@
 
     # HyTale
     hytale-launcher.url = "github:JPyke3/hytale-launcher-nix";
+    hytale-launcher.inputs.nixpkgs.follows = "nixpkgs";
 
     masssprings.url = "git+https://gitea.local.chriphost.de/christoph/cpp-masssprings";
     masssprings.inputs.nixpkgs.follows = "nixpkgs";
@@ -129,46 +134,75 @@
     system = "x86_64-linux";
     darwinSystem = "aarch64-darwin";
 
-    # We configure our global packages here.
+    # Maintain additional stable pkgs.
+    # This is supposed to provide a backup for packages in case they
+    # stop building on the unstable branch.
+    # It should otherwise not be mixed with this configuration,
+    # so don't even pass it to the modules.
+    # NOTE: Stays generic (unoptimised) on purpose
+    pkgs-stable = import inputs.nixpkgs-stable {
+      inherit system;
+      config.allowUnfree = true;
+      config.allowUnfreePredicate = pkg: true;
+    };
+
+    # Overlays define changes in the nixpkgs package set.
+    # Final is nixpkgs with the overlay applied, prev is nixpkgs before applying the overlay:
+    # final: prev: {
+    #   firefox = prev.firefox.override { ... };
+    #   myBrowser = final.firefox;
+    # }
+    overlays = [
+      inputs.devshell.overlays.default
+      inputs.nur.overlays.default
+      inputs.niri.overlays.niri
+      # inputs.emacs-overlay.overlay
+      inputs.claude-desktop.overlays.default
+
+      # All my own overlays (derivations + modifications)
+      (import ./overlays {inherit inputs nixpkgs pkgs-stable;})
+    ];
+
+    # The single place where a nixpkgs instance is created.
     # Usually, "nixpkgs.legacyPackages.${system}" is used (and more efficient),
     # but because we want to change the nixpkgs configuration, we have to re-import it.
-    pkgs = import nixpkgs {
-      inherit system;
-
-      config.allowUnfree = true;
-
-      # Alternative to setting config.allowUnfree.
-      # I read somewhere that this is more suitable when running HM standalone.
-      config.allowUnfreePredicate = pkg: true;
-
-      # Overlays define changes in the nixpkgs package set.
-      # Final is nixpkgs with the overlay applied, prev is nixpkgs before applying the overlay:
-      # final: prev: {
-      #   firefox = prev.firefox.override { ... };
-      #   myBrowser = final.firefox;
-      # }
-      overlays = let
-        # Maintain additional stable pkgs.
-        # This is supposed to provide a backup for packages in case they
-        # stop building on the unstable branch.
-        # It should otherwise not be mixed with this configuration,
-        # so don't even pass it to the modules.
-        pkgs-stable = import inputs.nixpkgs-stable {
-          inherit system;
+    #
+    # "args" is either { inherit system; } or { localSystem = { ... }; }.
+    # Never pass both: nixpkgs asserts on that (pkgs/top-level/impure.nix).
+    mkPkgs = args:
+      import nixpkgs ({
           config.allowUnfree = true;
-          config.allowUnfreePredicate = pkg: true;
-        };
-      in [
-        inputs.devshell.overlays.default
-        inputs.nur.overlays.default
-        inputs.niri.overlays.niri
-        # inputs.emacs-overlay.overlay
-        inputs.claude-desktop.overlays.default
 
-        # All my own overlays (derivations + modifications)
-        (import ./overlays {inherit inputs nixpkgs pkgs-stable;})
-      ];
+          # Alternative to setting config.allowUnfree.
+          # I read somewhere that this is more suitable when running HM standalone.
+          config.allowUnfreePredicate = pkg: true;
+
+          inherit overlays;
+        }
+        // args);
+
+    # Generic package set: runs on any CPU of the given system.
+    pkgs = mkPkgs {inherit system;};
+
+    # CPU-specific tuning, per host.
+    # Hosts listed here get architecture-specific builds,
+    # everybody else uses the generic "pkgs".
+    # This requires the platform-specific "gccarch-..." feature, which should
+    # be set in the system/<hostname>/default.nix (an example is in
+    # nix.settings.system-features in system/nixinator/default.nix).
+    # NOTE: No binary cache -> full system is compiled from scratch!
+    hostPlatforms = {
+      # nixinator = {
+      #   gcc.arch = "znver4";
+      #   gcc.tune = "znver4";
+      # };
     };
+
+    # Returns the generic "pkgs" for hosts without tuning.
+    mkHostPkgs = hostname:
+      if hostPlatforms ? ${hostname}
+      then mkPkgs {localSystem = {inherit system;} // hostPlatforms.${hostname};}
+      else pkgs;
 
     darwinPkgs = import nixpkgs {
       system = darwinSystem;
@@ -192,25 +226,18 @@
 
     # My own library functions are imported here.
     # They are made available to the system and HM configs by inheriting mylib.
-    mylib = import ./lib {
-      # Equal to "inputs = inputs;" and "pkgs = pkgs;".
-      # The right values come from the outer scope, because the names match
-      # in the inner and outer scope, we can use "inherit" instead.
-      # This is required because the lib/ module expects those as arguments.
-      inherit inputs pkgs;
+    # It has to be created per-host so the host-specific pkgs are used.
+    mkMylib = pkgs:
+      import ./lib {
+        # Equal to "inputs = inputs;" and "pkgs = pkgs;".
+        inherit inputs pkgs;
 
-      # Equal to "lib = nixpkgs.lib;".
-      # This is required because mylib also uses the default nixpkgs lib.
-      inherit (nixpkgs) lib;
-    };
+        # Equal to "lib = nixpkgs.lib;".
+        # This is required because mylib also uses the default nixpkgs lib.
+        inherit (nixpkgs) lib;
+      };
 
-    darwinMylib = import ./lib {
-      inherit inputs darwinPkgs;
-
-      inherit (nixpkgs) lib;
-
-      pkgs = darwinPkgs;
-    };
+    darwinMylib = mkMylib darwinPkgs;
 
     # NOTE: Keep public keys here so they're easy to rotate
     publicKeys.christoph = {
@@ -267,45 +294,68 @@
       # Downsides:
       # - The nixd HM options completion doesn't seem to work
       # - The system needs to be rebuilt with every HM config change
-      nixinator = mylib.nixos.mkNixosConfigWithHomeManagerModule {
-        inherit system mylib publicKeys;
-        hostname = "nixinator";
-        username = "christoph";
-        headless = false;
-        extraModules =
-          [
-            inputs.disko.nixosModules.disko
-            inputs.stylix.nixosModules.stylix
-            inputs.nix-gaming.nixosModules.platformOptimizations
-            inputs.codex-desktop-linux.nixosModules.default
-          ]
-          ++ commonModules;
-      };
-      nixtop = mylib.nixos.mkNixosConfigWithHomeManagerModule {
-        inherit system mylib publicKeys;
-        hostname = "nixtop";
-        username = "christoph";
-        headless = false;
-        extraModules = [] ++ commonModules;
-      };
-      servenix = mylib.nixos.mkNixosConfigWithHomeManagerModule {
-        inherit system mylib publicKeys;
-        hostname = "servenix";
-        username = "christoph";
-        headless = true;
-        extraModules =
-          []
-          ++ commonModules;
-      };
-      thinknix = mylib.nixos.mkNixosConfigWithHomeManagerModule {
-        inherit system mylib publicKeys;
-        hostname = "thinknix";
-        username = "christoph";
-        headless = true;
-        extraModules =
-          []
-          ++ commonModules;
-      };
+      nixinator = let
+        hostPkgs = mkHostPkgs "nixinator";
+        hostMylib = mkMylib hostPkgs;
+      in
+        hostMylib.nixos.mkNixosConfigWithHomeManagerModule {
+          inherit system publicKeys;
+          mylib = hostMylib;
+          hostname = "nixinator";
+          username = "christoph";
+          headless = false;
+          extraModules =
+            [
+              inputs.disko.nixosModules.disko
+              inputs.stylix.nixosModules.stylix
+              inputs.nix-gaming.nixosModules.platformOptimizations
+              inputs.codex-desktop-linux.nixosModules.default
+            ]
+            ++ commonModules;
+        };
+
+      nixtop = let
+        hostPkgs = mkHostPkgs "nixtop";
+        hostMylib = mkMylib hostPkgs;
+      in
+        hostMylib.nixos.mkNixosConfigWithHomeManagerModule {
+          inherit system publicKeys;
+          mylib = hostMylib;
+          hostname = "nixtop";
+          username = "christoph";
+          headless = false;
+          extraModules = [] ++ commonModules;
+        };
+
+      servenix = let
+        hostPkgs = mkHostPkgs "servenix";
+        hostMylib = mkMylib hostPkgs;
+      in
+        hostMylib.nixos.mkNixosConfigWithHomeManagerModule {
+          inherit system publicKeys;
+          mylib = hostMylib;
+          hostname = "servenix";
+          username = "christoph";
+          headless = true;
+          extraModules =
+            []
+            ++ commonModules;
+        };
+
+      thinknix = let
+        hostPkgs = mkHostPkgs "thinknix";
+        hostMylib = mkMylib hostPkgs;
+      in
+        hostMylib.nixos.mkNixosConfigWithHomeManagerModule {
+          inherit system publicKeys;
+          mylib = hostMylib;
+          hostname = "thinknix";
+          username = "christoph";
+          headless = true;
+          extraModules =
+            []
+            ++ commonModules;
+        };
 
       # These configurations don't include HM.
       # When using those, HM has to be installed separately in homeConfigurations.
