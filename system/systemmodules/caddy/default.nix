@@ -2,21 +2,9 @@
   config,
   lib,
   mylib,
-  pkgs,
   ...
 }: let
   cfg = config.systemmodules.caddy;
-
-  # TODO: determine the real hash when this path is first enabled (5.2).
-  #       The expression is inert while dnsProvider = null.
-  caddyPackage =
-    if cfg.dnsProvider == "ionos"
-    then
-      pkgs.caddy.withPlugins {
-        plugins = ["github.com/caddy-dns/ionos@v1.0.1"];
-        hash = lib.fakeHash;
-      }
-    else pkgs.caddy;
 in {
   options.systemmodules.caddy = import ./options.nix {inherit lib mylib;};
 
@@ -33,35 +21,46 @@ in {
           openFirewall
           ;
 
-        package = caddyPackage;
-
         globalConfig = lib.mkIf (!cfg.autoHttps) ''
           auto_https off
         '';
       };
     }
 
-    # Wildcard certificates need DNS-01, so the IONOS API key is only
-    # rendered into a file when a provider is configured.
-    (lib.mkIf (cfg.dnsProvider == "ionos") {
+    # Wildcard certificates can only be obtained through DNS-01, so a provider
+    # has to be configured. NixOS' acme module (lego) issues the certificate
+    # and Caddy just loads the files, which avoids building Caddy with a
+    # DNS plugin.
+    (lib.mkIf (cfg.dnsProvider != null) {
+      sops.secrets."caddy-ionos-prefix" = {};
+      sops.secrets."caddy-ionos-key" = {};
+
       sops.templates."caddy-acme.env" = {
-        owner = "caddy";
-        group = "caddy";
+        owner = "acme";
+        group = "acme";
         mode = "0400";
         content = ''
           IONOS_API_KEY=${config.sops.placeholder."caddy-ionos-prefix"}.${config.sops.placeholder."caddy-ionos-key"}
         '';
       };
 
-      services.caddy = {
-        environmentFile = config.sops.templates."caddy-acme.env".path;
+      security.acme = {
+        acceptTerms = true;
+        defaults.email = cfg.email;
 
-        globalConfig = ''
-          acme_dns ionos {
-            api_token {env.IONOS_API_KEY}
-            allowed_zones chriphost.de
+        certs.${cfg.acmeCertName} =
+          {
+            domain = cfg.acmeDomain;
+
+            inherit (cfg) dnsProvider;
+            environmentFile = config.sops.templates."caddy-acme.env".path;
+
+            # services.caddy runs as this group and has to read cert.pem/key.pem
+            group = "caddy";
           }
-        '';
+          // lib.optionalAttrs (cfg.acmeResolver != null) {
+            dnsResolver = cfg.acmeResolver;
+          };
       };
     })
   ]);

@@ -38,8 +38,37 @@ in {
     type = types.nullOr (types.enum ["ionos"]);
     default = null;
     description = ''
-      ACME DNS-01 provider. Required for wildcard certificates, which in turn
-      are required for the `*.local.chriphost.de` names.
+      ACME DNS-01 provider (lego). Required for wildcard certificates, which in
+      turn are required for the `*.local.chriphost.de` names.
+    '';
+  };
+
+  acmeDomain = mkOption {
+    type = types.str;
+    default = "*.local.chriphost.de";
+    description = "Domain the wildcard certificate is issued for.";
+  };
+
+  acmeCertName = mkOption {
+    type = types.str;
+    default = "local.chriphost.de";
+    description = ''
+      Name of the `security.acme.certs.<name>` entry. Vhosts reference this via
+      `useACMEHost`.
+    '';
+  };
+
+  acmeResolver = mkOption {
+    type = types.nullOr types.str;
+    default = null;
+    example = "8.8.8.8:53";
+    description = ''
+      Recursive resolver used for lego's DNS propagation check (`host:port`).
+
+      The LAN resolver (AdGuard) serves NODATA for TXT queries below
+      `*.local.chriphost.de` because those names are local rewrites there. That
+      makes lego's recursive check loop until its timeout even though the
+      challenge record is published on all authoritative nameservers.
     '';
   };
 

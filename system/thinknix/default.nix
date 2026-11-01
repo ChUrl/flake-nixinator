@@ -35,7 +35,13 @@
       # Dry run on alternate ports until the Nginx Proxy Manager is retired.
       httpPort = 9080;
       httpsPort = 9443;
-      autoHttps = false;
+      autoHttps = true;
+      dnsProvider = "ionos";
+
+      # AdGuard answers NODATA for TXT below *.local.chriphost.de, so the
+      # propagation check must not use the LAN resolver.
+      acmeResolver = "8.8.8.8:53";
+
       openFirewall = false;
     };
 
@@ -128,10 +134,9 @@
     # system/servenix/default.nix). Only thinknix terminates TLS and uses
     # Authelia, so there is only one certificate store.
     caddy.virtualHosts."auth.local.chriphost.de" = {
-      # The explicit http:// is required, without it Caddy treats
-      # the address as an HTTPS site and serves TLS on httpsPort instead
-      # of plain HTTP on httpPort. Dropped again once TLS is enabled.
-      hostName = "http://auth.local.chriphost.de";
+      # Uses the wildcard certificate managed by security.acme, see
+      # systemmodules.caddy.dnsProvider.
+      useACMEHost = "local.chriphost.de";
       extraConfig = "reverse_proxy 127.0.0.1:9091";
     };
 
