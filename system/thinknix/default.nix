@@ -29,6 +29,16 @@
   systemmodules = {
     authelia.enable = true;
 
+    caddy = {
+      enable = true;
+
+      # Dry run on alternate ports until the Nginx Proxy Manager is retired.
+      httpPort = 9080;
+      httpsPort = 9443;
+      autoHttps = false;
+      openFirewall = false;
+    };
+
     docker.networks = [
       {
         name = "behind-nginx";
@@ -113,6 +123,14 @@
   # };
 
   services = {
+    # This host is the entry for LAN and WAN: everything that is hosted on
+    # servenix is forwarded to its Caddy over HTTP inside the LAN (see
+    # system/servenix/default.nix). Only thinknix terminates TLS and uses
+    # Authelia, so there is only one certificate store.
+    caddy.virtualHosts."auth.local.chriphost.de" = {
+      extraConfig = "reverse_proxy 127.0.0.1:9091";
+    };
+
     # Configure keymap in X11
     xserver = {
       xkb.layout = "us";
