@@ -101,15 +101,9 @@ in {
         enable = true;
         # networking.firewall.checkReversePath = "loose";
 
-        trustedInterfaces = [
-          "podman0"
-          "docker0"
-        ];
+        # NOTE: trustedInterfaces (docker0/podman0) is set by
+        #       the docker systemmodule
 
-        # allowedTCPPorts = cfg.allowedTCPPorts;
-        # allowedTCPPortRanges = [];
-        # allowedUDPPorts = cfg.allowedUDPPorts;
-        # allowedUDPPortRanges = [];
         inherit (cfg) allowedTCPPorts allowedUDPPorts;
       };
     };
