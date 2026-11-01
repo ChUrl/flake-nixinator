@@ -140,6 +140,24 @@
       extraConfig = "reverse_proxy 127.0.0.1:9091";
     };
 
+    caddy.virtualHosts."adguard.local.chriphost.de" = {
+      useACMEHost = "local.chriphost.de";
+      extraConfig = "reverse_proxy 127.0.0.1:3000";
+    };
+
+    caddy.virtualHosts."arcane.local.chriphost.de" = {
+      useACMEHost = "local.chriphost.de";
+      extraConfig = "reverse_proxy 127.0.0.1:3552";
+    };
+
+    # Everything else that lives on servenix. Thinknix only terminates TLS and
+    # forwards to servenix's Caddy, which does the actual routing.
+    # NOTE: The port becomes 80 once the Nginx Proxy Manager is retired.
+    caddy.virtualHosts."*.local.chriphost.de" = {
+      useACMEHost = "local.chriphost.de";
+      extraConfig = "reverse_proxy http://192.168.86.25:9080";
+    };
+
     # Configure keymap in X11
     xserver = {
       xkb.layout = "us";
