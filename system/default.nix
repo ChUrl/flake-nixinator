@@ -130,19 +130,19 @@ with mylib.networking; {
     };
 
     sudo.enable = true;
-    sudo.extraRules = [
-      {
-        users = ["${username}"];
-        commands = [
-          # We allow running flatpak without password
-          # so flatpaks can be installed from the hm config
-          {
-            command = "/run/current-system/sw/bin/flatpak";
-            options = ["SETENV" "NOPASSWD"];
-          }
-        ];
-      }
-    ];
+    # sudo.extraRules = [
+    #   {
+    #     users = ["${username}"];
+    #     commands = [
+    #       # We allow running flatpak without password
+    #       # so flatpaks can be installed from the hm config
+    #       {
+    #         command = "/run/current-system/sw/bin/flatpak";
+    #         options = ["SETENV" "NOPASSWD"];
+    #       }
+    #     ];
+    #   }
+    # ];
   };
 
   documentation = {
