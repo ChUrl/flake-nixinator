@@ -61,9 +61,6 @@ in {
       settings = {
         theme = "dark";
 
-        # Passkeys need the real HTTPS origin, so TOTP is the default for now
-        default_2fa_method = "totp";
-
         # Only reachable through the tunnel / the reverse proxy in front of it.
         server.address = "tcp://127.0.0.1:9091";
 
@@ -117,7 +114,7 @@ in {
             }
             {
               domain = cfg.adminDomains;
-              policy = "two_factor";
+              policy = "one_factor";
             }
           ];
         };

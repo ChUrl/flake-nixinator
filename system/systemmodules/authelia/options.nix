@@ -23,7 +23,7 @@ in {
     type = types.listOf types.str;
     default = ["*.admin.chriphost.de"];
     description = ''
-      Domains that require two factors.
+      Domains behind Authelia (password only).
 
       Nextcloud, Immich, Paperless, ntfy, Gitea don't use Authelia deliberately
       to NOT go through the portal: their mobile apps would break.
