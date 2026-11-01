@@ -128,6 +128,10 @@
     # system/servenix/default.nix). Only thinknix terminates TLS and uses
     # Authelia, so there is only one certificate store.
     caddy.virtualHosts."auth.local.chriphost.de" = {
+      # The explicit http:// is required, without it Caddy treats
+      # the address as an HTTPS site and serves TLS on httpsPort instead
+      # of plain HTTP on httpPort. Dropped again once TLS is enabled.
+      hostName = "http://auth.local.chriphost.de";
       extraConfig = "reverse_proxy 127.0.0.1:9091";
     };
 

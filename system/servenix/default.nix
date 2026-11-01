@@ -132,14 +132,18 @@
   services = {
     caddy.virtualHosts = let
       # Reverse proxy vhosts for the containers hosted on servenix.
-      # Servenix terminates the TLS, it is only ever reached from
-      # thinknix's Caddy over HTTP on the LAN, so it needs no certificates.
+      # Thinknix terminates TLS and is the only client of this host: it forwards
+      # requests over plain HTTP on the LAN, so no certificates are needed here.
       #
       # The upstreams are loopbacks, not container names, as caddy runs on
       # the host and cannot use docker's embedded DNS, so every container
       # publishes its port on 127.0.0.1 only.
       vhost = name: port: {
         "${name}.local.chriphost.de" = {
+          # NOTE: The explicit http:// scheme is required. Without it Caddy
+          #       treats the address as an HTTPS site and serves TLS on
+          #       httpsPort instead of plain HTTP on httpPort.
+          hostName = "http://${name}.local.chriphost.de";
           extraConfig = "reverse_proxy 127.0.0.1:${toString port}";
         };
       };
