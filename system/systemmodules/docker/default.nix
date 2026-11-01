@@ -50,9 +50,8 @@ in {
             # "192.168.86.25"
           ];
 
+          # NOTE: Don't put an unauthenticated TCP listener here
           hosts = [
-            # Allow access to docker socket
-            "tcp://0.0.0.0:2375"
             "unix:///var/run/docker.sock"
           ];
         };
