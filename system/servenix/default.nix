@@ -55,6 +55,16 @@
   networking.tempAddresses = "disabled";
 
   systemmodules = {
+    caddy = {
+      enable = true;
+
+      # Dry run on alternate ports until the Nginx Proxy Manager is retired.
+      httpPort = 9080;
+      httpsPort = 9443;
+      autoHttps = false;
+      openFirewall = false;
+    };
+
     docker.networks = [
       {
         name = "behind-nginx";
@@ -120,6 +130,36 @@
 
   # List services that you want to enable:
   services = {
+    caddy.virtualHosts = let
+      # Reverse proxy vhosts for the containers hosted on servenix.
+      # Servenix terminates the TLS, it is only ever reached from
+      # thinknix's Caddy over HTTP on the LAN, so it needs no certificates.
+      #
+      # The upstreams are loopbacks, not container names, as caddy runs on
+      # the host and cannot use docker's embedded DNS, so every container
+      # publishes its port on 127.0.0.1 only.
+      vhost = name: port: {
+        "${name}.local.chriphost.de" = {
+          extraConfig = "reverse_proxy 127.0.0.1:${toString port}";
+        };
+      };
+    in
+      lib.mergeAttrsList [
+        (vhost "nextcloud" 8080)
+        (vhost "immich" 2283)
+        (vhost "paperless" 8000)
+        (vhost "jellyfin" 8096)
+        (vhost "gitea" 3000)
+        (vhost "ntfy" 8042)
+        (vhost "sonarr" 8989)
+
+        (vhost "f10" 55555)
+        (vhost "f11" 5173)
+        (vhost "f11pb" 8090)
+        (vhost "f12" 5174)
+        (vhost "f12pb" 8091)
+      ];
+
     # Configure keymap in X11
     xserver = {
       xkb.layout = "us";
