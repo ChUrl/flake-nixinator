@@ -85,31 +85,16 @@
 
       allowedTCPPorts = [
         53 # DNS (Adguard Home)
-        67 # DHCP
         80 # HTTP (Nginx Proxy Manager)
         443 # HTTPS (Nginx Proxy Manager)
 
         222 # Gitea SSH
         3000 # Gitea (runner needs to reach local gitea instance)
         3553 # Arcane
-
-        30033 # Teamspeak
-        10080 # Teamspeak
       ];
 
       allowedUDPPorts = [
         53 # DNS (Adguard Home)
-        67 # DHCP
-        80 # HTTP (Nginx Proxy Manager)
-        443 # HTTPS (Nginx Proxy Manager)
-
-        3000 # Gitea (runner needs to reach local gitea instance)
-        3553 # Arcane
-
-        5520 # HyTale
-
-        30033 # Teamspeak
-        9987 # Teamspeak
       ];
     };
 
