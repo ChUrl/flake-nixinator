@@ -78,6 +78,10 @@ in {
         USER_UID = "500";
         # USER_GID = "100";
 
+        # Hooks must talk to the local web server, not the public URL, otherwise a
+        # push hangs as soon as port 3000 is loopback-only.
+        GITEA__server__LOCAL_ROOT_URL = "http://127.0.0.1:3000/";
+
         GITEA__database__DB_TYPE = "postgres";
         GITEA__database__HOST = "gitea-db:5432";
         GITEA__database__NAME = "gitea";
