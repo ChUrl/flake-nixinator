@@ -9,5 +9,6 @@
     ./network
     ./polkit
     ./sops-nix
+    ./ssh
   ];
 }
