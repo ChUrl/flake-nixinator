@@ -60,7 +60,6 @@
       ];
       allowedUDPPorts = [
         53 # DNS
-        67 # DHCP
       ];
     };
 
