@@ -1,5 +1,6 @@
 {...}: {
   imports = [
+    ./authelia
     ./bootloader
     ./desktopportal
     ./docker
