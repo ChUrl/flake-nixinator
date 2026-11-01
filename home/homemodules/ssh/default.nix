@@ -47,6 +47,16 @@ in {
         "vps" = {
           User = "root";
           HostName = "vps.chriphost.de";
+
+          # VPS Nginx Proxy Manager admin UI. The VPS binds it to
+          # 127.0.0.1:51810, so tunnel it.
+          LocalForward = [
+            {
+              bind.port = 51810;
+              host.address = "127.0.0.1";
+              host.port = 51810;
+            }
+          ];
         };
         "mars" = {
           User = "smchurla";
