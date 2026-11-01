@@ -83,6 +83,11 @@ with mylib.networking; {
 
     polkit.enable = true;
 
+    ssh = {
+      enable = true;
+      allowedUsers = [username];
+    };
+
     sops-nix.bootSecrets.${username} = [
       "user-password"
     ];
@@ -387,11 +392,6 @@ with mylib.networking; {
     avahi = {
       enable = false; # Network printers
       nssmdns4 = true;
-    };
-
-    # Enable the OpenSSH daemon.
-    openssh = {
-      enable = true;
     };
 
     # Trims the journal if too large
