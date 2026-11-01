@@ -159,6 +159,10 @@
       "context7-api-key"
       "obsidian-rest-api-key"
     ];
+
+    # Port 5432 is forwarded by the VPS (NPM stream),
+    # see the "nixinator" host in home/homemodules/ssh.
+    ssh.port = 5432;
   };
 
   # NOTE: Sops needs the keys before impermanence kicks in
@@ -351,17 +355,6 @@
         GRANT ALL PRIVILEGES ON *.* TO 'smchurla'@'127.0.0.1';
         FLUSH PRIVILEGES;
       '';
-    };
-
-    openssh = {
-      ports = [5432];
-      settings = {
-        PasswordAuthentication = false;
-        KbdInteractiveAuthentication = false;
-        PermitRootLogin = "no";
-        AllowUsers = [username];
-        LogLevel = "VERBOSE"; # For fail2ban
-      };
     };
 
     # Backups onto the NAS over SFTP. The repo password comes from sops
