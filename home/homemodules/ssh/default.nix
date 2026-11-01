@@ -32,17 +32,19 @@ in {
           ControlPersist = "no";
         };
         "nixinator" = {
+          # We don't connect from nixinator to nixinator, only from the outside,
+          # so the VPS ip is used as HostName
           Port = 5432;
           User = "christoph";
           HostName = "vps.chriphost.de";
         };
         "servenix" = {
           User = "christoph";
-          HostName = "local.chriphost.de";
+          HostName = "servenix.chriphost.de";
         };
         "thinknix" = {
           User = "christoph";
-          HostName = "think.chriphost.de";
+          HostName = "thinknix.chriphost.de";
         };
         "vps" = {
           User = "root";
