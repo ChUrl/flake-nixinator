@@ -265,5 +265,20 @@ in {
         enableFishIntegration = config.homemodules.fish.enable;
       };
     };
+
+    # Obsidian (Electron) can fail to start (gray window) when an old V8 "Code Cache"
+    # entry from an older Electron/Obsidian version is reused. Drop it on version change
+    home.activation.obsidianClearStaleCodeCache = lib.mkIf (pkgs.stdenv.hostPlatform.isLinux && (!headless)) (
+      lib.hm.dag.entryAfter ["writeBoundary"] ''
+        obsidianConfig="${config.home.homeDirectory}/.config/obsidian"
+        marker="$obsidianConfig/.nix-codecache-version"
+        current="${pkgs.electron.version}-${pkgs.obsidian.version}"
+
+        if [ -d "$obsidianConfig" ] && [ "$(cat "$marker" 2>/dev/null)" != "$current" ]; then
+          run rm -rf "$obsidianConfig/Code Cache"
+          printf '%s' "$current" > "$marker"
+        fi
+      ''
+    );
   };
 }
