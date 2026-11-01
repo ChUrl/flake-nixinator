@@ -71,14 +71,12 @@ with mylib.networking; {
         "50-ether" = mkSystemdNetwork "enp*" false;
       };
 
+      # NOTE: The SSH port is opened by the ssh systemmodule
       allowedTCPPorts = [
-        22 # SSH
         80 # HTTP
         443 # HTTPS
       ];
-      allowedUDPPorts = [
-        9918 # Wireguard
-      ];
+      allowedUDPPorts = [];
     };
 
     polkit.enable = true;
