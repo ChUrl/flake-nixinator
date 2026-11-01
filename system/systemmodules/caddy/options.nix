@@ -15,15 +15,18 @@ in {
   };
 
   httpPort = mkOption {
-    type = types.port;
+    type = types.nullOr types.port;
     default = 80;
     description = "Port Caddy serves HTTP on.";
   };
 
   httpsPort = mkOption {
-    type = types.port;
+    type = types.nullOr types.port;
     default = 443;
-    description = "Port Caddy serves HTTPS on (only used when autoHttps is enabled).";
+    description = ''
+      Port Caddy serves HTTPS on (only used when autoHttps is enabled).
+      Set to null on plain HTTP origin servers.
+    '';
   };
 
   autoHttps = mkBoolOption true ''

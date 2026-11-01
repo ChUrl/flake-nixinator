@@ -71,11 +71,9 @@ with mylib.networking; {
         "50-ether" = mkSystemdNetwork "enp*" false;
       };
 
-      # NOTE: The SSH port is opened by the ssh systemmodule
-      allowedTCPPorts = [
-        80 # HTTP
-        443 # HTTPS
-      ];
+      # SSH ports are opened by the ssh systemmodule and the reverse
+      # proxy ports by the caddy systemmodule
+      allowedTCPPorts = [];
       allowedUDPPorts = [];
     };
 

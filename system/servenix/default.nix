@@ -37,7 +37,6 @@
     ../services/mailpit.nix
     ../services/nextcloud.nix
     ../services/ntfy.nix
-    ../services/nginx-proxy-manager.nix
     ../services/paperless.nix
     # ../services/plex.nix # Their monetization strategy is absolutely atrocious
     # ../services/portainer-agent.nix
@@ -58,11 +57,13 @@
     caddy = {
       enable = true;
 
-      # Dry run on alternate ports until the Nginx Proxy Manager is retired.
+      # Thinknix terminates TLS and forwards plain HTTP here.
+      # The port stays non-standard, so neither host depends on the
+      # other's cutover.
       httpPort = 9080;
-      httpsPort = 9443;
+      httpsPort = null;
       autoHttps = false;
-      openFirewall = false;
+      openFirewall = true;
     };
 
     docker.networks = [
@@ -91,19 +92,16 @@
         };
       };
 
-      # NOTE: Streams: Ports have to be opened in the VPS firewall + VPS UFW and bound in the VPS Nginx compose file.
+      # NOTE: Streams: Ports have to be opened in the VPS firewall +
+      #       VPS UFW and bound in the VPS Nginx compose file.
 
+      # The SSH port is opened by the ssh systemmodule and the Caddy ports
+      # by the caddy systemmodule
       allowedTCPPorts = [
-        53 # DNS (Adguard Home)
-        80 # HTTP (Nginx Proxy Manager)
-        443 # HTTPS (Nginx Proxy Manager)
-
-        222 # Gitea SSH
+        222 # Gitea SSH (LAN clients)
       ];
 
-      allowedUDPPorts = [
-        53 # DNS (Adguard Home)
-      ];
+      allowedUDPPorts = [];
     };
 
     # TODO: Fold those into the respective service files

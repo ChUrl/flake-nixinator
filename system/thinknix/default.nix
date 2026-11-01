@@ -17,7 +17,6 @@
     # General services
     ../services/adguard.nix
     ../services/arcane.nix
-    ../services/nginx-proxy-manager.nix
     # ../services/portainer.nix
     # ../services/pulse.nix
     # ../services/pulse-agent-thinknix.nix
@@ -32,9 +31,9 @@
     caddy = {
       enable = true;
 
-      # Dry run on alternate ports until the Nginx Proxy Manager is retired.
-      httpPort = 9080;
-      httpsPort = 9443;
+      # Entrypoint for LAN and WAN.
+      httpPort = 80;
+      httpsPort = 443;
       autoHttps = true;
       dnsProvider = "ionos";
 
@@ -42,7 +41,7 @@
       # propagation check must not use the LAN resolver.
       acmeResolver = "8.8.8.8:53";
 
-      openFirewall = false;
+      openFirewall = true;
     };
 
     docker.networks = [
@@ -71,10 +70,9 @@
         };
       };
 
+      # The Caddy ports are opened by the caddy systemmodules
       allowedTCPPorts = [
         53 # DNS
-        80 # HTTP
-        443 # HTTPS
       ];
       allowedUDPPorts = [
         53 # DNS
@@ -133,30 +131,111 @@
     # servenix is forwarded to its Caddy over HTTP inside the LAN (see
     # system/servenix/default.nix). Only thinknix terminates TLS and uses
     # Authelia, so there is only one certificate store.
-    caddy.virtualHosts."auth.local.chriphost.de" = {
-      # Uses the wildcard certificate managed by security.acme, see
-      # systemmodules.caddy.dnsProvider.
-      useACMEHost = "local.chriphost.de";
-      extraConfig = "reverse_proxy 127.0.0.1:9091";
-    };
+    caddy.virtualHosts =
+      # Public names, forwarded by the VPS over WireGuard with the Host header
+      # preserved. TLS terminates at the VPS, so these are plain HTTP here.
+      lib.genAttrs [
+        "f10.vps.chriphost.de"
+        "f11.vps.chriphost.de"
+        "f12.vps.chriphost.de"
+        "f11pb.vps.chriphost.de"
+        "f12pb.vps.chriphost.de"
+        "gitea.vps.chriphost.de"
+        "immich.vps.chriphost.de"
+        "jellyfin.vps.chriphost.de"
+        "nextcloud.vps.chriphost.de"
+        "ntfy.vps.chriphost.de"
+        "paperless.vps.chriphost.de"
+        "f11.vps.chriphost.gay"
+        "f12.vps.chriphost.gay"
+        "jellyfin.vps.chriphost.gay"
+        "f11.chriphost.de"
+      ] (h: {
+        hostName = "http://${h}";
+        extraConfig = "reverse_proxy http://192.168.86.25:9080";
+      })
+      // {
+        # Local services on this host
+        "auth.local.chriphost.de" = {
+          useACMEHost = "local.chriphost.de";
+          extraConfig = "reverse_proxy 127.0.0.1:9091";
+        };
 
-    caddy.virtualHosts."adguard.local.chriphost.de" = {
-      useACMEHost = "local.chriphost.de";
-      extraConfig = "reverse_proxy 127.0.0.1:3000";
-    };
+        "adguard.local.chriphost.de" = {
+          useACMEHost = "local.chriphost.de";
+          extraConfig = "reverse_proxy 127.0.0.1:3000";
+        };
 
-    caddy.virtualHosts."arcane.local.chriphost.de" = {
-      useACMEHost = "local.chriphost.de";
-      extraConfig = "reverse_proxy 127.0.0.1:3552";
-    };
+        "arcane.local.chriphost.de" = {
+          useACMEHost = "local.chriphost.de";
+          extraConfig = "reverse_proxy 127.0.0.1:3552";
+        };
 
-    # Everything else that lives on servenix. Thinknix only terminates TLS and
-    # forwards to servenix's Caddy, which does the actual routing.
-    # NOTE: The port becomes 80 once the Nginx Proxy Manager is retired.
-    caddy.virtualHosts."*.local.chriphost.de" = {
-      useACMEHost = "local.chriphost.de";
-      extraConfig = "reverse_proxy http://192.168.86.25:9080";
-    };
+        # Devices that are not hosted here or on servenix
+        "hass.local.chriphost.de" = {
+          useACMEHost = "local.chriphost.de";
+          extraConfig = "reverse_proxy http://192.168.86.55:8123";
+        };
+
+        "switch.local.chriphost.de" = {
+          useACMEHost = "local.chriphost.de";
+          extraConfig = "reverse_proxy http://192.168.86.2:80";
+        };
+
+        "wifi.local.chriphost.de" = {
+          useACMEHost = "local.chriphost.de";
+          extraConfig = "reverse_proxy http://192.168.86.3:80";
+        };
+
+        "synology.local.chriphost.de" = {
+          useACMEHost = "local.chriphost.de";
+          extraConfig = "reverse_proxy http://192.168.86.15:5000";
+        };
+
+        "truenas.local.chriphost.de" = {
+          useACMEHost = "local.chriphost.de";
+          extraConfig = ''
+            reverse_proxy https://192.168.86.20:443 {
+              transport http {
+                tls_insecure_skip_verify
+              }
+            }
+          '';
+        };
+
+        "pve.local.chriphost.de" = {
+          useACMEHost = "local.chriphost.de";
+          extraConfig = ''
+            reverse_proxy https://192.168.86.4:8006 {
+              transport http {
+                tls_insecure_skip_verify
+              }
+            }
+          '';
+        };
+
+        "pvf.local.chriphost.de" = {
+          useACMEHost = "local.chriphost.de";
+          extraConfig = ''
+            reverse_proxy https://192.168.86.13:8006 {
+              transport http {
+                tls_insecure_skip_verify
+              }
+            }
+          '';
+        };
+
+        # Everything else that lives on servenix. Thinknix only terminates TLS
+        # and forwards to servenix's Caddy, which does the actual routing.
+        "*.local.chriphost.de" = {
+          useACMEHost = "local.chriphost.de";
+          extraConfig = "reverse_proxy http://192.168.86.25:9080";
+        };
+
+        "http://hass.vps.chriphost.de" = {
+          extraConfig = "reverse_proxy http://192.168.86.55:8123";
+        };
+      };
 
     # Configure keymap in X11
     xserver = {
