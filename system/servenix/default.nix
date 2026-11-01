@@ -99,8 +99,6 @@
         443 # HTTPS (Nginx Proxy Manager)
 
         222 # Gitea SSH
-        3000 # Gitea (runner needs to reach local gitea instance)
-        3553 # Arcane
       ];
 
       allowedUDPPorts = [
@@ -155,13 +153,36 @@
         (vhost "jellyfin" 8096)
         (vhost "gitea" 3000)
         (vhost "ntfy" 8042)
-        (vhost "sonarr" 8989)
 
+        # *arr stack
+        (vhost "sonarr" 8989)
+        (vhost "radarr" 7878)
+        (vhost "prowlarr" 9696)
+        (vhost "bazarr" 6767)
+        (vhost "sabnzbd-movies" 8084)
+        (vhost "sabnzbd-shows" 8085)
+
+        # Media / documents
+        (vhost "fileflows" 5000)
+        (vhost "kiwix" 8081)
+        (vhost "pdf" 8082)
+        (vhost "kopia" 51515)
+        (vhost "mailpit" 8025)
+        (vhost "tmm" 4000)
+        (vhost "budget" 5006)
+
+        # Formula / pocketbase
         (vhost "f10" 55555)
         (vhost "f11" 5173)
         (vhost "f11pb" 8090)
         (vhost "f12" 5174)
         (vhost "f12pb" 8091)
+
+        # ente
+        (vhost "duck" 3010)
+        (vhost "duck-albums" 3011)
+        (vhost "duck-api" 3012)
+        (vhost "duck-s3" 3013)
       ];
 
     # Configure keymap in X11
