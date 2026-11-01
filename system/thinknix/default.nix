@@ -27,6 +27,8 @@
   networking.tempAddresses = "disabled";
 
   systemmodules = {
+    authelia.enable = true;
+
     docker.networks = [
       {
         name = "behind-nginx";
