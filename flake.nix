@@ -192,10 +192,10 @@
     # nix.settings.system-features in system/nixinator/default.nix).
     # NOTE: No binary cache -> full system is compiled from scratch!
     hostPlatforms = {
-      nixinator = {
-        gcc.arch = "znver4";
-        gcc.tune = "znver4";
-      };
+      # nixinator = {
+      #   gcc.arch = "znver4";
+      #   gcc.tune = "znver4";
+      # };
     };
 
     # Returns the generic "pkgs" for hosts without tuning.
