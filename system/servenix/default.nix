@@ -24,7 +24,7 @@
     # General services
     ../services/actual-budget.nix
     ../services/arcane-agent.nix
-    ../services/authelia.nix
+    # ../services/authelia.nix # Thinknix hosts authelia module
     ../services/bazarr.nix
     ../services/bento_pdf.nix
     ../services/ente.nix
