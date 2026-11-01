@@ -23,9 +23,7 @@ in {
 
       dependsOn = [];
 
-      ports = [
-        # "51515:51515"
-      ];
+      ports = ["127.0.0.1:51515:51515"];
 
       volumes = let
         # TODO: Setup on ThinkNix: adguard_config, adguard_work, portainer_config

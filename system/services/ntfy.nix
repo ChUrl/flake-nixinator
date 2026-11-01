@@ -35,9 +35,7 @@ in {
 
       dependsOn = [];
 
-      ports = [
-        "8042:80"
-      ];
+      ports = ["127.0.0.1:8042:80"];
 
       volumes = [
         "ntfy_cache:/var/cache/ntfy"

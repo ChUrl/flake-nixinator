@@ -110,9 +110,7 @@ in {
         "paperless-postgres"
       ];
 
-      ports = [
-        "8000:8000" # Bind for VPS
-      ];
+      ports = ["127.0.0.1:8000:8000"]; # Bind for VPS
 
       volumes = [
         "paperless_data:/usr/src/paperless/data"

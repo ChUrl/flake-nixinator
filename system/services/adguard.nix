@@ -17,9 +17,13 @@ in {
       dependsOn = [];
 
       ports = [
-        # DNS server
+        # DNS server (LAN resolvers)
         "53:53/tcp"
         "53:53/udp"
+
+        # WebUI, only reachable from the host's Caddy
+        "127.0.0.1:3000:80"
+
         # "853:853/tcp" # DNS over TLS
         # "853:853/udp" # DNS over QUIC
 

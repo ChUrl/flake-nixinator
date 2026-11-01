@@ -18,7 +18,7 @@ in {
 
       ports = [
         # "1025:1025" # SMTP
-        # "8025:8025" # WebUI
+        "127.0.0.1:8025:8025" # WebUI
       ];
 
       volumes = ["mailpit_data:/data"];

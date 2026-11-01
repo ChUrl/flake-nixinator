@@ -91,9 +91,7 @@ in {
         "nextcloud-memcache"
       ];
 
-      ports = [
-        "8080:80" # Bind for VPS
-      ];
+      ports = ["127.0.0.1:8080:80"]; # Bind for VPS
 
       volumes = [
         "nextcloud_data:/var/www/html"

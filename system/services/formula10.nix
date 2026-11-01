@@ -13,9 +13,7 @@ in {
 
       dependsOn = [];
 
-      ports = [
-        "55555:5000" # Bind for VPS
-      ];
+      ports = ["127.0.0.1:55555:5000"]; # Bind for VPS
 
       volumes = [
         "formula10_data:/app/instance"

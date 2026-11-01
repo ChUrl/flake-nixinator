@@ -14,9 +14,7 @@ in {
 
       dependsOn = [];
 
-      ports = [
-        "8091:8080" # Bind for VPS
-      ];
+      ports = ["127.0.0.1:8091:8080"]; # Bind for VPS
 
       volumes = [
         "formula12_pb_data:/pb/pb_data"
@@ -39,7 +37,7 @@ in {
 
       ports = [
         # "8080:8090"
-        "5174:3000"
+        "127.0.0.1:5174:3000"
       ];
 
       volumes = [];

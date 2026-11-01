@@ -66,9 +66,7 @@ in {
         "immich-redis"
       ];
 
-      ports = [
-        "2283:8080" # Bind for VPS
-      ];
+      ports = ["127.0.0.1:2283:8080"]; # Bind for VPS
 
       volumes = [
         "immich_config:/config"

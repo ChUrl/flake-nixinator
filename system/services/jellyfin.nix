@@ -18,9 +18,7 @@ in {
         # "pihole"
       ];
 
-      ports = [
-        "8096:8096" # Bind for VPS
-      ];
+      ports = ["127.0.0.1:8096:8096"]; # Bind for VPS
 
       volumes = [
         "/media/Show:/data/tvshows"

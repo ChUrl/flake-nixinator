@@ -60,10 +60,10 @@ in {
       ];
 
       ports = [
-        "3000:3000" # Bind for VPS
+        "127.0.0.1:3000:3000" # Bind for VPS
 
         # NOTE: Set .git/config url to ssh://christoph@gitea.local.chriphost.de:222/christoph/<repo>.git
-        "222:222" # Gitea SSH
+        "222:222" # Gitea SSH (LAN clients)
       ];
 
       volumes = [
@@ -111,7 +111,7 @@ in {
 
       environment = {
         # gitlab.local.chriphost.de doesn't work, because it gets resolved to 192.168.86.25:443, which is nginx
-        GITEA_INSTANCE_URL = "http://192.168.86.25:3000";
+        GITEA_INSTANCE_URL = "http://gitea:3000";
         GITEA_RUNNER_NAME = "servenix";
 
         # Can be generated from inside the container using act_runner generate-config > /config/config.yaml

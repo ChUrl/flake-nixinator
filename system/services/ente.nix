@@ -82,6 +82,7 @@ in {
       # allow the web app, the albums app and the desktop app (ente://app).
       environment.MINIO_API_CORS_ALLOW_ORIGIN = "https://${webHost},https://${albumsHost},ente://app";
       volumes = ["ente-minio_data:/data"];
+      ports = ["127.0.0.1:3013:3200"];
       networks = ["behind-nginx"];
     };
 
@@ -90,6 +91,7 @@ in {
       autoStart = true;
       dependsOn = ["ente-postgres"];
       environmentFiles = [config.sops.templates."ente-museum-env".path];
+      ports = ["127.0.0.1:3012:8080"];
       networks = ["ente-internal" "behind-nginx"];
     };
 
@@ -97,6 +99,10 @@ in {
       image = "ghcr.io/ente/web:${enteWebVersion}";
       autoStart = true;
       environment.ENTE_API_ORIGIN = "https://${apiHost}";
+      ports = [
+        "127.0.0.1:3010:3000" # web
+        "127.0.0.1:3011:3002" # albums
+      ];
       networks = ["behind-nginx"];
     };
   };

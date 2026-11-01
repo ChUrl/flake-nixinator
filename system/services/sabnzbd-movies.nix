@@ -21,7 +21,7 @@ in {
         #       because the hostname has to be whitelisted.
         #       Edit the "sabnzbd.ini" in the docker volume and add the reverse-proxy address
         #       to the host_whitelist variable.
-        # "8080:8080"
+        "127.0.0.1:8084:8080"
       ];
 
       volumes = [

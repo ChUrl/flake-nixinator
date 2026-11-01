@@ -16,9 +16,7 @@ in {
 
       dependsOn = [];
 
-      ports = [
-        # "5006:5006"
-      ];
+      ports = ["127.0.0.1:5006:5006"];
 
       volumes = [
         "actual-budget_data:/data"

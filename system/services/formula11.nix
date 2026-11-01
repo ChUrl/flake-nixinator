@@ -15,7 +15,7 @@ in {
       dependsOn = [];
 
       ports = [
-        "8090:8080" # Bind for VPS
+        "127.0.0.1:8090:8080" # Bind for VPS
       ];
 
       volumes = [
@@ -39,7 +39,7 @@ in {
 
       ports = [
         # "8080:8090"
-        "5173:3000"
+        "127.0.0.1:5173:3000"
       ];
 
       volumes = [];

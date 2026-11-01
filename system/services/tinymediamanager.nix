@@ -16,7 +16,7 @@ in {
 
       dependsOn = [];
 
-      ports = [];
+      ports = ["127.0.0.1:4000:4000"];
 
       volumes = [
         "tinymediamanager_data:/data"

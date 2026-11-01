@@ -21,9 +21,7 @@ in {
 
       dependsOn = [];
 
-      ports = [
-        "3553:3553"
-      ];
+      ports = [];
 
       volumes = [
         "/var/run/docker.sock:/var/run/docker.sock"

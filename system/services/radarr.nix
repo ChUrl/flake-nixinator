@@ -16,9 +16,7 @@ in {
 
       dependsOn = [];
 
-      ports = [
-        # "7878:7878"
-      ];
+      ports = ["127.0.0.1:7878:7878"];
 
       volumes = [
         "/media/Movie/.sabnzbd-complete:/media/downloads"

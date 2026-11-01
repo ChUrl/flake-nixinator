@@ -16,9 +16,7 @@ in {
 
       dependsOn = [];
 
-      ports = [
-        # "9696:9696"
-      ];
+      ports = ["127.0.0.1:9696:9696"];
 
       volumes = [
         "prowlarr_config:/config"
