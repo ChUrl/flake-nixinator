@@ -14,8 +14,8 @@ in {
   '';
 
   virtualisation.oci-containers.containers = {
-    #     NTFY_AUTH_USERS='admin:$2b$10$13iMkFcSNXcb/DKlUSS03OM25saLd8/hDlKkowFtXYctu2fQBoLJK:admin,christoph:$2b$10$8jgrgBltBXj/Qw0BxBWf1eIfH53VV6wTdlJZEqWBIH3htwEP9PKgq:user'
-    #     NTFY_AUTH_TOKENS="christoph:tk_rx8fd6hojuz4ekcb72j7juugkbmga:FAIL*-Notif"
+    #     NTFY_AUTH_USERS='admin:<bcrypt>:admin,christoph:<bcrypt>:user'
+    #     NTFY_AUTH_TOKENS="christoph:<token>:FAIL*-Notif"
 
     #     NTFY_BASE_URL="https://ntfy.vps.chriphost.de"
     #     NTFY_BEHIND_PROXY="true"

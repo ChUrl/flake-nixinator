@@ -31,7 +31,7 @@ in {
         CONFIG_FILE = "/config/config.yaml";
 
         # This token is invalid, when re-registering is needed it has to be refreshed
-        GITEA_RUNNER_REGISTRATION_TOKEN = "Mq6wr0dPthqDij3iaryP8s5VYZA5kPfOQbHA6wm6";
+        GITEA_RUNNER_REGISTRATION_TOKEN = "<redacted>"; # use the gitea-runner-token sops secret
       };
 
       extraOptions = [

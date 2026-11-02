@@ -27,7 +27,7 @@ in {
         TZ = "Europe/Berlin";
 
         PULSE_URL = "https://pulse.think.chriphost.de";
-        PULSE_TOKEN = "6ab80ff7336a0cd7e0edcf3cd270a72bf6e075bcff337235ab011d1f70231e2f";
+        PULSE_TOKEN = "<redacted>"; # was committed in plaintext — revoke if the service ever returns
       };
 
       extraOptions = [
