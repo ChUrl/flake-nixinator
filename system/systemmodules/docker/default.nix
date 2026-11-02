@@ -16,7 +16,9 @@ in {
       })
     ];
 
-    networking.firewall.trustedInterfaces = ["docker0" "podman0"];
+    # Containers reach the host services they need through explicit
+    # `iifname "br-*"` rules in the service modules (postgres 5432,
+    # mailpit 1025, gitea 3000), so no interface is trusted wholesale.
 
     # Needed for default bridge network to automatically work
     boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
