@@ -4,7 +4,7 @@
 #   ];
 {
   # sops secret holding this host's AGENT_TOKEN
-  tokenSecret ? "arcane-agent-key",
+  tokenSecret,
   # docker network to join, e.g. "behind-nginx"
   network ? null,
   # optional host path mounted at /backups

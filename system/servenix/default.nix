@@ -24,6 +24,7 @@
     # General services
     ../services/actual-budget.nix
     (import ../services/arcane-agent.nix {
+      tokenSecret = "arcane-agent-key";
       network = "behind-nginx";
       backupsPath = "/media/Arcane";
     })

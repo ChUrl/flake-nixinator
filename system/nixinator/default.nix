@@ -13,6 +13,10 @@
 
     # General services
     ../services/fileflows-node.nix
+    (import ../services/arcane-agent.nix {
+      tokenSecret = "arcane-agent-nixinator-key";
+      backupsPath = "/home/${username}/Arcane";
+    })
   ];
 
   # Append this to the default config set from mkCommonNixSettings
@@ -157,6 +161,7 @@
       "makemkv-app-key"
       "context7-api-key"
       "obsidian-rest-api-key"
+      "arcane-agent-nixinator-key"
     ];
 
     restic = {
