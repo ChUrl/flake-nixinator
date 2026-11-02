@@ -34,8 +34,14 @@
 
     # Synology DS223j
 
-    "/media/synology-syncthing" = {
-      device = "192.168.86.15:/volume1/DockerVolumes";
+    # "/media/synology-syncthing" = {
+    #   device = "192.168.86.15:/volume1/DockerVolumes";
+    #   fsType = "nfs";
+    #   options = ["defaults" "rw" "relatime" "_netdev" "bg" "hard"];
+    # };
+
+    "/media/Arcane" = {
+      device = "192.168.86.15:/volume1/Arcane";
       fsType = "nfs";
       options = ["defaults" "rw" "relatime" "_netdev" "bg" "hard"];
     };
@@ -54,8 +60,14 @@
       options = ["defaults" "rw" "relatime" "_netdev" "bg" "hard"];
     };
 
-    "/media/TV-Music" = {
+    "/media/Music" = {
       device = "192.168.86.20:/mnt/Seagate4TB/Music";
+      fsType = "nfs";
+      options = ["defaults" "rw" "relatime" "_netdev" "bg" "hard"];
+    };
+
+    "/media/MusicVideos" = {
+      device = "192.168.86.20:/mnt/Seagate4TB/MusicVideos";
       fsType = "nfs";
       options = ["defaults" "rw" "relatime" "_netdev" "bg" "hard"];
     };

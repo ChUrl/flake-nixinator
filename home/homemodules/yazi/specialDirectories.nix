@@ -5,6 +5,7 @@
   };
 in [
   # /home/christoph/
+  (mkIcon "Arcane" "")
   (mkIcon "Documents" "󰈙")
   (mkIcon "Downloads" "󰇚")
   (mkIcon "Games" "󰓓")

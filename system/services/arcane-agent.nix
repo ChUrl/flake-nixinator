@@ -27,7 +27,7 @@ in {
         "/var/run/docker.sock:/var/run/docker.sock"
 
         "arcane-agent_data:/app/data"
-        "/media/synology-syncthing:/backups"
+        "/media/Arcane:/backups"
       ];
 
       environment = {

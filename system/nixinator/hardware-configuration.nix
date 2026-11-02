@@ -108,6 +108,12 @@
       options = ["defaults" "rw" "noatime" "_netdev" "bg" "hard"];
     };
 
+    "/home/${username}/Arcane" = {
+      device = "192.168.86.15:/volume1/Arcane";
+      fsType = "nfs";
+      options = ["defaults" "rw" "relatime" "_netdev" "bg" "hard"];
+    };
+
     # TrueNAS
 
     "/home/${username}/Movies" = {
