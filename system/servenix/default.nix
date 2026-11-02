@@ -51,6 +51,8 @@
   networking.tempAddresses = "disabled";
 
   systemmodules = {
+    remote-build.enable = true;
+
     caddy = {
       enable = true;
 
