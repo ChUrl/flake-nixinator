@@ -403,7 +403,8 @@ with mylib.networking; {
     fstrim.enable = true; # SSD
     fwupd.enable = true; # Device firmware (I don't think I have any supported devices)
     # locate.enable = true; # Periodically update index
-    ntp.enable = true; # Clock sync
+    # ntp.enable = true; # Somehow fails on thinknix/servenix, use chrony
+    chrony.enable = true;
     gvfs.enable = true; # Network shares, spotify cover art caching, ...
     udev = {
       packages = with pkgs; [
