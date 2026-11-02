@@ -96,8 +96,14 @@
 
     # Synology DS223j
 
+    "/home/${username}/ProxMox" = {
+      device = "192.168.86.15:/volume1/ProxMox";
+      fsType = "nfs";
+      options = ["defaults" "rw" "noatime" "_netdev" "bg" "hard"];
+    };
+
     "/home/${username}/Restic" = {
-      device = "192.168.86.15:/volume1/NixinatorPersistence";
+      device = "192.168.86.15:/volume1/Restic";
       fsType = "nfs";
       options = ["defaults" "rw" "noatime" "_netdev" "bg" "hard"];
     };
