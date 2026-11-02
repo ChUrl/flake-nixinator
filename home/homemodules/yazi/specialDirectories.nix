@@ -16,6 +16,7 @@ in [
   (mkIcon "Notes" "󰠮")
   (mkIcon "Pictures" "")
   (mkIcon "Projects" "󱃷")
+  (mkIcon "Proxmox" "󰁯")
   (mkIcon "Public" "󰒗")
   (mkIcon "Restic" "󰁯")
   (mkIcon "Shows" "󰿎")

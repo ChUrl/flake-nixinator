@@ -96,7 +96,7 @@
 
     # Synology DS223j
 
-    "/home/${username}/ProxMox" = {
+    "/home/${username}/Proxmox" = {
       device = "192.168.86.15:/volume1/ProxMox";
       fsType = "nfs";
       options = ["defaults" "rw" "noatime" "_netdev" "bg" "hard"];
