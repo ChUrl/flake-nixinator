@@ -254,9 +254,12 @@
 
         "opnsense.local.chriphost.de" = {
           useACMEHost = "local.chriphost.de";
+          # NOTE: Pinned to HTTP/1.1 so caddy doesn't switch to QUIC,
+          #       which is rejected by opnsense
           extraConfig = ''
             reverse_proxy https://192.168.86.5:443 {
               transport http {
+                versions 1.1
                 tls_insecure_skip_verify
               }
             }
