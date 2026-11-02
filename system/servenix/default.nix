@@ -190,6 +190,14 @@
         (localVhost "duck-albums" 3011)
         (localVhost "duck-api" 3012)
         (localVhost "duck-s3" 3013)
+
+        # Catch-all: an unknown Host header gets a clear 404 instead of the
+        # empty 200 Caddy returns otherwise, which looked like a blank page.
+        {
+          ":9080" = {
+            extraConfig = ''respond "no vhost for this host" 404'';
+          };
+        }
       ];
 
     # Configure keymap in X11
