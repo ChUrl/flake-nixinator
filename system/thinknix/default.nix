@@ -22,6 +22,8 @@
   networking.tempAddresses = "disabled";
 
   systemmodules = {
+    remote-build.enable = true;
+
     authelia.enable = true;
 
     caddy = {
