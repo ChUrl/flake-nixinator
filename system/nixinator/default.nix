@@ -38,6 +38,9 @@
 
     impermanence.enable = true;
 
+    # Binary cache for servenix and thinknix
+    nix-cache.enable = true;
+
     network = {
       useNetworkManager = true;
 
@@ -193,6 +196,12 @@
     # see the "nixinator" host in home/homemodules/ssh.
     ssh.port = 5432;
   };
+
+  # Dedicated key for the Nix remote builder used by servenix/thinknix.
+  # Restricted to the store-serving protocol.
+  users.users.christoph.openssh.authorizedKeys.keys = [
+    ''command="nix-store --serve --write",no-agent-forwarding,no-port-forwarding,no-pty,no-user-rc,no-X11-forwarding ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICfoH83jY9OGFSnDhy8oOnJ2mZAyxpOAE4mJ96iHZJWi builder@nixos''
+  ];
 
   # NOTE: Sops needs the keys before impermanence kicks in
   #       so we have to link to /persist directly...
