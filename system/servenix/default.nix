@@ -33,7 +33,7 @@
     ../services/docker/fileflows.nix
     ../services/docker/gitea.nix
     ../services/docker/immich.nix
-    ../services/docker/jellyfin.nix
+    ../services/nixos/jellyfin.nix
     ../services/nixos/kiwix.nix
     ../services/nixos/mailpit.nix
     ../services/docker/nextcloud.nix
@@ -171,6 +171,10 @@
   };
 
   # List services that you want to enable:
+  # Keep the nvidia device nodes (/dev/nvidia0, nvidiactl, …) present so the
+  # jellyfin service can be granted access to them for NVENC.
+  hardware.nvidia.nvidiaPersistenced = true;
+
   services = {
     caddy.virtualHosts = let
       # Reverse proxy vhosts for the containers hosted on servenix.
