@@ -37,7 +37,7 @@ in {
       };
 
       extraOptions = [
-        "--privileged"
+        # Docker API access via the socket is enough; the GPU comes from CDI.
         "--device=nvidia.com/gpu=all"
         "--net=behind-nginx"
       ];

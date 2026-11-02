@@ -25,7 +25,9 @@ in {
 
         "fileflows_temp:/temp"
 
-        "/var/run/docker.sock:/var/run/docker.socl:ro"
+        # The node is only started manually and never needed the API socket;
+        # the mount path was also misspelled (docker.socl).
+        # "/var/run/docker.sock:/var/run/docker.sock:ro"
       ];
 
       hostname = "Nixinator";
@@ -40,7 +42,6 @@ in {
       };
 
       extraOptions = [
-        "--privileged"
         "--device=nvidia.com/gpu=all"
         # "--net=behind-nginx"
       ];
