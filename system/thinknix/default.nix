@@ -225,6 +225,17 @@
           '';
         };
 
+        "opnsense.local.chriphost.de" = {
+          useACMEHost = "local.chriphost.de";
+          extraConfig = ''
+            reverse_proxy https://192.168.86.5:443 {
+              transport http {
+                tls_insecure_skip_verify
+              }
+            }
+          '';
+        };
+
         # Everything else that lives on servenix. Thinknix only terminates TLS
         # and forwards to servenix's Caddy, which does the actual routing.
         "*.local.chriphost.de" = {
