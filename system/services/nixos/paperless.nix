@@ -15,6 +15,16 @@
     # Superuser "admin" with this password (change it in the UI afterwards)
     passwordFile = config.sops.secrets."paperless-admin-password".path;
 
+    settings = {
+      # Caddy terminates TLS and forwards over HTTP; without this Django thinks
+      # the request is insecure and the CSRF origin check fails.
+      PAPERLESS_PROXY_SSL_HEADER = ''["HTTP_X_FORWARDED_PROTO", "https"]'';
+
+      # Both names the browser may use (LAN and public)
+      PAPERLESS_CSRF_TRUSTED_ORIGINS = "https://paperless.local.chriphost.de,https://paperless.vps.chriphost.de";
+      PAPERLESS_ALLOWED_HOSTS = "paperless.local.chriphost.de,paperless.vps.chriphost.de";
+    };
+
     tesseractLanguages = [
       "deu"
       "eng"
