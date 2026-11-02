@@ -103,20 +103,24 @@
         "/var/lib/gitea"
         "/var/lib/paperless"
         "/var/lib/nextcloud"
+        "/var/lib/actual"
 
+        # DynamicUser services: /var/lib/<name> is a symlink into
+        # /var/lib/private and restic stores symlinks as-is instead of
+        # following them. The databases are dumped in prepareCommand.
+        "/var/lib/private/ntfy-sh"
+        "/var/lib/private/mailpit"
+
+        # Jellyfin data/ is rebuildable metadata, the media itself is on NFS.
+        "/var/lib/jellyfin/config"
+
+        # Live databases are dumped in prepareCommand instead
         "/var/backup"
       ];
 
       extraBackupArgs = [
         "--exclude-caches"
         "--cleanup-cache"
-
-        # Don't copy live databases. Done in prepareCommand
-        "--exclude=/var/lib/docker/volumes/gitea-db_data"
-        "--exclude=/var/lib/docker/volumes/immich-database_data"
-        "--exclude=/var/lib/docker/volumes/nextcloud-db_data"
-        "--exclude=/var/lib/docker/volumes/paperless-postgres_data"
-        "--exclude=/var/lib/docker/volumes/ente-postgres_data"
       ];
 
       pruneOpts = [
@@ -182,8 +186,6 @@
     # TODO: Fold those into the respective service files
     sops-nix.secrets.${username} = [
       "heidi-discord-token"
-      "paperless-nextcloud-sync-password"
-      "paperless-secret-key"
       "ntfy-auth-users"
       "ntfy-auth-tokens"
       "arcane-agent-key"
