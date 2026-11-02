@@ -72,13 +72,15 @@ in {
           # TODO: Why does this use the mandb user?
           # (mkDir "mandb" "/var/cache/man" m755)
 
-          (mkRDir "/var/cache/restic-backups-synology" m700) # Resitc's cache
+          (mkRDir "/var/cache/restic-backups-nixinator" m700) # Resitc's cache
           (mkRDir "/var/db/sudo" m711)
           (mkRDir "/var/lib/auto-cryptenroll" m755) # Lanzaboote
           (mkRDir "/var/lib/bluetooth" m755) # m700
           (mkRDir "/var/lib/btrfs" m755)
+          (mkRDir "/var/lib/chrony" m755)
           (mkRDir "/var/lib/containers" m755)
           (mkRDir "/var/lib/docker" m755)
+          (mkRDir "/var/lib/fail2ban" m755)
           (mkRDir "/var/lib/flatpak" m755)
           (mkRDir "/var/lib/libvirt" m755)
           (mkRDir "/var/lib/NetworkManager" m755)
