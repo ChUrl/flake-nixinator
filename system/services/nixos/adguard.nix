@@ -1,0 +1,30 @@
+{lib, ...}: {
+  # Static owner (instead of the module's DynamicUser) so the state directory
+  # migrated from the container has a predictable owner.
+  users.groups.adguard.gid = 3002;
+  users.users.adguard = {
+    isSystemUser = true;
+    group = "adguard";
+    uid = 3002;
+    home = "/var/lib/AdGuardHome";
+  };
+
+  services.adguardhome = {
+    enable = true;
+
+    # Everything else (upstreams, filters, rewrites, users) stays authoritative
+    # in /var/lib/AdGuardHome/AdGuardHome.yaml and is edited in the UI.
+    # Only the listen address is pinned: Caddy owns :80/:443 on this host.
+    settings = {
+      http.address = "127.0.0.1:3000";
+    };
+
+    mutableSettings = true;
+  };
+
+  systemd.services.adguardhome.serviceConfig = {
+    DynamicUser = lib.mkForce false;
+    User = "adguard";
+    Group = "adguard";
+  };
+}

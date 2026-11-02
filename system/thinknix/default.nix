@@ -15,7 +15,7 @@
     ./hardware-configuration.nix
 
     # General services
-    ../services/docker/adguard.nix
+    ../services/nixos/adguard.nix
     ../services/docker/arcane.nix
   ];
 
@@ -60,6 +60,7 @@
         "/var/lib/acme"
         "/var/lib/authelia-main"
         "/var/lib/docker/volumes"
+        "/var/lib/AdGuardHome"
       ];
 
       extraBackupArgs = [
