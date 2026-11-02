@@ -276,6 +276,20 @@
         "http://hass.vps.chriphost.de" = {
           extraConfig = "reverse_proxy http://192.168.86.55:8123";
         };
+
+        # Plain-HTTP side. Defining a site on :80 disables Caddy's automatic
+        # HTTP→HTTPS redirects, so the redirect for the LAN names is repeated
+        # here. Everything else gets a clear 404 — otherwise a public name that
+        # the VPS forwards but that has no vhost here would bounce between
+        # VPS:443 and this :80 forever.
+        ":80" = {
+          extraConfig = ''
+            @local host *.local.chriphost.de
+            redir @local https://{host}{uri} 308
+
+            respond "no vhost for this host" 404
+          '';
+        };
       };
 
     # Configure keymap in X11
