@@ -2,7 +2,7 @@
   sops.secrets."paperless-admin-password" = {};
 
   services.paperless = {
-    enable = false;
+    enable = true;
 
     # Public URL for links/CSRF; Caddy terminates TLS in front of it.
     domain = "paperless.vps.chriphost.de";
