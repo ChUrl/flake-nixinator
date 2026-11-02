@@ -102,7 +102,6 @@
 
     sops-nix.secrets.${username} = [
       "arcane-encryption-key"
-      "arcane-jwt-secret"
     ];
   };
 

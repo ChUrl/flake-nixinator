@@ -32,8 +32,12 @@ in {
 
       environment = {
         MANAGER_API_URL = "https://arcane.local.chriphost.de";
-        AGENT_MODE = "true";
-        EDGE_TRANSPORT = "poll";
+
+        # Edge mode: the agent connects out to the manager, so no port needs to
+        # be published (AGENT_MODE=true would switch it to Direct mode, which
+        # requires the manager to reach :3553).
+        EDGE_AGENT = "true";
+        EDGE_TRANSPORT = "auto";
 
         PUID = "1000";
         PGID = "1000";

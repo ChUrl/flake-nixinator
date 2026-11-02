@@ -10,7 +10,6 @@ in {
   # If we need to pass secrets to containers we can't use plain env variables.
   sops.templates."arcane_secrets.env".content = ''
     ENCRYPTION_KEY=${config.sops.placeholder.arcane-encryption-key}
-    JWT_SECRET=${config.sops.placeholder.arcane-jwt-secret}
   '';
 
   virtualisation.oci-containers.containers = {
