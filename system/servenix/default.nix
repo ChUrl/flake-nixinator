@@ -23,7 +23,10 @@
 
     # General services
     ../services/actual-budget.nix
-    ../services/arcane-agent.nix
+    (import ../services/arcane-agent.nix {
+      network = "behind-nginx";
+      backupsPath = "/media/Arcane";
+    })
     # ../services/authelia.nix # Thinknix hosts authelia module
     ../services/bazarr.nix
     ../services/bento_pdf.nix
