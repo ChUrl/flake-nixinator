@@ -39,7 +39,7 @@
     ../services/nixos/mailpit.nix
     ../services/docker/nextcloud.nix
     ../services/nixos/ntfy.nix
-    ../services/docker/paperless.nix
+    ../services/nixos/paperless.nix
     ../services/docker/prowlarr.nix
     ../services/docker/radarr.nix
     ../services/docker/sabnzbd-movies.nix
@@ -117,10 +117,15 @@
           fi
         }
 
-        dump gitea     gitea-db            gitea
+        # Native services on the shared PostgreSQL instance
+        ${pkgs.util-linux}/bin/runuser -u postgres -- \
+          ${config.services.postgresql.finalPackage}/bin/pg_dumpall \
+          > /var/backup/postgres.sql.tmp \
+          && ${pkgs.coreutils}/bin/mv /var/backup/postgres.sql.tmp /var/backup/postgres.sql
+
+        # Remaining container databases
         dump immich    immich-database     immich
         dump nextcloud nextcloud-db        nextcloud
-        dump paperless paperless-postgres  paperless
         dump ente      ente-postgres       ente
       '';
 
