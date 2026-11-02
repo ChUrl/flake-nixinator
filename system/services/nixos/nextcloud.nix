@@ -38,6 +38,19 @@ in {
       overwriteprotocol = "https";
       overwrite.cli.url = "https://nextcloud.vps.chriphost.de";
       default_phone_region = "DE";
+
+      # The logreader app only understands "file"; the module defaults to syslog.
+      log_type = "file";
+      logfile = "/var/lib/nextcloud/data/nextcloud.log";
+
+      # Silences the "configuration server ID" setup check (single PHP server,
+      # harmless, but the check nags otherwise).
+      serverid = 1;
+
+      # Mail goes to the local mailpit catcher (host service on 127.0.0.1:1025).
+      mail_smtpport = 1025;
+      mail_from_address = "nextcloud";
+      mail_domain = "chriphost.de";
     };
 
     # The module's default of 8 triggers Nextcloud's "OPcache interned strings
