@@ -76,9 +76,62 @@
       }
     ];
 
+    restic = {
+      enable = true;
+
+      paths = [
+        "/var/lib/docker/volumes"
+        "/var/backup"
+      ];
+
+      extraBackupArgs = [
+        "--exclude-caches"
+        "--cleanup-cache"
+
+        # Don't copy live databases. Done in prepareCommand
+        "--exclude=/var/lib/docker/volumes/gitea-db_data"
+        "--exclude=/var/lib/docker/volumes/immich-database_data"
+        "--exclude=/var/lib/docker/volumes/nextcloud-db_data"
+        "--exclude=/var/lib/docker/volumes/paperless-postgres_data"
+        "--exclude=/var/lib/docker/volumes/ente-postgres_data"
+      ];
+
+      pruneOpts = [
+        "--keep-daily 3"
+        "--keep-weekly 2"
+        "--keep-monthly 2"
+      ];
+
+      prepareCommand = ''
+        ${pkgs.coreutils}/bin/mkdir -p /var/backup
+
+        dump() {
+          name="$1"
+          container="$2"
+          user="$3"
+
+          if ${config.virtualisation.docker.package}/bin/docker exec "$container" \
+               pg_dumpall -U "$user" > "/var/backup/$name.sql.tmp" 2>/dev/null; then
+            ${pkgs.coreutils}/bin/mv "/var/backup/$name.sql.tmp" "/var/backup/$name.sql"
+          else
+            ${pkgs.coreutils}/bin/rm -f "/var/backup/$name.sql.tmp"
+            echo "WARNING: dump of $name failed" >&2
+          fi
+        }
+
+        dump gitea     gitea-db            gitea
+        dump immich    immich-database     immich
+        dump nextcloud nextcloud-db        nextcloud
+        dump paperless paperless-postgres  paperless
+        dump ente      ente-postgres       ente
+      '';
+
+      # Cleanup the prepare
+      cleanupCommand = "${pkgs.coreutils}/bin/rm -rf /var/backup/*";
+    };
+
     network = {
       useNetworkManager = false;
-
       networks = {
         "10-ether-1G" = mylib.networking.mkStaticSystemdNetwork {
           interface = "ens18";
@@ -106,9 +159,6 @@
     # TODO: Fold those into the respective service files
     sops-nix.secrets.${username} = [
       "heidi-discord-token"
-      "kopia-server-username"
-      "kopia-server-password"
-      "kopia-user-password"
       "paperless-nextcloud-sync-password"
       "paperless-secret-key"
       "ntfy-auth-users"
@@ -172,7 +222,6 @@
         (localVhost "fileflows" 5000)
         (localVhost "kiwix" 8081)
         (localVhost "pdf" 8082)
-        (localVhost "kopia" 51515)
         (localVhost "mailpit" 8025)
         (localVhost "tmm" 4000)
         (localVhost "budget" 5006)
