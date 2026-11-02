@@ -33,7 +33,7 @@
     ../services/docker/fileflows.nix
     ../services/nixos/gitea.nix
     ../services/nixos/gitea-runner.nix
-    ../services/docker/immich.nix
+    ../services/nixos/immich.nix
     ../services/nixos/jellyfin.nix
     ../services/nixos/kiwix.nix
     ../services/nixos/mailpit.nix
@@ -82,6 +82,7 @@
       paths = [
         "/var/lib/docker/volumes"
         "/var/backup"
+        "/var/lib/immich"
       ];
 
       extraBackupArgs = [
@@ -126,7 +127,6 @@
           && ${pkgs.coreutils}/bin/mv /var/backup/postgres.sql.tmp /var/backup/postgres.sql
 
         # Remaining container databases
-        dump immich    immich-database     immich
         dump nextcloud nextcloud-db        nextcloud
         dump ente      ente-postgres       ente
       '';
