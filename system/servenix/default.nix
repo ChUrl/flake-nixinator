@@ -35,7 +35,7 @@
     ../services/docker/immich.nix
     ../services/docker/jellyfin.nix
     ../services/nixos/kiwix.nix
-    ../services/docker/mailpit.nix
+    ../services/nixos/mailpit.nix
     ../services/docker/nextcloud.nix
     ../services/nixos/ntfy.nix
     ../services/docker/paperless.nix
