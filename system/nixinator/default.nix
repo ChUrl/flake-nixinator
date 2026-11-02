@@ -155,10 +155,34 @@
 
     sops-nix.secrets.${username} = [
       "makemkv-app-key"
-      "restic-repo-key"
       "context7-api-key"
       "obsidian-rest-api-key"
     ];
+
+    restic = {
+      enable = true;
+
+      paths = ["/persist"];
+
+      extraBackupArgs = [
+        "--one-file-system" # Nothing outside /persist
+        "--exclude-caches" # Excludes marked cache directories
+        "--cleanup-cache" # Auto remove old cache directories
+        "--exclude=/persist/home/${username}/.var/app" # flatpak
+        "--exclude=/persist/home/${username}/.lmstudio/models"
+        "--exclude=/persist/home/${username}/.cache"
+        "--exclude=/persist/var/cache"
+      ];
+
+      pruneOpts = [
+        "--keep-daily 3"
+        "--keep-weekly 2"
+        "--keep-monthly 2"
+      ];
+
+      randomizedDelaySec = "5h";
+      createWrapper = true;
+    };
 
     # Port 5432 is forwarded by the VPS (NPM stream),
     # see the "nixinator" host in home/homemodules/ssh.
@@ -357,53 +381,6 @@
       '';
     };
 
-    # Backups onto the NAS over SFTP. The repo password comes from sops
-    # (restic-repo-key), the ssh key lives in /persist/root/.ssh via
-    # impermanence, and the host settings are declared below.
-    restic.backups."synology" = {
-      # Keep the default user (root), so restic can read everything
-      repository = "sftp:backup@192.168.86.15:/NixinatorPersistence/restic";
-      initialize = true;
-      passwordFile = config.sops.secrets.restic-repo-key.path;
-      createWrapper = true;
-
-      paths = ["/persist"];
-
-      extraBackupArgs = [
-        "--one-file-system" # Nothing outside /persist
-        "--exclude-caches" # Excludes marked cache directories
-        "--cleanup-cache" # Auto remove old cache directories
-        "--exclude=/persist/home/${username}/.var/app" # flatpak
-        "--exclude=/persist/home/${username}/.lmstudio/models"
-        "--exclude=/persist/home/${username}/.cache"
-        "--exclude=/persist/var/cache"
-      ];
-
-      # Could help to enforce consistent dumps
-      # backupPrepareCommand = ''
-      #   mkdir -p /persist/var/backup/mysql
-      #   ${pkgs.mariadb}/bin/mariadb-dump --all-databases --single-transaction \
-      #     > /persist/var/backup/mysql/all-databases.sql
-      # '';
-
-      pruneOpts = [
-        "--keep-daily 3"
-        "--keep-weekly 1"
-        "--keep-monthly 1"
-      ];
-
-      runCheck = true;
-      checkOpts = [
-        "--read-data-subset=5%"
-      ];
-
-      timerConfig = {
-        OnCalendar = "daily";
-        Persistent = true;
-        RandomizedDelaySec = "5h";
-      };
-    };
-
     xserver = {
       # Configure keymap in X11
       xkb.layout = "us";
@@ -411,20 +388,6 @@
 
       videoDrivers = ["nvidia"]; # NVIDIA
     };
-  };
-
-  # The ssh settings for the restic backup.
-  # In this case, "localuser" is root, because the restic unit runs as root.
-  programs.ssh = {
-    extraConfig = ''
-      Match host 192.168.86.15 localuser root
-        IdentityFile /root/.ssh/restic
-        IdentitiesOnly yes
-        BatchMode yes
-    '';
-
-    # Synology: ssh-keyscan -t ed25519 192.168.86.15
-    knownHosts."192.168.86.15".publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFFOJqeggEhZxg4iJq4dN34TPjDBjqherMxqiBGC7gwI";
   };
 
   # The current system was installed on 22.05, do not change.
