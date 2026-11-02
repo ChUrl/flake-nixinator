@@ -65,7 +65,6 @@ in {
           (mkRDir "/etc/NetworkManager" m755)
           (mkRDir "/etc/secureboot" m755)
           (mkRDir "/etc/ssh" m755)
-          (mkRDir "/root/.ssh" m700) # Restic's ssh key
 
           # https://github.com/nix-community/impermanence/issues/253
           (mkRDir "/usr/systemd-placeholder" m755)
