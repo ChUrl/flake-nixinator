@@ -39,6 +39,12 @@ in {
       overwrite.cli.url = "https://nextcloud.vps.chriphost.de";
       default_phone_region = "DE";
     };
+
+    # The module's default of 8 triggers Nextcloud's "OPcache interned strings
+    # buffer is nearly full" warning.
+    phpOptions = {
+      "opcache.interned_strings_buffer" = "32";
+    };
   };
 
   # Internal origin: plain HTTP on loopback, Caddy does TLS and routing.
