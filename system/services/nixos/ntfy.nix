@@ -17,7 +17,7 @@
 
       auth-file = "/var/lib/ntfy-sh/user.db";
       auth-default-access = "deny-all";
-      auth-access = "christoph:*:read-write";
+      auth-access = ["christoph:*:read-write"];
       enable-login = true;
       require-login = true;
 
