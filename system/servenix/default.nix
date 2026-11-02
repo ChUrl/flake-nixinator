@@ -34,6 +34,7 @@
     ../services/docker/gitea.nix
     ../services/docker/immich.nix
     ../services/nixos/jellyfin.nix
+    ../services/nixos/jellarr.nix
     ../services/nixos/kiwix.nix
     ../services/nixos/mailpit.nix
     ../services/docker/nextcloud.nix
