@@ -26,11 +26,8 @@ in {
   # openssl rand -hex 8                        # ente-s3-user
   # openssl rand -hex 24                       # ente-s3-password
 
-  # postgres + minio read this
+  # minio reads this
   sops.templates."ente-env".content = ''
-    POSTGRES_USER=ente
-    POSTGRES_DB=ente_db
-    POSTGRES_PASSWORD=${config.sops.placeholder."ente-db-password"}
     MINIO_ROOT_USER=${config.sops.placeholder."ente-s3-user"}
     MINIO_ROOT_PASSWORD=${config.sops.placeholder."ente-s3-password"}
   '';
@@ -39,9 +36,9 @@ in {
   # (see configurations/local.yaml in the server image), so no
   # museum.yaml needs to be mounted into the container.
   sops.templates."ente-museum-env".content = ''
-    ENTE_DB_HOST=ente-postgres
+    ENTE_DB_HOST=192.168.86.25
     ENTE_DB_PORT=5432
-    ENTE_DB_NAME=ente_db
+    ENTE_DB_NAME=ente
     ENTE_DB_USER=ente
     ENTE_DB_PASSWORD=${config.sops.placeholder."ente-db-password"}
     ENTE_DB_SSLMODE=disable
@@ -65,13 +62,6 @@ in {
   '';
 
   virtualisation.oci-containers.containers = {
-    ente-postgres = {
-      image = "docker.io/library/postgres:${postgresVersion}";
-      autoStart = true;
-      environmentFiles = [config.sops.templates."ente-env".path];
-      volumes = ["ente-postgres_data:/var/lib/postgresql/data"];
-      networks = ["ente-internal"];
-    };
 
     ente-minio = {
       image = "docker.io/pgsty/silo:${siloVersion}";
@@ -89,7 +79,6 @@ in {
     ente-museum = {
       image = "ghcr.io/ente/server:${enteServerVersion}";
       autoStart = true;
-      dependsOn = ["ente-postgres"];
       environmentFiles = [config.sops.templates."ente-museum-env".path];
       ports = ["127.0.0.1:3012:8080"];
       networks = ["ente-internal" "behind-nginx"];
@@ -114,7 +103,7 @@ in {
         wantedBy = ["multi-user.target"];
         requires = ["docker.service"];
         after = ["docker.service"];
-        before = ["docker-ente-postgres.service" "docker-ente-minio.service"];
+        before = ["docker-ente-minio.service"];
         serviceConfig.Type = "oneshot";
         script = ''
           ${pkgs.docker}/bin/docker network inspect ente-internal >/dev/null 2>&1 ||
@@ -139,7 +128,7 @@ in {
       };
     }
     // lib.genAttrs
-    ["docker-ente-postgres" "docker-ente-minio" "docker-ente-museum" "docker-ente-web"]
+    ["docker-ente-minio" "docker-ente-museum" "docker-ente-web"]
     (_: {
       # The museum panics if Postgres isn't accepting connections yet, so the
       # module's unit is Restart=on-failure, just make sure systemd doesn't

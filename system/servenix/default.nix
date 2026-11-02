@@ -29,6 +29,7 @@
     })
     ../services/docker/bazarr.nix
     ../services/docker/bento_pdf.nix
+    ../services/nixos/ente-db.nix
     ../services/docker/ente.nix
     ../services/docker/fileflows.nix
     ../services/nixos/gitea.nix
@@ -146,9 +147,6 @@
           ${config.services.postgresql.finalPackage}/bin/pg_dumpall \
           > /var/backup/postgres.sql.tmp \
           && ${pkgs.coreutils}/bin/mv /var/backup/postgres.sql.tmp /var/backup/postgres.sql
-
-        # Remaining container databases
-        dump ente      ente-postgres       ente
       '';
 
       # Cleanup the prepare
