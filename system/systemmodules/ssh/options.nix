@@ -24,6 +24,20 @@ in {
     '';
   };
 
+  trustedSources = mkOption {
+    type = types.listOf types.str;
+    default = [];
+    example = ["10.10.10.1/32"];
+    description = ''
+      Sources that must never be banned or rate-limited (fail2ban `ignoreIP`
+      and OpenSSH `PerSourcePenaltyExemptList`).
+
+      Needed for hosts whose SSH is proxied for other clients: a TCP stream
+      collapses every client into the proxy's IP, so per-IP protection would
+      lock out the legitimate users along with the bots instead.
+    '';
+  };
+
   fail2ban =
     mkBoolOption true
     "Ban IPs that repeatedly fail SSH authentication.";
