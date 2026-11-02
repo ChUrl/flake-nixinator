@@ -87,8 +87,12 @@
 
       paths = [
         "/var/lib/docker/volumes"
-        "/var/backup"
+
         "/var/lib/immich"
+        "/var/lib/gitea"
+        "/var/lib/paperless"
+
+        "/var/backup"
       ];
 
       extraBackupArgs = [
