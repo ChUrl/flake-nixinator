@@ -127,6 +127,27 @@
   # };
 
   services = {
+    # Forward thinknix 222 to servenix 222, otherwise all .git/config paths would
+    # have to be updated to servenix.chriphost.de:222, as local.chriphost.de now
+    # points to thinknix (LAN/WAN entry + TLS termination lives there)
+    haproxy = {
+      enable = true;
+      config = ''
+        defaults
+          mode tcp
+          timeout connect 5s
+          timeout client  1h
+          timeout server  1h
+
+        frontend gitea-ssh
+          bind :222
+          default_backend gitea-ssh
+
+        backend gitea-ssh
+          server servenix 192.168.86.25:222
+      '';
+    };
+
     # This host is the entry for LAN and WAN: everything that is hosted on
     # servenix is forwarded to its Caddy over HTTP inside the LAN (see
     # system/servenix/default.nix). Only thinknix terminates TLS and uses
