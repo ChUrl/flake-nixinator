@@ -111,7 +111,9 @@ with mylib.networking; {
   # Bootloader/Kernel stuff
   boot = {
     kernelPackages = lib.mkDefault pkgs.linuxPackages;
-    kernelParams = ["mitigations=off"]; # I don't care
+    # Mitigations cost performance on the desktop, but the headless hosts are
+    # only reachable from the LAN / through the VPS, so keep them there.
+    kernelParams = lib.optionals (!headless) ["mitigations=off"];
 
     # Make /tmp volatile
     # NOTE: Setting this to true can lead to large derivations running out of tmp space
