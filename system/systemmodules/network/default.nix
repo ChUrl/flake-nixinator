@@ -101,9 +101,6 @@ in {
         enable = true;
         # networking.firewall.checkReversePath = "loose";
 
-        # NOTE: trustedInterfaces (docker0/podman0) is set by
-        #       the docker systemmodule
-
         inherit (cfg) allowedTCPPorts allowedUDPPorts;
       };
     };
