@@ -12,8 +12,8 @@
     ./disks.nix
 
     # General services
-    ../services/fileflows-node.nix
-    (import ../services/arcane-agent.nix {
+    ../services/docker/fileflows-node.nix
+    (import ../services/docker/arcane-agent.nix {
       tokenSecret = "arcane-agent-nixinator-key";
       backupsPath = "/home/${username}/Arcane";
     })

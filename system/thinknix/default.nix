@@ -15,12 +15,12 @@
     ./hardware-configuration.nix
 
     # General services
-    ../services/adguard.nix
-    ../services/arcane.nix
-    # ../services/portainer.nix
-    # ../services/pulse.nix
-    # ../services/pulse-agent-thinknix.nix
-    # ../services/whats-up-docker.nix
+    ../services/docker/adguard.nix
+    ../services/docker/arcane.nix
+    # ../services/docker/1_deprecated/portainer.nix
+    # ../services/docker/1_deprecated/pulse.nix
+    # ../services/docker/1_deprecated/pulse-agent-thinknix.nix
+    # ../services/docker/1_deprecated/whats-up-docker.nix
   ];
 
   networking.tempAddresses = "disabled";

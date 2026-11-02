@@ -15,43 +15,43 @@
     ./hardware-configuration.nix
 
     # My own services
-    ../services/heidi.nix
-    ../services/formula10.nix
-    ../services/formula11.nix
-    ../services/formula12.nix
-    # ../services/statespaces.nix
+    ../services/docker/heidi.nix
+    ../services/docker/formula10.nix
+    ../services/docker/formula11.nix
+    ../services/docker/formula12.nix
+    # ../services/docker/1_deprecated/statespaces.nix
 
     # General services
-    ../services/actual-budget.nix
-    (import ../services/arcane-agent.nix {
+    ../services/docker/actual-budget.nix
+    (import ../services/docker/arcane-agent.nix {
       tokenSecret = "arcane-agent-key";
       network = "behind-nginx";
       backupsPath = "/media/Arcane";
     })
-    # ../services/authelia.nix # Thinknix hosts authelia module
-    ../services/bazarr.nix
-    ../services/bento_pdf.nix
-    ../services/ente.nix
-    ../services/fileflows.nix
-    ../services/gitea.nix
-    ../services/immich.nix
-    ../services/jellyfin.nix
-    ../services/kiwix.nix
-    ../services/mailpit.nix
-    ../services/nextcloud.nix
-    ../services/ntfy.nix
-    ../services/paperless.nix
-    # ../services/plex.nix # Their monetization strategy is absolutely atrocious
-    # ../services/portainer-agent.nix
-    # ../services/pulse-agent-servenix.nix
-    ../services/prowlarr.nix
-    ../services/radarr.nix
-    ../services/sabnzbd-movies.nix
-    ../services/sabnzbd-shows.nix
-    ../services/sonarr.nix
-    # ../services/teamspeak.nix
-    ../services/tinymediamanager.nix
-    # ../services/whats-up-docker.nix
+    # ../services/docker/1_deprecated/authelia.nix # Thinknix hosts authelia module
+    ../services/docker/bazarr.nix
+    ../services/docker/bento_pdf.nix
+    ../services/docker/ente.nix
+    ../services/docker/fileflows.nix
+    ../services/docker/gitea.nix
+    ../services/docker/immich.nix
+    ../services/docker/jellyfin.nix
+    ../services/docker/kiwix.nix
+    ../services/docker/mailpit.nix
+    ../services/docker/nextcloud.nix
+    ../services/docker/ntfy.nix
+    ../services/docker/paperless.nix
+    # ../services/docker/1_deprecated/plex.nix # Their monetization strategy is absolutely atrocious
+    # ../services/docker/1_deprecated/portainer-agent.nix
+    # ../services/docker/1_deprecated/pulse-agent-servenix.nix
+    ../services/docker/prowlarr.nix
+    ../services/docker/radarr.nix
+    ../services/docker/sabnzbd-movies.nix
+    ../services/docker/sabnzbd-shows.nix
+    ../services/docker/sonarr.nix
+    # ../services/docker/1_deprecated/teamspeak.nix
+    ../services/docker/tinymediamanager.nix
+    # ../services/docker/1_deprecated/whats-up-docker.nix
   ];
 
   networking.tempAddresses = "disabled";

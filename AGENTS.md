@@ -71,22 +71,34 @@ Use `headless` (boolean) to gate anything graphical. Use `mylib.<fn>` instead of
 
 ### Module System
 
-Two parallel hierarchies, identical pattern:
+Three hierarchies, identical pattern:
 
 | Scope | Path | Option prefix |
 |-------|------|---------------|
 | System | `system/systemmodules/<name>/` | `systemmodules.<name>.*` |
+| Server services | `system/services/nixos/<name>/` | `systemmodules.<name>.*` |
 | Home-manager | `home/homemodules/<name>/` | `homemodules.<name>.*` |
 
 **System modules** — `system/systemmodules/<name>/`
 - `options.nix` — declares `systemmodules.<name>.*` options
 - `default.nix` — imports `./options.nix`, implements `lib.mkIf <name>.enable { ... }`
 
+These are OS-level modules shared by all Linux hosts (boot, network, ssh, sops,
+restic, docker runtime, …). Imported once via `system/systemmodules/default.nix`.
+
+**Server services** — `system/services/nixos/<name>/`
+- same two files, same `systemmodules.<name>.*` namespace (avoids colliding with
+  nixpkgs' `services.*`)
+- for things that run *on the servers*: `caddy`, `authelia`, and the services
+  migrated away from Docker later
+- imported via `system/services/nixos/default.nix`, which the NixOS builder adds
+  to every host (Darwin does not get them)
+
 **Home-manager modules** — `home/homemodules/<name>/`
 - `options.nix` — declares `homemodules.<name>.*` options
 - `default.nix` — same pattern under `homemodules.*`
 
-When adding a new module, copy from `0_template/` in either hierarchy. Modules under `1_deprecated/` are kept for reference only — not imported anywhere.
+When adding a new module, copy from `0_template/` in the matching hierarchy. Modules under `1_deprecated/` are kept for reference only — not imported anywhere.
 
 HM modules are placed in `home-manager.sharedModules` (not `users.<user>.imports`) — this enables proper nixd completions.
 
@@ -104,7 +116,16 @@ Always use `mylib.<fn>` (available as a special arg) rather than reimplementing 
 
 ### Services
 
-Server services are OCI containers (podman/docker) defined in `system/services/`. Each file defines one or more containers. These are only enabled on `servenix`. Use the template at `system/services/0_TEMPLATE.nix`.
+Everything that runs on the servers lives under `system/services/`:
+
+| Path | Content |
+|------|---------|
+| `system/services/docker/<name>.nix` | OCI container definitions (podman/docker). Each file defines one or more containers. Use the template `system/services/docker/0_TEMPLATE.nix`. |
+| `system/services/nixos/<name>/` | Native NixOS service modules (see *Module System*). |
+
+Containers are enabled per host in `system/<hostname>/default.nix`; most run on
+`servenix`, a few on `thinknix`. Retired definitions live in
+`system/services/docker/1_deprecated/`.
 
 ### Secrets
 

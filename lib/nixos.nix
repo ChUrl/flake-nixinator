@@ -84,6 +84,9 @@
 
           # Import all of my custom system modules
           ../system/systemmodules
+
+          # Server-side service modules (Caddy, Authelia, …)
+          ../system/services/nixos
         ]
 
         extraModules

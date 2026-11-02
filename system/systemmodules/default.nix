@@ -1,8 +1,6 @@
 {...}: {
   imports = [
-    ./authelia
     ./bootloader
-    ./caddy
     ./desktopportal
     ./docker
     ./fonts

@@ -116,7 +116,7 @@ NixFlake/
 
 ## Services
 
-All server services run as OCI containers (podman). Each service is defined in `system/services/<name>.nix`.
+All server services run as OCI containers (podman). Each service is defined in `system/services/docker/<name>.nix`; native NixOS services live in `system/services/nixos/`.
 
 | Service | Purpose |
 |---------|---------|

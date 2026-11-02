@@ -1,6 +1,6 @@
 # Usage (host default.nix):
 #   imports = [
-#     (import ../services/arcane-agent.nix {tokenSecret = "some-sops-secret";})
+#     (import ../services/docker/arcane-agent.nix {tokenSecret = "some-sops-secret";})
 #   ];
 {
   # sops secret holding this host's AGENT_TOKEN
