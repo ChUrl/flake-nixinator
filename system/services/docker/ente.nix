@@ -62,7 +62,6 @@ in {
   '';
 
   virtualisation.oci-containers.containers = {
-
     ente-minio = {
       image = "docker.io/pgsty/silo:${siloVersion}";
       autoStart = true;
@@ -81,7 +80,7 @@ in {
       autoStart = true;
       environmentFiles = [config.sops.templates."ente-museum-env".path];
       ports = ["127.0.0.1:3012:8080"];
-      networks = ["ente-internal" "behind-nginx"];
+      networks = ["behind-nginx"];
     };
 
     ente-web = {
@@ -98,19 +97,6 @@ in {
 
   systemd.services =
     {
-      # oci-containers doesn't create networks, so do it before the containers.
-      ente-network = {
-        wantedBy = ["multi-user.target"];
-        requires = ["docker.service"];
-        after = ["docker.service"];
-        before = ["docker-ente-minio.service"];
-        serviceConfig.Type = "oneshot";
-        script = ''
-          ${pkgs.docker}/bin/docker network inspect ente-internal >/dev/null 2>&1 ||
-            ${pkgs.docker}/bin/docker network create ente-internal
-        '';
-      };
-
       # Docker initializes a fresh named volume empty, but museum expects the
       # bucket to already exist (example compose does this with `mc mb`).
       ente-minio-init = {
