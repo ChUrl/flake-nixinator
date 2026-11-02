@@ -10,6 +10,7 @@
     ./mime
     ./network
     ./polkit
+    ./restic
     ./sops-nix
     ./ssh
   ];
