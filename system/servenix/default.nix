@@ -32,7 +32,7 @@
     ../services/docker/ente.nix
     ../services/docker/fileflows.nix
     ../services/nixos/gitea.nix
-    ../services/docker/gitea-runner.nix
+    ../services/nixos/gitea-runner.nix
     ../services/docker/immich.nix
     ../services/nixos/jellyfin.nix
     ../services/nixos/kiwix.nix
