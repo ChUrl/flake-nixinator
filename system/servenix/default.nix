@@ -134,53 +134,62 @@
       # The upstreams are loopbacks, not container names, as caddy runs on
       # the host and cannot use docker's embedded DNS, so every container
       # publishes its port on 127.0.0.1 only.
-      vhost = name: port: {
+      vhost = name: port: aliases: {
         "${name}.local.chriphost.de" = {
           # NOTE: The explicit http:// scheme is required. Without it Caddy
           #       treats the address as an HTTPS site and serves TLS on
           #       httpsPort instead of plain HTTP on httpPort.
           hostName = "http://${name}.local.chriphost.de";
+
+          # The VPS forwards the public names to thinknix, which proxies them
+          # here with the Host header preserved. Without these aliases Caddy
+          # answers an empty 200 for them.
+          serverAliases = map (alias: "http://${alias}") aliases;
+
           extraConfig = "reverse_proxy 127.0.0.1:${toString port}";
         };
       };
+
+      # Vhost without public aliases
+      localVhost = name: port: vhost name port [];
     in
       lib.mergeAttrsList [
-        (vhost "nextcloud" 8080)
-        (vhost "immich" 2283)
-        (vhost "paperless" 8000)
-        (vhost "jellyfin" 8096)
-        (vhost "gitea" 3000)
-        (vhost "ntfy" 8042)
+        (vhost "nextcloud" 8080 ["nextcloud.vps.chriphost.de"])
+        (vhost "immich" 2283 ["immich.vps.chriphost.de"])
+        (vhost "paperless" 8000 ["paperless.vps.chriphost.de"])
+        (vhost "jellyfin" 8096 ["jellyfin.vps.chriphost.de" "jellyfin.vps.chriphost.gay"])
+        (vhost "gitea" 3000 ["gitea.vps.chriphost.de"])
+        (vhost "ntfy" 8042 ["ntfy.vps.chriphost.de"])
 
         # *arr stack
-        (vhost "sonarr" 8989)
-        (vhost "radarr" 7878)
-        (vhost "prowlarr" 9696)
-        (vhost "bazarr" 6767)
-        (vhost "sabnzbd-movies" 8084)
-        (vhost "sabnzbd-shows" 8085)
+        (localVhost "sonarr" 8989)
+        (localVhost "radarr" 7878)
+        (localVhost "prowlarr" 9696)
+        (localVhost "bazarr" 6767)
+        (localVhost "sabnzbd-movies" 8084)
+        (localVhost "sabnzbd-shows" 8085)
 
         # Media / documents
-        (vhost "fileflows" 5000)
-        (vhost "kiwix" 8081)
-        (vhost "pdf" 8082)
-        (vhost "kopia" 51515)
-        (vhost "mailpit" 8025)
-        (vhost "tmm" 4000)
-        (vhost "budget" 5006)
+        (localVhost "fileflows" 5000)
+        (localVhost "kiwix" 8081)
+        (localVhost "pdf" 8082)
+        (localVhost "kopia" 51515)
+        (localVhost "mailpit" 8025)
+        (localVhost "tmm" 4000)
+        (localVhost "budget" 5006)
 
         # Formula / pocketbase
-        (vhost "f10" 55555)
-        (vhost "f11" 5173)
-        (vhost "f11pb" 8090)
-        (vhost "f12" 5174)
-        (vhost "f12pb" 8091)
+        (vhost "f10" 55555 ["f10.vps.chriphost.de"])
+        (vhost "f11" 5173 ["f11.vps.chriphost.de" "f11.vps.chriphost.gay" "f11.chriphost.de"])
+        (vhost "f11pb" 8090 ["f11pb.vps.chriphost.de"])
+        (vhost "f12" 5174 ["f12.vps.chriphost.de" "f12.vps.chriphost.gay"])
+        (vhost "f12pb" 8091 ["f12pb.vps.chriphost.de"])
 
         # ente
-        (vhost "duck" 3010)
-        (vhost "duck-albums" 3011)
-        (vhost "duck-api" 3012)
-        (vhost "duck-s3" 3013)
+        (localVhost "duck" 3010)
+        (localVhost "duck-albums" 3011)
+        (localVhost "duck-api" 3012)
+        (localVhost "duck-s3" 3013)
       ];
 
     # Configure keymap in X11
