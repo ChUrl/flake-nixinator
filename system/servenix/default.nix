@@ -97,9 +97,9 @@
       ];
 
       pruneOpts = [
-        "--keep-daily 3"
-        "--keep-weekly 2"
-        "--keep-monthly 2"
+        "--keep-daily 7"
+        "--keep-weekly 4"
+        "--keep-monthly 3"
       ];
 
       prepareCommand = ''
