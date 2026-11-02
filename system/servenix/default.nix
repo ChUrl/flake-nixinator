@@ -54,7 +54,17 @@
   # databases we are migrating come from 15/16. 17 has vectorchord + pgvector
   # and keeps the data dir at /var/lib/postgresql/17, so the old cluster stays
   # untouched as a rollback.
-  services.postgresql.package = pkgs.postgresql_17;
+  services.postgresql = {
+    package = pkgs.postgresql_17;
+
+    # The shared instance now serves gitea, paperless, immich and nextcloud.
+    # 256MB (the default) is too small: Nextcloud's admin check reported an
+    # 87% buffer cache hit ratio.
+    settings = {
+      shared_buffers = "4GB";
+      effective_cache_size = "12GB";
+    };
+  };
 
   systemmodules = {
     remote-build.enable = true;
