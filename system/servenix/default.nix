@@ -50,6 +50,12 @@
 
   networking.tempAddresses = "disabled";
 
+  # PostgreSQL 14 (the default for this stateVersion) is EOL and the container
+  # databases we are migrating come from 15/16. 17 has vectorchord + pgvector
+  # and keeps the data dir at /var/lib/postgresql/17, so the old cluster stays
+  # untouched as a rollback.
+  services.postgresql.package = pkgs.postgresql_17;
+
   systemmodules = {
     remote-build.enable = true;
 
