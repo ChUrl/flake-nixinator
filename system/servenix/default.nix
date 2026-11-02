@@ -37,7 +37,7 @@
     ../services/nixos/jellyfin.nix
     ../services/nixos/kiwix.nix
     ../services/nixos/mailpit.nix
-    ../services/docker/nextcloud.nix
+    ../services/nixos/nextcloud.nix
     ../services/nixos/ntfy.nix
     ../services/nixos/paperless.nix
     ../services/docker/prowlarr.nix
@@ -91,6 +91,7 @@
         "/var/lib/immich"
         "/var/lib/gitea"
         "/var/lib/paperless"
+        "/var/lib/nextcloud"
 
         "/var/backup"
       ];
@@ -137,7 +138,6 @@
           && ${pkgs.coreutils}/bin/mv /var/backup/postgres.sql.tmp /var/backup/postgres.sql
 
         # Remaining container databases
-        dump nextcloud nextcloud-db        nextcloud
         dump ente      ente-postgres       ente
       '';
 
