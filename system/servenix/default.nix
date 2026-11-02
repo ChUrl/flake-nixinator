@@ -19,16 +19,14 @@
     ../services/docker/formula10.nix
     ../services/docker/formula11.nix
     ../services/docker/formula12.nix
-    # ../services/docker/1_deprecated/statespaces.nix
 
     # General services
-    ../services/docker/actual-budget.nix
+    ../services/nixos/actual.nix
     (import ../services/docker/arcane-agent.nix {
       tokenSecret = "arcane-agent-key";
       network = "behind-nginx";
       backupsPath = "/media/Arcane";
     })
-    # ../services/docker/1_deprecated/authelia.nix # Thinknix hosts authelia module
     ../services/docker/bazarr.nix
     ../services/docker/bento_pdf.nix
     ../services/docker/ente.nix
@@ -36,22 +34,17 @@
     ../services/docker/gitea.nix
     ../services/docker/immich.nix
     ../services/docker/jellyfin.nix
-    ../services/docker/kiwix.nix
+    ../services/nixos/kiwix.nix
     ../services/docker/mailpit.nix
     ../services/docker/nextcloud.nix
-    ../services/docker/ntfy.nix
+    ../services/nixos/ntfy.nix
     ../services/docker/paperless.nix
-    # ../services/docker/1_deprecated/plex.nix # Their monetization strategy is absolutely atrocious
-    # ../services/docker/1_deprecated/portainer-agent.nix
-    # ../services/docker/1_deprecated/pulse-agent-servenix.nix
     ../services/docker/prowlarr.nix
     ../services/docker/radarr.nix
     ../services/docker/sabnzbd-movies.nix
     ../services/docker/sabnzbd-shows.nix
     ../services/docker/sonarr.nix
-    # ../services/docker/1_deprecated/teamspeak.nix
     ../services/docker/tinymediamanager.nix
-    # ../services/docker/1_deprecated/whats-up-docker.nix
   ];
 
   networking.tempAddresses = "disabled";
