@@ -73,6 +73,7 @@
       # The Caddy ports are opened by the caddy systemmodules
       allowedTCPPorts = [
         53 # DNS
+        222 # Gitea SSH (streamed to servenix 222 via haproxy)
       ];
       allowedUDPPorts = [
         53 # DNS
@@ -139,7 +140,7 @@
           timeout client  1h
           timeout server  1h
 
-        frontend gitea-ssh
+        frontend gitea-ssh-frontend
           bind :222
           default_backend gitea-ssh
 
@@ -211,6 +212,11 @@
         "synology.local.chriphost.de" = {
           useACMEHost = "local.chriphost.de";
           extraConfig = "reverse_proxy http://192.168.86.15:5000";
+        };
+
+        "amp.local.chriphost.de" = {
+          useACMEHost = "local.chriphost.de";
+          extraConfig = "reverse_proxy http://192.168.86.35:8080";
         };
 
         "truenas.local.chriphost.de" = {
