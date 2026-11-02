@@ -117,6 +117,12 @@
 
     masssprings.url = "git+https://gitea.local.chriphost.de/christoph/cpp-masssprings";
     masssprings.inputs.nixpkgs.follows = "nixpkgs";
+
+    # Declarative Jellyfin configuration (applies settings via the REST API)
+    # Pinned to main: the v0.1.0 tag still uses pkgs.pnpm.configHook, which no
+    # longer exists in current nixpkgs.
+    jellarr.url = "github:venkyr77/jellarr/de530bc0117eb4018598a67245e748623a6ce6dc";
+    jellarr.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   # Outputs is a function that takes the inputs as arguments.
@@ -338,7 +344,9 @@
           username = "christoph";
           headless = true;
           extraModules =
-            []
+            [
+              inputs.jellarr.nixosModules.default
+            ]
             ++ commonModules;
         };
 
