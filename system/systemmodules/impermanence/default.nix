@@ -7,8 +7,15 @@
   ...
 }: let
   inherit (config.systemmodules) impermanence;
+
+  # Paths owned by a home-manager module: HM modules can't set system options,
+  # so they declare them in homemodules.impermanence and are folded in here.
+  hmConfig = config.home-manager.users.${username} or {};
+  hmPersistDirectories = hmConfig.homemodules.impermanence.directories or [];
 in {
-  options.systemmodules.impermanence = import ./options.nix {inherit lib mylib;};
+  options.systemmodules.impermanence = import ./options.nix {
+    inherit lib mylib config username;
+  };
 
   config = let
     # NOTE: Setting user/group/mode only has an effect if the
@@ -42,17 +49,10 @@ in {
     mkRDir = mkDir "root";
     mkRFile = mkFile "root";
     mkUDir = mkDir "${username}";
-    mkUFile = mkFile "${username}";
-    # TODO: sth. like this, make options for configdirs/sharedirs/statedirs/homedirs
-    #       populate options from respective modules, not here...
-    # mkConfigDirs = dirs:
-    #   dirs
-    #   |> builtins.map (dir: ".config/${dir}")
-    #   |> builtins.map mkUDir # NOTE: mkUDir has wrong arg order
+
+    hmDirectories = builtins.map (directory: mkUDir directory m755) hmPersistDirectories;
   in
     lib.mkIf impermanence.enable {
-      # TODO: Create options to allow host-specific impermanence setup
-      #       inside the respective modules
       environment.persistence."/persist" = {
         hideMounts = false; # Sets x-gvfs-hide option
 
@@ -61,35 +61,19 @@ in {
           (mkRFile "/etc/machine-id" m444)
         ];
 
-        directories = [
-          (mkRDir "/etc/NetworkManager" m755)
-          (mkRDir "/etc/secureboot" m755)
-          (mkRDir "/etc/ssh" m755)
-
-          # https://github.com/nix-community/impermanence/issues/253
-          (mkRDir "/usr/systemd-placeholder" m755)
-
-          # TODO: Why does this use the mandb user?
-          # (mkDir "mandb" "/var/cache/man" m755)
-
-          (mkRDir "/var/cache/restic-backups-nixinator" m700) # Resitc's cache
-          (mkRDir "/var/db/sudo" m711)
-          (mkRDir "/var/lib/auto-cryptenroll" m755) # Lanzaboote
-          (mkRDir "/var/lib/bluetooth" m755) # m700
-          (mkRDir "/var/lib/btrfs" m755)
-          (mkRDir "/var/lib/chrony" m755)
-          (mkRDir "/var/lib/containers" m755)
-          (mkRDir "/var/lib/docker" m755)
-          (mkRDir "/var/lib/fail2ban" m755)
-          (mkRDir "/var/lib/flatpak" m755)
-          (mkRDir "/var/lib/libvirt" m755)
-          (mkRDir "/var/lib/NetworkManager" m755)
-          (mkRDir "/var/lib/nixos" m755)
-          (mkRDir "/var/lib/sbctl" m755) # Lanzaboote
-          (mkRDir "/var/lib/systemd" m755)
-
-          (mkRDir "/var/tmp" m777)
-        ];
+        # Paths used by modules are declared in the respective module, see
+        # systemmodules.impermanence.directories.
+        directories =
+          [
+            # impermanence / host state without a module
+            (mkRDir "/usr/systemd-placeholder" m755) # https://github.com/nix-community/impermanence/issues/253
+            (mkRDir "/var/db/sudo" m711)
+            (mkRDir "/var/lib/bluetooth" m755) # Created by the hardware config
+            (mkRDir "/var/lib/nixos" m755)
+            (mkRDir "/var/lib/systemd" m755)
+            (mkRDir "/var/tmp" m777)
+          ]
+          ++ impermanence.directories;
 
         users.${username} = {
           files = [
@@ -101,148 +85,35 @@ in {
           ];
 
           # TODO: I need something that lists stale folders in /persist (folders that are no longer mounted into the system)
-          directories = [
-            # Home directory
-            (mkUDir "Downloads" m755)
-            (mkUDir "Documents" m755)
-            (mkUDir "GitRepos" m755)
-            (mkUDir "NixFlake" m755)
-            (mkUDir "Notes" m755)
-            (mkUDir "Pictures" m755)
-            (mkUDir "Projects" m755)
-            (mkUDir "Public" m755)
-            # (mkUDir "Unity" m755)
-            (mkUDir "Videos" m755)
+          directories =
+            [
+              # Home directory
+              (mkUDir "Downloads" m755)
+              (mkUDir "Documents" m755)
+              (mkUDir "GitRepos" m755)
+              (mkUDir "NixFlake" m755)
+              (mkUDir "Notes" m755)
+              (mkUDir "Pictures" m755)
+              (mkUDir "Projects" m755)
+              (mkUDir "Public" m755)
+              # (mkUDir "Unity" m755)
+              (mkUDir "Videos" m755)
 
-            # Secrets
-            (mkUDir ".gnupg" m755) # m600
-            (mkUDir ".secrets" m755) # m644
-            (mkUDir ".ssh" m755) # m644
+              # Secrets
+              (mkUDir ".gnupg" m755) # m600
+              (mkUDir ".secrets" m755) # m644
+              (mkUDir ".ssh" m755) # m644
 
-            # The shit some applications add to ~/ without asking
-            # (mkUDir ".android" m755) # Unity
-            # (mkUDir ".claude" m755)
-            # (mkUDir ".codex" m755)
-            # (mkUDir ".comfy" m755)
-            (mkUDir ".docker" m755)
-            # (mkUDir ".gradle" m755) # Unity
-            # (mkUDir ".java" m755) # JetBrains
-            (mkUDir ".keychain" m755)
-            (mkUDir ".lmstudio" m755)
-            (mkUDir ".MakeMKV" m755)
-            (mkUDir ".mozilla/firefox" m755) # TODO: Remove this someday
-            (mkUDir ".mozilla/native-messaging-hosts" m755)
-            (mkUDir ".nix-package-search" m755)
-            (mkUDir ".npm" m755) # Contains mcp servers :/
-            # (mkUDir ".nv" m755) # Unity
-            # (mkUDir ".ollama" m755)
-            (mkUDir ".opencode" m755)
-            (mkUDir ".opencode-mem" m755)
-            # (mkUDir ".plastic4" m755) # Unity
-            (mkUDir ".tableplus" m755)
-            (mkUDir ".tiddl" m755)
-            (mkUDir ".var/app" m755)
-            (mkUDir ".vim/undo" m755)
-            (mkUDir ".vscode" m755)
-            (mkUDir ".zotero" m755)
-
-            # Cache that's actually useful
-            # (mkUDir ".cache/claude-cli-nodejs" m755)
-            (mkUDir ".cache/elephant" m755)
-            (mkUDir ".cache/fish/generated_completions" m755)
-            (mkUDir ".cache/nix" m755)
-            (mkUDir ".cache/nix-index" m755)
-            (mkUDir ".cache/nix-search-tv" m755)
-            (mkUDir ".cache/nvim" m755)
-            # (mkUDir ".cache/JetBrains" m755)
-            (mkUDir ".cache/keepassxc" m755)
-            (mkUDir ".cache/opencode" m755)
-            (mkUDir ".cache/uv" m755)
-
-            # Config
-            # (mkUDir ".config/.android" m755) # Unity
-            (mkUDir ".config/ai.opencode.desktop" m755)
-            # (mkUDir ".config/beekeeper-studio" m755)
-            (mkUDir ".config/beets" m755)
-            (mkUDir ".config/blender" m755)
-            (mkUDir ".config/chromium" m755)
-            # (mkUDir ".config/Claude" m755) # Claude desktop
-            (mkUDir ".config/Code" m755)
-            # (mkUDir ".config/Codex" m755)
-            # (mkUDir ".config/Ferdium" m755)
-            (mkUDir ".config/feishin" m755)
-            (mkUDir ".config/fish/completions" m755)
-            (mkUDir ".config/ghidra" m755)
-            (mkUDir ".config/impermanence" m755)
-            (mkUDir ".config/jellyfin-mpv-shim" m755)
-            # (mkUDir ".config/jellyfin-tui" m755) # Configured using nix
-            # (mkUDir ".config/JetBrains" m755)
-            # (mkUDir ".config/kdeconnect" m755)
-            (mkUDir ".config/keepassxc" m755)
-            (mkUDir ".config/LM Studio" m755)
-            # (mkUDir ".config/Msty" m755)
-            (mkUDir ".config/Nextcloud" m755)
-            # (mkUDir ".config/niri/dms" m755)
-            (mkUDir ".config/obsidian" m755)
-            (mkUDir ".config/obs-studio" m755)
-            (mkUDir ".config/opencode" m755)
-            (mkUDir ".config/RimStack" m755)
-            (mkUDir ".config/Signal" m755)
-            # (mkUDir ".config/singularitygroup-hotreload" m755) # Unity
-            # (mkUDir ".config/TeamSpeak" m755)
-            # (mkUDir ".config/tidal-hifi" m755)
-            # (mkUDir ".config/tidal_dl_ng" m755)
-            # (mkUDir ".config/unity3d" m755) # Unity
-            # (mkUDir ".config/unityhub" m755) # Unity
-            (mkUDir ".config/Vector 35" m755)
-            (mkUDir ".config/vlc" m755)
-            (mkUDir ".config/Zeal" m755)
-            (mkUDir ".config/zed" m755)
-
-            # Share
-            (mkUDir ".local/share/Anki2" m755)
-            # (mkUDir ".local/share/containers" m755) # Rootless docker
-            (mkUDir ".local/share/direnv" m755)
-            (mkUDir ".local/share/docker" m755)
-            (mkUDir ".local/share/fish" m755)
-            (mkUDir ".local/share/flatpak" m755)
-            # (mkUDir ".local/share/hyprland" m755)
-            (mkUDir ".local/share/hytale-launcher" m755)
-            (mkUDir ".local/share/Hytale" m755)
-            (mkUDir ".local/share/io.github.CyberTimon.RapidRAW" m755)
-            # (mkUDir ".local/share/IsolatedStorage" m755) # JetBrains license data
-            (mkUDir ".local/share/jellyfin-desktop" m755)
-            (mkUDir ".local/share/jellyfin-tui" m755)
-            # (mkUDir ".local/share/JetBrains" m755) # Unity
-            (mkUDir ".local/share/keyrings" m755) # m700
-            (mkUDir ".local/share/LRCGET" m755)
-            (mkUDir ".local/share/mime" m755)
-            (mkUDir ".local/share/net.lrclib.lrcget" m755)
-            (mkUDir ".local/share/Nextcloud" m755)
-            (mkUDir ".local/share/nix" m755)
-            (mkUDir ".local/share/nvim" m755)
-            (mkUDir ".local/share/opencode" m755)
-            (mkUDir ".local/share/org.localsend.localsend_app" m755)
-            (mkUDir ".local/share/qutebrowser" m755)
-            (mkUDir ".local/share/Rack2" m755)
-            (mkUDir ".local/share/RimStack" m755)
-            (mkUDir ".local/share/systemd" m755)
-            # (mkUDir ".local/share/unity3d" m755) # Unity
-            (mkUDir ".local/share/xemu-lgb" m755)
-            (mkUDir ".local/share/zathura" m755)
-            (mkUDir ".local/share/zed" m755)
-            (mkUDir ".local/share/zoxide" m755)
-
-            # State
-            # (mkUDir ".local/state/astal/notifd" m755)
-            (mkUDir ".local/state/home-manager/gc-roots" m755) # nix-flatpak stores its state there
-            (mkUDir ".local/state/lazygit" m755)
-            (mkUDir ".local/state/nix" m755)
-            (mkUDir ".local/state/nvim" m755)
-            (mkUDir ".local/state/opencode" m755)
-            (mkUDir ".local/state/waypaper" m755)
-            (mkUDir ".local/state/wireplumber" m755)
-          ];
+              # State of nix and systemd in the home directory. Everything
+              # else is declared by the module that owns it, see
+              # homemodules.impermanence and systemmodules.impermanence.
+              (mkUDir ".config/impermanence" m755) # fdignore files for newroot/newhome
+              (mkUDir ".local/share/nix" m755)
+              (mkUDir ".local/share/systemd" m755)
+              (mkUDir ".local/state/nix" m755)
+            ]
+            ++ hmDirectories
+            ++ impermanence.userDirectories;
         };
       };
 
