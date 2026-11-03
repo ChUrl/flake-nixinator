@@ -80,6 +80,48 @@ in {
     '';
   };
 
+  localDomain = mkOption {
+    type = types.str;
+    default = "local.chriphost.gay";
+    description = ''
+      Domain below which the vhosts are served: a service declaring the vhost
+      `foo` is reachable as `foo.<localDomain>`.
+    '';
+  };
+
+  vhosts = mkOption {
+    type = types.attrsOf (types.submodule {
+      options = {
+        port = mkOption {
+          type = types.port;
+          description = "Loopback port of the service (127.0.0.1:<port>).";
+        };
+
+        aliases = mkOption {
+          type = types.listOf types.str;
+          default = [];
+          description = ''
+            Additional host names for the vhost, e.g. the public (VPS) name of a
+            service that is proxied with the Host header preserved.
+          '';
+        };
+
+        extraConfig = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          description = "Overrides the default `reverse_proxy 127.0.0.1:<port>`.";
+        };
+      };
+    });
+    default = {};
+    description = ''
+      Reverse proxy vhosts, declared by the modules of the services they front.
+      How they are rendered depends on the role of the host: an HTTPS-terminating
+      host uses the wildcard certificate, a plain HTTP origin host serves them
+      with the `http://` scheme.
+    '';
+  };
+
   openFirewall =
     mkBoolOption true
     "Open httpPort/httpsPort in the firewall.";

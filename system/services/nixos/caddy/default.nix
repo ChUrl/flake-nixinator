@@ -24,6 +24,33 @@ in {
         globalConfig = lib.mkIf (!cfg.autoHttps) ''
           auto_https off
         '';
+
+        # One reverse proxy vhost per service that declared one
+        virtualHosts = lib.mapAttrs' (name: vhost: let
+          fqdn = "${name}.${cfg.localDomain}";
+
+          reverseProxy =
+            if vhost.extraConfig != null
+            then vhost.extraConfig
+            else "reverse_proxy 127.0.0.1:${toString vhost.port}";
+        in
+          lib.nameValuePair fqdn (
+            if cfg.autoHttps
+            then {
+              useACMEHost = cfg.acmeCertName;
+              serverAliases = vhost.aliases;
+              extraConfig = reverseProxy;
+            }
+            else {
+              # NOTE: The explicit http:// scheme is required. Without it Caddy
+              #       treats the address as an HTTPS site and serves TLS on
+              #       httpsPort instead of plain HTTP on httpPort.
+              hostName = "http://${fqdn}";
+              serverAliases = map (alias: "http://${alias}") vhost.aliases;
+              extraConfig = reverseProxy;
+            }
+          ))
+        cfg.vhosts;
       };
     }
 
