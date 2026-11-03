@@ -7,5 +7,6 @@
   imports = [
     ./authelia
     ./caddy
+    ./monitoring
   ];
 }
