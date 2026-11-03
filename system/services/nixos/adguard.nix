@@ -2,6 +2,11 @@
   # Backed up by systemmodules/restic
   systemmodules.restic.servicePaths = ["/var/lib/AdGuardHome"];
 
+  # DNS for the LAN. TCP is needed for answers that don't fit into a UDP
+  # datagram. The module's own openFirewall only opens the web UI.
+  systemmodules.network.allowedTCPPorts = [53];
+  systemmodules.network.allowedUDPPorts = [53];
+
   # Static owner (instead of the module's DynamicUser) so the state directory
   # migrated from the container has a predictable owner.
   users.groups.adguard.gid = 3002;

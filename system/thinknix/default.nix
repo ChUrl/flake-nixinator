@@ -57,7 +57,6 @@
     restic = {
       enable = true;
 
-
       extraBackupArgs = [
         "--exclude-caches"
         "--cleanup-cache"
@@ -84,14 +83,12 @@
         };
       };
 
-      # The Caddy ports are opened by the caddy systemmodules
+      # The Caddy ports are opened by the caddy systemmodule and the DNS port
+      # by the adguard service. 222 is the haproxy stream to servenix.
       allowedTCPPorts = [
-        53 # DNS
         222 # Gitea SSH (streamed to servenix 222 via haproxy)
       ];
-      allowedUDPPorts = [
-        53 # DNS
-      ];
+      allowedUDPPorts = [];
     };
   };
 

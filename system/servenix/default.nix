@@ -161,11 +161,10 @@
       # NOTE: Streams: Ports have to be opened in the VPS firewall +
       #       VPS UFW and bound in the VPS Nginx compose file.
 
-      # The SSH port is opened by the ssh systemmodule and the Caddy ports
-      # by the caddy systemmodule
-      allowedTCPPorts = [
-        222 # Gitea SSH (LAN clients)
-      ];
+      # The SSH port is opened by the ssh systemmodule, the Caddy ports by the
+      # caddy systemmodule and the service ports (e.g. gitea's SSH port) by the
+      # service modules
+      allowedTCPPorts = [];
 
       allowedUDPPorts = [];
     };

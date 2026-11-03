@@ -66,6 +66,10 @@
     repositoryRoot = "/var/lib/gitea/git/repositories";
   };
 
+  # The built-in SSH server listens on 222 (SSH_PORT below) and has to be
+  # reachable for LAN clients cloning over SSH
+  systemmodules.network.allowedTCPPorts = [222];
+
   networking.firewall.extraInputRules = ''
     iifname "br-*" tcp dport 3000 accept
   '';
