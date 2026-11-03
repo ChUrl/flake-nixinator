@@ -88,15 +88,12 @@ in {
           directories =
             [
               # Home directory
+              # NOTE: Documents, NixFlake, Notes, Pictures, Projects and Public
+              #       live inside .nextcloud (the Nextcloud sync root) now. The
+              #       names in $HOME are symlinks into it, created by the
+              #       activation script in home/christoph/nixinator.
               (mkUDir "Downloads" m755)
-              (mkUDir "Documents" m755)
               (mkUDir "GitRepos" m755)
-              (mkUDir "NixFlake" m755)
-              (mkUDir "Notes" m755)
-              (mkUDir "Pictures" m755)
-              (mkUDir "Projects" m755)
-              (mkUDir "Public" m755)
-              # (mkUDir "Unity" m755)
               (mkUDir "Videos" m755)
 
               # Secrets
