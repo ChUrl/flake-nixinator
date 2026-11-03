@@ -121,12 +121,12 @@ in {
 
             # The shit some applications add to ~/ without asking
             # (mkUDir ".android" m755) # Unity
-            (mkUDir ".claude" m755)
-            (mkUDir ".codex" m755)
+            # (mkUDir ".claude" m755)
+            # (mkUDir ".codex" m755)
             # (mkUDir ".comfy" m755)
             (mkUDir ".docker" m755)
             # (mkUDir ".gradle" m755) # Unity
-            (mkUDir ".java" m755) # JetBrains
+            # (mkUDir ".java" m755) # JetBrains
             (mkUDir ".keychain" m755)
             (mkUDir ".lmstudio" m755)
             (mkUDir ".MakeMKV" m755)
@@ -147,14 +147,14 @@ in {
             (mkUDir ".zotero" m755)
 
             # Cache that's actually useful
-            (mkUDir ".cache/claude-cli-nodejs" m755)
+            # (mkUDir ".cache/claude-cli-nodejs" m755)
             (mkUDir ".cache/elephant" m755)
             (mkUDir ".cache/fish/generated_completions" m755)
             (mkUDir ".cache/nix" m755)
             (mkUDir ".cache/nix-index" m755)
             (mkUDir ".cache/nix-search-tv" m755)
             (mkUDir ".cache/nvim" m755)
-            (mkUDir ".cache/JetBrains" m755)
+            # (mkUDir ".cache/JetBrains" m755)
             (mkUDir ".cache/keepassxc" m755)
             (mkUDir ".cache/opencode" m755)
             (mkUDir ".cache/uv" m755)
@@ -166,22 +166,21 @@ in {
             (mkUDir ".config/beets" m755)
             (mkUDir ".config/blender" m755)
             (mkUDir ".config/chromium" m755)
-            (mkUDir ".config/Claude" m755) # Claude desktop
+            # (mkUDir ".config/Claude" m755) # Claude desktop
             (mkUDir ".config/Code" m755)
-            (mkUDir ".config/Codex" m755)
-            (mkUDir ".config/Cryptomator" m755)
-            (mkUDir ".config/Ferdium" m755)
+            # (mkUDir ".config/Codex" m755)
+            # (mkUDir ".config/Ferdium" m755)
             (mkUDir ".config/feishin" m755)
             (mkUDir ".config/fish/completions" m755)
             (mkUDir ".config/ghidra" m755)
             (mkUDir ".config/impermanence" m755)
             (mkUDir ".config/jellyfin-mpv-shim" m755)
             # (mkUDir ".config/jellyfin-tui" m755) # Configured using nix
-            (mkUDir ".config/JetBrains" m755)
-            (mkUDir ".config/kdeconnect" m755)
+            # (mkUDir ".config/JetBrains" m755)
+            # (mkUDir ".config/kdeconnect" m755)
             (mkUDir ".config/keepassxc" m755)
             (mkUDir ".config/LM Studio" m755)
-            (mkUDir ".config/Msty" m755)
+            # (mkUDir ".config/Msty" m755)
             (mkUDir ".config/Nextcloud" m755)
             # (mkUDir ".config/niri/dms" m755)
             (mkUDir ".config/obsidian" m755)
@@ -190,9 +189,9 @@ in {
             (mkUDir ".config/RimStack" m755)
             (mkUDir ".config/Signal" m755)
             # (mkUDir ".config/singularitygroup-hotreload" m755) # Unity
-            (mkUDir ".config/TeamSpeak" m755)
-            (mkUDir ".config/tidal-hifi" m755)
-            (mkUDir ".config/tidal_dl_ng" m755)
+            # (mkUDir ".config/TeamSpeak" m755)
+            # (mkUDir ".config/tidal-hifi" m755)
+            # (mkUDir ".config/tidal_dl_ng" m755)
             # (mkUDir ".config/unity3d" m755) # Unity
             # (mkUDir ".config/unityhub" m755) # Unity
             (mkUDir ".config/Vector 35" m755)
@@ -207,14 +206,14 @@ in {
             (mkUDir ".local/share/docker" m755)
             (mkUDir ".local/share/fish" m755)
             (mkUDir ".local/share/flatpak" m755)
-            (mkUDir ".local/share/hyprland" m755)
+            # (mkUDir ".local/share/hyprland" m755)
             (mkUDir ".local/share/hytale-launcher" m755)
             (mkUDir ".local/share/Hytale" m755)
             (mkUDir ".local/share/io.github.CyberTimon.RapidRAW" m755)
-            (mkUDir ".local/share/IsolatedStorage" m755) # JetBrains license data
+            # (mkUDir ".local/share/IsolatedStorage" m755) # JetBrains license data
             (mkUDir ".local/share/jellyfin-desktop" m755)
             (mkUDir ".local/share/jellyfin-tui" m755)
-            (mkUDir ".local/share/JetBrains" m755) # Unity
+            # (mkUDir ".local/share/JetBrains" m755) # Unity
             (mkUDir ".local/share/keyrings" m755) # m700
             (mkUDir ".local/share/LRCGET" m755)
             (mkUDir ".local/share/mime" m755)
@@ -235,7 +234,7 @@ in {
             (mkUDir ".local/share/zoxide" m755)
 
             # State
-            (mkUDir ".local/state/astal/notifd" m755)
+            # (mkUDir ".local/state/astal/notifd" m755)
             (mkUDir ".local/state/home-manager/gc-roots" m755) # nix-flatpak stores its state there
             (mkUDir ".local/state/lazygit" m755)
             (mkUDir ".local/state/nix" m755)
