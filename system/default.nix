@@ -45,8 +45,10 @@ with mylib.networking; {
     fonts = {
       enable = !headless;
 
-      defaultSerifFont = "Noto Serif CJK SC";
-      defaultSansSerifFont = "Noto Sans CJK SC";
+      defaultSerifFont = "Noto Serif";
+      defaultSansSerifFont = "Noto Sans";
+      fallbackSerifFonts = ["Noto Serif CJK SC"];
+      fallbackSansSerifFonts = ["Noto Sans CJK SC"];
       defaultMonoFont = "MonoLisa Alt Script";
     };
 
