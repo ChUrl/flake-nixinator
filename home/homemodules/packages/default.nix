@@ -37,7 +37,7 @@ in {
       ".config/Nextcloud"
       ".config/Signal"
       ".config/Vector 35" # binaryninja-free
-      ".config/Zeal"
+      # ".config/Zeal"
       ".config/feishin"
       ".config/keepassxc"
       ".config/obsidian"
@@ -48,6 +48,7 @@ in {
       ".local/share/direnv"
       ".local/share/org.localsend.localsend_app"
       ".local/share/zoxide"
+      ".nextcloud"
       ".nix-package-search"
       ".tableplus"
     ];
@@ -196,7 +197,7 @@ in {
           keepassxc
           thunderbird # TODO: Email module
           obsidian
-          zeal # docs browser
+          # zeal # docs browser
           # zotero # NOTE: Depends on firefox version no longer in nixpkgs. Use flatpak
           vlc
           # audacity # NOTE: Broken on 2026-10-23
