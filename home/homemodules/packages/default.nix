@@ -9,6 +9,20 @@
   ...
 }: let
   inherit (config.homemodules) packages color;
+
+  # Qt 6 on Wayland draws the tray menu as an xdg_popup: the menu ends up in
+  # the wrong place and the tray tooltip ("Account synchronization is
+  # disabled") is rendered as a second floating window on top of it. Force only
+  # this app onto XWayland (niri runs xwayland-satellite), where the menu is a
+  # plain override-redirect window again.
+  nextcloud-client-xcb = pkgs.symlinkJoin {
+    name = "nextcloud-client-xcb-${pkgs.nextcloud-client.version}";
+    paths = [pkgs.nextcloud-client];
+    nativeBuildInputs = [pkgs.makeWrapper];
+    postBuild = ''
+      wrapProgram $out/bin/nextcloud --set QT_QPA_PLATFORM xcb
+    '';
+  };
 in {
   options.homemodules.packages = import ./options.nix {inherit lib mylib;};
 
@@ -178,7 +192,7 @@ in {
           # GUI stuff
           signal-desktop
           anki
-          nextcloud-client
+          nextcloud-client-xcb
           keepassxc
           thunderbird # TODO: Email module
           obsidian
