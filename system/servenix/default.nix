@@ -134,8 +134,8 @@
         f10 = {url = "https://f10.vps.chriphost.gay";};
         f11 = {url = "https://f11.vps.chriphost.gay";};
         f12 = {url = "https://f12.vps.chriphost.gay";};
-        f11pb = {url = "https://f11pb.vps.chriphost.gay";};
-        f12pb = {url = "https://f12pb.vps.chriphost.gay";};
+        f11pb = {url = "https://f11pb.vps.chriphost.gay/_";};
+        f12pb = {url = "https://f12pb.vps.chriphost.gay/_";};
         grafana = {url = "http://127.0.0.1:3030/api/health";};
       };
     };
