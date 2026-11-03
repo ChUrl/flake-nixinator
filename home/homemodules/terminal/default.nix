@@ -26,8 +26,8 @@ in {
         signCommits = true;
       };
 
-      jellyfin-tui.enable = true;
-      kitty.enable = true;
+      jellyfin-tui.enable = !headless;
+      kitty.enable = !headless;
       lazygit.enable = true;
 
       neovim = {
