@@ -17,6 +17,7 @@
     # General services
     ../services/nixos/adguard.nix
     ../services/docker/arcane.nix
+    ../services/docker/backrest.nix
   ];
 
   networking.tempAddresses = "disabled";
@@ -164,6 +165,11 @@
         "arcane.local.chriphost.gay" = {
           useACMEHost = "local.chriphost.gay";
           extraConfig = "reverse_proxy 127.0.0.1:3552";
+        };
+
+        "restic.local.chriphost.gay" = {
+          useACMEHost = "local.chriphost.gay";
+          extraConfig = "reverse_proxy 127.0.0.1:9898";
         };
 
         # Devices that are not hosted here or on servenix

@@ -5,7 +5,7 @@
   pkgs,
   ...
 }: let
-  backrestVersion = "1.14.1";
+  backrestVersion = "v1.14.1";
 
   # Repositories are mounted read-only, so restic must not try
   # to create locks: `--no-lock` per repo.
@@ -27,7 +27,8 @@
           "id": "nixinator",
           "guid": "f640bcad5c4779dc479b9623ba2d24095546151c8f8411792e1b2c2bade3aa53",
           "uri": "local:/repos/nixinator",
-          "password": "${config.sops.placeholder."restic-repo-key"}",
+          "password": "",
+          "env": ["RESTIC_PASSWORD_FILE=/run/secrets/restic-repo-key"],
           "flags": ["--no-lock"],
           "autoInitialize": false
         },
@@ -35,7 +36,8 @@
           "id": "servenix",
           "guid": "399aa28b976246a6f1ab9cca6d053bf985f1811a7ffe72ce142f53c9e4ac1e68",
           "uri": "local:/repos/servenix",
-          "password": "${config.sops.placeholder."restic-repo-key"}",
+          "password": "",
+          "env": ["RESTIC_PASSWORD_FILE=/run/secrets/restic-repo-key"],
           "flags": ["--no-lock"],
           "autoInitialize": false
         },
@@ -43,7 +45,8 @@
           "id": "thinknix",
           "guid": "190bdfc06bfb1ab1da857bb9842054524118fd5cebac395b5b3130713608a1d9",
           "uri": "local:/repos/thinknix",
-          "password": "${config.sops.placeholder."restic-repo-key"}",
+          "password": "",
+          "env": ["RESTIC_PASSWORD_FILE=/run/secrets/restic-repo-key"],
           "flags": ["--no-lock"],
           "autoInitialize": false
         }
@@ -51,11 +54,11 @@
       "plans": []
     }
   '';
-in {
+
   # Backrest stores its config plus the generated auth secret and its state.
-  # Seed the config once (so UI/login changes survive restarts) instead of
-  # mounting the sops template read-only.
-  sops.templates."backrest-config.json".content = backrestConfig;
+  # Seed the config once so UI/login changes survive restarts.
+  backrestConfigFile = pkgs.writeText "backrest-config.json" backrestConfig;
+in {
 
   systemd.services.backrest-config = {
     description = "Seed the Backrest configuration";
@@ -66,7 +69,7 @@ in {
     script = ''
       install -d -m 0700 /var/lib/backrest/config
       if [ ! -e /var/lib/backrest/config/config.json ]; then
-        install -m 0600 ${config.sops.templates."backrest-config.json".path} /var/lib/backrest/config/config.json
+        install -m 0600 ${backrestConfigFile} /var/lib/backrest/config/config.json
       fi
     '';
   };
@@ -89,7 +92,10 @@ in {
     volumes = [
       "backrest_data:/data"
       "/var/lib/backrest/config:/config"
+      # Read-only view of the repositories (Synology NFS export)
       "/media/Restic:/repos:ro"
+      # Repo password for restic (`RESTIC_PASSWORD_FILE` in the repo `env`)
+      "${config.sops.secrets."restic-repo-key".path}:/run/secrets/restic-repo-key:ro"
     ];
 
     environment = {
