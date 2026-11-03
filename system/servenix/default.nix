@@ -51,10 +51,6 @@
 
   networking.tempAddresses = "disabled";
 
-  # PostgreSQL 14 (the default for this stateVersion) is EOL and the container
-  # databases we are migrating come from 15/16. 17 has vectorchord + pgvector
-  # and keeps the data dir at /var/lib/postgresql/17, so the old cluster stays
-  # untouched as a rollback.
   services.postgresql = {
     package = pkgs.postgresql_17;
 
@@ -64,6 +60,32 @@
     settings = {
       shared_buffers = "4GB";
       effective_cache_size = "12GB";
+
+      # Stock autovacuum (naptime 60s, vacuum_scale_factor 0.2, cost_limit 200)
+      # cannot keep up with the oc_filecache churn of a sync that touches
+      # hundreds of thousands of files: Nextcloud's admin check reported 158k
+      # dead tuples on a single table.
+      autovacuum_naptime = "30s";
+      autovacuum_vacuum_scale_factor = "0.02";
+      autovacuum_analyze_scale_factor = "0.01";
+      autovacuum_vacuum_cost_limit = "2000";
+      autovacuum_work_mem = "256MB";
+
+      # Autovacuum, VACUUM and index builds on a table this large.
+      maintenance_work_mem = "512MB";
+
+      # The data disk is an SSD; the 4.0 default makes the planner prefer
+      # sequential scans over the indexes used by the filecache lookups.
+      random_page_cost = "1.1";
+      effective_io_concurrency = "200";
+
+      # Nextcloud issues a lot of small sorts and joins; 4MB is tight.
+      work_mem = "16MB";
+
+      # Fewer forced checkpoints while a bulk sync is writing, which otherwise
+      # shows up as stalls in the middle of an upload.
+      max_wal_size = "4GB";
+      checkpoint_completion_target = "0.9";
     };
   };
 
