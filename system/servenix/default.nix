@@ -124,7 +124,7 @@
       # thinknix -> servenix; Grafana itself is checked locally because
       # servenix uses public DNS and cannot resolve *.local.chriphost.gay.
       probes = {
-        vps = {url = "https://vps.chriphost.gay";};
+        status = {url = "https://status.vps.chriphost.gay";};
         gitea = {url = "https://gitea.vps.chriphost.gay";};
         immich = {url = "https://immich.vps.chriphost.gay";};
         jellyfin = {url = "https://jellyfin.vps.chriphost.gay";};
