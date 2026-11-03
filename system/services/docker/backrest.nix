@@ -63,6 +63,9 @@ in {
   # this service does not depend on restic being enabled on the host.
   sops.secrets."restic-repo-key" = {};
 
+  # Backed up by systemmodules/restic (bind mount, not a docker volume)
+  systemmodules.restic.servicePaths = ["/var/lib/backrest"];
+
   systemd.services.backrest-config = {
     description = "Seed the Backrest configuration";
     wantedBy = ["multi-user.target"];
