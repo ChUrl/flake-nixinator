@@ -42,7 +42,9 @@ in {
       passwordFile = config.sops.secrets."restic-repo-key".path;
       initialize = true;
 
-      inherit (cfg) paths extraBackupArgs createWrapper;
+      paths = lib.unique (cfg.paths ++ lib.optionals cfg.includeServicePaths cfg.servicePaths);
+
+      inherit (cfg) extraBackupArgs createWrapper;
 
       backupPrepareCommand =
         if cfg.prepareCommand == ""

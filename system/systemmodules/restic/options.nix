@@ -19,8 +19,23 @@ in {
   paths = mkOption {
     type = types.listOf types.str;
     default = [];
-    description = "Paths to back up.";
+    description = "Paths to back up (host policy).";
   };
+
+  servicePaths = mkOption {
+    type = types.listOf types.str;
+    default = [];
+    description = ''
+      Paths contributed by the modules that own the data (e.g. a service's
+      state directory). Added to `paths` unless `includeServicePaths` is
+      disabled.
+    '';
+  };
+
+  includeServicePaths = mylib.modules.mkBoolOption true ''
+    Back up `servicePaths` in addition to `paths`. Disable this when `paths`
+    already contains a parent directory of them (e.g. all of /persist).
+  '';
 
   extraBackupArgs = mkOption {
     type = types.listOf types.str;
