@@ -6,6 +6,8 @@
 }: {
   imports = [
     ./disks.nix
+
+    # TODO: ../services/nixos/gatus.nix
   ];
 
   # 1 vCPU, 1 GB RAM, 10 GB disk, so we keep a minimal config
@@ -151,18 +153,24 @@
   # for *.vps.chriphost.gay
   services.caddy.virtualHosts = let
     upstream = "reverse_proxy http://192.168.86.26:80";
-  in
-    {
-      "vps.chriphost.gay" = {
-        useACMEHost = "vps.chriphost.gay";
-        extraConfig = upstream;
-      };
-
-      "*.vps.chriphost.gay" = {
-        useACMEHost = "vps.chriphost.gay";
-        extraConfig = upstream;
-      };
+  in {
+    "vps.chriphost.gay" = {
+      useACMEHost = "vps.chriphost.gay";
+      extraConfig = upstream;
     };
+
+    "*.vps.chriphost.gay" = {
+      useACMEHost = "vps.chriphost.gay";
+      extraConfig = upstream;
+    };
+
+    # External watchdog. More specific than the wildcard above, so it is
+    # served locally instead of being forwarded to thinknix.
+    "status.vps.chriphost.gay" = {
+      useACMEHost = "vps.chriphost.gay";
+      extraConfig = "reverse_proxy 127.0.0.1:8080";
+    };
+  };
 
   # Hardware limitations
   nix.settings = {
