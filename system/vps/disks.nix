@@ -1,27 +1,24 @@
 {
-  # IONOS VPS: /dev/vda, 10 GB virtio disk.
+  # Hetzner Cloud VM: /dev/sda, 80 GB virtio disk, UEFI, no secure boot
   disko.devices = {
     disk = {
       main = {
         type = "disk";
-        device = "/dev/vda";
+        device = "/dev/sda";
 
         content = {
           type = "gpt";
 
           partitions = {
-            bios = {
-              size = "1M";
-              type = "EF02"; # BIOS boot partition (grub core.img)
-            };
-
-            boot = {
+            ESP = {
+              label = "EFI";
               size = "512M";
-              type = "8300"; # Linux filesystem
+              type = "EF00";
               content = {
                 type = "filesystem";
-                format = "ext4";
+                format = "vfat";
                 mountpoint = "/boot";
+                mountOptions = ["umask=077"];
               };
             };
 

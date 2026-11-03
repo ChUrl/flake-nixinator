@@ -15,11 +15,9 @@
     bootloader = {
       enable = true;
 
-      # BIOS: disko generates `boot.loader.grub.devices = ["/dev/vda"]`
-      # and nixpkgs takes the same entry from `grub.device`, which would result
-      # in a duplicated grub device -> leave `device` empty (disko decides)
-      loader = "grub";
-      grub.bootDevice = lib.mkForce "";
+      # The VM boots via UEFI (Secure Boot is off) and disko mounts the ESP at
+      # /boot, which is also the module's default efiSysMountPoint.
+      loader = "systemd-boot";
     };
 
     docker.enable = lib.mkForce false;
@@ -30,16 +28,20 @@
     network = {
       inherit hostname;
 
-      # IPv4 comes from DHCP (IONOS keeps the address for the VM's MAC),
-      # IPv6 is static with a link-local gateway.
-      networks."10-ens6" = {
+      # IPv4 comes from DHCP (2.31.177.253/32 via the private gateway
+      # 172.31.1.1), IPv6 is static /64 with the link-local gateway.
+      networks."10-eth0" = {
         enable = true;
 
-        matchConfig.Name = "ens6";
+        matchConfig.Name = "eth0";
 
-        address = ["2a02:2479:6b:b400::1/80"];
+        address = ["2a01:4f8:1c16:4ad1::1/64"];
         routes = [
-          {Gateway = "fe80::1";}
+          {
+            Gateway = "fe80::1";
+            # Hetzner's own netplan marks this route "on-link"
+            GatewayOnLink = true;
+          }
         ];
 
         networkConfig = {
@@ -75,6 +77,14 @@
     };
   };
 
+  # The Ubuntu image renamed the NIC to eth0 via netplan. On NixOS the kernel
+  # name would be enp1s0/ens3 depending on the PCI slot, so pin it by MAC.
+  # NOTE: the MAC changes if the server is ever deleted and recreated.
+  systemd.network.links."10-wan" = {
+    matchConfig.MACAddress = "92:00:0a:63:76:7a";
+    linkConfig.Name = "eth0";
+  };
+
   sops.secrets."wireguard-vps-private-key" = {};
 
   networking.wireguard.interfaces.wg0 = {
@@ -104,7 +114,7 @@
 
   networking.nat = {
     enable = true;
-    externalInterface = "ens6";
+    externalInterface = "eth0";
     internalInterfaces = ["wg0"];
   };
 
@@ -168,9 +178,6 @@
   zramSwap.enable = true;
 
   # The VM has no GPU/serial console; keep the default kernel.
-  # /boot is only 512M: keep three generations of kernel+initrd
-  boot.loader.grub.configurationLimit = 3;
-
   boot.initrd.availableKernelModules = [
     "virtio_pci"
     "virtio_blk"
