@@ -31,12 +31,22 @@ in {
           ControlPath = "~/.ssh/master-%r@%n:%p";
           ControlPersist = "no";
         };
-        "nixinator" = {
-          # We don't connect from nixinator to nixinator, only from the outside,
-          # so the VPS ip is used as HostName
-          Port = 5432;
+        "opnsense" = {
           User = "christoph";
-          HostName = "vps.chriphost.de";
+          HostName = "192.168.86.5";
+        };
+        # "synology" = {
+        #   # TODO: How do I disable synology password login? How do I login with SSH key?
+        # };
+        "nixinator" = {
+          # We don't connect from nixinator to itself, only from the outside:
+          # jump through the VPS, because fail2ban is running there.
+          # If we'd tunnel the ssh port (haproxy like before), fail2ban would
+          # not work because nixinator only sees 10.10.10.1
+          User = "christoph";
+          HostName = "192.168.86.50";
+          Port = 5432;
+          ProxyJump = "vps";
         };
         "servenix" = {
           User = "christoph";
@@ -47,18 +57,8 @@ in {
           HostName = "thinknix.chriphost.de";
         };
         "vps" = {
-          User = "root";
+          User = "christoph";
           HostName = "vps.chriphost.de";
-
-          # VPS Nginx Proxy Manager admin UI. The VPS binds it to
-          # 127.0.0.1:51810, so tunnel it.
-          LocalForward = [
-            {
-              bind.port = 51810;
-              host.address = "127.0.0.1";
-              host.port = 51810;
-            }
-          ];
         };
         "mars" = {
           User = "smchurla";
