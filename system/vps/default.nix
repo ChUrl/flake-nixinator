@@ -77,6 +77,10 @@
     };
   };
 
+  # The wildcard does not cover the apex, so add it as an extra SAN instead of
+  # serving a certificate without a matching name on https://vps.chriphost.gay.
+  security.acme.certs."vps.chriphost.gay".extraDomainNames = ["vps.chriphost.gay"];
+
   # The Ubuntu image renamed the NIC to eth0 via netplan. On NixOS the kernel
   # name would be enp1s0/ens3 depending on the PCI slot, so pin it by MAC.
   # NOTE: the MAC changes if the server is ever deleted and recreated.
