@@ -106,9 +106,9 @@ in {
           rules = [
             {
               domain = [
-                "auth.chriphost.de"
-                "auth.local.chriphost.de"
-                "auth.vps.chriphost.de"
+                "auth.chriphost.gay"
+                "auth.local.chriphost.gay"
+                "auth.vps.chriphost.gay"
               ];
               policy = "bypass";
             }

@@ -6,8 +6,8 @@
 # built-in SSH server only accepts `gitea@`. This walks every git repository
 # below $HOME and rewrites remotes of the form
 #
-#     ssh://git@gitea.local.chriphost.de:222/...   →  ssh://gitea@...
-#     ssh://git@gitea.vps.chriphost.de:222/...     →  ssh://gitea@...
+#     ssh://git@gitea.local.chriphost.gay:222/...   →  ssh://gitea@...
+#     ssh://git@gitea.vps.chriphost.gay:222/...     →  ssh://gitea@...
 #     git@gitea.<host>:...                         →  gitea@...
 #
 # Only remotes pointing at the gitea hosts are touched; github/gitlab/etc. are
@@ -69,10 +69,10 @@ for cfg in "${configs[@]}"; do
 
     new_url="$url"
     case "$url" in
-      ssh://git@gitea.local.chriphost.de:* | ssh://git@gitea.vps.chriphost.de:*)
+      ssh://git@gitea.local.chriphost.gay:* | ssh://git@gitea.vps.chriphost.gay:*)
         new_url="ssh://gitea@${url#ssh://git@}"
         ;;
-      git@gitea.local.chriphost.de:* | git@gitea.vps.chriphost.de:*)
+      git@gitea.local.chriphost.gay:* | git@gitea.vps.chriphost.gay:*)
         new_url="gitea@${url#git@}"
         ;;
     esac

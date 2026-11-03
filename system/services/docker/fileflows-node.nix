@@ -38,7 +38,7 @@ in {
         TZ = "Europe/Berlin";
 
         FFNODE = "1";
-        ServerUrl = "https://fileflows.local.chriphost.de";
+        ServerUrl = "https://fileflows.local.chriphost.gay";
       };
 
       extraOptions = [

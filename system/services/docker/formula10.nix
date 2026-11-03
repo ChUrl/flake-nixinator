@@ -8,7 +8,7 @@
 in {
   virtualisation.oci-containers.containers = {
     formula10 = {
-      image = "gitea.vps.chriphost.de/christoph/formula10:${f10Version}";
+      image = "gitea.vps.chriphost.gay/christoph/formula10:${f10Version}";
       autoStart = true;
 
       dependsOn = [];

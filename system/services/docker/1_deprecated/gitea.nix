@@ -62,7 +62,7 @@ in {
       ports = [
         "127.0.0.1:3000:3000" # Bind for VPS
 
-        # NOTE: Set .git/config url to ssh://christoph@gitea.local.chriphost.de:222/christoph/<repo>.git
+        # NOTE: Set .git/config url to ssh://christoph@gitea.local.chriphost.gay:222/christoph/<repo>.git
         "222:222" # Gitea SSH (LAN clients)
       ];
 
@@ -114,7 +114,7 @@ in {
       ];
 
       environment = {
-        # gitlab.local.chriphost.de doesn't work, because it gets resolved to 192.168.86.25:443, which is nginx
+        # gitlab.local.chriphost.gay doesn't work, because it gets resolved to 192.168.86.25:443, which is nginx
         GITEA_INSTANCE_URL = "http://gitea:3000";
         GITEA_RUNNER_NAME = "servenix";
 

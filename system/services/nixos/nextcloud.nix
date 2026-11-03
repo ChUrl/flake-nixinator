@@ -3,7 +3,7 @@
   pkgs,
   ...
 }: let
-  hostName = "nextcloud.local.chriphost.de";
+  hostName = "nextcloud.local.chriphost.gay";
 in {
   services.nextcloud = {
     enable = true;
@@ -25,8 +25,8 @@ in {
     settings = {
       trusted_domains = [
         hostName
-        "nextcloud.vps.chriphost.de"
-        "vps.chriphost.de"
+        "nextcloud.vps.chriphost.gay"
+        "vps.chriphost.gay"
       ];
 
       # Caddy on this host and the VPS hop
@@ -36,7 +36,7 @@ in {
       ];
 
       overwriteprotocol = "https";
-      overwrite.cli.url = "https://nextcloud.vps.chriphost.de";
+      overwrite.cli.url = "https://nextcloud.vps.chriphost.gay";
       default_phone_region = "DE";
 
       # The logreader app only understands "file"; the module defaults to syslog.
@@ -50,7 +50,7 @@ in {
       # Mail goes to the local mailpit catcher (host service on 127.0.0.1:1025).
       mail_smtpport = 1025;
       mail_from_address = "nextcloud";
-      mail_domain = "chriphost.de";
+      mail_domain = "chriphost.gay";
     };
 
     # The module's default of 8 triggers Nextcloud's "OPcache interned strings
@@ -71,8 +71,8 @@ in {
 
     # Requests from the VPS arrive with the public Host header
     serverAliases = [
-      "nextcloud.vps.chriphost.de"
-      "vps.chriphost.de"
+      "nextcloud.vps.chriphost.gay"
+      "vps.chriphost.gay"
     ];
   };
 }

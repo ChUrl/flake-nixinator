@@ -34,7 +34,7 @@ in {
       ];
 
       environment = {
-        APP_URL = "https://arcane.local.chriphost.de";
+        APP_URL = "https://arcane.local.chriphost.gay";
 
         PUID = "1000";
         PGID = "1000";

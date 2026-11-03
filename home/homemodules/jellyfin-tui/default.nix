@@ -25,8 +25,8 @@ in {
       file = let
         jellyfinUrl =
           if pkgs.stdenv.hostPlatform.isLinux
-          then "https://jellyfin.local.chriphost.de"
-          else "https://jellyfin.vps.chriphost.de";
+          then "https://jellyfin.local.chriphost.gay"
+          else "https://jellyfin.vps.chriphost.gay";
 
         configFile = ''
           servers:

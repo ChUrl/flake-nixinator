@@ -37,7 +37,7 @@ in {
       environment = let
         user = "PaperlessNextcloudSync";
       in {
-        WEBDRIVE_URL = "https://nextcloud.local.chriphost.de/remote.php/dav/files/${user}/";
+        WEBDRIVE_URL = "https://nextcloud.local.chriphost.gay/remote.php/dav/files/${user}/";
         WEBDRIVE_USER = "${user}";
 
         LC_ALL = "de_DE.UTF-8";
@@ -136,10 +136,10 @@ in {
         # PAPERLESS_ADMIN_USER = "root";
         # PAPERLESS_ADMIN_PASSWORD = "admin";
 
-        PAPERLESS_URL = "https://*.chriphost.de";
-        # PAPERLESS_CSRF_TRUSTED_ORIGINS = "[https://paperless.local.chriphost.de,https://paperless.vps.chriphost.de]";
-        # PAPERLESS_ALLOWED_HOSTS = "[https://paperless.local.chriphost.de,https://paperless.vps.chriphost.de]";
-        # PAPERLESS_CORS_ALLOWED_HOSTS = "[https://paperless.local.chriphost.de,https://paperless.vps.chriphost.de]";
+        PAPERLESS_URL = "https://*.chriphost.gay";
+        # PAPERLESS_CSRF_TRUSTED_ORIGINS = "[https://paperless.local.chriphost.gay,https://paperless.vps.chriphost.gay]";
+        # PAPERLESS_ALLOWED_HOSTS = "[https://paperless.local.chriphost.gay,https://paperless.vps.chriphost.gay]";
+        # PAPERLESS_CORS_ALLOWED_HOSTS = "[https://paperless.local.chriphost.gay,https://paperless.vps.chriphost.gay]";
       };
 
       extraOptions = [

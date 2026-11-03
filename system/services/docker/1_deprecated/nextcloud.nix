@@ -110,7 +110,7 @@ in {
 
         # Allow uploads larger than 1GB
         APACHE_BODY_LIMIT = "0";
-        NEXTCLOUD_TRUSTED_DOMAINS = "https://nextcloud.local.chriphost.de https://local.chriphost.de https://nextcloud.vps.chriphost.de https://vps.chriphost.de";
+        NEXTCLOUD_TRUSTED_DOMAINS = "https://nextcloud.local.chriphost.gay https://local.chriphost.gay https://nextcloud.vps.chriphost.gay https://vps.chriphost.gay";
 
         # Proxy
         APACHE_DISABLE_REWRITE_IP = "1";

@@ -5,7 +5,7 @@
     enable = true;
 
     # Public URL for links/CSRF; Caddy terminates TLS in front of it.
-    domain = "paperless.vps.chriphost.de";
+    domain = "paperless.vps.chriphost.gay";
     address = "127.0.0.1";
     port = 8000;
 
@@ -21,8 +21,8 @@
       PAPERLESS_PROXY_SSL_HEADER = ''["HTTP_X_FORWARDED_PROTO", "https"]'';
 
       # Both names the browser may use (LAN and public)
-      PAPERLESS_CSRF_TRUSTED_ORIGINS = "https://paperless.local.chriphost.de,https://paperless.vps.chriphost.de";
-      PAPERLESS_ALLOWED_HOSTS = "paperless.local.chriphost.de,paperless.vps.chriphost.de";
+      PAPERLESS_CSRF_TRUSTED_ORIGINS = "https://paperless.local.chriphost.gay,https://paperless.vps.chriphost.gay";
+      PAPERLESS_ALLOWED_HOSTS = "paperless.local.chriphost.gay,paperless.vps.chriphost.gay";
     };
 
     tesseractLanguages = [

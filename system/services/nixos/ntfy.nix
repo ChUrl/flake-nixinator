@@ -11,7 +11,7 @@
     environmentFile = config.sops.templates."ntfy_secrets.env".path;
 
     settings = {
-      base-url = "https://ntfy.vps.chriphost.de";
+      base-url = "https://ntfy.vps.chriphost.gay";
       listen-http = "127.0.0.1:8042";
       behind-proxy = true;
 

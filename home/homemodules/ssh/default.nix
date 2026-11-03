@@ -50,17 +50,17 @@ in {
         };
         "servenix" = {
           User = "christoph";
-          HostName = "servenix.chriphost.de";
+          HostName = "servenix.chriphost.gay";
         };
         "thinknix" = {
           User = "christoph";
-          HostName = "thinknix.chriphost.de";
+          HostName = "thinknix.chriphost.gay";
         };
-        "ionos" = {
-          # Old VPS (Fuck IONOS)
-          User = "root";
-          HostName = "212.227.233.241";
-        };
+        # "ionos" = {
+        #   # Old VPS (Fuck IONOS)
+        #   User = "root";
+        #   HostName = "212.227.233.241";
+        # };
         "hetzner" = {
           # New VPS (Hetzner)
           User = "christoph";

@@ -42,7 +42,7 @@ in {
       ++ lib.optional (backupsPath != null) "${backupsPath}:/backups";
 
     environment = {
-      MANAGER_API_URL = "https://arcane.local.chriphost.de";
+      MANAGER_API_URL = "https://arcane.local.chriphost.gay";
 
       # AGENT_MODE=true would select Direct mode, which requires the
       # manager to reach :3553 on this host.

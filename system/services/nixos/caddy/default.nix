@@ -32,16 +32,42 @@ in {
     # and Caddy just loads the files, which avoids building Caddy with a
     # DNS plugin.
     (lib.mkIf (cfg.dnsProvider != null) {
-      sops.secrets."caddy-ionos-prefix" = {};
-      sops.secrets."caddy-ionos-key" = {};
+      sops.secrets =
+        {
+          ionos = {
+            "caddy-ionos-prefix" = {};
+            "caddy-ionos-key" = {};
+          };
+          inwx = {
+            "caddy-inwx-user" = {};
+            "caddy-inwx-password" = {};
+          };
+          hetzner = {
+            "caddy-hetzner-api-token" = {};
+          };
+        }
+        .${cfg.dnsProvider};
 
       sops.templates."caddy-acme.env" = {
         owner = "acme";
         group = "acme";
         mode = "0400";
-        content = ''
-          IONOS_API_KEY=${config.sops.placeholder."caddy-ionos-prefix"}.${config.sops.placeholder."caddy-ionos-key"}
-        '';
+
+        # The env var names are the ones lego expects for the provider.
+        content =
+          {
+            ionos = ''
+              IONOS_API_KEY=${config.sops.placeholder."caddy-ionos-prefix"}.${config.sops.placeholder."caddy-ionos-key"}
+            '';
+            inwx = ''
+              INWX_USERNAME=${config.sops.placeholder."caddy-inwx-user"}
+              INWX_PASSWORD=${config.sops.placeholder."caddy-inwx-password"}
+            '';
+            hetzner = ''
+              HETZNER_API_TOKEN=${config.sops.placeholder."caddy-hetzner-api-token"}
+            '';
+          }
+          .${cfg.dnsProvider};
       };
 
       security.acme = {

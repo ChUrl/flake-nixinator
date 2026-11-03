@@ -8,7 +8,7 @@
 in {
   virtualisation.oci-containers.containers = {
     statespaces = {
-      image = "gitea.vps.chriphost.de/christoph/statespaces:${statespacesVersion}";
+      image = "gitea.vps.chriphost.gay/christoph/statespaces:${statespacesVersion}";
       autoStart = true;
 
       ports = [

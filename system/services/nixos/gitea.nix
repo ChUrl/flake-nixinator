@@ -24,8 +24,8 @@
     settings = {
       server = {
         # Public identity (links, clone URLs, LFS endpoint)
-        SSH_DOMAIN = "gitea.vps.chriphost.de";
-        ROOT_URL = "https://gitea.vps.chriphost.de/";
+        SSH_DOMAIN = "gitea.vps.chriphost.gay";
+        ROOT_URL = "https://gitea.vps.chriphost.gay/";
 
         # Internal hooks must not go through the public URL
         LOCAL_ROOT_URL = "http://127.0.0.1:3000/";

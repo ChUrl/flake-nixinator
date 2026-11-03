@@ -12,7 +12,7 @@
   siloVersion = "RELEASE.2026-10-26T00-00-00Z";
   postgresVersion = "15";
 
-  domain = "local.chriphost.de";
+  domain = "local.chriphost.gay";
   webHost = "duck.${domain}";
   apiHost = "duck-api.${domain}";
   albumsHost = "duck-albums.${domain}";

@@ -38,23 +38,28 @@ in {
   '';
 
   dnsProvider = mkOption {
-    type = types.nullOr (types.enum ["ionos"]);
+    type = types.nullOr (types.enum ["ionos" "inwx" "hetzner"]);
     default = null;
     description = ''
       ACME DNS-01 provider (lego). Required for wildcard certificates, which in
-      turn are required for the `*.local.chriphost.de` names.
+      turn are required for the `*.local.chriphost.gay` names.
+
+      `hetzner` uses `caddy-hetzner-api-token` (Hetzner **Cloud API** token with
+      DNS read+write — DNS-01 creates and removes TXT records),
+      `inwx` uses `caddy-inwx-user`/`caddy-inwx-password` (INWX account),
+      `ionos` uses `caddy-ionos-prefix`/`caddy-ionos-key` (IONOS API key).
     '';
   };
 
   acmeDomain = mkOption {
     type = types.str;
-    default = "*.local.chriphost.de";
+    default = "*.local.chriphost.gay";
     description = "Domain the wildcard certificate is issued for.";
   };
 
   acmeCertName = mkOption {
     type = types.str;
-    default = "local.chriphost.de";
+    default = "local.chriphost.gay";
     description = ''
       Name of the `security.acme.certs.<name>` entry. Vhosts reference this via
       `useACMEHost`.
@@ -69,7 +74,7 @@ in {
       Recursive resolver used for lego's DNS propagation check (`host:port`).
 
       The LAN resolver (AdGuard) serves NODATA for TXT queries below
-      `*.local.chriphost.de` because those names are local rewrites there. That
+      `*.local.chriphost.gay` because those names are local rewrites there. That
       makes lego's recursive check loop until its timeout even though the
       challenge record is published on all authoritative nameservers.
     '';

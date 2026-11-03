@@ -39,23 +39,23 @@ in [
           (mkBm "LAN Smart Switch" "http://192.168.86.2/")
           (mkBm "WiFi Access Point" "http://192.168.86.3/")
           (mkBm "OPNsense" "https://192.168.86.5/")
-          (mkBm "Synology DS223j" "https://synology.local.chriphost.de/")
+          (mkBm "Synology DS223j" "https://synology.local.chriphost.gay/")
           (mkBm "PVE Direct" "https://192.168.86.4:8006/#v1:0:18:4:::::::")
           (mkBm "PVF Direct" "https://192.168.86.13:8006/#v1:0:18:4:::::::")
           "separator"
           # The VPS proxy admin UI is only reachable through the SSH tunnel
           # ("ssh vps" sets up LocalForward 51810 → 127.0.0.1:51810).
           (mkBm "VPS Proxy (tunnel)" "http://localhost:51810/")
-          (mkBm "AdGuard" "https://adguard.local.chriphost.de/")
-          (mkBm "Arcane" "https://arcane.local.chriphost.de/")
+          (mkBm "AdGuard" "https://adguard.local.chriphost.gay/")
+          (mkBm "Arcane" "https://arcane.local.chriphost.gay/")
         ];
       }
-      (mkBm "Cloud" "https://nextcloud.local.chriphost.de/apps/files/files")
-      (mkBm "Immich" "https://immich.local.chriphost.de/photos")
-      (mkBm "Jelly" "https://jellyfin.local.chriphost.de/web/#/home.html")
-      (mkBm "HASS" "https://hass.local.chriphost.de/lovelace")
-      (mkBm "Docs" "https://paperless.local.chriphost.de/documents?sort=created&reverse=1&page=1")
-      (mkBm "Gitea" "https://gitea.local.chriphost.de/christoph")
+      (mkBm "Cloud" "https://nextcloud.local.chriphost.gay/apps/files/files")
+      (mkBm "Immich" "https://immich.local.chriphost.gay/photos")
+      (mkBm "Jelly" "https://jellyfin.local.chriphost.gay/web/#/home.html")
+      (mkBm "HASS" "https://hass.local.chriphost.gay/lovelace")
+      (mkBm "Docs" "https://paperless.local.chriphost.gay/documents?sort=created&reverse=1&page=1")
+      (mkBm "Gitea" "https://gitea.local.chriphost.gay/christoph")
       # (mkBm "Chat" "http://localhost:11435/") # Local WebUI
       "separator"
 
@@ -102,9 +102,9 @@ in [
       (mkBm "Heise" "https://www.heise.de/")
       (mkBm "HN" "https://news.ycombinator.com/news")
       (mkBm "Reddit" "https://www.reddit.com/user/FightingMushroom/saved/")
-      # (mkBm "F10" "https://f10.local.chriphost.de/race/Everyone")
-      (mkBm "F12" "https://f12.local.chriphost.de/racepicks")
-      (mkBm "F12PB" "https://f12pb.local.chriphost.de/_/")
+      # (mkBm "F10" "https://f10.local.chriphost.gay/race/Everyone")
+      (mkBm "F12" "https://f12.local.chriphost.gay/racepicks")
+      (mkBm "F12PB" "https://f12pb.local.chriphost.gay/_/")
       (mkBm "ISBNDB" "https://isbndb.com/")
       (mkBm "Music" "https://bandcamp.com/chriphost")
       (mkBm "Albums" "https://www.albumoftheyear.org/user/chriphost/list/307966/2025/")

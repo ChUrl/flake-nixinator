@@ -68,10 +68,10 @@
       httpsPort = 443;
       autoHttps = true;
 
-      # *.vps.chriphost.de is a wildcard, so it has to be issued via DNS-01
-      dnsProvider = "ionos";
-      acmeDomain = "*.vps.chriphost.de";
-      acmeCertName = "vps.chriphost.de";
+      # *.vps.chriphost.gay is a wildcard, so it has to be issued via DNS-01
+      dnsProvider = "hetzner";
+      acmeDomain = "*.vps.chriphost.gay";
+      acmeCertName = "vps.chriphost.gay";
 
       openFirewall = true;
     };
@@ -143,31 +143,22 @@
     '';
   };
 
-  # Thinknix terminates TLS for *.local.chriphost.de, VPS terminates TLS
-  # for *.vps.chriphost.de
+  # Thinknix terminates TLS for *.local.chriphost.gay, VPS terminates TLS
+  # for *.vps.chriphost.gay
   services.caddy.virtualHosts = let
     upstream = "reverse_proxy http://192.168.86.26:80";
   in
     {
-      "vps.chriphost.de" = {
-        useACMEHost = "vps.chriphost.de";
+      "vps.chriphost.gay" = {
+        useACMEHost = "vps.chriphost.gay";
         extraConfig = upstream;
       };
 
-      "*.vps.chriphost.de" = {
-        useACMEHost = "vps.chriphost.de";
+      "*.vps.chriphost.gay" = {
+        useACMEHost = "vps.chriphost.gay";
         extraConfig = upstream;
       };
-    }
-    // lib.genAttrs
-    [
-      # chriphost.gay is delegated to INWX, so no DNS-01 in the IONOS account:
-      # Caddy issues these individually via HTTP-01.
-      "f11.vps.chriphost.gay"
-      "f12.vps.chriphost.gay"
-      "jellyfin.vps.chriphost.gay"
-    ]
-    (_: {extraConfig = upstream;});
+    };
 
   # Hardware limitations
   nix.settings = {

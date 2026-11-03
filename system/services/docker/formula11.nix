@@ -9,7 +9,7 @@
 in {
   virtualisation.oci-containers.containers = {
     formula11_pocketbase = {
-      image = "gitea.vps.chriphost.de/christoph/pocketbase:${pocketbaseVersion}";
+      image = "gitea.vps.chriphost.gay/christoph/pocketbase:${pocketbaseVersion}";
       autoStart = true;
 
       dependsOn = [];
@@ -30,7 +30,7 @@ in {
     };
 
     formula11 = {
-      image = "gitea.vps.chriphost.de/christoph/formula11:${f11Version}";
+      image = "gitea.vps.chriphost.gay/christoph/formula11:${f11Version}";
       autoStart = true;
 
       dependsOn = [
@@ -50,12 +50,12 @@ in {
         # PB_PORT="8000";
 
         # PB_PROTOCOL="https";
-        # PB_URL="f11pb.vps.chriphost.de";
+        # PB_URL="f11pb.vps.chriphost.gay";
 
-        PUBLIC_PBURL = "https://f11pb.vps.chriphost.de";
+        PUBLIC_PBURL = "https://f11pb.vps.chriphost.gay";
 
         # Required by SvelteKit to prevent cross-site POST errors
-        ORIGIN = "https://f11.vps.chriphost.de";
+        ORIGIN = "https://f11.vps.chriphost.gay";
       };
 
       extraOptions = [

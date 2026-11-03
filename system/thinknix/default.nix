@@ -33,9 +33,9 @@
       httpPort = 80;
       httpsPort = 443;
       autoHttps = true;
-      dnsProvider = "ionos";
+      dnsProvider = "hetzner";
 
-      # AdGuard answers NODATA for TXT below *.local.chriphost.de, so the
+      # AdGuard answers NODATA for TXT below *.local.chriphost.gay, so the
       # propagation check must not use the LAN resolver.
       acmeResolver = "8.8.8.8:53";
 
@@ -106,7 +106,7 @@
 
   services = {
     # Forward thinknix 222 to servenix 222, otherwise all .git/config paths would
-    # have to be updated to servenix.chriphost.de:222, as local.chriphost.de now
+    # have to be updated to servenix.chriphost.gay:222, as local.chriphost.gay now
     # points to thinknix (LAN/WAN entry + TLS termination lives there)
     haproxy = {
       enable = true;
@@ -134,70 +134,66 @@
       # Public names, forwarded by the VPS over WireGuard with the Host header
       # preserved. TLS terminates at the VPS, so these are plain HTTP here.
       lib.genAttrs [
-        "f10.vps.chriphost.de"
-        "f11.vps.chriphost.de"
-        "f12.vps.chriphost.de"
-        "f11pb.vps.chriphost.de"
-        "f12pb.vps.chriphost.de"
-        "gitea.vps.chriphost.de"
-        "immich.vps.chriphost.de"
-        "jellyfin.vps.chriphost.de"
-        "nextcloud.vps.chriphost.de"
-        "ntfy.vps.chriphost.de"
-        "paperless.vps.chriphost.de"
+        "f10.vps.chriphost.gay"
         "f11.vps.chriphost.gay"
         "f12.vps.chriphost.gay"
+        "f11pb.vps.chriphost.gay"
+        "f12pb.vps.chriphost.gay"
+        "gitea.vps.chriphost.gay"
+        "immich.vps.chriphost.gay"
         "jellyfin.vps.chriphost.gay"
-        "f11.chriphost.de"
+        "nextcloud.vps.chriphost.gay"
+        "ntfy.vps.chriphost.gay"
+        "paperless.vps.chriphost.gay"
       ] (h: {
         hostName = "http://${h}";
         extraConfig = "reverse_proxy http://192.168.86.25:9080";
       })
       // {
         # Local services on this host
-        "auth.local.chriphost.de" = {
-          useACMEHost = "local.chriphost.de";
+        "auth.local.chriphost.gay" = {
+          useACMEHost = "local.chriphost.gay";
           extraConfig = "reverse_proxy 127.0.0.1:9091";
         };
 
-        "adguard.local.chriphost.de" = {
-          useACMEHost = "local.chriphost.de";
+        "adguard.local.chriphost.gay" = {
+          useACMEHost = "local.chriphost.gay";
           extraConfig = "reverse_proxy 127.0.0.1:3000";
         };
 
-        "arcane.local.chriphost.de" = {
-          useACMEHost = "local.chriphost.de";
+        "arcane.local.chriphost.gay" = {
+          useACMEHost = "local.chriphost.gay";
           extraConfig = "reverse_proxy 127.0.0.1:3552";
         };
 
         # Devices that are not hosted here or on servenix
-        "hass.local.chriphost.de" = {
-          useACMEHost = "local.chriphost.de";
+        "hass.local.chriphost.gay" = {
+          useACMEHost = "local.chriphost.gay";
           extraConfig = "reverse_proxy http://192.168.86.55:8123";
         };
 
-        "switch.local.chriphost.de" = {
-          useACMEHost = "local.chriphost.de";
+        "switch.local.chriphost.gay" = {
+          useACMEHost = "local.chriphost.gay";
           extraConfig = "reverse_proxy http://192.168.86.2:80";
         };
 
-        "wifi.local.chriphost.de" = {
-          useACMEHost = "local.chriphost.de";
+        "wifi.local.chriphost.gay" = {
+          useACMEHost = "local.chriphost.gay";
           extraConfig = "reverse_proxy http://192.168.86.3:80";
         };
 
-        "synology.local.chriphost.de" = {
-          useACMEHost = "local.chriphost.de";
+        "synology.local.chriphost.gay" = {
+          useACMEHost = "local.chriphost.gay";
           extraConfig = "reverse_proxy http://192.168.86.15:5000";
         };
 
-        "amp.local.chriphost.de" = {
-          useACMEHost = "local.chriphost.de";
+        "amp.local.chriphost.gay" = {
+          useACMEHost = "local.chriphost.gay";
           extraConfig = "reverse_proxy http://192.168.86.35:8080";
         };
 
-        "truenas.local.chriphost.de" = {
-          useACMEHost = "local.chriphost.de";
+        "truenas.local.chriphost.gay" = {
+          useACMEHost = "local.chriphost.gay";
           extraConfig = ''
             reverse_proxy https://192.168.86.20:443 {
               transport http {
@@ -207,8 +203,8 @@
           '';
         };
 
-        "pve.local.chriphost.de" = {
-          useACMEHost = "local.chriphost.de";
+        "pve.local.chriphost.gay" = {
+          useACMEHost = "local.chriphost.gay";
           extraConfig = ''
             reverse_proxy https://192.168.86.4:8006 {
               transport http {
@@ -218,8 +214,8 @@
           '';
         };
 
-        "pvf.local.chriphost.de" = {
-          useACMEHost = "local.chriphost.de";
+        "pvf.local.chriphost.gay" = {
+          useACMEHost = "local.chriphost.gay";
           extraConfig = ''
             reverse_proxy https://192.168.86.13:8006 {
               transport http {
@@ -229,8 +225,8 @@
           '';
         };
 
-        "opnsense.local.chriphost.de" = {
-          useACMEHost = "local.chriphost.de";
+        "opnsense.local.chriphost.gay" = {
+          useACMEHost = "local.chriphost.gay";
           # NOTE: Pinned to HTTP/1.1 so caddy doesn't switch to QUIC,
           #       which is rejected by opnsense
           extraConfig = ''
@@ -245,12 +241,12 @@
 
         # Everything else that lives on servenix. Thinknix only terminates TLS
         # and forwards to servenix's Caddy, which does the actual routing.
-        "*.local.chriphost.de" = {
-          useACMEHost = "local.chriphost.de";
+        "*.local.chriphost.gay" = {
+          useACMEHost = "local.chriphost.gay";
           extraConfig = "reverse_proxy http://192.168.86.25:9080";
         };
 
-        "http://hass.vps.chriphost.de" = {
+        "http://hass.vps.chriphost.gay" = {
           extraConfig = "reverse_proxy http://192.168.86.55:8123";
         };
 
@@ -261,7 +257,7 @@
         # VPS:443 and this :80 forever.
         ":80" = {
           extraConfig = ''
-            @local host *.local.chriphost.de
+            @local host *.local.chriphost.gay
             redir @local https://{host}{uri} 308
 
             respond "no vhost for this host" 404

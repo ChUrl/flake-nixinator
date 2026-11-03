@@ -13,7 +13,7 @@ in {
 
   virtualisation.oci-containers.containers = {
     heidi = {
-      image = "gitea.vps.chriphost.de/christoph/discord-heidi:${heidiVersion}";
+      image = "gitea.vps.chriphost.gay/christoph/discord-heidi:${heidiVersion}";
       autoStart = true;
 
       dependsOn = [];

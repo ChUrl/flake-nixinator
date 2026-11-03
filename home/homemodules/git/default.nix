@@ -102,7 +102,7 @@ in {
         };
 
         url = {
-          "ssh://git@gitea.local.chriphost.de:222/christoph/" = {
+          "ssh://git@gitea.local.chriphost.gay:222/christoph/" = {
             insteadOf = "gitea:";
           };
           "git@github.com:" = {

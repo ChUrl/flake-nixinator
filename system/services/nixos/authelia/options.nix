@@ -9,19 +9,19 @@ in {
 
   domain = mkOption {
     type = types.str;
-    default = "chriphost.de";
+    default = "chriphost.gay";
     description = "Base domain the session cookie is valid for.";
   };
 
   authUrl = mkOption {
     type = types.str;
-    default = "https://auth.chriphost.de";
+    default = "https://auth.chriphost.gay";
     description = "URL the portal is reachable at.";
   };
 
   adminDomains = mkOption {
     type = types.listOf types.str;
-    default = ["*.admin.chriphost.de"];
+    default = ["*.admin.chriphost.gay"];
     description = ''
       Domains behind Authelia (password only).
 

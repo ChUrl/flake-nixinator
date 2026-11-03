@@ -17,7 +17,7 @@ in {
     #     NTFY_AUTH_USERS='admin:<bcrypt>:admin,christoph:<bcrypt>:user'
     #     NTFY_AUTH_TOKENS="christoph:<token>:FAIL*-Notif"
 
-    #     NTFY_BASE_URL="https://ntfy.vps.chriphost.de"
+    #     NTFY_BASE_URL="https://ntfy.vps.chriphost.gay"
     #     NTFY_BEHIND_PROXY="true"
     #     NTFY_AUTH_FILE="/var/lib/ntfy/auth.db"
     #     NTFY_AUTH_DEFAULT_ACCESS="deny-all"
@@ -51,7 +51,7 @@ in {
         PGID = "1000";
         TZ = "Europe/Berlin";
 
-        NTFY_BASE_URL = "https://ntfy.vps.chriphost.de";
+        NTFY_BASE_URL = "https://ntfy.vps.chriphost.gay";
         NTFY_BEHIND_PROXY = "true";
         NTFY_AUTH_FILE = "/var/lib/ntfy/auth.db";
         NTFY_AUTH_DEFAULT_ACCESS = "deny-all";

@@ -46,7 +46,7 @@ in {
         TZ = "Europe/Berlin";
 
         # PLEX_CLAIM = "";
-        # ADVERTISE_IP = "https://plex.vps.chriphost.de:32400";
+        # ADVERTISE_IP = "https://plex.vps.chriphost.gay:32400";
       };
 
       extraOptions = [

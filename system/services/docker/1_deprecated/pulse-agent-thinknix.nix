@@ -26,7 +26,7 @@ in {
         PGID = "1000";
         TZ = "Europe/Berlin";
 
-        PULSE_URL = "https://pulse.think.chriphost.de";
+        PULSE_URL = "https://pulse.think.chriphost.gay";
         PULSE_TOKEN = "<redacted>"; # was committed in plaintext — revoke if the service ever returns
       };
 
