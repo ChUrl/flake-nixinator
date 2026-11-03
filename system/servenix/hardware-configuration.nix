@@ -44,6 +44,12 @@
     #   options = ["defaults" "rw" "relatime" "_netdev" "bg" "hard"];
     # };
 
+    fileSystems."/media/Restic" = {
+      device = "192.168.86.15:/volume1/Restic";
+      fsType = "nfs";
+      options = ["defaults" "ro" "noatime" "_netdev" "bg" "hard"];
+    };
+
     "/media/Arcane" = {
       device = "192.168.86.15:/volume1/Arcane";
       fsType = "nfs";
