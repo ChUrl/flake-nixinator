@@ -64,7 +64,7 @@ in {
         "hetzner" = {
           # New VPS (Hetzner)
           User = "christoph";
-          HostName = "2.31.177.253";
+          HostName = "vps.chriphost.gay";
         };
         "mars" = {
           User = "smchurla";
