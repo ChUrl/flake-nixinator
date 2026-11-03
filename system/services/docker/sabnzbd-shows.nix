@@ -7,6 +7,9 @@
 }: let
   sabnzbdVersion = "5.1.3";
 in {
+  # Served by systemmodules/caddy
+  systemmodules.caddy.vhosts.sabnzbd-shows = {port = 8085;};
+
   virtualisation.oci-containers.containers = {
     sabnzbd-shows = {
       image = "linuxserver/sabnzbd:${sabnzbdVersion}";

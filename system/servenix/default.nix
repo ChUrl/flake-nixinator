@@ -176,78 +176,16 @@
   hardware.nvidia.nvidiaPersistenced = true;
 
   services = {
-    caddy.virtualHosts = let
-      # Reverse proxy vhosts for the containers hosted on servenix.
-      # Thinknix terminates TLS and is the only client of this host: it forwards
-      # requests over plain HTTP on the LAN, so no certificates are needed here.
-      #
-      # The upstreams are loopbacks, not container names, as caddy runs on
-      # the host and cannot use docker's embedded DNS, so every container
-      # publishes its port on 127.0.0.1 only.
-      vhost = name: port: aliases: {
-        "${name}.local.chriphost.gay" = {
-          # NOTE: The explicit http:// scheme is required. Without it Caddy
-          #       treats the address as an HTTPS site and serves TLS on
-          #       httpsPort instead of plain HTTP on httpPort.
-          hostName = "http://${name}.local.chriphost.gay";
-
-          # The VPS forwards the public names to thinknix, which proxies them
-          # here with the Host header preserved. Without these aliases Caddy
-          # answers an empty 200 for them.
-          serverAliases = map (alias: "http://${alias}") aliases;
-
-          extraConfig = "reverse_proxy 127.0.0.1:${toString port}";
-        };
+    # Every service declares its own vhost (systemmodules.caddy.vhosts).
+    # Thinknix terminates TLS and is the only client of this host: it forwards
+    # requests over plain HTTP on the LAN, so no certificates are needed here.
+    caddy.virtualHosts = {
+      # Catch-all: an unknown Host header gets a clear 404 instead of the
+      # empty 200 Caddy returns otherwise, which looked like a blank page.
+      ":9080" = {
+        extraConfig = ''respond "no vhost for this host" 404'';
       };
-
-      # Vhost without public aliases
-      localVhost = name: port: vhost name port [];
-    in
-      lib.mergeAttrsList [
-        (vhost "nextcloud" 8080 ["nextcloud.vps.chriphost.gay"])
-        (vhost "immich" 2283 ["immich.vps.chriphost.gay"])
-        (vhost "paperless" 8000 ["paperless.vps.chriphost.gay"])
-        (vhost "jellyfin" 8096 ["jellyfin.vps.chriphost.gay"])
-        (vhost "gitea" 3000 ["gitea.vps.chriphost.gay"])
-        (vhost "ntfy" 8042 ["ntfy.vps.chriphost.gay"])
-
-        # *arr stack
-        (localVhost "sonarr" 8989)
-        (localVhost "radarr" 7878)
-        (localVhost "prowlarr" 9696)
-        (localVhost "bazarr" 6767)
-        (localVhost "sabnzbd-movies" 8084)
-        (localVhost "sabnzbd-shows" 8085)
-
-        # Media / documents
-        (localVhost "fileflows" 5000)
-        (localVhost "kiwix" 8081)
-        (localVhost "pdf" 8082)
-        (localVhost "mailpit" 8025)
-        (localVhost "tmm" 4000)
-        (localVhost "budget" 5006)
-
-        # Formula / pocketbase
-        (vhost "f10" 55555 ["f10.vps.chriphost.gay"])
-        (vhost "f11" 5173 ["f11.vps.chriphost.gay"])
-        (vhost "f11pb" 8090 ["f11pb.vps.chriphost.gay"])
-        (vhost "f12" 5174 ["f12.vps.chriphost.gay"])
-        (vhost "f12pb" 8091 ["f12pb.vps.chriphost.gay"])
-
-        # ente
-        (localVhost "duck" 3010)
-        (localVhost "duck-albums" 3011)
-        (localVhost "duck-api" 3012)
-        (localVhost "duck-s3" 3013)
-
-        # Catch-all: an unknown Host header gets a clear 404 instead of the
-        # empty 200 Caddy returns otherwise, which looked like a blank page.
-        {
-          ":9080" = {
-            extraConfig = ''respond "no vhost for this host" 404'';
-          };
-        }
-      ];
+    };
 
     # Configure keymap in X11
     xserver = {

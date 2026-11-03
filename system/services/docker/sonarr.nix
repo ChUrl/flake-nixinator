@@ -7,6 +7,9 @@
 }: let
   sonarrVersion = "4.0.20";
 in {
+  # Served by systemmodules/caddy
+  systemmodules.caddy.vhosts.sonarr = {port = 8989;};
+
   virtualisation.oci-containers.containers = {
     sonarr = {
       image = "linuxserver/sonarr:${sonarrVersion}";

@@ -70,6 +70,12 @@
   # reachable for LAN clients cloning over SSH
   systemmodules.network.allowedTCPPorts = [222];
 
+  # Served by systemmodules/caddy
+  systemmodules.caddy.vhosts.gitea = {
+    port = 3000;
+    aliases = ["gitea.vps.chriphost.gay"];
+  };
+
   networking.firewall.extraInputRules = ''
     iifname "br-*" tcp dport 3000 accept
   '';

@@ -7,6 +7,9 @@
 }: let
   radarrVersion = "6.4.4";
 in {
+  # Served by systemmodules/caddy
+  systemmodules.caddy.vhosts.radarr = {port = 7878;};
+
   virtualisation.oci-containers.containers = {
     radarr = {
       image = "linuxserver/radarr:${radarrVersion}";

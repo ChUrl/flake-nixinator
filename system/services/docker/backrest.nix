@@ -59,6 +59,9 @@
   # Seed the config once so UI/login changes survive restarts.
   backrestConfigFile = pkgs.writeText "backrest-config.json" backrestConfig;
 in {
+  # Served by systemmodules/caddy
+  systemmodules.caddy.vhosts.restic = {port = 9898;};
+
   # Repo password, also used by systemmodules/restic. Declared here as well so
   # this service does not depend on restic being enabled on the host.
   sops.secrets."restic-repo-key" = {};

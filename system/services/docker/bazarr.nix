@@ -7,6 +7,9 @@
 }: let
   bazarrVersion = "1.6.2";
 in {
+  # Served by systemmodules/caddy
+  systemmodules.caddy.vhosts.bazarr = {port = 6767;};
+
   virtualisation.oci-containers.containers = {
     bazarr = {
       image = "linuxserver/bazarr:${bazarrVersion}";

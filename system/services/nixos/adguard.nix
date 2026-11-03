@@ -7,6 +7,9 @@
   systemmodules.network.allowedTCPPorts = [53];
   systemmodules.network.allowedUDPPorts = [53];
 
+  # Served by systemmodules/caddy
+  systemmodules.caddy.vhosts.adguard = {port = 3000;};
+
   # Static owner (instead of the module's DynamicUser) so the state directory
   # migrated from the container has a predictable owner.
   users.groups.adguard.gid = 3002;

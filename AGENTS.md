@@ -159,6 +159,25 @@ Changing a persisted path is data-loss sensitive: verify with
 `nix eval .#nixosConfigurations.nixinator.config.environment.persistence --apply 'p: p."/persist".directories'`
 (and `.users.christoph.directories`) that the set is unchanged.
 
+### Reverse proxy (caddy)
+
+`systemmodules.caddy` reverses-proxies the services: thinknix terminates TLS,
+servenix is a plain HTTP origin that thinknix forwards to. Services declare their
+own vhost instead of the host listing them:
+
+| Consumer | Declaration |
+|----------|-------------|
+| Service module | `systemmodules.caddy.vhosts.<name> = { port = 8080; aliases = ["<name>.vps.chriphost.gay"]; };` — served as `<name>.local.chriphost.gay`, with `http://` on the origin host and the wildcard certificate on the TLS host |
+| Host-only names (VPS forwarding list, devices, `:80`/`:9080` catch-alls) | `services.caddy.virtualHosts` in `system/<hostname>/default.nix` |
+
+Public (VPS) names are still listed on thinknix: the services they front are only
+imported on servenix, which cannot be seen from there.
+
+Backups follow the same rule: services add their state directories to
+`systemmodules.restic.servicePaths` (nixinator sets `includeServicePaths = false`
+because it backs up `/persist` as a whole), and their ports to
+`systemmodules.network.allowed{TCP,UDP}Ports`.
+
 ### Overlays and Custom Derivations
 
 - `overlays/default.nix` — package overrides (e.g., patched JetBrains CLion version)

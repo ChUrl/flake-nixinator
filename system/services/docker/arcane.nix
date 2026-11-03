@@ -7,6 +7,9 @@
 }: let
   arcaneVersion = "v2.17.0";
 in {
+  # Served by systemmodules/caddy
+  systemmodules.caddy.vhosts.arcane = {port = 3552;};
+
   sops.secrets."arcane-encryption-key" = {};
 
   # If we need to pass secrets to containers we can't use plain env variables.

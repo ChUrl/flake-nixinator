@@ -2,6 +2,9 @@
   # Backed up by systemmodules/restic
   systemmodules.restic.servicePaths = ["/var/lib/actual"];
 
+  # Served by systemmodules/caddy
+  systemmodules.caddy.vhosts.budget = {port = 5006;};
+
   users.groups.actual.gid = 3001;
   users.users.actual = {
     isSystemUser = true;

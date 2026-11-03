@@ -7,6 +7,9 @@
 }: let
   version = "26.10";
 in {
+  # Served by systemmodules/caddy
+  systemmodules.caddy.vhosts.fileflows = {port = 5000;};
+
   virtualisation.oci-containers.containers = {
     fileflows = {
       image = "revenz/fileflows:${version}";

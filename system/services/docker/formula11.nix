@@ -7,6 +7,19 @@
   pocketbaseVersion = "0.33.0";
   f11Version = "latest";
 in {
+  # Served by systemmodules/caddy
+  systemmodules.caddy.vhosts = {
+    f11 = {
+      port = 5173;
+      aliases = ["f11.vps.chriphost.gay"];
+    };
+
+    f11pb = {
+      port = 8090;
+      aliases = ["f11pb.vps.chriphost.gay"];
+    };
+  };
+
   virtualisation.oci-containers.containers = {
     formula11_pocketbase = {
       image = "gitea.vps.chriphost.gay/christoph/pocketbase:${pocketbaseVersion}";

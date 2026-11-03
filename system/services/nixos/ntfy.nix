@@ -2,6 +2,12 @@
   # Backed up by systemmodules/restic (DynamicUser state lives in /var/lib/private)
   systemmodules.restic.servicePaths = ["/var/lib/private/ntfy-sh"];
 
+  # Served by systemmodules/caddy
+  systemmodules.caddy.vhosts.ntfy = {
+    port = 8042;
+    aliases = ["ntfy.vps.chriphost.gay"];
+  };
+
   sops.secrets."ntfy-auth-users" = {};
   sops.secrets."ntfy-auth-tokens" = {};
 

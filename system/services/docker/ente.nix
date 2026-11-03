@@ -18,6 +18,14 @@
   albumsHost = "duck-albums.${domain}";
   s3Host = "duck-s3.${domain}";
 in {
+  # Served by systemmodules/caddy
+  systemmodules.caddy.vhosts = {
+    duck = {port = 3010;};
+    duck-albums = {port = 3011;};
+    duck-api = {port = 3012;};
+    duck-s3 = {port = 3013;};
+  };
+
   # NOTE: Init the secrets with
   # openssl rand -base64 32                    # ente-key-encryption (32 bytes, std b64)
   # openssl rand -base64 64                    # ente-key-hash (64 bytes, std b64)

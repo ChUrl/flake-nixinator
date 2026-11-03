@@ -1,4 +1,7 @@
 {
+  # Served by systemmodules/caddy
+  systemmodules.caddy.vhosts.kiwix = {port = 8081;};
+
   # The 123G ZIM library stays on the SSD. kiwix-serve runs with
   # ProtectHome = true and a DynamicUser, so the directory is bind-mounted
   # read-only outside of /home.

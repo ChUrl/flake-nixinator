@@ -7,6 +7,9 @@
 }: let
   version = "5.3.4";
 in {
+  # Served by systemmodules/caddy
+  systemmodules.caddy.vhosts.tmm = {port = 4000;};
+
   virtualisation.oci-containers.containers = {
     tinymediamanager = {
       image = "tinymediamanager/tinymediamanager:${version}";

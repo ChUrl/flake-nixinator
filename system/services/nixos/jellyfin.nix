@@ -6,6 +6,12 @@
   # Only the config dir is worth backing up, data/cache/log are rebuildable
   systemmodules.restic.servicePaths = [config.services.jellyfin.configDir];
 
+  # Served by systemmodules/caddy
+  systemmodules.caddy.vhosts.jellyfin = {
+    port = 8096;
+    aliases = ["jellyfin.vps.chriphost.gay"];
+  };
+
   # The old LinuxServer container used a single /config directory. The NixOS
   # module requires dataDir ≠ configDir, so the data is split during migration:
   #   <volume>/data, cache, log  → /var/lib/jellyfin/{data,cache,log}

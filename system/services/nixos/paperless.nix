@@ -4,6 +4,12 @@
   # Backed up by systemmodules/restic
   systemmodules.restic.servicePaths = [config.services.paperless.dataDir];
 
+  # Served by systemmodules/caddy
+  systemmodules.caddy.vhosts.paperless = {
+    port = config.services.paperless.port;
+    aliases = ["paperless.vps.chriphost.gay"];
+  };
+
   services.paperless = {
     enable = true;
 

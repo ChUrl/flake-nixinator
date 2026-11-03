@@ -2,6 +2,12 @@
   # Backed up by systemmodules/restic
   systemmodules.restic.servicePaths = [config.services.immich.mediaLocation];
 
+  # Served by systemmodules/caddy
+  systemmodules.caddy.vhosts.immich = {
+    port = config.services.immich.port;
+    aliases = ["immich.vps.chriphost.gay"];
+  };
+
   services.immich = {
     enable = true;
 

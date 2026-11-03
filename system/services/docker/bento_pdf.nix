@@ -7,6 +7,9 @@
 }: let
   bentoVersion = "2.8.10";
 in {
+  # Served by systemmodules/caddy
+  systemmodules.caddy.vhosts.pdf = {port = 8082;};
+
   virtualisation.oci-containers.containers = {
     bento = {
       image = "ghcr.io/alam00000/bentopdf-simple:${bentoVersion}";

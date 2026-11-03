@@ -7,6 +7,9 @@
 }: let
   prowlarrVersion = "2.6.5";
 in {
+  # Served by systemmodules/caddy
+  systemmodules.caddy.vhosts.prowlarr = {port = 9696;};
+
   virtualisation.oci-containers.containers = {
     prowlarr = {
       image = "linuxserver/prowlarr:${prowlarrVersion}";

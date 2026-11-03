@@ -19,6 +19,9 @@ in {
     # Backed up by systemmodules/restic
     systemmodules.restic.servicePaths = ["/var/lib/authelia-main"];
 
+    # Served by systemmodules/caddy
+    systemmodules.caddy.vhosts.auth = {port = 9091;};
+
     sops.secrets."authelia-jwt-secret" = {
       owner = instance.user;
       group = instance.group;

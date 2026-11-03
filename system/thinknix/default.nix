@@ -138,26 +138,8 @@
         extraConfig = "reverse_proxy http://192.168.86.25:9080";
       })
       // {
-        # Local services on this host
-        "auth.local.chriphost.gay" = {
-          useACMEHost = "local.chriphost.gay";
-          extraConfig = "reverse_proxy 127.0.0.1:9091";
-        };
-
-        "adguard.local.chriphost.gay" = {
-          useACMEHost = "local.chriphost.gay";
-          extraConfig = "reverse_proxy 127.0.0.1:3000";
-        };
-
-        "arcane.local.chriphost.gay" = {
-          useACMEHost = "local.chriphost.gay";
-          extraConfig = "reverse_proxy 127.0.0.1:3552";
-        };
-
-        "restic.local.chriphost.gay" = {
-          useACMEHost = "local.chriphost.gay";
-          extraConfig = "reverse_proxy 127.0.0.1:9898";
-        };
+        # The services on this host (authelia, adguard, arcane, backrest)
+        # declare their own vhosts, see systemmodules.caddy.vhosts.
 
         # Devices that are not hosted here or on servenix
         "hass.local.chriphost.gay" = {

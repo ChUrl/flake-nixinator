@@ -9,6 +9,12 @@ in {
   # Backed up by systemmodules/restic
   systemmodules.restic.servicePaths = [config.services.nextcloud.datadir];
 
+  # Served by systemmodules/caddy
+  systemmodules.caddy.vhosts.nextcloud = {
+    port = 8080;
+    aliases = ["nextcloud.vps.chriphost.gay"];
+  };
+
   services.nextcloud = {
     enable = true;
     package = pkgs.nextcloud35;

@@ -6,6 +6,12 @@
 }: let
   f10Version = "latest";
 in {
+  # Served by systemmodules/caddy
+  systemmodules.caddy.vhosts.f10 = {
+    port = 55555;
+    aliases = ["f10.vps.chriphost.gay"];
+  };
+
   virtualisation.oci-containers.containers = {
     formula10 = {
       image = "gitea.vps.chriphost.gay/christoph/formula10:${f10Version}";
