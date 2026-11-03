@@ -29,7 +29,11 @@
 
       auth-file = "/var/lib/ntfy-sh/user.db";
       auth-default-access = "deny-all";
-      auth-access = ["christoph:*:read-write"];
+      auth-access = [
+        "christoph:*:read-write"
+        # Alertmanager publishes to the monitoring topic only.
+        "grafana:alerts:write-only"
+      ];
       enable-login = true;
       require-login = true;
 
