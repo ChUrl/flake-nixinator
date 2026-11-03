@@ -1,4 +1,5 @@
 {
+  config,
   lib,
   pkgs,
   ...
@@ -19,12 +20,50 @@
       yazi.enable = lib.mkForce false;
     };
 
-    home.packages = with pkgs; [
-      git
-      htop
-      tmux
-      neovim
-      yazi
-    ];
+    home = {
+      packages = with pkgs; [
+        atool
+        dig
+        duf
+        file
+        gdu
+        git
+        htop
+        neovim
+        ouch
+        p7zip
+        sd
+        systemctl-tui
+        tmux
+        unrar
+        unzip
+        wget
+        yazi
+      ];
+    };
+
+    programs = {
+      eza = {
+        enable = true;
+        enableFishIntegration = config.homemodules.fish.enable;
+      };
+
+      fd.enable = true;
+
+      fzf = {
+        enable = true;
+        enableFishIntegration = config.homemodules.fish.enable;
+      };
+
+      navi = {
+        enable = true;
+        enableFishIntegration = config.homemodules.fish.enable;
+      };
+
+      zoxide = {
+        enable = true;
+        enableFishIntegration = config.homemodules.fish.enable;
+      };
+    };
   };
 }
