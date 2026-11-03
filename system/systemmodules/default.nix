@@ -6,6 +6,7 @@
     ./fonts
     ./impermanence
     ./mime
+    ./monitoring-agent
     ./network
     ./nix-cache
     ./polkit
