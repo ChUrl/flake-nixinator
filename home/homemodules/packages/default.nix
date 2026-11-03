@@ -68,6 +68,7 @@ in {
           httpie # Cool http client
           bandwhich # Network utilization
           snitch # Better netstat
+          nmap
           # speedtest-cli
         ]
 
