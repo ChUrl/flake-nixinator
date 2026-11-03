@@ -115,7 +115,7 @@
     hytale-launcher.url = "github:JPyke3/hytale-launcher-nix";
     hytale-launcher.inputs.nixpkgs.follows = "nixpkgs";
 
-    masssprings.url = "git+https://gitea.local.chriphost.de/christoph/cpp-masssprings";
+    masssprings.url = "git+https://gitea.vps.chriphost.gay/christoph/cpp-masssprings";
     masssprings.inputs.nixpkgs.follows = "nixpkgs";
   };
 
