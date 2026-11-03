@@ -32,6 +32,9 @@ in {
     # and Caddy just loads the files, which avoids building Caddy with a
     # DNS plugin.
     (lib.mkIf (cfg.dnsProvider != null) {
+      # Backed up by systemmodules/restic (the ACME directory is hardcoded)
+      systemmodules.restic.servicePaths = ["/var/lib/acme"];
+
       sops.secrets =
         {
           ionos = {
@@ -46,7 +49,9 @@ in {
             "caddy-hetzner-api-token" = {};
           };
         }
-        .${cfg.dnsProvider};
+        .${
+          cfg.dnsProvider
+        };
 
       sops.templates."caddy-acme.env" = {
         owner = "acme";
@@ -67,7 +72,9 @@ in {
               HETZNER_API_TOKEN=${config.sops.placeholder."caddy-hetzner-api-token"}
             '';
           }
-          .${cfg.dnsProvider};
+          .${
+            cfg.dnsProvider
+          };
       };
 
       security.acme = {

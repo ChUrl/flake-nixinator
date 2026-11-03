@@ -1,4 +1,7 @@
 {
+  # Backed up by systemmodules/restic (DynamicUser state lives in /var/lib/private)
+  systemmodules.restic.servicePaths = ["/var/lib/private/mailpit"];
+
   # SMTP is published for the containers that send mail (ente), but the firewall
   # only allows it on the docker bridges, never on the LAN.
   networking.firewall.extraInputRules = ''

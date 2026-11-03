@@ -174,6 +174,10 @@
 
       paths = ["/persist"];
 
+      # /persist already contains the state of every service (it's the
+      # impermanence bind mount source), so don't add the service paths again.
+      includeServicePaths = false;
+
       extraBackupArgs = [
         "--one-file-system" # Nothing outside /persist
         "--exclude-caches" # Excludes marked cache directories

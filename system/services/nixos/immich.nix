@@ -1,4 +1,7 @@
-{...}: {
+{config, ...}: {
+  # Backed up by systemmodules/restic
+  systemmodules.restic.servicePaths = [config.services.immich.mediaLocation];
+
   services.immich = {
     enable = true;
 

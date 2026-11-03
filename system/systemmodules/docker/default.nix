@@ -26,6 +26,9 @@ in {
       ];
     };
 
+    # Backed up by systemmodules/restic
+    systemmodules.restic.servicePaths = ["/var/lib/docker/volumes"];
+
     environment.variables = lib.mkMerge [
       (lib.mkIf ((!docker.podman) && docker.docker.buildkit) {
         DOCKER_BUILDKIT = 1;

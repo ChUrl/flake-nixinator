@@ -57,12 +57,6 @@
     restic = {
       enable = true;
 
-      paths = [
-        "/var/lib/acme"
-        "/var/lib/authelia-main"
-        "/var/lib/docker/volumes"
-        "/var/lib/AdGuardHome"
-      ];
 
       extraBackupArgs = [
         "--exclude-caches"

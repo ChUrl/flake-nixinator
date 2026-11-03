@@ -1,6 +1,9 @@
 {config, ...}: {
   sops.secrets."paperless-admin-password" = {};
 
+  # Backed up by systemmodules/restic
+  systemmodules.restic.servicePaths = [config.services.paperless.dataDir];
+
   services.paperless = {
     enable = true;
 

@@ -1,10 +1,14 @@
 {
+  config,
   lib,
   pkgs,
   ...
 }: let
   hostName = "nextcloud.local.chriphost.gay";
 in {
+  # Backed up by systemmodules/restic
+  systemmodules.restic.servicePaths = [config.services.nextcloud.datadir];
+
   services.nextcloud = {
     enable = true;
     package = pkgs.nextcloud35;

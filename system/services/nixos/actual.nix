@@ -1,4 +1,7 @@
 {
+  # Backed up by systemmodules/restic
+  systemmodules.restic.servicePaths = ["/var/lib/actual"];
+
   users.groups.actual.gid = 3001;
   users.users.actual = {
     isSystemUser = true;

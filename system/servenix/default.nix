@@ -96,24 +96,10 @@
     restic = {
       enable = true;
 
+      # The services declare their own state directories
+      # (systemmodules.restic.servicePaths). Only what restic produces itself is
+      # listed here.
       paths = [
-        "/var/lib/docker/volumes"
-
-        "/var/lib/immich"
-        "/var/lib/gitea"
-        "/var/lib/paperless"
-        "/var/lib/nextcloud"
-        "/var/lib/actual"
-
-        # DynamicUser services: /var/lib/<name> is a symlink into
-        # /var/lib/private and restic stores symlinks as-is instead of
-        # following them. The databases are dumped in prepareCommand.
-        "/var/lib/private/ntfy-sh"
-        "/var/lib/private/mailpit"
-
-        # Jellyfin data/ is rebuildable metadata, the media itself is on NFS.
-        "/var/lib/jellyfin/config"
-
         # Live databases are dumped in prepareCommand instead
         "/var/backup"
       ];
@@ -132,6 +118,7 @@
       prepareCommand = ''
         ${pkgs.coreutils}/bin/mkdir -p /var/backup
 
+        # Left in case we need to backup databases from docker in the future
         dump() {
           name="$1"
           container="$2"

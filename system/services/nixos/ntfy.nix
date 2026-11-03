@@ -1,4 +1,7 @@
 {config, ...}: {
+  # Backed up by systemmodules/restic (DynamicUser state lives in /var/lib/private)
+  systemmodules.restic.servicePaths = ["/var/lib/private/ntfy-sh"];
+
   sops.secrets."ntfy-auth-users" = {};
   sops.secrets."ntfy-auth-tokens" = {};
 

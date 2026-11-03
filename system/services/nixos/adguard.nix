@@ -1,4 +1,7 @@
 {lib, ...}: {
+  # Backed up by systemmodules/restic
+  systemmodules.restic.servicePaths = ["/var/lib/AdGuardHome"];
+
   # Static owner (instead of the module's DynamicUser) so the state directory
   # migrated from the container has a predictable owner.
   users.groups.adguard.gid = 3002;

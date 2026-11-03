@@ -1,4 +1,11 @@
-{lib, ...}: {
+{
+  config,
+  lib,
+  ...
+}: {
+  # Backed up by systemmodules/restic
+  systemmodules.restic.servicePaths = [config.services.gitea.stateDir];
+
   # uid matches the container's USER_UID, so the copied /data volume keeps its
   # ownership and needs no chown.
   users.users.gitea.uid = 500;

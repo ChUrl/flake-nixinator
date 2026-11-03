@@ -16,6 +16,9 @@ in {
   options.systemmodules.authelia = import ./options.nix {inherit lib mylib;};
 
   config = lib.mkIf cfg.enable {
+    # Backed up by systemmodules/restic
+    systemmodules.restic.servicePaths = ["/var/lib/authelia-main"];
+
     sops.secrets."authelia-jwt-secret" = {
       owner = instance.user;
       group = instance.group;
