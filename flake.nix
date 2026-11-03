@@ -357,6 +357,23 @@
             ++ commonModules;
         };
 
+      vps = let
+        hostPkgs = mkHostPkgs "vps";
+        hostMylib = mkMylib hostPkgs;
+      in
+        hostMylib.nixos.mkNixosConfigWithHomeManagerModule {
+          inherit system publicKeys;
+          mylib = hostMylib;
+          hostname = "vps";
+          username = "christoph";
+          headless = true;
+          extraModules =
+            [
+              inputs.disko.nixosModules.disko
+            ]
+            ++ commonModules;
+        };
+
       # These configurations don't include HM.
       # When using those, HM has to be installed separately in homeConfigurations.
       # nixinator = mylib.nixos.mkNixosSystemConfig {
