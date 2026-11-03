@@ -287,23 +287,36 @@
       # in $HOME are symlinks pointing into it: symlinks inside the sync tree
       # are ignored by the client, so the real directories have to be on the
       # .nextcloud side.
-      activation.nextcloudSyncLinks = lib.hm.dag.entryAfter ["writeBoundary"] ''
-        for name in Documents NixFlake Notes Pictures Projects Public; do
-          link="$HOME/$name"
+      #
+      # This has to run before linkGeneration, which is where home.file creates
+      # e.g. ~/Notes/Obsidian/Chriphost/.obsidian/snippets/*.css. Without the
+      # ordering the two entries race and the symlink is skipped whenever those
+      # files got created first, because the directory is non-empty by then.
+      activation.nextcloudSyncLinks = lib.hm.dag.entryBetween ["linkGeneration"] ["writeBoundary"] ''
+        if [ ! -d "$HOME/.nextcloud" ]; then
+          echo "nextcloud: $HOME/.nextcloud is missing, not creating the sync links" >&2
+        else
+          for name in Documents NixFlake Notes Pictures Projects Public; do
+            link="$HOME/$name"
+            target="$HOME/.nextcloud/$name"
 
-          if [ -L "$link" ]; then
-            continue
-          fi
+            if [ -L "$link" ]; then
+              continue
+            fi
 
-          # rmdir refuses non-empty directories, so anything that still holds
-          # data is left alone instead of being replaced.
-          if [ -e "$link" ] && ! ${pkgs.coreutils}/bin/rmdir "$link" 2>/dev/null; then
-            echo "nextcloud: not linking $link (non-empty), move its contents to $HOME/.nextcloud/$name first" >&2
-            continue
-          fi
+            # rmdir refuses non-empty directories, so anything that still
+            # holds data is left alone instead of being replaced.
+            if [ -e "$link" ] && ! ${pkgs.coreutils}/bin/rmdir "$link" 2>/dev/null; then
+              echo "nextcloud: not linking $link (non-empty), move its contents to $target first" >&2
+              continue
+            fi
 
-          run ${pkgs.coreutils}/bin/ln -s "$HOME/.nextcloud/$name" "$link"
-        done
+            # A dangling link would break activation as soon as home.file
+            # tries to create something below it.
+            run ${pkgs.coreutils}/bin/mkdir -p "$target"
+            run ${pkgs.coreutils}/bin/ln -s "$target" "$link"
+          done
+        fi
       '';
 
       # Do not change.
