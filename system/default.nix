@@ -64,6 +64,8 @@ with mylib.networking; {
       defaultVideoPlayer = "mpv.desktop";
     };
 
+    monitoring-agent.enable = true;
+
     network = {
       inherit hostname;
       enable = true;
