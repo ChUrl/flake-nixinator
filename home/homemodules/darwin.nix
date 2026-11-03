@@ -13,6 +13,7 @@
     ./neovim
     ./packages
     ./paths
+    ./sops
     ./ssh
     ./terminal
     ./tmux

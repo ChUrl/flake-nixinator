@@ -7,7 +7,10 @@
 }: let
   TEMPLATEVersion = "";
 in {
-  # If we need to pass secrets to containers we can't use plain env variables.
+  # Secrets can't be passed as plain env variables. Declare the secret here so
+  # it's installed (root-owned is enough, the file is read by root).
+  sops.secrets."SECRET" = {};
+
   sops.templates."TEMPLATE_secrets.env".content = ''
     SECRET=${config.sops.placeholder.SECRET}
   '';

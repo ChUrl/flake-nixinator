@@ -10,6 +10,9 @@ in {
   options.systemmodules.docker = import ./options.nix {inherit lib mylib;};
 
   config = lib.mkIf docker.enable {
+    # Registry login used by all oci-containers (see mylib.containers.mkDockerLogin)
+    sops.secrets."docker-password" = {};
+
     environment.variables = lib.mkMerge [
       (lib.mkIf ((!docker.podman) && docker.docker.buildkit) {
         DOCKER_BUILDKIT = 1;

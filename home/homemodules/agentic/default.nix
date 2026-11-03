@@ -23,6 +23,12 @@ in {
   options.homemodules.agentic = import ./options.nix {inherit lib mylib;};
 
   config = lib.mkIf agentic.enable {
+    # API keys used by the MCP servers below
+    homemodules.sops.secrets = [
+      "context7-api-key"
+      "obsidian-rest-api-key"
+    ];
+
     # Shared MCP servers. Every agent tool (opencode, zed, ...) picks these up
     # through its "enableMcpIntegration" option.
     programs.mcp = {

@@ -7,6 +7,8 @@
 }: let
   arcaneVersion = "v2.17.0";
 in {
+  sops.secrets."arcane-encryption-key" = {};
+
   # If we need to pass secrets to containers we can't use plain env variables.
   sops.templates."arcane_secrets.env".content = ''
     ENCRYPTION_KEY=${config.sops.placeholder.arcane-encryption-key}

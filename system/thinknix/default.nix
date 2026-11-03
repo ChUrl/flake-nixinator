@@ -99,10 +99,6 @@
         53 # DNS
       ];
     };
-
-    sops-nix.secrets.${username} = [
-      "arcane-encryption-key"
-    ];
   };
 
   services = {

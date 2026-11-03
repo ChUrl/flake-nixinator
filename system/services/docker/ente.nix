@@ -26,6 +26,15 @@ in {
   # openssl rand -hex 8                        # ente-s3-user
   # openssl rand -hex 24                       # ente-s3-password
 
+  sops.secrets = {
+    "ente-s3-user" = {};
+    "ente-s3-password" = {};
+    "ente-db-password" = {};
+    "ente-key-encryption" = {};
+    "ente-key-hash" = {};
+    "ente-jwt-secret" = {};
+  };
+
   # minio reads this
   sops.templates."ente-env".content = ''
     MINIO_ROOT_USER=${config.sops.placeholder."ente-s3-user"}

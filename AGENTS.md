@@ -131,6 +131,15 @@ Containers are enabled per host in `system/<hostname>/default.nix`; most run on
 
 Managed via **sops-nix**. Age keys stored in `flake.nix` under `publicKeys.christoph`. Encrypted `.yaml`/`.json` files live alongside the module that uses them, referenced as `sops.secrets.<name>`.
 
+Secrets are declared **where they are used**, not in a per-host list:
+
+| Consumer | Declaration |
+|----------|-------------|
+| System module / service (template, env file, `.path`) | `sops.secrets."<name>" = {};` in that module (root-owned, which is enough since activation, systemd and the docker daemon read them as root) |
+| Needs a different owner (e.g. `authelia`) | add `owner`/`group`/`mode` to the declaration |
+| Home-manager module (the user session reads the file) | `homemodules.sops.secrets = ["<name>"];` — HM modules can't set system options, so `system/systemmodules/sops-nix` folds these in and chowns them to the user |
+| Needed before users exist (e.g. `user-password`) | `systemmodules.sops-nix.bootSecrets = ["<name>"];` (sets `neededForUsers`, no owner) |
+
 ### Overlays and Custom Derivations
 
 - `overlays/default.nix` — package overrides (e.g., patched JetBrains CLion version)

@@ -18,6 +18,9 @@
 }: let
   arcaneVersion = "v2.17.0";
 in {
+  # Secret holding this host's AGENT_TOKEN
+  sops.secrets.${tokenSecret} = {};
+
   # Secrets can't be passed as plain environment variables.
   sops.templates."arcane-agent_secrets.env".content = ''
     AGENT_TOKEN=${config.sops.placeholder.${tokenSecret}}

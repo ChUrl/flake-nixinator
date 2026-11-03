@@ -160,13 +160,6 @@
       ];
     };
 
-    sops-nix.secrets.${username} = [
-      "makemkv-app-key"
-      "context7-api-key"
-      "obsidian-rest-api-key"
-      "arcane-agent-nixinator-key"
-    ];
-
     restic = {
       enable = true;
 
@@ -212,6 +205,8 @@
   # NOTE: Sops needs the keys before impermanence kicks in
   #       so we have to link to /persist directly...
   sops.age.keyFile = "/persist/home/${username}/.secrets/age/age.key";
+
+  sops.secrets."makemkv-app-key" = {};
 
   sops.templates."makemkv-settings.conf" = {
     owner = config.users.users.${username}.name;

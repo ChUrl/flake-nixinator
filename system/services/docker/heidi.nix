@@ -6,6 +6,8 @@
 }: let
   heidiVersion = "latest";
 in {
+  sops.secrets."heidi-discord-token" = {};
+
   # If we need to pass secrets to containers we can't use plain env variables.
   sops.templates."heidi_secrets.env".content = ''
     DISCORD_TOKEN=${config.sops.placeholder.heidi-discord-token}

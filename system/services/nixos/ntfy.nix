@@ -1,4 +1,7 @@
 {config, ...}: {
+  sops.secrets."ntfy-auth-users" = {};
+  sops.secrets."ntfy-auth-tokens" = {};
+
   # Users and tokens are re-synchronised from sops on every start, so the old
   # auth database does not have to be carried over.
   sops.templates."ntfy_secrets.env".content = ''

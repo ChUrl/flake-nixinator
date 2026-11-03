@@ -84,17 +84,13 @@ with mylib.networking; {
       allowedUsers = [username];
     };
 
-    sops-nix.bootSecrets.${username} = [
+    sops-nix.bootSecrets = [
       "user-password"
     ];
-
-    sops-nix.secrets.${username} = [
-      "ssh-private-key"
-      "nix-github-token"
-      "docker-password"
-      "jellyfin-password"
-    ];
   };
+
+  # Used by the nix.conf template below
+  sops.secrets."nix-github-token" = {};
 
   # Write the nix user config file here so we have secrets access
   sops.templates."nix.conf" = {

@@ -33,6 +33,9 @@ in
     };
 
     homemodules = {
+      # Needed for ~/.ssh/id_ed25519 below (installed by the system sops module)
+      sops.secrets = ["ssh-private-key"];
+
       beets.enable = !headless;
       cava.enable = !headless;
 

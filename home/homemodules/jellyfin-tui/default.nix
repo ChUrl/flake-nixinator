@@ -17,6 +17,9 @@ in {
   options.homemodules.jellyfin-tui = import ./options.nix {inherit lib mylib;};
 
   config = lib.mkIf jellyfin-tui.enable {
+    # The server password from the system sops file
+    homemodules.sops.secrets = ["jellyfin-password"];
+
     home = {
       packages = [
         pkgs.jellyfin-tui

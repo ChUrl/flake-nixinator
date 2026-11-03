@@ -31,6 +31,7 @@
     ./qutebrowser
     ./rmpc
     ./rofi
+    ./sops
     ./waybar
     ./ssh
     ./terminal
