@@ -15,7 +15,6 @@
   };
 
   endpoints = [
-    (mkEndpoint "vps" "https://vps.chriphost.gay")
     (mkEndpoint "gitea" "https://gitea.vps.chriphost.gay")
     (mkEndpoint "immich" "https://immich.vps.chriphost.gay")
     (mkEndpoint "jellyfin" "https://jellyfin.vps.chriphost.gay")
@@ -25,8 +24,8 @@
     (mkEndpoint "f10" "https://f10.vps.chriphost.gay")
     (mkEndpoint "f11" "https://f11.vps.chriphost.gay")
     (mkEndpoint "f12" "https://f12.vps.chriphost.gay")
-    (mkEndpoint "f11pb" "https://f11pb.vps.chriphost.gay")
-    (mkEndpoint "f12pb" "https://f12pb.vps.chriphost.gay")
+    (mkEndpoint "f11pb" "https://f11pb.vps.chriphost.gay/api/health")
+    (mkEndpoint "f12pb" "https://f12pb.vps.chriphost.gay/api/health")
   ];
 in {
   sops.secrets."gatus-discord-webhook" = {};
