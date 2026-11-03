@@ -155,7 +155,14 @@
   in {
     "vps.chriphost.gay" = {
       useACMEHost = "vps.chriphost.gay";
-      extraConfig = upstream;
+      extraConfig = "redir https://status.vps.chriphost.gay{uri} 302";
+    };
+
+    # Browsers often autocomplete the apex to www.; the wildcard would
+    # otherwise forward it to thinknix, which has no vhost for it.
+    "www.vps.chriphost.gay" = {
+      useACMEHost = "vps.chriphost.gay";
+      extraConfig = "redir https://status.vps.chriphost.gay{uri} 302";
     };
 
     "*.vps.chriphost.gay" = {
