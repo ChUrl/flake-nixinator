@@ -11,9 +11,19 @@ in {
     image = "ghcr.io/google/cadvisor:${cadvisorVersion}";
     autoStart = true;
 
-    # Scraped by Prometheus on the same host. Docker binds this to the
-    # loopback, so it is not reachable from the LAN.
-    ports = ["127.0.0.1:8083:8080"];
+    # Host networking on purpose: cAdvisor only needs to be scraped from
+    # 127.0.0.1, and this avoids Docker's DNAT rules. A NixOS firewall reload
+    # can flush the DOCKER chain, after which new port mappings fail with
+    # "iptables: No chain/target/match by that name".
+    ports = [];
+
+    cmd = [
+      "--listen_ip=127.0.0.1"
+      "--port=8083"
+      "--docker_only=true"
+      "--housekeeping_interval=30s"
+      "--logtostderr"
+    ];
 
     volumes = [
       "/:/rootfs:ro"
@@ -28,6 +38,7 @@ in {
     };
 
     extraOptions = [
+      "--net=host"
       "--privileged"
       "--device=/dev/kmsg"
     ];
