@@ -192,15 +192,15 @@
       createWrapper = true;
     };
 
-    # Port 5432 is forwarded by the VPS (NPM stream),
-    # see the "nixinator" host in home/homemodules/ssh.
+    # When connecting from outside, do a proxyjump to this port
     ssh.port = 5432;
 
     # Every external SSH client arrives as 10.10.10.1 through WireGuard,
     # so fail2ban and OpenSSH's PerSourcePenalties cannot distinguish a bot
     # from a legitimate login and ban the proxy itself.
-    # For that reason, SSH is limited on the server instead of here
-    ssh.trustedSources = ["10.10.10.1/32"];
+    # Because the VPS already runs fail2ban, bots should not reach nixinator,
+    # So keep this disabled for now.
+    # ssh.trustedSources = ["10.10.10.1/32"];
   };
 
   # Dedicated key for the Nix remote builder used by servenix/thinknix.
