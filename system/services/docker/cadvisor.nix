@@ -8,7 +8,7 @@
   cadvisorVersion = "v0.60.6";
 in {
   virtualisation.oci-containers.containers.cadvisor = {
-    image = "gcr.io/cadvisor/cadvisor:${cadvisorVersion}";
+    image = "ghcr.io/google/cadvisor:${cadvisorVersion}";
     autoStart = true;
 
     # Scraped by Prometheus on the same host. Docker binds this to the

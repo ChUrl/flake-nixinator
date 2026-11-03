@@ -29,6 +29,7 @@
     })
     ../services/docker/bazarr.nix
     ../services/docker/bento_pdf.nix
+    ../services/docker/cadvisor.nix
     ../services/nixos/ente-db.nix
     ../services/docker/ente.nix
     ../services/docker/fileflows.nix
@@ -91,6 +92,53 @@
 
   systemmodules = {
     remote-build.enable = true;
+
+    monitoring-agent.listenAddress = "127.0.0.1";
+
+    monitoring = {
+      enable = true;
+
+      # node_exporter targets. PVE/PVF need `prometheus-node-exporter`
+      # installed on the Debian host; nixinator is a desktop and is excluded
+      # from the "host down" alert.
+      nodes = {
+        servenix = "127.0.0.1:9100";
+        thinknix = "192.168.86.26:9100";
+        nixinator = "192.168.86.50:9100";
+        vps = "10.10.10.1:9100";
+        pve = "192.168.86.4:9100";
+        pvf = "192.168.86.13:9100";
+      };
+
+      # Polled through prometheus-pve-exporter (API token, not SSH). Both
+      # nodes belong to the same cluster ("clusterio"), so one token created
+      # with `pveum` on either node authenticates against both.
+      proxmoxTargets = ["192.168.86.4" "192.168.86.13"];
+
+      # Keep the growing TSDB off the root filesystem (the `ssd` mount in
+      # hardware-configuration.nix). Bind-mounted over the service's state
+      # directory, and owned by the `prometheus` user.
+      prometheusDataDir = "/home/christoph/ssd/prometheus";
+
+      # End-to-end checks. The public names exercise VPS -> WireGuard ->
+      # thinknix -> servenix; Grafana itself is checked locally because
+      # servenix uses public DNS and cannot resolve *.local.chriphost.gay.
+      probes = {
+        vps = {url = "https://vps.chriphost.gay";};
+        gitea = {url = "https://gitea.vps.chriphost.gay";};
+        immich = {url = "https://immich.vps.chriphost.gay";};
+        jellyfin = {url = "https://jellyfin.vps.chriphost.gay";};
+        nextcloud = {url = "https://nextcloud.vps.chriphost.gay";};
+        paperless = {url = "https://paperless.vps.chriphost.gay";};
+        ntfy = {url = "https://ntfy.vps.chriphost.gay";};
+        f10 = {url = "https://f10.vps.chriphost.gay";};
+        f11 = {url = "https://f11.vps.chriphost.gay";};
+        f12 = {url = "https://f12.vps.chriphost.gay";};
+        f11pb = {url = "https://f11pb.vps.chriphost.gay";};
+        f12pb = {url = "https://f12pb.vps.chriphost.gay";};
+        grafana = {url = "http://127.0.0.1:3030/api/health";};
+      };
+    };
 
     caddy = {
       enable = true;
