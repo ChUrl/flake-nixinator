@@ -396,6 +396,11 @@ in {
         port = cfg.grafanaPort;
       };
 
+      # LAN-only Prometheus UI/API.
+      systemmodules.caddy.vhosts.prometheus = {
+        port = cfg.prometheusPort;
+      };
+
       # ------------------------------------------------ impermanence/restic
       systemmodules.impermanence.directories = [
         "/var/lib/${prometheusStateDir}"
