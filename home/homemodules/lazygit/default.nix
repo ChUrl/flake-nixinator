@@ -11,6 +11,7 @@ in {
   options.homemodules.lazygit = import ./options.nix {inherit lib mylib;};
 
   config = lib.mkIf lazygit.enable {
+    homemodules.impermanence.directories = [".local/state/lazygit"];
     programs.lazygit = {
       enable = true;
       settings = {

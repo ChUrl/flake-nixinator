@@ -9,6 +9,9 @@ in {
   options.systemmodules.mime = import ./options.nix {inherit lib mylib;};
 
   config = lib.mkIf mime.enable {
+    # xdg mime database of the user
+    systemmodules.impermanence.userDirectories = [".local/share/mime"];
+
     xdg = {
       # https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
       # Find .desktop files: fd ".*\.desktop" / | grep --color=auto -E neovide

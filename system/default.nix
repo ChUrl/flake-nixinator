@@ -346,6 +346,18 @@ with mylib.networking; {
     xwayland.enable = !headless;
   };
 
+  # State of the services enabled below
+  systemmodules.impermanence = {
+    directories =
+      lib.optionals config.services.flatpak.enable ["/var/lib/flatpak"]
+      ++ lib.optionals config.services.chrony.enable ["/var/lib/chrony"];
+
+    userDirectories = [
+      ".local/share/keyrings" # gnome-keyring
+      ".local/state/wireplumber" # pipewire
+    ];
+  };
+
   # List services that you want to enable:
   services = {
     # Enable sound with pipewire.

@@ -140,6 +140,25 @@ Secrets are declared **where they are used**, not in a per-host list:
 | Home-manager module (the user session reads the file) | `homemodules.sops.secrets = ["<name>"];` — HM modules can't set system options, so `system/systemmodules/sops-nix` folds these in and chowns them to the user |
 | Needed before users exist (e.g. `user-password`) | `systemmodules.sops-nix.bootSecrets = ["<name>"];` (sets `neededForUsers`, no owner) |
 
+### Impermanence
+
+`systemmodules.impermanence` binds `/persist` into the ephemeral root/home
+subvolumes. Only nixinator enables it, but every module declares its own paths
+so nothing is lost silently:
+
+| Consumer | Declaration |
+|----------|-------------|
+| System module / service (`/var/lib/...`, `/etc/...`) | `systemmodules.impermanence.directories = ["/var/lib/docker"];` — bare strings are `0755 root:root`, or use `{ directory = "..."; mode = "u=rwx,g=,o="; }` |
+| System module owning something in `$HOME` (e.g. `mime`) | `systemmodules.impermanence.userDirectories = [".local/share/mime"];` |
+| Home-manager module | `homemodules.impermanence.directories = [".config/zed"];` — relative to `$HOME`, `0755` and owned by the user |
+| App installed by `homemodules/packages` | add the state dirs to its `homemodules.impermanence.directories` list there |
+| App installed only on one host (flatpak, Steam, `home/<host>` packages) | `homemodules.impermanence.directories` in `home/<user>/<host>/default.nix` |
+| Needed by impermanence/nix/systemd itself | stays in `system/systemmodules/impermanence/default.nix` |
+
+Changing a persisted path is data-loss sensitive: verify with
+`nix eval .#nixosConfigurations.nixinator.config.environment.persistence --apply 'p: p."/persist".directories'`
+(and `.users.christoph.directories`) that the set is unchanged.
+
 ### Overlays and Custom Derivations
 
 - `overlays/default.nix` — package overrides (e.g., patched JetBrains CLion version)

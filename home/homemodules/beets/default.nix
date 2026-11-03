@@ -11,6 +11,7 @@ in {
   options.homemodules.beets = import ./options.nix {inherit lib mylib;};
 
   config = lib.mkIf beets.enable {
+    homemodules.impermanence.directories = [".config/beets"];
     programs.beets = {
       enable = true;
       mpdIntegration = {

@@ -12,6 +12,12 @@ in {
   options.homemodules.fish = import ./options.nix {inherit lib mylib;};
 
   config = lib.mkIf fish.enable {
+    # Generated completions survive a rebuild and the shell history location
+    homemodules.impermanence.directories = [
+      ".cache/fish/generated_completions"
+      ".config/fish/completions"
+      ".local/share/fish"
+    ];
     # https://github.com/catppuccin/fish/blob/main/themes/Catppuccin%20Mocha.theme
     home.file.".config/fish/themes/system-theme.theme".text = ''
       fish_color_normal ${color.hex.text}

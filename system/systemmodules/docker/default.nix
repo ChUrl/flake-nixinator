@@ -13,6 +13,19 @@ in {
     # Registry login used by all oci-containers (see mylib.containers.mkDockerLogin)
     sops.secrets."docker-password" = {};
 
+    # Container images/volumes and the docker CLI state in the user's home
+    systemmodules.impermanence = {
+      directories = [
+        "/var/lib/containers"
+        "/var/lib/docker"
+      ];
+
+      userDirectories = [
+        ".docker"
+        ".local/share/docker"
+      ];
+    };
+
     environment.variables = lib.mkMerge [
       (lib.mkIf ((!docker.podman) && docker.docker.buildkit) {
         DOCKER_BUILDKIT = 1;

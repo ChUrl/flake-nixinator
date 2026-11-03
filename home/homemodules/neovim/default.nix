@@ -15,6 +15,12 @@ in {
   options.homemodules.neovim = import ./options.nix {inherit lib mylib;};
 
   config = lib.mkIf neovim.enable {
+    homemodules.impermanence.directories = [
+      ".cache/nvim"
+      ".local/share/nvim"
+      ".local/state/nvim"
+      ".vim/undo"
+    ];
     home = {
       file.".config/neovide/config.toml".source = ./neovide_config.ini;
       file.".config/vale/.vale.ini".source = ./vale_config.ini;

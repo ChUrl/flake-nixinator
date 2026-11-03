@@ -19,6 +19,7 @@
     ./helix
     ./hyprland
     ./hyprpanel
+    ./impermanence
     ./jellyfin-tui
     ./kitty
     ./lazygit

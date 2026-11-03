@@ -14,6 +14,25 @@
     homemodules = {
       agentic.enable = true;
 
+      # State of the desktop apps installed in home.packages below
+      impermanence.directories = [
+        ".MakeMKV"
+        ".config/RimStack"
+        ".config/blender" # Installed through Steam
+        ".config/jellyfin-mpv-shim"
+        ".config/obs-studio"
+        ".local/share/Hytale"
+        ".local/share/Rack2" # Predecessor of RimStack
+        ".local/share/RimStack"
+        ".local/share/hytale-launcher"
+        ".local/share/io.github.CyberTimon.RapidRAW"
+        ".local/share/jellyfin-desktop"
+        ".local/share/net.lrclib.lrcget"
+        ".local/share/xemu-lgb"
+        ".local/share/LRCGET"
+        ".tiddl"
+      ];
+
       btop.cuda = true;
 
       # This has been relocated here from the default config,

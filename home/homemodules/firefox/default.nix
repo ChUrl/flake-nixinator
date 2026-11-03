@@ -11,6 +11,10 @@ in {
   options.homemodules.firefox = import ./options.nix {inherit lib mylib;};
 
   config = lib.mkIf firefox.enable {
+    homemodules.impermanence.directories = [
+      ".mozilla/firefox" # TODO: Remove this someday
+      ".mozilla/native-messaging-hosts"
+    ];
     textfox = {
       enable = firefox.textfox;
       # useLegacyExtensions = false;

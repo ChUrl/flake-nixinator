@@ -23,6 +23,19 @@ in {
   options.homemodules.agentic = import ./options.nix {inherit lib mylib;};
 
   config = lib.mkIf agentic.enable {
+    # opencode/claude/codex write their config, cache and state here
+    homemodules.impermanence.directories = [
+      ".cache/opencode"
+      ".cache/uv" # uvx MCP servers
+      ".config/ai.opencode.desktop"
+      ".config/opencode"
+      ".local/share/opencode"
+      ".local/state/opencode"
+      ".npm" # npx MCP servers
+      ".opencode"
+      ".opencode-mem"
+    ];
+
     # API keys used by the MCP servers below
     homemodules.sops.secrets = [
       "context7-api-key"

@@ -11,6 +11,10 @@ in {
   options.homemodules.zed = import ./options.nix {inherit lib mylib;};
 
   config = lib.mkIf zed.enable {
+    homemodules.impermanence.directories = [
+      ".config/zed"
+      ".local/share/zed"
+    ];
     programs.zed-editor = {
       enable = true;
       package = pkgs.zed-editor;

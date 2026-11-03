@@ -10,6 +10,11 @@ in {
   options.systemmodules.ssh = import ./options.nix {inherit lib mylib;};
 
   config = lib.mkIf ssh.enable {
+    # OpenSSH host keys and fail2ban's ban database
+    systemmodules.impermanence.directories =
+      ["/etc/ssh"]
+      ++ lib.optionals ssh.fail2ban ["/var/lib/fail2ban"];
+
     services.openssh = {
       enable = true;
       ports = [ssh.port];

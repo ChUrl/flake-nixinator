@@ -9,6 +9,7 @@ in {
   options.homemodules.zathura = import ./options.nix {inherit lib mylib;};
 
   config = lib.mkIf zathura.enable {
+    homemodules.impermanence.directories = [".local/share/zathura"];
     programs.zathura = {
       enable = true;
 

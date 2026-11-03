@@ -13,6 +13,31 @@ in {
   options.homemodules.packages = import ./options.nix {inherit lib mylib;};
 
   config = lib.mkIf packages.enable {
+    # State of the applications installed below
+    homemodules.impermanence.directories = [
+      ".cache/keepassxc"
+      ".cache/nix"
+      ".cache/nix-index"
+      ".cache/nix-search-tv"
+      ".config/LM Studio"
+      ".config/Nextcloud"
+      ".config/Signal"
+      ".config/Vector 35" # binaryninja-free
+      ".config/Zeal"
+      ".config/feishin"
+      ".config/keepassxc"
+      ".config/obsidian"
+      ".config/vlc"
+      ".lmstudio"
+      ".local/share/Anki2"
+      ".local/share/Nextcloud"
+      ".local/share/direnv"
+      ".local/share/org.localsend.localsend_app"
+      ".local/share/zoxide"
+      ".nix-package-search"
+      ".tableplus"
+    ];
+
     # TODO: Add extra packages option and use that from host-specific configs
     home.packages = with pkgs;
       lib.mkMerge [

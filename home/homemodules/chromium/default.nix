@@ -10,6 +10,7 @@ in {
   options.homemodules.chromium = import ./options.nix {inherit lib mylib;};
 
   config = lib.mkIf chromium.enable {
+    homemodules.impermanence.directories = [".config/chromium"];
     home.packages = with pkgs;
       builtins.concatLists [
         (lib.optionals chromium.google [

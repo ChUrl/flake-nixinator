@@ -14,6 +14,10 @@ in {
   options.homemodules.vscode = import ./options.nix {inherit lib mylib;};
 
   config = mkIf cfg.enable {
+    homemodules.impermanence.directories = [
+      ".config/Code"
+      ".vscode"
+    ];
     programs.vscode = {
       enable = true;
       package = pkgs.vscode;

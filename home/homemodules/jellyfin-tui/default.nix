@@ -20,6 +20,8 @@ in {
     # The server password from the system sops file
     homemodules.sops.secrets = ["jellyfin-password"];
 
+    homemodules.impermanence.directories = [".local/share/jellyfin-tui"];
+
     home = {
       packages = [
         pkgs.jellyfin-tui

@@ -12,6 +12,12 @@ in {
   options.homemodules.niri = import ./options.nix {inherit lib mylib;};
 
   config = lib.mkIf niri.enable rec {
+    # State of waypaper and the elephant backend of walker (both configured
+    # below)
+    homemodules.impermanence.directories = [
+      ".cache/elephant"
+      ".local/state/waypaper"
+    ];
     assertions = [
       {
         assertion = nixosConfig.programs.niri.enable;

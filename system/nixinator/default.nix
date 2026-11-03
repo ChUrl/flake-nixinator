@@ -38,6 +38,15 @@
 
     impermanence.enable = true;
 
+    # State of btrfs (autoScrub below) and libvirt
+    impermanence.directories = [
+      "/var/lib/btrfs"
+      "/var/lib/libvirt"
+    ];
+
+    # Ghidra's user settings (programs.ghidra below)
+    impermanence.userDirectories = [".config/ghidra"];
+
     # Binary cache for servenix and thinknix
     nix-cache.enable = true;
 

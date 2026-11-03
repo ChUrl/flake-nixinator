@@ -13,6 +13,12 @@ in {
   options.systemmodules.network = import ./options.nix {inherit lib mylib;};
 
   config = mkIf cfg.enable {
+    # NetworkManager keeps its connection profiles and state here
+    systemmodules.impermanence.directories = lib.optionals cfg.useNetworkManager [
+      "/etc/NetworkManager"
+      "/var/lib/NetworkManager"
+    ];
+
     services.resolved = {
       enable = true;
 

@@ -36,6 +36,16 @@ in
       # Needed for ~/.ssh/id_ed25519 below (installed by the system sops module)
       sops.secrets = ["ssh-private-key"];
 
+      # Flatpak apps (services.flatpak below), the gc roots nix-flatpak stores
+      # in the home directory and the other user state this file configures
+      impermanence.directories = [
+        ".keychain" # programs.keychain
+        ".local/share/flatpak"
+        ".local/state/home-manager/gc-roots"
+        ".var/app"
+        ".zotero" # Flatpak org.zotero.Zotero
+      ];
+
       beets.enable = !headless;
       cava.enable = !headless;
 

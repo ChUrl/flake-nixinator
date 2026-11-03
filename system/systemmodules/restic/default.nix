@@ -17,6 +17,14 @@ in {
     sops.secrets."restic-repo-key" = {};
     sops.secrets."restic-ssh-key" = {};
 
+    # restic's local cache for this host's backup
+    systemmodules.impermanence.directories = [
+      {
+        directory = "/var/cache/restic-backups-${hostname}";
+        mode = "u=rwx,g=,o=";
+      }
+    ];
+
     programs.ssh = {
       extraConfig = ''
         Match host ${synology} localuser root

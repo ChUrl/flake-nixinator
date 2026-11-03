@@ -11,6 +11,7 @@ in {
   options.homemodules.qutebrowser = import ./options.nix {inherit lib mylib;};
 
   config = lib.mkIf qutebrowser.enable {
+    homemodules.impermanence.directories = [".local/share/qutebrowser"];
     programs.qutebrowser = {
       enable = true;
       loadAutoconfig = true; # Load settings set from GUI

@@ -53,6 +53,12 @@ in {
         # WARN: Make sure to persist this if using impermanence!
         pkiBundle = "/var/lib/sbctl";
       };
+
+      systemmodules.impermanence.directories = [
+        "/etc/secureboot"
+        "/var/lib/auto-cryptenroll" # autoEnrollKeys
+        "/var/lib/sbctl" # pkiBundle
+      ];
     })
   ]);
 }
