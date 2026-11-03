@@ -53,7 +53,8 @@
 
       # 22 is opened by the ssh module, 80/443 by the caddy module,
       # 222 is the HAProxy gitea stream, 51820/udp is WireGuard.
-      # 5432 is not listed here, because it is accepted in extraInputRules below
+      # nixinator is no longer streamed, it is reached through this host's
+      # sshd with ProxyJump now, so fail2ban sees the real client addresses.
       allowedTCPPorts = lib.mkForce [222];
       allowedUDPPorts = lib.mkForce [51820];
     };
@@ -107,17 +108,6 @@
     internalInterfaces = ["wg0"];
   };
 
-  # The public 5432 stream is an SSH proxy to nixinator, so every external
-  # client arrives as 10.10.10.1 -> per-IP banning has to happen here, where
-  # the source addresses are still visible
-  networking.firewall.extraInputRules = ''
-    # Drop before accepting: extraInputRules are appended at the end of the
-    # input-allow chain, so the accept has to live here as well.
-    iifname "ens6" tcp dport 5432 ct state new \
-      meter ssh_stream { ip saddr limit rate over 12/minute } drop
-    iifname "ens6" tcp dport 5432 accept
-  '';
-
   services.haproxy = {
     enable = true;
 
@@ -140,14 +130,6 @@
 
       backend gitea_ssh
         server servenix 192.168.86.25:222 check
-
-      # nixinator SSH
-      frontend fe_nixinator_ssh
-        bind :5432
-        default_backend nixinator_ssh
-
-      backend nixinator_ssh
-        server nixinator 192.168.86.50:5432 check
     '';
   };
 
