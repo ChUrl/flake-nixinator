@@ -6,8 +6,7 @@
 }: {
   imports = [
     ./disks.nix
-
-    # TODO: ../services/nixos/gatus.nix
+    ../services/nixos/gatus.nix
   ];
 
   # 1 vCPU, 1 GB RAM, 10 GB disk, so we keep a minimal config
