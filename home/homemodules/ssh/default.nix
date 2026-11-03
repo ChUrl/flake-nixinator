@@ -56,9 +56,15 @@ in {
           User = "christoph";
           HostName = "thinknix.chriphost.de";
         };
+        "ionos" = {
+          # Old VPS (Fuck IONOS)
+          User = "root";
+          HostName = "212.227.233.241";
+        };
         "vps" = {
-          User = "christoph";
-          HostName = "vps.chriphost.de";
+          # New VPS (Hetzner)
+          User = "root";
+          HostName = "2.31.177.253";
         };
         "mars" = {
           User = "smchurla";
