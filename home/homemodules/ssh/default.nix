@@ -35,6 +35,14 @@ in {
           User = "christoph";
           HostName = "192.168.86.5";
         };
+        "pve" = {
+          User = "root";
+          HostName = "192.168.86.4";
+        };
+        "pvf" = {
+          User = "root";
+          HostName = "192.168.86.13";
+        };
         # "synology" = {
         #   # TODO: How do I disable synology password login? How do I login with SSH key?
         # };
