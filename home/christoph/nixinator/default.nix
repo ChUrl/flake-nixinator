@@ -283,6 +283,29 @@
         })
       ];
 
+      # Nextcloud syncs a single real directory (~/.nextcloud). The directories
+      # in $HOME are symlinks pointing into it: symlinks inside the sync tree
+      # are ignored by the client, so the real directories have to be on the
+      # .nextcloud side.
+      activation.nextcloudSyncLinks = lib.hm.dag.entryAfter ["writeBoundary"] ''
+        for name in Documents NixFlake Notes Pictures Projects Public; do
+          link="$HOME/$name"
+
+          if [ -L "$link" ]; then
+            continue
+          fi
+
+          # rmdir refuses non-empty directories, so anything that still holds
+          # data is left alone instead of being replaced.
+          if [ -e "$link" ] && ! ${pkgs.coreutils}/bin/rmdir "$link" 2>/dev/null; then
+            echo "nextcloud: not linking $link (non-empty), move its contents to $HOME/.nextcloud/$name first" >&2
+            continue
+          fi
+
+          run ${pkgs.coreutils}/bin/ln -s "$HOME/.nextcloud/$name" "$link"
+        done
+      '';
+
       # Do not change.
       # This marks the version when NixOS was installed for backwards-compatibility.
       stateVersion = "22.05";
