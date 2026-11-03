@@ -7,6 +7,21 @@
   ...
 }: let
   inherit (config.systemmodules) sops-nix;
+
+  user = config.users.users.${username};
+
+  # Secrets needed by the user session are declared in the respective
+  # home-manager module: HM modules can't set system options themselves,
+  # so the system sops module folds them in here.
+  hmSecrets = config.home-manager.users.${username}.homemodules.sops.secrets or [];
+
+  userSecrets = lib.unique (sops-nix.secrets ++ hmSecrets);
+  allSecrets = lib.unique (userSecrets ++ sops-nix.bootSecrets);
+
+  group =
+    if pkgs.stdenv.hostPlatform.isDarwin
+    then "staff" # Apparently there's no way to get the primary group?
+    else user.group;
 in {
   options.systemmodules.sops-nix = import ./options.nix {inherit lib mylib;};
 
@@ -26,45 +41,25 @@ in {
       defaultSopsFile = ./secrets.yaml;
 
       age = {
-        keyFile = lib.mkDefault "${config.users.users.${username}.home}/.secrets/age/age.key";
+        keyFile = lib.mkDefault "${user.home}/.secrets/age/age.key";
         generateKey = false;
         sshKeyPaths = [];
       };
 
-      secrets = let
-        mkSecret = name: {
-          ${name} = lib.mkMerge [
-            (lib.optionalAttrs pkgs.stdenv.hostPlatform.isLinux {
-              owner = config.users.users.${username}.name;
-              group = config.users.users.${username}.group;
-            })
-            (lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin {
-              owner = config.users.users.${username}.name;
-              group = "staff"; # Apparently there's no way to get the primary group?
-            })
-          ];
-        };
-
-        mkBootSecret = name: {
-          ${name} = {
+      secrets = lib.genAttrs allSecrets (name:
+        lib.mkMerge [
+          (lib.mkIf (lib.elem name userSecrets) {
+            # mkDefault so modules that need their own owner (e.g. authelia)
+            # can still override it.
+            owner = lib.mkDefault user.name;
+            group = lib.mkDefault group;
+          })
+          (lib.mkIf (lib.elem name sops-nix.bootSecrets) {
             # Make these secrets available before creating users.
             # This means we can't set the owner or group.
             neededForUsers = true;
-          };
-        };
-      in
-        lib.mkMerge [
-          (
-            if (builtins.hasAttr "${username}" sops-nix.secrets)
-            then lib.mergeAttrsList (builtins.map mkSecret sops-nix.secrets.${username})
-            else {}
-          )
-          (
-            if (builtins.hasAttr "${username}" sops-nix.bootSecrets)
-            then lib.mergeAttrsList (builtins.map mkBootSecret sops-nix.bootSecrets.${username})
-            else {}
-          )
-        ];
+          })
+        ]);
     };
   };
 }
