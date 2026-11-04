@@ -147,6 +147,19 @@
     '';
   };
 
+  services.prometheus.exporters.wireguard = {
+    enable = true;
+    listenAddress = "10.10.10.1";
+    port = 9586;
+    interfaces = ["wg0"];
+  };
+
+  services.prometheus.exporters.fail2ban = {
+    enable = true;
+    listenAddress = "10.10.10.1";
+    port = 9191;
+  };
+
   services.haproxy = {
     enable = true;
 
@@ -200,12 +213,21 @@
       useACMEHost = "vps.chriphost.gay";
       extraConfig = "reverse_proxy 127.0.0.1:8080";
     };
+
+    # Caddy's own metrics, scraped by Prometheus over WireGuard.
+    "http://10.10.10.1:9180" = {
+      extraConfig = "metrics";
+    };
   };
+
+  networking.firewall.extraInputRules = ''
+    iifname "wg0" ip saddr { 192.168.86.25, 10.10.10.0/24 } tcp dport { 9180, 9586, 9191 } accept
+  '';
 
   # Hardware limitations
   nix.settings = {
-    max-jobs = 1;
-    cores = 1;
+    max-jobs = 2;
+    cores = 2;
   };
 
   zramSwap.enable = true;
