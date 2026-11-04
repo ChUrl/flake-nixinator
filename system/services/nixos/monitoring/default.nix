@@ -110,7 +110,7 @@
           })
           (mkAlert {
             alert = "ExporterDown";
-            expr = ''up{job=~"pve|blackbox.*|vps-wireguard|vps-fail2ban|caddy-.*|smokeping|nixinator-smart|pve-smart|pvf-smart|snmp-.*|hass"} == 0'';
+            expr = ''up{job=~"pve|blackbox.*|vps-wireguard|vps-fail2ban|caddy-.*|smokeping|nixinator-smart|snmp-.*|hass"} == 0'';
             duration = "10m";
             summary = "Exporter {{ $labels.job }} is down";
           })
@@ -128,9 +128,9 @@
           })
           (mkAlert {
             alert = "FilesystemFullPrediction";
-            expr = ''predict_linear(node_filesystem_avail_bytes{${fsSelector}}[6h], 86400) < 0'';
-            duration = "1h";
-            summary = "{{ $labels.instance }}: {{ $labels.mountpoint }} will fill up within 24h";
+            expr = ''predict_linear(node_filesystem_avail_bytes{${fsSelector}}[24h], 7 * 24 * 3600) < 0 and node_filesystem_avail_bytes{${fsSelector}} / node_filesystem_size_bytes{${fsSelector}} < 0.25'';
+            duration = "6h";
+            summary = "{{ $labels.instance }}: {{ $labels.mountpoint }} will fill up within 7 days and has less than 25% free";
           })
           (mkAlert {
             alert = "MemoryLow";
@@ -153,10 +153,10 @@
           })
           (mkAlert {
             alert = "ProxmoxDown";
-            expr = ''pve_up == 0'';
+            expr = ''pve_up{id=~"node/.*|cluster/.*"} == 0'';
             duration = "3m";
             severity = "critical";
-            summary = "Proxmox VE {{ $labels.instance }} is not reachable";
+            summary = "Proxmox VE {{ $labels.id }} is not reachable";
           })
           (mkAlert {
             alert = "ProbeFailed";
@@ -233,10 +233,10 @@
           })
           (mkAlert {
             alert = "PVEBackupStale";
-            expr = ''time() - pve_backup_last_timestamp_seconds > 26 * 3600'';
-            duration = "30m";
+            expr = ''time() - pve_backup_last_timestamp_seconds > 10 * 24 * 3600'';
+            duration = "1h";
             severity = "critical";
-            summary = "PVE backup on {{ $labels.node }} is older than 26h";
+            summary = "PVE backup on {{ $labels.node }} is older than 10 days";
           })
           (mkAlert {
             alert = "WireGuardHandshakeStale";
@@ -288,6 +288,25 @@
             summary = "SMART temperature high on {{ $labels.instance }} {{ $labels.device }}";
           })
           (mkAlert {
+            alert = "PVEDiskHealth";
+            expr = ''pve_disk_health == 0'';
+            duration = "10m";
+            severity = "critical";
+            summary = "PVE disk {{ $labels.disk }} on {{ $labels.node }} reports FAILED";
+          })
+          (mkAlert {
+            alert = "PVEDiskWearout";
+            expr = ''pve_disk_wearout > 90'';
+            duration = "1h";
+            summary = "PVE disk {{ $labels.disk }} on {{ $labels.node }} is above 90% wearout";
+          })
+          (mkAlert {
+            alert = "PVEDiskTemperature";
+            expr = ''pve_disk_temperature_celsius > 55'';
+            duration = "15m";
+            summary = "PVE disk {{ $labels.disk }} on {{ $labels.node }} is above 55°C";
+          })
+          (mkAlert {
             alert = "HassDown";
             expr = ''up{job="hass"} == 0'';
             duration = "5m";
@@ -313,8 +332,8 @@
           })
           (mkAlert {
             alert = "SmokepingPacketLoss";
-            expr = ''(sum by (host) (smokeping_requests_total) - sum by (host) (smokeping_response_duration_seconds_count)) / sum by (host) (smokeping_requests_total) > 0.05'';
-            duration = "10m";
+            expr = ''(sum by (host) (rate(smokeping_requests_total[10m])) - sum by (host) (rate(smokeping_response_duration_seconds_count[10m]))) / sum by (host) (rate(smokeping_requests_total[10m])) > 0.05'';
+            duration = "15m";
             summary = "Packet loss to {{ $labels.host }} is above 5%";
           })
         ];
@@ -464,14 +483,6 @@
       {
         job_name = "nixinator-smart";
         static_configs = [{targets = ["192.168.86.50:9633"];}];
-      }
-      {
-        job_name = "pve-smart";
-        static_configs = [{targets = ["192.168.86.4:9633"];}];
-      }
-      {
-        job_name = "pvf-smart";
-        static_configs = [{targets = ["192.168.86.13:9633"];}];
       }
     ]
     ++ lib.optional (cfg.hassTarget != null) {
@@ -804,6 +815,78 @@ in {
         wantedBy = ["timers.target"];
         timerConfig = {
           OnBootSec = "10m";
+          OnUnitActiveSec = "1h";
+          Persistent = true;
+        };
+      };
+
+      # PVE has no smartctl_exporter package; the API's disks/list and
+      # disks/smart endpoints give health, wearout and SMART text without
+      # installing anything on the Proxmox hosts.
+      systemd.services.pve-disk-metrics = {
+        description = "Export PVE disk SMART health for Prometheus";
+        after = ["sops-install-secrets.service"];
+        path = [pkgs.curl pkgs.jq pkgs.coreutils pkgs.gawk];
+        serviceConfig = {
+          Type = "oneshot";
+          User = "root";
+        };
+
+        script = ''
+          set -eu
+          set -a
+          . ${config.sops.templates."pve-exporter.env".path}
+          set +a
+
+          out=/var/lib/node-exporter/textfile/pve-disks.prom
+          mkdir -p "$(dirname "$out")"
+          tmp="$out.tmp"
+          : > "$tmp"
+
+          auth="PVEAPIToken=''${PVE_USER}!''${PVE_TOKEN_NAME}=''${PVE_TOKEN_VALUE}"
+
+          for node in pve pvf; do
+            case "$node" in
+              pve) host=192.168.86.4 ;;
+              pvf) host=192.168.86.13 ;;
+            esac
+
+            curl -sk -H "Authorization: $auth" \
+              "https://$host:8006/api2/json/nodes/$node/disks/list" |
+              jq -r '.data[] | [.devpath, (.health // "UNKNOWN"), (.wearout // "N/A"), (.type // "unknown"), (.size // 0)] | @tsv' |
+              while IFS=$'\t' read -r dev health wearout type size; do
+                case "$wearout" in
+                  "" | N/A | *[!0-9]*) wearout=-1 ;;
+                esac
+                case "$health" in
+                  PASSED) health_val=1 ;;
+                  FAILED) health_val=0 ;;
+                  *) health_val=-1 ;;
+                esac
+
+                temp=$(curl -sk -H "Authorization: $auth" \
+                  "https://$host:8006/api2/json/nodes/$node/disks/smart?disk=$dev" |
+                  jq -r 'if .data.text then (.data.text | capture("Temperature:\s+(?<t>[0-9]+) Celsius").t? // "") else ([.data.attributes[]? | select(.name == "Temperature_Celsius" or .name == "Airflow_Temperature_Cel") | (.raw | tostring)] | first // "") end' |
+                  awk 'NF {print $1; exit}')
+                case "$temp" in "" | *[!0-9]*) temp=-1 ;; esac
+
+                {
+                  echo "pve_disk_health{node=\"$node\",disk=\"$dev\",type=\"$type\"} $health_val"
+                  echo "pve_disk_wearout{node=\"$node\",disk=\"$dev\"} $wearout"
+                  echo "pve_disk_temperature_celsius{node=\"$node\",disk=\"$dev\"} $temp"
+                  echo "pve_disk_size_bytes{node=\"$node\",disk=\"$dev\"} $size"
+                } >> "$tmp"
+              done || true
+          done
+
+          mv "$tmp" "$out"
+        '';
+      };
+
+      systemd.timers.pve-disk-metrics = {
+        wantedBy = ["timers.target"];
+        timerConfig = {
+          OnBootSec = "15m";
           OnUnitActiveSec = "1h";
           Persistent = true;
         };
