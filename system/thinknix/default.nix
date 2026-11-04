@@ -156,6 +156,13 @@
           extraConfig = "metrics";
         };
 
+        # Loki ingest proxy for the VPS. The OPNsense WireGuard firewall only
+        # allows the VPS to reach thinknix on :80, so the VPS pushes logs here
+        # and Caddy forwards them to Loki on servenix.
+        "http://192.168.86.26" = {
+          extraConfig = "reverse_proxy http://192.168.86.25:3100";
+        };
+
         "switch.local.chriphost.gay" = {
           useACMEHost = "local.chriphost.gay";
           extraConfig = "reverse_proxy http://192.168.86.2:80";

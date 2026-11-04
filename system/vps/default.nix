@@ -21,6 +21,11 @@
       loader = "systemd-boot";
     };
 
+    # The OPNsense WireGuard firewall lets the VPS reach thinknix on :80 for
+    # the public reverse proxy but not servenix directly. Alloy therefore
+    # pushes through thinknix, which proxies to Loki on servenix.
+    monitoring-agent.logs.lokiUrl = "http://192.168.86.26";
+
     docker.enable = lib.mkForce false;
 
     # Build on nixinator and pull from its binary cache.
