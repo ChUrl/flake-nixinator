@@ -472,9 +472,9 @@
       };
     }
     ++ lib.optionals cfg.snmp.enable [
-      (snmpJob "snmp-opnsense" "192.168.86.5" "opnsense" ["if_mib" "hrSystem" "ucd_memory" "ucd_system_stats"])
-      (snmpJob "snmp-synology" "192.168.86.15" "synology" ["synology" "if_mib"])
-      (snmpJob "snmp-truenas" "192.168.86.20" "truenas" ["if_mib" "hrSystem" "hrStorage" "ucd_memory" "ucd_system_stats"])
+      (snmpJob "snmp-opnsense" "192.168.86.5" "opnsense" ["if_mib" "hrSystem" "hrStorage" "ucd_memory" "ucd_system_stats" "system"])
+      (snmpJob "snmp-synology" "192.168.86.15" "synology" ["synology" "if_mib" "hrSystem" "hrStorage" "ucd_memory" "ucd_system_stats" "ucd_la_table" "system"])
+      (snmpJob "snmp-truenas" "192.168.86.20" "truenas" ["if_mib" "hrSystem" "hrStorage" "ucd_memory" "ucd_system_stats" "system"])
     ];
 in {
   options.systemmodules.monitoring = import ./options.nix {inherit lib mylib;};
