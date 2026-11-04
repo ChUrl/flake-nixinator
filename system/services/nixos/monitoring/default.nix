@@ -33,6 +33,36 @@
         prober = "icmp";
         timeout = "5s";
       };
+      dns_public = {
+        prober = "dns";
+        timeout = "5s";
+        dns = {
+          query_name = "chriphost.gay";
+          query_type = "A";
+          valid_rcodes = ["NOERROR"];
+        };
+      };
+      dns_lan = {
+        prober = "dns";
+        timeout = "5s";
+        dns = {
+          query_name = "grafana.local.chriphost.gay";
+          query_type = "A";
+          valid_rcodes = ["NOERROR"];
+        };
+      };
+      # Probes thinknix directly with SNI/Host for a local name, so the local
+      # wildcard certificate's expiry is exported as well.
+      https_local_cert = {
+        prober = "http";
+        timeout = "5s";
+        http = {
+          preferred_ip_protocol = "ip4";
+          valid_status_codes = [200 301 302 401 403];
+          headers.Host = "grafana.local.chriphost.gay";
+          tls_config.server_name = "grafana.local.chriphost.gay";
+        };
+      };
     };
   });
 
@@ -68,7 +98,7 @@
           })
           (mkAlert {
             alert = "ExporterDown";
-            expr = ''up{job=~"pve|blackbox.*"} == 0'';
+            expr = ''up{job=~"pve|blackbox.*|vps-wireguard|vps-fail2ban|thinknix-fail2ban|caddy-.*|smokeping|nixinator-smart|pve-smart|pvf-smart|snmp-.*|hass"} == 0'';
             duration = "10m";
             summary = "Exporter {{ $labels.job }} is down";
           })
@@ -129,6 +159,152 @@
             duration = "1h";
             summary = "{{ $labels.probe }}: certificate expires in less than 14 days";
           })
+          (mkAlert {
+            alert = "CertificateExpiringCritical";
+            expr = ''probe_ssl_earliest_cert_expiry - time() < 7 * 24 * 3600'';
+            duration = "1h";
+            severity = "critical";
+            summary = "{{ $labels.probe }}: certificate expires in less than 7 days";
+          })
+          (mkAlert {
+            alert = "ResticBackupFailed";
+            expr = ''restic_last_run_success == 0'';
+            duration = "10m";
+            severity = "critical";
+            summary = "{{ $labels.host }}: the last restic run failed";
+          })
+          (mkAlert {
+            alert = "ResticBackupStale";
+            expr = ''time() - restic_last_success_timestamp_seconds > 48 * 3600'';
+            duration = "10m";
+            severity = "critical";
+            summary = "{{ $labels.host }}: no successful restic backup in 48h";
+          })
+          (mkAlert {
+            alert = "PVEQuorumLost";
+            expr = ''pve_cluster_info{quorate!="1"} == 1'';
+            duration = "2m";
+            severity = "critical";
+            summary = "Proxmox cluster quorum lost";
+          })
+          (mkAlert {
+            alert = "PVEGuestDown";
+            expr = ''pve_up{id=~"qemu/.*",id!="qemu/108"} == 0'';
+            duration = "5m";
+            severity = "critical";
+            summary = "PVE guest {{ $labels.id }} is not running";
+          })
+          (mkAlert {
+            alert = "PVEStorageHigh";
+            expr = ''pve_disk_usage_bytes{id=~"storage/.*"} / pve_disk_size_bytes{id=~"storage/.*"} > 0.95'';
+            duration = "15m";
+            summary = "PVE storage {{ $labels.id }} is above 95%";
+          })
+          (mkAlert {
+            alert = "PVENodeSaturated";
+            expr = ''pve_cpu_usage_ratio > 0.9'';
+            duration = "15m";
+            summary = "PVE node {{ $labels.id }} CPU above 90%";
+          })
+          (mkAlert {
+            alert = "PVENotBackedUp";
+            expr = ''pve_not_backed_up_total > 0'';
+            duration = "1h";
+            summary = "PVE reports guests without a backup";
+          })
+          (mkAlert {
+            alert = "PVEBackupFailed";
+            expr = ''pve_backup_last_status == 0'';
+            duration = "10m";
+            severity = "critical";
+            summary = "PVE backup on {{ $labels.node }} failed";
+          })
+          (mkAlert {
+            alert = "PVEBackupStale";
+            expr = ''time() - pve_backup_last_timestamp_seconds > 26 * 3600'';
+            duration = "30m";
+            severity = "critical";
+            summary = "PVE backup on {{ $labels.node }} is older than 26h";
+          })
+          (mkAlert {
+            alert = "WireGuardHandshakeStale";
+            expr = ''time() - wireguard_latest_handshake_seconds{interface="wg0",public_key="bsvabi6V4XZx7ZS/53Tai0s1n0Tf/6KRvMn+9yNnymY="} > 600'';
+            duration = "5m";
+            summary = "WireGuard peer OPNsense has not handshaked in 10 minutes";
+          })
+          (mkAlert {
+            alert = "WireGuardPeerMissing";
+            expr = ''absent(wireguard_latest_handshake_seconds{interface="wg0",public_key="bsvabi6V4XZx7ZS/53Tai0s1n0Tf/6KRvMn+9yNnymY="})'';
+            duration = "5m";
+            summary = "WireGuard exporter no longer reports the OPNsense peer";
+          })
+          (mkAlert {
+            alert = "SnmpDeviceUnreachable";
+            expr = ''snmp_scrape_pdus_returned == 0'';
+            duration = "5m";
+            summary = "SNMP device {{ $labels.instance }} returned no PDUs";
+          })
+          (mkAlert {
+            alert = "Caddy5xx";
+            expr = ''sum(rate(caddy_http_requests_total{code=~"5.."}[5m])) > 0'';
+            duration = "10m";
+            summary = "Caddy is returning 5xx responses";
+          })
+          (mkAlert {
+            alert = "CaddyUpstreamUnhealthy";
+            expr = ''caddy_reverse_proxy_upstreams_healthy == 0'';
+            duration = "5m";
+            summary = "Caddy reports an unhealthy upstream";
+          })
+          (mkAlert {
+            alert = "SmartFailure";
+            expr = ''smartctl_device_smart_status != 1'';
+            duration = "10m";
+            severity = "critical";
+            summary = "SMART health check failed on {{ $labels.instance }} {{ $labels.device }}";
+          })
+          (mkAlert {
+            alert = "SmartMediaErrors";
+            expr = ''smartctl_device_media_errors > 0'';
+            duration = "10m";
+            summary = "SMART media errors on {{ $labels.instance }} {{ $labels.device }}";
+          })
+          (mkAlert {
+            alert = "SmartTemperature";
+            expr = ''smartctl_device_temperature_celsius > 55'';
+            duration = "15m";
+            summary = "SMART temperature high on {{ $labels.instance }} {{ $labels.device }}";
+          })
+          (mkAlert {
+            alert = "HassDown";
+            expr = ''up{job="hass"} == 0'';
+            duration = "5m";
+            summary = "Home Assistant Prometheus endpoint is down";
+          })
+          (mkAlert {
+            alert = "Fail2banSocketDown";
+            expr = ''f2b_up == 0'';
+            duration = "5m";
+            summary = "Fail2ban exporter on {{ $labels.instance }} cannot reach the fail2ban socket";
+          })
+          (mkAlert {
+            alert = "Fail2banSocketErrors";
+            expr = ''increase(f2b_errors{type=~"socket_.*"}[15m]) > 0'';
+            duration = "5m";
+            summary = "Fail2ban exporter on {{ $labels.instance }} has socket errors";
+          })
+          (mkAlert {
+            alert = "Fail2banManyBans";
+            expr = ''sum by (jail, instance) (f2b_jail_banned_current) > 20'';
+            duration = "15m";
+            summary = "Fail2ban jail {{ $labels.jail }} on {{ $labels.instance }} has more than 20 banned IPs";
+          })
+          (mkAlert {
+            alert = "SmokepingPacketLoss";
+            expr = ''(sum by (host) (smokeping_requests_total) - sum by (host) (smokeping_response_duration_seconds_count)) / sum by (host) (smokeping_requests_total) > 0.05'';
+            duration = "10m";
+            summary = "Packet loss to {{ $labels.host }} is above 5%";
+          })
         ];
       }
     ];
@@ -169,6 +345,32 @@
       ];
     })
     modules;
+
+  # One SNMP job per device; the auth is selected by the exporter's `auth`
+  # query parameter, so all devices can share the same module definitions.
+  snmpJob = name: target: auth: modules: {
+    job_name = name;
+    metrics_path = "/snmp";
+    params = {
+      auth = [auth];
+      module = modules;
+    };
+    static_configs = [{targets = [target];}];
+    relabel_configs = [
+      {
+        source_labels = ["__address__"];
+        target_label = "__param_target";
+      }
+      {
+        source_labels = ["__param_target"];
+        target_label = "instance";
+      }
+      {
+        target_label = "__address__";
+        replacement = "127.0.0.1:9116";
+      }
+    ];
+  };
 
   scrapeConfigs =
     lib.optional (cfg.nodes != {}) {
@@ -225,7 +427,59 @@
     ++ lib.optional cfg.nvidiaGpu {
       job_name = "nvidia";
       static_configs = [{targets = ["127.0.0.1:9835"];}];
-    };
+    }
+    ++ lib.optional cfg.smokeping.enable {
+      job_name = "smokeping";
+      static_configs = [{targets = ["127.0.0.1:9374"];}];
+    }
+    ++ [
+      {
+        job_name = "vps-wireguard";
+        static_configs = [{targets = ["10.10.10.1:9586"];}];
+      }
+      {
+        job_name = "vps-fail2ban";
+        static_configs = [{targets = ["10.10.10.1:9191"];}];
+      }
+      {
+        job_name = "thinknix-fail2ban";
+        static_configs = [{targets = ["192.168.86.26:9191"];}];
+      }
+      {
+        job_name = "caddy-thinknix";
+        static_configs = [{targets = ["192.168.86.26:9180"];}];
+      }
+      {
+        job_name = "caddy-vps";
+        static_configs = [{targets = ["10.10.10.1:9180"];}];
+      }
+      {
+        job_name = "nixinator-smart";
+        static_configs = [{targets = ["192.168.86.50:9633"];}];
+      }
+      {
+        job_name = "pve-smart";
+        static_configs = [{targets = ["192.168.86.4:9633"];}];
+      }
+      {
+        job_name = "pvf-smart";
+        static_configs = [{targets = ["192.168.86.13:9633"];}];
+      }
+    ]
+    ++ lib.optional (cfg.hassTarget != null) {
+      job_name = "hass";
+      metrics_path = "/api/prometheus";
+      static_configs = [{targets = [cfg.hassTarget];}];
+      authorization = {
+        type = "Bearer";
+        credentials_file = config.sops.secrets."hass-prometheus-token".path;
+      };
+    }
+    ++ lib.optionals cfg.snmp.enable [
+      (snmpJob "snmp-opnsense" "192.168.86.5" "opnsense" ["if_mib" "hrSystem" "ucd_memory" "ucd_system_stats"])
+      (snmpJob "snmp-synology" "192.168.86.15" "synology" ["synology" "if_mib"])
+      (snmpJob "snmp-truenas" "192.168.86.20" "truenas" ["if_mib" "hrSystem" "hrStorage" "ucd_memory" "ucd_system_stats"])
+    ];
 in {
   options.systemmodules.monitoring = import ./options.nix {inherit lib mylib;};
 
@@ -237,6 +491,10 @@ in {
         listenAddress = "127.0.0.1";
         port = cfg.prometheusPort;
         retentionTime = cfg.retentionTime;
+
+        # The HA bearer token is a runtime file; full promtool checks cannot
+        # see it inside the Nix sandbox.
+        checkConfig = "syntax-only";
 
         inherit scrapeConfigs;
         rules = [rulesContent];
@@ -317,6 +575,22 @@ in {
       services.prometheus.exporters.nvidia-gpu = lib.mkIf cfg.nvidiaGpu {
         enable = true;
         listenAddress = "127.0.0.1";
+      };
+
+      services.prometheus.exporters.smokeping = lib.mkIf cfg.smokeping.enable {
+        enable = true;
+        listenAddress = "127.0.0.1";
+        port = 9374;
+        hosts = cfg.smokeping.hosts;
+        pingInterval = cfg.smokeping.pingInterval;
+      };
+
+      services.prometheus.exporters.snmp = lib.mkIf cfg.snmp.enable {
+        enable = true;
+        listenAddress = "127.0.0.1";
+        port = 9116;
+        configurationPath = ./snmp.yml;
+        environmentFile = config.sops.templates."snmp.env".path;
       };
 
       # --------------------------------------------------------------- grafana
@@ -431,6 +705,27 @@ in {
       # Read by Alertmanager, which runs unprivileged.
       sops.secrets."ntfy-grafana-password" = {};
 
+      sops.secrets."snmp-community-opnsense" = {};
+      sops.secrets."snmp-community-synology" = {};
+      sops.secrets."snmp-community-truenas" = {};
+
+      # Prometheus reads this via authorization.credentials_file.
+      sops.secrets."hass-prometheus-token" = {
+        owner = "prometheus";
+        group = "prometheus";
+        mode = "0400";
+      };
+
+      sops.templates."snmp.env" = {
+        mode = "0400";
+
+        content = ''
+          SNMP_COMMUNITY_OPNSENSE=${config.sops.placeholder."snmp-community-opnsense"}
+          SNMP_COMMUNITY_SYNOLOGY=${config.sops.placeholder."snmp-community-synology"}
+          SNMP_COMMUNITY_TRUENAS=${config.sops.placeholder."snmp-community-truenas"}
+        '';
+      };
+
       # systemd reads EnvironmentFile as root; the exporter does not need
       # access to the rendered file.
       sops.templates."alertmanager.env" = {
@@ -455,6 +750,60 @@ in {
         '';
       };
     }
+
+    # PVE/PVF backup freshness. The pve-exporter does not expose task history,
+    # so query the API with the same token and write textfile metrics.
+    (lib.mkIf (cfg.proxmoxTargets != []) {
+      systemd.services.pve-backup-metrics = {
+        description = "Export Proxmox backup task status for Prometheus";
+        after = ["sops-install-secrets.service"];
+        path = [pkgs.curl pkgs.jq pkgs.coreutils];
+        serviceConfig = {
+          Type = "oneshot";
+          User = "root";
+        };
+
+        script = ''
+          set -eu
+          set -a
+          . ${config.sops.templates."pve-exporter.env".path}
+          set +a
+
+          out=/var/lib/node-exporter/textfile/pve-backup.prom
+          mkdir -p "$(dirname "$out")"
+          tmp="$out.tmp"
+          : > "$tmp"
+
+          for node in pve pvf; do
+            case "$node" in
+              pve) host=192.168.86.4 ;;
+              pvf) host=192.168.86.13 ;;
+            esac
+
+            curl -sk \
+              -H "Authorization: PVEAPIToken=''${PVE_USER}!''${PVE_TOKEN_NAME}=''${PVE_TOKEN_VALUE}" \
+              "https://$host:8006/api2/json/nodes/$node/tasks?typefilter=vzdump&limit=200" |
+              jq -r --arg node "$node" '
+                .data
+                | map(select(.status != null and .endtime != null))
+                | max_by(.starttime) // empty
+                | "pve_backup_last_status{node=\"\($node)\"} \(if .status == "OK" then 1 else 0 end)\npve_backup_last_timestamp_seconds{node=\"\($node)\"} \(.endtime)\npve_backup_last_duration_seconds{node=\"\($node)\"} \(.endtime - .starttime)"
+              ' >> "$tmp" || true
+          done
+
+          mv "$tmp" "$out"
+        '';
+      };
+
+      systemd.timers.pve-backup-metrics = {
+        wantedBy = ["timers.target"];
+        timerConfig = {
+          OnBootSec = "10m";
+          OnUnitActiveSec = "1h";
+          Persistent = true;
+        };
+      };
+    })
 
     # Optional: put the TSDB on a dedicated disk. systemd applies bind mounts
     # before ProtectHome, so a source inside /home works without weakening the

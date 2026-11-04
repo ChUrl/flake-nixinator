@@ -89,7 +89,7 @@ in {
         };
 
         module = mkOption {
-          type = types.enum ["http_2xx" "tcp_connect" "icmp"];
+          type = types.enum ["http_2xx" "tcp_connect" "icmp" "dns_public" "dns_lan" "https_local_cert"];
           default = "http_2xx";
           description = "Blackbox probe module.";
         };
@@ -97,8 +97,37 @@ in {
     });
     default = {};
     description = ''
-      End-to-end probes (HTTP status, latency, TLS expiry). The attribute name
-      becomes the `probe` label.
+      End-to-end probes (HTTP status, latency, TLS expiry, ICMP, DNS). The
+      attribute name becomes the `probe` label.
+    '';
+  };
+
+  smokeping = {
+    enable = mkBoolOption true "Probe WAN latency and packet loss with smokeping_prober.";
+
+    hosts = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      description = "Hosts to ping continuously.";
+    };
+
+    pingInterval = mkOption {
+      type = types.str;
+      default = "60s";
+      description = "Interval between pings.";
+    };
+  };
+
+  snmp.enable =
+    mkBoolOption false
+    "Scrape OPNsense (192.168.86.5), Synology (192.168.86.15) and TrueNAS (192.168.86.20) via SNMP.";
+
+  hassTarget = mkOption {
+    type = types.nullOr types.str;
+    default = null;
+    description = ''
+      Home Assistant address for the Prometheus integration, e.g.
+      `192.168.86.55:8123`. Requires `hass-prometheus-token` in sops.
     '';
   };
 
