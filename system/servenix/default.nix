@@ -121,6 +121,18 @@
       # directory, and owned by the `prometheus` user.
       prometheusDataDir = "/home/christoph/ssd/prometheus";
 
+      nvidiaGpu = true;
+
+      smokeping = {
+        enable = true;
+        hosts = ["1.1.1.1" "8.8.8.8" "192.168.86.5" "2.31.177.253"];
+        pingInterval = "60s";
+      };
+
+      snmp.enable = true;
+
+      hassTarget = "192.168.86.55:8123";
+
       # End-to-end checks. The public names exercise VPS -> WireGuard ->
       # thinknix -> servenix; Grafana itself is checked locally because
       # servenix uses public DNS and cannot resolve *.local.chriphost.gay.
@@ -138,6 +150,38 @@
         f11pb = {url = "https://f11pb.vps.chriphost.gay/api/health";};
         f12pb = {url = "https://f12pb.vps.chriphost.gay/api/health";};
         grafana = {url = "http://127.0.0.1:3030/api/health";};
+
+        # WAN / LAN / DNS
+        gateway = {
+          url = "192.168.86.5";
+          module = "icmp";
+        };
+        cloudflare = {
+          url = "1.1.1.1";
+          module = "icmp";
+        };
+        google = {
+          url = "8.8.8.8";
+          module = "icmp";
+        };
+        vps-ping = {
+          url = "2.31.177.253";
+          module = "icmp";
+        };
+        dns-public = {
+          url = "1.1.1.1:53";
+          module = "dns_public";
+        };
+        dns-lan = {
+          url = "192.168.86.26:53";
+          module = "dns_lan";
+        };
+
+        # Local wildcard certificate, via thinknix with SNI/Host override
+        local-cert = {
+          url = "https://192.168.86.26";
+          module = "https_local_cert";
+        };
       };
     };
 
@@ -245,6 +289,10 @@
   # Keep the nvidia device nodes (/dev/nvidia0, nvidiactl, …) present so the
   # jellyfin service can be granted access to them for NVENC.
   hardware.nvidia.nvidiaPersistenced = true;
+
+  # The exporter runs as a DynamicUser and needs the video group to read
+  # /dev/nvidia*.
+  systemd.services.prometheus-nvidia-gpu-exporter.serviceConfig.SupplementaryGroups = ["video"];
 
   services = {
     # Every service declares its own vhost (systemmodules.caddy.vhosts).
