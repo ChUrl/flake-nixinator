@@ -160,6 +160,12 @@
     port = 9191;
   };
 
+  # The nixpkgs module hardcodes F2B_WEB_LISTEN_ADDRESS to 127.0.0.1 (the
+  # listenAddress option is only used for the firewall). Override it so
+  # Prometheus can scrape over WireGuard.
+  systemd.services.prometheus-fail2ban-exporter.environment.F2B_WEB_LISTEN_ADDRESS =
+    lib.mkForce "10.10.10.1:9191";
+
   services.haproxy = {
     enable = true;
 
