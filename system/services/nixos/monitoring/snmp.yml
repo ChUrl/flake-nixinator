@@ -1,12 +1,12 @@
 auths:
   opnsense:
-    community: $SNMP_COMMUNITY_OPNSENSE
+    community: ${SNMP_COMMUNITY_OPNSENSE}
     version: 2
   synology:
-    community: $SNMP_COMMUNITY_SYNOLOGY
+    community: ${SNMP_COMMUNITY_SYNOLOGY}
     version: 2
   truenas:
-    community: $SNMP_COMMUNITY_TRUENAS
+    community: ${SNMP_COMMUNITY_TRUENAS}
     version: 2
 modules:
   hrStorage:

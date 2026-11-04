@@ -12,6 +12,18 @@
   prometheusStateDir = toString config.systemd.services.prometheus.serviceConfig.StateDirectory;
   prometheusStateDataDir = "/var/lib/${prometheusStateDir}/data";
 
+  # The exporter's own $VAR expansion does not cover auths.community, so render
+  # the config from sops at activation instead.
+  snmpConfig =
+    builtins.replaceStrings
+    ["\${SNMP_COMMUNITY_OPNSENSE}" "\${SNMP_COMMUNITY_SYNOLOGY}" "\${SNMP_COMMUNITY_TRUENAS}"]
+    [
+      config.sops.placeholder."snmp-community-opnsense"
+      config.sops.placeholder."snmp-community-synology"
+      config.sops.placeholder."snmp-community-truenas"
+    ]
+    (builtins.readFile ./snmp.yml);
+
   # Plain HTTP checks. `valid_status_codes` includes the auth redirects of
   # Nextcloud/Paperless/Gitea, so the probe measures reachability and TLS, not
   # whether the login page answers 200.
@@ -585,8 +597,8 @@ in {
         enable = true;
         listenAddress = "127.0.0.1";
         port = 9116;
-        configurationPath = ./snmp.yml;
-        environmentFile = config.sops.templates."snmp.env".path;
+        configurationPath = config.sops.templates."snmp.yml".path;
+        enableConfigCheck = false;
       };
 
       # --------------------------------------------------------------- grafana
@@ -712,14 +724,11 @@ in {
         mode = "0400";
       };
 
-      sops.templates."snmp.env" = {
-        mode = "0400";
-
-        content = ''
-          SNMP_COMMUNITY_OPNSENSE=${config.sops.placeholder."snmp-community-opnsense"}
-          SNMP_COMMUNITY_SYNOLOGY=${config.sops.placeholder."snmp-community-synology"}
-          SNMP_COMMUNITY_TRUENAS=${config.sops.placeholder."snmp-community-truenas"}
-        '';
+      sops.templates."snmp.yml" = {
+        # Read by the exporter's DynamicUser; lives in tmpfs, not the store.
+        mode = "0444";
+        content = snmpConfig;
+        restartUnits = ["prometheus-snmp-exporter.service"];
       };
 
       # systemd reads EnvironmentFile as root; the exporter does not need
