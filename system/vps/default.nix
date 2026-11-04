@@ -93,7 +93,9 @@
   sops.secrets."wireguard-vps-private-key" = {};
 
   networking.wireguard.interfaces.wg0 = {
-    ips = ["10.10.10.1/24"];
+    # IPv4 for the LAN/VPS routing, IPv6 ULA for clients that want IPv6
+    # through the tunnel (NATed to the VPS's public /64 below).
+    ips = ["10.10.10.1/24" "fd10:10:10::1/64"];
     listenPort = 51820;
     privateKeyFile = config.sops.secrets."wireguard-vps-private-key".path;
 
@@ -103,24 +105,46 @@
         publicKey = "bsvabi6V4XZx7ZS/53Tai0s1n0Tf/6KRvMn+9yNnymY=";
         allowedIPs = [
           "10.10.10.2/32"
+          "fd10:10:10::2/128"
           "192.168.86.0/24"
+          "fd00::/64"
         ];
       }
       {
         # iPhone
         publicKey = "qcJPgz/N3y+QMac5kfLKDgouIcWnLD+uPpe4JTEB4G0=";
-        allowedIPs = ["10.10.10.3/32"];
+        allowedIPs = [
+          "10.10.10.3/32"
+          "fd10:10:10::3/128"
+        ];
       }
     ];
   };
 
   # Peers route their internet traffic through WireGuard
-  boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
+  boot.kernel.sysctl = {
+    "net.ipv4.ip_forward" = 1;
+    "net.ipv6.conf.all.forwarding" = 1;
+    "net.ipv6.conf.default.forwarding" = 1;
+  };
 
   networking.nat = {
     enable = true;
     externalInterface = "eth0";
     internalInterfaces = ["wg0"];
+  };
+
+  # The NixOS nat module is IPv4-only. Masquerade the WireGuard ULA to the
+  # VPS's public /64 so tunnel clients get working IPv6.
+  networking.nftables.tables.nat6 = {
+    family = "ip6";
+    content = ''
+      chain postrouting {
+        type nat hook postrouting priority srcnat; policy accept;
+
+        oifname "eth0" ip6 saddr fd10:10:10::/64 masquerade
+      }
+    '';
   };
 
   services.haproxy = {
