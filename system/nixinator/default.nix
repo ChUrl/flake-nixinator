@@ -313,6 +313,10 @@
 
   networking.firewall.trustedInterfaces = ["virbr0"]; # libvirt
 
+  networking.firewall.extraInputRules = ''
+    ip saddr 192.168.86.25 tcp dport 9633 accept
+  '';
+
   programs = {
     ausweisapp = {
       enable = true;
@@ -337,6 +341,12 @@
   };
 
   services = {
+    prometheus.exporters.smartctl = {
+      enable = true;
+      listenAddress = "192.168.86.50";
+      port = 9633;
+    };
+
     # desktopManager.plasma6.enable = true;
     # displayManager.gdm.enable = true; # Somehow, Plasma's own manager didn't work
 
