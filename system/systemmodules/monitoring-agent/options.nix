@@ -4,6 +4,7 @@
   ...
 }: let
   inherit (lib) mkEnableOption mkOption types;
+  inherit (mylib.modules) mkBoolOption;
 in {
   enable = mkEnableOption "node_exporter for the central monitoring stack";
 
@@ -32,5 +33,22 @@ in {
     description = ''
       Directory for the textfile collector (backup timestamps and similar).
     '';
+  };
+
+  logs = {
+    enable = mkBoolOption true "Ship journald logs to Loki via Grafana Alloy.";
+
+    lokiUrl = mkOption {
+      type = types.str;
+      default = "http://192.168.86.25:3100";
+      description = ''
+        Loki push endpoint base URL. The host running Loki overrides this to
+        `http://127.0.0.1:3100`.
+      '';
+    };
+
+    docker =
+      mkBoolOption false
+      "Also collect Docker container logs (hosts that run Docker, currently servenix).";
   };
 }

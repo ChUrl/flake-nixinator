@@ -3,9 +3,53 @@
   lib,
   mylib,
   pkgs,
+  hostname,
   ...
 }: let
   cfg = config.systemmodules.monitoring-agent;
+
+  alloyConfig = ''
+    loki.source.journal "journal" {
+      forward_to = [loki.write.default.receiver]
+      labels = {
+        "host" = "${hostname}",
+      }
+    }
+
+    ${
+      lib.optionalString cfg.logs.docker ''
+        discovery.docker "containers" {
+          host = "unix:///var/run/docker.sock"
+        }
+
+        discovery.relabel "containers" {
+          rule {
+            source_labels = ["__meta_docker_container_name"]
+            target_label  = "container"
+            regex         = "/(.*)"
+          }
+
+          rule {
+            target_label = "host"
+            replacement  = "${hostname}"
+          }
+        }
+
+        loki.source.docker "containers" {
+          host          = "unix:///var/run/docker.sock"
+          targets       = discovery.docker.containers.targets
+          forward_to    = [loki.write.default.receiver]
+          relabel_rules = discovery.relabel.containers.rules
+        }
+      ''
+    }
+
+    loki.write "default" {
+      endpoint {
+        url = "${cfg.logs.lokiUrl}/loki/api/v1/push"
+      }
+    }
+  '';
 in {
   options.systemmodules.monitoring-agent = import ./options.nix {inherit lib mylib;};
 
@@ -34,5 +78,18 @@ in {
     networking.firewall.extraInputRules = ''
       ip saddr { ${lib.concatStringsSep ", " cfg.scrapeSources} } tcp dport 9100 accept
     '';
+
+    services.alloy = lib.mkIf cfg.logs.enable {
+      enable = true;
+      extraFlags = ["--disable-reporting"];
+    };
+
+    environment.etc."alloy/config.alloy" = lib.mkIf cfg.logs.enable {
+      text = alloyConfig;
+    };
+
+    # The Docker log collector needs read access to the Docker socket.
+    systemd.services.alloy.serviceConfig.SupplementaryGroups =
+      lib.mkIf cfg.logs.docker (lib.mkAfter ["docker"]);
   };
 }
