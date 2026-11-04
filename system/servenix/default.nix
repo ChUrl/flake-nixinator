@@ -48,6 +48,7 @@
     ../services/docker/sabnzbd-shows.nix
     ../services/docker/sonarr.nix
     ../services/docker/tinymediamanager.nix
+    ../services/docker/traggo.nix
   ];
 
   networking.tempAddresses = "disabled";
