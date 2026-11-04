@@ -43,9 +43,10 @@ in {
           User = "root";
           HostName = "192.168.86.13";
         };
-        # "synology" = {
-        #   # TODO: How do I disable synology password login? How do I login with SSH key?
-        # };
+        "synology" = {
+          User = "christoph";
+          HostName = "192.168.86.15";
+        };
         "nixinator" = {
           # We don't connect from nixinator to itself, only from the outside:
           # jump through the VPS, because fail2ban is running there.
@@ -69,6 +70,10 @@ in {
         #   User = "root";
         #   HostName = "212.227.233.241";
         # };
+        "truenas" = {
+          User = "truenas_admin";
+          HostName = "192.168.86.20";
+        };
         "hetzner" = {
           # New VPS (Hetzner)
           User = "christoph";
