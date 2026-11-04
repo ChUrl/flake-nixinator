@@ -94,7 +94,13 @@
   systemmodules = {
     remote-build.enable = true;
 
-    monitoring-agent.listenAddress = "127.0.0.1";
+    monitoring-agent = {
+      listenAddress = "127.0.0.1";
+      logs = {
+        lokiUrl = "http://127.0.0.1:3100";
+        docker = true;
+      };
+    };
 
     monitoring = {
       enable = true;
