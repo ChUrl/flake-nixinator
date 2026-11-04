@@ -14,24 +14,54 @@
         "enableLogDetails": true,
         "prettifyLogMessage": false,
         "showCommonLabels": false,
-        "showLabels": false,
+        "showLabels": true,
         "showTime": true,
         "sortOrder": "Descending",
         "wrapLogMessage": true
       },
       "targets": [
-        {"expr": "{host=~\".+\"}", "refId": "A"}
+        {"expr": "{host=~\"$host\"} |= \"$search\"", "refId": "A"}
       ],
-      "title": "All logs",
+      "title": "Logs (host, unit/container)",
       "type": "logs"
     }
   ],
   "schemaVersion": 39,
   "tags": ["logs"],
-  "templating": {"list": []},
+  "templating": {
+    "list": [
+      {
+        "allValue": ".+",
+        "current": {"selected": true, "text": ["All"], "value": ["$__all"]},
+        "datasource": {"type": "loki", "uid": "loki"},
+        "definition": "label_values(host)",
+        "includeAll": true,
+        "label": "Host",
+        "multi": true,
+        "name": "host",
+        "options": [],
+        "query": "label_values(host)",
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "current": {"selected": false, "text": "", "value": ""},
+        "hide": 0,
+        "label": "Search",
+        "name": "search",
+        "options": [{"selected": true, "text": "", "value": ""}],
+        "query": "",
+        "skipUrlSync": false,
+        "type": "textbox"
+      }
+    ]
+  },
   "time": {"from": "now-1h", "to": "now"},
   "timezone": "browser",
   "title": "Logs",
   "uid": "logs",
-  "version": 1
+  "version": 2
 }

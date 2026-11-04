@@ -9,8 +9,23 @@
   cfg = config.systemmodules.monitoring-agent;
 
   alloyConfig = ''
+    loki.relabel "journal" {
+      forward_to = []
+
+      rule {
+        source_labels = ["__journal__systemd_unit"]
+        target_label  = "unit"
+      }
+
+      rule {
+        source_labels = ["__journal_priority_keyword"]
+        target_label  = "level"
+      }
+    }
+
     loki.source.journal "journal" {
-      forward_to = [loki.write.default.receiver]
+      forward_to    = [loki.write.default.receiver]
+      relabel_rules = loki.relabel.journal.rules
       labels = {
         "host" = "${hostname}",
       }
