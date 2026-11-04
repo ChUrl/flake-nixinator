@@ -23,6 +23,8 @@
         }
 
         discovery.relabel "containers" {
+          targets = discovery.docker.containers.targets
+
           rule {
             source_labels = ["__meta_docker_container_name"]
             target_label  = "container"
@@ -36,10 +38,9 @@
         }
 
         loki.source.docker "containers" {
-          host          = "unix:///var/run/docker.sock"
-          targets       = discovery.docker.containers.targets
-          forward_to    = [loki.write.default.receiver]
-          relabel_rules = discovery.relabel.containers.rules
+          host       = "unix:///var/run/docker.sock"
+          targets    = discovery.relabel.containers.output
+          forward_to = [loki.write.default.receiver]
         }
       ''
     }
