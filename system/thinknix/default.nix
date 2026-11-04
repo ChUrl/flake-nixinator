@@ -22,6 +22,10 @@
 
   networking.tempAddresses = "disabled";
 
+  networking.firewall.extraInputRules = ''
+    ip saddr 192.168.86.25 tcp dport 9180 accept
+  '';
+
   systemmodules = {
     remote-build.enable = true;
 
@@ -145,6 +149,11 @@
         "hass.local.chriphost.gay" = {
           useACMEHost = "local.chriphost.gay";
           extraConfig = "reverse_proxy http://192.168.86.55:8123";
+        };
+
+        # Caddy's own metrics, scraped by Prometheus from servenix.
+        "http://192.168.86.26:9180" = {
+          extraConfig = "metrics";
         };
 
         "switch.local.chriphost.gay" = {

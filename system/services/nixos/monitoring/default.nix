@@ -98,7 +98,7 @@
           })
           (mkAlert {
             alert = "ExporterDown";
-            expr = ''up{job=~"pve|blackbox.*|vps-wireguard|vps-fail2ban|thinknix-fail2ban|caddy-.*|smokeping|nixinator-smart|pve-smart|pvf-smart|snmp-.*|hass"} == 0'';
+            expr = ''up{job=~"pve|blackbox.*|vps-wireguard|vps-fail2ban|caddy-.*|smokeping|nixinator-smart|pve-smart|pvf-smart|snmp-.*|hass"} == 0'';
             duration = "10m";
             summary = "Exporter {{ $labels.job }} is down";
           })
@@ -440,10 +440,6 @@
       {
         job_name = "vps-fail2ban";
         static_configs = [{targets = ["10.10.10.1:9191"];}];
-      }
-      {
-        job_name = "thinknix-fail2ban";
-        static_configs = [{targets = ["192.168.86.26:9191"];}];
       }
       {
         job_name = "caddy-thinknix";
