@@ -295,10 +295,17 @@
             summary = "PVE disk {{ $labels.disk }} on {{ $labels.node }} reports FAILED";
           })
           (mkAlert {
-            alert = "PVEDiskWearout";
-            expr = ''pve_disk_wearout > 90'';
+            alert = "PVEDiskLifeLow";
+            expr = ''pve_disk_life_left_percent >= 0 and pve_disk_life_left_percent < 10'';
             duration = "1h";
-            summary = "PVE disk {{ $labels.disk }} on {{ $labels.node }} is above 90% wearout";
+            summary = "PVE disk {{ $labels.disk }} on {{ $labels.node }} has less than 10% life left";
+          })
+          (mkAlert {
+            alert = "PVEDiskLifeCritical";
+            expr = ''pve_disk_life_left_percent >= 0 and pve_disk_life_left_percent < 5'';
+            duration = "1h";
+            severity = "critical";
+            summary = "PVE disk {{ $labels.disk }} on {{ $labels.node }} has less than 5% life left";
           })
           (mkAlert {
             alert = "PVEDiskTemperature";
@@ -560,6 +567,78 @@ in {
         };
       };
 
+      # ----------------------------------------------------------------- logs
+      services.loki = {
+        enable = true;
+
+        configuration = {
+          auth_enabled = false;
+
+          server = {
+            http_listen_address = "0.0.0.0";
+            http_listen_port = 3100;
+            grpc_listen_port = 9096;
+          };
+
+          common = {
+            path_prefix = "/var/lib/loki";
+            replication_factor = 1;
+
+            ring = {
+              instance_addr = "127.0.0.1";
+              kvstore.store = "inmemory";
+            };
+
+            storage.filesystem = {
+              chunks_directory = "/var/lib/loki/chunks";
+              rules_directory = "/var/lib/loki/rules";
+            };
+          };
+
+          schema_config.configs = [
+            {
+              from = "2024-01-01";
+              store = "tsdb";
+              object_store = "filesystem";
+              schema = "v13";
+              index = {
+                prefix = "index_";
+                period = "24h";
+              };
+            }
+          ];
+
+          limits_config = {
+            retention_period = "168h";
+            reject_old_samples = true;
+            reject_old_samples_max_age = "168h";
+          };
+
+          compactor = {
+            working_directory = "/var/lib/loki/compactor";
+            retention_enabled = true;
+            delete_request_store = "filesystem";
+            compaction_interval = "10m";
+            retention_delete_delay = "2h";
+            retention_delete_worker_count = 150;
+          };
+        };
+      };
+
+      # Loki's data lives on the SSD; bind it over the module's dataDir.
+      systemd.tmpfiles.rules = [
+        "d /home/christoph/ssd/loki 0700 loki loki -"
+      ];
+
+      systemd.services.loki.unitConfig.RequiresMountsFor = ["/home/christoph/ssd"];
+      systemd.services.loki.serviceConfig.BindPaths = [
+        "/home/christoph/ssd/loki:/var/lib/loki"
+      ];
+
+      networking.firewall.extraInputRules = ''
+        ip saddr { 192.168.86.26, 192.168.86.50, 10.10.10.0/24 } tcp dport 3100 accept
+      '';
+
       # ------------------------------------------------------------- exporters
       services.prometheus.exporters.blackbox = lib.mkIf (cfg.probes != {}) {
         enable = true;
@@ -665,6 +744,14 @@ in {
               url = "http://127.0.0.1:${toString cfg.alertmanagerPort}";
               editable = false;
               jsonData.implementation = "prometheus";
+            }
+            {
+              name = "Loki";
+              uid = "loki";
+              type = "loki";
+              access = "proxy";
+              url = "http://127.0.0.1:3100";
+              editable = false;
             }
           ];
 
@@ -872,7 +959,7 @@ in {
 
                 {
                   echo "pve_disk_health{node=\"$node\",disk=\"$dev\",type=\"$type\"} $health_val"
-                  echo "pve_disk_wearout{node=\"$node\",disk=\"$dev\"} $wearout"
+                  echo "pve_disk_life_left_percent{node=\"$node\",disk=\"$dev\"} $wearout"
                   echo "pve_disk_temperature_celsius{node=\"$node\",disk=\"$dev\"} $temp"
                   echo "pve_disk_size_bytes{node=\"$node\",disk=\"$dev\"} $size"
                 } >> "$tmp"
