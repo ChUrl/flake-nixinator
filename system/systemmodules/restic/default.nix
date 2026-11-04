@@ -23,6 +23,7 @@ in {
         directory = "/var/cache/restic-backups-${hostname}";
         mode = "u=rwx,g=,o=";
       }
+      "/var/lib/restic-metrics"
     ];
 
     programs.ssh = {
@@ -65,6 +66,74 @@ in {
         OnCalendar = "daily";
         Persistent = true;
         inherit (cfg) randomizedDelaySec;
+      };
+    };
+
+    # Freshness metrics for the node_exporter textfile collector. The restic
+    # unit's own timestamps are cleared when it becomes inactive, so the timer's
+    # last trigger is the reliable "last run" timestamp.
+    systemd.services.restic-metrics = {
+      description = "Export restic backup status for Prometheus";
+      after = ["restic-backups-${hostname}.service"];
+      path = [config.systemd.package pkgs.coreutils];
+      serviceConfig = {
+        Type = "oneshot";
+        User = "root";
+      };
+
+      script = ''
+        set -eu
+        unit="restic-backups-${hostname}.service"
+        timer="restic-backups-${hostname}.timer"
+        state=/var/lib/restic-metrics
+        out=/var/lib/node-exporter/textfile/restic.prom
+
+        mkdir -p "$state" "$(dirname "$out")"
+
+        result=$(systemctl show "$unit" -p Result --value 2>/dev/null || true)
+        status=$(systemctl show "$unit" -p ExecMainStatus --value 2>/dev/null || true)
+        last=$(systemctl show "$timer" -p LastTriggerUSec --timestamp=unix --value 2>/dev/null || true)
+        last=''${last#@}
+        case "$last" in
+          "" | n/a | *[!0-9]*) last=0 ;;
+        esac
+
+        success=0
+        if [ "$result" = "success" ] && [ "$status" = "0" ] && [ "$last" -gt 0 ]; then
+          success=1
+          echo "$last" > "$state/last-success"
+        fi
+
+        last_success=0
+        if [ -r "$state/last-success" ]; then
+          last_success=$(cat "$state/last-success")
+        fi
+
+        {
+          echo '# HELP restic_last_run_success Whether the last scheduled restic run succeeded.'
+          echo '# TYPE restic_last_run_success gauge'
+          echo "restic_last_run_success{host=\"${hostname}\"} $success"
+          echo '# HELP restic_last_run_exit_code Exit code of the last restic run.'
+          echo '# TYPE restic_last_run_exit_code gauge'
+          echo "restic_last_run_exit_code{host=\"${hostname}\"} ''${status:-0}"
+          echo '# HELP restic_last_run_timestamp_seconds Start time of the last scheduled restic run.'
+          echo '# TYPE restic_last_run_timestamp_seconds gauge'
+          echo "restic_last_run_timestamp_seconds{host=\"${hostname}\"} $last"
+          echo '# HELP restic_last_success_timestamp_seconds Time of the last successful restic run.'
+          echo '# TYPE restic_last_success_timestamp_seconds gauge'
+          echo "restic_last_success_timestamp_seconds{host=\"${hostname}\"} $last_success"
+        } > "$out.tmp"
+
+        mv "$out.tmp" "$out"
+      '';
+    };
+
+    systemd.timers.restic-metrics = {
+      wantedBy = ["timers.target"];
+      timerConfig = {
+        OnBootSec = "5m";
+        OnUnitActiveSec = "15m";
+        Persistent = true;
       };
     };
   };
