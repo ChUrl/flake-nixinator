@@ -21,8 +21,11 @@ in {
           openFirewall
           ;
 
-        globalConfig = lib.mkIf (!cfg.autoHttps) ''
-          auto_https off
+        # `metrics` enables the HTTP metrics; the admin API (servenix) and the
+        # `metrics` vhosts (thinknix/VPS) only serve them.
+        globalConfig = ''
+          ${lib.optionalString (!cfg.autoHttps) "auto_https off"}
+          metrics
         '';
 
         # One reverse proxy vhost per service that declared one
