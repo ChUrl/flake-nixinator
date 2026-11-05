@@ -93,6 +93,11 @@
         222 # Gitea SSH (streamed to servenix 222 via haproxy)
       ];
       allowedUDPPorts = [];
+
+      extraPorts.haproxy = {
+        port = 222;
+        address = "0.0.0.0";
+      };
     };
   };
 

@@ -7,6 +7,19 @@
   systemmodules.network.allowedTCPPorts = [53];
   systemmodules.network.allowedUDPPorts = [53];
 
+  # DNS binds on all interfaces; the web UI is declared by the vhost below.
+  systemmodules.network.extraPorts = {
+    adguard-dns-tcp = {
+      port = 53;
+      address = "0.0.0.0";
+    };
+    adguard-dns-udp = {
+      port = 53;
+      address = "0.0.0.0";
+      protocol = "udp";
+    };
+  };
+
   # Served by systemmodules/caddy
   systemmodules.caddy.vhosts.adguard = {port = 3000;};
 

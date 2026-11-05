@@ -66,6 +66,11 @@
       # sshd with ProxyJump now, so fail2ban sees the real client addresses.
       allowedTCPPorts = lib.mkForce [222];
       allowedUDPPorts = lib.mkForce [51820];
+
+      extraPorts.haproxy = {
+        port = 222;
+        address = "0.0.0.0";
+      };
     };
 
     caddy = {

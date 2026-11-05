@@ -10,6 +10,13 @@
 in {
   systemmodules.caddy.vhosts.scanopy = {port = 60072;};
 
+  # The integrated daemon runs on the host network and only listens on the
+  # port built into the image.
+  systemmodules.network.extraPorts.scanopy-daemon = {
+    port = 60073;
+    address = "0.0.0.0";
+  };
+
   # Database is dumped by restic
   systemmodules.restic.servicePaths = [
     "/var/lib/scanopy"
