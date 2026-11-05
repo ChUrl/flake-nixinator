@@ -110,7 +110,7 @@
           })
           (mkAlert {
             alert = "ExporterDown";
-            expr = ''up{job=~"pve|blackbox.*|vps-wireguard|vps-fail2ban|caddy|caddy-.*|smokeping|nvidia|snmp-.*"} == 0'';
+            expr = ''up{job=~"pve|blackbox.*|vps-wireguard|vps-fail2ban|caddy|caddy-.*|smokeping|nvidia|gitea|gitea-runner|snmp-.*"} == 0'';
             duration = "10m";
             summary = "Exporter {{ $labels.job }} is down";
           })
@@ -255,6 +255,95 @@
             expr = ''snmp_scrape_pdus_returned == 0'';
             duration = "5m";
             summary = "SNMP device {{ $labels.instance }} returned no PDUs";
+          })
+          (mkAlert {
+            alert = "SynologySystemStatus";
+            expr = ''systemStatus{job="snmp-synology"} != 1'';
+            duration = "5m";
+            severity = "critical";
+            summary = "Synology {{ $labels.instance }} reports a non-normal system status";
+          })
+          (mkAlert {
+            alert = "SynologyDiskStatus";
+            expr = ''diskStatus{job="snmp-synology"} != 1'';
+            duration = "5m";
+            summary = "Synology disk {{ $labels.diskID }} is not healthy";
+          })
+          (mkAlert {
+            alert = "SynologyDiskHealth";
+            expr = ''diskHealthStatus{job="snmp-synology"} != 1'';
+            duration = "5m";
+            severity = "critical";
+            summary = "Synology disk {{ $labels.diskID }} health status is not normal";
+          })
+          (mkAlert {
+            alert = "SynologyRaidStatus";
+            expr = ''raidStatus{job="snmp-synology"} != 1'';
+            duration = "5m";
+            severity = "critical";
+            summary = "Synology RAID {{ $labels.raidName }} is not healthy";
+          })
+          (mkAlert {
+            alert = "SynologyFanStatus";
+            expr = ''(cpuFanStatus{job="snmp-synology"} != 1) or (systemFanStatus{job="snmp-synology"} != 1)'';
+            duration = "5m";
+            summary = "Synology {{ $labels.instance }} reports a fan problem";
+          })
+          (mkAlert {
+            alert = "SynologyPowerStatus";
+            expr = ''powerStatus{job="snmp-synology"} != 1'';
+            duration = "5m";
+            severity = "critical";
+            summary = "Synology {{ $labels.instance }} reports a power problem";
+          })
+          (mkAlert {
+            alert = "SynologyDiskTemperature";
+            expr = ''diskTemperature{job="snmp-synology"} > 55'';
+            duration = "15m";
+            summary = "Synology disk {{ $labels.diskID }} is above 55°C";
+          })
+          (mkAlert {
+            alert = "SynologySystemTemperature";
+            expr = ''temperature{job="snmp-synology"} > 55'';
+            duration = "15m";
+            summary = "Synology {{ $labels.instance }} system temperature is above 55°C";
+          })
+          (mkAlert {
+            alert = "SynologyVolumeUsage";
+            expr = ''(1 - raidFreeSize{job="snmp-synology",raidName=~"Volume.*"} / raidTotalSize{job="snmp-synology",raidName=~"Volume.*"}) * 100 > 90'';
+            duration = "30m";
+            summary = "Synology {{ $labels.raidName }} is above 90% used";
+          })
+          (mkAlert {
+            alert = "SnmpInterfaceDown";
+            expr = ''(ifOperStatus{job=~"snmp-opnsense|snmp-truenas"} != 1) and on (instance, ifIndex) (ifAdminStatus{job=~"snmp-opnsense|snmp-truenas"} == 1)'';
+            duration = "5m";
+            severity = "critical";
+            summary = "{{ $labels.instance }}: interface {{ $labels.ifName }} is down";
+          })
+          (mkAlert {
+            alert = "SnmpInterfaceErrors";
+            expr = ''rate(ifInErrors{job=~"snmp-opnsense|snmp-truenas"}[5m]) > 0 or rate(ifOutErrors{job=~"snmp-opnsense|snmp-truenas"}[5m]) > 0'';
+            duration = "15m";
+            summary = "{{ $labels.instance }}: interface {{ $labels.ifName }} is reporting errors";
+          })
+          (mkAlert {
+            alert = "SnmpCpuHigh";
+            expr = ''hrProcessorLoad{job=~"snmp-opnsense|snmp-truenas"} > 90'';
+            duration = "15m";
+            summary = "{{ $labels.instance }}: SNMP CPU load above 90%";
+          })
+          (mkAlert {
+            alert = "SnmpMemoryLow";
+            expr = ''memAvailReal{job=~"snmp-opnsense|snmp-truenas"} / memTotalReal{job=~"snmp-opnsense|snmp-truenas"} < 0.10'';
+            duration = "15m";
+            summary = "{{ $labels.instance }}: less than 10% memory available (SNMP)";
+          })
+          (mkAlert {
+            alert = "SnmpStorageHigh";
+            expr = ''hrStorageUsed{job="snmp-truenas"} / hrStorageSize{job="snmp-truenas"} > 0.90'';
+            duration = "30m";
+            summary = "{{ $labels.instance }}: storage {{ $labels.hrStorageDescr }} is above 90%";
           })
           (mkAlert {
             alert = "Caddy5xx";
@@ -484,6 +573,14 @@
       {
         job_name = "nixinator-smart";
         static_configs = [{targets = ["192.168.86.50:9633"];}];
+      }
+      {
+        job_name = "gitea";
+        static_configs = [{targets = ["127.0.0.1:3000"];}];
+      }
+      {
+        job_name = "gitea-runner";
+        static_configs = [{targets = ["127.0.0.1:9101"];}];
       }
       {
         # Desktop GPU; intentionally not in the ExporterDown alert because the
