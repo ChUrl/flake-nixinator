@@ -122,15 +122,6 @@ in {
     mkBoolOption false
     "Scrape OPNsense (192.168.86.5), Synology (192.168.86.15) and TrueNAS (192.168.86.20) via SNMP.";
 
-  hassTarget = mkOption {
-    type = types.nullOr types.str;
-    default = null;
-    description = ''
-      Home Assistant address for the Prometheus integration, e.g.
-      `192.168.86.55:8123`. Requires `hass-prometheus-token` in sops.
-    '';
-  };
-
   ntfyTopic = mkOption {
     type = types.str;
     default = "alerts";

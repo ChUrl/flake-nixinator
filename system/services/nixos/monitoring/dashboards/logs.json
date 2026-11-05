@@ -20,9 +20,12 @@
         "wrapLogMessage": true
       },
       "targets": [
-        {"expr": "{host=~\"$host\"} |= \"$search\"", "refId": "A"}
+        {
+          "expr": "{host=~\"$host\", level=~\"$level\", container=~\"$container\", service_name=~\"$service_name\", job=~\"$job\", unit=~\"$unit\"} |= \"$search\"",
+          "refId": "A"
+        }
       ],
-      "title": "Logs (host, unit/container)",
+      "title": "Logs",
       "type": "logs"
     }
   ],
@@ -48,6 +51,91 @@
         "type": "query"
       },
       {
+        "allValue": ".*",
+        "current": {"selected": true, "text": ["All"], "value": ["$__all"]},
+        "datasource": {"type": "loki", "uid": "loki"},
+        "definition": "label_values(level)",
+        "includeAll": true,
+        "label": "Level",
+        "multi": true,
+        "name": "level",
+        "options": [],
+        "query": "label_values(level)",
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "allValue": ".*",
+        "current": {"selected": true, "text": ["All"], "value": ["$__all"]},
+        "datasource": {"type": "loki", "uid": "loki"},
+        "definition": "label_values(container)",
+        "includeAll": true,
+        "label": "Container",
+        "multi": true,
+        "name": "container",
+        "options": [],
+        "query": "label_values(container)",
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "allValue": ".*",
+        "current": {"selected": true, "text": ["All"], "value": ["$__all"]},
+        "datasource": {"type": "loki", "uid": "loki"},
+        "definition": "label_values(service_name)",
+        "includeAll": true,
+        "label": "Service",
+        "multi": true,
+        "name": "service_name",
+        "options": [],
+        "query": "label_values(service_name)",
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "allValue": ".*",
+        "current": {"selected": true, "text": ["All"], "value": ["$__all"]},
+        "datasource": {"type": "loki", "uid": "loki"},
+        "definition": "label_values(job)",
+        "includeAll": true,
+        "label": "Job",
+        "multi": true,
+        "name": "job",
+        "options": [],
+        "query": "label_values(job)",
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "allValue": ".*",
+        "current": {"selected": true, "text": ["All"], "value": ["$__all"]},
+        "datasource": {"type": "loki", "uid": "loki"},
+        "definition": "label_values(unit)",
+        "includeAll": true,
+        "label": "Unit",
+        "multi": true,
+        "name": "unit",
+        "options": [],
+        "query": "label_values(unit)",
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      },
+      {
         "current": {"selected": false, "text": "", "value": ""},
         "hide": 0,
         "label": "Search",
@@ -63,5 +151,5 @@
   "timezone": "browser",
   "title": "Logs",
   "uid": "logs",
-  "version": 2
+  "version": 3
 }

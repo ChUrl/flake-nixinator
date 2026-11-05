@@ -110,7 +110,7 @@
           })
           (mkAlert {
             alert = "ExporterDown";
-            expr = ''up{job=~"pve|blackbox.*|vps-wireguard|vps-fail2ban|caddy-.*|smokeping|nixinator-smart|snmp-.*|hass"} == 0'';
+            expr = ''up{job=~"pve|blackbox.*|vps-wireguard|vps-fail2ban|caddy|caddy-.*|smokeping|nvidia|snmp-.*"} == 0'';
             duration = "10m";
             summary = "Exporter {{ $labels.job }} is down";
           })
@@ -314,12 +314,6 @@
             summary = "PVE disk {{ $labels.disk }} on {{ $labels.node }} is above 55°C";
           })
           (mkAlert {
-            alert = "HassDown";
-            expr = ''up{job="hass"} == 0'';
-            duration = "5m";
-            summary = "Home Assistant Prometheus endpoint is down";
-          })
-          (mkAlert {
             alert = "Fail2banSocketDown";
             expr = ''f2b_up == 0'';
             duration = "5m";
@@ -491,16 +485,13 @@
         job_name = "nixinator-smart";
         static_configs = [{targets = ["192.168.86.50:9633"];}];
       }
+      {
+        # Desktop GPU; intentionally not in the ExporterDown alert because the
+        # machine is regularly powered off.
+        job_name = "nvidia-nixinator";
+        static_configs = [{targets = ["192.168.86.50:9835"];}];
+      }
     ]
-    ++ lib.optional (cfg.hassTarget != null) {
-      job_name = "hass";
-      metrics_path = "/api/prometheus";
-      static_configs = [{targets = [cfg.hassTarget];}];
-      authorization = {
-        type = "Bearer";
-        credentials_file = config.sops.secrets."hass-prometheus-token".path;
-      };
-    }
     ++ lib.optionals cfg.snmp.enable [
       (snmpJob "snmp-opnsense" "192.168.86.5" "opnsense" ["if_mib" "hrSystem" "hrStorage" "ucd_memory" "ucd_system_stats" "system"])
       (snmpJob "snmp-synology" "192.168.86.15" "synology" ["synology" "if_mib" "hrSystem" "hrStorage" "ucd_memory" "ucd_system_stats" "ucd_la_table" "system"])
@@ -814,13 +805,6 @@ in {
       sops.secrets."snmp-community-opnsense" = {};
       sops.secrets."snmp-community-synology" = {};
       sops.secrets."snmp-community-truenas" = {};
-
-      # Prometheus reads this via authorization.credentials_file.
-      sops.secrets."hass-prometheus-token" = {
-        owner = "prometheus";
-        group = "prometheus";
-        mode = "0400";
-      };
 
       sops.templates."snmp.yml" = {
         # Read by the exporter's DynamicUser; lives in tmpfs, not the store.
