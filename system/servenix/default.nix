@@ -137,8 +137,6 @@
 
       snmp.enable = true;
 
-      hassTarget = "192.168.86.55:8123";
-
       # End-to-end checks. The public names exercise VPS -> WireGuard ->
       # thinknix -> servenix; Grafana itself is checked locally because
       # servenix uses public DNS and cannot resolve *.local.chriphost.gay.
