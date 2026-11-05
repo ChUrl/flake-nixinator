@@ -2,6 +2,7 @@
   config,
   lib,
   hostname,
+  pkgs,
   ...
 }: {
   imports = [
@@ -178,6 +179,48 @@
   # Prometheus can scrape over WireGuard.
   systemd.services.prometheus-fail2ban-exporter.environment.F2B_WEB_LISTEN_ADDRESS =
     lib.mkForce "10.10.10.1:9191";
+
+  # fail2ban-exporter only exposes counts, not the banned IP list. Publish the
+  # list through node_exporter's textfile collector for the dashboard.
+  systemd.services.fail2ban-banned-ips = {
+    description = "Export banned fail2ban IPs for Prometheus";
+    after = ["fail2ban.service"];
+    path = [pkgs.fail2ban pkgs.coreutils pkgs.gnused pkgs.gnugrep];
+    serviceConfig = {
+      Type = "oneshot";
+      User = "root";
+    };
+
+    script = ''
+      out=/var/lib/node-exporter/textfile/fail2ban.prom
+      mkdir -p "$(dirname "$out")"
+      tmp="$out.tmp"
+      : > "$tmp"
+
+      jails=$(fail2ban-client status 2>/dev/null | sed -n 's/^Jail list:[[:space:]]*//p' || true)
+      for jail in $(printf '%s' "$jails" | tr ',' ' '); do
+        fail2ban-client status "$jail" 2>/dev/null |
+          sed -n 's/.*Banned IP list:[[:space:]]*//p' |
+          tr ' ' '\n' |
+          while IFS= read -r ip; do
+            if [ -n "$ip" ]; then
+              echo "fail2ban_banned_ip{jail=\"$jail\",ip=\"$ip\"} 1" >> "$tmp"
+            fi
+          done
+      done
+
+      mv "$tmp" "$out"
+    '';
+  };
+
+  systemd.timers.fail2ban-banned-ips = {
+    wantedBy = ["timers.target"];
+    timerConfig = {
+      OnBootSec = "5m";
+      OnUnitActiveSec = "5m";
+      Persistent = true;
+    };
+  };
 
   services.haproxy = {
     enable = true;
