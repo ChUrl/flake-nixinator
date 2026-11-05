@@ -1,4 +1,8 @@
-{config, ...}: let
+{
+  config,
+  lib,
+  ...
+}: let
   version = "v9.3.7-1";
 in {
   # Shared with the Nextcloud connector, see system/services/nixos/nextcloud.nix.
@@ -9,9 +13,23 @@ in {
   '';
 
   # Served by systemmodules/caddy
+  #
+  # NOTE: The Document Server is not just an admin panel. Browsers load the
+  #       editor (JS, UI, websockets) from DocumentServerUrl, so it has to be
+  #       reachable from wherever Nextcloud is used - including the internet.
+  #       Server-side requests use DocumentServerInternalUrl instead (see
+  #       system/services/nixos/nextcloud.nix).
   systemmodules.caddy.vhosts.office = {
     port = 8086;
+    aliases = ["office.vps.chriphost.gay"];
   };
+
+  assertions = [
+    {
+      assertion = lib.elem "office.vps.chriphost.gay" config.systemmodules.caddy.vhosts.office.aliases;
+      message = "eurooffice: office.vps.chriphost.gay must stay an alias of the vhost. Browsers load the editor from DocumentServerUrl; removing the public name breaks Office for WAN users (use DocumentServerInternalUrl for server-side requests).";
+    }
+  ];
 
   virtualisation.oci-containers.containers = {
     eurooffice = {

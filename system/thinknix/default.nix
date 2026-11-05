@@ -141,6 +141,8 @@
         "jellyfin.vps.chriphost.gay"
         "nextcloud.vps.chriphost.gay"
         "ntfy.vps.chriphost.gay"
+        # Keep this: browsers load the Euro-Office editor from this origin.
+        "office.vps.chriphost.gay"
         "paperless.vps.chriphost.gay"
       ] (h: {
         hostName = "http://${h}";
