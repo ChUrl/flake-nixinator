@@ -98,7 +98,7 @@ in {
         #       requests would be answered with HTTP 500.
 
         # NOTE: Enable this after the first account has been registered:
-        # SCANOPY_DISABLE_REGISTRATION = "true";
+        SCANOPY_DISABLE_REGISTRATION = "true";
 
         TZ = "Europe/Berlin";
       };
