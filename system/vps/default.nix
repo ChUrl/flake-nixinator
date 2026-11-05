@@ -123,6 +123,14 @@
           "fd10:10:10::3/128"
         ];
       }
+      {
+        # MacBook (darwinix)
+        publicKey = "NWR4q7m+MrB9Y8TzBHAVkGoSt4x28D1dqT+tNeSCnQM=";
+        allowedIPs = [
+          "10.10.10.4/32"
+          "fd10:10:10::4/128"
+        ];
+      }
     ];
   };
 
