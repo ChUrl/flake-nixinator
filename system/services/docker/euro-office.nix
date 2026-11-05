@@ -10,8 +10,7 @@ in {
 
   # Served by systemmodules/caddy
   systemmodules.caddy.vhosts.office = {
-    # 8080 is Nextcloud, 8083 is free
-    port = 8083;
+    port = 8086;
     aliases = ["office.vps.chriphost.gay"];
   };
 
@@ -25,7 +24,7 @@ in {
       dependsOn = [];
 
       ports = [
-        "127.0.0.1:8083:80"
+        "127.0.0.1:8086:80"
       ];
 
       volumes = [
