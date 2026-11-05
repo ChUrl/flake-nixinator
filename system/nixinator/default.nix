@@ -314,8 +314,10 @@
   networking.firewall.trustedInterfaces = ["virbr0"]; # libvirt
 
   networking.firewall.extraInputRules = ''
-    ip saddr 192.168.86.25 tcp dport 9633 accept
+    ip saddr 192.168.86.25 tcp dport { 9633, 9835 } accept
   '';
+
+  systemd.services.prometheus-nvidia-gpu-exporter.serviceConfig.SupplementaryGroups = ["video"];
 
   programs = {
     ausweisapp = {
@@ -345,6 +347,12 @@
       enable = true;
       listenAddress = "192.168.86.50";
       port = 9633;
+    };
+
+    prometheus.exporters.nvidia-gpu = {
+      enable = true;
+      listenAddress = "192.168.86.50";
+      port = 9835;
     };
 
     # desktopManager.plasma6.enable = true;
