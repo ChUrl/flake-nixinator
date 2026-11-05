@@ -148,7 +148,6 @@
         immich = {url = "https://immich.vps.chriphost.gay";};
         jellyfin = {url = "https://jellyfin.vps.chriphost.gay";};
         nextcloud = {url = "https://nextcloud.vps.chriphost.gay";};
-        office = {url = "https://office.vps.chriphost.gay/healthcheck";};
         paperless = {url = "https://paperless.vps.chriphost.gay";};
         ntfy = {url = "https://ntfy.vps.chriphost.gay";};
         f10 = {url = "https://f10.vps.chriphost.gay";};

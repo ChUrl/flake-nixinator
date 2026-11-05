@@ -11,7 +11,6 @@ in {
   # Served by systemmodules/caddy
   systemmodules.caddy.vhosts.office = {
     port = 8086;
-    aliases = ["office.vps.chriphost.gay"];
   };
 
   virtualisation.oci-containers.containers = {

@@ -19,7 +19,6 @@
     (mkEndpoint "immich" "https://immich.vps.chriphost.gay")
     (mkEndpoint "jellyfin" "https://jellyfin.vps.chriphost.gay")
     (mkEndpoint "nextcloud" "https://nextcloud.vps.chriphost.gay")
-    (mkEndpoint "office" "https://office.vps.chriphost.gay/healthcheck")
     (mkEndpoint "paperless" "https://paperless.vps.chriphost.gay")
     (mkEndpoint "ntfy" "https://ntfy.vps.chriphost.gay")
     (mkEndpoint "f10" "https://f10.vps.chriphost.gay")

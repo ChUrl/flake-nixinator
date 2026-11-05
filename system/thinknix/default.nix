@@ -141,7 +141,6 @@
         "jellyfin.vps.chriphost.gay"
         "nextcloud.vps.chriphost.gay"
         "ntfy.vps.chriphost.gay"
-        "office.vps.chriphost.gay"
         "paperless.vps.chriphost.gay"
       ] (h: {
         hostName = "http://${h}";

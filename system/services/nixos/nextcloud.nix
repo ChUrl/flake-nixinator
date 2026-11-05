@@ -111,7 +111,7 @@ in {
     };
     script = ''
       occ=${lib.getExe config.services.nextcloud.occ}
-      $occ config:app:set eurooffice DocumentServerUrl --value=https://office.vps.chriphost.gay/
+      $occ config:app:set eurooffice DocumentServerUrl --value=https://office.local.chriphost.gay/
       $occ config:app:set eurooffice jwt_secret --value="$(cat "$CREDENTIALS_DIRECTORY/jwt")"
     '';
   };
