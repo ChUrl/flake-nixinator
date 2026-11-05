@@ -23,6 +23,11 @@
         timeout = "3h";
       };
 
+      metrics = {
+        enabled = true;
+        addr = "127.0.0.1:9101";
+      };
+
       # Jobs run in containers on the same docker network as before.
       # The module adds the docker group + socket automatically because the
       # labels use the docker:// prefix.
