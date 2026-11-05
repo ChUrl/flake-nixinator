@@ -28,4 +28,9 @@
       "/dev/dri/renderD128"
     ];
   };
+
+  # Let the server read Nextcloud's data for the external library
+  # (0750 nextcloud:nextcloud). Supplementary groups are applied before
+  # PrivateUsers=, so this works without relaxing the sandbox.
+  systemd.services.immich-server.serviceConfig.SupplementaryGroups = ["nextcloud"];
 }
