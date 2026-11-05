@@ -46,7 +46,13 @@ in {
       ];
 
       overwriteprotocol = "https";
-      overwrite.cli.url = "https://nextcloud.vps.chriphost.gay";
+      # Quoted on purpose: `overwrite.cli.url = ...` would become a nested
+      # {"overwrite": {"cli": {"url": ...}}} in override.config.php, which
+      # Nextcloud ignores. The stateful config.php still has the install-time
+      # value (`http://nextcloud.local.chriphost.de`), which the cron-based
+      # Euro-Office health check then uses as the file URL it asks the
+      # Document Server to download - and that fails.
+      "overwrite.cli.url" = "https://nextcloud.vps.chriphost.gay";
       default_phone_region = "DE";
 
       # The logreader app only understands "file"; the module defaults to syslog.
