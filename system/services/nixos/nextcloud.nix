@@ -67,6 +67,10 @@ in {
     # buffer is nearly full" warning.
     phpOptions = {
       "opcache.interned_strings_buffer" = "32";
+
+      # APCu (memcache.local) hardcodes a 32M shared segment, which Nextcloud's
+      # admin check flags once the file cache fills it (reported 91%).
+      "apc.shm_size" = "256M";
     };
   };
 
