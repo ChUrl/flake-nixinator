@@ -86,6 +86,10 @@ in {
         # thinknix terminates TLS
         SCANOPY_USE_SECURE_SESSION_COOKIES = "true";
 
+        # The image keeps the UI outside the binary; without this the server
+        # starts API-only and every UI route returns 404.
+        SCANOPY_WEB_EXTERNAL_PATH = "/app/static";
+
         # The integrated daemon runs on the host, not in this docker network
         SCANOPY_INTEGRATED_DAEMON_URL = "http://host.docker.internal:60073";
 

@@ -46,6 +46,7 @@
     ../services/docker/radarr.nix
     ../services/docker/sabnzbd-movies.nix
     ../services/docker/sabnzbd-shows.nix
+    ../services/docker/scanopy.nix
     ../services/docker/sonarr.nix
     ../services/docker/tinymediamanager.nix
     ../services/docker/traggo.nix
@@ -154,6 +155,10 @@
         f11pb = {url = "https://f11pb.vps.chriphost.gay/api/health";};
         f12pb = {url = "https://f12pb.vps.chriphost.gay/api/health";};
         grafana = {url = "http://127.0.0.1:3030/api/health";};
+
+        # The UI is LAN-only, so probe the container directly instead of the
+        # public name.
+        scanopy = {url = "http://127.0.0.1:60072/api/health";};
 
         # WAN / LAN / DNS
         gateway = {
