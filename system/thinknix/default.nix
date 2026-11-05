@@ -17,7 +17,7 @@
     # General services
     ../services/nixos/adguard.nix
     ../services/docker/arcane.nix
-    ../services/docker/backrest.nix
+    # ../services/docker/backrest.nix # Replaced by grafana dashboard
   ];
 
   networking.tempAddresses = "disabled";
