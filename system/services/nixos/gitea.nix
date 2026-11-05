@@ -60,8 +60,6 @@
       };
 
       security.INSTALL_LOCK = true;
-
-      metrics.ENABLED = true;
     };
 
     # Keep the old container layout so /data can be copied 1:1
