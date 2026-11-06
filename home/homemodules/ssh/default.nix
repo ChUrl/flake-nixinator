@@ -55,7 +55,7 @@ in {
           User = "christoph";
           HostName = "192.168.86.50";
           Port = 5432;
-          ProxyJump = "hetzner";
+          ProxyJump = "vps";
         };
         "servenix" = {
           User = "christoph";
@@ -74,7 +74,7 @@ in {
           User = "truenas_admin";
           HostName = "192.168.86.20";
         };
-        "hetzner" = {
+        "vps" = {
           # New VPS (Hetzner)
           User = "christoph";
           HostName = "vps.chriphost.gay";
