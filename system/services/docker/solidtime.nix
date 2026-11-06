@@ -35,7 +35,14 @@
 
     # Reminders etc. are handled by the worker container
     QUEUE_CONNECTION = "database";
-    CACHE_DRIVER = "database";
+
+    # NOTE: Must be `file`, not `database`: the `cache`/`cache_locks` tables are
+    #       created by the migrations, but `migrate --isolated` and
+    #       `optimize:clear` take a cache lock before any migration runs, so a
+    #       database cache store makes the first boot fail (relation "cache"
+    #       does not exist). Backed by the shared storage volume, so locks and
+    #       caches are still shared between app, queue and scheduler.
+    CACHE_DRIVER = "file";
 
     FILESYSTEM_DISK = "local";
     PUBLIC_FILESYSTEM_DISK = "public";
