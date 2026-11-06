@@ -18,9 +18,24 @@ $ mode: echo -e "switch\nbuild\nboot"
 nh clean <mode>
 $ mode: echo -e "all\nuser"
 
+% nh
+# Rebuild remote/target host
+ssh <target> 'cd ~/NixFlake && git pull' && nh os <mode> --target-host <target>
+$ target: echo -e "nixinator\nservenix\nthinknix\nvps"
+$ mode: echo -e "switch\nbuild\nboot"
+
+% nh
+# Rebuild all hosts
+for target in vps servenix thinknix; do ssh "$target" 'cd ~/NixFlake && git pull' && nh os switch --target-host "$target" || break done
+
 % nix
 # Find out why a package is included in the closure when building the system derivation
 nix why-depends /run/current-system nixpkgs#<package>
+
+% nix
+# Display the closure of a package
+nix path-info --recursive --size --closure-size --human-readable $(readlink -f $(which <executable>))
+$ executable: bash -c "compgen -c"
 
 % nixos
 # Find the storepath of an executable in the users path
@@ -31,6 +46,19 @@ $ executable: bash -c "compgen -c"
 # Find the wanted dynamic libraries of an executable in the users path
 ldd $(readlink -f $(which <executable>))
 $ executable: bash -c "compgen -c"
+
+% nix-store
+# Optimize the store
+nix-store --optimise -vv
+
+% nix-store
+# Verify the store
+nix-store --verify --check-contents
+
+% disko
+# Disko help
+sudo nix run 'github:nix-community/disko/latest#disko-install' -- --flake .#<target> --disk <disk-name> <disk-device>
+$ target: echo -e "nixinator\nservenix\nthinknix\nvps"
 
 % nix-tree
 # Browse closures in the nix store sorted by size
@@ -158,6 +186,10 @@ xdg-mime query default <mimetype>
 # Query the default app for a file
 xdg-mime query default $(file --mime-type <file> | awk -F' ' '{print $2}')
 $ file: eza -f -1
+
+% xdg
+# List XDG_DATA_DIRS
+echo -e $XDG_DATA_DIRS | sed "s/:/\n/g" | sed "s/ /\n/g" | sort -u
 
 % ouch
 # Extract an archive
