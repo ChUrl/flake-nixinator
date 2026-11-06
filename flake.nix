@@ -260,9 +260,6 @@
       inputs.niri.nixosModules.niri # This also imports the HM module
     ];
   in {
-    # Local shell for NixFlake directory
-    devShells.${system}.default = import ./shell.nix {inherit pkgs;};
-
     # Usage: sudo darwin-rebuild switch --flake .#darwinix
     darwinConfigurations = {
       darwinix = darwinMylib.nixos.mkDarwinConfigWithHomeManagerModule {
