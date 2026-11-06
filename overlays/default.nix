@@ -100,4 +100,5 @@ in
 
     # This is already a complete overlay with final: prev:, so it must be composed directly
     (import ./latexminted.nix)
+    (import ./zathura.nix)
   ]
