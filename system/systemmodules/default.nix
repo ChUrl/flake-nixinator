@@ -14,5 +14,6 @@
     ./restic
     ./sops-nix
     ./ssh
+    ./vm
   ];
 }

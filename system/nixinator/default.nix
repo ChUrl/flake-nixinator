@@ -47,6 +47,25 @@
     # Ghidra's user settings (programs.ghidra below)
     impermanence.userDirectories = [".config/ghidra"];
 
+    # Declarative live-OS VMs (immutable images, no state at all)
+    vm = {
+      enable = true;
+
+      live.tails = {
+        source = let
+          tailsVersion = "7.16";
+        in {
+          url = "https://mirror.bouwhuis.network/tails/tails/stable/tails-amd64-${tailsVersion}/tails-amd64-${tailsVersion}.img";
+          hash = "sha256-e+9FuarUMObCu/14wwxaetLxQ9SYoAK5a4iBShjFKh0=";
+        };
+
+        media = "disk";
+        diskSize = 8192;
+        memorySize = 8192;
+        cores = 4;
+      };
+    };
+
     # Binary cache for servenix and thinknix
     nix-cache.enable = true;
 
