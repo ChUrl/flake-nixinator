@@ -31,11 +31,10 @@ in {
           modules-left = ["custom/launcher" "niri/workspaces" "niri/window" "hyprland/workspaces" "hyprland/window"]; # "user"
           modules-center = ["mpris"]; # "systemd-failed-units"
           modules-right =
-            ["privacy" "pulseaudio" "network" "disk" "cpu"]
+            lib.optional isNixinator "systemd-failed-units"
+            ++ ["privacy" "pulseaudio" "network" "disk" "cpu"]
             ++ lib.optional isNixinator "custom/gpu"
-            ++ ["memory"]
-            ++ lib.optional isNixinator "systemd-failed-units"
-            ++ ["clock" "tray"];
+            ++ ["memory" "clock" "tray"];
 
           "custom/launcher" = {
             format = "<span></span>";
