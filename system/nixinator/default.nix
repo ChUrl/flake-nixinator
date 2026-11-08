@@ -317,7 +317,39 @@
     ip saddr 192.168.86.25 tcp dport { 9633, 9835 } accept
   '';
 
-  systemd.services.prometheus-nvidia-gpu-exporter.serviceConfig.SupplementaryGroups = ["video"];
+  # Both exporters bind to the static LAN address, which NetworkManager only
+  # assigns a few seconds after `network.target`. Wait for the address instead
+  # of starting early and failing into systemd's start limit.
+  systemd.services = let
+    waitForLanAddress = pkgs.writeShellScript "wait-for-lan-address" ''
+      until ${pkgs.iproute2}/bin/ip -o -4 addr show \
+              | ${pkgs.gnugrep}/bin/grep -q 'inet 192\.168\.86\.50/'; do
+        sleep 1
+      done
+    '';
+  in {
+    prometheus-smartctl-exporter = {
+      after = ["network.target"];
+      serviceConfig = {
+        ExecStartPre = waitForLanAddress;
+        # `ip` needs netlink; the module only whitelists INET/INET6.
+        RestrictAddressFamilies = ["AF_NETLINK"];
+        # Fail when the address never appears (e.g. cable unplugged), but give
+        # it enough time that it survives slow link establishment.
+        TimeoutStartSec = "5min";
+      };
+    };
+
+    prometheus-nvidia-gpu-exporter = {
+      after = ["network.target"];
+      serviceConfig = {
+        ExecStartPre = waitForLanAddress;
+        RestrictAddressFamilies = ["AF_NETLINK"];
+        TimeoutStartSec = "5min";
+        SupplementaryGroups = ["video"];
+      };
+    };
+  };
 
   programs = {
     ausweisapp = {
