@@ -293,6 +293,13 @@ in {
                 continue
               fi
 
+              # The retire script marks each generation read-only, and a
+              # subvolume can only be deleted while its parent is writable.
+              # Clearing the flag on the archive itself is enough: nested
+              # subvolumes (systemd's srv, var/lib/machines, ...) are always
+              # created writable, so --recursive can remove them afterwards.
+              btrfs property set -ts "$entry" ro false
+
               echo "Deleting $entry"
               btrfs subvolume delete --recursive "$entry"
             done
