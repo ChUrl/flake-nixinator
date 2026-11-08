@@ -2,9 +2,14 @@
   config,
   lib,
   mylib,
+  hostname,
+  pkgs,
   ...
 }: let
   inherit (config.homemodules) color waybar;
+
+  # Desktop-only widgets (NVIDIA GPU etc.)
+  isNixinator = hostname == "nixinator";
 in {
   options.homemodules.waybar = import ./options.nix {inherit lib mylib;};
 
@@ -25,7 +30,12 @@ in {
 
           modules-left = ["custom/launcher" "niri/workspaces" "niri/window" "hyprland/workspaces" "hyprland/window"]; # "user"
           modules-center = ["mpris"]; # "systemd-failed-units"
-          modules-right = ["privacy" "pulseaudio" "network" "disk" "cpu" "memory" "clock" "tray"];
+          modules-right =
+            ["privacy" "pulseaudio" "network" "disk" "cpu"]
+            ++ lib.optional isNixinator "custom/gpu"
+            ++ ["memory"]
+            ++ lib.optional isNixinator "systemd-failed-units"
+            ++ ["clock" "tray"];
 
           "custom/launcher" = {
             format = "<span></span>";
@@ -118,12 +128,22 @@ in {
             on-click = "kitty --title=WireMix wiremix";
           };
 
-          network = {
-            format = "<span>󰌀</span> {ipaddr}";
-            format-disconnected = "<span></span> ";
-            interface = "enp8s0";
-            tooltip = false;
-          };
+          network =
+            if isNixinator
+            then {
+              format = "<span>󰌀</span> {ipaddr}";
+              format-wifi = "<span>󰌀</span> {essid} {signalStrength}%";
+              format-ethernet = "<span>󰌀</span> {ipaddr}";
+              format-disconnected = "<span></span> ";
+              tooltip = true;
+              tooltip-format = "{ifname}: {ipaddr}/{cidr}\n↓ {bandwidthDownBytes}  ↑ {bandwidthUpBytes}";
+            }
+            else {
+              format = "<span>󰌀</span> {ipaddr}";
+              format-disconnected = "<span></span> ";
+              interface = "enp8s0";
+              tooltip = false;
+            };
 
           disk = {
             interval = 5;
@@ -184,12 +204,60 @@ in {
             show-passive-items = true;
             spacing = 5;
           };
+
+          # Defined for every host (like the niri/hyprland modules), but only
+          # added to modules-right on nixinator.
+          "custom/gpu" = let
+            gpuScript = pkgs.writeShellScript "waybar-gpu" ''
+              nvidia-smi --query-gpu=utilization.gpu,temperature.gpu,memory.used,memory.total \
+                --format=csv,noheader,nounits -i 0 2>/dev/null |
+              ${pkgs.gawk}/bin/awk -F', *' '
+                {
+                  printf "{\"text\":\"󰢮 %s%% %s°C\",\"tooltip\":\"GPU %s%% · %s°C\\nVRAM %s / %s MiB\"}\n", $1, $2, $1, $2, $3, $4
+                }
+                END {
+                  if (NR == 0) printf "{\"text\":\"󰢮 n/a\"}\n"
+                }
+              '
+            '';
+          in {
+            exec = gpuScript;
+            return-type = "json";
+            interval = 5;
+            on-click = "kitty --title=Btop btop";
+          };
         };
       };
 
       style = let
         border-width = "2px";
         border-radius = "10px";
+
+        # The GPU chip only exists on nixinator, so shift the following chips'
+        # colors there only; other hosts keep the original sequence.
+        memoryColor =
+          if isNixinator
+          then color.hex.sky
+          else color.hex.teal;
+        clockColor =
+          if isNixinator
+          then color.hex.sapphire
+          else color.hex.sky;
+
+        # Styles for modules that only exist on nixinator
+        desktopCss = lib.optionalString isNixinator ''
+          #custom-gpu,
+          #systemd-failed-units {
+            color: #${color.hex.mantle};
+            font-weight: bold;
+            padding: 0px 10px 0px 10px;
+            margin: 8px 5px 8px 5px;
+            border-radius: ${border-radius};
+          }
+
+          #custom-gpu         {background-color: #${color.hex.teal};}
+          #systemd-failed-units {background-color: #${color.hex.red};}
+        '';
       in ''
         /* Order is Top-Right-Bottom-Left for combined properties */
         * {
@@ -229,8 +297,8 @@ in {
         #network                   {background-color: #${color.hex.peach};}
         #disk                      {background-color: #${color.hex.yellow};}
         #cpu                       {background-color: #${color.hex.green};}
-        #memory                    {background-color: #${color.hex.teal};}
-        #clock                     {background-color: #${color.hex.sky};}
+        #memory                    {background-color: #${memoryColor};}
+        #clock                     {background-color: #${clockColor};}
         #tray                      {background-color: #${color.hex.accent};}
 
         /* Square Widgets */
@@ -286,6 +354,8 @@ in {
         #tray {
           margin: 0px 0px 0px 5px;
         }
+
+        ${desktopCss}
       '';
     };
   };
