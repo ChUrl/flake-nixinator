@@ -133,13 +133,14 @@ in {
 
           cpu = {
             interval = 1;
-            # states = {
-            #   "critical" = 85;
-            # };
-            format = "<span></span> {load}%";
-            # format-critical = "<span color='#${color.hex.red}'><span></span> {load}%</span>";
+            states = {
+              "critical" = 85;
+            };
+            format = "<span></span> {usage}%";
+            format-critical = "<span color='#${color.hex.red}'><span></span> {usage}%</span>";
             on-click = "kitty --title=Btop btop";
-            tooltip = false;
+            tooltip = true;
+            tooltip-format = "Usage:  {usage}%\nLoad:   {load1} / {load5} / {load15}\nFreq:   {avg_frequency} GHz";
           };
 
           memory = {
