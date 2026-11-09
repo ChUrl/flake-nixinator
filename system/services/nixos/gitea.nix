@@ -45,6 +45,7 @@
         START_SSH_SERVER = true;
         SSH_PORT = 222;
         SSH_LISTEN_PORT = 222;
+        LFS_ALLOW_PURE_SSH = true;
         APP_DATA_PATH = "/var/lib/gitea/gitea";
 
         # Caddy terminates TLS in front of gitea
