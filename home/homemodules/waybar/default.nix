@@ -32,7 +32,7 @@ in {
           modules-center = ["mpris"]; # "systemd-failed-units"
           modules-right =
             lib.optional isNixinator "systemd-failed-units"
-            ++ ["privacy" "pulseaudio" "network" "disk" "cpu"]
+            ++ ["privacy" "pulseaudio" "network" "disk" "custom/cpu"]
             ++ lib.optional isNixinator "custom/gpu"
             ++ ["memory" "clock" "tray"];
 
@@ -150,16 +150,84 @@ in {
             on-click = "kitty --hold --title=Duf duf --hide-mp '/var/*,/etc/*,/usr/*,/home/christoph/.*' -width 120";
           };
 
-          cpu = {
+          # Waybar's cpu module cannot show a temperature, so this mirrors custom/gpu
+          "custom/cpu" = let
+            cpuScript = pkgs.writeShellScript "waybar-cpu" ''
+              set -eu
+
+              state="''${XDG_RUNTIME_DIR:-/tmp}/waybar-cpu.stat"
+
+              # cpu user nice system idle iowait irq softirq steal guest guest_nice
+              read -r _cpu u n s i w irq sirq st _rest < /proc/stat
+              total=$((u + n + s + i + w + irq + sirq + st))
+              busy=$((total - i - w))
+
+              prev_total=0
+              prev_busy=0
+              if [ -r "$state" ]; then
+                read -r prev_total prev_busy < "$state" || true
+              fi
+              echo "$total $busy" > "$state"
+
+              delta=$((total - prev_total))
+              delta_busy=$((busy - prev_busy))
+              if [ "$prev_total" -eq 0 ]; then
+                # First sample after a (re)start, fall back to "since boot"
+                usage=$((busy * 100 / total))
+              elif [ "$delta" -gt 0 ]; then
+                usage=$((delta_busy * 100 / delta))
+              else
+                usage=0
+              fi
+              [ "$usage" -le 100 ] || usage=100
+              [ "$usage" -ge 0 ] || usage=0
+
+              # Package temperature
+              temp=""
+              for name in /sys/class/hwmon/hwmon*/name; do
+                read -r hwmon < "$name" || continue
+                case "$hwmon" in
+                  k10temp | zenpower | coretemp | cpu_thermal) ;;
+                  *) continue ;;
+                esac
+                if read -r milli < "''${name%name}temp1_input"; then
+                  temp=$((milli / 1000))
+                fi
+                break
+              done
+
+              read -r load1 load5 load15 _rest < /proc/loadavg
+
+              freq=$(
+                cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq 2>/dev/null |
+                  ${pkgs.gawk}/bin/awk '{ sum += $1; n++ } END { if (n) printf "%.2f", sum / n / 1000000 }'
+              ) || freq=""
+              [ -n "$freq" ] || freq="n/a"
+
+              # JSON needs escaped newlines in the tooltip
+              nl='\n'
+              temp_text=""
+              temp_tooltip=""
+              if [ -n "$temp" ]; then
+                temp_text=" $temp°C"
+                temp_tooltip="Temp:   $temp°C$nl"
+              fi
+
+              class=""
+              if [ "$usage" -ge 85 ]; then
+                class="critical"
+              fi
+
+              printf '{"text":"%s%%%s","tooltip":"Usage:  %s%%%s%sLoad:   %s / %s / %s%sFreq:   %s GHz","class":"%s"}\n' \
+                "$usage" "$temp_text" "$usage" "$nl" "$temp_tooltip" \
+                "$load1" "$load5" "$load15" "$nl" "$freq" "$class"
+            '';
+          in {
+            exec = cpuScript;
+            return-type = "json";
             interval = 1;
-            states = {
-              "critical" = 85;
-            };
-            format = "<span></span> {usage}%";
-            format-critical = "<span color='#${color.hex.red}'><span></span> {usage}%</span>";
+            format = "<span></span> {text}";
             on-click = "kitty --title=Btop btop";
-            tooltip = true;
-            tooltip-format = "Usage:  {usage}%\nLoad:   {load1} / {load5} / {load15}\nFreq:   {avg_frequency} GHz";
           };
 
           memory = {
@@ -295,7 +363,8 @@ in {
         #pulseaudio                {background-color: #${color.hex.maroon};}
         #network                   {background-color: #${color.hex.peach};}
         #disk                      {background-color: #${color.hex.yellow};}
-        #cpu                       {background-color: #${color.hex.green};}
+        #custom-cpu                {background-color: #${color.hex.green};}
+        #custom-cpu.critical       {color: #${color.hex.red};}
         #memory                    {background-color: #${memoryColor};}
         #clock                     {background-color: #${clockColor};}
         #tray                      {background-color: #${color.hex.accent};}
@@ -326,7 +395,7 @@ in {
         #privacy,
         #network,
         #disk,
-        #cpu,
+        #custom-cpu,
         #memory,
         #clock {
           color: #${color.hex.mantle};
