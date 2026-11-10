@@ -42,10 +42,14 @@
     kernelModules = [
       "kvm-amd"
       "sg" # Blu-Ray drive
-      "zenpower" # Sensors for Zen CPUs: https://github.com/NixOS/nixos-hardware/blob/master/common/cpu/amd/zenpower.nix
+      "k10temp"
+      # "zenpower" # Sensors for Zen CPUs: https://github.com/NixOS/nixos-hardware/blob/master/common/cpu/amd/zenpower.nix
     ];
 
-    blacklistedKernelModules = ["k10temp"]; # Disable in favor of zenpower
+    blacklistedKernelModules = [
+      # "k10temp" # Disable in favor of zenpower (but zenpower is out-of-tree and currently broken for Linux 7.2)
+      "zenpower"
+    ];
 
     kernelParams = [
       # Enable AMD pstate
