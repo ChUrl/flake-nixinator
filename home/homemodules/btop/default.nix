@@ -65,10 +65,10 @@ in {
           theme[temp_mid]=${color.hexS.yellow}
           theme[temp_end]=${color.hexS.red}
 
-          # CPU graph colors (Teal -> Lavender)
-          theme[cpu_start]=${color.hexS.teal}
-          theme[cpu_mid]=${color.hexS.sapphire}
-          theme[cpu_end]=${color.hexS.lavender}
+          # CPU graph colors (Green -> Yellow -> Red)
+          theme[cpu_start]=${color.hexS.green}
+          theme[cpu_mid]=${color.hexS.yellow}
+          theme[cpu_end]=${color.hexS.red}
 
           # Mem/Disk free meter (Mauve -> Lavender -> Blue)
           theme[free_start]=${color.hexS.mauve}
@@ -128,11 +128,11 @@ in {
 
         #* Sets the CPU stat shown in upper half of the CPU graph, "total" is always available.
         #* Select from a list of detected attributes from the options menu.
-        cpu_graph_upper = "user";
+        cpu_graph_upper = "total";
 
         #* Sets the CPU stat shown in lower half of the CPU graph, "total" is always available.
         #* Select from a list of detected attributes from the options menu.
-        cpu_graph_lower = "system";
+        cpu_graph_lower = "user";
 
         #* If gpu info should be shown in the cpu box. Available values = "Auto", "On" and "Off".
         show_gpu_info = "Off";
