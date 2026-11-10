@@ -60,6 +60,19 @@
     #     });
     #   };
 
+    # btop has no option to turn off the per-core mini graphs, it switches to
+    # them automatically if there is horizontal space.
+    btop = prev.btop.overrideAttrs (old: {
+      postPatch =
+        (old.postPatch or "")
+        + ''
+          substituteInPlace src/btop_draw.cpp \
+            --replace-fail \
+              'if (b_column_size == 0) b_width = (8 + 6 * show_temp) * b_columns + 1;' \
+              'b_column_size = 0; b_width = (8 + 6 * show_temp) * b_columns + 1;'
+        '';
+    });
+
     # Now in Nixpkgs
     # neovide = prev.neovide.overrideAttrs (finalAttrs: prevAttrs: {
     #   version = "0.15.1";
