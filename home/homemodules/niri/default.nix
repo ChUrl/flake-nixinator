@@ -690,6 +690,13 @@ in {
 
             always-center-single-column = true;
 
+            # Heights cycled by Mod+Comma (same idea as the default 50%/100%
+            # column widths, but vertical)
+            preset-window-heights = [
+              {proportion = 0.5;}
+              {proportion = 1.0;}
+            ];
+
             # Gaps between windows
             gaps = 8;
 
@@ -1213,6 +1220,18 @@ in {
                 title = "Decrease column width";
               };
             };
+            "Mod+Shift+Equal" = {
+              action = set-window-height "+10%";
+              hotkey-overlay = {
+                title = "Increase column height";
+              };
+            };
+            "Mod+Shift+Minus" = {
+              action = set-window-height "-10%";
+              hotkey-overlay = {
+                title = "Decrease column height";
+              };
+            };
             "Mod+Shift+M" = {
               action = set-column-width "50%";
               hotkey-overlay = {
@@ -1226,9 +1245,15 @@ in {
               };
             };
             "Mod+Comma" = {
-              action = reset-window-height;
+              action = switch-preset-window-height;
               hotkey-overlay = {
-                title = "Reset window height.";
+                title = "Toggle column height between 50% and 100%.";
+              };
+            };
+            "Mod+Shift+Comma" = {
+              action = set-window-height "100%";
+              hotkey-overlay = {
+                title = "Set column height to 100%.";
               };
             };
             "Mod+V" = {
