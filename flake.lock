@@ -1051,11 +1051,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1793447316,
-        "narHash": "sha256-LU3gnwfuUNnFbmQ/QoDYyAaM3Gp0vhMJNsU4XvLAuok=",
+        "lastModified": 1793976540,
+        "narHash": "sha256-14bUkcoh3MpxmGTQQKSBLjNlbb598sbVpsJSet21L8U=",
         "ref": "refs/heads/main",
-        "rev": "f02d31dc32455302d122ba3bb4cb64415b8c69a5",
-        "revCount": 143,
+        "rev": "5c1a8105f681f423555a11890e24efe52a28b14f",
+        "revCount": 144,
         "type": "git",
         "url": "https://gitea.vps.chriphost.gay/christoph/cpp-masssprings"
       },
