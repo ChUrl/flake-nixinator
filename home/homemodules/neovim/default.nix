@@ -11,6 +11,16 @@
   ...
 }: let
   inherit (config.homemodules) neovim color;
+  inherit (pkgs.stdenv.hostPlatform) isDarwin;
+
+  # Zathura's main viewer variant needs xdotool (X11) and D-Bus for synctex
+  # forward search, neither of which exists on macOS. The simple variant with
+  # synctex disabled is the documented way to run Zathura there.
+  vimtexViewMethod =
+    if isDarwin
+    then "zathura_simple"
+    else "zathura";
+  vimtexViewSettings = lib.optionalString isDarwin "vim.g.vimtex_view_zathura_use_synctex = 0";
 in {
   options.homemodules.neovim = import ./options.nix {inherit lib mylib;};
 
@@ -2160,7 +2170,8 @@ in {
             init = ''
               function()
                 vim.g.vimtex_mappings_enabled = true
-                vim.g.vimtex_view_method = "zathura"
+                vim.g.vimtex_view_method = "${vimtexViewMethod}"
+                ${vimtexViewSettings}
                 vim.g.vimtex_syntax_conceal_disable = false
                 vim.g.vimtex_syntax_conceal = {
                   accents = 1,
