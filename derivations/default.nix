@@ -10,5 +10,6 @@
   raddbg = pkgs.callPackage ./raddbg {};
   rimstack = pkgs.callPackage ./rimstack {};
   tiddl = pkgs.callPackage ./tiddl {};
+  vscode-remote-server = pkgs.callPackage ./vscode-remote-server {};
   xemu-8bit = pkgs.callPackage ./xemu-8bit {};
 }
