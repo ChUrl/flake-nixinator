@@ -42,6 +42,7 @@ in {
           ms-vscode-remote.remote-ssh
           ms-vscode-remote.remote-ssh-edit
           ms-vscode.remote-explorer
+          pkgs.vscode-remote-server
           anthropic.claude-code
 
           # Python
