@@ -1,21 +1,16 @@
 # Host override for the WSL2 host.
 # The non-graphical part of home/christoph/default.nix is used as-is (headless),
-# so the terminal environment is the same as on the other headless hosts. Only
-# the sops-managed pieces have to be turned off: this host has no age key and
-# therefore no decrypted secrets.
+# so the terminal environment is the same as on the other headless hosts.
 {
-  lib,
   ...
 }: {
   config = {
     home.stateVersion = "26.11";
 
-    # The sops private key is not installed on this host (see system/wslix), so
-    # there is nothing to sign commits with. Generate a key locally with
-    # "ssh-keygen" and/or use the Windows ssh-agent instead.
-    homemodules.git.signCommits = lib.mkForce false;
-
-    # Nothing for keychain to unlock without ~/.ssh/id_ed25519 from sops.
-    programs.keychain.enable = lib.mkForce false;
+    # Unlike the other hosts, the ssh key is not provided by sops (this host has
+    # no age key). Keep it at ~/.ssh/id_ed25519; programs.keychain and the git
+    # commit signing from home/christoph/default.nix pick it up like everywhere
+    # else. home.file.".ssh/id_ed25519{,.pub}" stay disabled on this host so
+    # they don't replace it.
   };
 }
