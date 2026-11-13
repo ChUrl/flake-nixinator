@@ -5,7 +5,6 @@
 # same as on the other headless hosts.
 {
   lib,
-  mylib,
   username,
   ...
 }: {
@@ -46,11 +45,12 @@
     sops-nix.enable = lib.mkForce false;
 
     network = {
-      # WSL hands out the address over DHCP on eth0. Replace the wildcard
-      # ethernet network of the physical hosts, there is no enp* here.
-      networks = lib.mkForce {
-        "10-eth0" = mylib.networking.mkSystemdNetwork "eth0" false;
-      };
+      # WSL assigns eth0's address, default route and DNS itself (and the
+      # network namespace is shared by all distros). A .network file with
+      # DHCP=yes makes networkd flush that configuration when it takes the
+      # link over (KeepConfiguration defaults to "no") and there is no DHCP
+      # server to acquire a new lease from.
+      networks = lib.mkForce {};
     };
   };
 
