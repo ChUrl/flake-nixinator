@@ -376,6 +376,9 @@
         };
 
       # NixOS running as a WSL2 distribution, see system/wslix.
+      # It runs a niri session nested into WSLg (`niri-session`); the headless
+      # flag stays on so the terminal environment does not pull in the desktop
+      # packages (browsers, flatpak apps, ...).
       # Usage: sudo nixos-rebuild switch --flake .#wslix
       wslix = let
         hostPkgs = mkHostPkgs "wslix";

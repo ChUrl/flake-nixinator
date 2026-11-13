@@ -53,7 +53,7 @@ This is a multi-host NixOS/nix-darwin flake. Home-manager runs **as a NixOS modu
 | `servenix` | Server (x86_64) | Headless; runs OCI container services |
 | `thinknix` | Headless (x86_64) | Generic headless config |
 | `darwinix` | macOS (aarch64) | Darwin-specific configuration |
-| `wslix` | WSL2 (x86_64) | NixOS-WSL; terminal environment only, no sops key |
+| `wslix` | WSL2 (x86_64) | NixOS-WSL; niri session nested into WSLg, terminal environment, no sops key |
 
 ### Config Layering (resolved in this order)
 
