@@ -18,6 +18,10 @@
     nix-darwin.url = "github:nix-darwin/nix-darwin/master";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
 
+    # NixOS as a WSL2 distribution
+    nixos-wsl.url = "github:nix-community/NixOS-WSL/main";
+    nixos-wsl.inputs.nixpkgs.follows = "nixpkgs";
+
     # NOTE: Update this after May and November
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-26.05";
 
@@ -367,6 +371,25 @@
           extraModules =
             [
               inputs.disko.nixosModules.disko
+            ]
+            ++ commonModules;
+        };
+
+      # NixOS running as a WSL2 distribution, see system/wslix.
+      # Usage: sudo nixos-rebuild switch --flake .#wslix
+      wslix = let
+        hostPkgs = mkHostPkgs "wslix";
+        hostMylib = mkMylib hostPkgs;
+      in
+        hostMylib.nixos.mkNixosConfigWithHomeManagerModule {
+          inherit system publicKeys;
+          mylib = hostMylib;
+          hostname = "wslix";
+          username = "christoph";
+          headless = true;
+          extraModules =
+            [
+              inputs.nixos-wsl.nixosModules.default
             ]
             ++ commonModules;
         };
