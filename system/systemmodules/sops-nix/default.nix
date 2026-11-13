@@ -25,7 +25,7 @@
 in {
   options.systemmodules.sops-nix = import ./options.nix {inherit lib mylib;};
 
-  config = {
+  config = lib.mkIf sops-nix.enable {
     environment.systemPackages = with pkgs; [
       sops
       age

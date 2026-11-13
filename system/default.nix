@@ -93,16 +93,20 @@ with mylib.networking; {
     ];
   };
 
-  # Used by the nix.conf template below
-  sops.secrets."nix-github-token" = {};
+  # Only declared when sops is in use. A host without an age key (wslix)
+  # cannot decrypt these, so it skips them entirely.
+  sops = lib.optionalAttrs config.systemmodules.sops-nix.enable {
+    # Used by the nix.conf template below
+    secrets."nix-github-token" = {};
 
-  # Write the nix user config file here so we have secrets access
-  sops.templates."nix.conf" = {
-    owner = config.users.users.${username}.name;
-    group = config.users.users.${username}.group;
-    content = ''
-      access-tokens = github.com=${config.sops.placeholder.nix-github-token}
-    '';
+    # Write the nix user config file here so we have secrets access
+    templates."nix.conf" = {
+      owner = config.users.users.${username}.name;
+      group = config.users.users.${username}.group;
+      content = ''
+        access-tokens = github.com=${config.sops.placeholder.nix-github-token}
+      '';
+    };
   };
 
   # Enable flakes
@@ -234,7 +238,11 @@ with mylib.networking; {
   users.mutableUsers = false; # Users are always overridden by stuff defined here
   users.users.${username} = {
     isNormalUser = true;
-    hashedPasswordFile = config.sops.secrets.user-password.path;
+    # The password hash comes from sops (see systemmodules.sops-nix). Hosts
+    # without secrets leave this unset; NixOS-WSL makes sudo passwordless.
+    hashedPasswordFile =
+      lib.mkIf config.systemmodules.sops-nix.enable
+      config.sops.secrets.user-password.path;
     description = "Christoph";
     group = "users";
     uid = 1000;

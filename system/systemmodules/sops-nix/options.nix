@@ -3,6 +3,13 @@
   mylib,
   ...
 }: {
+  enable = mylib.modules.mkBoolOption true ''
+    Install and decrypt the sops secrets.
+    Hosts that have no age key (e.g. the WSL host) disable this. Their modules
+    must then not declare any sops secrets, and the consumers in
+    system/default.nix and the home config are skipped as well.
+  '';
+
   secrets = lib.mkOption {
     type = lib.types.listOf lib.types.str;
     description = ''

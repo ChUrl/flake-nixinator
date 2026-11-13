@@ -352,15 +352,6 @@ in
       # Files to generate in the home directory are specified here.
       file = lib.mkMerge [
         {
-          # Because we can't access the absolute path /run/secrets/... we have to symlink.
-          # This will create a chain of links leading to /run/secrets/... without /nix/store
-          # containing the secret contents.
-          ".ssh/id_ed25519".source =
-            config.lib.file.mkOutOfStoreSymlink
-            nixosConfig.sops.secrets.ssh-private-key.path;
-
-          ".ssh/id_ed25519.pub".text = "${publicKeys.${username}.ssh}";
-
           ".secrets/age/age.pub".text = "${publicKeys.${username}.age}";
 
           # The sops config specifies what happens when we call sops edit
@@ -373,11 +364,21 @@ in
                   - age:
                     - *${username}
           '';
+        }
+        (lib.mkIf nixosConfig.systemmodules.sops-nix.enable {
+          # Because we can't access the absolute path /run/secrets/... we have to symlink.
+          # This will create a chain of links leading to /run/secrets/... without /nix/store
+          # containing the secret contents.
+          ".ssh/id_ed25519".source =
+            config.lib.file.mkOutOfStoreSymlink
+            nixosConfig.sops.secrets.ssh-private-key.path;
+
+          ".ssh/id_ed25519.pub".text = "${publicKeys.${username}.ssh}";
 
           ".config/nix/nix.conf".source =
             config.lib.file.mkOutOfStoreSymlink
             nixosConfig.sops.templates."nix.conf".path;
-        }
+        })
         (lib.mkIf nixosConfig.systemmodules.desktopportal.termfilechooser.enable {
           ".config/xdg-desktop-portal-termfilechooser/config".text = ''
             [filechooser]
