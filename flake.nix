@@ -45,6 +45,9 @@
     lanzaboote.url = "github:nix-community/lanzaboote/v1.1.0";
     lanzaboote.inputs.nixpkgs.follows = "nixpkgs";
 
+    bootvine.url = "git+https://codeberg.org/wvhulle/bootvine";
+    bootvine.inputs.nixpkgs.follows = "nixpkgs";
+
     # Nix User Repository (e.g. Firefox addons)
     nur.url = "github:nix-community/NUR";
     nur.inputs.nixpkgs.follows = "nixpkgs";
@@ -258,6 +261,7 @@
       inputs.sops-nix.nixosModules.sops
       inputs.impermanence.nixosModules.impermanence
       inputs.lanzaboote.nixosModules.lanzaboote
+      inputs.bootvine.nixosModules.default
 
       # We need the niri module also on the headless hosts
       # so nix can parse the config (although it is disabled...)
