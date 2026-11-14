@@ -113,12 +113,22 @@ in {
     niri = {
       enable = lib.mkForce true;
 
-      # The winit (nested) backend passes age = 0 to smithay's damage tracker, so
-      # the whole output is damaged and re-rendered on every frame, even when only
-      # the cursor moved. In WSLg that is what makes the nested session so slow.
-      # The patch queries the actual buffer age instead (Smithay issue #1672).
+      # Two winit (nested) backend patches:
+      #
+      # - The backend passed age = 0 to smithay's damage tracker, so the whole
+      #   output was damaged and re-rendered on every frame, even when only the
+      #   cursor moved. It now queries the real buffer age (Smithay issue #1672).
+      # - It also renders niri's own software cursor on top of the host cursor
+      #   that WSLg's Weston already draws, which shows two cursors and makes
+      #   every pointer movement redraw the frame. The pointer is no longer
+      #   rendered in the nested backend, so only the host cursor remains.
       package = lib.mkForce (pkgs.niri.overrideAttrs (old: {
-        patches = (old.patches or []) ++ [../../patches/niri/winit-buffer-age.patch];
+        patches =
+          (old.patches or [])
+          ++ [
+            ../../patches/niri/winit-buffer-age.patch
+            ../../patches/niri/winit-no-software-cursor.patch
+          ];
       }));
     };
 

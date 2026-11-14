@@ -1,0 +1,16 @@
+diff --git a/src/backend/winit.rs b/src/backend/winit.rs
+index a9bcc515..e58ba928 100644
+--- a/src/backend/winit.rs
++++ b/src/backend/winit.rs
+@@ -230,7 +230,10 @@ impl Winit {
+             target: RenderTarget::Output,
+             xray: None,
+         };
+-        let mut elements = niri.render_to_vec(ctx, output, true);
++        // Don't render niri's own (software) cursor in the nested backend: WSLg's
++        // Weston already draws the host cursor, so including it here shows two
++        // cursors and makes every pointer motion redraw the frame.
++        let mut elements = niri.render_to_vec(ctx, output, false);
+ 
+         // Visualize the damage, if enabled.
+         if niri.debug_draw_damage {
