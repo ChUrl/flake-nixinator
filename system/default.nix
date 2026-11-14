@@ -372,6 +372,9 @@ with mylib.networking; {
 
   # List services that you want to enable:
   services = {
+    # Cool boot screen
+    bootvine.enable = true;
+
     # Enable sound with pipewire.
     pipewire = {
       enable = !headless;
