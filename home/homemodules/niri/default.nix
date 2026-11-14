@@ -1317,25 +1317,25 @@ in {
               };
             };
             "Mod+Shift+H" = {
-              action = move-column-left-or-to-monitor-left;
+              action = consume-or-expel-window-left;
               hotkey-overlay = {
-                title = "Move column to the left. Equivalent bindings for other directions.";
+                title = "Consume the window from the left into this column, or expel this window into a column on the left.";
               };
             };
             "Mod+Shift+J" = {
-              action = move-window-down-or-to-workspace-down;
+              action = move-window-down;
               hotkey-overlay = {
                 hidden = true;
               };
             };
             "Mod+Shift+K" = {
-              action = move-window-up-or-to-workspace-up;
+              action = move-window-up;
               hotkey-overlay = {
                 hidden = true;
               };
             };
             "Mod+Shift+L" = {
-              action = move-column-right-or-to-monitor-right;
+              action = consume-or-expel-window-right;
               hotkey-overlay = {
                 hidden = true;
               };
