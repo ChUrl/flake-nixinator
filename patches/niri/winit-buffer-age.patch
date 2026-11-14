@@ -1,0 +1,27 @@
+diff --git a/src/backend/winit.rs b/src/backend/winit.rs
+index a9bcc515..2ad20eb1 100644
+--- a/src/backend/winit.rs
++++ b/src/backend/winit.rs
+@@ -238,13 +238,18 @@ impl Winit {
+             draw_damage(&mut output_state.debug_damage_tracker, &mut elements);
+         }
+ 
++        // Query the buffer age of the back buffer before rendering, so the damage
++        // tracker can reuse the previous frames' damage instead of damaging the
++        // whole output every frame (see Smithay issue #1672).
++        //
++        // The EGL context is still current from the previous frame's bind(), so this
++        // does not need to bind first. If the age is unavailable this falls back to 0,
++        // which is the previous behavior (full redraw).
++        let age = self.backend.buffer_age().unwrap_or(0);
++
+         // Hand them over to winit.
+         let res = {
+             let (renderer, mut framebuffer) = self.backend.bind().unwrap();
+-            // FIXME: currently impossible to call due to a mutable borrow.
+-            //
+-            // let age = self.backend.buffer_age().unwrap();
+-            let age = 0;
+             self.damage_tracker
+                 .render_output(renderer, &mut framebuffer, age, &elements, [0.; 4])
+                 .unwrap()

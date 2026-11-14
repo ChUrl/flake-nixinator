@@ -110,7 +110,17 @@ in {
   # instead of taking over a TTY. The rest of the session comes from the niri
   # home-manager module, which is enabled together with the system module.
   programs = {
-    niri.enable = lib.mkForce true;
+    niri = {
+      enable = lib.mkForce true;
+
+      # The winit (nested) backend passes age = 0 to smithay's damage tracker, so
+      # the whole output is damaged and re-rendered on every frame, even when only
+      # the cursor moved. In WSLg that is what makes the nested session so slow.
+      # The patch queries the actual buffer age instead (Smithay issue #1672).
+      package = lib.mkForce (pkgs.niri.overrideAttrs (old: {
+        patches = (old.patches or []) ++ [../../patches/niri/winit-buffer-age.patch];
+      }));
+    };
 
     # niri starts xwayland-satellite (installed by the niri HM module) for X11
     # apps, which needs an Xwayland binary. WSLg's own X server on DISPLAY=:0

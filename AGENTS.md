@@ -184,6 +184,7 @@ because it backs up `/persist` as a whole), and their ports to
 - `overlays/default.nix` — package overrides (e.g., patched JetBrains CLion version)
 - `derivations/default.nix` — custom packages: `monolisa`, `msty`, `unityhub`, `tidal-dl-ng`, `tiddl`
 - `derivations/1_deprecated/` — kept for reference, not imported
+- `patches/` — patch files for nixpkgs packages, applied per host (e.g. wslix's niri winit damage-tracking fix); keep them rebased when the package updates
 
 ### Sub-projects
 
