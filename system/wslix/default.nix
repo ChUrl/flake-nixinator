@@ -27,6 +27,10 @@
     processors=8
   '';
 in {
+  # There is no tty in WSL; the unit fails and makes `switch` report an error.
+  # `enable = false` masks the unit (symlink to /dev/null).
+  systemd.services."getty@tty1".enable = false;
+
   wsl = {
     enable = true;
 
