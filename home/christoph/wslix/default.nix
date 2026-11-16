@@ -2,9 +2,45 @@
 # The non-graphical part of home/christoph/default.nix is used as-is (headless),
 # so the terminal environment is the same as on the other headless hosts.
 # On top of that, this host runs niri nested into WSLg (see system/wslix).
-{lib, ...}: {
+{
+  lib,
+  pkgs,
+  ...
+}: let
+  rcarXosVersions = ["4.40.0"];
+  rcarXosPackages = map (version: pkgs.rcar-xos.override {inherit version;}) rcarXosVersions;
+  sdkRoot = p: "${p}/rcar-xos/v${p.version}";
+in {
   config = {
     home.stateVersion = "26.11";
+
+    # R-Car xOS SDK (SDK1+SDK3, Linux BSP, Poky). The archives must be in the
+    # store first: nix-store --add-fixed sha512 <rcar-xos_*_v<version>_release.tar.gz>
+    # Versions need an entry in derivations/rcar-xos/versions.nix, the last one
+    # is the default SDKVersion in cmake-variants.yaml.
+    home.packages = rcarXosPackages;
+
+    # VS Code CMake Tools kits and variants for the installed SDK versions.
+    home.file."cmake-kits.json".text = builtins.toJSON (map (p: {
+        name = "Linux Poky ${p.pokyVersion} v${p.version}";
+        toolchainFile = "${sdkRoot p}/cmake/toolchain_poky_${lib.replaceStrings ["."] ["_"] p.pokyVersion}.cmake";
+      })
+      rcarXosPackages);
+
+    home.file."cmake-variants.yaml".source = (pkgs.formats.yaml {}).generate "cmake-variants.yaml" {
+      SDKVersion = {
+        default = "v${(lib.last rcarXosPackages).version}";
+        choices = lib.listToAttrs (map (p: {
+            name = "v${p.version}";
+            value = {
+              short = "v${p.version}";
+              long = "v${p.version}";
+              settings.rcar-xos_DIR = "${sdkRoot p}/cmake";
+            };
+          })
+          rcarXosPackages);
+      };
+    };
 
     homemodules = {
       # Icon and cursor theme used by the niri GTK/Qt config, also only
