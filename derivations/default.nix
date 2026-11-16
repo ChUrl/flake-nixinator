@@ -8,6 +8,7 @@
   comfyui-desktop = pkgs.callPackage ./comfyui-desktop {};
   monolisa = pkgs.callPackage ./monolisa {};
   raddbg = pkgs.callPackage ./raddbg {};
+  rcar-xos = pkgs.callPackage ./rcar-xos {};
   rimstack = pkgs.callPackage ./rimstack {};
   tiddl = pkgs.callPackage ./tiddl {};
   vscode-remote-server = pkgs.callPackage ./vscode-remote-server {};
