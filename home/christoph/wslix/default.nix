@@ -93,6 +93,26 @@ in {
       ];
     };
 
+    # Merged into the global ssh config of homemodules/ssh.
+    programs.ssh.settings = {
+      "*" = {
+        ServerAliveInterval = lib.mkForce 60;
+        StrictHostKeyChecking = "no";
+      };
+
+      "hwaci_pc_christoph" = {
+        HostName = "hsba6.adwin.renesas.com";
+        Port = 10035;
+        User = "christoph";
+      };
+
+      "hwaci_pc_hwaci" = {
+        HostName = "hsba6.adwin.renesas.com";
+        Port = 10035;
+        User = "hwaci";
+      };
+    };
+
     # Unlike the other hosts, the ssh key is not provided by sops (this host has
     # no age key). Keep it at ~/.ssh/id_ed25519; programs.keychain and the git
     # commit signing from home/christoph/default.nix pick it up like everywhere
