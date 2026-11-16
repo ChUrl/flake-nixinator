@@ -142,15 +142,15 @@ in {
   };
 
   services = {
-    # WSL generates /etc/resolv.conf from the Windows host, there is no local
-    # resolver to run (the network module would enable systemd-resolved).
-    resolved.enable = lib.mkForce false;
+    bootvine.enable = lib.mkForce false;
 
     # The Windows host keeps the clock in sync, chrony would fight it.
     chrony.enable = lib.mkForce false;
-
-    # No firmware to update inside WSL.
     fwupd.enable = lib.mkForce false;
+
+    # WSL generates /etc/resolv.conf from the Windows host, there is no local
+    # resolver to run (the network module would enable systemd-resolved).
+    resolved.enable = lib.mkForce false;
 
     # WSLg runs its own PulseAudio server for the Windows audio devices and
     # exports it as PULSE_SERVER=/mnt/wslg/PulseServer, so no pipewire/pulseaudio
