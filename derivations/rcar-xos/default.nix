@@ -111,7 +111,10 @@ in
       runHook postInstall
     '';
 
-    passthru = {inherit sdk1 sdk3 bsp poky;};
+    passthru = {
+      inherit sdk1 sdk3 bsp poky;
+      inherit (hashes) pokyVersion;
+    };
 
     meta = {
       description = "Renesas R-Car xOS platform SDK (Linux/QNX), Linux BSP and Poky toolchain";
