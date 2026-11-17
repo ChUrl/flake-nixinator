@@ -4,10 +4,10 @@
   fetchurl,
 }: let
   pname = "rimstack";
-  version = "1.1.0";
+  version = "1.2.1";
   src = fetchurl {
     url = "https://github.com/TheForgotten69/RimStack/releases/download/v${version}/RimStack-${version}-x86_64.AppImage";
-    hash = "sha256-1rpQkLNXyrX7S/E0TriB4vRjg3CJ8xnaPXQsrNoP/dA=";
+    hash = "sha256-+qh8w5Z2DGtjd+M6J2PhPj/2GsAj3a0ipfEvmAbH3cY=";
   };
   appimageContents = appimageTools.extract {inherit pname version src;};
 in
