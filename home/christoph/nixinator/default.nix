@@ -403,7 +403,7 @@
                 "/usr/lib/extensions/vulkan/gamescope/bin"
 
                 # So ModOrganizer2 can load this plugin symlinked from here
-                "${config.home.homeDirectory}/Projects/ModOrganizer2_Cyberpunk_Plugin"
+                "${config.home.homeDirectory}/.nextcloud/Projects/ModOrganizer2_Cyberpunk_Plugin"
               ];
             };
           };
@@ -439,7 +439,7 @@
           "com.unity.UnityHub".Context = {
             filesystems = [
               "${config.home.homeDirectory}/Unity"
-              "${config.home.homeDirectory}/Projects"
+              "${config.home.homeDirectory}/.nextcloud/Projects"
             ];
           };
         };
