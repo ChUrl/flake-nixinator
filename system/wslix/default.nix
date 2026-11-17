@@ -10,6 +10,7 @@
 # backend, so the whole session shows up as one window on the Windows desktop.
 # Start it with `niri-session` from a WSL shell.
 {
+  config,
   lib,
   pkgs,
   username,
@@ -86,7 +87,17 @@ in {
       sopsFile = ./secrets.yaml;
       owner = username;
     };
+
+    # Artifactory access token for rcar-xos-fetch (derivations/rcar-xos-fetch)
+    secrets."artifactory-token" = {
+      sopsFile = ./secrets.yaml;
+      owner = username;
+    };
   };
+
+  # Let `sops system/wslix/secrets.yaml` find the key (systemmodules.sops-nix,
+  # which sets this on the other hosts, is disabled here).
+  environment.variables.SOPS_AGE_KEY_FILE = config.sops.age.keyFile;
 
   system.stateVersion = "26.11";
 
