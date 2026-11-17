@@ -19,7 +19,14 @@ in {
     # store first: nix-store --add-fixed sha512 <rcar-xos_*_v<version>_release.tar.gz>
     # Versions need an entry in derivations/rcar-xos/versions.nix, the last one
     # is the default SDKVersion in cmake-variants.yaml.
-    home.packages = rcarXosPackages;
+    # rcar-xos-fetch downloads new versions and prints their versions.nix entries.
+    home.packages =
+      rcarXosPackages
+      ++ [
+        (pkgs.rcar-xos-fetch.override {
+          tokenFile = nixosConfig.sops.secrets."artifactory-token".path;
+        })
+      ];
 
     # VS Code CMake Tools kits and variants for the installed SDK versions.
     home.file."cmake-kits.json".text = builtins.toJSON (map (p: {
