@@ -93,6 +93,7 @@ in {
 
           # Document utils
           poppler-utils # pdfunite
+          qpdf # lossless pdf page extraction and compression
           pdf2svg # extract vector graphics from pdf
           pandoc # document converting madness
 
