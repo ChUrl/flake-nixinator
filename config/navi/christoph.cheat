@@ -318,9 +318,24 @@ $ file: eza -f -1
 pdftocairo -f <page> -l <page> -svg "<input>" "<output>.svg"
 $ input: eza -f -1 | rg "\.pdf"
 
-$ docs
-# Extract pages from pdf and join
+% docs
+# Extract pages from pdf and join (duplicates shared fonts/images, prefer qpdf)
 pdfseparate -f <firstpage> -l <lastpage> "<input>" "page-%d.pdf" && pdfunite page-*.pdf "<output>.pdf" && rm page-*.pdf
+$ input: eza -f -1 | rg "\.pdf"
+
+% qpdf
+# Extract pages from pdf and join without duplicating shared resources
+qpdf --empty --pages "<input>" <firstpage>-<lastpage> -- "<output>.pdf"
+$ input: eza -f -1 | rg "\.pdf"
+
+% qpdf
+# Extract multiple page ranges from pdf into one file (comma separated)
+qpdf --empty --pages "<input>" <firstrange>,<secondrange> -- "<output>.pdf"
+$ input: eza -f -1 | rg "\.pdf"
+
+% qpdf
+# Compress an existing pdf
+qpdf --recompress-flate --compression-level=9 --object-streams=generate "<input>" "<output>.pdf"
 $ input: eza -f -1 | rg "\.pdf"
 
 ; ===========================
