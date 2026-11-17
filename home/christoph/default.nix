@@ -475,6 +475,7 @@ in
         enableFishIntegration = config.homemodules.fish.enable;
         enableXsessionIntegration = !headless;
         keys = ["id_ed25519" "id_rsa"];
+        extraFlags = ["--ignore-missing"];
       };
 
       mpv = {
