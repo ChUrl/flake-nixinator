@@ -4,6 +4,7 @@
 # On top of that, this host runs niri nested into WSLg (see system/wslix).
 {
   lib,
+  nixosConfig,
   pkgs,
   ...
 }: let
@@ -39,6 +40,28 @@ in {
             };
           })
           rcarXosPackages);
+      };
+    };
+
+    # MCP servers of this host (the shared ones live in homemodules/agentic,
+    # which is only enabled on nixinator). programs.mcp headers are plain
+    # strings that would end up in the store, so the token is passed through an
+    # environment variable that is read from the sops secret at startup;
+    # mcp-remote substitutes ${VAR} in --header values.
+    programs.mcp = {
+      enable = true;
+
+      servers.adms61 = {
+        command = "npx";
+        args = [
+          "-y"
+          "mcp-remote"
+          "http://boardlab.adwin.renesas.com/mcp"
+          "--allow-http"
+          "--header"
+          "Authorization:\${ADMS61_AUTH}"
+        ];
+        env.ADMS61_AUTH.file = nixosConfig.sops.secrets."adms61-mcp-token".path;
       };
     };
 
