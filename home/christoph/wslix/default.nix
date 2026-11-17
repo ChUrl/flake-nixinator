@@ -43,25 +43,33 @@ in {
       };
     };
 
-    # MCP servers of this host (the shared ones live in homemodules/agentic,
-    # which is only enabled on nixinator). programs.mcp headers are plain
-    # strings that would end up in the store, so the token is passed through an
-    # environment variable that is read from the sops secret at startup;
-    # mcp-remote substitutes ${VAR} in --header values.
-    programs.mcp = {
+    # Claude Code CLI with the MCP servers of this host (the shared ones live
+    # in homemodules/agentic, which is only enabled on nixinator).
+    #
+    # The organization's managed settings only allow MCP servers by URL
+    # (allowManagedMcpServersOnly, *.renesas.com is on the list), so command
+    # based servers - including the wrapper programs.mcp generates for secret
+    # files - are blocked. Hence a native http server it is. The token must not
+    # end up in the store: the header references ${ADMS61_AUTH}, which Claude
+    # Code expands, and the wrapper exports that from the sops secret.
+    programs.claude-code = {
       enable = true;
 
-      servers.adms61 = {
-        command = "npx";
-        args = [
-          "-y"
-          "mcp-remote"
-          "http://boardlab.adwin.renesas.com/mcp"
-          "--allow-http"
-          "--header"
-          "Authorization:\${ADMS61_AUTH}"
-        ];
-        env.ADMS61_AUTH.file = nixosConfig.sops.secrets."adms61-mcp-token".path;
+      package = pkgs.symlinkJoin {
+        name = "claude-code-adms61";
+        inherit (pkgs.claude-code) version meta;
+        paths = [pkgs.claude-code];
+        nativeBuildInputs = [pkgs.makeWrapper];
+        postBuild = ''
+          wrapProgram $out/bin/claude \
+            --run 'export ADMS61_AUTH="$(cat ${nixosConfig.sops.secrets."adms61-mcp-token".path} 2>/dev/null)"'
+        '';
+      };
+
+      mcpServers.adms61 = {
+        type = "http";
+        url = "http://boardlab.adwin.renesas.com/mcp";
+        headers.Authorization = "\${ADMS61_AUTH}";
       };
     };
 
