@@ -71,6 +71,23 @@ in {
     MESA_D3D12_DEFAULT_ADAPTER_NAME = "Nvidia";
   };
 
+  # Secrets of this host only (systemmodules.sops-nix stays disabled below, so
+  # its shared secrets.yaml and its consumers are not involved). Decrypting
+  # needs the age private key at ~/.secrets/age/age.key; without it the
+  # activation fails to install the secret.
+  sops = {
+    age = {
+      keyFile = "/home/${username}/.secrets/age/age.key";
+      generateKey = false;
+      sshKeyPaths = [];
+    };
+
+    secrets."adms61-mcp-token" = {
+      sopsFile = ./secrets.yaml;
+      owner = username;
+    };
+  };
+
   system.stateVersion = "26.11";
 
   systemmodules = {
