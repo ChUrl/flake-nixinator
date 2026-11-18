@@ -8,7 +8,7 @@
   pkgs,
   ...
 }: let
-  rcarXosVersions = ["4.40.0"];
+  rcarXosVersions = ["4.39.0" "4.40.0"];
   rcarXosPackages = map (version: pkgs.rcar-xos.override {inherit version;}) rcarXosVersions;
   sdkRoot = p: "${p}/rcar-xos/v${p.version}";
 in {

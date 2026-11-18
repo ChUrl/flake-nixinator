@@ -4,6 +4,14 @@
 #
 # To add a version, copy a block, change the key and replace the four hashes.
 {
+  "4.39.0" = {
+    # Poky release shipped in this version, selects cmake/toolchain_poky_<x>_<y>.cmake
+    pokyVersion = "6.0";
+    sdk1 = "sha512-CxWo6geucZtUuCvFsWdRsGKSBVV8fI+m9x5xxescM0lNXlXHn1N2jblDqQExRUuKUIESLLQh8hxRKD5XiaO8LQ==";
+    sdk3 = "sha512-jrsMZBS2DQIFGc0KLxu/UXOtljwuoasTB3dHs4hsj+1nTc4k6tiz5yuVS2i7upmUtMyb5dFDbcT1VNOkLCbfWg==";
+    bsp = "sha512-vODOGsc8z1kSsRQB55mriAVcg6Lc88DIWx1iQagh/HFyMNiP4FD7APg8yqdGHdTYUSNEKa9NXaCnTHI+CcIcSQ==";
+    poky = "sha512-3z2f7w8jmddlcSTdkD6JAhm4W44860shlCNEhyZ/19kGk9PUez13aQ/cZg1G0dQf1jPchpzLzthMlwQkIFVUEQ==";
+  };
   "4.40.0" = {
     # Poky release shipped in this version, selects cmake/toolchain_poky_<x>_<y>.cmake
     pokyVersion = "6.0";
