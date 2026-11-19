@@ -53,7 +53,11 @@ This is a multi-host NixOS/nix-darwin flake. Home-manager runs **as a NixOS modu
 | `servenix` | Server (x86_64) | Headless; runs OCI container services |
 | `thinknix` | Headless (x86_64) | Generic headless config |
 | `darwinix` | macOS (aarch64) | Darwin-specific configuration |
-| `wslix` | WSL2 (x86_64) | NixOS-WSL; niri session nested into WSLg, terminal environment, no sops key |
+| `wslix` | WSL2 (x86_64) | NixOS-WSL on the home machine; NFS media shares, private ssh hosts, NVIDIA adapter |
+| `wslren` | WSL2 (x86_64) | NixOS-WSL on the work machine; R-Car xOS/QNX, Claude MCP, hwaci ssh hosts, Intel adapter |
+
+Both WSL hosts share `system/wsl` + `home/christoph/wsl`; each has its own
+`secrets.yaml` and `systemmodules.sops-nix` stays disabled on them.
 
 ### Config Layering (resolved in this order)
 
@@ -140,6 +144,12 @@ Secrets are declared **where they are used**, not in a per-host list:
 | Needs a different owner (e.g. `authelia`) | add `owner`/`group`/`mode` to the declaration |
 | Home-manager module (the user session reads the file) | `homemodules.sops.secrets = ["<name>"];` — HM modules can't set system options, so `system/systemmodules/sops-nix` folds these in and chowns them to the user |
 | Needed before users exist (e.g. `user-password`) | `systemmodules.sops-nix.bootSecrets = ["<name>"];` (sets `neededForUsers`, no owner) |
+
+The WSL hosts (`wslix`, `wslren`) are the exception: they keep
+`systemmodules.sops-nix` disabled and declare their secrets (including
+`user-password` with `neededForUsers`) in `system/<host>/default.nix`, each
+pointing at its own `system/<host>/secrets.yaml`. Both files are encrypted with
+the same age key (`~/.secrets/age/age.key` on each machine).
 
 ### Impermanence
 

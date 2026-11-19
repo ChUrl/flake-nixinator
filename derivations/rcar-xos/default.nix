@@ -2,7 +2,7 @@
 #
 # The archives are downloaded from the Renesas Artifactory by Nix itself
 # (builtin:fetchurl), which authenticates with the netrc-file from nix.conf
-# (system/wslix sets it up from the sops token). Archives that are already in
+# (system/wslren sets it up from the sops token). Archives that are already in
 # the store, e.g. from `nix-store --add-fixed sha512`, have the same store path
 # and are reused.
 #

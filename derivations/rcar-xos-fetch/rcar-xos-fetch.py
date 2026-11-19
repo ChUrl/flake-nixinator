@@ -2,7 +2,7 @@
 """Print derivations/rcar-xos/versions.nix entries for R-Car xOS SDK versions.
 
 1. Shows the SDK versions on the Renesas Artifactory and in versions.nix,
-   whether their archives are in the store yet, and which ones the wslix home
+   whether their archives are in the store yet, and which ones the wslren home
    config installs.
 2. Lets you pick versions (curses checklist).
 3. Downloads only the *_archiver.SHA512 files of the four archives, plus the
@@ -10,7 +10,7 @@
 4. Prints the blocks to paste into derivations/rcar-xos/versions.nix.
 
 The archives themselves are downloaded by Nix when the rcar-xos_v<x>_<y>_<z>
-package is built (builtin:fetchurl with the netrc from system/wslix).
+package is built (builtin:fetchurl with the netrc from system/wslren).
 
 The access token is read from a file (the sops secret), never from argv.
 """
@@ -350,7 +350,7 @@ def main():
     args = ap.parse_args()
 
     versions_nix = args.flake / "derivations/rcar-xos/versions.nix"
-    home_nix = args.flake / "home/christoph/wslix/default.nix"
+    home_nix = args.flake / "home/christoph/wslren/default.nix"
 
     try:
         token = args.token_file.read_text().strip()

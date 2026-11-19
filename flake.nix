@@ -380,9 +380,8 @@
         };
 
       # NixOS running as a WSL2 distribution, see system/wslix.
-      # It runs a niri session nested into WSLg (`niri-session`); the headless
-      # flag stays on so the terminal environment does not pull in the desktop
-      # packages (browsers, flatpak apps, ...).
+      # The headless flag stays on so the terminal environment does not pull in
+      # the desktop packages (browsers, flatpak apps, ...).
       # Usage: sudo nixos-rebuild switch --flake .#wslix
       wslix = let
         hostPkgs = mkHostPkgs "wslix";
@@ -392,6 +391,27 @@
           inherit system publicKeys;
           mylib = hostMylib;
           hostname = "wslix";
+          username = "christoph";
+          headless = true;
+          extraModules =
+            [
+              inputs.nixos-wsl.nixosModules.default
+            ]
+            ++ commonModules;
+        };
+
+      # NixOS running as a WSL2 distribution on the work machine, see
+      # system/wslren. Same base as wslix (system/wsl), plus the
+      # toolchains and ssh hosts.
+      # Usage: sudo nixos-rebuild switch --flake .#wslren
+      wslren = let
+        hostPkgs = mkHostPkgs "wslren";
+        hostMylib = mkMylib hostPkgs;
+      in
+        hostMylib.nixos.mkNixosConfigWithHomeManagerModule {
+          inherit system publicKeys;
+          mylib = hostMylib;
+          hostname = "wslren";
           username = "christoph";
           headless = true;
           extraModules =
@@ -433,7 +453,7 @@
     #   };
     # };
 
-    # My own derivations (derivations/default.nix), for project flake. 
+    # My own derivations (derivations/default.nix), for project flake.
     # Taken from the same "pkgs" as the systems, so the store paths match
     # the installed packages.
     packages.${system} = builtins.mapAttrs (name: _: pkgs.${name}) (import ./derivations {inherit inputs pkgs;});
