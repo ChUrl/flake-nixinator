@@ -432,5 +432,10 @@
     #     extraModules = [];
     #   };
     # };
+
+    # My own derivations (derivations/default.nix), for project flake. 
+    # Taken from the same "pkgs" as the systems, so the store paths match
+    # the installed packages.
+    packages.${system} = builtins.mapAttrs (name: _: pkgs.${name}) (import ./derivations {inherit inputs pkgs;});
   };
 }
