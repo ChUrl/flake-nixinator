@@ -22,6 +22,8 @@ in {
     home.packages =
       rcarXosPackages
       ++ [
+        # Needs the installer in the store, see derivations/qnx-software-center
+        pkgs.qnx-software-center
         (pkgs.rcar-xos-fetch.override {
           tokenFile = nixosConfig.sops.secrets."artifactory-token".path;
         })
