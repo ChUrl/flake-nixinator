@@ -151,6 +151,7 @@
         office = {url = "https://office.vps.chriphost.gay/healthcheck";};
         paperless = {url = "https://paperless.vps.chriphost.gay";};
         ntfy = {url = "https://ntfy.vps.chriphost.gay";};
+        time = {url = "https://time.vps.chriphost.gay";};
         f10 = {url = "https://f10.vps.chriphost.gay";};
         f11 = {url = "https://f11.vps.chriphost.gay";};
         f12 = {url = "https://f12.vps.chriphost.gay";};

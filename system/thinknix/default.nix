@@ -143,6 +143,7 @@
         # Keep this: browsers load the Euro-Office editor from this origin.
         "office.vps.chriphost.gay"
         "paperless.vps.chriphost.gay"
+        "time.vps.chriphost.gay"
       ] (h: {
         hostName = "http://${h}";
         extraConfig = "reverse_proxy http://192.168.86.25:9080";

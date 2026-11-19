@@ -80,8 +80,13 @@
     ];
   };
 in {
-  # Served by systemmodules/caddy (LAN only, no public alias)
-  systemmodules.caddy.vhosts.time = {port = 8095;};
+  # Served by systemmodules/caddy. The public name is forwarded by the VPS
+  # (wildcard) to thinknix, which proxies to servenix's Caddy with the Host
+  # header preserved, so the alias is served here as plain HTTP.
+  systemmodules.caddy.vhosts.time = {
+    port = 8095;
+    aliases = ["time.vps.chriphost.gay"];
+  };
 
   sops.secrets = {
     "solidtime-app-key" = {};

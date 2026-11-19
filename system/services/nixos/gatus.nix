@@ -22,6 +22,7 @@
     (mkEndpoint "office" "https://office.vps.chriphost.gay/healthcheck")
     (mkEndpoint "paperless" "https://paperless.vps.chriphost.gay")
     (mkEndpoint "ntfy" "https://ntfy.vps.chriphost.gay")
+    (mkEndpoint "time" "https://time.vps.chriphost.gay")
     (mkEndpoint "f10" "https://f10.vps.chriphost.gay")
     (mkEndpoint "f11" "https://f11.vps.chriphost.gay")
     (mkEndpoint "f12" "https://f12.vps.chriphost.gay")
