@@ -93,7 +93,18 @@ in {
       sopsFile = ./secrets.yaml;
       owner = username;
     };
+
+    # The same token as netrc for the nix-daemon, so builtin:fetchurl can
+    # download the R-Car xOS archives (derivations/rcar-xos). Artifactory takes
+    # the access token as basic-auth password, the login is the token subject.
+    templates."nix-netrc".content = ''
+      machine artifactory.global.renesas.com
+        login christoph.urlacher.yf@renesas.com
+        password ${config.sops.placeholder."artifactory-token"}
+    '';
   };
+
+  nix.settings.netrc-file = config.sops.templates."nix-netrc".path;
 
   # Let `sops system/wslix/secrets.yaml` find the key (systemmodules.sops-nix,
   # which sets this on the other hosts, is disabled here).
