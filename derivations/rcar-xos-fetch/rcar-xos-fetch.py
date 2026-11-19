@@ -1,12 +1,16 @@
 #!/usr/bin/env python3
-"""Download R-Car xOS SDK archives from the Renesas Artifactory into the Nix store.
+"""Print derivations/rcar-xos/versions.nix entries for R-Car xOS SDK versions.
 
-1. Shows the SDK versions known to derivations/rcar-xos/versions.nix, whether
-   their archives are in the store, and which ones the wslix home config installs.
-2. Lets you pick versions available on Artifactory (curses checklist).
-3. Downloads the four archives (+ their *_archiver.SHA512 files) with jfrog-cli,
-   verifies them and adds them to the store (nix-store --add-fixed sha512).
+1. Shows the SDK versions on the Renesas Artifactory and in versions.nix,
+   whether their archives are in the store yet, and which ones the wslix home
+   config installs.
+2. Lets you pick versions (curses checklist).
+3. Downloads only the *_archiver.SHA512 files of the four archives, plus the
+   first few KB of the Poky archive to detect the Poky release.
 4. Prints the blocks to paste into derivations/rcar-xos/versions.nix.
+
+The archives themselves are downloaded by Nix when the rcar-xos_v<x>_<y>_<z>
+package is built (builtin:fetchurl with the netrc from system/wslix).
 
 The access token is read from a file (the sops secret), never from argv.
 """
@@ -15,7 +19,6 @@ import argparse
 import base64
 import concurrent.futures
 import curses
-import hashlib
 import json
 import os
 import re
@@ -24,6 +27,8 @@ import subprocess
 import sys
 import tarfile
 import tempfile
+import urllib.error
+import urllib.request
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -99,13 +104,17 @@ class JFrog:
             raise RuntimeError(f"jf rt search {pattern} failed:\n{p.stderr.strip()}")
         return json.loads(p.stdout or "[]")
 
-    def download(self, path: str, dest: Path):
-        # Not captured, so jf's progress output is visible.
-        subprocess.run(
-            ["jf", "rt", "download", "--flat", "--fail-no-op", path, f"{dest}/"],
-            env=self.env,
-            check=True,
-        )
+
+
+def http_open(token: str, path: str):
+    """Streaming GET of a repository path (token in a header, not in argv)."""
+    req = urllib.request.Request(ARTIFACTORY_URL + path, headers={"Authorization": f"Bearer {token}"})
+    try:
+        return urllib.request.urlopen(req, timeout=60)
+    except urllib.error.HTTPError as e:
+        raise RuntimeError(f"GET {path}: HTTP {e.code} {e.reason}") from None
+    except urllib.error.URLError as e:
+        raise RuntimeError(f"GET {path}: {e.reason}") from None
 
 
 def remote_versions(jf: JFrog) -> dict[str, set[str]]:
@@ -148,11 +157,12 @@ def load_versions_nix(path: Path) -> dict:
 
 
 def enabled_versions(home_nix: Path) -> list[str]:
+    """Versions referenced as rcar-xos_v4_40_0 in the home config."""
     try:
-        m = re.search(r"rcarXosVersions\s*=\s*\[([^\]]*)\]", home_nix.read_text())
+        text = home_nix.read_text()
     except OSError:
         return []
-    return re.findall(r'"([^"]+)"', m[1]) if m else []
+    return [m.replace("_", ".") for m in re.findall(r"rcar-xos_v(\d+(?:_\d+)*)", text)]
 
 
 def fixed_path(sri: str, name: str) -> str | None:
@@ -262,39 +272,32 @@ def checklist(stdscr, rows: list[Row]) -> list[Row] | None:
             return [rows[i] for i in sorted(selected)]
 
 
-# --------------------------------------------------------------------------- fetch/import
+# --------------------------------------------------------------------------- hashes
 
 
-def read_sha_file(path: Path, archive_name: str) -> str:
-    for line in path.read_text().splitlines():
+def parse_sha_file(text: str, archive_name: str) -> str:
+    for line in text.splitlines():
         parts = line.split()
         if len(parts) >= 2 and parts[-1].lstrip("*") == archive_name:
             return parts[0].lower()
-    parts = path.read_text().split()
+    parts = text.split()
     if parts and re.fullmatch(r"[0-9a-fA-F]{128}", parts[0]):
         return parts[0].lower()
-    raise RuntimeError(f"no sha512 for {archive_name} in {path}")
-
-
-def sha512_file(path: Path) -> str:
-    h = hashlib.sha512()
-    with open(path, "rb") as f:
-        while chunk := f.read(16 << 20):
-            h.update(chunk)
-    return h.hexdigest()
+    raise RuntimeError(f"no sha512 for {archive_name} in {sha_name(archive_name)}")
 
 
 def to_sri(hexdigest: str) -> str:
     return "sha512-" + base64.b64encode(bytes.fromhex(hexdigest)).decode()
 
 
-def poky_version(poky_archive: Path) -> str | None:
+def poky_version(fileobj) -> str | None:
     """Release of the Poky SDK installer, e.g. 6.0 for ...-toolchain-6.0.sh.
 
-    The installer is one of the first members, so the streamed read stops early.
+    The installer is one of the first members, so the streamed read stops
+    after a few KB instead of downloading the whole archive.
     """
     rx = re.compile(r"toolchains/poky/poky-[^/]*-toolchain-(\d+)\.(\d+)[^/]*\.sh$")
-    with tarfile.open(poky_archive, "r|gz") as tar:
+    with tarfile.open(fileobj=fileobj, mode="r|gz") as tar:
         for member in tar:
             m = rx.search(member.name)
             if m:
@@ -302,50 +305,16 @@ def poky_version(poky_archive: Path) -> str | None:
     return None
 
 
-def fetch_version(jf: JFrog, version: str, workdir: Path) -> dict:
-    dest = workdir / f"v{version}"
-    dest.mkdir(parents=True, exist_ok=True)
+def hash_version(token: str, version: str) -> dict:
     entry = {}
     for kind, (folder, name_t) in ARCHIVES.items():
         name = name_t.format(v=version)
         remote = f"{REPO_BASE}/v{version}/{folder}"
-        archive, shafile = dest / name, dest / sha_name(name)
-
-        print(f"\n==> v{version} {kind}: {name}")
-        if not shafile.exists():
-            jf.download(f"{remote}/{shafile.name}", dest)
-        expected = read_sha_file(shafile, name)
-        sri = to_sri(expected)
-
-        path = fixed_path(sri, name)
-        if path and os.path.exists(path):
-            print(f"    already in store: {path}")
-        else:
-            if archive.exists() and sha512_file(archive) != expected:
-                print("    existing download has the wrong hash, downloading again")
-                archive.unlink()
-            if not archive.exists():
-                jf.download(f"{remote}/{name}", dest)
-            print("    verifying sha512 ...")
-            if sha512_file(archive) != expected:
-                raise RuntimeError(f"{archive}: sha512 does not match {shafile.name}")
-            print("    adding to store ...")
-            out = subprocess.run(
-                ["nix-store", "--add-fixed", "sha512", str(archive)],
-                check=True,
-                capture_output=True,
-                text=True,
-            ).stdout.strip()
-            if path and out != path:
-                raise RuntimeError(f"store path mismatch: got {out}, expected {path}")
-            print(f"    {out}")
-
+        with http_open(token, f"{remote}/{sha_name(name)}") as r:
+            entry[kind] = to_sri(parse_sha_file(r.read().decode(), name))
         if kind == "poky":
-            if archive.exists():
-                entry["pokyVersion"] = poky_version(archive)
-            else:
-                entry["pokyVersion"] = poky_version(Path(path))
-        entry[kind] = sri
+            with http_open(token, f"{remote}/{name}") as r:
+                entry["pokyVersion"] = poky_version(r)
     return entry
 
 
@@ -377,13 +346,6 @@ def main():
         help="file containing the Artifactory access token (default: %(default)s)",
     )
     ap.add_argument("--flake", type=Path, default=flake, help="flake checkout (default: %(default)s)")
-    ap.add_argument(
-        "--workdir",
-        type=Path,
-        default=Path.home() / "Downloads" / "rcar-xos",
-        help="download directory (default: %(default)s)",
-    )
-    ap.add_argument("--keep", action="store_true", help="keep the downloaded archives after importing")
     ap.add_argument("--list", action="store_true", help="only print the table, no TUI")
     args = ap.parse_args()
 
@@ -434,12 +396,11 @@ def main():
         entries = {}
         failed = []
         for r in chosen:
+            print(f"==> v{r.version}", file=sys.stderr)
             try:
-                entries[r.version] = fetch_version(jf, r.version, args.workdir)
-                if not args.keep:
-                    shutil.rmtree(args.workdir / f"v{r.version}", ignore_errors=True)
-            except (RuntimeError, subprocess.CalledProcessError) as e:
-                print(f"\nerror: v{r.version}: {e}", file=sys.stderr)
+                entries[r.version] = hash_version(token, r.version)
+            except (RuntimeError, OSError, tarfile.TarError) as e:
+                print(f"error: v{r.version}: {e}", file=sys.stderr)
                 failed.append(r.version)
     finally:
         jf.cleanup()
@@ -451,7 +412,7 @@ def main():
                 print(f"#   v{v} is already up to date in versions.nix")
                 continue
             print(nix_block(v, entries[v]))
-        print(f"\n# and enable them in {home_nix} (rcarXosVersions).")
+        print(f"\n# and install them in {home_nix}, e.g. pkgs.rcar-xos_v{v.replace('.', '_')}.")
     if failed:
         die("failed: " + ", ".join(f"v{v}" for v in failed))
 

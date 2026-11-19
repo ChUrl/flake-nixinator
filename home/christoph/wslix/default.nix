@@ -8,18 +8,17 @@
   pkgs,
   ...
 }: let
-  rcarXosVersions = ["4.39.0" "4.40.0"];
-  rcarXosPackages = map (version: pkgs.rcar-xos.override {inherit version;}) rcarXosVersions;
+  # The last one is the default SDKVersion in cmake-variants.yaml.
+  rcarXosPackages = with pkgs; [rcar-xos_v4_39_0 rcar-xos_v4_40_0];
   sdkRoot = p: "${p}/rcar-xos/v${p.version}";
 in {
   config = {
     home.stateVersion = "26.11";
 
-    # R-Car xOS SDK (SDK1+SDK3, Linux BSP, Poky). The archives must be in the
-    # store first: nix-store --add-fixed sha512 <rcar-xos_*_v<version>_release.tar.gz>
-    # Versions need an entry in derivations/rcar-xos/versions.nix, the last one
-    # is the default SDKVersion in cmake-variants.yaml.
-    # rcar-xos-fetch downloads new versions and prints their versions.nix entries.
+    # R-Car xOS SDK (SDK1+SDK3, Linux BSP, Poky). Nix downloads the archives
+    # from Artifactory (netrc in system/wslix). Versions need an entry in
+    # derivations/rcar-xos/versions.nix, rcar-xos-fetch lists the versions on
+    # Artifactory and prints those entries.
     home.packages =
       rcarXosPackages
       ++ [

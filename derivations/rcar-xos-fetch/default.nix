@@ -1,9 +1,9 @@
-# TUI to download R-Car xOS SDK archives from the Renesas Artifactory (jfrog-cli),
-# add them to the store and print the matching derivations/rcar-xos/versions.nix
-# entries. See ./rcar-xos-fetch.py.
+# TUI to list the R-Car xOS SDK versions on the Renesas Artifactory (jfrog-cli)
+# and print their derivations/rcar-xos/versions.nix entries from the published
+# SHA512 files. The archives themselves are downloaded by Nix. See ./rcar-xos-fetch.py.
 #
 # tokenFile is the default for --token-file (the sops secret path on the host).
-# nix-store/nix are taken from the system, not bundled.
+# nix/nix-store (versions.nix evaluation, store status) come from the system.
 {
   lib,
   stdenvNoCC,
@@ -34,7 +34,7 @@ stdenvNoCC.mkDerivation {
   '';
 
   meta = {
-    description = "Download R-Car xOS SDK archives from Artifactory into the Nix store";
+    description = "Print versions.nix entries for R-Car xOS SDK versions on Artifactory";
     license = lib.licenses.mit;
     mainProgram = "rcar-xos-fetch";
     platforms = lib.platforms.linux;
