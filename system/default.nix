@@ -93,8 +93,9 @@ with mylib.networking; {
     ];
   };
 
-  # Only declared when sops is in use. A host without an age key (wslix)
-  # cannot decrypt these, so it skips them entirely.
+  # Only declared when sops is in use. The WSL hosts keep
+  # systemmodules.sops-nix disabled and use their own secrets files
+  # (system/wslix, system/wslren) instead.
   sops = lib.optionalAttrs config.systemmodules.sops-nix.enable {
     # Used by the nix.conf template below
     secrets."nix-github-token" = {};
@@ -238,10 +239,12 @@ with mylib.networking; {
   users.mutableUsers = false; # Users are always overridden by stuff defined here
   users.users.${username} = {
     isNormalUser = true;
-    # The password hash comes from sops (see systemmodules.sops-nix). Hosts
-    # without secrets leave this unset; NixOS-WSL makes sudo passwordless.
+    # The password hash comes from sops: on the regular hosts from the shared
+    # secrets.yaml (systemmodules.sops-nix), on the WSL hosts from their own
+    # secrets file (system/wslix, system/wslren). The hosts that declare the
+    # secret also get the password, which makes sudo ask for it.
     hashedPasswordFile =
-      lib.mkIf config.systemmodules.sops-nix.enable
+      lib.mkIf (config.sops.secrets ? "user-password")
       config.sops.secrets.user-password.path;
     description = "Christoph";
     group = "users";
