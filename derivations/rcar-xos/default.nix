@@ -1,27 +1,28 @@
 # R-Car xOS platform package (Linux SDK1 + QNX SDK3 + Linux BSP + Poky toolchain).
 #
-# The archives are only reachable behind the Renesas Artifactory, so they have
-# to be added to the store manually:
-#
-#   nix-store --add-fixed sha512 ~/Downloads/rcar-xos_*_v4.40.0_release.tar.gz
+# The archives are downloaded from the Renesas Artifactory by Nix itself
+# (builtin:fetchurl), which authenticates with the netrc-file from nix.conf
+# (system/wslix sets it up from the sops token). Archives that are already in
+# the store, e.g. from `nix-store --add-fixed sha512`, have the same store path
+# and are reused.
 #
 # Everything ends up in a single tree, $out/rcar-xos/v<version>/:
 #   cmake/, sw/, opensource/, ...   from SDK1 and SDK3 (merged, SDK3 wins on conflicts)
 #   os/                             from the Linux BSP
 #   tools/toolchains/poky/          Poky SDK, installed by its own installer
 #
-# Other versions: add hashes to ./versions.nix and use
-#   rcar-xos.override { version = "4.41.0"; }
+# Every version in ./versions.nix is exposed as its own package, e.g.
+#   pkgs.rcar-xos_v4_40_0
+# (see derivations/default.nix), rcar-xos itself is the newest one.
 {
   lib,
   stdenvNoCC,
-  requireFile,
   xz,
   gnutar,
   gzip,
   which,
   python3,
-  version ? "4.40.0",
+  version ? lib.last (lib.sort lib.versionOlder (lib.attrNames (import ./versions.nix))),
 }: let
   hashes = (import ./versions.nix).${version} or (throw "rcar-xos: no hashes for version ${version}, add them to versions.nix");
 
@@ -32,15 +33,11 @@
     path,
     hash,
   }:
-    requireFile {
+    # Not pkgs.fetchurl: only builtin:fetchurl gets the netrc-file (the
+    # credentials stay with the daemon instead of the build sandbox).
+    import <nix/fetchurl.nix> {
       inherit name hash;
       url = "${base}/${path}";
-      message = ''
-        ${name} is not publicly downloadable. Download it from
-          ${base}/${path}
-        then add it to the Nix store:
-          nix-store --add-fixed sha512 ${name}
-      '';
     };
 
   sdk1 = mkArchive {
