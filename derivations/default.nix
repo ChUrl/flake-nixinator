@@ -8,6 +8,7 @@
 
   comfyui-desktop = pkgs.callPackage ./comfyui-desktop {};
   monolisa = pkgs.callPackage ./monolisa {};
+  qnx-software-center = pkgs.callPackage ./qnx-software-center {};
   raddbg = pkgs.callPackage ./raddbg {};
   rcar-xos = pkgs.callPackage ./rcar-xos {};
   rcar-xos-fetch = pkgs.callPackage ./rcar-xos-fetch {};
