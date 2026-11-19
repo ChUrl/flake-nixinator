@@ -276,7 +276,9 @@ in {
               gcl = "git clone";
             })
 
-            (lib.optionalAttrs config.homemodules.kitty.enable {ssh = "kitty +kitten ssh";})
+            (lib.optionalAttrs (config.homemodules.kitty.enable && fish.kittySshAbbr) {
+              ssh = "kitty +kitten ssh";
+            })
 
             (abbrify pkgs.lazygit {lg = "lazygit";})
           ];
