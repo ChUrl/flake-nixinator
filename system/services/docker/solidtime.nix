@@ -17,6 +17,14 @@
     APP_URL = "https://time.local.chriphost.gay";
     APP_FORCE_HTTPS = "true";
 
+    # The public name is a Caddy alias here and is forwarded by the VPS with the
+    # Host header preserved (see systemmodules.caddy.vhosts.time and the VPS
+    # forwarding list in system/thinknix). solidtime's TrustHosts middleware
+    # only accepts the APP_URL host plus the entries listed here, otherwise a
+    # request over the public name fails with "This hostname is not configured
+    # for this instance".
+    TRUSTED_HOSTS = "time.vps.chriphost.gay";
+
     # No self-service signup (`on`/`invite-only`/`off`). The first user is
     # created with `docker exec solidtime php artisan admin:user:create ...`.
     APP_ENABLE_REGISTRATION = "off";
