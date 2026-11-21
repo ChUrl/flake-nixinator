@@ -35,14 +35,6 @@ in {
       ${pkgs.coreutils}/bin/ln -sfn /var/cache/pulsesecure/opt/pulsesecure /opt/pulsesecure
     '';
 
-    systemd.tmpfiles.rules = [
-      "d /var/lib/pulsesecure/pulse 0700 root root -"
-      # The vendor's postinst sets these default ACLs so the unprivileged UI
-      # can read files the daemon creates in the connection store.
-      "a+ /var/lib/pulsesecure/pulse - - - - d:g::r,d:o::r"
-      "d /var/log/pulsesecure/logging 0755 root root -"
-    ];
-
     # dsTMService writes its split-DNS resolver settings here. /etc is read-only
     # on NixOS, so point the path at the (persistent) state directory instead.
     environment.etc."pulse-resolv.conf".source = "/var/lib/pulsesecure/pulse-resolv.conf";
@@ -69,6 +61,24 @@ in {
         Type = "forking";
         Restart = "always";
         RestartSec = 1;
+
+        # Created at service start, i.e. after the impermanence bind mounts.
+        # tmpfiles runs too early for these: its directories would be hidden by
+        # the /var/lib/pulsesecure and /var/log/pulsesecure mounts.
+        StateDirectory = "pulsesecure/pulse";
+        StateDirectoryMode = "0700";
+        LogsDirectory = "pulsesecure/logging";
+        LogsDirectoryMode = "0755";
+
+        ExecStartPre = [
+          # A SIGKILLed instance leaves these behind; wait on them and the
+          # next start silently hangs before it even opens its log.
+          "${pkgs.coreutils}/bin/rm -f /run/dsAccessService.pid /dev/shm/pulsesecure_debuglog.shm /dev/shm/PulseSecure_transient.shm"
+          # The deb's postinst sets these default ACLs so the unprivileged UI
+          # can read what the daemon writes to the connection store.
+          "${pkgs.acl}/bin/setfacl -d -m g::r,o::r /var/lib/pulsesecure/pulse"
+        ];
+
         ExecStart = "${pkgs.pulsesecure}/opt/pulsesecure/bin/startup.sh start";
         ExecStop = "${pkgs.pulsesecure}/opt/pulsesecure/bin/startup.sh stop";
 
