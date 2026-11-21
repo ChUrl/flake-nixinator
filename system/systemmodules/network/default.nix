@@ -3,6 +3,7 @@
   config,
   lib,
   mylib,
+  pkgs,
   ...
 }:
 with lib;
@@ -290,6 +291,11 @@ in {
       "org.freedesktop.NetworkManager.settings.modify.system"
     ];
 
+    environment.systemPackages = with pkgs; [
+      openvpn
+      openconnect
+    ];
+
     # General Networking Settings
     networking = {
       # Gets inherited from flake in nixos mylib and passed through the module option
@@ -300,6 +306,11 @@ in {
       networkmanager = {
         enable = cfg.useNetworkManager;
         ensureProfiles.profiles = cfg.profiles;
+
+        plugins = with pkgs; [
+          networkmanager-openvpn
+          networkmanager-openconnect
+        ];
 
         insertNameservers = [
           "192.168.86.26"
