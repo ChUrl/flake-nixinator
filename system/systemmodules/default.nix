@@ -10,6 +10,7 @@
     ./network
     ./nix-cache
     ./polkit
+    ./pulsesecure
     ./remote-build
     ./restic
     ./sops-nix
