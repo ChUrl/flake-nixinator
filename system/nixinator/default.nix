@@ -38,6 +38,9 @@
 
     impermanence.enable = true;
 
+    # Ivanti Secure Access Client (TU Dortmund VPN)
+    pulsesecure.enable = true;
+
     # State of btrfs (autoScrub below) and libvirt
     impermanence.directories = [
       "/var/lib/btrfs"
