@@ -209,9 +209,6 @@ in {
           binaryninja-free # reverse engineering
           raddbg # RAD debugger (custom derivation)
           tableplus # database explorer
-          # claude-desktop
-          lmstudio # TODO: Ollama
-          opencode-desktop
           upscayl
           # calibre # Sometimes I need to convert ebooks
           vcv-rack

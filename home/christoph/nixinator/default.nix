@@ -94,22 +94,6 @@
     };
 
     programs = {
-      # claude-code = {
-      #   enable = true;
-      #   enableMcpIntegration = true;
-      # };
-
-      # codexDesktopLinux = {
-      #   enable = true;
-      #   linuxFeatures = [
-      #     "frameless-titlebar"
-      #     "global-dictation"
-      #     "read-aloud"
-      #     "tray-usage"
-      #     "ui-tweaks"
-      #   ];
-      # };
-
       # NOTE: Starts extremely slow
       # ghostty = {
       #   enable = true;
