@@ -232,6 +232,7 @@
         # (obs-studio.override {cudaSupport = true;})
         kdePackages.kdenlive
         # davinci-resolve
+        ladybird
         krita
         makemkv
         lrcget
