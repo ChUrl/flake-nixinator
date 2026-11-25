@@ -132,6 +132,7 @@ in {
           "opencode"
           "opencode-go"
           "anthropic"
+          "openai"
           "lmstudio"
         ];
         formatter = {
