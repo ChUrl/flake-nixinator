@@ -1,4 +1,5 @@
 {
+  inputs,
   config,
   nixosConfig,
   lib,
@@ -45,6 +46,17 @@ in {
 
     home.packages = with pkgs; [
       # claude-desktop
+      # Base App
+      (inputs.antigravity-nix.packages.x86_64-linux.default.override {
+        useFHS = false;
+        browserPkg = pkgs.chromium;
+      })
+      # IDE
+      (inputs.antigravity-nix.packages.x86_64-linux.google-antigravity-ide.override {
+        useFHS = false;
+        browserPkg = pkgs.chromium;
+      })
+      inputs.antigravity-nix.packages.x86_64-linux.google-antigravity-cli # CLI
       lmstudio # TODO: Ollama
       opencode-desktop
     ];

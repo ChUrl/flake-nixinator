@@ -108,12 +108,13 @@
     # musnix.url = "github:musnix/musnix";
     # musnix.inputs.nixpkgs.follows = "nixpkgs";
 
+    # Unofficial
     claude-desktop.url = "github:aaddrick/claude-desktop-debian";
     claude-desktop.inputs.nixpkgs.follows = "nixpkgs";
-
-    # Unofficial
     codex-desktop-linux.url = "github:ilysenko/codex-desktop-linux";
     codex-desktop-linux.inputs.nixpkgs.follows = "nixpkgs";
+    antigravity-nix.url = "github:jacopone/antigravity-nix";
+    antigravity-nix.inputs.nixpkgs.follows = "nixpkgs";
 
     stylix.url = "github:nix-community/stylix";
     stylix.inputs.nixpkgs.follows = "nixpkgs";
